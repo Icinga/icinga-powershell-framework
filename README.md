@@ -23,7 +23,7 @@ Please take a look on the following content to get to know the possibilities of 
 Contributing
 ------------
 
-The Icinga 2 PowerShell module is an Open Source project and lives from your contributions. No matter whether these are feature requests, issues, translations, documentation or code.
+The Icinga Windows Module is an Open Source project and lives from your contributions. No matter whether these are feature requests, issues, translations, documentation or code.
 
 * Please check whether a related issue alredy exists on our [Issue Tracker](https://github.com/LordHepipud/icinga-module-windows/issues)
 * Send a [Pull Request](https://github.com/LordHepipud/icinga-module-windows/pulls)
