@@ -5,6 +5,10 @@ This PowerShell Module will provide a basic framework to retreive data from Wind
 
 The module will execute local PowerShell scripts (modules) and return the result as formatted JSON. This result can later be parsed by any software to either do inventory or monitoring tasks.
 
+### Architecture
+
+![Architecture](images/01_architecture/architecture.png)
+
 The module provides three ways to fetch data:
 
 * An active Rest-Api
