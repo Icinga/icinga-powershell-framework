@@ -1,0 +1,4 @@
+log/*
+agent/*
+.vscode/
+*.log
