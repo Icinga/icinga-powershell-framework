@@ -13,7 +13,13 @@ At first we need to obtain folders in which we can install the module. To get a 
 
 ***We do recommend to use the Program Files folder (in case it's present) to install the module into, which will make the installation as service easier***
 
-To be able to use the module, you will require to have it named **exactly** as the .psm1 and .psd1 files inside the repository.
+To be able to use the module, you will require to have named the folder **exactly** as the .psm1 and .psd1 files inside the repository.
+
+Example folder path:
+
+```
+    C:\Program Files\WindowsPowerShell\Modules\icinga-module-windows
+```
 
 To validate if the module is installed properly, you can start a new PowerShell instance and type the following command
 
@@ -29,7 +35,7 @@ Configure the module
 Once the module is installed, you will want to run the initial setup. Therefor you will simply have to type in the command
 
 ```powershell
-    Start-Icinga-Setup
+    New-Icinga-Setup
 ```
 
 This will create the base configuration of the module including the setup of directories and required files within the **PowerShell Module Directory**.
