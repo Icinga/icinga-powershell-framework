@@ -13,26 +13,26 @@ $ClientJobs | Add-Member -membertype ScriptMethod -name 'AddTicks' -value {
 $ClientJobs | Add-Member -membertype ScriptMethod -name 'WindowsHello' -value {
     param([string]$os, [string]$fqdn, [string]$version, [bool]$force);
 
-    [hashtable]$hello = @{
-        'os'      = $os;
-        'fqdn'    = $fqdn;
-        'version' = $version;
-        'port'    = $Icinga2.Config.'tcp.socket.port';
-    };
-
-    [string]$token = $this.getAuthToken();
-    if ([string]::isNullOrEmpty($token) -eq $FALSE) {
-        $hello.Add(
-            'modules',
-            (New-Icinga-Monitoring -ListModules)
-        )
-    }
-
     if ($this.hello_counter -ge 30) {
         $this.hello_counter = 0;
     }
 
     if ($this.hello_counter -eq 0 -Or $force -eq $TRUE) {
+        [hashtable]$hello = @{
+            'os'      = $os;
+            'fqdn'    = $fqdn;
+            'version' = $version;
+            'port'    = $Icinga2.Config.'tcp.socket.port';
+        };
+
+        [string]$token = $this.getAuthToken();
+        if ([string]::isNullOrEmpty($token) -eq $FALSE) {
+            $hello.Add(
+                'modules',
+                (New-Icinga-Monitoring -ListModules)
+            )
+        }
+
         $response = $Icinga2.ClientProtocol.NewRequest(
             @('X-Windows-Hello: 1'),
             ($hello | ConvertTo-Json -Depth 2 -Compress),
