@@ -44,6 +44,7 @@ $Checker | Add-Member -membertype ScriptMethod -name 'Start' -value {
         # they will become executed right on time
         $StopWatchHandler.Stop();
         $this.time_offset = [math]::Round($StopWatchHandler.Elapsed.TotalSeconds, 0);
+        $Icinga2.ClientJobs.AddTicks($this.time_offset);
 
         Start-Sleep -Seconds 1;
     }

@@ -4,6 +4,12 @@ $ClientJobs | Add-Member -membertype NoteProperty -name 'hello_counter'    -valu
 $ClientJobs | Add-Member -membertype NoteProperty -name 'module_scheduler' -value @( );
 $ClientJobs | Add-Member -membertype NoteProperty -name 'module_output'    -value $null;
 
+$ClientJobs | Add-Member -membertype ScriptMethod -name 'AddTicks' -value {
+    param([int]$ticks);
+
+    $this.hello_counter += $ticks;
+}
+
 $ClientJobs | Add-Member -membertype ScriptMethod -name 'WindowsHello' -value {
     param([string]$os, [string]$fqdn, [string]$version, [bool]$force);
 
@@ -20,6 +26,10 @@ $ClientJobs | Add-Member -membertype ScriptMethod -name 'WindowsHello' -value {
             'modules',
             (New-Icinga-Monitoring -ListModules)
         )
+    }
+
+    if ($this.hello_counter -ge 30) {
+        $this.hello_counter = 0;
     }
 
     if ($this.hello_counter -eq 0 -Or $force -eq $TRUE) {
@@ -51,13 +61,9 @@ $ClientJobs | Add-Member -membertype ScriptMethod -name 'WindowsHello' -value {
         $Icinga2.Cache.Checker.Authenticated = $FALSE;
 
         return $response;
-    } else {
-        if ($this.hello_counter -ge 30) {
-            $this.hello_counter = 0;
-        } else {
-            $this.hello_counter += 1;
-        }
     }
+
+    $this.hello_counter += 1;
 
     return $null;
 }
