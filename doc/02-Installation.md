@@ -35,7 +35,7 @@ Configure the module
 Once the module is installed, you will want to run the initial setup. Therefor you will simply have to type in the command
 
 ```powershell
-    New-Icinga-Setup
+    Install-Icinga
 ```
 
 This will create the base configuration of the module including the setup of directories and required files within the **PowerShell Module Directory**.

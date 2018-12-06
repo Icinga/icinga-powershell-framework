@@ -15,7 +15,7 @@ Set-Variable -Name Icinga2 -Option Constant -Value @{
         'Restart-Icinga-Service',
         'New-Icinga-Service',
         'Remove-Icinga-Service',
-        'New-Icinga-Setup',
+        'Install-Icinga',
         'Get-Icinga-Setup',
         'Start-Icinga-Daemon',
         'Stop-Icinga-Daemon',

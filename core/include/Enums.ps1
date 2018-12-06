@@ -37,7 +37,7 @@
 };
 
 [hashtable]$ServiceStatus = @{
-    'NotInstalled' = 'The Icinga service for this module is not installed. Please run New-Icinga-Setup to install the service.';
+    'NotInstalled' = 'The Icinga service for this module is not installed. Please run Install-Icinga to install the service.';
     'Running'      = 'The Icinga service is running.';
     'Stopped'      = 'The Icinga service is not running.';
     'Starting'     = 'The Icinga service is about to start.';

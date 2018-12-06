@@ -4,12 +4,12 @@
 .DESCRIPTION
    More Information on https://github.com/LordHepipud/icinga-module-windows
 .EXAMPLE
-   New-Icinga-Setup
+   Install-Icinga
  .NOTES
     
 #>
 
-function New-Icinga-Setup()
+function Install-Icinga()
 {
     [string]$command = Get-Icinga-Command('setup');
     return &$command;
@@ -65,7 +65,7 @@ function Start-Icinga-Daemon
     if ((Get-Icinga-Setup) -eq $FALSE) {
         $Icinga2.Log.Write(
             $Icinga2.Enums.LogState.Warning,
-            'The agent seems to be not configured on this system. Please run "New-Icinga-Setup" and try again.'
+            'The agent seems to be not configured on this system. Please run "Install-Icinga" and try again.'
         );
         return;
     }
@@ -82,7 +82,7 @@ function Stop-Icinga-Daemon()
     if ((Get-Icinga-Setup) -eq $FALSE) {
         $Icinga2.Log.Write(
             $Icinga2.Enums.LogState.Warning,
-            'The agent seems to be not configured on this system. Please run "New-Icinga-Setup" and try again.'
+            'The agent seems to be not configured on this system. Please run "Install-Icinga" and try again.'
         );
         return;
     }
@@ -100,7 +100,7 @@ function Start-Icinga-Checker
     if ((Get-Icinga-Setup) -eq $FALSE) {
         $Icinga2.Log.Write(
             $Icinga2.Enums.LogState.Warning,
-            'The agent seems to be not configured on this system. Please run "New-Icinga-Setup" and try again.'
+            'The agent seems to be not configured on this system. Please run "Install-Icinga" and try again.'
         );
         return;
     }
@@ -117,7 +117,7 @@ function Stop-Icinga-Checker
     if ((Get-Icinga-Setup) -eq $FALSE) {
         $Icinga2.Log.Write(
             $Icinga2.Enums.LogState.Warning,
-            'The agent seems to be not configured on this system. Please run "New-Icinga-Setup" and try again.'
+            'The agent seems to be not configured on this system. Please run "Install-Icinga" and try again.'
         );
         return;
     }
@@ -156,7 +156,7 @@ function New-Icinga-Monitoring()
     if ((Get-Icinga-Setup) -eq $FALSE) {
         $Icinga2.Log.Write(
             $Icinga2.Enums.LogState.Warning,
-            'The agent seems to be not configured on this system. Please run "New-Icinga-Setup" and try again.'
+            'The agent seems to be not configured on this system. Please run "Install-Icinga" and try again.'
         );
         return;
     }
@@ -197,7 +197,7 @@ function Get-Icinga-Counter()
     if ((Get-Icinga-Setup) -eq $FALSE) {
         $Icinga2.Log.Write(
             $Icinga2.Enums.LogState.Warning,
-            'The agent seems to be not configured on this system. Please run "New-Icinga-Setup" and try again.'
+            'The agent seems to be not configured on this system. Please run "Install-Icinga" and try again.'
         );
         return;
     }
