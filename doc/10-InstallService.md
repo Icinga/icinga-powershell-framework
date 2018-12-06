@@ -30,7 +30,7 @@ and the binary name is
 Now lets install the service with the help of the PowerShell Module:
 
 ```powershell
-    New-Icinga-Service -IcingaServicePath 'C:\Program Files\Icinga Windows Service\icinga-service.exe'
+    Install-Icinga-Service -IcingaServicePath 'C:\Program Files\Icinga Windows Service\icinga-service.exe'
 ```
 
 You can validate if the service has been installed properly by using the Get Service Cmdlet:
@@ -44,6 +44,6 @@ Of course there are more Cmdlets available, making the management of this Icinga
 * Start-Icinga-Service
 * Stop-Icinga-Service
 * Restart-Icinga-Service
-* Remove-Icinga-Service
+* Uninstall-Icinga-Service
 
 **Note:** If you run the PowerShell Module as service, both the Daemon and Checker component will be started. To prevent external access to the Daemon, you should ensure to block port **5891** on this host.

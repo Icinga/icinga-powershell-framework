@@ -41,7 +41,7 @@ function Restart-Icinga-Service()
     $Icinga2.Service.Restart();
 }
 
-function New-Icinga-Service()
+function Install-Icinga-Service()
 {
     [CmdletBinding()]
     param(
@@ -50,7 +50,7 @@ function New-Icinga-Service()
     $Icinga2.Service.Install($IcingaServicePath);
 }
 
-function Remove-Icinga-Service()
+function Uninstall-Icinga-Service()
 {
     $Icinga2.Service.Uninstall();
 }
