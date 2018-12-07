@@ -24,11 +24,7 @@ $SSL | Add-Member -membertype ScriptMethod -name 'LoadServerCertificate' -value 
 
         # Try to discover the certificate based on our FQDN
         if ([string]::IsNullOrEmpty($CertName) -eq $TRUE -And [string]::IsNullOrEmpty($CertThumbprint) -eq $TRUE) {
-            $CertName = [string]::Format(
-                '{0}.{1}',
-                (Get-WmiObject Win32_ComputerSystem).DNSHostName,
-                (Get-WmiObject win32_computersystem).Domain
-            );
+            $CertName = [System.Net.Dns]::GetHostEntry('localhost').HostName;
 
             $Icinga2.Log.Write(
                 $Icinga2.Enums.LogState.Info,

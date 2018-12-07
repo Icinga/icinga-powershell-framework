@@ -17,11 +17,7 @@ $Checker | Add-Member -membertype ScriptMethod -name 'Start' -value {
     $WindowsInformations = Get-CimInstance Win32_OperatingSystem;
     $this.version        = $WindowsInformations.CimInstanceProperties['Version'].Value;
     $this.os             = $WindowsInformations.CimInstanceProperties['Caption'].Value;
-    $this.fqdn           = [string]::Format(
-        '{0}.{1}',
-        (Get-WmiObject Win32_ComputerSystem).DNSHostName,
-        (Get-WmiObject win32_computersystem).Domain
-    );
+    $this.fqdn           = [System.Net.Dns]::GetHostEntry('localhost').HostName;
 
     $Icinga2.Log.Write(
         $Icinga2.Enums.LogState.Info,
