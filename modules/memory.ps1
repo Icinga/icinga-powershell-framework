@@ -23,8 +23,8 @@ function ClassMemory
     );
 
     # Lets load some additional memory informations, besides current performance counters
-    $ComputerInformations = Get-CimInstance Win32_ComputerSystem;
-    $counter.Add('\Memory\Physical Memory Total Bytes', @{ 'value' = $ComputerInformations.TotalPhysicalMemory; 'sample' = @{ }; });
+    $ComputerInformation = Get-CimInstance Win32_ComputerSystem;
+    $counter.Add('\Memory\Physical Memory Total Bytes', @{ 'value' = $ComputerInformation.TotalPhysicalMemory; 'sample' = @{ }; });
 
     return $counter;
 }
