@@ -65,8 +65,25 @@
     63 = 'Reserved for system vendor'
 }
 
+[hashtable]$Capabilities = @{ 
+    0 = 'Unknown';
+    1 = 'Other';
+    2 = 'Sequential Access';
+    3 = 'Random Access';
+    4 = 'Supports Writing';
+    5 = 'Encryption';
+    6 = 'Compression';
+    7 = 'Supports Removeable Media';
+    8 = 'Manual Cleaning';
+    9 = 'Automatic Cleaning';
+    10 = 'SMART Notification';
+    11 = 'Supports Dual Sided Media';
+    12 = 'Predismount Eject Not Required'
+}
+
 [hashtable]$ProviderEnums = @{ 
-    BiosCharacteristics = $BiosCharacteristics
+    BiosCharacteristics = $BiosCharacteristics;
+    Capabilities = $Capabilities;
 }
 
 Export-ModuleMember -Variable @('ProviderEnums');
