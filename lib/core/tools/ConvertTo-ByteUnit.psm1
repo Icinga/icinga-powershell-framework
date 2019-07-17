@@ -41,7 +41,7 @@ function ConvertTo-KiloByte()
                 $result = ($Value / 1000); 
         }
         KB {
-                Write-Output $Value;
+                $result = $Value;
         }
         MB {
                 $result = ($Value * [math]::Pow(10, 3));
