@@ -1,28 +1,34 @@
 function ConvertTo-Byte()
 {
     param(
-        [single]$Value,
-        [string]$Unit
+        [single]$Value, 
+        [string]$Unit #Validation PT PetaByte
     );
 
     switch ($Unit) {
-        B { 
-                $result = $Value; 
+        Byte { 
+                $result = $Value;
+                break; 
         }
-        KB {
+        KiloByte {
                 $result = ($Value * [math]::Pow(10, 3));
+                break;
         }
-        MB {
+        MegaByte {
                 $result = ($Value * [math]::Pow(10, 6));
+                break;
         }
-        GB {
+        GigaByte {
                 $result = ($Value * [math]::Pow(10, 9));
+                break;
         }
-        TB {
+        TeraByte {
                 $result = ($Value * [math]::Pow(10, 12));
+                break;
         }
-        PB {
+        PetaByte {
                 $result = ($Value * [math]::Pow(10, 15));
+                break;
         }
         Default {}
     }
@@ -37,23 +43,29 @@ function ConvertTo-KiloByte()
     );
 
     switch ($Unit) {
-        B { 
-                $result = ($Value / 1000); 
+        Byte { 
+                $result = ($Value / 1000);
+                break; 
         }
-        KB {
+        KiloByte {
                 $result = $Value;
+                break;
         }
-        MB {
+        MegaByte {
                 $result = ($Value * [math]::Pow(10, 3));
+                break;
         }
-        GB {
+        GigaByte {
                 $result = ($Value * [math]::Pow(10, 6));
+                break;
         }
-        TB {
+        TeraByte {
                 $result = ($Value * [math]::Pow(10, 9));
+                break;
         }
-        PB {
+        PetaByte {
                 $result = ($Value * [math]::Pow(10, 12));
+                break;
         }
         Default {}
     }
@@ -69,23 +81,29 @@ function ConvertTo-MegaByte()
     );
 
     switch ($Unit) {
-        B { 
-                $result = ($Value / [math]::Pow(10, 6)); 
+        Byte { 
+                $result = ($Value / [math]::Pow(10, 6));
+                break; 
         }
-        KB {
+        KiloByte {
                 $result = ($Value / [math]::Pow(10, 3));
+                break;
         }
-        MB {
+        MegaByte {
                 $result = $Value;
+                break;
         }
-        GB {
+        GigaByte {
                 $result = ($Value * [math]::Pow(10, 3));
+                break;
         }
-        TB {
+        TeraByte {
                 $result = ($Value * [math]::Pow(10, 6));
+                break;
         }
-        PB {
+        PetaByte {
                 $result = ($Value * [math]::Pow(10, 9));
+                break;
         }
         Default {}
     }
@@ -101,23 +119,29 @@ function ConvertTo-GigaByte()
     );
 
     switch ($Unit) {
-        B { 
+        Byte { 
                 $result = ($Value / [math]::Pow(10, 9)); 
+                break;
         }
-        KB {
-                $result = ($Value / [math]::Pow(10, 6))
+        KiloByte {
+                $result = ($Value / [math]::Pow(10, 6));
+                break;
         }
-        MB {
+        MegaByte {
                 $result = ($Value / [math]::Pow(10, 3));
+                break;
         }
-        GB {
+        GigaByte {
                 $result = $Value;
+                break;
         }
-        TB {
+        TeraByte {
                 $result = ($Value * [math]::Pow(10, 3));
+                break;
         }
-        PB {
+        PetaByte {
                 $result = ($Value * [math]::Pow(10, 6));
+                break;
         }
         Default {}
     }
@@ -133,23 +157,29 @@ function ConvertTo-TeraByte()
     );
 
     switch ($Unit) {
-        B { 
+        Byte { 
                 $result = ($Value / [math]::Pow(10, 12)); 
+                break;
         }
-        KB {
+        KiloByte {
                 $result = ($Value / [math]::Pow(10, 9));
+                break;
         }
-        MB {
+        MegaByte {
                 $result = ($Value / [math]::Pow(10, 6));
+                break;
         }
-        GB {
+        GigaByte {
                 $result = ($Value / [math]::Pow(10, 3));
+                break;
         }
-        TB {
+        TeraByte {
                 $result = $Value;
+                break;
         }
-        PB {
+        PetaByte {
                 $result = ($Value * [math]::Pow(10, 3));
+                break;
         }
         Default {}
     }
@@ -165,23 +195,29 @@ function ConvertTo-PetaByte()
     );
 
     switch ($Unit) {
-        B { 
-                $result = ($Value / [math]::Pow(10, 15)); 
+        Byte { 
+                $result = ($Value / [math]::Pow(10, 15));
+                break; 
         }
-        KB {
+        KiloByte {
                 $result = ($Value / [math]::Pow(10, 12));
+                break;
         }
-        MB {
+        MegaByte {
                 $result = ($Value / [math]::Pow(10, 9));
+                break;
         }
-        GB {
+        GigaByte {
                 $result = ($Value / [math]::Pow(10, 6));
+                break;
         }
-        TB {
+        TeraByte {
                 $result = ($Value / [math]::Pow(10, 3));
+                break;
         }
-        PB {
+        PetaByte {
                 $result = $Value;
+                break;
         }
         Default {}
     }
