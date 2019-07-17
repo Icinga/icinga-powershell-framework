@@ -192,7 +192,25 @@ function Get-IcingaDiskModel
     return @{'value' = $DiskModel; 'name' = 'Model'};
 }
 
-function Get-IcingaDisk {
+function Get-IcingaDiskManufacturer
+{
+    $DiskManufacturer = Get-IcingaDiskInformation -Parameter Manufacturer;
+    return @{'value' = $DiskManufacturer; 'name' = 'Manufacturer'};
+}
+
+function Get-IcingaDiskTotalCylinders
+{
+    $DiskTotalCylinders = Get-IcingaDiskInformation -Parameter TotalCylinders;
+    return @{'value' = $DiskTotalCylinders; 'name' = 'TotalCylinders'};
+}
+
+function Get-IcingaDiskTotalSectors
+{
+    $DiskTotalSectors = Get-IcingaDiskInformation -Parameter TotalSectors;
+    return @{'value' = $DiskTotalSectors; 'name' = 'TotalSectors'};
+}
+
+function Get-IcingaDisks {
     
     $DiskInformation = Get-CimInstance Win32_DiskDrive;
     $diskPartitionInformation = Get-IcingaDiskPartitions;
