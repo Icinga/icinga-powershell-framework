@@ -167,7 +167,7 @@ function Get-IcingaDiskCapabilities
     [hashtable]$DiskCapabilities = @{};
 
     foreach ($id in $DiskInformation.Capabilities) {
-        $DiskCapabilities.Add([int]$id, $ProviderEnums.Capabilities.([int]$id));
+        $DiskCapabilities.Add([int]$id, $ProviderEnums.DiskCapabilities.([int]$id));
     }
         return @{'value' = $DiskCapabilities; 'name' = 'Capabilities'};
 
