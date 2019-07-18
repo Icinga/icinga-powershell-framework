@@ -7,6 +7,8 @@ param (
 # Create an internal 'namespace' for our environment
 Set-Variable -Name Icinga2 -Option Constant -Value @{
     Function = @(
+        'Import-IcingaLib',
+        'Import-IcingaDirectoryModules',
         'Get-Icinga-Lib',
         'Get-Icinga-Object',
         'Get-Icinga-Service',
