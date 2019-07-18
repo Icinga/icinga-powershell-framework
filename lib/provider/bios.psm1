@@ -1,8 +1,10 @@
 Import-Module $IncludeDir\provider\enums;
 
+<##################################################################################################
+################# Runspace "Show-Icinga{BIOS}" ####################################################
+##################################################################################################>
 function Show-IcingaBiosData()
 {
-    # Lets load some bios informations
     $BIOSInformation = Get-CimInstance Win32_BIOS;
     [hashtable]$BIOSData = @{};
 
@@ -14,6 +16,40 @@ function Show-IcingaBiosData()
 
     return $BIOSData;
 }
+
+<##################################################################################################
+################# Runspace "Get-Icinga{BIOS}" #####################################################
+##################################################################################################>
+function Get-IcingaBios()
+{
+    <# Collects the most important BIOS informations,
+    e.g. name, version, manufacturer#>
+    $BIOSInformation = Get-CimInstance Win32_BIOS;
+    [hashtable]$BIOSCharacteristics = @{};
+    [hashtable]$BIOSData = @{};
+
+    foreach ($id in $BIOSInformation.BiosCharacteristics) {
+        $BIOSCharacteristics.Add([string]$id, $ProviderEnums.BiosCharacteristics.Item([int]$id));
+    }
+
+        $BIOSData.Add(
+            'bios', @{
+                'metadata' = @{
+                    'Name' = $BIOSInformation.Name;
+                    'Caption' = $BIOSInformation.Caption;
+                    'Manufacturer' = $BIOSInformation.Manufacturer;
+                    'PrimaryBIOS' = $BIOSInformation.PrimaryBIOS;
+                    'SerialNumber' = $BIOSInformation.SerialNumber;
+                    'SMBIOSBIOSVersion' = $BIOSInformation.SMBIOSBIOSVersion;
+                    'SoftwareElementID' = $BIOSInformation.SoftwareElementID;
+                    'Status' = $BIOSInformation.Status;
+                    'Version' = $BIOSInformation.Version;
+                    'BiosCharacteristics' = $BIOSCharacteristics;
+                }
+            }
+        );
+        return $BIOSData;
+    }
 
 function Get-IcingaBiosSerialNumber()
 {
@@ -33,7 +69,7 @@ function Get-IcingaBiosManufacturer()
     return @{'value' = $bios.Manufacturer; 'name' = 'Manufacturer'};
 }
 
-# Primary Bios seems to be relevant in dual-bios context
+# Primary Bios might be more relevant in dual bios context
 function Get-IcingaBiosPrimaryBios()
 {
     $bios = Get-CimInstance Win32_BIOS;
@@ -78,7 +114,7 @@ function Get-IcingaBiosCharacteristics()
     [hashtable]$BIOSCharacteristics = @{};
 
     foreach ($id in $bios.BiosCharacteristics) {
-        $BIOSCharacteristics.Add([int]$id, $ProviderEnums.BiosCharacteristics.([int]$id));
+        $BIOSCharacteristics.Add([string]$id, $ProviderEnums.BiosCharacteristics.Item([int]$id));
     }
 
     $output = $BIOSCharacteristics;
