@@ -1,8 +1,13 @@
-[hashtable]$BiosCharacteristics = @{ 
+
+<##################################################################################################
+################# /lib/provider/bios.psm1 #########################################################
+##################################################################################################>
+
+[hashtable]$BiosCharacteristics = @{
     0 = 'Reserved'; 
     1 = 'Reserved'; 
     2 = 'Unknown';
-    3 = 'BIOS Characteristics Not Supported'; 
+    3 = 'BIOS Characteristics Not Supported';
     4 = 'ISA is supported';
     5 = 'MCA is supported';
     6 = 'EISA is supported';
@@ -65,7 +70,11 @@
     63 = 'Reserved for system vendor'
 }
 
-[hashtable]$DiskCapabilities = @{ 
+<##################################################################################################
+################# /lib/provider/disks.psm1 ########################################################
+##################################################################################################>
+
+[hashtable]$DiskCapabilities = @{
     0 = 'Unknown';
     1 = 'Other';
     2 = 'Sequential Access';
@@ -78,8 +87,12 @@
     9 = 'Automatic Cleaning';
     10 = 'SMART Notification';
     11 = 'Supports Dual Sided Media';
-    12 = 'Predismount Eject Not Required'
+    12 = 'Predismount Eject Not Required';
 }
+
+<##################################################################################################
+################# /lib/provider/cpu.psm1 ##########################################################
+##################################################################################################>
 
 [hashtable]$CPUArchitecture = @{
     0='x86';
@@ -100,122 +113,122 @@
 }
 
 [hashtable]$CPUStatusInfo = @{
-    1='Other'
-    2='Unknown'
-    3='Enabled'
-    4='Disabled'
-    5='Not Applicable'
+    1='Other';
+    2='Unknown';
+    3='Enabled';
+    4='Disabled';
+    5='Not Applicable';
 }
 
 [hashtable]$CPUFamily = @{
-    1='Other'
-    2='Unknown'
-    3='8086'
-    4='80286'
-    5='80386'
-    6='80486'
-    7='8087'
-    8='80287'
-    9='80387'
-   10='80487'
-   11='Pentium(R) brand'
-   12='Pentium(R) Pro'
-   13='Pentium(R) II'
-   14='Pentium(R) processor with MMX(TM) technology'
-   15='Celeron(TM)'
-   16='Pentium(R) II Xeon(TM)'
-   17='Pentium(R) III'
-   18='M1 Family'
-   19='M2 Family'
-   24='K5 Family'
-   25='K6 Family'
-   26='K6-2'
-   27='K6-3'
-   28='AMD Athlon(TM) Processor Family'
-   29='AMD(R) Duron(TM) Processor'
-   30='AMD29000 Family'
-   31='K6-2+'
-   32='Power PC Family'
-   33='Power PC 601'
-   34='Power PC 603'
-   35='Power PC 603+'
-   36='Power PC 604'
-   37='Power PC 620'
-   38='Power PC X704'
-   39='Power PC 750'
-   48='Alpha Family'
-   49='Alpha 21064'
-   50='Alpha 21066'
-   51='Alpha 21164'
-   52='Alpha 21164PC'
-   53='Alpha 21164a'
-   54='Alpha 21264'
-   55='Alpha 21364'
-   64='MIPS Family'
-   65='MIPS R4000'
-   66='MIPS R4200'
-   67='MIPS R4400'
-   68='MIPS R4600'
-   69='MIPS R10000'
-   80='SPARC Family'
-   81='SuperSPARC'
-   82='microSPARC II'
-   83='microSPARC IIep'
-   84='UltraSPARC'
-   85='UltraSPARC II'
-   86='UltraSPARC IIi'
-   87='UltraSPARC III'
-   88='UltraSPARC IIIi'
-   96='68040'
-   97='68xxx Family'
-   98='68000'
-   99='68010'
-  100='68020'
-  101='68030'
-  112='Hobbit Family'
-  120='Crusoe(TM) TM5000 Family'
-  121='Crusoe(TM) TM3000 Family'
-  122='Efficeon(TM) TM8000 Family'
-  128='Weitek'
-  130='Itanium(TM) Processor'
-  131='AMD Athlon(TM) 64 Processor Family'
-  132='AMD Opteron(TM) Family'
-  144='PA-RISC Family'
-  145='PA-RISC 8500'
-  146='PA-RISC 8000'
-  147='PA-RISC 7300LC'
-  148='PA-RISC 7200'
-  149='PA-RISC 7100LC'
-  150='PA-RISC 7100'
-  160='V30 Family'
-  176='Pentium(R) III Xeon(TM)'
-  177='Pentium(R) III Processor with Intel(R) SpeedStep(TM) Technology'
-  178='Pentium(R) 4'
-  179='Intel(R) Xeon(TM)'
-  180='AS400 Family'
-  181='Intel(R) Xeon(TM) processor MP'
-  182='AMD AthlonXP(TM) Family'
-  183='AMD AthlonMP(TM) Family'
-  184='Intel(R) Itanium(R) 2'
-  185='Intel Pentium M Processor'
-  190='K7'
-  200='IBM390 Family'
-  201='G4'
-  202='G5'
-  203='G6'
-  204='z/Architecture base'
-  250='i860'
-  251='i960'
-  260='SH-3'
-  261='SH-4'
-  280='ARM'
-  281='StrongARM'
-  300='6x86'
-  301='MediaGX'
-  302='MII'
-  320='WinChip'
-  350='DSP'
-  500='Video Processor'
+    1='Other';
+    2='Unknown';
+    3='8086';
+    4='80286';
+    5='80386';
+    6='80486';
+    7='8087';
+    8='80287';
+    9='80387';
+   10='80487';
+   11='Pentium(R) brand';
+   12='Pentium(R) Pro';
+   13='Pentium(R) II';
+   14='Pentium(R) processor with MMX(TM) technology';
+   15='Celeron(TM)';
+   16='Pentium(R) II Xeon(TM)';
+   17='Pentium(R) III';
+   18='M1 Family';
+   19='M2 Family';
+   24='K5 Family';
+   25='K6 Family';
+   26='K6-2';
+   27='K6-3';
+   28='AMD Athlon(TM) Processor Family';
+   29='AMD(R) Duron(TM) Processor';
+   30='AMD29000 Family';
+   31='K6-2+';
+   32='Power PC Family';
+   33='Power PC 601';
+   34='Power PC 603';
+   35='Power PC 603+';
+   36='Power PC 604';
+   37='Power PC 620';
+   38='Power PC X704';
+   39='Power PC 750';
+   48='Alpha Family';
+   49='Alpha 21064';
+   50='Alpha 21066';
+   51='Alpha 21164';
+   52='Alpha 21164PC';
+   53='Alpha 21164a';
+   54='Alpha 21264';
+   55='Alpha 21364';
+   64='MIPS Family';
+   65='MIPS R4000';
+   66='MIPS R4200';
+   67='MIPS R4400';
+   68='MIPS R4600';
+   69='MIPS R10000';
+   80='SPARC Family';
+   81='SuperSPARC';
+   82='microSPARC II';
+   83='microSPARC IIep';
+   84='UltraSPARC';
+   85='UltraSPARC II';
+   86='UltraSPARC IIi';
+   87='UltraSPARC III';
+   88='UltraSPARC IIIi';
+   96='68040';
+   97='68xxx Family';
+   98='68000';
+   99='68010';
+  100='68020';
+  101='68030';
+  112='Hobbit Family';
+  120='Crusoe(TM) TM5000 Family';
+  121='Crusoe(TM) TM3000 Family';
+  122='Efficeon(TM) TM8000 Family';
+  128='Weitek';
+  130='Itanium(TM) Processor';
+  131='AMD Athlon(TM) 64 Processor Family';
+  132='AMD Opteron(TM) Family';
+  144='PA-RISC Family';
+  145='PA-RISC 8500';
+  146='PA-RISC 8000';
+  147='PA-RISC 7300LC';
+  148='PA-RISC 7200';
+  149='PA-RISC 7100LC';
+  150='PA-RISC 7100';
+  160='V30 Family';
+  176='Pentium(R) III Xeon(TM)';
+  177='Pentium(R) III Processor with Intel(R) SpeedStep(TM) Technology';
+  178='Pentium(R) 4';
+  179='Intel(R) Xeon(TM)';
+  180='AS400 Family';
+  181='Intel(R) Xeon(TM) processor MP';
+  182='AMD AthlonXP(TM) Family';
+  183='AMD AthlonMP(TM) Family';
+  184='Intel(R) Itanium(R) 2';
+  185='Intel Pentium M Processor';
+  190='K7';
+  200='IBM390 Family';
+  201='G4';
+  202='G5';
+  203='G6';
+  204='z/Architecture base';
+  250='i860';
+  251='i960';
+  260='SH-3';
+  261='SH-4';
+  280='ARM';
+  281='StrongARM';
+  300='6x86';
+  301='MediaGX';
+  302='MII';
+  320='WinChip';
+  350='DSP';
+  500='Video Processor';
 }
 
 [hashtable]$CPUConfigManagerErrorCode = @{
@@ -277,15 +290,109 @@
     21='Quiesced';
 }
 
-[hashtable]$ProviderEnums = @{ 
+[hashtable]$CPUPowerManagementCapabilities = @{
+    0='Unknown';
+    1='Not Supported';
+    2='Disabled';
+    3='Enabled';
+}
+
+[hashtable]$MemoryFormFactor = @{
+    0='Unknown';
+    1= 'Other';
+    2= 'SIP';
+    3= 'DIP';
+    4= 'ZIP';
+    5= 'SOJ';
+    6= 'Proprietary';
+    7= 'SIMM';
+    8= 'DIMM';
+    9= 'TSOP';
+    10= 'PGA';
+    11= 'RIMM';
+    12= 'SODIMM';
+    13= 'SRIMM';
+    14= 'SMD';
+    15= 'SSMP';
+    16= 'QFP';
+    17= 'TQFP';
+    18= 'SOIC';
+    19= 'LCC';
+    20= 'PLCC';
+    21= 'BGA';
+    22= 'FPBGA';
+    23= 'LGA';
+}
+
+[hashtable]$MemoryInterleavePosition = @{
+    0= 'Noninterleaved';
+    1= 'First position';
+    2= 'Second position';
+}
+
+[hashtable]$MemoryMemoryType = @{
+    0= 'Unknown';
+    1= 'Other';  
+    2= 'DRAM';
+    3= 'Synchronous DRAM';
+    4= 'Cache DRAM';
+    5= 'EDO';
+    6= 'EDRAM';
+    7= 'VRAM';
+    8= 'SRAM';
+    9= 'RAM';
+    10= 'ROM';
+    11= 'Flash';
+    12='EEPROM';
+    13= 'FEPROM';
+    14= 'EPROM';
+    15= 'CDRAM';
+    16= '3DRAM';
+    17= 'SDRAM';
+    18= 'SGRAM';
+    19= 'RDRAM';
+    20= 'DDR';
+    21= 'DDR2';
+    22= 'DDR2 FB-DIMM';
+    23= 'DDR2—FB-DIMM,May not be available; see note above.';
+    24= 'DDR3—May not be available; see note above.';
+    25= 'FBD2';
+}
+
+[hashtable]$MemoryTypeDetail = @{
+    1= 'Reserved';
+    2= 'Other';
+    4= 'Unknown';
+    8= 'Fast-paged';
+    16= 'Static column';
+    32= 'Pseudo-static';
+    64= 'RAMBUS';
+    128= 'Synchronous';
+    256= 'CMOS';
+    512= 'EDO';
+    1024= 'Window DRAM';
+    2048= 'Cache DRAM';
+    4096= 'Non-volatile';
+}
+
+[hashtable]$ProviderEnums = @{
+    #/lib/provider/bios.psm1
     BiosCharacteristics = $BiosCharacteristics;
+    #/lib/provider/disks.psm1
     DiskCapabilities = $DiskCapabilities;
+    #/lib/provider/cpu.psm1
     CPUArchitecture = $CPUArchitecture;
     CPUProcessorType = $CPUProcessorType;
     CPUStatusInfo = $CPUStatusInfo;
     CPUFamily = $CPUFamily;
     CPUConfigManagerErrorCode = $CPUConfigManagerErrorCode;
     CPUAvailability = $CPUAvailability;
+    CPUPowerManagementCapabilities = $CPUPowerManagementCapabilities;
+    #/lib/provider/memory.psm1
+    MemoryFormFactor = $MemoryFormFactor;
+    MemoryInterleavePosition = $MemoryInterleavePosition;
+    MemoryMemoryType = $MemoryMemoryType;
+    MemoryTypeDetail = $MemoryTypeDetail;
 }
 
 Export-ModuleMember -Variable @('ProviderEnums');

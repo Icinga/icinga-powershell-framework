@@ -1,4 +1,10 @@
-function Show-IcingaDiskFullData {
+Import-Module $IncludeDir\provider\enums;
+
+<##################################################################################################
+################# Runspace "Show-Icinga{Disk}" ####################################################
+##################################################################################################>
+
+function Show-IcingaDiskData {
 
     $DisksInformations = Get-CimInstance Win32_DiskDrive;
 
@@ -84,8 +90,15 @@ function Show-IcingaDiskPhysical()
     return $PhysicalDiskData;
 }
 
+<##################################################################################################
+################# Runspace "Get-Icinga{Disk}" ####################################################
+##################################################################################################>
+
 function Get-IcingaDiskInformation()
 {
+    <# Fetches the information for other more specific Get-IcingaDisk-functions
+    e.g. Get-IcingaDiskModel; Get-IcingaDiskManufacturer.
+    Can be used to fetch information regarding a value of your choice. #>
     param(
         # The value to fetch from Win32_DiskDrive
         [string]$Parameter
@@ -93,7 +106,7 @@ function Get-IcingaDiskInformation()
     $DiskInformation = Get-CimInstance Win32_DiskDrive;
     [hashtable]$DiskData = @{};
 
-    foreach ($id in $DiskInformation.DeviceID) {    
+    foreach ($id in $DiskInformation.DeviceID) {
         $id = $id.trimstart(".\PHYSICALDRVE");
         $DiskData.Add($id.trim(), $DiskInformation.$Parameter);
     }
@@ -102,6 +115,9 @@ function Get-IcingaDiskInformation()
 }
 function Get-IcingaDiskPartitions()
 {
+    <# Fetches all the most important informations regarding partitions
+    e.g. physical disk; partition, size
+    , also collects partition information for Get-IcingaDisks #>
     $LogicalDiskInfo = Get-WmiObject Win32_LogicalDiskToPartition;
     [hashtable]$PartitionDiskByDriveLetter = @{};
 
@@ -141,7 +157,7 @@ function Get-IcingaDiskPartitionSize()
 
     [hashtable]$PartitionSizeByDriveLetter = @{};
 
-    # Should be dependent on the driveLetters returned in: "Show-IcingaDiskFullData"
+    # Should be dependent on the driveLetters returned in: "Show-IcingaDiskData"
     for ($test = 0; $test -lt 26; $test++)
     {
         $DiskDriveLetter = ([char](65 + $test))
@@ -211,12 +227,14 @@ function Get-IcingaDiskTotalSectors
 }
 
 function Get-IcingaDisks {
-    
+    <# Collects all the most important Disk-Informations,
+    e.g. size, model, sectors, cylinders
+    Is dependent on Get-IcingaDiskPartitions#>
     $DiskInformation = Get-CimInstance Win32_DiskDrive;
     $diskPartitionInformation = Get-IcingaDiskPartitions;
     [hashtable]$DiskData = @{};
 
-    foreach ($id in $DiskInformation.DeviceID) {    
+    foreach ($id in $DiskInformation.DeviceID) {
         [int]$id = $id.trimstart(".\PHYSICALDRVE");
 
         $DiskData.Add(
