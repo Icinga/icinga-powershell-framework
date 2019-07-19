@@ -18,7 +18,7 @@ function New-IcingaCheckresult()
         }
 
         # Compile the check / package if not already done
-        $this.check.Compile();
+        $this.check.Compile() | Out-Null;
 
         Write-Host ([string]::Format('| {0}', $this.check.GetPerfData()));
 
