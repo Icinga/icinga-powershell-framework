@@ -80,7 +80,7 @@ function New-IcingaCheckPackage()
             $this.exitcode = $IcingaEnums.IcingaExitCode.Ok;
         }
 
-        if ($Silent -eq $FALSE) {
+        if ($Silent -eq $FALSE -And [int]$this.exitcode -ne $IcingaEnums.IcingaExitCode.Unknown) {
             #Write-Host ([string]::Format('Check result for package {0} ({1}):{2}', $this.name, $this.GetPackageConfigMessage(), "`r`n"));
             $this.PrintOutputMessages();
         }
@@ -106,6 +106,15 @@ function New-IcingaCheckPackage()
     }
 
     $Check | Add-Member -membertype ScriptMethod -name 'CheckMinimumOk' -value {
+        if ($this.opmin -gt $this.checks.Count) {
+            Write-Host ([string]::Format(
+                'Unknown: The minimum argument ({0}) is exceeding the amount of assigned checks ({1}) to this package "{2}"',
+                $this.opmin, $this.checks.Count, $this.name
+            ));
+            $this.exitcode = $IcingaEnums.IcingaExitCode.Unknown;
+            return $FALSE;
+        }
+
         [int]$okCount = $this.GetOkCount();
 
         if ($this.opmin -le $okCount) {
@@ -116,6 +125,15 @@ function New-IcingaCheckPackage()
     }
 
     $Check | Add-Member -membertype ScriptMethod -name 'CheckMaximumOk' -value {
+        if ($this.opmax -gt $this.checks.Count) {
+            Write-Host ([string]::Format(
+                'Unknown: The maximum argument ({0}) is exceeding the amount of assigned checks ({1}) to this package "{2}"',
+                $this.opmax, $this.checks.Count, $this.name
+            ));
+            $this.exitcode = $IcingaEnums.IcingaExitCode.Unknown;
+            return $FALSE;
+        }
+
         [int]$okCount = $this.GetOkCount();
 
         if ($this.opmax -ge $okCount) {
@@ -225,6 +243,9 @@ function New-IcingaCheckPackage()
     }
 
     $Check | Add-Member -membertype ScriptMethod -name 'GetWorstExitCode' -value {
+        if ([int]$this.exitcode -eq [int]$IcingaEnums.IcingaExitCode.Unknown) {
+            return;
+        }
         $worstCheck = $null;
         foreach ($check in $this.checks) {
             if ([int]$this.exitcode -lt $check.exitcode) {
