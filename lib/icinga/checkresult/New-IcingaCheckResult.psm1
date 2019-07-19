@@ -20,7 +20,9 @@ function New-IcingaCheckresult()
         # Compile the check / package if not already done
         $this.check.Compile() | Out-Null;
 
-        Write-Host ([string]::Format('| {0}', $this.check.GetPerfData()));
+        if ([int]$this.check.exitcode -ne [int]$IcingaEnums.IcingaExitCode.Unknown) {
+            Write-Host ([string]::Format('| {0}', $this.check.GetPerfData()));
+        }
 
         return $this.check.exitcode;
     }
