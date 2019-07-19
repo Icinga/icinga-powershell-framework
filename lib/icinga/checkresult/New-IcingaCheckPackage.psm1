@@ -60,21 +60,18 @@ function New-IcingaCheckPackage()
                 $this.GetWorstExitCode();
                 $this.exitcode = $IcingaEnums.IcingaExitCode.Critical;
             } else {
-                $this.WriteAllOutput();
                 $this.exitcode = $IcingaEnums.IcingaExitCode.Ok;
             }
         } elseif([int]$this.opmin -ne -1) {
             if ($this.CheckMinimumOk() -eq $FALSE) {
                 $this.GetWorstExitCode();
             } else {
-                $this.WriteAllOutput();
                 $this.exitcode = $IcingaEnums.IcingaExitCode.Ok;
             }
         } elseif([int]$this.opmax -ne -1) {
             if ($this.CheckMaximumOk() -eq $FALSE) {
                 $this.GetWorstExitCode();
             } else {
-                $this.WriteAllOutput();
                 $this.exitcode = $IcingaEnums.IcingaExitCode.Ok;
             }
         }
