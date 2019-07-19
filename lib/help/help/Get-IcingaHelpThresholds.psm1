@@ -1,4 +1,4 @@
-Import-IcingaLib icinga\checkresult;
+Import-IcingaLib icinga\plugin;
 
 function Get-IcingaHelpThresholds()
 {
