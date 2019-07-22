@@ -67,11 +67,17 @@
              $CounterInstances = New-Object System.Diagnostics.PerformanceCounterCategory($UseCounterCategory);
              foreach ($instance in $CounterInstances.GetInstanceNames()) {
                  [string]$NewCounterName = $Counter.Replace('*', $instance);
-                 $NewCounter             = New-IcingaPerformanceCounterObject -FullName $NewCounterName -Category $UseCounterCategory -Counter $UseCounterName -Instance $instance -SkipWait $SkipWait;
+                 $NewCounter             = New-IcingaPerformanceCounterObject -FullName $NewCounterName -Category $UseCounterCategory -Counter $UseCounterName -Instance $instance -SkipWait $TRUE;
                  $AllCountersIntances += $NewCounter;
              }
          } catch {
              return (New-IcingaPerformanceCounterNullObject -FullName $Counter -ErrorMessage ([string]::Format('Failed to deserialize instances for counter "{0}". Exception: "{1}".', $Counter, $_.Exception.Message)));
+         }
+
+         # If we load multiple instances, we should add a global wait here instead of a wait for each single instance
+         # This will speed up CPU loading for example with plenty of cores avaiable
+         if ($SkipWait -eq $FALSE) {
+            Start-Sleep -Milliseconds 500;
          }
  
          # Add the parent counter including the array of Performance Counters to our
