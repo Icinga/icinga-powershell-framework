@@ -41,7 +41,7 @@ function New-IcingaCheck()
         param($warning);
 
         if ([string]::IsNullOrEmpty($warning)) {
-            return;
+            return $this;
         }
 
         if ((Test-Numeric $warning)) {
@@ -222,6 +222,10 @@ function New-IcingaCheck()
 
     $Check | Add-Member -membertype ScriptMethod -name 'CritOutOfRange' -value {
         param($critical);
+
+        if ([string]::IsNullOrEmpty($critical)) {
+            return $this;
+        }
 
         if ((Test-Numeric $critical)) {
             $this.CritIfGreaterThan($critical).CritIfLowerThan(0) | Out-Null;
