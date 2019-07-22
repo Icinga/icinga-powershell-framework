@@ -4,11 +4,12 @@ Import-IcingaLib core\tools;
 function New-IcingaCheck()
 {
     param(
-        [string]$Name    = '',
-        $Value           = $null,
-        $Unit            = $null,
-        [string]$Minimum = '',
-        [string]$Maximum = ''
+        [string]$Name       = '',
+        $Value              = $null,
+        $Unit               = $null,
+        [string]$Minimum    = '',
+        [string]$Maximum    = '',
+        [switch]$NoPerfData
     );
 
     $Check = New-Object -TypeName PSObject;
@@ -24,7 +25,7 @@ function New-IcingaCheck()
     $Check | Add-Member -membertype NoteProperty -name 'unit'      -value $Unit;
     $Check | Add-Member -membertype NoteProperty -name 'spacing'   -value 0;
     $Check | Add-Member -membertype NoteProperty -name 'compiled'  -value $FALSE;
-    $Check | Add-Member -membertype NoteProperty -name 'perfdata'   -value $TRUE;
+    $Check | Add-Member -membertype NoteProperty -name 'perfdata'  -value (-Not $NoPerfData);
     $Check | Add-Member -membertype NoteProperty -name 'warning'   -value '';
     $Check | Add-Member -membertype NoteProperty -name 'critical'  -value '';
     $Check | Add-Member -membertype NoteProperty -name 'minimum'   -value $Minimum;
@@ -580,7 +581,7 @@ function New-IcingaCheck()
 
     $Check | Add-Member -membertype ScriptMethod -name 'GetPerfData' -value {
 
-        if ($this.completed) {
+        if ($this.completed -Or -Not $this.perfdata) {
             return '';
         }
 
