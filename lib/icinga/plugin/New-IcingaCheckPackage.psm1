@@ -85,7 +85,6 @@ function New-IcingaCheckPackage()
         }
 
         if ($Silent -eq $FALSE -And [int]$this.exitcode -ne $IcingaEnums.IcingaExitCode.Unknown) {
-            #Write-Host ([string]::Format('Check result for package {0} ({1}):{2}', $this.name, $this.GetPackageConfigMessage(), "`r`n"));
             $this.PrintOutputMessages();
         }
 
