@@ -23,7 +23,6 @@ function Get-IcingaProcessData {
     [hashtable]$ProcessList        = @{};
     [hashtable]$ProcessNamesUnique = @{};
     [hashtable]$ProcessIDsByName   = @{};
-    #$NumberOfCPUThreads = $Icinga2.System.NumberOfCPUThreads;
 
     foreach ($process in $ProcessInformation) {
         [string]$processName = $process.Name.Replace('.exe', '');
@@ -91,34 +90,6 @@ function Get-IcingaProcessData {
 
     $ProcessData.Add('Process Count', $ProcessInformation.Count);
     $ProcessData.add('Processes', $ProcessList);
-    
-    return $ProcessData;
-    # Code Stolli below
-    
-    foreach ($NameID in $ProcessUniqueList.Name) {
-        $ProcessIDsBasedOnName = (Get-WmiObject Win32_Process -Filter name="'${NameID}'").ProcessID;
-        $ProcessIDsByName.Add($NameID,$ProcessIDsBasedOnName);
-    }
-    
-    foreach ($id in $ProcessUniqueList) {
-        $nameid = $id.name;
-        $ProcessNamesUnique.Add(
-            $id.Name.trim(".exe"), @{
-                'processlist' = @{
-                    $ProcessIDsByName.Item("$nameid") = "metadata";
-                };
-                'perfdata' = @{
-                    'lawl' = 'lol';
-                    'lel' = 'lel';
-                    'lol' = 'eyooo';
-                }
-            }
-        );
-    }
-    
-    
-    $ProcessData.Add('Process Count', $ProcessInformation.Count);
-    $ProcessData.add('Processes', $ProcessNamesUnique);
     
     return $ProcessData;
 }
