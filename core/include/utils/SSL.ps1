@@ -27,7 +27,7 @@ $SSL | Add-Member -membertype ScriptMethod -name 'LoadServerCertificate' -value 
             $CertName = [System.Net.Dns]::GetHostEntry('localhost').HostName;
 
             $Icinga2.Log.Write(
-                $Icinga2.Enums.LogState.Info,
+                $Icinga2.Enums.LogState.Debug,
                 [string]::Format(
                     'Trying to discover certificate for this host with FQDN "{0}"',
                     $CertName
