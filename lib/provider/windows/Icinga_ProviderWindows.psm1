@@ -1,8 +1,16 @@
 Import-Module $IncludeDir\provider\enums\Icinga_ProviderEnums;
 
+
 function Get-IcingaWindows()
 {
     $WindowsInformations = Get-CimInstance Win32_OperatingSystem;
+
+    $OSProductSuite = @();
+    $ProviderEnums.WindowsOSProductSuite.Keys | Where-Object { 
+        $_ -band $WindowsInformations.OSProductSuite 
+    } | ForEach-Object { 
+        $OSProductSuite += $ProviderEnums.WindowsOSProductSuite.Get_Item($_); 
+    };
 
     $windows_datails = @{};
     $windows_datails.Add(
@@ -23,7 +31,7 @@ function Get-IcingaWindows()
                 };
                 'OSProductSuite' = @{
                     'raw' = $WindowsInformations.OSProductSuite;
-                    'value' = $ProviderEnums.WindowsOSProductSuite[[int]$WindowsInformations.OSProductSuite];
+                    'value' = $OSProductSuite;
                 };
                 'ProductType' = @{
                     'raw' = $WindowsInformations.ProductType;

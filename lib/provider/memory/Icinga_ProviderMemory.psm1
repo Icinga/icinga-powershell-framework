@@ -8,6 +8,14 @@ function Get-IcingaMemory ()
     [hashtable]$MEMData = @{};
 
     foreach($memory in $MEMInformation) {
+
+        $TypeDetail = @();
+        $ProviderEnums.MemoryTypeDetail.Keys | Where-Object { 
+            $_ -band $memory.TypeDetail 
+        } | ForEach-Object { 
+            $TypeDetail += $ProviderEnums.MemoryTypeDetail.Get_Item($_); 
+        };
+
         $MEMData.Add(
             $memory.tag.trim("Physical Memory"), @{
                 'metadata' = @{
@@ -46,7 +54,7 @@ function Get-IcingaMemory ()
                     };
                     'TypeDetail' = @{
                         'raw'   = $memory.TypeDetail;
-                        'value' = $ProviderEnums.MemoryTypeDetail[[int]$memory.TypeDetail];
+                        'value' = $TypeDetail;
                     };
                 };
                 'specs' = @{
