@@ -51,7 +51,7 @@ function New-IcingaCheckPackage()
     }
 
     $Check | Add-Member -membertype ScriptMethod -name 'Compile' -value {
-        param([bool]$Silent);
+        param([bool]$Verbose);
 
         if ($this.compiled) {
             return;
@@ -90,7 +90,7 @@ function New-IcingaCheckPackage()
             $this.exitcode = $IcingaEnums.IcingaExitCode.Ok;
         }
 
-        if ($Silent -eq $FALSE -And [int]$this.exitcode -ne $IcingaEnums.IcingaExitCode.Unknown) {
+        if ($Verbose -eq $TRUE -Or [int]$this.exitcode -ne $IcingaEnums.IcingaExitCode.Unknown) {
             $this.PrintOutputMessages();
         }
 
@@ -100,7 +100,7 @@ function New-IcingaCheckPackage()
     }
 
     $Check | Add-Member -membertype ScriptMethod -name 'SilentCompile' -value {
-        $this.Compile($TRUE) | Out-Null;
+        $this.Compile($FALSE) | Out-Null;
     }
 
     $Check | Add-Member -membertype ScriptMethod -name 'GetOkCount' -value {
