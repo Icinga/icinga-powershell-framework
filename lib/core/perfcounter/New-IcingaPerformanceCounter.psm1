@@ -1,7 +1,7 @@
 <#
  # This is the main function which is called from this script, constructing our counters
  # and loading possible sub-instances from our Performance Counter.
- # It will return either an New-IcingaPerformanceCounterObject or New-IcingaPerformanceCounterArray
+ # It will return either an New-IcingaPerformanceCounterObject or New-IcingaPerformanceCounterResult
  # which both contain the same members, allowing us to dynamicly use the objects
  # without having to worry about exception.
  #>
@@ -49,14 +49,14 @@
      # the different values, we need to know how to handle the instances of the counter
  
      # If we specify a instance with (*) we want the module to automaticly fetch all
-     # instances for this counter. This will result in an New-IcingaPerformanceCounterArray
+     # instances for this counter. This will result in an New-IcingaPerformanceCounterResult
      # which contains the parent name including counters for all instances that
      # have been found
      if ($UseCounterInstance -eq '*') {
          # In case we already loaded the counters once, return the finished array
          # TODO: Re-Implement caching for counters
          <#if ($Icinga2.Cache.PerformanceCounter.ContainsKey($Counter) -eq $TRUE) {
-             return (New-IcingaPerformanceCounterArray -FullName $Counter -PerformanceCounters $Icinga2.Cache.PerformanceCounter[$Counter]);
+             return (New-IcingaPerformanceCounterResult -FullName $Counter -PerformanceCounters $Icinga2.Cache.PerformanceCounter[$Counter]);
          }#>
  
          # If we need to build the array, load all instances from the counters and
@@ -75,11 +75,11 @@
          }
  
          # Add the parent counter including the array of Performance Counters to our
-         # caching mechanism and return the New-IcingaPerformanceCounterArray object for usage
+         # caching mechanism and return the New-IcingaPerformanceCounterResult object for usage
          # within the monitoring modules
          # TODO: Re-Implement caching for counters
          # $Icinga2.Cache.PerformanceCounter.Add($Counter, $AllCountersIntances);
-         return (New-IcingaPerformanceCounterArray -FullName $Counter -PerformanceCounters $AllCountersIntances);
+         return (New-IcingaPerformanceCounterResult -FullName $Counter -PerformanceCounters $AllCountersIntances);
      } else {
          # This part will handle the counters without any instances as well as
          # specificly assigned instances, like (_Total) CPU usage.

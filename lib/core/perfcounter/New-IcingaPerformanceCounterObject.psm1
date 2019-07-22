@@ -4,9 +4,9 @@
  # following members:
  # Name
  # Value
- # Like the New-IcingaPerformanceCounterArray, this will allow to fetch the
+ # Like the New-IcingaPerformanceCounterResult, this will allow to fetch the
  # current values of a single counter instance including the name
- # of the counter. Within the New-IcingaPerformanceCounterArray function,
+ # of the counter. Within the New-IcingaPerformanceCounterResult function,
  # objects created by this function are used.
  #>
  function New-IcingaPerformanceCounterObject()
