@@ -26,7 +26,7 @@ function New-IcingaCheckPackage()
     $Check | Add-Member -membertype NoteProperty -name 'opmax'     -value $OperatorMax;
     $Check | Add-Member -membertype NoteProperty -name 'spacing'   -value 0;
     $Check | Add-Member -membertype NoteProperty -name 'compiled'  -value $FALSE;
-    $Check | Add-Member -membertype NoteProperty -name 'perfdata'   -value $FALSE;
+    $Check | Add-Member -membertype NoteProperty -name 'perfdata'  -value $FALSE;
 
     $Check | Add-Member -membertype ScriptMethod -name 'Initialise' -value {
         foreach ($check in $this.checks) {
