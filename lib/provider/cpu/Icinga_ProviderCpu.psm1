@@ -1,28 +1,4 @@
 Import-Module $IncludeDir\provider\enums;
-
-<##################################################################################################
-################# Runspace "Show-Icinga{CPU}" #####################################################
-##################################################################################################>
-function Show-IcingaCPUData()
-{
-
-$CPUInformation = Get-CimInstance Win32_Processor;
-[hashtable]$PhysicalCPUData = @{};
-
-foreach ($cpu_properties in $CPUInformation) {
-    $cpu_datails = @{};
-    foreach($cpu_core in $cpu_properties.CimInstanceProperties) {
-        $cpu_datails.Add($cpu_core.Name, $cpu_core.Value);
-    }
-    $PhysicalCPUData.Add($cpu_datails.DeviceID, $cpu_datails);
-}
-
-return $PhysicalCPUData;
-}
-
-<##################################################################################################
-################# Runspace "Get-Icinga{Memory}" ###################################################
-##################################################################################################>
 function Get-IcingaCPUs()
 {
     <# Collects the most important CPU informations,
@@ -284,8 +260,8 @@ function Get-IcingaCPUNumberOfLogicalProcessors()
 
 function Get-IcingaCPUCount()
 {
-    <# Collects the most important CPU informations,
-    e.g. name, version, manufacturer#>
+    <# Compares whether NumberofLogicalCores, NumberofCores or Threadcount across all CPUs is the highest,
+    this function is used in provider/memory/Icinga_ProviderMemory.psm1#>
     $CPUInformation = Get-CimInstance Win32_Processor;
 
     foreach ($cpu in $CPUInformation) {

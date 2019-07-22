@@ -1,25 +1,4 @@
 Import-Module $IncludeDir\provider\enums;
-
-<##################################################################################################
-################# Runspace "Show-Icinga{BIOS}" ####################################################
-##################################################################################################>
-function Show-IcingaBiosData()
-{
-    $BIOSInformation = Get-CimInstance Win32_BIOS;
-    [hashtable]$BIOSData = @{};
-
-    foreach ($bios_properties in $BIOSInformation) {
-        foreach($bios in $bios_properties.CimInstanceProperties) {
-            $BIOSData.Add($bios.Name, $bios.Value);
-        }
-    }
-
-    return $BIOSData;
-}
-
-<##################################################################################################
-################# Runspace "Get-Icinga{BIOS}" #####################################################
-##################################################################################################>
 function Get-IcingaBios()
 {
     <# Collects the most important BIOS informations,
@@ -51,6 +30,45 @@ function Get-IcingaBios()
         return $BIOSData;
     }
 
+
+function Get-IcingaBiosCharacteristics()
+{    
+    param([switch]$Sorted);
+    
+    $bios = Get-CimInstance WIN32_BIOS;
+    [hashtable]$BIOSCharacteristics = @{};
+
+    foreach ($id in $bios.BiosCharacteristics) {
+        $BIOSCharacteristics.Add([string]$id, $ProviderEnums.BiosCharacteristics.Item([int]$id));
+    }
+    
+    $output = $BIOSCharacteristics;
+    
+    if ($sorted) {
+        $output = $BIOSCharacteristics.GetEnumerator() | Sort-Object name;
+    }
+
+    return @{'value' = $output; 'name' = 'BiosCharacteristics'};
+}
+function Get-IcingaBiosCharacteristics()
+{
+    param([switch]$Sorted);
+
+    $bios = Get-CimInstance WIN32_BIOS;
+    [hashtable]$BIOSCharacteristics = @{};
+
+    foreach ($id in $bios.BiosCharacteristics) {
+        $BIOSCharacteristics.Add([string]$id, $ProviderEnums.BiosCharacteristics.Item([int]$id));
+    }
+
+    $output = $BIOSCharacteristics;
+
+    if ($sorted) {
+        $output = $BIOSCharacteristics.GetEnumerator() | Sort-Object name;
+    }
+
+    return @{'value' = $output; 'name' = 'BiosCharacteristics'};
+}
 function Get-IcingaBiosSerialNumber()
 {
     $bios = Get-CimInstance Win32_BIOS;
@@ -104,24 +122,4 @@ function Get-IcingaBiosSoftwareElementID()
 {
     $bios = Get-CimInstance Win32_BIOS;
     return @{'value' = $bios.SoftwareElementID; 'name' = 'SoftwareElementID'};
-}
-
-function Get-IcingaBiosCharacteristics()
-{
-    param([switch]$Sorted);
-
-    $bios = Get-CimInstance WIN32_BIOS;
-    [hashtable]$BIOSCharacteristics = @{};
-
-    foreach ($id in $bios.BiosCharacteristics) {
-        $BIOSCharacteristics.Add([string]$id, $ProviderEnums.BiosCharacteristics.Item([int]$id));
-    }
-
-    $output = $BIOSCharacteristics;
-
-    if ($sorted) {
-        $output = $BIOSCharacteristics.GetEnumerator() | Sort-Object name;
-    }
-
-    return @{'value' = $output; 'name' = 'BiosCharacteristics'};
 }
