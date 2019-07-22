@@ -10,46 +10,46 @@ function Show-IcingaMemoryData ()
 
     [hashtable]$MEMData = @{};
 
-    foreach($id in $MEMInformation) {
+    foreach($memory in $MEMInformation) {
         $MEMData.Add(
-            $id.tag.trim("Physical Memory"), @{
-                'Caption' = $id.Name;
-                'Description' = $id.Description;
-                'Name' = $id.Name;
-                'InstallDate' = $id.InstallDate;
-                'Status' = $id.Status
-                'CreationClassName'= $id.CreationClassName
-                'Manufacturer'= $id.Manufacturer
-                'Model'= $id.Model
-                'OtherIdentifyingInfo'= $id.OtherIdentifyingInfo
-                'PartNumber'= $id.PartNumber
-                'PoweredOn'= $id.PoweredOn
-                'SerialNumber'= $id.SerialNumber
-                'SKU'= $id.SKU
-                'Tag'= $id.Tag
-                'Version'= $id.Version
-                'HotSwappable'= $id.HotSwappable
-                'Removable'= $id.Removable
-                'Replaceable'= $id.Replaceable
-                'FormFactor'= $id.FormFactor
-                'BankLabel'= $id.BankLabel
-                'Capacity'= $id.Capacity
-                'DataWidth'= $id.DataWidth
-                'InterleavePosition'= $id.InterleavePosition
-                'MemoryType'= $id.MemoryType
-                'PositionInRow'= $id.PositionInRow
-                'Speed'= $id.Speed
-                'TotalWidth'= $id.TotalWidth
-                'Attributes'= $id.Attributes
-                'ConfiguredClockSpeed'= $id.ConfiguredClockSpeed
-                'ConfiguredVoltage'= $id.ConfiguredVoltage
-                'DeviceLocator'= $id.DeviceLocator
-                'InterleaveDataDepth'= $id.InterleaveDataDepth
-                'MaxVoltage'= $id.MaxVoltage
-                'MinVoltage'= $id.MinVoltage
-                'SMBIOSMemoryType'= $id.SMBIOSMemoryType
-                'TypeDetail'= $id.TypeDetail
-                'PSComputerName'= $id.PSComputerName
+            $memory.tag.trim("Physical Memory"), @{
+                'Caption' = $memory.Name;
+                'Description' = $memory.Description;
+                'Name' = $memory.Name;
+                'InstallDate' = $memory.InstallDate;
+                'Status' = $memory.Status
+                'CreationClassName'= $memory.CreationClassName
+                'Manufacturer'= $memory.Manufacturer
+                'Model'= $memory.Model
+                'OtherIdentifyingInfo'= $memory.OtherIdentifyingInfo
+                'PartNumber'= $memory.PartNumber
+                'PoweredOn'= $memory.PoweredOn
+                'SerialNumber'= $memory.SerialNumber
+                'SKU'= $memory.SKU
+                'Tag'= $memory.Tag
+                'Version'= $memory.Version
+                'HotSwappable'= $memory.HotSwappable
+                'Removable'= $memory.Removable
+                'Replaceable'= $memory.Replaceable
+                'FormFactor'= $memory.FormFactor
+                'BankLabel'= $memory.BankLabel
+                'Capacity'= $memory.Capacity
+                'DataWidth'= $memory.DataWidth
+                'InterleavePosition'= $memory.InterleavePosition
+                'MemoryType'= $memory.MemoryType
+                'PositionInRow'= $memory.PositionInRow
+                'Speed'= $memory.Speed
+                'TotalWidth'= $memory.TotalWidth
+                'Attributes'= $memory.Attributes
+                'ConfiguredClockSpeed'= $memory.ConfiguredClockSpeed
+                'ConfiguredVoltage'= $memory.ConfiguredVoltage
+                'DeviceLocator'= $memory.DeviceLocator
+                'InterleaveDataDepth'= $memory.InterleaveDataDepth
+                'MaxVoltage'= $memory.MaxVoltage
+                'MinVoltage'= $memory.MinVoltage
+                'SMBIOSMemoryType'= $memory.SMBIOSMemoryType
+                'TypeDetail'= $memory.TypeDetail
+                'PSComputerName'= $memory.PSComputerName
             }
         );
     }    
@@ -66,57 +66,57 @@ function Get-IcingaMemory ()
     
     [hashtable]$MEMData = @{};
 
-    foreach($id in $MEMInformation) {
+    foreach($memory in $MEMInformation) {
         $MEMData.Add(
-            $id.tag.trim("Physical Memory"), @{
+            $memory.tag.trim("Physical Memory"), @{
                 'metadata' = @{
-                    'Caption' = $id.Name;
-                    'Description'= $id.Description;
-                    'Manufacturer'= $id.Manufacturer;
-                    'Model'= $id.Model;
-                    'OtherIdentifyingInfo'= $id.OtherIdentifyingInfo;
-                    'PartNumber'= $id.PartNumber;
-                    'SerialNumber'= $id.SerialNumber;
-                    'Tag'= $id.Tag;
-                    'SMBIOSMemoryType'= $id.SMBIOSMemoryType;
-                    'DeviceLocator' = $id.DeviceLocator;
-                    'PositionInRow' = $id.PositionInRow;
-                    'Version' = $id.Version;
-                    'PoweredOn' = $id.PoweredOn;
-                    'Status' = $id.Status;
-                    'InstallDate' = $id.InstallDate;
-                    'BankLabel' = $id.BankLabel;
-                    'InterleaveDataDepth' = $id.InterleaveDataDepth;
-                    'Attributes' = $id.Attributes;
-                    'Replaceable' = $id.Replaceable;
-                    'Removable' = $id.Removable;
-                    'HotSwappable' = $id.HotSwappable;
+                    'Caption' = $memory.Name;
+                    'Description'= $memory.Description;
+                    'Manufacturer'= $memory.Manufacturer;
+                    'Model'= $memory.Model;
+                    'OtherIdentifyingInfo'= $memory.OtherIdentifyingInfo;
+                    'PartNumber'= $memory.PartNumber;
+                    'SerialNumber'= $memory.SerialNumber;
+                    'Tag'= $memory.Tag;
+                    'SMBIOSMemoryType'= $memory.SMBIOSMemoryType;
+                    'DeviceLocator' = $memory.DeviceLocator;
+                    'PositionInRow' = $memory.PositionInRow;
+                    'Version' = $memory.Version;
+                    'PoweredOn' = $memory.PoweredOn;
+                    'Status' = $memory.Status;
+                    'InstallDate' = $memory.InstallDate;
+                    'BankLabel' = $memory.BankLabel;
+                    'InterleaveDataDepth' = $memory.InterleaveDataDepth;
+                    'Attributes' = $memory.Attributes;
+                    'Replaceable' = $memory.Replaceable;
+                    'Removable' = $memory.Removable;
+                    'HotSwappable' = $memory.HotSwappable;
                     'FormFactor' = @{
-                        'raw'   = $id.FormFactor;
-                        'value' = $ProviderEnums.MemoryFormFactor[[int]$id.FormFactor];
+                        'raw'   = $memory.FormFactor;
+                        'value' = $ProviderEnums.MemoryFormFactor[[int]$memory.FormFactor];
                     };
                     'InterleavePosition' = @{
-                        'raw'   = $id.InterleavePosition;
-                        'value' = $ProviderEnums.MemoryInterleavePosition[[int]$id.InterleavePosition];
+                        'raw'   = $memory.InterleavePosition;
+                        'value' = $ProviderEnums.MemoryInterleavePosition[[int]$memory.InterleavePosition];
                     };
                     'MemoryType' = @{
-                        'raw'   = $id.MemoryType;
-                        'value' = $ProviderEnums.MemoryMemoryType[[int]$id.MemoryType];
+                        'raw'   = $memory.MemoryType;
+                        'value' = $ProviderEnums.MemoryMemoryType[[int]$memory.MemoryType];
                     };
                     'TypeDetail' = @{
-                        'raw'   = $id.TypeDetail;
-                        'value' = $ProviderEnums.MemoryTypeDetail[[int]$id.TypeDetail];
+                        'raw'   = $memory.TypeDetail;
+                        'value' = $ProviderEnums.MemoryTypeDetail[[int]$memory.TypeDetail];
                     };
                 };
                 'specs' = @{
-                    'MaxVoltage' = $id.MaxVoltage;
-                    'MinVoltage' = $id.MinVoltage;
-                    'ConfiguredVoltage' = $id.ConfiguredVoltage;
-                    'ConfiguredClockSpeed' = $id.ConfiguredClockSpeed;
-                    'TotalWidth' = $id.TotalWidth;
-                    'DataWidth' = $id.DataWidth;
-                    'Speed' = $id.Speed;
-                    'Capacity' = $id.Capacity;
+                    'MaxVoltage' = $memory.MaxVoltage;
+                    'MinVoltage' = $memory.MinVoltage;
+                    'ConfiguredVoltage' = $memory.ConfiguredVoltage;
+                    'ConfiguredClockSpeed' = $memory.ConfiguredClockSpeed;
+                    'TotalWidth' = $memory.TotalWidth;
+                    'DataWidth' = $memory.DataWidth;
+                    'Speed' = $memory.Speed;
+                    'Capacity' = $memory.Capacity;
                 }
             }
         );
@@ -133,8 +133,8 @@ function Get-IcingaMemoryInformation()
     $MEMInformation = Get-CimInstance Win32_PhysicalMemory;
     [hashtable]$MEMData = @{};
 
-    foreach ($id in $MEMInformation) {
-        $MEMData.Add($id.tag.trim("Physical Memory"), $id.$Parameter);
+    foreach ($memory in $MEMInformation) {
+        $MEMData.Add($memory.tag.trim("Physical Memory"), $memory.$Parameter);
     }
 
     return $MEMData;
