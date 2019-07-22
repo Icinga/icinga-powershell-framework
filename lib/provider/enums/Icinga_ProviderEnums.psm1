@@ -1,6 +1,6 @@
 
 <##################################################################################################
-################# /lib/provider/bios.psm1 #########################################################
+################# /lib/provider/bios ##############################################################
 ##################################################################################################>
 
 [hashtable]$BiosCharacteristics = @{
@@ -71,7 +71,7 @@
 }
 
 <##################################################################################################
-################# /lib/provider/disks.psm1 ########################################################
+################# /lib/provider/disks #############################################################
 ##################################################################################################>
 
 [hashtable]$DiskCapabilities = @{
@@ -91,7 +91,7 @@
 }
 
 <##################################################################################################
-################# /lib/provider/cpu.psm1 ##########################################################
+################# /lib/provider/cpu ###############################################################
 ##################################################################################################>
 
 [hashtable]$CPUArchitecture = @{
@@ -298,7 +298,7 @@
 }
 
 <##################################################################################################
-################# /lib/provider/memory.psm1 #######################################################
+################# /lib/provider/memory ############################################################
 ##################################################################################################>
 
 [hashtable]$MemoryFormFactor = @{
@@ -379,12 +379,104 @@
     4096= 'Non-volatile';
 }
 
+<##################################################################################################
+################# /lib/provider/Windows ###########################################################
+##################################################################################################>
+
+[hashtable]$WindowsOSProductSuite = @{
+    1= 'Microsoft Small Business Server was once installed, but may have been upgraded to another version of Windows.';
+    2= 'Windows Server 2008 Enterprise is installed.';
+    4= 'Windows BackOffice components are installed.';
+    8= 'Communication Server is installed.';
+    16= 'Terminal Services is installed.';
+    32= 'Microsoft Small Business Server is installed with the restrictive client license.';
+    64= 'Windows Embedded is installed.';
+    128= 'Datacenter edition is installed.';
+    256= 'Terminal Services is installed, but only one interactive session is supported.';
+    512= 'Windows Home Edition is installed.';
+    1024= 'Web Server Edition is installed.';
+    8192= 'Storage Server Edition is installed.';
+    16384= 'Compute Cluster Edition is installed.';
+}
+
+[hashtable]$WindowsProductType = @{
+    1= 'Work Station';
+    2= 'Domain Controller';
+    3= 'Server';
+}
+
+[hashtable]$WindowsOSType = @{
+    0= 'Unknown';
+    1= 'Other';
+    2= 'MACROS';
+    3= 'ATTUNIX';
+    4= 'DGUX';
+    5= 'DECNT';
+    6= 'Digital Unix';
+    7= 'OpenVMS'
+    8= 'HPUX';
+    9= 'AIX';
+   10= 'MVS';
+   11= 'OS400';
+   12= 'OS/2';
+   13= 'JavaVM';
+   14= 'MSDOS';
+   15= 'WIN3x';
+   16= 'WIN95';
+   17= 'WIN98';
+   18= 'WINNT';
+   19= 'WINCE';
+   20= 'NCR3000';
+   21= 'NetWare';
+   22= 'OSF';
+   23= 'DC/OS';
+   24= 'Reliant UNIX';
+   25= 'SCO UnixWare';
+   26= 'SCO OpenServer';
+   27= 'Sequent';
+   28= 'IRIX';
+   29= 'Solaris';
+   30= 'SunOS';
+   31= 'U6000';
+   32= 'ASERIES';
+   33= 'TandemNSK';
+   34= 'TandemNT';
+   35= 'BS2000';
+   36= 'LINUX';
+   37= 'Lynx';
+   38= 'XENIX';
+   39= 'VM/ESA';
+   40= 'Interactive UNIX';
+   41= 'BSDUNIX';
+   42= 'FreeBSD';
+   43= 'NetBSD';
+   44= 'GNU Hurd';
+   45= 'OS9';
+   46= 'MACH Kernel';
+   47= 'Inferno';
+   48= 'QNX';
+   49= 'EPOC';
+   50= 'IxWorks';
+   51= 'VxWorks';
+   52= 'MiNT';
+   53= 'BeOS';
+   54= 'HP MPE';
+   55= 'NextStep';
+   56= 'PalmPilot';
+   57= 'Rhapsody';
+   58= 'Windows 2000';
+   59= 'Dedicated';
+   60= 'OS/390';
+   61= 'VSE';
+   62= 'TPF';
+}
+  
 [hashtable]$ProviderEnums = @{
-    #/lib/provider/bios.psm1
+    #/lib/provider/bios
     BiosCharacteristics = $BiosCharacteristics;
-    #/lib/provider/disks.psm1
+    #/lib/provider/disks
     DiskCapabilities = $DiskCapabilities;
-    #/lib/provider/cpu.psm1
+    #/lib/provider/cpu
     CPUArchitecture = $CPUArchitecture;
     CPUProcessorType = $CPUProcessorType;
     CPUStatusInfo = $CPUStatusInfo;
@@ -392,11 +484,15 @@
     CPUConfigManagerErrorCode = $CPUConfigManagerErrorCode;
     CPUAvailability = $CPUAvailability;
     CPUPowerManagementCapabilities = $CPUPowerManagementCapabilities;
-    #/lib/provider/memory.psm1
+    #/lib/provider/memory
     MemoryFormFactor = $MemoryFormFactor;
     MemoryInterleavePosition = $MemoryInterleavePosition;
     MemoryMemoryType = $MemoryMemoryType;
     MemoryTypeDetail = $MemoryTypeDetail;
+    #/lib/provider/windows
+    WindowsOSProductSuite = $WindowsOSProductSuite;
+    WindowsProductType = $WindowsProductType;
+    WindowsOSType = $WindowsOSType;
 }
 
 Export-ModuleMember -Variable @('ProviderEnums');
