@@ -9,6 +9,12 @@
     
 #>
 
+function Use-Icinga()
+{
+    # This function will allow us to load this entire module including possible
+    # actions, making it available within our shell environment
+}
+
 function Import-IcingaLib()
 {
     param(
@@ -24,56 +30,38 @@ function Import-IcingaLib()
         [Switch]$ForceReload
     );
 
-    [string]$directory  = Join-Path -Path $PSScriptRoot -ChildPath 'lib';
+    [string]$directory  = Join-Path -Path $PSScriptRoot -ChildPath 'lib\';
     [string]$module     = Join-Path -Path $directory -ChildPath $Lib;
-    $module = $module.Replace('.psm1', ''); # Cut possible .psm1 ending
-    [string]$moduleName = $module.Split('\')[-1]; # Get the last element
+    [string]$moduleName = '';
 
-    if ($ForceReload) {
-        $ListOfLoadedModules = Get-Module | Select-Object Name;
-        if ($ListOfLoadedModules -Like "*$moduleName*") {
-            Remove-Module -Name $moduleName;
+    $ListOfLoadedModules = Get-Module | Select-Object Name;
+
+    # Load modules from directory
+    if ((Test-Path $module -PathType Container)) {
+        Get-ChildItem -Path $module -Recurse -Filter *.psm1 |
+        ForEach-Object {
+            [string]$modulePath = $_.FullName;
+            $moduleName = $_.Name.Replace('.psm1', '');
+
+            if ($ForceReload) {
+                if ($ListOfLoadedModules -like "*$moduleName*") {
+                    Remove-Module -Name $moduleName
+                }
+            }
+
+            Import-Module ([string]::Format('{0}', $modulePath)) -Global; 
         }
-    }
+    } else {
+        $module = $module.Replace('.psm1', ''); # Cut possible .psm1 ending
+        $moduleName = $module.Split('\')[-1]; # Get the last element
 
-    Import-Module ([string]::Format('{0}.psm1', $module)) -Global;
-}
-
-function Import-IcingaDirectoryModules()
-{
-    param(
-        [Parameter(
-            Position=0, 
-            Mandatory=$true, 
-            ValueFromPipeline=$true,
-            ValueFromPipelineByPropertyName=$true)
-        ]
-        [String]$LibDirectory,
-        # The Force Reload will remove the module in case it's loaded and reload it to track
-        # possible development changes without having to create new PowerShell environments
-        [Switch]$ForceReload
-    );
-
-    $LibDirectory = $LibDirectory.Replace('.psm1', '');
-
-    if (-Not (Test-Path $LibDirectory)) {
-        Write-Output ([string]::Format('Include directory not found: {0}', $LibDirectory));
-        return;
-    }
-
-    Get-ChildItem -Path $LibDirectory -Recurse -Filter *.psm1 |
-    ForEach-Object {
-        [string]$modulePath = $_.FullName;
-        [string]$moduleName = $_.Name.Replace('.psm1', '');
-        
         if ($ForceReload) {
-            $ListOfLoadedModules = Get-Module | Select-Object Name;
-            if ($ListOfLoadedModules -like "*$moduleName*") {
-                Remove-Module -Name $moduleName
+            if ($ListOfLoadedModules -Like "*$moduleName*") {
+                Remove-Module -Name $moduleName;
             }
         }
-    
-        Import-Module ([string]::Format('{0}', $modulePath)) -Global; 
+
+        Import-Module ([string]::Format('{0}.psm1', $module)) -Global;
     }
 }
 
@@ -345,6 +333,10 @@ function Get-Icinga-Object()
 {
     return $Icinga2;
 }
+
+# Automaticly load the Help library including Plugins
+Import-IcingaLib help\help;
+Import-IcingaLib plugins;
 
 # Initialise base configuration for our module
 $Icinga2 = & (Join-Path -Path $PSScriptRoot -ChildPath '\core\init.ps1') `
