@@ -1,5 +1,4 @@
-Import-Module $IncludeDir\provider\enums\Icinga_ProviderEnums;
-
+Import-IcingaLib provider\enums;
 
 function Get-IcingaWindows()
 {

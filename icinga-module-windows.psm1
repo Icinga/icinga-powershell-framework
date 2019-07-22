@@ -9,8 +9,6 @@
     
 #>
 
-$global:IncludeDir = "$PSScriptRoot\lib";
-
 function Install-Icinga()
 {
     [string]$command = Get-Icinga-Command('setup');
