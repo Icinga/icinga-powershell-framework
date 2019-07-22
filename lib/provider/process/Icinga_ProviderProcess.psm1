@@ -1,4 +1,5 @@
-Import-Module $IncludeDir\provider\cpu;
+Import-IcingaLib provider\enums;
+Import-IcingaLib provider\cpu;
 
 function Add-IcingaProcessPerfData()
 {

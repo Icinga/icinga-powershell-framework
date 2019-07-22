@@ -1,4 +1,4 @@
-Import-Module $IncludeDir\provider\enums;
+Import-IcingaLib provider\enums;
 function Get-IcingaCPUs()
 {
     <# Collects the most important CPU informations,
