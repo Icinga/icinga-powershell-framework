@@ -1,4 +1,4 @@
-Import-Module $IncludeDir\provider\enums\Icinga_ProviderEnums;
+Import-IcingaLib provider\enums;
 function Get-IcingaMemory ()
 {
     <# Collects the most important Memory informations,

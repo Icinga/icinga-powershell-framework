@@ -1,4 +1,4 @@
-Import-Module $IncludeDir\provider\enums;
+Import-IcingaLib provider\enums;
 function Get-IcingaBios()
 {
     <# Collects the most important BIOS informations,
