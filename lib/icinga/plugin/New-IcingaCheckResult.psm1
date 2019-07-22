@@ -4,7 +4,7 @@ function New-IcingaCheckresult()
 {
     param(
         $Check,
-        [switch]$NoPerfData,
+        [bool]$NoPerfData,
         [switch]$Compile
     );
 
