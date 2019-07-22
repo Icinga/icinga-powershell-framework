@@ -44,6 +44,12 @@ function New-IcingaCheckPackage()
         }
     }
 
+    $Check | Add-Member -membertype ScriptMethod -name 'AddCheck' -value {
+        param($check);
+
+        $this.checks += $check;
+    }
+
     $Check | Add-Member -membertype ScriptMethod -name 'Compile' -value {
         param([bool]$Silent);
 
