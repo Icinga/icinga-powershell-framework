@@ -38,6 +38,10 @@ function New-IcingaCheckPackage()
 
     $Check | Add-Member -membertype ScriptMethod -name 'AddSpacing' -value {
         $this.spacing += 1;
+        foreach ($check in $this.checks) {
+            $check.spacing = $this.spacing;
+            $check.AddSpacing();
+        }
     }
 
     $Check | Add-Member -membertype ScriptMethod -name 'Compile' -value {
