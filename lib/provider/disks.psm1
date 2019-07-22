@@ -106,15 +106,17 @@ function Get-IcingaDiskInformation()
     $DiskInformation = Get-CimInstance Win32_DiskDrive;
     [hashtable]$DiskData = @{};
 
-    foreach ($id in $DiskInformation.DeviceID) {
-        $id = $id.trimstart(".\PHYSICALDRVE");
-        $DiskData.Add($id.trim(), $DiskInformation.$Parameter);
+    foreach ($disk in $DiskInformation) {
+        $DiskData.Add($disk.DeviceID.trimstart(".\PHYSICALDRVE"), $disk.$Parameter);
     }
 
     return $DiskData;
 }
 function Get-IcingaDiskPartitions()
 {
+    param(
+        $Disk
+    );
     <# Fetches all the most important informations regarding partitions
     e.g. physical disk; partition, size
     , also collects partition information for Get-IcingaDisks #>
@@ -137,7 +139,15 @@ function Get-IcingaDiskPartitions()
         
         $diskPartition = $diskPartition.trim("Partition #");
         $diskDisk = $diskDisk.trim("Disk #");
+
+        If ([string]::IsNullOrEmpty($Disk) -eq $FALSE) {
+            If ([int]$Disk -ne [int]$diskDisk) {
+                continue;
+            } 
+        }
+
         $diskPartitionSize = Get-Partition -DriveLetter $driveLetter;
+
         $PartitionDiskByDriveLetter.Add(
             $driveLetter,
             @{
@@ -182,8 +192,8 @@ function Get-IcingaDiskCapabilities
     $DiskInformation = Get-CimInstance Win32_DiskDrive;
     [hashtable]$DiskCapabilities = @{};
 
-    foreach ($id in $DiskInformation.Capabilities) {
-        $DiskCapabilities.Add([int]$id, $ProviderEnums.DiskCapabilities.([int]$id));
+    foreach ($capabilities in $DiskInformation.Capabilities) {
+        $DiskCapabilities.Add([int]$capabilities, $ProviderEnums.DiskCapabilities.([int]$capabilities));
     }
         return @{'value' = $DiskCapabilities; 'name' = 'Capabilities'};
 
@@ -231,23 +241,21 @@ function Get-IcingaDisks {
     e.g. size, model, sectors, cylinders
     Is dependent on Get-IcingaDiskPartitions#>
     $DiskInformation = Get-CimInstance Win32_DiskDrive;
-    $diskPartitionInformation = Get-IcingaDiskPartitions;
     [hashtable]$DiskData = @{};
 
-    foreach ($id in $DiskInformation.DeviceID) {
-        [int]$id = $id.trimstart(".\PHYSICALDRVE");
-
+    foreach ($disk in $DiskInformation) {
+        $diskID = $disk.DeviceID.trimstart(".\PHYSICALDRVE");
         $DiskData.Add(
-            $id, @{
+            $diskID, @{
                 'metadata' = @{
-                    'Size' = $DiskInformation.Size;
-                    'Model' = $DiskInformation.Model;
-                    'Name' = $DiskInformation.Name.trim('.\');
-                    'Manufacturer' = $DiskInformation.Manufacturer;
-                    'Cylinder' = $DiskInformation.TotalCylinders;
-                    'Sectors' = $DiskInformation.TotalSectors
+                    'Size' = $disk.Size;
+                    'Model' = $disk.Model;
+                    'Name' = $disk.Name.trim('.\');
+                    'Manufacturer' = $disk.Manufacturer;
+                    'Cylinder' = $disk.TotalCylinders;
+                    'Sectors' = $disk.TotalSectors
                 };
-                'partitions' = $diskPartitionInformation
+                'partitions' = (Get-IcingaDiskPartitions -Disk $diskID);
             }
         );    
     }

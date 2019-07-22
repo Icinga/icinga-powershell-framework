@@ -30,75 +30,74 @@ function Get-IcingaCPUs()
     $CPUInformation = Get-CimInstance Win32_Processor;
     [hashtable]$CPUData = @{};
 
-    foreach ($id in $CPUInformation.DeviceID) {
-        $id=$id.trim('CPU');
+    foreach ($cpu in $CPUInformation) {
 
         $CPUData.Add(
-            $id, @{
+            $cpu.DeviceID.trim('CPU'), @{
                 'metadata' = @{
-                    'Name' = $CPUInformation.Name;
-                    'DeviceID' = $CPUInformation.DeviceID;
-                    'ProcessorID' = $CPUInformation.ProcessorId;
-                    'UniqueID' = $CPUInformation.UniqueId;
-                    'Description' = $CPUInformation.Description;
-                    'OtherFamilyDescription' = $CPUInformation.OtherFamilyDescription;
-                    'Caption' = $CPUInformation.Caption;
-                    'Version' = $CPUInformation.Version;
-                    'SerialNumber' = $CPUInformation.SerialNumber;
-                    'Manufacturer' = $CPUInformation.Manufacturer;
-                    'NumberOfCores' = $CPUInformation.NumberOfCores;
-                    'PartNumber' = $CPUInformation.PartNumber;
-                    'Status' = $CPUInformation.Status;
-                    'CPUStatus' = $CPUInformation.CpuStatus;
-                    'Revision' = $CPUInformation.Revision;
-                    'NumberOfLogicalProcessors' = $CPUInformation.NumberOfLogicalProcessors;
-                    'Level'= $CPUInformation.Level;
-                    'AddressWidth' = $CPUInformation.AddressWidth;
-                    'Stepping' = $CPUInformation.Stepping;
-                    'SocketDesignation' = $CPUInformation.SocketDesignation;
+                    'Name' = $cpu.Name;
+                    'DeviceID' = $cpu.DeviceID;
+                    'ProcessorID' = $cpu.ProcessorId;
+                    'UniqueID' = $cpu.UniqueId;
+                    'Description' = $cpu.Description;
+                    'OtherFamilyDescription' = $cpu.OtherFamilyDescription;
+                    'Caption' = $cpu.Caption;
+                    'Version' = $cpu.Version;
+                    'SerialNumber' = $cpu.SerialNumber;
+                    'Manufacturer' = $cpu.Manufacturer;
+                    'NumberOfCores' = $cpu.NumberOfCores;
+                    'PartNumber' = $cpu.PartNumber;
+                    'Status' = $cpu.Status;
+                    'CPUStatus' = $cpu.CpuStatus;
+                    'Revision' = $cpu.Revision;
+                    'NumberOfLogicalProcessors' = $cpu.NumberOfLogicalProcessors;
+                    'Level'= $cpu.Level;
+                    'AddressWidth' = $cpu.AddressWidth;
+                    'Stepping' = $cpu.Stepping;
+                    'SocketDesignation' = $cpu.SocketDesignation;
                     'Family' = @{
-                        'raw'   = $CPUInformation.Family;
-                        'value' = $ProviderEnums.CPUFamily[[int]$CPUInformation.Family];
+                        'raw'   = $cpu.Family;
+                        'value' = $ProviderEnums.CPUFamily[[int]$cpu.Family];
                     };
                     'Architecture' = @{
-                        'raw'   = $CPUInformation.Architecture;
-                        'value' = $ProviderEnums.CPUArchitecture[[int]$CPUInformation.Architecture];
+                        'raw'   = $cpu.Architecture;
+                        'value' = $ProviderEnums.CPUArchitecture[[int]$cpu.Architecture];
                     };
                     'ProcessorType' = @{
-                        'raw'   = $CPUInformation.ProcessorType;
-                        'value' = $ProviderEnums.CPUProcessorType[[int]$CPUInformation.ProcessorType];
+                        'raw'   = $cpu.ProcessorType;
+                        'value' = $ProviderEnums.CPUProcessorType[[int]$cpu.ProcessorType];
                     };
                     'StatusInfo' = @{
-                        'raw'   = $CPUInformation.StatusInfo;
-                        'value' = $ProviderEnums.CPUStatusInfo[[int]$CPUInformation.StatusInfo];
+                        'raw'   = $cpu.StatusInfo;
+                        'value' = $ProviderEnums.CPUStatusInfo[[int]$cpu.StatusInfo];
                     };
                     'Availability' = @{
-                        'raw' = $CPUInformation.Availability;
-                        'value' = $ProviderEnums.CPUAvailability[[int]$CPUInformation.Availability];
+                        'raw' = $cpu.Availability;
+                        'value' = $ProviderEnums.CPUAvailability[[int]$cpu.Availability];
                     };
                     'PowerManagementCapabilities' = @{
-                        'raw' = $CPUInformation.PowerManagementCapabilities;
-                        'value' = $ProviderEnums.CPUPowerManagementCapabilities[[int]$CPUInformation.PowerManagementCapabilities];
+                        'raw' = $cpu.PowerManagementCapabilities;
+                        'value' = $ProviderEnums.CPUPowerManagementCapabilities[[int]$cpu.PowerManagementCapabilities];
                     }
                 };
                 'errors' = @{
-                    'LastErrorCode' = $CPUInformation.LastErrorCode;
-                    'ErrorCleared' = $CPUInformation.ErrorCleared;
-                    'ErrorDescription' = $CPUInformation.ErrorDescription;
+                    'LastErrorCode' = $cpu.LastErrorCode;
+                    'ErrorCleared' = $cpu.ErrorCleared;
+                    'ErrorDescription' = $cpu.ErrorDescription;
                     'ConfigManagerErrorCode' = @{
-                        'raw'   = [int]$CPUInformation.ConfigManagerErrorCode;
-                        'value' = $ProviderEnums.CPUConfigManagerErrorCode.([int]$CPUInformation.ConfigManagerErrorCode);
+                        'raw'   = [int]$cpu.ConfigManagerErrorCode;
+                        'value' = $ProviderEnums.CPUConfigManagerErrorCode.([int]$cpu.ConfigManagerErrorCode);
                     }
                 };
                 'specs' = @{
-                    'LoadPercentage' = $CPUInformation.LoadPercentage;
-                    'CurrentVoltage' = $CPUInformation.CurrentVoltage;
-                    'ThreadCount' = $CPUInformation.ThreadCount;
-                    'L3CacheSize' = $CPUInformation.L3CacheSize;
-                    'L2CacheSpeed' = $CPUInformation.L2CacheSpeed;
-                    'L2CacheSize' = $CPUInformation.L2CacheSize;
-                    'VoltageCaps' = $CPUInformation.VoltageCaps;
-                    'CurrentClockSpeed' = $CPUInformation.CurrentClockSpeed;
+                    'LoadPercentage' = $cpu.LoadPercentage;
+                    'CurrentVoltage' = $cpu.CurrentVoltage;
+                    'ThreadCount' = $cpu.ThreadCount;
+                    'L3CacheSize' = $cpu.L3CacheSize;
+                    'L2CacheSpeed' = $cpu.L2CacheSpeed;
+                    'L2CacheSize' = $cpu.L2CacheSize;
+                    'VoltageCaps' = $cpu.VoltageCaps;
+                    'CurrentClockSpeed' = $cpu.CurrentClockSpeed;
                 }
             }
         );
@@ -117,8 +116,8 @@ function Get-IcingaCPUInformation()
     $CPUInformation = Get-CimInstance Win32_Processor;
     [hashtable]$CPUData = @{};
 
-    foreach ($id in $CPUInformation.DeviceID) {
-        $CPUData.Add($id.trim('CPU'), $CPUInformation.$Parameter);
+    foreach ($cpu in $CPUInformation) {
+        $CPUData.Add($cpu.DeviceID.trim('CPU'), $cpu.$Parameter);
     }
 
     return $CPUData;
@@ -137,12 +136,11 @@ function Get-IcingaCPUInformationWithEnums()
     
     [hashtable]$CPUData = @{};
 
-    foreach ($id in $CPUInformation.DeviceID) {
-        $id=$id.trim('CPU');
+    foreach ($cpu in $CPUInformation) {
         $CPUData.Add(
-            $id, @{
-                'raw'   = $CPUInformation.$Parameter;
-                'value' = $ProviderEnums."$Prefix$Parameter"[[int]$CPUInformation.$Parameter]
+            $cpu.DeviceID.trim('CPU'), @{
+                'raw'   = $cpu.$Parameter;
+                'value' = $ProviderEnums."$Prefix$Parameter"[[int]$cpu.$Parameter]
             }
         );
     }
@@ -154,17 +152,16 @@ function Get-IcingaCPUErrors()
     $CPUInformation = Get-CimInstance Win32_Processor;
     [hashtable]$CPUData = @{};
 
-    foreach ($id in $CPUInformation.DeviceID) {
-        $id=$id.trim('CPU');
+    foreach ($cpu in $CPUInformation) {
         $CPUData.Add(
-            $id, @{
+            $cpu.trim('CPU'), @{
                 'errors' = @{
-                    'LastErrorCode' = $CPUInformation.LastErrorCode;
-                    'ErrorCleared' = $CPUInformation.ErrorCleared;
-                    'ErrorDescription' = $CPUInformation.ErrorDescription;
+                    'LastErrorCode' = $cpu.LastErrorCode;
+                    'ErrorCleared' = $cpu.ErrorCleared;
+                    'ErrorDescription' = $cpu.ErrorDescription;
                     'ConfigManagerErrorCode' = @{
-                        'raw'   = [int]$CPUInformation.ConfigManagerErrorCode;
-                        'value' = $ProviderEnums.CPUConfigManagerErrorCode.([int]$CPUInformation.ConfigManagerErrorCode);
+                        'raw'   = [int]$cpu.ConfigManagerErrorCode;
+                        'value' = $ProviderEnums.CPUConfigManagerErrorCode.([int]$cpu.ConfigManagerErrorCode);
                     }
                 }
             }
@@ -283,4 +280,24 @@ function Get-IcingaCPUNumberOfLogicalProcessors()
     $CPUNumberOfLogicalProcessors = Get-IcingaCPUInformation -Parameter NumberOfLogicalProcessors;
 
     return @{'value' = $CPUNumberOfLogicalProcessors; 'name' = 'NumberOfLogicalProcessors'};
+}
+
+function Get-IcingaCPUCount()
+{
+    <# Collects the most important CPU informations,
+    e.g. name, version, manufacturer#>
+    $CPUInformation = Get-CimInstance Win32_Processor;
+
+    foreach ($cpu in $CPUInformation) {
+        $NumberOfCoresValue += $cpu.NumberOfCores;
+        $NumberOfLogicalProcessorsValue += $cpu.NumberOfLogicalProcessors;
+        $ThreadCountValue += $cpu.ThreadCount;
+    }
+
+    If (($NumberOfCoresValue -ge $NumberOfLogicalProcessorsValue) -and ($NumberOfCoresValue -ge $ThreadCountValue)) {
+        return $NumberOfCoresValue;
+    } elseif ($NumberOfLogicalProcessorsValue -ge $ThreadCountValue) {
+        return $NumberOfLogicalProcessorsValue;
+    }
+    return $ThreadCountValue;
 }
