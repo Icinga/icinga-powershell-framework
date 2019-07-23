@@ -55,7 +55,6 @@ function New-IcingaCheck()
             if (-Not $negate -And (Test-Numeric $rangeMin) -And (Test-Numeric $rangeMax)) {
                 $this.WarnIfLowerThan($rangeMin).WarnIfGreaterThan($rangeMax) | Out-Null;
             } elseif ((Test-Numeric $rangeMin) -And [string]::IsNullOrEmpty($rangeMax) -eq $TRUE) {
-                Write-Host 'lal'
                 $this.WarnIfLowerThan($rangeMin) | Out-Null;
             } elseif ($rangeMin -eq '~' -And (Test-Numeric $rangeMax)) {
                 $this.WarnIfGreaterThan($rangeMax) | Out-Null;
