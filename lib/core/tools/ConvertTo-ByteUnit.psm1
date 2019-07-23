@@ -13,14 +13,15 @@ function ConvertTo-Byte()
         { 'TB', 'TeraByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 12)); $boolOption = $true; }
         { 'PT', 'PetaByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 15)); $boolOption = $true; }
         default { 
-                if (-Not $boolOption) {
-                        Throw 'Invalid input';
-                } 
+            if (-Not $boolOption) {
+                Throw 'Invalid input';
+            } 
         }
     }
 
     return $result;
 }
+
 function ConvertTo-KiloByte()
 {
     param(
@@ -36,9 +37,9 @@ function ConvertTo-KiloByte()
         { 'TB', 'TeraByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 9)); $boolOption = $true; }
         { 'PT', 'PetaByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 12)); $boolOption = $true; }
         default { 
-                if (-Not $boolOption) {
-                        Throw 'Invalid input';
-                }  
+            if (-Not $boolOption) {
+                Throw 'Invalid input';
+            }  
         }
     }
     
@@ -60,9 +61,9 @@ function ConvertTo-MegaByte()
         { 'TB', 'TeraByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 6)); $boolOption = $true; }
         { 'PT', 'PetaByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 9)); $boolOption = $true; }
         default { 
-                if (-Not $boolOption) {
-                     Throw 'Invalid input';
-                } 
+            if (-Not $boolOption) {
+                Throw 'Invalid input';
+            } 
         }
     }
     
@@ -84,9 +85,9 @@ function ConvertTo-GigaByte()
         { 'TB', 'TeraByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 3)); $boolOption = $true; }
         { 'PT', 'PetaByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 6)); $boolOption = $true; }
         default { 
-                if (-Not $boolOption) {
-                        Throw 'Invalid input';
-                }  
+            if (-Not $boolOption) {
+                Throw 'Invalid input';
+            }  
         }
     }
     
@@ -108,9 +109,9 @@ function ConvertTo-TeraByte()
         { 'TB', 'TeraByte' -contains $_ } { $result = $Value; $boolOption = $true; }
         { 'PT', 'PetaByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 3)); $boolOption = $true; }
         default { 
-                if (-Not $boolOption) {
-                        Throw 'Invalid input';
-                }  
+            if (-Not $boolOption) {
+                Throw 'Invalid input';
+            }  
         }
     }
     
@@ -132,9 +133,9 @@ function ConvertTo-PetaByte()
         { 'TB', 'TeraByte' -contains $_ } { $result = ($Value / [math]::Pow(10, 3)); $boolOption = $true; }
         { 'PT', 'PetaByte' -contains $_ } { $result = $Value; $boolOption = $true; }
         default { 
-                if (-Not $boolOption) {
-                        Throw 'Invalid input';
-                }  
+            if (-Not $boolOption) {
+                Throw 'Invalid input';
+            }  
         }
     }
     
