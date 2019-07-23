@@ -334,9 +334,8 @@ function Get-Icinga-Object()
     return $Icinga2;
 }
 
-# Automaticly load the Help library including Plugins
-Import-IcingaLib help\help;
-Import-IcingaLib plugins;
+# Automaticly load all library modules
+Import-IcingaLib '\';
 
 # Initialise base configuration for our module
 $Icinga2 = & (Join-Path -Path $PSScriptRoot -ChildPath '\core\init.ps1') `
