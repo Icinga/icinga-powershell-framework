@@ -51,6 +51,8 @@ function Get-IcingaDiskPartitions()
                 continue;
             } 
         }
+        
+        $DiskArray   = New-IcingaPerformanceCounterStructure -CounterCategory 'LogicalDisk' -PerformanceCounterHash (New-IcingaPerformanceCounterArray @('\LogicalDisk(*)\% free space'));
 
         $diskPartitionSize = Get-Partition -DriveLetter $driveLetter;
 
@@ -60,6 +62,7 @@ function Get-IcingaDiskPartitions()
                 'Disk' = $diskDisk;
                 'Partition' = $diskPartition;
                 'Size' = $diskPartitionSize.Size;
+                'Free Space' = $DiskArray.Item([string]::Format('{0}:', $driveLetter))."% free space".value;
             }
         );
     }

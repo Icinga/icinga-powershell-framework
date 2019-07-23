@@ -339,8 +339,10 @@ function Get-Icinga-Object()
 Import-IcingaLib '\';
 
 # Initialise base configuration for our module
+<#
 $Icinga2 = & (Join-Path -Path $PSScriptRoot -ChildPath '\core\init.ps1') `
               -RootDirectory $PSScriptRoot `
               -ModuleName    $MyInvocation.MyCommand.Name;
 
 Export-ModuleMember @Icinga2;
+#>
