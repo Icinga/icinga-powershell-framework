@@ -1,5 +1,3 @@
-#
-
 function ConvertTo-Byte()
 {
     param(
