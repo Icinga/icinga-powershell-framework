@@ -30,10 +30,18 @@ function New-IcingaCheckPackage()
 
     $Check | Add-Member -membertype ScriptMethod -name 'Initialise' -value {
         foreach ($check in $this.checks) {
-            $check.verbose = $this.verbose;
-            $check.AddSpacing();
-            $check.SilentCompile();
+            $this.InitCheck($check);
         }
+    }
+
+    $Check | Add-Member -membertype ScriptMethod -name 'InitCheck' -value {
+        if ($null -eq $check) {
+            return;
+        }
+
+        $check.verbose = $this.verbose;
+        $check.AddSpacing();
+        $check.SilentCompile();
     }
 
     $Check | Add-Member -membertype ScriptMethod -name 'AddSpacing' -value {
@@ -47,6 +55,11 @@ function New-IcingaCheckPackage()
     $Check | Add-Member -membertype ScriptMethod -name 'AddCheck' -value {
         param($check);
 
+        if ($null -eq $check) {
+            return;
+        }
+
+        $this.InitCheck($check);
         $this.checks += $check;
     }
 
