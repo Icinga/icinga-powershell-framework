@@ -43,13 +43,14 @@ function Import-IcingaLib()
             [string]$modulePath = $_.FullName;
             $moduleName = $_.Name.Replace('.psm1', '');
 
-            if ($ForceReload) {
-                if ($ListOfLoadedModules -like "*$moduleName*") {
+            if ($ListOfLoadedModules -like "*$moduleName*") {
+                if ($ForceReload) {
                     Remove-Module -Name $moduleName
+                    Import-Module ([string]::Format('{0}', $modulePath)) -Global; 
                 }
+            } else {
+                Import-Module ([string]::Format('{0}', $modulePath)) -Global; 
             }
-
-            Import-Module ([string]::Format('{0}', $modulePath)) -Global; 
         }
     } else {
         $module = $module.Replace('.psm1', ''); # Cut possible .psm1 ending
