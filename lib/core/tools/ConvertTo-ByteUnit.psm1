@@ -1,5 +1,3 @@
-#
-
 function ConvertTo-Byte()
 {
     param(
@@ -54,7 +52,7 @@ function ConvertTo-MegaByte()
         [string]$Unit
     );
 
-    switch($Unit) {
+    switch ($Unit) {
         { 'B', 'Byte' -contains $_ } { $result = ($Value / [math]::Pow(10, 6)); $boolOption = $true; }
         { 'KB', 'KiloByte' -contains $_ } { $result = ($Value / [math]::Pow(10, 3)); $boolOption = $true; }
         { 'MB', 'MegaByte' -contains $_ } { $result = $Value; $boolOption = $true; }       
@@ -78,7 +76,7 @@ function ConvertTo-GigaByte()
         [string]$Unit
     );
 
-    switch($Unit) {
+    switch ($Unit) {
         { 'B', 'Byte' -contains $_ } { $result = ($Value / [math]::Pow(10, 9)); $boolOption = $true; }
         { 'KB', 'KiloByte' -contains $_ } { $result = ($Value / [math]::Pow(10, 6)); $boolOption = $true; }
         { 'MB', 'MegaByte' -contains $_ } { $result = ($Value / [math]::Pow(10, 3)); $boolOption = $true; }
@@ -102,7 +100,7 @@ function ConvertTo-TeraByte()
         [string]$Unit
     );
 
-    switch($Unit) {
+    switch ($Unit) {
         { 'B', 'Byte' -contains $_ } { $result = ($Value / [math]::Pow(10, 12)); $boolOption = $true; }
         { 'KB', 'KiloByte' -contains $_ } { $result = ($Value / [math]::Pow(10, 9)); $boolOption = $true; }
         { 'MB', 'MegaByte' -contains $_ } { $result = ($Value / [math]::Pow(10, 6)); $boolOption = $true; }
@@ -126,7 +124,7 @@ function ConvertTo-PetaByte()
         [string]$Unit
     );
 
-    switch($Unit) {
+    switch ($Unit) {
         { 'B', 'Byte' -contains $_ } { $result = ($Value / [math]::Pow(10, 15)); $boolOption = $true; }
         { 'KB', 'KiloByte' -contains $_ } { $result = ($Value / [math]::Pow(10, 12)); $boolOption = $true; }
         { 'MB', 'MegaByte' -contains $_ } { $result = ($Value / [math]::Pow(10, 9)); $boolOption = $true; }
