@@ -12,8 +12,9 @@ function Invoke-IcingaCheckFreePartition()
         $Verbose
     );
 
-    $DiskFree = Get-IcingaDiskPartitions
+    $DiskFree = Get-IcingaDiskPartitions;
     $DiskPackage = New-IcingaCheckPackage -Name 'Free Disk Space' -OperatorAnd -Verbos $Verbose;
+    [array]$CheckedPartitions;
 
     foreach ($Letter in $DiskFree.Keys) {
         if ($Include.Count -ne 0) {
@@ -22,6 +23,8 @@ function Invoke-IcingaCheckFreePartition()
                 continue;
             }
         }
+
+        $CheckedPartitions+=$Letter
 
         if ($Exclude.Count -ne 0) {
             $Exclude = $Exclude.trim(' :/\');
