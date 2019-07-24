@@ -13,8 +13,7 @@ function Invoke-IcingaCheckUsedPartitionSpace()
     );
 
     $DiskFree = Get-IcingaDiskPartitions;
-    $DiskPackage = New-IcingaCheckPackage -Name 'Free Disk Space' -OperatorAnd -Verbos $Verbose;
-    [array]$CheckedPartitions;
+    $DiskPackage = New-IcingaCheckPackage -Name 'Used Partition Space' -OperatorAnd -Verbos $Verbose;
 
     foreach ($Letter in $DiskFree.Keys) {
         if ($Include.Count -ne 0) {
@@ -24,7 +23,6 @@ function Invoke-IcingaCheckUsedPartitionSpace()
             }
         }
 
-        $CheckedPartitions+=$Letter
 
         if ($Exclude.Count -ne 0) {
             $Exclude = $Exclude.trim(' :/\');
@@ -38,5 +36,5 @@ function Invoke-IcingaCheckUsedPartitionSpace()
         $DiskPackage.AddCheck($IcingaCheck);
     }
 
-    exit (New-IcingaCheckResult -Name 'Free Disk Space' -Check $DiskPackage -NoPerfData $NoPerfData -Compile);
+    exit (New-IcingaCheckResult -Check $DiskPackage -NoPerfData $NoPerfData -Compile);
 }
