@@ -475,11 +475,26 @@
 ################# /lib/provider/Services ###########################################################
 ##################################################################################################>
 
-[hashtable]$ServiceStatus = @{
-    'Stopped' = 1;
-    'Running' = 4;
+[hashtable]$ServiceStatusName = @{
+    1 = 'Stopped';
+    2 = 'StartPending';
+    3 = 'StopPending';
+    4 = 'Running';
+    5 = 'ContinuePending';
+    6 = 'PausePending';
+    7 = 'Paused';
 }
-  
+
+[hashtable]$ServiceStatus = @{
+    'Stopped'         = 1;
+    'StartPending'    = 2;
+    'StopPending'     = 3;
+    'Running'         = 4;
+    'ContinuePending' = 5;
+    'PausePending'    = 6;
+    'Paused'          = 7;
+}
+
 [hashtable]$ProviderEnums = @{
     #/lib/provider/bios
     BiosCharacteristics = $BiosCharacteristics;
@@ -504,6 +519,7 @@
     WindowsOSType = $WindowsOSType;
     #/lib/provider/services
     ServiceStatus = $ServiceStatus;
+    ServiceStatusName =$ServiceStatusName;
 }
 
 Export-ModuleMember -Variable @('ProviderEnums');
