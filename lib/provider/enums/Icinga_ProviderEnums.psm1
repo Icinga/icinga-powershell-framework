@@ -243,7 +243,7 @@
     8='The driver loader for the device is missing.';
     9='This device is not working properly because the controlling firmware is reporting the resources for the device incorrectly.';
     10='This device cannot start.';
-    11=' This device failed.';
+    11='This device failed.';
     12='This device cannot find enough free resources that it can use.';
     13="Windows cannot verify this device’s resources.";
     14='This device cannot work properly until you restart your computer.';
