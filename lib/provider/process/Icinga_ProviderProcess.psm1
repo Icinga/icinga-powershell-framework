@@ -14,9 +14,12 @@ function Add-IcingaProcessPerfData()
 
 function Get-IcingaProcessData {
 
+    param(
+        [array]$Process
+    );
+
     $ProcessInformation     = Get-WmiObject Win32_Process;
     $ProcessPerfDataList    = Get-WmiObject Win32_PerfFormattedData_PerfProc_Process;
-    $ProcessUniqueList      = Get-WmiObject Win32_Process | Select-Object name -unique;
     $CPUCoreCount           = Get-IcingaCPUCount;
     
     
@@ -25,8 +28,14 @@ function Get-IcingaProcessData {
     [hashtable]$ProcessNamesUnique = @{};
     [hashtable]$ProcessIDsByName   = @{};
 
-    foreach ($process in $ProcessInformation) {
-        [string]$processName = $process.Name.Replace('.exe', '');
+    foreach ($processinfo in $ProcessInformation) {
+        [string]$processName = $processinfo.Name.Replace('.exe', '');
+
+        If ($null -ne $Process) {
+            If (-Not ($Process.Contains($processName))) {
+                continue;
+            }
+        }
 
         if ($ProcessList.ContainsKey($processName) -eq $FALSE) {
             $ProcessList.Add($processName, @{
@@ -36,56 +45,60 @@ function Get-IcingaProcessData {
         }
 
         $ProcessList[$processName]['ProcessList'].Add(
-            [string]$process.ProcessID, @{
-                'Name' = $process.Name;
-                'ProcessId' = $process.ProcessId;
-                'Priority' = $process.Priority;
-                'PageFileUsage' = $process.PageFileUsage;
-                'ThreadCount' = $process.ThreadCount;
-                'KernelModeTime' = $process.KernelModeTime;
-                'UserModeTime' = $process.UserModeTime;
-                'WorkingSetSize' = $process.WorkingSetSize;
-                'CommandLine' = $process.CommandLine;
+            [string]$processinfo.ProcessID, @{
+                'Name' = $processinfo.Name;
+                'ProcessId' = $processinfo.ProcessId;
+                'Priority' = $processinfo.Priority;
+                'PageFileUsage' = $processinfo.PageFileUsage;
+                'ThreadCount' = $processinfo.ThreadCount;
+                'KernelModeTime' = $processinfo.KernelModeTime;
+                'UserModeTime' = $processinfo.UserModeTime;
+                'WorkingSetSize' = $processinfo.WorkingSetSize;
+                'CommandLine' = $processinfo.CommandLine;
             }
         );
 
-        Add-IcingaProcessPerfData -ProcessList $ProcessList[$processName]['PerformanceData'] -ProcessKey 'ThreadCount' -Process $process;
-        Add-IcingaProcessPerfData -ProcessList $ProcessList[$processName]['PerformanceData'] -ProcessKey 'PageFileUsage' -Process $process;
-        Add-IcingaProcessPerfData -ProcessList $ProcessList[$processName]['PerformanceData'] -ProcessKey 'KernelModeTime' -Process $process;
-        Add-IcingaProcessPerfData -ProcessList $ProcessList[$processName]['PerformanceData'] -ProcessKey 'UserModeTime' -Process $process;
-        Add-IcingaProcessPerfData -ProcessList $ProcessList[$processName]['PerformanceData'] -ProcessKey 'WorkingSetSize' -Process $process;
+        Add-IcingaProcessPerfData -ProcessList $ProcessList[$processName]['PerformanceData'] -ProcessKey 'ThreadCount' -Process $processinfo;
+        Add-IcingaProcessPerfData -ProcessList $ProcessList[$processName]['PerformanceData'] -ProcessKey 'PageFileUsage' -Process $processinfo;
+        Add-IcingaProcessPerfData -ProcessList $ProcessList[$processName]['PerformanceData'] -ProcessKey 'KernelModeTime' -Process $processinfo;
+        Add-IcingaProcessPerfData -ProcessList $ProcessList[$processName]['PerformanceData'] -ProcessKey 'UserModeTime' -Process $processinfo;
+        Add-IcingaProcessPerfData -ProcessList $ProcessList[$processName]['PerformanceData'] -ProcessKey 'WorkingSetSize' -Process $processinfo;
     }
 
-    foreach ($process in $ProcessPerfDataList) {
-        if ($process.Name -eq '_Total' -Or $process.Name -eq 'Idle') {
+    foreach ($processinfo in $ProcessPerfDataList) {
+        if ($processinfo.Name -eq '_Total' -Or $processinfo.Name -eq 'Idle') {
             continue;
         }
 
-        [string]$processName = $process.Name.Split('#')[0];
-        [string]$ProcessId = $process.IDProcess;
+        If ($null -ne $Process) {
+            If (-Not ($Process.Contains($processName))) {
+                continue;
+            }
+        }
+
+        [string]$processName = $processinfo.Name.Split('#')[0];
+        [string]$ProcessId = $processinfo.IDProcess;
 
         if ($ProcessList.ContainsKey($processName) -eq $FALSE) {
-            Write-Host 'Unknown Process Name: ' $processName;
             continue;
         }
 
         if ($ProcessList[$processName]['ProcessList'].ContainsKey($ProcessId) -eq $FALSE) {
-            Write-Host 'Unknown Process ID: ' $ProcessId;
             continue;
         }
 
         $ProcessList[$processName]['ProcessList'][$ProcessId].Add(
-            'WorkingSetPrivate', $process.WorkingSetPrivate
+            'WorkingSetPrivate', $processinfo.WorkingSetPrivate
         );
         $ProcessList[$processName]['ProcessList'][$ProcessId].Add(
-            'PercentProcessorTime', ($process.PercentProcessorTime / $CPUCoreCount)
+            'PercentProcessorTime', ($processinfo.PercentProcessorTime / $CPUCoreCount)
         );
 
         Add-IcingaProcessPerfData -ProcessList $ProcessList[$processName]['PerformanceData'] -ProcessKey 'WorkingSetPrivate' -Process $process;
         if ($ProcessList[$processName]['PerformanceData'].ContainsKey('PercentProcessorTime') -eq $FALSE) {
-            $ProcessList[$processName]['PerformanceData'].Add('PercentProcessorTime', ($process.PercentProcessorTime / $CPUCoreCount));
+            $ProcessList[$processName]['PerformanceData'].Add('PercentProcessorTime', ($processinfo.PercentProcessorTime / $CPUCoreCount));
         } else {
-            $ProcessList[$processName]['PerformanceData']['PercentProcessorTime'] += ($process.PercentProcessorTime / $CPUCoreCount);
+            $ProcessList[$processName]['PerformanceData']['PercentProcessorTime'] += ($processinfo.PercentProcessorTime / $CPUCoreCount);
         }
     }
 

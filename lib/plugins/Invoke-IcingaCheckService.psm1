@@ -17,5 +17,5 @@ function Invoke-IcingaCheckService()
     $IcingaCheck = New-IcingaCheck -Name $ServiceName -Value $StatusRaw -ObjectExists $FoundService -Translation $ProviderEnums.ServiceStatusName;
     $IcingaCheck.CritIfNotMatch($Status) | Out-Null;
 
-    exit (New-IcingaCheckResult -Name "Service $Service" -Check $IcingaCheck -NoPerfData $TRUE -Compile);
+    exit (New-IcingaCheckResult -Check $IcingaCheck -NoPerfData $TRUE -Compile);
 }
