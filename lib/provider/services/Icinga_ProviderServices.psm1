@@ -63,18 +63,3 @@ function Get-IcingaServices()
     }
     return $ServiceData;
 }
-
-function Get-IcingaServicesStatusTranslation()
-{
-    param (
-        $Status
-    )
-
-    if ($Status -match "^\d+$") {
-        return $Status
-    } else {
-        $Status = $ProviderEnums.ServiceStatus.($Status); 
-    }
-
-    return $Status;
-}

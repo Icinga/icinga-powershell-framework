@@ -13,7 +13,7 @@ function Invoke-IcingaCheckService()
     $FoundService = Get-IcingaServices -Service $Service;
     $ServiceName  = $FoundService.Values.metadata.ServiceName;
     $DisplayName  = $FoundService.Values.metadata.DisplayName;
-    $Status       = Get-IcingaServicesStatusTranslation -Status $Status;
+    $Status       = ConvertTo-ServiceStatusCode -Status $Status;
     $StatusRaw    = $FoundService.Values.configuration.Status.raw;
 
     $IcingaCheck = New-IcingaCheck -Name ([string]::Format('Service "{0} ({1})"', $DisplayName, $ServiceName)) -Value $StatusRaw -ObjectExists $FoundService -ValueTranslation $ProviderEnums.ServicesStatus;
