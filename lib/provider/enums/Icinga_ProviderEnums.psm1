@@ -470,6 +470,15 @@
    61= 'VSE';
    62= 'TPF';
 }
+
+<##################################################################################################
+################# /lib/provider/Services ###########################################################
+##################################################################################################>
+
+[hashtable]$ServiceStatus = @{
+    'Stopped' = 1;
+    'Running' = 4;
+}
   
 [hashtable]$ProviderEnums = @{
     #/lib/provider/bios
@@ -493,6 +502,8 @@
     WindowsOSProductSuite = $WindowsOSProductSuite;
     WindowsProductType = $WindowsProductType;
     WindowsOSType = $WindowsOSType;
+    #/lib/provider/services
+    ServiceStatus = $ServiceStatus;
 }
 
 Export-ModuleMember -Variable @('ProviderEnums');
