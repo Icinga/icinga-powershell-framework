@@ -1,7 +1,7 @@
 Import-IcingaLib core\perfcounter;
 Import-IcingaLib icinga\plugin;
 
-function Invoke-IcingaCheckFreePartition()
+function Invoke-IcingaCheckUsedPartitionSpace()
 {
     param(
         $Warning,
@@ -33,7 +33,7 @@ function Invoke-IcingaCheckFreePartition()
             }
         }
 
-        $IcingaCheck = New-IcingaCheck -Name ([string]::Format('Partition {0}', $Letter)) -Value $DiskFree.([string]::Format($Letter))."Free Space" -Unit '%';
+        $IcingaCheck = New-IcingaCheck -Name ([string]::Format('Partition {0}', $Letter)) -Value (100-($DiskFree.([string]::Format($Letter))."Free Space")) -Unit '%';
         $IcingaCheck.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
         $DiskPackage.AddCheck($IcingaCheck);
     }
