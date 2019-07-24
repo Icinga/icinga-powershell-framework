@@ -1,14 +1,15 @@
+Import-IcingaLib core\tools;
+Import-IcingaLib provider\enums;
+
 function ConvertTo-ServiceStatusCode()
 {
     param (
         $Status
     )
 
-    if ($Status -match "^\d+$") {
-        return $Status
-    } else {
-        $Status = $ProviderEnums.ServiceStatus.($Status); 
+    if (Test-Numeric $Status) {
+        return [int]$Status
     }
 
-    return $Status;
+    return [int]($ProviderEnums.ServiceStatus.$Status);
 }

@@ -1,4 +1,5 @@
 Import-IcingaLib provider\services;
+Import-IcingaLib provider\enums;
 Import-IcingaLib icinga\plugin;
 
 function Invoke-IcingaCheckService()
@@ -11,12 +12,11 @@ function Invoke-IcingaCheckService()
     );
 
     $FoundService = Get-IcingaServices -Service $Service;
-    $ServiceName  = $FoundService.Values.metadata.ServiceName;
-    $DisplayName  = $FoundService.Values.metadata.DisplayName;
+    $ServiceName  = Get-IcingaServiceCheckName -ServiceInput $Service -Service $FoundService;
     $Status       = ConvertTo-ServiceStatusCode -Status $Status;
     $StatusRaw    = $FoundService.Values.configuration.Status.raw;
 
-    $IcingaCheck = New-IcingaCheck -Name ([string]::Format('Service "{0} ({1})"', $DisplayName, $ServiceName)) -Value $StatusRaw -ObjectExists $FoundService -ValueTranslation $ProviderEnums.ServicesStatus;
+    $IcingaCheck = New-IcingaCheck -Name $ServiceName -Value $StatusRaw -ObjectExists $FoundService -Translation $ProviderEnums.ServiceStatusName;
     $IcingaCheck.CritIfNotMatch($Status) | Out-Null;
 
     exit (New-IcingaCheckResult -Name "Service $Service" -Check $IcingaCheck -NoPerfData $TRUE -Compile);
