@@ -6,9 +6,7 @@ function Invoke-IcingaCheckService()
 {
     param(
         [string]$Status,
-        [string]$Service,
-        [switch]$NoPerfData,
-        $Verbose
+        [string]$Service
     );
 
     $FoundService = Get-IcingaServices -Service $Service;
