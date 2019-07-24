@@ -70,33 +70,37 @@ function New-IcingaCheckPackage()
             return;
         }
 
-        if ($this.opand) {
-            if ($this.CheckAllOk() -eq $FALSE) {
-                $this.GetWorstExitCode();
+        if ($this.checks.Count -ne 0) {
+            if ($this.opand) {
+                if ($this.CheckAllOk() -eq $FALSE) {
+                    $this.GetWorstExitCode();
+                }
+            } elseif($this.opor) {
+                if ($this.CheckOneOk() -eq $FALSE) {
+                    $this.GetWorstExitCode();
+                }
+            } elseif($this.opnone) {
+                if ($this.CheckOneOk() -eq $TRUE) {
+                    $this.GetWorstExitCode();
+                    $this.exitcode = $IcingaEnums.IcingaExitCode.Critical;
+                } else {
+                    $this.exitcode = $IcingaEnums.IcingaExitCode.Ok;
+                }
+            } elseif([int]$this.opmin -ne -1) {
+                if ($this.CheckMinimumOk() -eq $FALSE) {
+                    $this.GetWorstExitCode();
+                } else {
+                    $this.exitcode = $IcingaEnums.IcingaExitCode.Ok;
+                }
+            } elseif([int]$this.opmax -ne -1) {
+                if ($this.CheckMaximumOk() -eq $FALSE) {
+                    $this.GetWorstExitCode();
+                } else {
+                    $this.exitcode = $IcingaEnums.IcingaExitCode.Ok;
+                }
             }
-        } elseif($this.opor) {
-            if ($this.CheckOneOk() -eq $FALSE) {
-                $this.GetWorstExitCode();
-            }
-        } elseif($this.opnone) {
-            if ($this.CheckOneOk() -eq $TRUE) {
-                $this.GetWorstExitCode();
-                $this.exitcode = $IcingaEnums.IcingaExitCode.Critical;
-            } else {
-                $this.exitcode = $IcingaEnums.IcingaExitCode.Ok;
-            }
-        } elseif([int]$this.opmin -ne -1) {
-            if ($this.CheckMinimumOk() -eq $FALSE) {
-                $this.GetWorstExitCode();
-            } else {
-                $this.exitcode = $IcingaEnums.IcingaExitCode.Ok;
-            }
-        } elseif([int]$this.opmax -ne -1) {
-            if ($this.CheckMaximumOk() -eq $FALSE) {
-                $this.GetWorstExitCode();
-            } else {
-                $this.exitcode = $IcingaEnums.IcingaExitCode.Ok;
-            }
+        } else {
+            $this.exitcode = $IcingaEnums.IcingaExitCode.Unknown;
         }
 
         if ([int]$this.exitcode -eq -1) {
@@ -219,6 +223,20 @@ function New-IcingaCheckPackage()
         }
     }
 
+    $Check | Add-Member -membertype ScriptMethod -name 'PrintNoChecksConfigured' -value {
+        if ($this.checks.Count -eq 0) {
+            Write-Host (
+                [string]::Format(
+                    '{0}{1}: No checks configured for package "{2}"',
+                    (New-StringTree ($this.spacing + 1)),
+                    $IcingaEnums.IcingaExitCodeText.($this.exitcode),
+                    $this.name
+                )
+            )
+            return;
+        }
+    }
+
     $Check | Add-Member -membertype ScriptMethod -name 'WritePackageOutputStatus' -value {
         [string]$outputMessage = '{0}{1}: Check package "{2}" is {1}';
         if ($this.verbose -ne 0) {
@@ -252,14 +270,17 @@ function New-IcingaCheckPackage()
             }
             
         }
+
         $this.WritePackageOutputStatus();
 
         if ($printAll) {
             $this.WriteAllOutput();
+            $this.PrintNoChecksConfigured();
         } elseif ($printDetails) {
             # Now print Non-Ok Check outputs in case our package is not Ok
             if ([int]$this.exitcode -ne $IcingaEnums.IcingaExitCode.Ok) {
                 $this.WriteCheckErrors();
+                $this.PrintNoChecksConfigured();
             }
         }
     }
