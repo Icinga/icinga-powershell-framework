@@ -24,6 +24,10 @@ function Get-IcingaWindows()
                 'BuildNumber' = $WindowsInformations.BuildNumber;
                 'OSArchitecture' = $WindowsInformations.OSArchitecture;
                 'NumberOfUsers' = $WindowsInformations.NumberOfUsers;
+                'Uptime' = @{
+                    'raw' = $WindowsInformations.LastBootUpTime;
+                    'value' = ((Get-Date) - $WindowsInformations.LastBootUpTime).TotalSeconds;
+                };
                 'OSType' = @{
                     'raw' = $WindowsInformations.OSType;
                     'value' = $ProviderEnums.WindowsOSType[[int]$WindowsInformations.OSType];
