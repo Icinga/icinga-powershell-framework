@@ -4,7 +4,11 @@ function Get-IcingaServices()
         [array]$Service
     )
 
-    $ServiceInformation = Get-Service -Name $Service;
+    $ServiceInformation = Get-Service -Name $Service -ErrorAction SilentlyContinue;
+
+    if ($null -eq $ServiceInformation) {
+        return $null;
+    }
 
     [hashtable]$ServiceData = @{};
 
