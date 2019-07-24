@@ -10,6 +10,7 @@ function New-IcingaCheck()
         [string]$Minimum    = '',
         [string]$Maximum    = '',
         $ObjectExists       = -1,
+        $Translation        = $null,
         [switch]$NoPerfData
     );
 
@@ -32,6 +33,7 @@ function New-IcingaCheck()
     $Check | Add-Member -membertype NoteProperty -name 'minimum'      -value $Minimum;
     $Check | Add-Member -membertype NoteProperty -name 'maximum'      -value $Maximum;
     $Check | Add-Member -membertype NoteProperty -name 'objectexists' -value $ObjectExists;
+    $Check | Add-Member -membertype NoteProperty -name 'translation'  -value $Translation;
     $Check | Add-Member -membertype NoteProperty -name 'checks'       -value $null;
     $Check | Add-Member -membertype NoteProperty -name 'completed'    -value $FALSE;
 
@@ -403,6 +405,26 @@ function New-IcingaCheck()
         return $this;
     }
 
+    $Check | Add-Member -membertype ScriptMethod -name 'TranslateValue' -value {
+        param($value);
+
+        if ($null -eq $this.translation -Or $null -eq $value) {
+            return $value;
+        }
+
+        $checkValue = $value;
+
+        if ((Test-Numeric $checkValue)) {
+            $checkValue = [int]$checkValue;
+        }
+
+        if ($this.translation.ContainsKey($checkValue)) {
+            return $this.translation[$checkValue];
+        }
+
+        return $value;
+    }
+
     $Check | Add-Member -membertype ScriptMethod -name 'AddInternalCheckMessage' -value {
         param($state, $value, $type);
 
@@ -415,9 +437,17 @@ function New-IcingaCheck()
         }
 
         $this.SetExitCode($state);
-        $this.AddMessage([string]::Format(
-            '{0} {1}{4} is {2} {3}{4}', $this.name, $this.value, $type, $value, $this.unit
-        ), $state);
+        $this.AddMessage(
+            [string]::Format(
+                '{0} {1}{4} is {2} {3}{4}',
+                $this.name,
+                $this.TranslateValue($this.value),
+                $type,
+                $this.TranslateValue($value),
+                $this.unit
+            ),
+            $state
+        );
 
         switch ($state) {
             $IcingaEnums.IcingaExitCode.Warning {
@@ -562,7 +592,15 @@ function New-IcingaCheck()
     $Check | Add-Member -membertype ScriptMethod -name 'AddOkOutput' -value {
         if ([int]$this.exitcode -eq -1) {
             $this.exitcode = $IcingaEnums.IcingaExitCode.Ok;
-            $this.AddMessage([string]::Format('{0} is {1}{2}', $this.name, $this.value, $this.unit), $IcingaEnums.IcingaExitCode.Ok);
+            $this.AddMessage(
+                [string]::Format(
+                    '{0} is {1}{2}',
+                    $this.name,
+                    $this.TranslateValue($this.value),
+                    $this.unit
+                ),
+                $IcingaEnums.IcingaExitCode.Ok
+            );
         }
     }
 
