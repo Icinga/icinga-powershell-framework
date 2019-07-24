@@ -289,11 +289,9 @@ function New-IcingaCheckPackage()
         if ([int]$this.exitcode -eq [int]$IcingaEnums.IcingaExitCode.Unknown) {
             return;
         }
-        $worstCheck = $null;
         foreach ($check in $this.checks) {
             if ([int]$this.exitcode -lt $check.exitcode) {
                 $this.exitcode = $check.exitcode;
-                $worstCheck = $check;
             }
         }
     }
