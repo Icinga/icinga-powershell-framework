@@ -1,6 +1,5 @@
 function Show-IcingaMemoryData ()
 {
-
     $MEMInformation = Get-CimInstance Win32_PhysicalMemory;
 
     [hashtable]$MEMData = @{};
