@@ -9,29 +9,33 @@ function New-IcingaCheck()
         $Unit               = $null,
         [string]$Minimum    = '',
         [string]$Maximum    = '',
+        $ObjectExists       = -1,
+        $Translation        = $null,
         [switch]$NoPerfData
     );
 
     $Check = New-Object -TypeName PSObject;
-    $Check | Add-Member -membertype NoteProperty -name 'name'      -value $Name;
-    $Check | Add-Member -membertype NoteProperty -name 'verbose'   -value 0;
-    $Check | Add-Member -membertype NoteProperty -name 'messages'  -value @();
-    $Check | Add-Member -membertype NoteProperty -name 'oks'       -value @();
-    $Check | Add-Member -membertype NoteProperty -name 'warnings'  -value @();
-    $Check | Add-Member -membertype NoteProperty -name 'criticals' -value @();
-    $Check | Add-Member -membertype NoteProperty -name 'unknowns'  -value @();
-    $Check | Add-Member -membertype NoteProperty -name 'value'     -value $Value;
-    $Check | Add-Member -membertype NoteProperty -name 'exitcode'  -value -1;
-    $Check | Add-Member -membertype NoteProperty -name 'unit'      -value $Unit;
-    $Check | Add-Member -membertype NoteProperty -name 'spacing'   -value 0;
-    $Check | Add-Member -membertype NoteProperty -name 'compiled'  -value $FALSE;
-    $Check | Add-Member -membertype NoteProperty -name 'perfdata'  -value (-Not $NoPerfData);
-    $Check | Add-Member -membertype NoteProperty -name 'warning'   -value '';
-    $Check | Add-Member -membertype NoteProperty -name 'critical'  -value '';
-    $Check | Add-Member -membertype NoteProperty -name 'minimum'   -value $Minimum;
-    $Check | Add-Member -membertype NoteProperty -name 'maximum'   -value $Maximum;
-    $Check | Add-Member -membertype NoteProperty -name 'checks'    -value $null;
-    $Check | Add-Member -membertype NoteProperty -name 'completed' -value $FALSE;
+    $Check | Add-Member -membertype NoteProperty -name 'name'         -value $Name;
+    $Check | Add-Member -membertype NoteProperty -name 'verbose'      -value 0;
+    $Check | Add-Member -membertype NoteProperty -name 'messages'     -value @();
+    $Check | Add-Member -membertype NoteProperty -name 'oks'          -value @();
+    $Check | Add-Member -membertype NoteProperty -name 'warnings'     -value @();
+    $Check | Add-Member -membertype NoteProperty -name 'criticals'    -value @();
+    $Check | Add-Member -membertype NoteProperty -name 'unknowns'     -value @();
+    $Check | Add-Member -membertype NoteProperty -name 'value'        -value $Value;
+    $Check | Add-Member -membertype NoteProperty -name 'exitcode'     -value -1;
+    $Check | Add-Member -membertype NoteProperty -name 'unit'         -value $Unit;
+    $Check | Add-Member -membertype NoteProperty -name 'spacing'      -value 0;
+    $Check | Add-Member -membertype NoteProperty -name 'compiled'     -value $FALSE;
+    $Check | Add-Member -membertype NoteProperty -name 'perfdata'     -value (-Not $NoPerfData);
+    $Check | Add-Member -membertype NoteProperty -name 'warning'      -value '';
+    $Check | Add-Member -membertype NoteProperty -name 'critical'     -value '';
+    $Check | Add-Member -membertype NoteProperty -name 'minimum'      -value $Minimum;
+    $Check | Add-Member -membertype NoteProperty -name 'maximum'      -value $Maximum;
+    $Check | Add-Member -membertype NoteProperty -name 'objectexists' -value $ObjectExists;
+    $Check | Add-Member -membertype NoteProperty -name 'translation'  -value $Translation;
+    $Check | Add-Member -membertype NoteProperty -name 'checks'       -value $null;
+    $Check | Add-Member -membertype NoteProperty -name 'completed'    -value $FALSE;
 
     $Check | Add-Member -membertype ScriptMethod -name 'AddSpacing' -value {
         $this.spacing += 1;
@@ -401,13 +405,49 @@ function New-IcingaCheck()
         return $this;
     }
 
+    $Check | Add-Member -membertype ScriptMethod -name 'TranslateValue' -value {
+        param($value);
+
+        if ($null -eq $this.translation -Or $null -eq $value) {
+            return $value;
+        }
+
+        $checkValue = $value;
+
+        if ((Test-Numeric $checkValue)) {
+            $checkValue = [int]$checkValue;
+        }
+
+        if ($this.translation.ContainsKey($checkValue)) {
+            return $this.translation[$checkValue];
+        }
+
+        return $value;
+    }
+
     $Check | Add-Member -membertype ScriptMethod -name 'AddInternalCheckMessage' -value {
         param($state, $value, $type);
 
+        if ($this.objectexists -ne -1 -And $null -eq $this.objectexists) {
+            $this.SetExitCode($IcingaEnums.IcingaExitCode.Unknown);
+            $this.AddMessage([string]::Format(
+                '{0} does not exist', $this.name
+            ), $IcingaEnums.IcingaExitCode.Unknown);
+            return;
+        }
+
         $this.SetExitCode($state);
-        $this.AddMessage([string]::Format(
-            '{0} {1}{4} is {2} {3}{4}', $this.name, $this.value, $type, $value, $this.unit
-        ), $state);
+        $this.AddMessage(
+            [string]::Format(
+                '{0} {1}{4} is {2} {3}{4}',
+                $this.name,
+                $this.TranslateValue($this.value),
+                $type,
+                $this.TranslateValue($value),
+                $this.unit
+            ),
+            $state
+        );
 
         switch ($state) {
             $IcingaEnums.IcingaExitCode.Warning {
@@ -552,7 +592,15 @@ function New-IcingaCheck()
     $Check | Add-Member -membertype ScriptMethod -name 'AddOkOutput' -value {
         if ([int]$this.exitcode -eq -1) {
             $this.exitcode = $IcingaEnums.IcingaExitCode.Ok;
-            $this.AddMessage([string]::Format('{0} is {1}{2}', $this.name, $this.value, $this.unit), $IcingaEnums.IcingaExitCode.Ok);
+            $this.AddMessage(
+                [string]::Format(
+                    '{0} is {1}{2}',
+                    $this.name,
+                    $this.TranslateValue($this.value),
+                    $this.unit
+                ),
+                $IcingaEnums.IcingaExitCode.Ok
+            );
         }
     }
 
