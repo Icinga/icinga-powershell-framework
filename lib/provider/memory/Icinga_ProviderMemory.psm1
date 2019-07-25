@@ -1,5 +1,5 @@
 Import-IcingaLib provider\enums;
-function Get-IcingaMemory ()
+function Get-IcingaMemory()
 {
     <# Collects the most important Memory informations,
     e.g. name, version, manufacturer#>
