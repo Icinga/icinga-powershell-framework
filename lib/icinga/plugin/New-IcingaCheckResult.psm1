@@ -13,7 +13,7 @@ function New-IcingaCheckresult()
     $CheckResult | Add-Member -membertype NoteProperty -name 'noperfdata' -value $NoPerfData;
 
     $CheckResult | Add-Member -membertype ScriptMethod -name 'Compile' -value {
-        if ($this.check -eq $null) {
+        if ($null -eq $this.check) {
             return $IcingaEnums.IcingaExitCode.Unknown;
         }
 
