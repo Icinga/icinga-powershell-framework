@@ -3,19 +3,26 @@
 function ConvertTo-Seconds()
 {
     param(
-        [single]$Value,
-        [string]$Unit
+        [string]$Value,
+        [char]$Unit,
+        [switch]$Milliseconds
     );
 
-    switch ($Unit) {
-        { 'ms', 'milliseconds' -contains $_ } { $result = ($Value / [math]::Pow(10, 3)); $boolOption = $true; }
-        { 's', 'seconds' -contains $_ } { $result = $Value; $boolOption = $true; }
-        { 'm', 'minutes' -contains $_ } { $result = ($Value * 60); $boolOption = $true; }
-        { 'h', 'hours' -contains $_ } { $result = ($Value * 3600); $boolOption = $true; }
-        { 'd', 'day' -contains $_ } { $result = ($Value * 86400); $boolOption = $true; }
-        { 'W', 'Week' -contains $_ } { $result = ($Value * 604800); $boolOption = $true; }
-        { 'M', 'Month' -contains $_ } { $result = ($Value * [math]::Pow(2.628, 6)); $boolOption = $true; }
-        { 'Y', 'Year' -contains $_ } { $result = ($Value * [math]::Pow(10, 7)); $boolOption = $true; }
+    #100 D
+    #100 D
+    $Unit = $Value.Substring($Value.get_Length()-2)[0];
+    [single]$ValueSplitted = $Value;
+    #$Name.Substring($Name.get_Length()-1);
+    #$Name.Substring(0,$Name.get_Length()-1);
+    switch ([int][char]$Unit) {
+#       { 'ms', 'milliseconds' -contains $_ } { $result = ($Value / [math]::Pow(10, 3)); $boolOption = $true; }
+        { 115 -contains $_ } { $result = $ValueSplitted; $boolOption = $true; }
+        { 109 -contains $_ } { $result = ($ValueSplitted * 60); $boolOption = $true; }
+        { 104 -contains $_ } { $result = ($ValueSplitted * 3600); $boolOption = $true; }
+        { 100 -contains $_ } { $result = ($ValueSplitted * 86400); $boolOption = $true; }
+        { 87  -contains $_ } { $result = ($ValueSplitted * 604800); $boolOption = $true; }
+        { 77  -contains $_ } { $result = ($ValueSplitted * (2.5[math]::Pow(10, 6))); $boolOption = $true; }
+        { 89  -contains $_ } { $result = ($ValueSplitted * (3.10[math]::Pow(10, 7))); $boolOption = $true; }
         default { 
             if (-Not $boolOption) {
                 Throw 'Invalid input';
