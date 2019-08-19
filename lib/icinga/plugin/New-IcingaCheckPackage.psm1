@@ -72,6 +72,8 @@ function New-IcingaCheckPackage()
             return;
         }
 
+        $this.compiled = $TRUE;
+
         if ($this.checks.Count -ne 0) {
             if ($this.opand) {
                 if ($this.CheckAllOk() -eq $FALSE) {
@@ -109,11 +111,9 @@ function New-IcingaCheckPackage()
             $this.exitcode = $IcingaEnums.IcingaExitCode.Ok;
         }
 
-        if ($Verbose -eq $TRUE -Or [int]$this.exitcode -ne $IcingaEnums.IcingaExitCode.Unknown) {
+        if ($Verbose -eq $TRUE) {
             $this.PrintOutputMessages();
         }
-
-        $this.compiled = $TRUE;
 
         return $this.exitcode;
     }
@@ -259,6 +259,7 @@ function New-IcingaCheckPackage()
     $Check | Add-Member -membertype ScriptMethod -name 'PrintOutputMessages' -value {
         [bool]$printDetails = $FALSE;
         [bool]$printAll = $FALSE;
+
         switch ($this.verbose) {
             0 { break; };
             1 { break; };
@@ -270,7 +271,6 @@ function New-IcingaCheckPackage()
                 $printAll = $TRUE;
                 break;
             }
-            
         }
 
         $this.WritePackageOutputStatus();
