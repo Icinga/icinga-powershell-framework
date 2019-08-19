@@ -4,9 +4,17 @@
 #
 function Show-IcingaPerformanceCounters()
 {
-    param ([string]$CounterCategory);
+    param (
+        [string]$CounterCategory
+    );
 
     [hashtable]$counters = @{};
+
+    if ([string]::IsNullOrEmpty($CounterCategory)) {
+        $counters.Add('error', 'Please specify a counter category');
+        return $counters;
+    }
+
     try {
         # At first create our Performance Counter object for the category we specified
         $Category = New-Object System.Diagnostics.PerformanceCounterCategory($CounterCategory);
