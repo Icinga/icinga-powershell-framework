@@ -4,26 +4,38 @@ Import-IcingaLib provider\users;
 function Invoke-IcingaCheckUsers()
 {
     param (
-        [array]$username,
+        [array]$Username,
+        $Warning,
+        $Critical,
         [switch]$NoPerfData,
-        $Verbose
-
+        [int]$Verbose
     );
     
-    $UsersPackage  = New-IcingaCheckPackage -Name 'Users' -OperatorAnd -Verbos $Verbose;
-    $UserInformation = Get-IcingaUsers -Username $username;
+    $UsersPackage  = New-IcingaCheckPackage -Name 'Users' -OperatorAnd -Verbose $Verbose;
+    $LoggedOnUsers = Get-IcingaLoggedOnUsers -UserFilter $Username;
 
-    foreach ($ExistingUser in $UserInformation) {
-    Write-Host $ExistingUser;
-    If ($null -eq $ExistingUser)
-    {
-        continue;
-    }
-    $Status = $ExistingUser.Enabled;
+    if ($Username.Count -ne 0) {
+        foreach ($User in $Username) {
+            $IcingaCheck = $null;
+            [int]$LoginCount = 0;
 
-    $IcingaCheck = New-IcingaCheck -Name ([string]::Format('User {0} Status {1} ', $ExistingUser, $Status)) -Value $Status -NoPerfData;
-    $IcingaCheck.CritIfNotMatch('True') | Out-Null;
-    $UsersPackage.AddCheck($IcingaCheck);
+            if ($LoggedOnUsers.users.ContainsKey($User)) {
+                $LoginCount = $LoggedOnUsers.users.$User.count;
+            }
+
+            $IcingaCheck = New-IcingaCheck -Name ([string]::Format('Logged On User "{0}"', $User)) -Value $LoginCount;
+            $IcingaCheck.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
+            $UsersPackage.AddCheck($IcingaCheck);
+        }
+    } else {
+        foreach ($User in $LoggedOnUsers.users.Keys) {
+            $UsersPackage.AddCheck(
+                (New-IcingaCheck -Name ([string]::Format('Logged On User "{0}"', $User)) -Value $LoggedOnUsers.users.$User.count)
+            );
+        }
+        $IcingaCheck = New-IcingaCheck -Name 'Logged On Users' -Value $LoggedOnUsers.count;
+        $IcingaCheck.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
+        $UsersPackage.AddCheck($IcingaCheck)
     }
     
     exit (New-IcingaCheckResult -Name 'Users' -Check $UsersPackage -NoPerfData $NoPerfData -Compile);
