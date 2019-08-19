@@ -35,6 +35,8 @@ function New-IcingaCheckPackage()
     }
 
     $Check | Add-Member -membertype ScriptMethod -name 'InitCheck' -value {
+        param($check);
+
         if ($null -eq $check) {
             return;
         }
