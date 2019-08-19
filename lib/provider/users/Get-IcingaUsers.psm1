@@ -1,16 +1,15 @@
-function Get-IcingaUsers ()
+function Get-IcingaUsers()
 {
     param (
         [array]$Username
     );
 
-
     if ($null -eq $Username) {
         return Get-LocalUser;
     } else {
-        [array]$UserInformation
+        [array]$UserInformation = @();
         foreach ($UniqueUser in $Username) {
-            [array]$UserInformation += Get-LocalUser -Name $UniqueUser;
+            $UserInformation += (Get-LocalUser -Name $UniqueUser);
         }
     }
 
