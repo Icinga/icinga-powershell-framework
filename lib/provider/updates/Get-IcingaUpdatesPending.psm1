@@ -11,6 +11,7 @@ function Get-IcingaUpdatesPending ()
         # Get a list of current pending updates which are not yet installed on the system
         $Pending = $SearchIndex.Search("IsInstalled=0");
         $PendingUpdates.Add('count', $Pending.Updates.Count);
+        $PendingUpdates.Add('updates', @{ });
 
         foreach ($update in $Pending.Updates) {
             [hashtable]$PendingUpdateDetails = @{};
@@ -60,7 +61,7 @@ function Get-IcingaUpdatesPending ()
                 $name = [string]::Format('{0} ({1})', $name, $PendingUpdateNameCache[$name]);
             }
 
-            $PendingUpdates.Add($name, $PendingUpdateDetails);
+            $PendingUpdates.updates.Add($name, $PendingUpdateDetails);
         }
     } catch {
         if ($PendingUpdates.ContainsKey('Count') -eq $FALSE) {
