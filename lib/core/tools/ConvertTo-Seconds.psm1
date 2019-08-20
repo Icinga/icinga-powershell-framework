@@ -1,34 +1,62 @@
+Import-IcingaLib core\tools;
 # year month week days hours minutes seconds milliseconds
 
 function ConvertTo-Seconds()
 {
     param(
-        [string]$Value,
-        [char]$Unit,
-        [switch]$Milliseconds
+        [string]$Value
     );
 
-    #100 D
-    #100 D
-    $Unit = $Value.Substring($Value.get_Length()-2)[0];
-    [single]$ValueSplitted = $Value;
-    #$Name.Substring($Name.get_Length()-1);
-    #$Name.Substring(0,$Name.get_Length()-1);
-    switch ([int][char]$Unit) {
-#       { 'ms', 'milliseconds' -contains $_ } { $result = ($Value / [math]::Pow(10, 3)); $boolOption = $true; }
-        { 115 -contains $_ } { $result = $ValueSplitted; $boolOption = $true; }
-        { 109 -contains $_ } { $result = ($ValueSplitted * 60); $boolOption = $true; }
-        { 104 -contains $_ } { $result = ($ValueSplitted * 3600); $boolOption = $true; }
-        { 100 -contains $_ } { $result = ($ValueSplitted * 86400); $boolOption = $true; }
-        { 87  -contains $_ } { $result = ($ValueSplitted * 604800); $boolOption = $true; }
-        { 77  -contains $_ } { $result = ($ValueSplitted * (2.5[math]::Pow(10, 6))); $boolOption = $true; }
-        { 89  -contains $_ } { $result = ($ValueSplitted * (3.10[math]::Pow(10, 7))); $boolOption = $true; }
-        default { 
-            if (-Not $boolOption) {
-                Throw 'Invalid input';
-            } 
+    [string]$NumberPart = '';
+    [string]$UnitPart   = '';
+    [bool]$Negate       = $FALSE;
+
+    foreach($char in $Value.ToCharArray()) {
+        if ((Test-Numeric $char)) {
+            $NumberPart += $char;
+        } else {
+            if ($char -eq '-') {
+                $Negate = $TRUE;
+            } elseif ($char -eq '.' -Or $char -eq ',') {
+                $NumberPart += '.';
+            } else {
+                $UnitPart += $char;
+            }
         }
     }
-    
+
+    [single]$ValueSplitted = $NumberPart;
+    $result             = 0;
+
+    if ($Negate) {
+        $ValueSplitted *= -1;
+    }
+
+    [string]$errorMsg   = (
+        [string]::Format('Invalid unit type "{0}" specified for convertion. Allowed units: ms, s, m, h, d, w, M, y', $UnitPart)
+    );
+
+    if ($UnitPart -Match 'ms') {
+        $result = ($ValueSplitted / [math]::Pow(10, 3));
+    } else {
+        if ($UnitPart.Length -gt 1) {
+            Throw $errorMsg;
+        }
+
+        switch ([int][char]$UnitPart) {
+            { 115 -contains $_ } { $result = $ValueSplitted; break; } # s
+            { 109 -contains $_ } { $result = $ValueSplitted * 60; break; } # m
+            { 104 -contains $_ } { $result = $ValueSplitted * 3600; break; } # h
+            { 100 -contains $_ } { $result = $ValueSplitted * 86400; break; } # d
+            { 119 -contains $_ } { $result = $ValueSplitted * 604800; break; } # w
+            { 77  -contains $_ } { $result = $ValueSplitted * 2592000; break; } # M
+            { 121 -contains $_ } { $result = $ValueSplitted * 31536000; break; } # y
+            default { 
+                Throw $errorMsg;
+                break;
+            }
+        }
+    }
+
     return $result;
 }
