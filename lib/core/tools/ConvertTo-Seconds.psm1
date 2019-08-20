@@ -7,9 +7,14 @@ function ConvertTo-Seconds()
         [string]$Value
     );
 
+    if ([string]::IsNullOrEmpty($Value)) {
+        return $Value;
+    }
+
     [string]$NumberPart = '';
     [string]$UnitPart   = '';
     [bool]$Negate       = $FALSE;
+    [bool]$hasUnit      = $FALSE;
 
     foreach($char in $Value.ToCharArray()) {
         if ((Test-Numeric $char)) {
@@ -21,8 +26,13 @@ function ConvertTo-Seconds()
                 $NumberPart += '.';
             } else {
                 $UnitPart += $char;
+                $hasUnit = $TRUE;
             }
         }
+    }
+
+    if (-Not $hasUnit) {
+        return $Value;
     }
 
     [single]$ValueSplitted = $NumberPart;
@@ -60,3 +70,38 @@ function ConvertTo-Seconds()
 
     return $result;
 }
+
+function ConvertTo-SecondsFromIcingaThresholds()
+{
+    param(
+        [string]$Threshold
+    );
+
+    [array]$Content    = $Threshold.Split(':');
+    [array]$NewContent = @();
+
+    foreach ($entry in $Content) {
+        $NewContent += (Get-IcingaThresholdsAsSeconds -Value $entry)
+    }
+
+    return [string]::Join(':', $NewContent);
+}
+
+function Get-IcingaThresholdsAsSeconds()
+{
+    param(
+        [string]$Value
+    );
+
+    if ($Value.Contains('~')) {
+        $Value = $Value.Replace('~', '');
+        return [string]::Format('~{0}', (ConvertTo-Seconds $Value));
+    } elseif ($Value.Contains('@')) {
+        $Value = $Value.Replace('@', '');
+        return [string]::Format('@{0}', (ConvertTo-Seconds $Value));
+    }
+
+    return (ConvertTo-Seconds $Value);
+}
+
+Export-ModuleMember -Function @( 'ConvertTo-Seconds', 'ConvertTo-SecondsFromIcingaThresholds' );
