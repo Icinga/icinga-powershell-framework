@@ -12,10 +12,10 @@
 };
 
 [hashtable]$IcingaExitCodeText = @{
-    0 = 'Ok';
-    1 = 'Warning';
-    2 = 'Critical';
-    3 = 'Unknown';
+    0 = '[OK]';
+    1 = '[WARNING]';
+    2 = '[CRITICAL]';
+    3 = '[UNKNOWN]';
 };
 
 [hashtable]$IcingaMeasurementUnits = @{
