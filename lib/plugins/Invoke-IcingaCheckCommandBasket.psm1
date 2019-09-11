@@ -10,17 +10,96 @@ function Invoke-IcingaCheckCommandBasket()
         $CheckName = (Get-Command Invoke-IcingaCheck*).Name
     }
 
+    [int]$FieldID = 0;
+    [hashtable]$Basket = @{};
+    $Basket.Add('Datafield', @{});
+    $Basket.Add('DataList', @{});
+    $Basket.Add('Command', @{});
+
+                        # DataList Entries (Default for NoPerfData)
+                        if ($Basket.DataList.ContainsKey('PowerShell NoPerfData') -eq $FALSE) {
+                            $Basket.DataList.Add(
+                            'PowerShell NoPerfData', @{
+                                'list_name' = 'PowerShell NoPerfData';
+                                'owner' = $env:username;
+                                'originalId' = '1'; #Gehört noch geändert
+                                'entries' = @{};
+                            }
+                            );
+                        }
+    
+                            $Basket.DataList["PowerShell NoPerfData"].entries.Add(
+                                '0', @{
+                                    'entry_name' = '0';
+                                    'entry_value:' = "yes";
+                                    'format' = 'string';
+                                    'allowed_roles' = $NULL;
+                                }
+                            );
+                            $Basket.DataList["PowerShell NoPerfData"].entries.Add(
+                                '1', @{
+                                    'entry_name' = '1';
+                                    'entry_value:' = "no";
+                                    'format' = 'string';
+                                    'allowed_roles' = $NULL;
+                                }
+                            );
+    
+                                    # DataList Entries (Default for Verbose)
+            if ($Basket.DataList.ContainsKey('PowerShell Verbose') -eq $FALSE) {
+                $Basket.DataList.Add(
+                'PowerShell Verbose', @{
+                    'list_name' = 'PowerShell Verbose';
+                    'owner' = $env:username;
+                    'originalId' = '50'; #Gehört noch geändert
+                    'entries' = @{};
+                }
+                );
+            }
+                $Basket.DataList["PowerShell Verbose"].entries.Add(
+                    '0', @{
+                        'entry_name' = '0';
+                        'entry_value:' = "Show Default";
+                        'format' = 'string';
+                        'allowed_roles' = $NULL;
+                    }
+                );
+                $Basket.DataList["PowerShell Verbose"].entries.Add(
+                    '1', @{
+                        'entry_name' = '1';
+                        'entry_value:' = "Show Operator";
+                        'format' = 'string';
+                        'allowed_roles' = $NULL;
+                    }
+                );
+                $Basket.DataList["PowerShell Verbose"].entries.Add(
+                    '2', @{
+                        'entry_name' = '2';
+                        'entry_value:' = "Show Problems";
+                        'format' = 'string';
+                        'allowed_roles' = $NULL;
+                    }
+                )
+                $Basket.DataList["PowerShell Verbose"].entries.Add(
+                    '3', @{
+                        'entry_name' = '3';
+                        'entry_value:' = "Show All";
+                        'format' = 'string';
+                        'allowed_roles' = $NULL;
+                    }
+                );
+    
+
     foreach ($check in $CheckName) {
     
-    [hashtable]$Basket = @{};
+#    [hashtable]$Basket = @{};
 
-    [int]$FieldID = 0;
+#    [int]$FieldID = 0;
     
     $Data = (Get-Help $check)
 
-    $Basket.Add(
-        'Command', @{
-            $Data.Syntax.syntaxItem.Name = @{
+    $Basket.Command.Add(
+            $Data.Syntax.syntaxItem.Name, @{
                 'arguments'= @{
                     '-C' = @{
                         'value' = [string]::Format('Use-Icinga; {0}', $Data.Syntax.syntaxItem.Name);
@@ -39,11 +118,10 @@ function Invoke-IcingaCheckCommandBasket()
                 'vars' = @{};
                 'zone' = $NULL;
             }
-        }
     )
 
-    $Basket.Add('Datafield', @{});
-    $Basket.Add('DataList', @{});
+#    $Basket.Add('Datafield', @{});
+#    $Basket.Add('DataList', @{});
 
     foreach ($parameter in $Data.Syntax.syntaxItem.parameter) {
         if ($parameter.name -ne 'core') {
@@ -54,7 +132,7 @@ function Invoke-IcingaCheckCommandBasket()
             [string]$Order = 99
         }
 
-        $IcingaCustomVariable = [string]::Format('$PowerShell_{0}$', $parameter.Name);
+        $IcingaCustomVariable = [string]::Format('$PowerShell_{0}_{1}$', $parameter.type.name, $parameter.Name);
 
         # Conditional whether type of parameter is switch
             if ($parameter.type.name -eq 'switch') {
@@ -105,12 +183,13 @@ function Invoke-IcingaCheckCommandBasket()
                 }
             );
 
-            $IcingaCustomVariable = [string]::Format('PowerShell_{0}', $parameter.Name);
+            $IcingaCustomVariable = [string]::Format('PowerShell_{0}_{1}', $parameter.type.name, $parameter.Name);
 
             $DataListName = [string]::Format('PowerShell {0}', $parameter.Name)
             
             if ($parameter.type.name -eq 'switch') {
                 $IcingaDataType='Datalist';
+                if ($Basket.DataList.ContainsKey($DataListName) -eq $FALSE) {
                 $Basket.DataList.Add(
                     $DataListName, @{
                         'list_name' = $DataListName;
@@ -119,7 +198,7 @@ function Invoke-IcingaCheckCommandBasket()
                         'entries' = @{};
                     }
                 );
-
+                }
             } elseif ($parameter.type.name -eq 'Object') {
                 if ($parameter.Name -eq 'Verbose') {
                     $IcingaDataType='Datalist'
@@ -132,6 +211,11 @@ function Invoke-IcingaCheckCommandBasket()
             }
             $IcingaDataType = [string]::Format('Icinga\Module\Director\DataType\DataType{0}', $IcingaDataType)
 
+            if ($Basket.Datafield.Values.varname -eq $IcingaCustomVariable)
+            {
+            }
+            else {
+            [int]$FieldID = $FieldID + 1;
             $Basket.Datafield.Add(
                 [string]$FieldID, @{
                     'varname' = $IcingaCustomVariable;
@@ -142,6 +226,7 @@ function Invoke-IcingaCheckCommandBasket()
                     'originalId' = [string]$FieldID;
                 }
             );
+
 
             if ($parameter.type.name -eq 'switch' -or $parameter.Name -eq 'Verbose') {
                 $Basket.Datafield[[string]$FieldID].Add(
@@ -162,6 +247,7 @@ function Invoke-IcingaCheckCommandBasket()
                     'settings', @{}
                 );
             }
+        }
             [int]$FieldID = $FieldID + 1;
     }
 }
@@ -171,16 +257,18 @@ function Invoke-IcingaCheckCommandBasket()
         [int]$FieldID = $FieldID + 1;
         $Basket.Command[$Data.Syntax.syntaxItem.Name].arguments.Add(
             '-Verbose', @{
-                'value' = '$PowerShell_Verbose$';
-                'order' = 'o';
+                'value' = '$PowerShell_Object_Verbose$';
+                'order' = '99';
             }
         );
         $Basket.Command[$Data.Syntax.syntaxItem.Name].vars.Add(
-            'PowerShell_Verbose', "0"
+            'PowerShell_Object_Verbose', "0"
         );
+        if ($Basket.Datafield.Values.varname -eq $IcingaCustomVariable) {
+        } else {
         $Basket.Datafield.Add(
             [string]$FieldID, @{
-                'varname' = 'PowerShell_Verbose';
+                'varname' = 'PowerShell_Object_Verbose';
                 'caption' = 'Verbose';
                 'description' = $NULL;
                 'datatype' = 'Icinga\Module\Director\DataType\DataTypeDatalist';
@@ -193,6 +281,7 @@ function Invoke-IcingaCheckCommandBasket()
                 }
             }
         );
+        }
     }
 
 
@@ -200,17 +289,19 @@ function Invoke-IcingaCheckCommandBasket()
         [int]$FieldID = $FieldID + 1;
         $Basket.Command[$Data.Syntax.syntaxItem.Name].arguments.Add(
             '-NoPerfData', @{
-                'set_if' = '$PowerShell_NoPerfData$';
+                'set_if' = '$PowerShell_switch_NoPerfData$';
                 'set_if_format' = 'string';
                 'order' = '99';
             }
         );
         $Basket.Command[$Data.Syntax.syntaxItem.Name].vars.Add(
-            'PowerShell_NoPerfData', "0"
+            'PowerShell_switch_NoPerfData', "0"
         );
+        if ($Basket.Datafield.Values.varname -eq $IcingaCustomVariable) {
+        } else {
         $Basket.Datafield.Add(
             [string]$FieldID, @{
-                'varname' = 'PowerShell_NoPerfData';
+                'varname' = 'PowerShell_switch_NoPerfData';
                 'caption' = 'Perf Data';
                 'description' = $NULL;
                 'datatype' = 'Icinga\Module\Director\DataType\DataTypeDatalist';
@@ -223,89 +314,19 @@ function Invoke-IcingaCheckCommandBasket()
                 }
             }
         );
-    }
-                    # DataList Entries (Default for NoPerfData)
-                    if ($Basket.DataList.ContainsKey('PowerShell NoPerfData') -eq $FALSE) {
-                        $Basket.DataList.Add(
-                        'PowerShell NoPerfData', @{
-                            'list_name' = 'PowerShell NoPerfData';
-                            'owner' = $env:username;
-                            'originalId' = '1'; #Gehört noch geändert
-                            'entries' = @{};
-                        }
-                        );
-                    }
-                        $Basket.DataList["PowerShell NoPerfData"].entries.Add(
-                            '0', @{
-                                'entry_name' = '0';
-                                'entry_value:' = "yes";
-                                'format' = 'string';
-                                'allowed_roles' = $NULL;
-                            }
-                        );
-                        $Basket.DataList["PowerShell NoPerfData"].entries.Add(
-                            '1', @{
-                                'entry_name' = '1';
-                                'entry_value:' = "no";
-                                'format' = 'string';
-                                'allowed_roles' = $NULL;
-                            }
-                        );
-
-                                # DataList Entries (Default for Verbose)
-        if ($Basket.DataList.ContainsKey('PowerShell Verbose') -eq $FALSE) {
-            $Basket.DataList.Add(
-            'PowerShell Verbose', @{
-                'list_name' = 'PowerShell Verbose';
-                'owner' = $env:username;
-                'originalId' = '50'; #Gehört noch geändert
-                'entries' = @{};
-            }
-            );
         }
-            $Basket.DataList["PowerShell Verbose"].entries.Add(
-                '0', @{
-                    'entry_name' = '0';
-                    'entry_value:' = "Show Default";
-                    'format' = 'string';
-                    'allowed_roles' = $NULL;
-                }
-            );
-            $Basket.DataList["PowerShell Verbose"].entries.Add(
-                '1', @{
-                    'entry_name' = '1';
-                    'entry_value:' = "Show Operator";
-                    'format' = 'string';
-                    'allowed_roles' = $NULL;
-                }
-            );
-            $Basket.DataList["PowerShell Verbose"].entries.Add(
-                '2', @{
-                    'entry_name' = '2';
-                    'entry_value:' = "Show Problems";
-                    'format' = 'string';
-                    'allowed_roles' = $NULL;
-                }
-            )
-            $Basket.DataList["PowerShell Verbose"].entries.Add(
-                '3', @{
-                    'entry_name' = '3';
-                    'entry_value:' = "Show All";
-                    'format' = 'string';
-                    'allowed_roles' = $NULL;
-                }
-            );
+    }
     $AllChecks.Add($check, $Basket);
     }
 
 Write-Host $CheckName;
 Write-Host $CheckName.Count;
 
-    if ([string]$CheckName.Count -eq '1') {
+#    if ([string]$CheckName.Count -eq '1') {
         $output=ConvertTo-Json -D 100 $Basket > Check.json;
-    } else {
-        $output=ConvertTo-Json -D 100 $AllChecks > Check.json;
-    }
+#    } else {
+#        $output=ConvertTo-Json -D 100 $AllChecks > Check.json;
+#    }
 
     return $output;
 }
