@@ -28,16 +28,16 @@ Import-IcingaLib icinga\plugin;
 .PARAMETER Status
    Status for the specified service or services to check against.
 
- .INPUTS
+.INPUTS
    System.Array
 
- .OUTPUTS
+.OUTPUTS
    System.String
 
- .LINK
+.LINK
    https://github.com/LordHepipud/icinga-module-windows
 
- .NOTES
+.NOTES
 #>
 
 function Invoke-IcingaCheckService()
