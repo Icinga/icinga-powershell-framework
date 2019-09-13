@@ -214,12 +214,12 @@ function Get-IcingaCheckCommandConfig()
                             'value' = @{
                                 'type' = 'Function';
                                 'body' = [string]::Format(
-                                        'var arr = macro("{0}");{1}if (len(arr) == 0) {2}{1}return "$null";{1}{3}{1}return arr.join(",");',
-                                        $IcingaCustomVariable,
-                                        "`r`n",
-                                        '{',
-                                        '}'
-                                    );
+                                    'var arr = macro("{0}");{1}if (len(arr) == 0) {2}{1}return "$null";{1}{3}{1}return arr.join(",");',
+                                    $IcingaCustomVariable,
+                                    "`r`n",
+                                    '{',
+                                    '}'
+                                );
                             }
                             'order' = $Order;
                         }
