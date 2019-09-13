@@ -56,6 +56,7 @@ function Invoke-IcingaCheckCommandBasket()
 
     # Variable definition and initialization
     [int]$FieldID = 0;
+#    [int]$FieldNumeration = 0;
     [hashtable]$Basket = @{};
 
     # Define basic hashtable structure by adding fields: "Datafield", "DataList", "Command"
@@ -96,7 +97,7 @@ function Invoke-IcingaCheckCommandBasket()
             'PowerShell Verbose', @{
                 'list_name' = 'PowerShell Verbose';
                 'owner' = $env:username;
-                'originalId' = '50';
+                'originalId' = '2';
                 'entries' = @(
                     @{
                         'entry_name' = '0';
@@ -133,6 +134,7 @@ function Invoke-IcingaCheckCommandBasket()
     or one of $CheckName = 'Invoke-IcingaCheckCommand'
     #>
     foreach ($check in $CheckName) {
+        [int]$FieldNumeration = 0;
     if ($check -eq 'Invoke-IcingaCheckCommandBasket') {
     } else {
     
@@ -222,15 +224,6 @@ function Invoke-IcingaCheckCommandBasket()
             $Required = 'n';
             }
 
-            [int]$FieldID = $FieldID + 1;
-            $Basket.Command[$Data.Syntax.syntaxItem.Name].fields.Add(
-                [string]$FieldID, @{
-                    'datafield_id' = [int]$FieldID;
-                    'is_required' = $Required;
-                    'var_filter' = $NULL;
-                }
-            );
-
             $IcingaCustomVariable = [string]::Format('PowerShell_{0}_{1}', $parameter.type.name, $parameter.Name);
 
             $DataListName = [string]::Format('PowerShell {0}', $parameter.Name)
@@ -289,11 +282,16 @@ function Invoke-IcingaCheckCommandBasket()
                     );
                 } else {
                     $Basket.Datafield[[string]$FieldID].Add(
-                        'settings', @{}
+                        'settings', @{
+                            'visbility' = 'visible';
+                        }
                     );
                 }
+                [int]$FieldID = [int]$FieldID + 1;
             }
         }
+
+[int]$FieldNumeration = [int]$FieldNumeration + 1;
     }
 
     # Check whether or not noperfdata and verbose is set and add it if necessary
@@ -362,6 +360,48 @@ function Invoke-IcingaCheckCommandBasket()
     }
     }
     }
+    foreach ($check in $CheckName) {
+        [int]$FieldNumeration = 0;
+    if ($check -eq 'Invoke-IcingaCheckCommandBasket') {
+    } else {
+
+        $Data = (Get-Help $check)    
+    
+    foreach ($parameter in $Data.Syntax.syntaxItem.parameter){
+        $IcingaCustomVariable = [string]::Format('PowerShell_{0}_{1}', $parameter.type.name, $parameter.Name);
+
+
+        [hashtable]$translationdatafield = @{}
+        foreach ($DID in $Basket.Datafield.Keys)
+        {
+
+            $translationdatafield.Add($Basket.Datafield.$DID.varname, $DID);
+        }
+        
+#        $translationdatafield.Add()
+        foreach($key in $translationdatafield.Keys)
+        {
+            if ([string]$IcingaCustomVariable -eq [string]$key)
+            {
+                $otherID = $translationdatafield[$IcingaCustomVariable];
+            } else {}
+        }
+            # Get Necessary Syntax-Information and more through cmdlet "Get-Help"
+    Write-Host $Data.Syntax.syntaxItem.Name
+    Write-Host $Parameter.Name
+    #            [int]$FieldID = [int]$FieldID + 1;
+        $Basket.Command[$Data.Syntax.syntaxItem.Name].fields.Add(
+            [string]$FieldNumeration, @{
+                'datafield_id' = [int]$otherID;
+                'is_required' = $Required;
+                'var_filter' = $NULL;
+            }
+        );
+
+        [int]$FieldNumeration = [int]$FieldNumeration + 1;
+    }
+    }
+}
 
     if ($CheckName.Count -eq 1) {
         $FileName = "${CheckName}.json";
