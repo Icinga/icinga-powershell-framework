@@ -207,8 +207,15 @@ function New-IcingaCheckPackage()
     }
 
     $Check | Add-Member -membertype ScriptMethod -name 'WriteAllOutput' -value {
+        [hashtable]$MessageOrdering = @{};
         foreach ($check in $this.checks) {
-            $check.PrintAllMessages();
+            $MessageOrdering.Add($check.name, $check);
+        }
+
+        $SortedArray = $MessageOrdering.GetEnumerator() | Sort-Object name;
+
+        foreach ($entry in $SortedArray) {
+            $entry.Value.PrintAllMessages();
         }
     }
 
@@ -218,10 +225,17 @@ function New-IcingaCheckPackage()
     }
 
     $Check | Add-Member -membertype ScriptMethod -name 'WriteCheckErrors' -value {
+        [hashtable]$MessageOrdering = @{};
         foreach ($check in $this.checks) {
             if ([int]$check.exitcode -ne $IcingaEnums.IcingaExitCode.Ok) {
-                $check.PrintOutputMessages();
+                $MessageOrdering.Add($check.name, $check);
             }
+        }
+
+        $SortedArray = $MessageOrdering.GetEnumerator() | Sort-Object name;
+
+        foreach ($entry in $SortedArray) {
+            $entry.Value.PrintAllMessages();
         }
     }
 
@@ -299,12 +313,36 @@ function New-IcingaCheckPackage()
     }
 
     $Check | Add-Member -membertype ScriptMethod -name 'GetPerfData' -value {
-        [string]$perfData = '';
+        [string]$perfData             = '';
+        [hashtable]$CollectedPerfData = @{};
+
+        # At first lets collect all perf data, but ensure we only add possible label duplication only once
         foreach ($check in $this.checks) {
-            $perfData += $check.GetPerfData();
+            $data = $check.GetPerfData();
+
+            if ($null -eq $data -Or $null -eq $data.label) {
+                continue;
+            }
+
+            if ($CollectedPerfData.ContainsKey($data.label)) {
+                continue;
+            }
+
+            $CollectedPerfData.Add($data.label, $data.perfdata);
         }
-        
-        return $perfData;
+
+        # Now sort the label output by name
+        $SortedArray = $CollectedPerfData.GetEnumerator() | Sort-Object name;
+
+        # Buold the performance data output based on the sorted result
+        foreach ($entry in $SortedArray) {
+            $perfData += $entry.Value;
+        }
+
+        return @{
+            'label'    = $this.name;
+            'perfdata' = $perfData;
+        }
     }
 
     $Check.Initialise();
