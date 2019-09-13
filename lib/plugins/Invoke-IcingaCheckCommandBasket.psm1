@@ -8,6 +8,10 @@
 
    More Information on https://github.com/LordHepipud/icinga-module-windows
 
+.FUNCTIONALITY
+   This module is intended to be used to export one or all PowerShell-Modules with the namespace 'Invoke-IcingaCheck'.
+   The JSON-Export, which will be egenerated through this module is structured like an Icinga-Director-JSON-Export, so it can be imported via the Icinga-Director the same way.
+
 .EXAMPLE
    PS>Invoke-IcingaCheckCommandBasket
    The following commands have been exported:
@@ -32,6 +36,8 @@
    Has to be a single string.
  .INPUTS
    System.String
+   Oder:
+           None. You cannot pipe objects to Add-Extension.
 
  .OUTPUTS
    System.String
@@ -55,7 +61,7 @@ function Invoke-IcingaCheckCommandBasket()
     }
 
     # Variable definition and initialization
-    [int]$FieldID = 0;
+    [int]$FieldID = 3;
 #    [int]$FieldNumeration = 0;
     [hashtable]$Basket = @{};
 
@@ -251,6 +257,56 @@ function Invoke-IcingaCheckCommandBasket()
                 $IcingaDataType='String';
             }
 
+            if($Basket.Datafield.ContainsKey('0') -eq $FALSE){
+                $Basket.Datafield.Add(
+                    '0', @{
+                        'varname' = 'PowerShell_switch_NoPerfData';
+                        'caption' = 'NoPerfData';
+                        'description' = $NULL;
+                        'datatype' = 'Icinga\\Module\\Director\\DataType\\DataTypeDatalist';
+                        'format' = $NULL;
+                        'originalId' = '0';
+                        'settings' = @{
+                            'datalist' = 'PowerShell NoPerfData';
+                            'datatype' = 'string';
+                            'behavior' = 'strict';
+                        }
+                    }
+                )
+            }
+
+            if($Basket.Datafield.ContainsKey('1') -eq $FALSE){
+                $Basket.Datafield.Add(
+                    '1', @{
+                        'varname' = 'PowerShell_switch_NoPerfData';
+                        'caption' = 'Verbose';
+                        'description' = $NULL;
+                        'datatype' = 'Icinga\\Module\\Director\\DataType\\DataTypeString';
+                        'format' = $NULL;
+                        'originalId' = '1';
+                        'settings' = @{
+                            'datalist' = 'PowerShell Verbose';
+                            'datatype' = 'string';
+                            'behavior' = 'strict';
+                        }
+                    }
+                )
+            }
+
+            if($Basket.Datafield.ContainsKey('2') -eq $FALSE){
+                $Basket.Datafield.Add(
+                    '2', @{
+                        'varname' = 'Basket_Check_Variable';
+                        'caption' = 'Basket_Check';
+                        'description' = $NULL;
+                        'datatype' = 'Icinga\\Module\\Director\\DataType\\DataTypeArray';
+                        'format' = $NULL;
+                        'originalId' = '2';
+                        'settings' = @{};
+                    }
+                )
+            }
+
             $IcingaDataType = [string]::Format('Icinga\Module\Director\DataType\DataType{0}', $IcingaDataType)
 
             if ($Basket.Datafield.Values.varname -eq $IcingaCustomVariable) {
@@ -361,7 +417,7 @@ function Invoke-IcingaCheckCommandBasket()
     }
     }
     foreach ($check in $CheckName) {
-        [int]$FieldNumeration = 0;
+        [int]$FieldNumeration = 1;
     if ($check -eq 'Invoke-IcingaCheckCommandBasket') {
     } else {
 
@@ -370,12 +426,26 @@ function Invoke-IcingaCheckCommandBasket()
     foreach ($parameter in $Data.Syntax.syntaxItem.parameter){
         $IcingaCustomVariable = [string]::Format('PowerShell_{0}_{1}', $parameter.type.name, $parameter.Name);
 
+        if ($Basket.Command[$Data.Syntax.syntaxItem.Name].fields.ContainsKey('0') -eq $FALSE){
+            $Basket.Command[$Data.Syntax.syntaxItem.Name].fields.Add(
+                '0', @{
+                'datafield_id' = '2';
+                'is_required' = 'n';
+                'var_filter' = $NULL;
+                }
+            );
+        }
+
+
 
         [hashtable]$translationdatafield = @{}
         foreach ($DID in $Basket.Datafield.Keys)
         {
+            if ($translationdatafield.Contains('PowerShell_switch_NoPerfData') -eq $TRUE){
 
+            }else{
             $translationdatafield.Add($Basket.Datafield.$DID.varname, $DID);
+            }
         }
         
 #        $translationdatafield.Add()
@@ -387,9 +457,10 @@ function Invoke-IcingaCheckCommandBasket()
             } else {}
         }
             # Get Necessary Syntax-Information and more through cmdlet "Get-Help"
-    Write-Host $Data.Syntax.syntaxItem.Name
-    Write-Host $Parameter.Name
+#    Write-Host $Data.Syntax.syntaxItem.Name
+#    Write-Host $Parameter.Name
     #            [int]$FieldID = [int]$FieldID + 1;
+    
         $Basket.Command[$Data.Syntax.syntaxItem.Name].fields.Add(
             [string]$FieldNumeration, @{
                 'datafield_id' = [int]$otherID;
