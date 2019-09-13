@@ -4,17 +4,17 @@ Import-IcingaLib icinga\exception;
 function Exit-IcingaMissingPermission()
 {
     param(
-        [string]$Input,
+        [string]$InputString,
         [string]$StringPattern,
         [string]$CustomMessage,
         [string]$ExeptionType
     );
 
-    if ($null -eq $Input -Or [string]::IsNullOrEmpty($Input)) {
+    if ($null -eq $InputString -Or [string]::IsNullOrEmpty($InputString)) {
         return;
     }
 
-    if (-Not $Input.Contains($StringPattern)) {
+    if (-Not $InputString.Contains($StringPattern)) {
         return;
     }
 
