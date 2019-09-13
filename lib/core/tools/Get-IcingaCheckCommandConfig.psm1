@@ -281,7 +281,7 @@ function Get-IcingaCheckCommandConfig()
                         '0', @{
                             'varname' = 'PowerShell_switch_NoPerfData';
                             'caption' = 'NoPerfData';
-                            'description' = $NULL;
+                            'description' = 'Specifies if the plugin will return performance data output or not';
                             'datatype' = 'Icinga\\Module\\Director\\DataType\\DataTypeDatalist';
                             'format' = $NULL;
                             'originalId' = '0';
@@ -299,7 +299,7 @@ function Get-IcingaCheckCommandConfig()
                         '1', @{
                             'varname' = 'PowerShell_switch_NoPerfData';
                             'caption' = 'Verbose';
-                            'description' = $NULL;
+                            'description' = 'Specifies if the plugin will return performance data output or not';
                             'datatype' = 'Icinga\\Module\\Director\\DataType\\DataTypeString';
                             'format' = $NULL;
                             'originalId' = '1';
@@ -320,7 +320,7 @@ function Get-IcingaCheckCommandConfig()
                         [string]$FieldID, @{
                             'varname' = $IcingaCustomVariable;
                             'caption' = $parameter.Name;
-                            'description' = $NULL;
+                            'description' = $parameter.Description.Text;
                             'datatype' = $IcingaDataType;
                             'format' = $NULL;
                             'originalId' = [string]$FieldID;
@@ -377,7 +377,7 @@ function Get-IcingaCheckCommandConfig()
                     [string]$FieldID, @{
                         'varname' = 'PowerShell_Object_Verbose';
                         'caption' = 'Verbose';
-                        'description' = $NULL;
+                        'description' = 'Increase the plugin output for more information on the received result.';
                         'datatype' = 'Icinga\Module\Director\DataType\DataTypeDatalist';
                         'format' = $NULL;
                         'originalId' = [string]$FieldID;
@@ -407,7 +407,7 @@ function Get-IcingaCheckCommandConfig()
                     [string]$FieldID, @{
                         'varname' = 'PowerShell_switch_NoPerfData';
                         'caption' = 'Perf Data';
-                        'description' = $NULL;
+                        'description' = 'Specifies if the plugin will return performance data output or not';
                         'datatype' = 'Icinga\Module\Director\DataType\DataTypeDatalist';
                         'format' = $NULL;
                         'originalId' = [string]$FieldID;
