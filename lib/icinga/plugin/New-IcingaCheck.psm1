@@ -408,6 +408,8 @@ function New-IcingaCheck()
     $Check | Add-Member -membertype ScriptMethod -name 'TranslateValue' -value {
         param($value);
 
+        $value = Format-IcingaPerfDataValue $value;
+
         if ($null -eq $this.translation -Or $null -eq $value) {
             return $value;
         }
@@ -633,7 +635,7 @@ function New-IcingaCheck()
     $Check | Add-Member -membertype ScriptMethod -name 'GetPerfData' -value {
 
         if ($this.completed -Or -Not $this.perfdata) {
-            return '';
+            return $null;
         }
 
         $this.AutodiscoverMinMax();
@@ -645,18 +647,22 @@ function New-IcingaCheck()
             $this.maximum = [string]::Format(';{0}', $this.maximum);
         }
 
-        $this.completed = $TRUE;
+        $this.completed    = $TRUE;
+        [string]$LabelName = (Format-IcingaPerfDataLabel $this.name);
 
-        return [string]::Format(
-            "'{0}'={1}{2};{3};{4}{5}{6} ",
-            $this.name,
-            $this.value,
-            $this.unit,
-            $this.warning,
-            $this.critical,
-            $this.minimum,
-            $this.maximum
-        );
+        return @{
+            'label'    = $LabelName;
+            'perfdata' = [string]::Format(
+                "'{0}'={1}{2};{3};{4}{5}{6} ",
+                $LabelName,
+                (Format-IcingaPerfDataValue $this.value),
+                $this.unit,
+                (Format-IcingaPerfDataValue $this.warning),
+                (Format-IcingaPerfDataValue $this.critical),
+                (Format-IcingaPerfDataValue $this.minimum),
+                (Format-IcingaPerfDataValue $this.maximum)
+            );
+        };
     }
 
     $Check | Add-Member -membertype ScriptMethod -name 'AutodiscoverMinMax' -value {
