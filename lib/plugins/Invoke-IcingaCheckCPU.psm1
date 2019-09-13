@@ -1,5 +1,6 @@
 Import-IcingaLib core\perfcounter;
 Import-IcingaLib icinga\plugin;
+Import-IcingaLib icinga\exception;
 
 function Invoke-IcingaCheckCPU()
 {
@@ -13,6 +14,8 @@ function Invoke-IcingaCheckCPU()
 
     $CpuCounter  = New-IcingaPerformanceCounter -Counter ([string]::Format('\Processor({0})\% processor time', $Core));
     $CpuPackage  = New-IcingaCheckPackage -Name 'CPU Load' -OperatorAnd -Verbos $Verbose;
+
+    Exit-IcingaMissingPermission -Input $CpuCounter.ErrorMessage -StringPattern '"Global"' -ExeptionType $IcingaExceptions.Throw.PerformanceCounter;
 
     if ($CpuCounter.Counters.Count -ne 0) {
         foreach ($counter in $CpuCounter.Counters) {
