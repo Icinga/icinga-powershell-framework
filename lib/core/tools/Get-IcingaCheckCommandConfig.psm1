@@ -25,7 +25,6 @@
    - 'Invoke-IcingaCheckUsers'
 ############################################################
 
-
 .EXAMPLE
    Get-IcingaCheckCommandConfig -OutFile 'C:\Users\icinga\config-exports'
    The following commands have been exported:
@@ -50,16 +49,16 @@
    Used to specify an array of commands which should be exported.
    Seperated with ','
 
- .INPUTS
+.INPUTS
    System.Array
 
- .OUTPUTS
+.OUTPUTS
    System.String
 
- .LINK
+.LINK
    https://github.com/LordHepipud/icinga-module-windows
 
- .NOTES
+.NOTES
 #>
 
 function Get-IcingaCheckCommandConfig()
