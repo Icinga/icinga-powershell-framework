@@ -71,7 +71,12 @@
                  $AllCountersIntances += $NewCounter;
              }
          } catch {
-             return (New-IcingaPerformanceCounterNullObject -FullName $Counter -ErrorMessage ([string]::Format('Failed to deserialize instances for counter "{0}". Exception: "{1}".', $Counter, $_.Exception.Message)));
+            # Throw an exception in case our permissions are not enough to fetch performance counter
+            Exit-IcingaThrowException -InputString $_.Exception -StringPattern 'System.UnauthorizedAccessException' -ExceptionType 'Permission' -ExceptionThrown $IcingaExceptions.Permission.PerformanceCounter;
+            Exit-IcingaThrowException -InputString $_.Exception -StringPattern 'System.InvalidOperationException'   -ExceptionType 'Input'     -CustomMessage $Counter -ExceptionThrown $IcingaExceptions.Inputs.PerformanceCounter;
+            Exit-IcingaThrowException -InputString $_.Exception -StringPattern '' -ExceptionType 'Unhandled';
+            # Shouldn't actually get down here anyways
+            return (New-IcingaPerformanceCounterNullObject -FullName $Counter -ErrorMessage ([string]::Format('Failed to deserialize instances for counter "{0}". Exception: "{1}".', $Counter, $_.Exception.Message)));
          }
 
          # If we load multiple instances, we should add a global wait here instead of a wait for each single instance
