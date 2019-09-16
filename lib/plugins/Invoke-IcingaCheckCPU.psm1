@@ -18,12 +18,12 @@ function Invoke-IcingaCheckCPU()
 
     if ($CpuCounter.Counters.Count -ne 0) {
         foreach ($counter in $CpuCounter.Counters) {
-            $IcingaCheck = New-IcingaCheck -Name ([string]::Format('Core {0}', (Format-IcingaDigitCount $counter.Instance -Digits $CpuCount -Symbol ' '))) -Value $counter.Value().Value -Unit '%';
+            $IcingaCheck = New-IcingaCheck -Name ([string]::Format('Core {0}', (Format-IcingaDigitCount $counter.Instance.Replace('_', '') -Digits $CpuCount -Symbol ' '))) -Value $counter.Value().Value -Unit '%';
             $IcingaCheck.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
             $CpuPackage.AddCheck($IcingaCheck);
         }
     } else {
-        $IcingaCheck = New-IcingaCheck -Name ([string]::Format('Core {0}', (Format-IcingaDigitCount $Core -Digits $CpuCount -Symbol ' '))) -Value $CpuCounter.Value().Value -Unit '%';
+        $IcingaCheck = New-IcingaCheck -Name ([string]::Format('Core {0}', (Format-IcingaDigitCount $Core.Replace('_', '') -Digits $CpuCount -Symbol ' '))) -Value $CpuCounter.Value().Value -Unit '%';
         $IcingaCheck.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
         $CpuPackage.AddCheck($IcingaCheck);
     }
