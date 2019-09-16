@@ -14,15 +14,16 @@ function Invoke-IcingaCheckCPU()
 
     $CpuCounter  = New-IcingaPerformanceCounter -Counter ([string]::Format('\Processor({0})\% processor time', $Core));
     $CpuPackage  = New-IcingaCheckPackage -Name 'CPU Load' -OperatorAnd -Verbos $Verbose;
+    $CpuCount    = ([string](Get-IcingaCpuCount)).Length;
 
     if ($CpuCounter.Counters.Count -ne 0) {
         foreach ($counter in $CpuCounter.Counters) {
-            $IcingaCheck = New-IcingaCheck -Name ([string]::Format('Core {0}', (Format-IcingaDigitCount $counter.Instance -Digits ([string](Get-IcingaCpuCount)).Length -Symbol ' '))) -Value $counter.Value().Value -Unit '%';
+            $IcingaCheck = New-IcingaCheck -Name ([string]::Format('Core {0}', (Format-IcingaDigitCount $counter.Instance -Digits $CpuCount -Symbol ' '))) -Value $counter.Value().Value -Unit '%';
             $IcingaCheck.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
             $CpuPackage.AddCheck($IcingaCheck);
         }
     } else {
-        $IcingaCheck = New-IcingaCheck -Name ([string]::Format('Core {0}', (Format-IcingaDigitCount $Core -Digits ([string](Get-IcingaCpuCount)).Length -Symbol ' '))) -Value $CpuCounter.Value().Value -Unit '%';
+        $IcingaCheck = New-IcingaCheck -Name ([string]::Format('Core {0}', (Format-IcingaDigitCount $Core -Digits $CpuCount -Symbol ' '))) -Value $CpuCounter.Value().Value -Unit '%';
         $IcingaCheck.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
         $CpuPackage.AddCheck($IcingaCheck);
     }
