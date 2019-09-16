@@ -95,13 +95,13 @@ function Get-IcingaCheckCommandConfig()
                 'entries' = @(
                     @{
                         'entry_name' = '0';
-                        'entry_value:' = "yes";
+                        'entry_value' = "yes";
                         'format' = 'string';
                         'allowed_roles' = $NULL;
                     },
                     @{
                         'entry_name' = '1';
-                        'entry_value:' = "no";
+                        'entry_value' = "no";
                         'format' = 'string';
                         'allowed_roles' = $NULL;
                     }
@@ -120,25 +120,25 @@ function Get-IcingaCheckCommandConfig()
                 'entries' = @(
                     @{
                     'entry_name' = '0';
-                    'entry_value:' = "Show Default";
+                    'entry_value' = "Show Default";
                     'format' = 'string';
                     'allowed_roles' = $NULL;
                     },
                     @{
                     'entry_name' = '1';
-                    'entry_value:' = "Show Operator";
+                    'entry_value' = "Show Operator";
                     'format' = 'string';
                     'allowed_roles' = $NULL;
                     },
                     @{
                     'entry_name' = '2';
-                    'entry_value:' = "Show Problems";
+                    'entry_value' = "Show Problems";
                     'format' = 'string';
                     'allowed_roles' = $NULL;
                     },
                     @{
                     'entry_name' = '3';
-                    'entry_value:' = "Show All";
+                    'entry_value' = "Show All";
                     'format' = 'string';
                     'allowed_roles' = $NULL;
                     }
