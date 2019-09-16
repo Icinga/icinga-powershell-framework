@@ -211,7 +211,7 @@ function Get-IcingaCheckCommandConfig()
                     if ($parameter.name -ne 'Verbose') {
                         $Basket.Command[$Data.Name].vars.Add($parameter.Name, '$$null');
                     } else {
-                        $Basket.Command[$Data.Name].vars.Add($parameter.Name, "");
+                        $Basket.Command[$Data.Name].vars.Add($parameter.Name, "0");
                     }
                 }
 
