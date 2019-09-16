@@ -170,7 +170,7 @@ function Get-IcingaCheckCommandConfig()
                 'fields' = @{};
                 'imports' = @();
                 'is_string' = $NULL;
-                'methods_excute' = 'PluginCheck';
+                'methods_execute' = 'PluginCheck';
                 'object_name' = $Data.Syntax.syntaxItem.Name;
                 'object_type' = 'object';
                 'timeout' = '180';
