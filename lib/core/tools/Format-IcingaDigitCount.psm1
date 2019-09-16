@@ -2,7 +2,8 @@ function Format-IcingaDigitCount()
 {
     param(
         [string]$Value,
-        [int]$Digits
+        [int]$Digits,
+        [string]$Symbol = 0
     );
 
     if ([string]::IsNullOrEmpty($Value)) {
@@ -15,7 +16,7 @@ function Format-IcingaDigitCount()
     }
 
     while ($Value.Length -lt $Digits) {
-        $Value = [string]::Format('0{0}', $Value);
+        $Value = [string]::Format('{0}{1}', $Symbol, $Value);
     }
 
     return $Value;
