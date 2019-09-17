@@ -66,6 +66,15 @@ function Import-IcingaLib()
     }
 }
 
+function Get-IcingaPluginDir()
+{
+    return (Join-Path -Path $PSScriptRoot -ChildPath 'lib\plugins\');
+}
+
+function Get-IcingaCacheDir()
+{
+    return (Join-Path -Path $PSScriptRoot -ChildPath 'cache');
+}
 function Install-Icinga()
 {
     [string]$command = Get-Icinga-Command('setup');
