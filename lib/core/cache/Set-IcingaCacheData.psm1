@@ -28,5 +28,10 @@ function Set-IcingaCacheData()
         }
     }
 
-    Set-Content -Path $CacheFile -Value (ConvertTo-Json -InputObject $cacheData -Depth 100) | Out-Null;
+    try {
+        Set-Content -Path $CacheFile -Value (ConvertTo-Json -InputObject $cacheData -Depth 100) | Out-Null;   
+    } catch {
+        Exit-IcingaThrowException -InputString $_.Exception -CustomMessage (Get-IcingaCacheDir) -StringPattern 'System.UnauthorizedAccessException' -ExceptionType 'Permission' -ExceptionThrown $IcingaExceptions.Permission.CacheFolder;
+        Exit-IcingaThrowException -CustomMessage $_.Exception -ExceptionType 'Unhandled' -Force;
+    }
 }
