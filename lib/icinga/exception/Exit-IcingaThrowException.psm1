@@ -6,15 +6,18 @@ function Exit-IcingaThrowException()
         [string]$CustomMessage,
         [string]$ExceptionThrown,
         [ValidateSet('Permission','Input','Unhandled')]
-        [string]$ExceptionType    = 'Unhandled'
+        [string]$ExceptionType    = 'Unhandled',
+        [switch]$Force
     );
 
-    if ($null -eq $InputString -Or [string]::IsNullOrEmpty($InputString)) {
-        return;
-    }
+    if ($Force -eq $FALSE) {
+        if ($null -eq $InputString -Or [string]::IsNullOrEmpty($InputString)) {
+            return;
+        }
 
-    if (-Not $InputString.Contains($StringPattern)) {
-        return;
+        if (-Not $InputString.Contains($StringPattern)) {
+            return;
+        }
     }
 
     $ExceptionMessageLib = $null;
@@ -44,7 +47,7 @@ function Exit-IcingaThrowException()
             }
         }
     } else {
-        $ExceptionName    = 'Unhandled Exception';
+        $ExceptionName   = 'Unhandled Exception';
         $ExceptionThrown = [string]::Format(
             'Unhandled exception occured:{0}{1}',
             "`r`n",
