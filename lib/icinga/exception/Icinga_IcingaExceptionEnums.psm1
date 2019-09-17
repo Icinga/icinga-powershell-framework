@@ -10,6 +10,7 @@
 
 [hashtable]$Inputs = @{
     PerformanceCounter = 'A plugin failed to fetch Performance Counter information. Please ensure the counter is written properly and available on your system.';
+    EventLog           = 'Failed to fetch EventLog information. Please specify a LogName.';
 };
 
 <#
