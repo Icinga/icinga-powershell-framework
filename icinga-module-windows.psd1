@@ -25,7 +25,7 @@ Description = 'Icinga 2 Windows Agent Module, which allows to entirely monitor t
 PowerShellVersion = '3.0'
 
 # Aus diesem Modul zu exportierende Funktionen. Um optimale Leistung zu erzielen, verwenden Sie keine Platzhalter und löschen den Eintrag nicht. Verwenden Sie ein leeres Array, wenn keine zu exportierenden Funktionen vorhanden sind.
-FunctionsToExport = @( 'Use-Icinga', 'Import-IcingaLib', 'Start-Icinga-Checker', 'Stop-Icinga-Checker', 'Get-Icinga-Lib', 'Get-Icinga-Object', 'Get-Icinga-Service', 'Start-Icinga-Service', 'Stop-Icinga-Service', 'Restart-Icinga-Service', 'Install-Icinga-Service', 'Uninstall-Icinga-Service', 'Get-Icinga-Setup', 'Install-Icinga', 'Start-Icinga-Daemon', 'Stop-Icinga-Daemon', 'Icinga-Client', 'Get-Icinga-Command', 'New-Icinga-Monitoring', 'Get-Icinga-Counter', 'Get-Icinga-Config', 'Set-Icinga-Config', 'Remove-Icinga-Config', 'New-Icinga-Config' )
+FunctionsToExport = @( 'Use-Icinga', 'Import-IcingaLib', 'Get-IcingaPluginDir', 'Get-IcingaCacheDir', 'Start-Icinga-Checker', 'Stop-Icinga-Checker', 'Get-Icinga-Lib', 'Get-Icinga-Object', 'Get-Icinga-Service', 'Start-Icinga-Service', 'Stop-Icinga-Service', 'Restart-Icinga-Service', 'Install-Icinga-Service', 'Uninstall-Icinga-Service', 'Get-Icinga-Setup', 'Install-Icinga', 'Start-Icinga-Daemon', 'Stop-Icinga-Daemon', 'Icinga-Client', 'Get-Icinga-Command', 'New-Icinga-Monitoring', 'Get-Icinga-Counter', 'Get-Icinga-Config', 'Set-Icinga-Config', 'Remove-Icinga-Config', 'New-Icinga-Config' )
 
 # Aus diesem Modul zu exportierende Cmdlets. Um optimale Leistung zu erzielen, verwenden Sie keine Plat'zhalter und löschen den Eintrag nicht. Verwenden Sie ein leeres Array, wenn keine zu exportierenden Cmdlets vorhanden sind.
 CmdletsToExport = @()
