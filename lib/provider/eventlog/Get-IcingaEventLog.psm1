@@ -56,10 +56,15 @@ function Get-IcingaEventLog()
         $EventLogArguments.Add('Before', $Before);
     }
 
-    $events = Get-EventLog @EventLogArguments;
+    try {
+        $events = Get-EventLog @EventLogArguments;   
+    } catch {
+        Exit-IcingaThrowException -InputString $_.Exception -StringPattern 'ParameterBindingValidationException' -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.EventLog;
+        Exit-IcingaThrowException -InputString $_.Exception -StringPattern 'System.InvalidOperationException' -CustomMessage (-Join $LogName) -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.EventLogLogName;
+        Exit-IcingaThrowException -InputString $_.Exception -ExceptionType 'Unhandled' -Force;
+    }
 
     if ($null -ne $ExcludeEventId -Or $null -ne $ExcludeUsername -Or $null -ne $ExcludeEntryType -Or $null -ne $ExcludeMessage) {
-        Write-Host 'Filtering started!'
         $filteredEvents = @();
         foreach ($event in $events) {
             # Filter out excluded event IDs
