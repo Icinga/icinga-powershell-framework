@@ -215,7 +215,19 @@ function New-IcingaCheckPackage()
 
         [hashtable]$MessageOrdering = @{};
         foreach ($check in $this.checks) {
-            $MessageOrdering.Add($check.name, $check);
+            if ($MessageOrdering.ContainsKey($check.Name) -eq $FALSE) {
+                $MessageOrdering.Add($check.name, $check);
+            } else {
+                [int]$DuplicateKeyIndex = 1;
+                while ($TRUE) {
+                    $newCheckName = [string]::Format('{0}[{1}]', $check.Name, $DuplicateKeyIndex);
+                    if ($MessageOrdering.ContainsKey($newCheckName) -eq $FALSE) {
+                        $MessageOrdering.Add($newCheckName, $check);
+                        break;
+                    }
+                    $DuplicateKeyIndex += 1;
+                }
+            }
         }
 
         $SortedArray = $MessageOrdering.GetEnumerator() | Sort-Object name;
