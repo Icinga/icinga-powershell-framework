@@ -13,7 +13,12 @@ function Set-IcingaCacheData()
     if ((Test-Path $CacheFile)) {
         $cacheData = Get-IcingaCacheData -Space $Space -CacheStore $CacheStore;
     } else {
-        New-Item -Path $CacheFile -Force | Out-Null;
+        try {
+            New-Item -Path $CacheFile -Force | Out-Null;
+        } catch {
+            Exit-IcingaThrowException -InputString $_.Exception -CustomMessage (Get-IcingaCacheDir) -StringPattern 'NewItemUnauthorizedAccessError' -ExceptionType 'Permission' -ExceptionThrown $IcingaExceptions.Permission.CacheFolder;
+            Exit-IcingaThrowException -CustomMessage $_.Exception -ExceptionType 'Unhandled' -Force;
+        }
     }
 
     if ($null -eq $cacheData -or $cacheData.Count -eq 0) {
