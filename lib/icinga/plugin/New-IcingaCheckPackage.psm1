@@ -11,13 +11,15 @@ function New-IcingaCheckPackage()
         [int]$OperatorMin      = -1,
         [int]$OperatorMax      = -1,
         [array]$Checks         = @(),
-        [int]$Verbose          = 0
+        [int]$Verbose          = 0,
+        [switch]$Hidden        = $FALSE
     );
 
     $Check = New-Object -TypeName PSObject;
     $Check | Add-Member -membertype NoteProperty -name 'name'      -value $Name;
     $Check | Add-Member -membertype NoteProperty -name 'exitcode'  -value -1;
     $Check | Add-Member -membertype NoteProperty -name 'verbose'   -value $Verbose;
+    $Check | Add-Member -membertype NoteProperty -name 'hidden'    -value $Hidden;
     $Check | Add-Member -membertype NoteProperty -name 'checks'    -value $Checks;
     $Check | Add-Member -membertype NoteProperty -name 'opand'     -value $OperatorAnd;
     $Check | Add-Member -membertype NoteProperty -name 'opor'      -value $OperatorOr;
@@ -207,6 +209,10 @@ function New-IcingaCheckPackage()
     }
 
     $Check | Add-Member -membertype ScriptMethod -name 'WriteAllOutput' -value {
+        if ($this.hidden) {
+            return;
+        }
+
         [hashtable]$MessageOrdering = @{};
         foreach ($check in $this.checks) {
             $MessageOrdering.Add($check.name, $check);
@@ -254,6 +260,10 @@ function New-IcingaCheckPackage()
     }
 
     $Check | Add-Member -membertype ScriptMethod -name 'WritePackageOutputStatus' -value {
+        if ($this.hidden) {
+            return;
+        }
+
         [string]$outputMessage = '{0}{1}: Check package "{2}" is {1}';
         if ($this.verbose -ne 0) {
             $outputMessage += ' ({3})';
