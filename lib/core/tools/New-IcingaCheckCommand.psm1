@@ -78,7 +78,7 @@ function New-IcingaCheckCommand()
 
     # Try to open the default Editor for the new Cmdlet
     $DefaultEditor = (Get-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.psm1\OpenWithList' -Name a).a;
-    #$DefaultEditor = $DefaultEditor.Replace('.exe', '');
+    $DefaultEditor = $DefaultEditor.Replace('.exe', '');
 
     Write-Host ([string]::IsNullOrEmpty($DefaultEditor));
     Write-Host ((Get-Command $DefaultEditor -ErrorAction SilentlyContinue));
