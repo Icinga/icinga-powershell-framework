@@ -46,9 +46,6 @@ function Get-IcingaEventLog()
     if ($null -ne $IncludeEntryType) {
         $EventLogArguments.Add('EntryType', $IncludeEntryType);
     }
-    if ($null -ne $IncludeMessage) {
-        $EventLogArguments.Add('Message', $IncludeMessage);
-    }
     if ($null -ne $After) {
         $EventLogArguments.Add('After', $After);
     }
@@ -64,21 +61,21 @@ function Get-IcingaEventLog()
         Exit-IcingaThrowException -InputString $_.Exception -ExceptionType 'Unhandled' -Force;
     }
 
-    if ($null -ne $ExcludeEventId -Or $null -ne $ExcludeUsername -Or $null -ne $ExcludeEntryType -Or $null -ne $ExcludeMessage) {
+    if ($null -ne $ExcludeEventId -Or $null -ne $ExcludeUsername -Or $null -ne $ExcludeEntryType -Or $null -ne $ExcludeMessage -Or $null -ne $IncludeMessage) {
         $filteredEvents = @();
         foreach ($event in $events) {
             # Filter out excluded event IDs
-            if ($event.InstanceID -contains $ExcludeEventId) {
+            if ($ExcludeEventId.Count -ne 0 -And $event.InstanceID -contains $ExcludeEventId) {
                 continue;
             }
 
             # Filter out excluded event IDs
-            if ($event.UserName -contains $ExcludeUsername) {
+            if ($ExcludeUsername.Count -ne 0 -And $event.UserName -contains $ExcludeUsername) {
                 continue;
             }
 
             # Filter out excluded event IDs
-            if ($event.EntryType -contains $ExcludeEntryType) {
+            if ($ExcludeEntryType.Count -ne 0 -And $event.EntryType -contains $ExcludeEntryType) {
                 continue;
             }
 
@@ -87,6 +84,20 @@ function Get-IcingaEventLog()
                 # Filter out excluded event IDs
                 if ([string]$event.Message -like [string]$exMessage) {
                     $skip = $TRUE;
+                    break;
+                }
+            }
+
+            if ($skip) {
+                continue;
+            }
+
+            [bool]$skip = $TRUE;
+
+            foreach ($inMessage in $IncludeMessage) {
+                # Filter for specific message content
+                if ([string]$event.Message -like [string]$inMessage) {
+                    $skip = $FALSE;
                     break;
                 }
             }
