@@ -150,7 +150,7 @@ function Get-IcingaCheckCommandConfig()
                 'arguments'   = @{
                     # Set the Command handling for every check command
                     '-C' = @{
-                        'value' = [string]::Format('Use-Icinga; {0}', $Data.Name);
+                        'value' = [string]::Format('Use-Icinga; exit {0}', $Data.Name);
                         'order' = '0';
                     }
                 }
