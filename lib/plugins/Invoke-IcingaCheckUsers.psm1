@@ -38,5 +38,5 @@ function Invoke-IcingaCheckUsers()
         $UsersPackage.AddCheck($IcingaCheck)
     }
     
-    exit (New-IcingaCheckResult -Name 'Users' -Check $UsersPackage -NoPerfData $NoPerfData -Compile);
+    return (New-IcingaCheckResult -Name 'Users' -Check $UsersPackage -NoPerfData $NoPerfData -Compile);
 }

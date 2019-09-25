@@ -30,5 +30,5 @@ function Invoke-IcingaCheckProcessCount()
     }
 
 
-    exit (New-IcingaCheckResult -Check $ProcessPackage -NoPerfData $NoPerfData -Compile);
+    return (New-IcingaCheckResult -Check $ProcessPackage -NoPerfData $NoPerfData -Compile);
 }

@@ -75,5 +75,5 @@ function Invoke-IcingaCheckService()
     $ServicesPackage.AddCheck($IcingaCheck);
 
     }
-    exit (New-IcingaCheckResult -Name 'Services' -Check $ServicesPackage -NoPerfData $TRUE -Compile);
+    return (New-IcingaCheckResult -Name 'Services' -Check $ServicesPackage -NoPerfData $TRUE -Compile);
 }
