@@ -82,6 +82,25 @@ function Get-IcingaCheckCommandConfig()
     $Basket.Add('DataList', @{});
     $Basket.Add('Command', @{});
 
+    # At first generate a base Check-Command we can use as import source for all other commands
+    $Basket.Command.Add(
+        'PowerShell Base',
+        @{
+            'arguments'       = @{};
+            'command'         = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe';
+            'disabled'        = $FALSE;
+            'fields'          = @();
+            'imports'         = @();
+            'is_string'       = $NULL;
+            'methods_execute' = 'PluginCheck';
+            'object_name'     = 'PowerShell Base';
+            'object_type'     = 'object';
+            'timeout'         = '180';
+            'vars'            = @{};
+            'zone'            = $NULL;
+        }
+    );
+
     # "Verbose" gets added to all Checks build and exported no matter what, so we add it from the start
     if ($Basket.DataList.ContainsKey('PowerShell Verbose') -eq $FALSE) {
         $Basket.DataList.Add(
@@ -128,24 +147,18 @@ function Get-IcingaCheckCommandConfig()
         # Add command Structure
         $Basket.Command.Add(
             $Data.Name, @{
-                'arguments'= @{
-                    # Gets set for every command as default
+                'arguments'   = @{
+                    # Set the Command handling for every check command
                     '-C' = @{
                         'value' = [string]::Format('Use-Icinga; {0}', $Data.Name);
                         'order' = '0';
                     }
                 }
-                'command' = "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe";
-                'disabled' = $FALSE;
-                'fields' = @();
-                'imports' = @();
-                'is_string' = $NULL;
-                'methods_execute' = 'PluginCheck';
+                'fields'      = @();
+                'imports'     = @( 'PowerShell Base' );
                 'object_name' = $Data.Name;
                 'object_type' = 'object';
-                'timeout' = '180';
-                'vars' = @{};
-                'zone' = $NULL;
+                'vars'        = @{};
             }
         );
 
