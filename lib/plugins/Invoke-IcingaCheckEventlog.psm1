@@ -50,5 +50,5 @@ function Invoke-IcingaCheckEventlog()
         $EventLogPackage.AddCheck($IcingaCheck);
     }
 
-    exit (New-IcingaCheckResult -Name 'EventLog' -Check $EventLogPackage -NoPerfData $NoPerfData -Compile);
+    return (New-IcingaCheckResult -Name 'EventLog' -Check $EventLogPackage -NoPerfData $NoPerfData -Compile);
 }
