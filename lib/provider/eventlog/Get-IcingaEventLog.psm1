@@ -54,7 +54,7 @@ function Get-IcingaEventLog()
     }
 
     try {
-        $events = Get-EventLog @EventLogArguments;   
+        $events = Get-EventLog @EventLogArguments;
     } catch {
         Exit-IcingaThrowException -InputString $_.Exception -StringPattern 'ParameterBindingValidationException' -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.EventLog;
         Exit-IcingaThrowException -InputString $_.Exception -StringPattern 'System.InvalidOperationException' -CustomMessage (-Join $LogName) -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.EventLogLogName;
