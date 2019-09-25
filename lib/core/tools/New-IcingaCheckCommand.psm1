@@ -80,10 +80,6 @@ function New-IcingaCheckCommand()
     $DefaultEditor = (Get-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.psm1\OpenWithList' -Name a).a;
     $DefaultEditor = $DefaultEditor.Replace('.exe', '');
 
-    Write-Host ([string]::IsNullOrEmpty($DefaultEditor));
-    Write-Host ((Get-Command $DefaultEditor -ErrorAction SilentlyContinue));
-    Write-Host ((Test-Path $DefaultEditor));
-
     if ([string]::IsNullOrEmpty($DefaultEditor) -eq $FALSE -And ((Get-Command $DefaultEditor -ErrorAction SilentlyContinue) -eq $null) -And ((Test-Path $DefaultEditor) -eq $FALSE)) {
         Write-Host 'No default editor for .psm1 files found. Specify a default editor to automaticly open the newly generated check plugin.';
         return;
