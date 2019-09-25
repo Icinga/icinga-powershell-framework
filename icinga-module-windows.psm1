@@ -13,6 +13,7 @@ function Use-Icinga()
 {
     # This function will allow us to load this entire module including possible
     # actions, making it available within our shell environment
+    Import-IcingaLib '\' -Init;
 }
 
 function Import-IcingaLib()
@@ -27,8 +28,15 @@ function Import-IcingaLib()
         [String]$Lib,
         # The Force Reload will remove the module in case it's loaded and reload it to track
         # possible development changes without having to create new PowerShell environments
-        [Switch]$ForceReload
+        [Switch]$ForceReload,
+        [switch]$Init
     );
+
+    # This is just to only allow a global loading of the module. Import-IcingaLib is ignored on every other
+    # location. It is just there to give a basic idea within commands, of which functions are used
+    if ($Init -eq $FALSE) {
+        return;
+    }
 
     [string]$directory  = Join-Path -Path $PSScriptRoot -ChildPath 'lib\';
     [string]$module     = Join-Path -Path $directory -ChildPath $Lib;
@@ -38,6 +46,7 @@ function Import-IcingaLib()
 
     # Load modules from directory
     if ((Test-Path $module -PathType Container)) {
+
         Get-ChildItem -Path $module -Recurse -Filter *.psm1 |
         ForEach-Object {
             [string]$modulePath = $_.FullName;
@@ -343,9 +352,6 @@ function Get-Icinga-Object()
 {
     return $Icinga2;
 }
-
-# Automaticly load all library modules
-Import-IcingaLib '\';
 
 # Initialise base configuration for our module
 <#
