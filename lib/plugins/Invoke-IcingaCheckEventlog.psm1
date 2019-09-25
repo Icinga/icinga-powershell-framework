@@ -16,7 +16,7 @@ function Invoke-IcingaCheckEventlog()
         [array]$ExcludeMessage,
         $After = $null,
         $Before = $null,
-        [bool]$DisableTimeCache,
+        [switch]$DisableTimeCache = $FALSE,
         [switch]$NoPerfData,
         $Verbose
     );
