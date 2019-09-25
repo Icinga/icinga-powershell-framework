@@ -6,7 +6,7 @@ function New-IcingaCheckCommand()
             'Warning',
             'Critical',
             '[switch]NoPerfData',
-            'Verbose'
+            '[int]Verbose'
         ),
         [array]$ImportLib    = @()
     );
@@ -72,6 +72,14 @@ function New-IcingaCheckCommand()
     }
 
     Add-Content -Path $ScriptFile -Value "";
+    Add-Content -Path $ScriptFile -Value '    <# Icinga Basic Check-Plugin Template. Below you will find an example structure. #>';
+    Add-Content -Path $ScriptFile -Value ([string]::Format('    $CheckPackage = New-IcingaCheckPackage -Name {0}New Package{0} -OperatorAnd -Verbose $Verbose;', "'"));
+    Add-Content -Path $ScriptFile -Value ([string]::Format('    $IcingaCheck  = New-IcingaCheck -Name {0}New Check{0} -Value 10 -Unit {0}%{0}', "'"));
+    Add-Content -Path $ScriptFile -Value ([string]::Format('    $IcingaCheck.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;', "'"));
+    Add-Content -Path $ScriptFile -Value ([string]::Format('    $CheckPackage.AddCheck($IcingaCheck);', "'"));
+    Add-Content -Path $ScriptFile -Value "";
+    Add-Content -Path $ScriptFile -Value ([string]::Format('    return (New-IcingaCheckresult -Check $CheckPackage -NoPerfData $NoPerfData -Compile);', "'"));
+
     Add-Content -Path $ScriptFile -Value "}";
 
     Write-Host ([string]::Format('The Check-Command "{0}" was successfully added.', $CommandName));
@@ -79,6 +87,8 @@ function New-IcingaCheckCommand()
     # Try to open the default Editor for the new Cmdlet
     $DefaultEditor = (Get-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.psm1\OpenWithList' -Name a).a;
     $DefaultEditor = $DefaultEditor.Replace('.exe', '');
+
+    Import-Module $ScriptFile -Global;
 
     if ([string]::IsNullOrEmpty($DefaultEditor) -eq $FALSE -And ((Get-Command $DefaultEditor -ErrorAction SilentlyContinue) -eq $null) -And ((Test-Path $DefaultEditor) -eq $FALSE)) {
         Write-Host 'No default editor for .psm1 files found. Specify a default editor to automaticly open the newly generated check plugin.';
