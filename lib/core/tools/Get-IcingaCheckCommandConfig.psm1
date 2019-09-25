@@ -162,7 +162,7 @@ function Get-IcingaCheckCommandConfig()
                     [string]$Order = 99
                 }
 
-                $IcingaCustomVariable = [string]::Format('$PowerShell_{0}_{1}$', $parameter.type.name, $parameter.Name);
+                $IcingaCustomVariable = [string]::Format('$PowerShell_{0}_{1}$', (Get-Culture).TextInfo.ToTitleCase($parameter.type.name), $parameter.Name);
 
                 # Todo: Should we improve this? Actually the handling would be identical, we just need to assign
                 #       the proper field for this
@@ -222,7 +222,7 @@ function Get-IcingaCheckCommandConfig()
                     $Required = 'n';
                 }
 
-                $IcingaCustomVariable = [string]::Format('PowerShell_{0}_{1}', $parameter.type.name, $parameter.Name);
+                $IcingaCustomVariable = [string]::Format('PowerShell_{0}_{1}', (Get-Culture).TextInfo.ToTitleCase($parameter.type.name), $parameter.Name);
 
                 # Todo: Should we improve this? Actually the handling would be identical, we just need to assign
                 #       the proper field for this
@@ -263,7 +263,7 @@ function Get-IcingaCheckCommandConfig()
                 if($Basket.Datafield.ContainsKey('0') -eq $FALSE){
                     $Basket.Datafield.Add(
                         '0', @{
-                            'varname' = 'PowerShell_switch_NoPerfData';
+                            'varname' = 'PowerShell_Switch_NoPerfData';
                             'caption' = 'Ignore Performance Data';
                             'description' = 'Specifies if the plugin will return performance data output or not';
                             'datatype' = 'Icinga\Module\Director\DataType\DataTypeBoolean';
@@ -372,12 +372,12 @@ function Get-IcingaCheckCommandConfig()
         if ($Basket.Command[$Data.Name].arguments.ContainsKey('-NoPerfData') -eq $FALSE) {
             $Basket.Command[$Data.Name].arguments.Add(
                 '-NoPerfData', @{
-                    'set_if' = '$PowerShell_switch_NoPerfData$';
+                    'set_if' = '$PowerShell_Switch_NoPerfData$';
                     'set_if_format' = 'string';
                     'order' = '99';
                 }
             );
-            $Basket.Command[$Data.Name].vars.Add('PowerShell_switch_NoPerfData', $FALSE);
+            $Basket.Command[$Data.Name].vars.Add('PowerShell_Switch_NoPerfData', $FALSE);
         }
     }
 
@@ -386,8 +386,8 @@ function Get-IcingaCheckCommandConfig()
 
         $Data = (Get-Help $check)
 
-        foreach ($parameter in $Data.parameters.parameter){
-            $IcingaCustomVariable = [string]::Format('PowerShell_{0}_{1}', $parameter.type.name, $parameter.Name);
+        foreach ($parameter in $Data.parameters.parameter) {
+            $IcingaCustomVariable = [string]::Format('PowerShell_{0}_{1}', (Get-Culture).TextInfo.ToTitleCase($parameter.type.name), $parameter.Name);
 
             # Todo: Should we improve this? Actually the handling would be identical, we just need to assign
             #       the proper field for this
