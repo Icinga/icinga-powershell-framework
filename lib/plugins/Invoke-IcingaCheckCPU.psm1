@@ -28,5 +28,5 @@ function Invoke-IcingaCheckCPU()
         $CpuPackage.AddCheck($IcingaCheck);
     }
 
-    exit (New-IcingaCheckResult -Name 'CPU Load' -Check $CpuPackage -NoPerfData $NoPerfData -Compile);
+    return (New-IcingaCheckResult -Name 'CPU Load' -Check $CpuPackage -NoPerfData $NoPerfData -Compile);
 }

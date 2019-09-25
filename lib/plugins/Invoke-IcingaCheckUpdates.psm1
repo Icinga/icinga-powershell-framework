@@ -54,5 +54,5 @@ function Invoke-IcingaCheckUpdates()
         $UpdatePackage.AddCheck($UpdateList);
     }
 
-    exit (New-IcingaCheckResult -Name 'Pending Updates' -Check $UpdatePackage -NoPerfData $NoPerfData -Compile);
+    return (New-IcingaCheckResult -Name 'Pending Updates' -Check $UpdatePackage -NoPerfData $NoPerfData -Compile);
 }
