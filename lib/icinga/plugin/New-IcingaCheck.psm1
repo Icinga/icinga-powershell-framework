@@ -36,9 +36,16 @@ function New-IcingaCheck()
     $Check | Add-Member -membertype NoteProperty -name 'translation'  -value $Translation;
     $Check | Add-Member -membertype NoteProperty -name 'checks'       -value $null;
     $Check | Add-Member -membertype NoteProperty -name 'completed'    -value $FALSE;
+    $Check | Add-Member -membertype NoteProperty -name 'checkcommand' -value '';
 
     $Check | Add-Member -membertype ScriptMethod -name 'AddSpacing' -value {
         $this.spacing += 1;
+    }
+
+    $Check | Add-Member -membertype ScriptMethod -name 'AssignCheckCommand' -value {
+        param($CheckCommand);
+
+        $this.checkcommand = $CheckCommand;
     }
 
     $Check | Add-Member -membertype ScriptMethod -name 'WarnOutOfRange' -value {
@@ -525,7 +532,7 @@ function New-IcingaCheck()
         param($msgArray, [string]$spaces);
 
         foreach ($msg in $msgArray) {
-            Write-Host ([string]::Format('{0}{1}', $spaces, $msg));
+            Write-IcingaPluginOutput ([string]::Format('{0}{1}', $spaces, $msg));
         }
     }
 
@@ -651,8 +658,8 @@ function New-IcingaCheck()
         [string]$LabelName = (Format-IcingaPerfDataLabel $this.name);
 
         return @{
-            'label'    = $LabelName;
-            'perfdata' = [string]::Format(
+            'label'     = $LabelName;
+            'perfdata'  = [string]::Format(
                 "'{0}'={1}{2};{3};{4}{5}{6} ",
                 $LabelName,
                 (Format-IcingaPerfDataValue $this.value),
@@ -662,6 +669,13 @@ function New-IcingaCheck()
                 (Format-IcingaPerfDataValue $this.minimum),
                 (Format-IcingaPerfDataValue $this.maximum)
             );
+            'unit'     = $this.unit;
+            'value'    = (Format-IcingaPerfDataValue $this.value);
+            'warning'  = (Format-IcingaPerfDataValue $this.warning);
+            'critical' = (Format-IcingaPerfDataValue $this.critical);
+            'minimum'  = (Format-IcingaPerfDataValue ($this.minimum).Replace(';', ''));
+            'maximum'  = (Format-IcingaPerfDataValue ($this.maximum).Replace(';', ''));
+            'package'  = $FALSE;
         };
     }
 
