@@ -16,19 +16,20 @@ function New-IcingaCheckPackage()
     );
 
     $Check = New-Object -TypeName PSObject;
-    $Check | Add-Member -membertype NoteProperty -name 'name'      -value $Name;
-    $Check | Add-Member -membertype NoteProperty -name 'exitcode'  -value -1;
-    $Check | Add-Member -membertype NoteProperty -name 'verbose'   -value $Verbose;
-    $Check | Add-Member -membertype NoteProperty -name 'hidden'    -value $Hidden;
-    $Check | Add-Member -membertype NoteProperty -name 'checks'    -value $Checks;
-    $Check | Add-Member -membertype NoteProperty -name 'opand'     -value $OperatorAnd;
-    $Check | Add-Member -membertype NoteProperty -name 'opor'      -value $OperatorOr;
-    $Check | Add-Member -membertype NoteProperty -name 'opnone'    -value $OperatorNone;
-    $Check | Add-Member -membertype NoteProperty -name 'opmin'     -value $OperatorMin;
-    $Check | Add-Member -membertype NoteProperty -name 'opmax'     -value $OperatorMax;
-    $Check | Add-Member -membertype NoteProperty -name 'spacing'   -value 0;
-    $Check | Add-Member -membertype NoteProperty -name 'compiled'  -value $FALSE;
-    $Check | Add-Member -membertype NoteProperty -name 'perfdata'  -value $FALSE;
+    $Check | Add-Member -membertype NoteProperty -name 'name'         -value $Name;
+    $Check | Add-Member -membertype NoteProperty -name 'exitcode'     -value -1;
+    $Check | Add-Member -membertype NoteProperty -name 'verbose'      -value $Verbose;
+    $Check | Add-Member -membertype NoteProperty -name 'hidden'       -value $Hidden;
+    $Check | Add-Member -membertype NoteProperty -name 'checks'       -value $Checks;
+    $Check | Add-Member -membertype NoteProperty -name 'opand'        -value $OperatorAnd;
+    $Check | Add-Member -membertype NoteProperty -name 'opor'         -value $OperatorOr;
+    $Check | Add-Member -membertype NoteProperty -name 'opnone'       -value $OperatorNone;
+    $Check | Add-Member -membertype NoteProperty -name 'opmin'        -value $OperatorMin;
+    $Check | Add-Member -membertype NoteProperty -name 'opmax'        -value $OperatorMax;
+    $Check | Add-Member -membertype NoteProperty -name 'spacing'      -value 0;
+    $Check | Add-Member -membertype NoteProperty -name 'compiled'     -value $FALSE;
+    $Check | Add-Member -membertype NoteProperty -name 'perfdata'     -value $FALSE;
+    $Check | Add-Member -membertype NoteProperty -name 'checkcommand' -value '';
 
     $Check | Add-Member -membertype ScriptMethod -name 'Initialise' -value {
         foreach ($check in $this.checks) {
@@ -65,6 +66,16 @@ function New-IcingaCheckPackage()
 
         $this.InitCheck($check);
         $this.checks += $check;
+    }
+
+    $Check | Add-Member -membertype ScriptMethod -name 'AssignCheckCommand' -value {
+        param($CheckCommand);
+
+        $this.checkcommand = $CheckCommand;
+
+        foreach ($check in $this.checks) {
+            $check.AssignCheckCommand($CheckCommand);
+        }
     }
 
     $Check | Add-Member -membertype ScriptMethod -name 'Compile' -value {
@@ -137,7 +148,7 @@ function New-IcingaCheckPackage()
 
     $Check | Add-Member -membertype ScriptMethod -name 'CheckMinimumOk' -value {
         if ($this.opmin -gt $this.checks.Count) {
-            Write-Host ([string]::Format(
+            Write-IcingaPluginOutput ([string]::Format(
                 'Unknown: The minimum argument ({0}) is exceeding the amount of assigned checks ({1}) to this package "{2}"',
                 $this.opmin, $this.checks.Count, $this.name
             ));
@@ -156,7 +167,7 @@ function New-IcingaCheckPackage()
 
     $Check | Add-Member -membertype ScriptMethod -name 'CheckMaximumOk' -value {
         if ($this.opmax -gt $this.checks.Count) {
-            Write-Host ([string]::Format(
+            Write-IcingaPluginOutput ([string]::Format(
                 'Unknown: The maximum argument ({0}) is exceeding the amount of assigned checks ({1}) to this package "{2}"',
                 $this.opmax, $this.checks.Count, $this.name
             ));
@@ -259,7 +270,7 @@ function New-IcingaCheckPackage()
 
     $Check | Add-Member -membertype ScriptMethod -name 'PrintNoChecksConfigured' -value {
         if ($this.checks.Count -eq 0) {
-            Write-Host (
+            Write-IcingaPluginOutput (
                 [string]::Format(
                     '{0}{1}: No checks configured for package "{2}"',
                     (New-StringTree ($this.spacing + 1)),
@@ -281,7 +292,7 @@ function New-IcingaCheckPackage()
             $outputMessage += ' ({3})';
         }
 
-        Write-Host (
+        Write-IcingaPluginOutput (
             [string]::Format(
                 $outputMessage,
                 (New-StringTree $this.spacing),
@@ -350,7 +361,7 @@ function New-IcingaCheckPackage()
                 continue;
             }
 
-            $CollectedPerfData.Add($data.label, $data.perfdata);
+            $CollectedPerfData.Add($data.label, $data);
         }
 
         # Now sort the label output by name
@@ -363,7 +374,8 @@ function New-IcingaCheckPackage()
 
         return @{
             'label'    = $this.name;
-            'perfdata' = $perfData;
+            'perfdata' = $CollectedPerfData;
+            'package'  = $TRUE;
         }
     }
 

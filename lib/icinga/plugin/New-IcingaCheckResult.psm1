@@ -17,11 +17,14 @@ function New-IcingaCheckresult()
             return $IcingaEnums.IcingaExitCode.Unknown;
         }
 
+        $CheckCommand = (Get-PSCallStack)[1].Command;
+
         # Compile the check / package if not already done
+        $this.check.AssignCheckCommand($CheckCommand);
         $this.check.Compile($TRUE) | Out-Null;
 
         if ([int]$this.check.exitcode -ne [int]$IcingaEnums.IcingaExitCode.Unknown -And -Not $this.noperfdata) {
-            Write-Host ([string]::Format('| {0}', $this.check.GetPerfData().perfdata));
+            Write-IcingaPluginPerfData ($this.check.GetPerfData().perfdata);
         }
 
         return $this.check.exitcode;
