@@ -2,9 +2,9 @@ function Install-IcingaAgent()
 {
     param(
         [string]$Version,
-        [string]$Source       = 'https://packages.icinga.com/windows/',
-        [string]$InstallDir   = '',
-        [switch]$AllowUpdates
+        [string]$Source     = 'https://packages.icinga.com/windows/',
+        [string]$InstallDir = '',
+        [bool]$AllowUpdates = $FALSE
     );
 
     $IcingaData       = Get-IcingaAgentInstallation;
