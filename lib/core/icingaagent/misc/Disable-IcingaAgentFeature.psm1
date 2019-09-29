@@ -9,7 +9,7 @@ function Disable-IcingaAgentFeature()
     }
 
     if ((Test-IcingaAgentFeatureEnabled -Feature $Feature) -eq $FALSE) {
-        Write-Host 'This feature is already disabled.'
+        Write-Host ([string]::Format('This feature is already disabled [{0}]', $Feature));
         return;
     }
 
