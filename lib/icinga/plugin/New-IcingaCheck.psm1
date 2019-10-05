@@ -647,36 +647,22 @@ function New-IcingaCheck()
 
         $this.AutodiscoverMinMax();
 
-        if ([string]::IsNullOrEmpty($this.minimum) -eq $FALSE) {
-            $this.minimum = [string]::Format(';{0}', $this.minimum);
-        }
-        if ([string]::IsNullOrEmpty($this.maximum) -eq $FALSE) {
-            $this.maximum = [string]::Format(';{0}', $this.maximum);
-        }
-
         $this.completed    = $TRUE;
         [string]$LabelName = (Format-IcingaPerfDataLabel $this.name);
 
-        return @{
-            'label'     = $LabelName;
-            'perfdata'  = [string]::Format(
-                "'{0}'={1}{2};{3};{4}{5}{6} ",
-                $LabelName,
-                (Format-IcingaPerfDataValue $this.value),
-                $this.unit,
-                (Format-IcingaPerfDataValue $this.warning),
-                (Format-IcingaPerfDataValue $this.critical),
-                (Format-IcingaPerfDataValue $this.minimum),
-                (Format-IcingaPerfDataValue $this.maximum)
-            );
+        $perfdata = @{
+            'label'    = $LabelName;
+            'perfdata' = '';
             'unit'     = $this.unit;
             'value'    = (Format-IcingaPerfDataValue $this.value);
             'warning'  = (Format-IcingaPerfDataValue $this.warning);
             'critical' = (Format-IcingaPerfDataValue $this.critical);
-            'minimum'  = (Format-IcingaPerfDataValue ($this.minimum).Replace(';', ''));
-            'maximum'  = (Format-IcingaPerfDataValue ($this.maximum).Replace(';', ''));
+            'minimum'  = (Format-IcingaPerfDataValue $this.minimum);
+            'maximum'  = (Format-IcingaPerfDataValue $this.maximum);
             'package'  = $FALSE;
         };
+
+        return $perfdata;
     }
 
     $Check | Add-Member -membertype ScriptMethod -name 'AutodiscoverMinMax' -value {
