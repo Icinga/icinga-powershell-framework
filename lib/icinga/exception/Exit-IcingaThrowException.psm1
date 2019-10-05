@@ -70,6 +70,8 @@ function Exit-IcingaThrowException()
         $ExceptionTypeString
     );
 
-    Write-Host $OutputMessage;
-    exit $IcingaEnums.IcingaExitCode.Unknown;
+    if ($global:IcingaDaemonData.FrameworkRunningAsDaemon -eq $FALSE) {
+        Write-Host $OutputMessage;
+        exit $IcingaEnums.IcingaExitCode.Unknown;
+    }
 }

@@ -6,8 +6,13 @@ function Write-IcingaPluginPerfData()
     );
 
     $CheckResultCache = Get-IcingaCacheData -Space 'sc_daemon' -CacheStore 'checkresult' -KeyName $CheckCommand;
+
+    if ($global:IcingaDaemonData.FrameworkRunningAsDaemon -eq $FALSE) {
         [string]$PerfDataOutput = (Get-IcingaPluginPerfDataContent -PerfData $PerformanceData -CheckResultCache $CheckResultCache);
         Write-Host ([string]::Format('| {0}', $PerfDataOutput));
+    } else {
+        [void](Get-IcingaPluginPerfDataContent -PerfData $PerformanceData -CheckResultCache $CheckResultCache -AsObject $TRUE);
+    }
 }
 
 function Get-IcingaPluginPerfDataContent()
@@ -40,6 +45,9 @@ function Get-IcingaPluginPerfDataContent()
 
             $compiledPerfData = (New-IcingaPerformanceDataEntry $data);
 
+            if ($AsObject) {
+                $global:IcingaThreadContent['Scheduler']['PluginPerfData'] += $compiledPerfData;
+            }
             $PerfDataOutput += $compiledPerfData;
         }
     }
