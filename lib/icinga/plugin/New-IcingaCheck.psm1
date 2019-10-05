@@ -38,6 +38,27 @@ function New-IcingaCheck()
     $Check | Add-Member -membertype NoteProperty -name 'completed'    -value $FALSE;
     $Check | Add-Member -membertype NoteProperty -name 'checkcommand' -value '';
 
+    $Check | Add-Member -membertype ScriptMethod -name 'HandleDaemon' -value {
+        # Only apply this once the checkcommand is set
+
+        if ([string]::IsNullOrEmpty($this.checkcommand) -Or $global:IcingaDaemonData.FrameworkRunningAsDaemon -eq $FALSE) {
+            return;
+        }
+
+        if ($global:IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler.ContainsKey($this.checkcommand)) {
+            if ($global:IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler[$this.checkcommand]['results'].ContainsKey($this.name) -eq $FALSE) {
+                $global:IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler[$this.checkcommand]['results'].Add(
+                    $this.name,
+                    [hashtable]::Synchronized(@{})
+                );
+            }
+            $global:IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler[$this.checkcommand]['results'][$this.name].Add(
+                (Get-IcingaUnixTime),
+                $this.value
+            );
+        }
+    }
+
     $Check | Add-Member -membertype ScriptMethod -name 'AddSpacing' -value {
         $this.spacing += 1;
     }
@@ -46,6 +67,7 @@ function New-IcingaCheck()
         param($CheckCommand);
 
         $this.checkcommand = $CheckCommand;
+        $this.HandleDaemon();
     }
 
     $Check | Add-Member -membertype ScriptMethod -name 'WarnOutOfRange' -value {
@@ -683,6 +705,7 @@ function New-IcingaCheck()
     }
 
     $Check.ValidateUnit();
+    $Check.HandleDaemon();
 
     return $Check;
 }
