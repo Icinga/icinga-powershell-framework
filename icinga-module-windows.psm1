@@ -84,6 +84,12 @@ function Get-IcingaCacheDir()
 {
     return (Join-Path -Path $PSScriptRoot -ChildPath 'cache');
 }
+
+function Get-IcingaPowerShellConfigDir()
+{
+    return (Join-Path -Path $PSScriptRoot -ChildPath 'config');
+}
+
 function Install-Icinga()
 {
     [string]$command = Get-Icinga-Command('setup');
