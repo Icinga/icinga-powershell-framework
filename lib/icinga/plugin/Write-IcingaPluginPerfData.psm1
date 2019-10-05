@@ -1,10 +1,12 @@
 function Write-IcingaPluginPerfData()
 {
     param(
-        $PerformanceData
+        $PerformanceData,
+        $CheckCommand
     );
 
-        [string]$PerfDataOutput = (Get-IcingaPluginPerfDataContent -PerfData $PerformanceData);
+    $CheckResultCache = Get-IcingaCacheData -Space 'sc_daemon' -CacheStore 'checkresult' -KeyName $CheckCommand;
+        [string]$PerfDataOutput = (Get-IcingaPluginPerfDataContent -PerfData $PerformanceData -CheckResultCache $CheckResultCache);
         Write-Host ([string]::Format('| {0}', $PerfDataOutput));
 }
 
@@ -12,6 +14,7 @@ function Get-IcingaPluginPerfDataContent()
 {
     param(
         $PerfData,
+        $CheckResultCache,
         [bool]$AsObject = $FALSE
     );
 
@@ -21,8 +24,24 @@ function Get-IcingaPluginPerfDataContent()
         $data = $PerfData[$package];
         if ($data.package) {
             $PerfDataOutput += (Get-IcingaPluginPerfDataContent -PerfData $data.perfdata -AsObject $AsObject);
+            $PerfDataOutput += (Get-IcingaPluginPerfDataContent -PerfData $data.perfdata -CheckResultCache $CheckResultCache -AsObject $AsObject);
         } else {
-            $PerfDataOutput += $data.perfdata;
+            foreach ($checkresult in $CheckResultCache.PSobject.Properties) {
+                $SearchPattern = [string]::Format('{0}_', $data.label);
+                $SearchEntry   = $checkresult.Name;
+                if ($SearchEntry -like "$SearchPattern*") {
+                    $cachedresult = (New-IcingaPerformanceDataEntry -PerfDataObject $data -Label $SearchEntry -Value $checkresult.Value);
+
+                    if ($AsObject) {
+                        $global:IcingaThreadContent['Scheduler']['PluginPerfData'] += $cachedresult;
+                    }
+                    $PerfDataOutput += $cachedresult;
+                }
+            }
+
+            $compiledPerfData = (New-IcingaPerformanceDataEntry $data);
+
+            $PerfDataOutput += $compiledPerfData;
         }
     }
 

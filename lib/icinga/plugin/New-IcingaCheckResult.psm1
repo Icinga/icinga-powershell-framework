@@ -24,7 +24,7 @@ function New-IcingaCheckresult()
         $this.check.Compile($TRUE) | Out-Null;
 
         if ([int]$this.check.exitcode -ne [int]$IcingaEnums.IcingaExitCode.Unknown -And -Not $this.noperfdata) {
-            Write-IcingaPluginPerfData ($this.check.GetPerfData().perfdata);
+            Write-IcingaPluginPerfData -PerformanceData ($this.check.GetPerfData().perfdata) -CheckCommand $CheckCommand;
         }
 
         return $this.check.exitcode;
