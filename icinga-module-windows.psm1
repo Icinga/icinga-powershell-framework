@@ -11,9 +11,28 @@
 
 function Use-Icinga()
 {
+    param(
+        [switch]$LibOnly = $FALSE,
+        [switch]$Daemon  = $FALSE
+    );
+
     # This function will allow us to load this entire module including possible
     # actions, making it available within our shell environment
     Import-IcingaLib '\' -Init;
+
+    if ($LibOnly -eq $FALSE) {
+        $global:IcingaThreads       = [hashtable]::Synchronized(@{});
+        $global:IcingaThreadContent = [hashtable]::Synchronized(@{});
+        $global:IcingaThreadPool    = [hashtable]::Synchronized(@{});
+        $global:IcingaDaemonData    = [hashtable]::Synchronized(
+            @{
+                'IcingaThreads'            = $global:IcingaThreads;
+                'IcingaThreadContent'      = $global:IcingaThreadContent;
+                'IcingaThreadPool'         = $global:IcingaThreadPool;
+                'FrameworkRunningAsDaemon' = $Daemon;
+            }
+        );
+    }
 }
 
 function Import-IcingaLib()
