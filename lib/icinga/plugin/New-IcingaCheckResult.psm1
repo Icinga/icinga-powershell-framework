@@ -17,7 +17,7 @@ function New-IcingaCheckresult()
             return $IcingaEnums.IcingaExitCode.Unknown;
         }
 
-        $CheckCommand = (Get-PSCallStack)[1].Command;
+        $CheckCommand = (Get-PSCallStack)[2].Command;
 
         # Compile the check / package if not already done
         $this.check.AssignCheckCommand($CheckCommand);
