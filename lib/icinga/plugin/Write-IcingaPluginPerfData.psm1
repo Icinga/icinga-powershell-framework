@@ -23,7 +23,6 @@ function Get-IcingaPluginPerfDataContent()
     foreach ($package in $PerfData.Keys) {
         $data = $PerfData[$package];
         if ($data.package) {
-            $PerfDataOutput += (Get-IcingaPluginPerfDataContent -PerfData $data.perfdata -AsObject $AsObject);
             $PerfDataOutput += (Get-IcingaPluginPerfDataContent -PerfData $data.perfdata -CheckResultCache $CheckResultCache -AsObject $AsObject);
         } else {
             foreach ($checkresult in $CheckResultCache.PSobject.Properties) {
