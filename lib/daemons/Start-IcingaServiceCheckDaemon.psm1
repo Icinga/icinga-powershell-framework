@@ -91,7 +91,7 @@ function Start-IcingaServiceCheckTask()
                     # Flush data we no longer require in our cache to free memory
                     foreach ($entry in $OldData.Keys) {
                         foreach ($key in $OldData[$entry].Keys) {
-                            Remove-IcingaHashtableItem -Hashtable $$IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler[$CheckCommand]['results'][$entry] -Key $key.Name
+                            Remove-IcingaHashtableItem -Hashtable $IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler[$CheckCommand]['results'][$entry] -Key $key.Name
                         }
                     }
 
