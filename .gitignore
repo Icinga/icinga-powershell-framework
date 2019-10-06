@@ -1,4 +1,6 @@
 log/*
 agent/*
+config/*
+cache/*
 .vscode/
 *.log
