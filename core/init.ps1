@@ -10,6 +10,7 @@ Set-Variable -Name Icinga2 -Option Constant -Value @{
         'Use-Icinga',
         'Import-IcingaLib',
         'Get-IcingaPluginDir',
+        'Get-IcingaCustomPluginDir',
         'Get-IcingaCacheDir',
         'Get-IcingaPowerShellConfigDir',
         'Get-Icinga-Lib',

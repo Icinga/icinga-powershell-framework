@@ -29,7 +29,7 @@ function New-IcingaCheckCommand()
         $CommandName
     );
 
-    [string]$ScriptFile = Join-Path -Path (Get-IcingaPluginDir) -ChildPath $CommandFile;
+    [string]$ScriptFile = Join-Path -Path (Get-IcingaCustomPluginDir) -ChildPath $CommandFile;
 
     if ((Test-Path $ScriptFile) -eq $TRUE) {
         throw 'This Check-Command does already exist.';
