@@ -40,8 +40,15 @@ function New-IcingaCheck()
 
     $Check | Add-Member -membertype ScriptMethod -name 'HandleDaemon' -value {
         # Only apply this once the checkcommand is set
-
         if ([string]::IsNullOrEmpty($this.checkcommand) -Or $global:IcingaDaemonData.FrameworkRunningAsDaemon -eq $FALSE) {
+            return;
+        }
+
+        if ($global:IcingaDaemonData.ContainsKey('BackgroundDaemon') -eq $FALSE) {
+            return;
+        }
+
+        if ($global:IcingaDaemonData.BackgroundDaemon.ContainsKey('ServiceCheckScheduler') -eq $FALSE) {
             return;
         }
 
