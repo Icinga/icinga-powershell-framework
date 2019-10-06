@@ -2,7 +2,7 @@ function Get-IcingaServices()
 {
     param (
         [array]$Service
-    )
+    );
 
     $ServiceInformation = Get-Service -Name $Service -ErrorAction SilentlyContinue;
     $ServiceWmiInfo     = $null;
