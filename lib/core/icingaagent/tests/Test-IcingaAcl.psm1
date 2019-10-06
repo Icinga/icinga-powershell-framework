@@ -13,7 +13,6 @@ function Test-IcingaAcl()
     $ServiceUser = Get-IcingaServiceUser;
     $UserFound   = $FALSE;
     $HasAccess   = $FALSE;
-
     foreach ($user in $FolderACL.Access) {
         # Not only check here for the exact name but also for included strings like NT AU or NT-AU or even further later on
         # As the Get-Acl Cmdlet will translate usernames into the own language, resultng in 'NT AUTHORITY\NetworkService' being translated
