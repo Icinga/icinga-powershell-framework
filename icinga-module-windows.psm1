@@ -18,6 +18,8 @@ function Use-Icinga()
 
     # This function will allow us to load this entire module including possible
     # actions, making it available within our shell environment
+    # First load our custom modules
+    Import-IcingaLib '\' -Init -Custom;
     Import-IcingaLib '\' -Init;
 
     if ($LibOnly -eq $FALSE) {
@@ -48,7 +50,8 @@ function Import-IcingaLib()
         # The Force Reload will remove the module in case it's loaded and reload it to track
         # possible development changes without having to create new PowerShell environments
         [Switch]$ForceReload,
-        [switch]$Init
+        [switch]$Init,
+        [switch]$Custom
     );
 
     # This is just to only allow a global loading of the module. Import-IcingaLib is ignored on every other
@@ -57,7 +60,11 @@ function Import-IcingaLib()
         return;
     }
 
-    [string]$directory  = Join-Path -Path $PSScriptRoot -ChildPath 'lib\';
+    if ($Custom) {
+        [string]$directory  = Join-Path -Path $PSScriptRoot -ChildPath 'custom\';
+    } else {
+        [string]$directory  = Join-Path -Path $PSScriptRoot -ChildPath 'lib\';
+    }
     [string]$module     = Join-Path -Path $directory -ChildPath $Lib;
     [string]$moduleName = '';
 
@@ -97,6 +104,11 @@ function Import-IcingaLib()
 function Get-IcingaPluginDir()
 {
     return (Join-Path -Path $PSScriptRoot -ChildPath 'lib\plugins\');
+}
+
+function Get-IcingaCustomPluginDir()
+{
+    return (Join-Path -Path $PSScriptRoot -ChildPath 'custom\plugins\');
 }
 
 function Get-IcingaCacheDir()
