@@ -4,6 +4,11 @@ function Format-IcingaPerfDataLabel()
         $PerfData
     );
 
+    $Output = ((($PerfData) -Replace ' ', '_') -Replace '[\W]', '');
+
+    while ($Output.Contains('__')) {
+        $Output = $Output.Replace('__', '_');
+    }
     # Remove all special characters and spaces on label names
-    return ((($PerfData) -Replace ' ', '_') -Replace '[\W]', '');
+    return $Output;
 }
