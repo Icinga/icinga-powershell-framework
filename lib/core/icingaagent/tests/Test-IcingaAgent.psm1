@@ -2,6 +2,7 @@ function Test-IcingaAgent()
 {
     if (Get-Service 'icinga2' -ErrorAction SilentlyContinue) {
         Write-IcingaTestOutput -Severity 'PASSED' -Message 'Icinga Agent Service is installed';
+        Test-IcingaAgentServicePermission | Out-Null;
         Test-IcingaAcl "$Env:ProgramData\icinga2\etc" -WriteOutput | Out-Null;
         Test-IcingaAcl "$Env:ProgramData\icinga2\var" -WriteOutput | Out-Null;
         Test-IcingaAcl (Get-IcingaCacheDir) -WriteOutput | Out-Null;
