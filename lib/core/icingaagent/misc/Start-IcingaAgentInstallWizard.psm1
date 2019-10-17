@@ -6,6 +6,8 @@ function Start-IcingaAgentInstallWizard()
         [switch]$AutoUseHostname     = $FALSE,
         [switch]$LowerCase           = $FALSE,
         [switch]$UpperCase           = $FALSE,
+        $AddDirectorGlobal           = $null,
+        $AddGlobalTemplates          = $null,
         [string]$PackageSource,
         [string]$AgentVersion,
         [switch]$AllowVersionChanges = $FALSE,
@@ -24,6 +26,7 @@ function Start-IcingaAgentInstallWizard()
     );
 
     [array]$InstallerArguments = @();
+    [array]$GlobalZoneConfig   = @();
 
     if ([string]::IsNullOrEmpty($Hostname) -And $AutoUseFQDN -eq $FALSE -And $AutoUseHostname -eq $FALSE) {
         if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to manually specify a hostname?' -Default 'n').result -eq 1) {
@@ -136,14 +139,44 @@ function Start-IcingaAgentInstallWizard()
         $InstallerArguments += "-ParentZone $ParentZone";
     }
 
+    if ($null -eq $AddDirectorGlobal) {
+        if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to add the global zone "director-global"?' -Default 'y').result -eq 1) {
+            $AddDirectorGlobal = $TRUE;
+        } else {
+            $AddDirectorGlobal = $FALSE;
+        }
+    }
+
+    $InstallerArguments += ("-AddDirectorGlobal $AddDirectorGlobal");
+    if ($AddDirectorGlobal) {
+        $GlobalZoneConfig += 'director-global';
+    }
+
+    if ($null -eq $AddGlobalTemplates) {
+        if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to add the global zone "global-templates"?' -Default 'y').result -eq 1) {
+            $AddGlobalTemplates = $TRUE;
+        } else {
+            $AddGlobalTemplates = $FALSE;
+        }
+    }
+
+    $InstallerArguments += ("-AddGlobalTemplates $AddGlobalTemplates");
+    if ($AddGlobalTemplates) {
+        $GlobalZoneConfig += 'global-templates';
+    }
+
     if ($null -eq $GlobalZones) {
-        if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to add additional global zones, besides "director-global" and "global-templates"?' -Default 'n').result -eq 0) {
+        if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to add custom global zones?' -Default 'n').result -eq 0) {
             $ArrayString = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please specify your additional zones seperated by ","' -Default 'v').answer;
-            $GlobalZones = ($ArrayString.Replace(' ', '')).Split(',');
+            $GlobalZones = ($ArrayString.Replace(' ', '')).Split(',')
+            $GlobalZoneConfig += $GlobalZones;
             $InstallerArguments += ("-GlobalZones " + ([string]::Join(',', $GlobalZones)));
         } else {
             $GlobalZones = @();
+            $InstallerArguments += ("-GlobalZones @()");
         }
+    } else {
+        $GlobalZoneConfig += $GlobalZones;
     }
 
     [bool]$CanConnectToParent = $FALSE;
@@ -170,10 +203,12 @@ function Start-IcingaAgentInstallWizard()
                 $CAPort = 5665;
             }
         }
-        if ([string]::IsNullOrEmpty($Ticket)) {
+        if ($null -eq $Ticket) {
             if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you have a Icinga Ticket available to sign your certificate?' -Default 'y').result -eq 1) {
                 $Ticket = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please enter your Icinga Ticket' -Default 'v').answer;
                 $InstallerArguments += "-Ticket $Ticket";
+            } else {
+                $InstallerArguments += "-Ticket ''";
             }
         }
     } else {
@@ -210,7 +245,7 @@ function Start-IcingaAgentInstallWizard()
             Install-IcingaAgentBaseFeatures;
             Install-IcingaAgentCertificates -Hostname $Hostname -Endpoint $CAEndpoint -Port $CAPort -CACert $CAFile -Ticket $Ticket | Out-Null;
             Write-IcingaAgentApiConfig -Port $CAPort;
-            Write-IcingaAgentZonesConfig -Endpoints $Endpoints -EndpointConnections $EndpointConnections -ParentZone $ParentZone -GlobalZones $GlobalZones -Hostname $Hostname;
+            Write-IcingaAgentZonesConfig -Endpoints $Endpoints -EndpointConnections $EndpointConnections -ParentZone $ParentZone -GlobalZones $GlobalZoneConfig -Hostname $Hostname;
             Test-IcingaAgent;
             Restart-Service icinga2;
         }
