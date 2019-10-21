@@ -6,8 +6,8 @@ Installing the module is managed by differen ways, depending on the user environ
 Instructions
 ---
 
-* Install the Module with the [Kickstart Script](installation\01-KickstartScript.md)
-* Install the module [manually](installation\02-ManualInstallation.md)
+* Install the Module with the [Kickstart Script](installation/01-KickstartScript.md)
+* Install the module [manually](installation/02-ManualInstallation.md)
 
 Testing the installation
 ---
