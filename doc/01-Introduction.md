@@ -1,23 +1,13 @@
 Introduction
-==============
+===
 
-This PowerShell Module will provide a basic framework to retreive data from Windows Hosts. The module will work with the current common Windows Versions, starting from Windows 7 / 2008 R2. Older versions might also work, are however not official supported.
+This PowerShell Framework will provide a collection of Cmdlets to entirely manage an Icinga 2 Agent setup and provide check plugins to fetch information from Windows hosts.
 
-The module will execute local PowerShell scripts (modules) and return the result as formatted JSON. This result can later be parsed by any software to either do inventory or monitoring tasks.
-
-### Architecture
-
-![Architecture](images/01_architecture/architecture.png)
-
-The module provides three ways to fetch data:
-
-* An active Rest-Api
-* A passive Checker component
-* PowerShell Cmdlets
+It will ensure all required Icinga configurations are handled and present and offer an easy way to extend the monitoring with custom plugins. The framework will provide a standardised set of Cmdlets, Tools and Providers to make daily work, integrations and testing available to everyone, regardless if you are a Developer, System Engineer or enthusiast.
 
 The following requirements have to be fullfilled:
 
 * Windows 7 / Windows 2008 R2 or later
-* PowerShell Version 3.x or higher
+* PowerShell Version 4.x or higher
 
 If you are ready to get started, take a look on the [installation guide](02-Installation.md).
