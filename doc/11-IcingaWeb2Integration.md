@@ -1,4 +1,4 @@
-Integrating Icinga Web 2
+Integrating Icinga Web 2 (Deprecated)
 =====================================
 
 The PowerShell Module provides the possibility to directly (or indirectly over Proxies) connect to an Icinga Web 2 Api to send informations there.
