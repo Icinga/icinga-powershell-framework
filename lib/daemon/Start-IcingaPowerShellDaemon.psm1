@@ -6,8 +6,16 @@ function Start-IcingaPowerShellDaemon()
         Use-Icinga -LibOnly -Daemon;
 
         try {
-            # Todo: Add dynamic loading of enabled background tasks
-            Start-IcingaServiceCheckDaemon;
+            $EnabledDaemons = Get-IcingaBackgroundDaemons;
+            
+            foreach ($daemon in $EnabledDaemons.Keys) {
+                if (-Not (Test-IcingaFunction $daemon)) {
+                    continue;
+                }
+
+                $daemonArgs = $EnabledDaemons[$daemon];
+                &$daemon @daemonArgs;
+            }
         } catch {
             # Todo: Add exception handling
         }
