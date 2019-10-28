@@ -1,14 +1,10 @@
 Icinga Module for Windows
 ==============
 
-## This Module is a Technical-Preview and should **NOT** be used actively in production!
+**This Module is a Technical-Preview and should **NOT** be used actively in production!**
 
-This repository provides a PowerShell Module to fetch information and data of Windows Hosts, allowing a wide range of integrations
-
-* Remote Execeution
-* Icinga Web 2 integration
-* Usage with the Icinga 2 Agent
-* ...
+The Icinga PowerShell Framework provides a wide range of configurarion and check possibilities to ensure an easy integration and full monitoring of windows environments.
+Each single chapter of this documentation will describe parts of the module and the possibilities.
 
 Before you continue, please take a look on the [installation guide](doc/02-Installation.md)
 
@@ -19,7 +15,12 @@ Please take a look on the following content to get to know the possibilities of 
 
 * [Introduction](doc/01-Introduction.md)
 * [Installation Guide](doc/02-Installation.md)
-* [Execution Policies](doc/03-ExecutionPolicy.md)
+* [Icinga Integration](doc/05-IcingaIntegration.md)
+
+Developer Guide
+------------
+
+If you wish to extend the Framework by yourself or write custom plugins for your environment, please have a look on the [Developer Guide](doc/04-DeveloperGuide.md) for detailed explanations of functions and code examples.
 
 Contributing
 ------------

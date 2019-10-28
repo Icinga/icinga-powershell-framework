@@ -19,7 +19,7 @@ Use-Icinga;
 
 before each function call. An example on the PowerShell would be this:
 
-```
+```powershell
 Use-Icinga; Invoke-IcingaCheckCPU;
 ```
 
@@ -30,7 +30,7 @@ Check-Command definition for Icinga
 
 A example Check-Command for Icinga could look like this:
 
-```
+```icinga
 object CheckCommand "Windows Check CPU" {
     import "plugin-check-command"
     command = [

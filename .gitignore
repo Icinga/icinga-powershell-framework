@@ -1,4 +1,8 @@
 log/*
 agent/*
+config/*
+cache/*
 .vscode/
 *.log
+
+!cache/README.md
