@@ -10,6 +10,10 @@ function Set-IcingaAgentServiceUser()
         return $FALSE;
     }
 
+    if ($User.Contains('\') -eq $FALSE) {
+        $User = [string]::Format('.\{0}', $User);
+    }
+
     $ArgString = 'config icinga2 obj= "{0}" password="{1}"';
     if($null -eq $Password) {
         $ArgString = 'config icinga2 obj= "{0}"{1}';
