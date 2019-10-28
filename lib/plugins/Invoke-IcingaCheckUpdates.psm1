@@ -16,14 +16,14 @@ Import-IcingaLib provider\updates;
    Based on the thresholds set the status will change between 'OK', 'WARNING' or 'CRITICAL'. The function will return one of these given codes.
    
 .EXAMPLE
-   PS> Invoke-IcingaCheckUpdates -IcingaCheckUpdates_Int_Warning 4 -IcingaCheckUpdates_Int_Critical 20
+   PS> Invoke-IcingaCheckUpdates -Warning 4 -Critical 20
    [OK]: Check package "Updates" is [OK]
    | 'Pending Update Count'=2;4;20 
 
-.PARAMETER IcingaCheckUpdates_Int_Warning
+.PARAMETER Warning
    Used to specify a Warning threshold. In this case an integer value.
 
-.PARAMETER IcingaCheckUpdates_Int_Critical
+.PARAMETER Critical
    Used to specify a Critical threshold. In this case an integer value.
 
 .INPUTS
@@ -41,8 +41,8 @@ function Invoke-IcingaCheckUpdates()
 {
     param (
         [array]$UpdateFilter,
-        [int]$IcingaCheckUpdates_Int_Warning,
-        [int]$IcingaCheckUpdates_Int_Critical,
+        [int]$Warning,
+        [int]$Critical,
         [switch]$NoPerfData,
         [int]$Verbose
     );
@@ -79,7 +79,7 @@ function Invoke-IcingaCheckUpdates()
     }
 
     $IcingaCheck = New-IcingaCheck -Name 'Pending Update Count' -Value $PendingCount;
-    $IcingaCheck.WarnOutOfRange($IcingaCheckUpdates_Int_Warning).CritOutOfRange($IcingaCheckUpdates_Int_Critical) | Out-Null;
+    $IcingaCheck.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
     $UpdateCount.AddCheck($IcingaCheck);
 
     $UpdatePackage  = New-IcingaCheckPackage -Name 'Updates' -OperatorAnd -Verbose $Verbose -Checks @(

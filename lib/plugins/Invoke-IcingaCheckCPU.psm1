@@ -16,19 +16,19 @@ Import-IcingaLib icinga\plugin;
    Based on the thresholds set the status will change between 'OK', 'WARNING' or 'CRITICAL'. The function will return one of these given codes.
 
 .EXAMPLE
-   PS>Invoke-IcingaCheckCpu -IcingaCheckCPU_Int_Warning 50 -IcingaCheckCPU_Int_Critical 75
+   PS>Invoke-IcingaCheckCpu -Warning 50 -Critical 75
    [OK]: Check package "CPU Load" is [OK]
    | 'Core #0'=4,588831%;50;75;0;100 'Core #1'=0,9411243%;50;75;0;100 'Core #2'=11,53223%;50;75;0;100 'Core #3'=4,073013%;50;75;0;100
 
 .EXAMPLE
-   PS>Invoke-IcingaCheckCpu -IcingaCheckCPU_Int_Warning 50 -IcingaCheckCPU_Int_Critical 75 -Core 1  
+   PS>Invoke-IcingaCheckCpu -Warning 50 -Critical 75 -Core 1  
    [OK]: Check package "CPU Load" is [OK]
    | 'Core #1'=2,612651%;50;75;0;100 
 
-.PARAMETER IcingaCheckCPU_Int_Warning
+.PARAMETER Warning
    Used to specify a Warning threshold. In this case an integer value.
 
-.PARAMETER IcingaCheckCPU_Int_Critical
+.PARAMETER Critical
    Used to specify a Critical threshold. In this case an integer value.
 
 .PARAMETER Core
@@ -49,8 +49,8 @@ Import-IcingaLib icinga\plugin;
 function Invoke-IcingaCheckCPU()
 {
     param(
-        [int]$IcingaCheckCPU_Int_Warning,
-        [int]$IcingaCheckCPU_Int_Critical,
+        [int]$Warning,
+        [int]$Critical,
         $Core               = '*',
         [switch]$NoPerfData,
         $Verbose
@@ -62,12 +62,12 @@ function Invoke-IcingaCheckCPU()
     if ($CpuCounter.Counters.Count -ne 0) {
         foreach ($counter in $CpuCounter.Counters) {
             $IcingaCheck = New-IcingaCheck -Name ([string]::Format('Core #{0}', $counter.Instance)) -Value $counter.Value().Value -Unit '%';
-            $IcingaCheck.WarnOutOfRange($IcingaCheckCPU_Int_Warning).CritOutOfRange($IcingaCheckCPU_Int_Critical) | Out-Null;
+            $IcingaCheck.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
             $CpuPackage.AddCheck($IcingaCheck);
         }
     } else {
         $IcingaCheck = New-IcingaCheck -Name ([string]::Format('Core #{0}',$Core)) -Value $CpuCounter.Value().Value -Unit '%';
-        $IcingaCheck.WarnOutOfRange($IcingaCheckCPU_Int_Warning).CritOutOfRange($IcingaCheckCPU_Int_Critical) | Out-Null;
+        $IcingaCheck.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
         $CpuPackage.AddCheck($IcingaCheck);
     }
 

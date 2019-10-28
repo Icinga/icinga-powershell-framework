@@ -21,10 +21,10 @@ Import-IcingaLib provider\users;
 .EXAMPLE
    PS>
 
-.PARAMETER IcingaCheckUsers_Int_Warning
+.PARAMETER Warning
    Used to specify a Warning threshold. In this case an integer value.
 
-.PARAMETER IcingaCheckUsers_Int_Critical
+.PARAMETER Critical
    Used to specify a Critical threshold. In this case an integer value.
 
 .PARAMETER Username
@@ -48,8 +48,8 @@ function Invoke-IcingaCheckUsers()
 {
     param (
         [array]$Username,
-        [int]$IcingaCheckUsers_Int_Warning,
-        [int]$IcingaCheckUsers_Int_Critical,
+        [int]$Warning,
+        [int]$Critical,
         [switch]$NoPerfData,
         [int]$Verbose
     );
@@ -67,7 +67,7 @@ function Invoke-IcingaCheckUsers()
             }
 
             $IcingaCheck = New-IcingaCheck -Name ([string]::Format('Logged On User "{0}"', $User)) -Value $LoginCount;
-            $IcingaCheck.WarnOutOfRange($IcingaCheckUsers_Int_Warning).CritOutOfRange($IcingaCheckUsers_Int_Critical) | Out-Null;
+            $IcingaCheck.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
             $UsersPackage.AddCheck($IcingaCheck);
         }
     } else {
@@ -77,7 +77,7 @@ function Invoke-IcingaCheckUsers()
             );
         }
         $IcingaCheck = New-IcingaCheck -Name 'Logged On Users' -Value $LoggedOnUsers.count;
-        $IcingaCheck.WarnOutOfRange($IcingaCheckUsers_Int_Warning).CritOutOfRange($IcingaCheckUsers_Int_Critical) | Out-Null;
+        $IcingaCheck.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
         $UsersPackage.AddCheck($IcingaCheck)
     }
     

@@ -17,7 +17,7 @@ Import-IcingaLib core\tools;
    Based on the thresholds set the status will change between 'OK', 'WARNING' or 'CRITICAL'. The function will return one of these given codes.
    
 .EXAMPLE
-   PS> Invoke-IcingaCheckUptime -IcingaCheckUptime_String_Warning 18d -IcingaCheckUptime_String_Critical 20d
+   PS> Invoke-IcingaCheckUptime -Warning 18d -Critical 20d
    [WARNING]: Check package "Windows Uptime: Days: 19 Hours: 13 Minutes: 48 Seconds: 29" is [WARNING]
    | 'Windows Uptime'=1691309,539176s;1555200;1728000 
 
@@ -45,8 +45,8 @@ Import-IcingaLib core\tools;
 function Invoke-IcingaCheckUptime()
 {
     param(
-        [string]$IcingaCheckUptime_String_Warning,
-        [string]$IcingaCheckUptime_String_Critical,
+        [string]$Warning,
+        [string]$Critical,
         [switch]$NoPerfData,
         [int]$Verbose
     );
@@ -56,9 +56,9 @@ function Invoke-IcingaCheckUptime()
 
     $IcingaCheck = New-IcingaCheck -Name 'Windows Uptime' -Value $WindowsData.windows.metadata.uptime.value -Unit 's';
     $IcingaCheck.WarnOutOfRange(
-        (ConvertTo-SecondsFromIcingaThresholds -Threshold $IcingaCheckUptime_String_Warning)
+        (ConvertTo-SecondsFromIcingaThresholds -Threshold $Warning)
     ).CritOutOfRange(
-        (ConvertTo-SecondsFromIcingaThresholds -Threshold $IcingaCheckUptime_String_Critical)
+        (ConvertTo-SecondsFromIcingaThresholds -Threshold $Critical)
     ) | Out-Null;
 
     $CheckPackage = New-IcingaCheckPackage -Name $Name -OperatorAnd -Checks $IcingaCheck -Verbose $Verbose;

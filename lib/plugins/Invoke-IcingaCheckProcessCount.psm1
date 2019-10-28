@@ -16,21 +16,21 @@ Import-IcingaLib icinga\plugin;
    Based on the thresholds set the status will change between 'OK', 'WARNING' or 'CRITICAL'. The function will return one of these given codes.
 
 .EXAMPLE
-   PS>Invoke-IcingaCheckProcessCount -Process conhost -IcingaCheckProcess_Int_Warning 5 -IcingaCheckProcess_Int_Critical 10
+   PS>Invoke-IcingaCheckProcessCount -Process conhost -Warning 5 -Critical 10
    [OK]: Check package "Process Check" is [OK]
    | 'Process Count "conhost"'=3;; 
 
 .EXAMPLE
-   PS>Invoke-IcingaCheckProcessCount -Process conhost,wininit -IcingaCheckProcess_Int_Warning 5 -IcingaCheckProcess_Int_Critical 10 -Verbose 4
+   PS>Invoke-IcingaCheckProcessCount -Process conhost,wininit -Warning 5 -Critical 10 -Verbose 4
    [OK]: Check package "Process Check" is [OK] (Match All)
     \_ [OK]: Process Count "conhost" is 3
     \_ [OK]: Process Count "wininit" is 1
    | 'Process Count "conhost"'=3;5;10 'Process Count "wininit"'=1;5;10
 
-.PARAMETER IcingaCheckProcess_Int_Warning
+.PARAMETER Warning
    Used to specify a Warning threshold. In this case an integer value.
 
-.PARAMETER IcingaCheckProcess_Int_Critical
+.PARAMETER Critical
    Used to specify a Critical threshold. In this case an integer value.
 
 .PARAMETER Process
@@ -52,8 +52,8 @@ Import-IcingaLib icinga\plugin;
 function Invoke-IcingaCheckProcessCount()
 {
     param(
-        [int]$IcingaCheckProcess_Int_Warning,
-        [int]$IcingaCheckProcess_Int_Critical,
+        [int]$Warning,
+        [int]$Critical,
         [array]$Process,
         [switch]$NoPerfData,
         $Verbose
@@ -66,13 +66,13 @@ function Invoke-IcingaCheckProcessCount()
     if ($Process.Count -eq 0) {
         $ProcessCount = $ProcessInformation['Process Count'];
         $IcingaCheck = New-IcingaCheck -Name ([string]::Format('Process Count')) -Value $ProcessCount;
-        $IcingaCheck.WarnOutOfRange($IcingaCheckProcess_Int_Warning).CritOutOfRange($IcingaCheckProcess_Int_Critical) | Out-Null;
+        $IcingaCheck.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
         $ProcessPackage.AddCheck($IcingaCheck);
     } else {
         foreach ($proc in $process) {
             $ProcessCount = $ProcessInformation."Processes".$proc.processlist.Count;
             $IcingaCheck = New-IcingaCheck -Name ([string]::Format('Process Count "{0}"', $proc)) -Value $ProcessCount;
-            $IcingaCheck.WarnOutOfRange($IcingaCheckProcess_Int_Warning).CritOutOfRange($IcingaCheckProcess_Int_Critical) | Out-Null;
+            $IcingaCheck.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
             $ProcessPackage.AddCheck($IcingaCheck);
         }
     }

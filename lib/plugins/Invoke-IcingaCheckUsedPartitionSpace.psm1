@@ -16,24 +16,24 @@ Import-IcingaLib icinga\plugin;
    Based on the thresholds set the status will change between 'OK', 'WARNING' or 'CRITICAL'. The function will return one of these given codes.
 
 .EXAMPLE
-   PS>Invoke-IcingaCheckUsedPartitionSpace -IcingaCheckUsedPartitionSpace_Int_Warning 60 -IcingaCheckUsedPartitionSpace_Int_Critical 80
+   PS>Invoke-IcingaCheckUsedPartitionSpace -Warning 60 -Critical 80
    [OK]: Check package "Used Partition Space" is [OK]
    | 'Partition C'=8,06204986572266%;60;;0;100 'Partition D'=12,06204736572266%;60;;0;100 'Partition K'=19,062047896572266%;60;;0;100
 
 .EXAMPLE
-   PS>Invoke-IcingaCheckUsedPartitionSpace -IcingaCheckUsedPartitionSpace_Int_Warning 60 -IcingaCheckUsedPartitionSpace_Int_Critical 80 -Exclude "C:\"
+   PS>Invoke-IcingaCheckUsedPartitionSpace -Warning 60 -Critical 80 -Exclude "C:\"
    [OK]: Check package "Used Partition Space" is [OK]
    | 'Partition D'=12,06204736572266%;60;;0;100 'Partition K'=19,062047896572266%;60;;0;100
 
 .EXAMPLE
-   PS>Invoke-IcingaCheckUsedPartitionSpace -IcingaCheckUsedPartitionSpace_Int_Warning 60 -IcingaCheckUsedPartitionSpace_Int_Critical 80 -Include "C:\"
+   PS>Invoke-IcingaCheckUsedPartitionSpace -Warning 60 -Critical 80 -Include "C:\"
    [OK]: Check package "Used Partition Space" is [OK]
    | 'Partition C'=8,06204986572266%;60;;0;100
 
-.PARAMETER IcingaCheckUsedPartitionSpace_Int_Warning
+.PARAMETER Warning
    Used to specify a Warning threshold. In this case an integer value.
 
-.PARAMETER IcingaCheckUsedPartitionSpace_Int_Critical
+.PARAMETER Critical
    Used to specify a Critical threshold. In this case an integer value.
 
 .PARAMETER Exclude
@@ -59,8 +59,8 @@ Import-IcingaLib icinga\plugin;
 function Invoke-IcingaCheckUsedPartitionSpace()
 {
     param(
-        [int]$IcingaCheckUsedPartitionSpace_Int_Warning,
-        [int]$IcingaCheckUsedPartitionSpace_Int_Critical,
+        [int]$Warning,
+        [int]$Critical,
         [array]$Include               = @(),
         [array]$Exclude               = @(),
         [switch]$NoPerfData,
@@ -87,7 +87,7 @@ function Invoke-IcingaCheckUsedPartitionSpace()
         }
 
         $IcingaCheck = New-IcingaCheck -Name ([string]::Format('Partition {0}', $Letter)) -Value (100-($DiskFree.([string]::Format($Letter))."Free Space")) -Unit '%';
-        $IcingaCheck.WarnOutOfRange($IcingaCheckUsedPartitionSpace_Int_Warning).CritOutOfRange($IcingaCheckUsedPartitionSpace_Int_Critical) | Out-Null;
+        $IcingaCheck.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
         $DiskPackage.AddCheck($IcingaCheck);
     }
 

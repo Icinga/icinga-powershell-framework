@@ -15,22 +15,22 @@ Import-IcingaLib provider\bios;
    Based on the thresholds set the status will change between 'OK', 'WARNING' or 'CRITICAL'. The function will return one of these given codes.
 
 .EXAMPLE
-   PS>Invoke-IcingaCheckDirectory -Path "C:\Users\Icinga\Downloads" -InvokeIcingaCheck_Int_Warning 20 -InvokeIcingaCheck_Int_Critical 30 -Verbose 3
+   PS>Invoke-IcingaCheckDirectory -Path "C:\Users\Icinga\Downloads" -Warning 20 -Critical 30 -Verbose 3
    [OK]: Check package "C:\Users\Icinga\Downloads" is [OK] (Match All)
     \_ [OK]: C:\Users\Icinga\Downloads is 19
 
 .EXAMPLE
-   PS>Invoke-IcingaCheckDirectory -Path "C:\Users\Icinga\Downloads" -InvokeIcingaCheck_Int_Warning 20 -InvokeIcingaCheck_Int_Critical 30 -Verbose 3
+   PS>Invoke-IcingaCheckDirectory -Path "C:\Users\Icinga\Downloads" -Warning 20 -Critical 30 -Verbose 3
    [WARNING]: Check package "C:\Users\Icinga\Downloads" is [WARNING] (Match All)
     \_ [WARNING]: C:\Users\Icinga\Downloads is 24
 
 .EXAMPLE
-   PS>Invoke-IcingaCheckDirectory -Path "C:\Users\Icinga\Downloads" -InvokeIcingaCheck_Int_Warning 20 -InvokeIcingaCheck_Int_Critical 30 -Verbose 3 -YoungerThen 08.10.2018 -OlderThen 10.12.2018
+   PS>Invoke-IcingaCheckDirectory -Path "C:\Users\Icinga\Downloads" -Warning 20 -Critical 30 -Verbose 3 -YoungerThen 08.10.2018 -OlderThen 10.12.2018
    [OK]: Check package "C:\Users\Icinga\Downloads" is [OK] (Match All)
     \_ [OK]: C:\Users\Icinga\Downloads is 1
 
 .EXAMPLE
-   PS>Invoke-IcingaCheckDirectory -Path "C:\Users\Icinga\Downloads" -FileNames "*.txt","*.sql" -InvokeIcingaCheck_Int_Warning 20 -InvokeIcingaCheck_Int_Critical 30 -Verbose 3
+   PS>Invoke-IcingaCheckDirectory -Path "C:\Users\Icinga\Downloads" -FileNames "*.txt","*.sql" -Warning 20 -Critical 30 -Verbose 3
    [OK]: Check package "C:\Users\Icinga\Downloads" is [OK] (Match All)
     \_ [OK]: C:\Users\Icinga\Downloads is 4
 
