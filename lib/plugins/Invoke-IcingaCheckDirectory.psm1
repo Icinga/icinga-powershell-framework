@@ -15,24 +15,30 @@ Import-IcingaLib provider\bios;
    Based on the thresholds set the status will change between 'OK', 'WARNING' or 'CRITICAL'. The function will return one of these given codes.
 
 .EXAMPLE
-   PS>Invoke-IcingaCheckDirectory -Path "C:\Users\Icinga\Downloads" -Warning 20 -Critical 30 -Verbose 3
+   PS>Invoke-IcingaCheckDirectory -Path "C:\Users\Icinga\Downloads" -InvokeIcingaCheck_Int_Warning 20 -InvokeIcingaCheck_Int_Critical 30 -Verbose 3
    [OK]: Check package "C:\Users\Icinga\Downloads" is [OK] (Match All)
     \_ [OK]: C:\Users\Icinga\Downloads is 19
 
 .EXAMPLE
-   PS>Invoke-IcingaCheckDirectory -Path "C:\Users\Icinga\Downloads" -Warning 20 -Critical 30 -Verbose 3
+   PS>Invoke-IcingaCheckDirectory -Path "C:\Users\Icinga\Downloads" -InvokeIcingaCheck_Int_Warning 20 -InvokeIcingaCheck_Int_Critical 30 -Verbose 3
    [WARNING]: Check package "C:\Users\Icinga\Downloads" is [WARNING] (Match All)
     \_ [WARNING]: C:\Users\Icinga\Downloads is 24
 
 .EXAMPLE
-   PS>Invoke-IcingaCheckDirectory -Path "C:\Users\Icinga\Downloads" -Warning 20 -Critical 30 -Verbose 3 -YoungerThen 08.10.2018 -OlderThen 10.12.2018
+   PS>Invoke-IcingaCheckDirectory -Path "C:\Users\Icinga\Downloads" -InvokeIcingaCheck_Int_Warning 20 -InvokeIcingaCheck_Int_Critical 30 -Verbose 3 -YoungerThen 08.10.2018 -OlderThen 10.12.2018
    [OK]: Check package "C:\Users\Icinga\Downloads" is [OK] (Match All)
     \_ [OK]: C:\Users\Icinga\Downloads is 1
 
 .EXAMPLE
-   PS>Invoke-IcingaCheckDirectory -Path "C:\Users\Icinga\Downloads" -FileNames "*.txt","*.sql" -Warning 20 -Critical 30 -Verbose 3
+   PS>Invoke-IcingaCheckDirectory -Path "C:\Users\Icinga\Downloads" -FileNames "*.txt","*.sql" -InvokeIcingaCheck_Int_Warning 20 -InvokeIcingaCheck_Int_Critical 30 -Verbose 3
    [OK]: Check package "C:\Users\Icinga\Downloads" is [OK] (Match All)
     \_ [OK]: C:\Users\Icinga\Downloads is 4
+
+.PARAMETER IcingaCheckDirectory_Int_Warning
+   Used to specify a Warning threshold. In this case an integer value.
+
+.PARAMETER IcingaCheckDirectory_Int_Critical
+   Used to specify a Critical threshold. In this case an integer value.
 
 .PARAMETER Path
    Used to specify a path.
@@ -68,10 +74,10 @@ function Invoke-IcingaCheckDirectory()
 {
     param(
         [string]$Path,
-        [string]$FileNames,
+        [array]$FileNames,
         [switch]$Recurse,
-        $Critical,
-        $Warning,
+        [int]$IcingaCheckDirectory_Int_Critical,
+        [int]$IcingaCheckDirectory_Int_Warning,
         [string]$YoungerThen,
         [string]$OlderThen,
         [int]$Verbose
@@ -99,9 +105,9 @@ function Invoke-IcingaCheckDirectory()
     $DirectoryCheck = New-IcingaCheck -Name $Path -Value $FileCount.Count -NoPerfData;
 
     $DirectoryCheck.WarnOutOfRange(
-        ($Warning)
+        ($IcingaCheckDirectory_Int_Warning)
     ).CritOutOfRange(
-        ($Critical)
+        ($IcingaCheckDirectory_Int_Critical)
     ) | Out-Null;
 
     $DirectoryPackage = New-IcingaCheckPackage -Name $Path -OperatorAnd -Checks $DirectoryCheck -Verbose $Verbose;
