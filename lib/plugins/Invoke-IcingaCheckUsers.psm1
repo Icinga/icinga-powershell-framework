@@ -1,12 +1,44 @@
 Import-IcingaLib icinga\plugin;
 Import-IcingaLib provider\users;
 
+<#
+.SYNOPSIS
+   Checks how many files are in a directory.
+.DESCRIPTION
+   Invoke-IcingaCheckDirectory returns either 'OK', 'WARNING' or 'CRITICAL', based on the thresholds set.
+   e.g 'C:\Users\Icinga\Backup' contains 200 files, WARNING is set to 150, CRITICAL is set to 300. In this case the check will return CRITICAL
+   More Information on https://github.com/LordHepipud/icinga-module-windows
+.FUNCTIONALITY
+   This module is intended to be used to check how many files and directories are within are specified path. 
+   Based on the thresholds set the status will change between 'OK', 'WARNING' or 'CRITICAL'. The function will return one of these given codes.
+   
+.EXAMPLE
+   PS>
+.EXAMPLE
+   PS>
+.PARAMETER Warning
+   Used to specify a Warning threshold. In this case an integer value.
+.PARAMETER Critical
+   Used to specify a Critical threshold. In this case an integer value.
+.PARAMETER Username
+   Used to specify an array of usernames to match against.
+   
+   e.g 'Administrator', 'Icinga'
+.INPUTS
+   System.String
+.OUTPUTS
+   System.String
+.LINK
+   https://github.com/LordHepipud/icinga-module-windows
+.NOTES
+#>
+
 function Invoke-IcingaCheckUsers()
 {
     param (
         [array]$Username,
-        $Warning,
-        $Critical,
+        [int]$Warning,
+        [int]$Critical,
         [switch]$NoPerfData,
         [int]$Verbose
     );
