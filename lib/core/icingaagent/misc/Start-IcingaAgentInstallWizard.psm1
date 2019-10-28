@@ -22,7 +22,9 @@ function Start-IcingaAgentInstallWizard()
         [string]$Ticket,
         [string]$CAFile,
         [switch]$RunInstaller,
-        [switch]$Reconfigure
+        [switch]$Reconfigure,
+        [string]$ServiceUser,
+        [securestring]$ServicePass   = $null
     );
 
     [array]$InstallerArguments = @();
@@ -220,6 +222,25 @@ function Start-IcingaAgentInstallWizard()
         }
     }
 
+    if ([string]::IsNullOrEmpty($ServiceUser)) {
+        if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to change the user the Icinga Agent service is running with (Default: "NT Authority\NetworkService")?' -Default 'n').result -eq 0) {
+            $ServiceUser = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please enter the user you wish the Icinga Agent service to run with' -Default 'v').answer;
+            $InstallerArguments += "-ServiceUser $ServiceUser";
+            if ($null -eq $ServicePass) {
+                if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Does your Icinga Service user require a password to login (not required for System users)?' -Default 'y').result -eq 1) {
+                    $ServicePass = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please enter the password for your service user' -Secure -Default 'v').answer;
+                    $InstallerArguments += "-ServicePass $ServicePass";
+                } else {
+                    $ServicePass = '';
+                    $InstallerArguments += "-ServicePass ''";
+                }
+            }
+        } else {
+            $InstallerArguments += "-ServiceUser 'NT Authority\NetworkService'";
+            $ServiceUser = 'NT Authority\NetworkService';
+        }
+    }
+
     if ($InstallerArguments.Count -ne 0) {
         $InstallerArguments += "-RunInstaller";
         Write-Host 'The wizard is complete. These are the configured settings:';
@@ -242,6 +263,11 @@ function Start-IcingaAgentInstallWizard()
     if ($RunInstaller) {
         if ((Install-IcingaAgent -Version $AgentVersion -Source $PackageSource -AllowUpdates $AllowVersionChanges) -Or $Reconfigure) {
             Move-IcingaAgentDefaultConfig;
+            Set-IcingaAgentServiceUser -User $ServiceUser -Password $ServicePass;
+            Set-IcingaAgentServicePermission;
+            Set-IcingaAcl "$Env:ProgramData\icinga2\etc";
+            Set-IcingaAcl "$Env:ProgramData\icinga2\var";
+            Set-IcingaAcl (Get-IcingaCacheDir);
             Install-IcingaAgentBaseFeatures;
             Install-IcingaAgentCertificates -Hostname $Hostname -Endpoint $CAEndpoint -Port $CAPort -CACert $CAFile -Ticket $Ticket | Out-Null;
             Write-IcingaAgentApiConfig -Port $CAPort;
