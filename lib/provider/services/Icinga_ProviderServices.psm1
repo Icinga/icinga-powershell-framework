@@ -2,9 +2,16 @@ function Get-IcingaServices()
 {
     param (
         [array]$Service
-    )
+    );
 
     $ServiceInformation = Get-Service -Name $Service -ErrorAction SilentlyContinue;
+    $ServiceWmiInfo     = $null;
+
+    if ($Service.Count -eq 0) {
+        $ServiceWmiInfo = Get-WmiObject Win32_Service;
+    } else {
+        $ServiceWmiInfo = Get-WmiObject -Class Win32_Service | Where-Object { $Service -Contains $_.Name } | Select-Object StartName, Name;
+    }
 
     if ($null -eq $ServiceInformation) {
         return $null;
@@ -14,20 +21,32 @@ function Get-IcingaServices()
 
     foreach ($service in $ServiceInformation) {
     
-    [array]$DependentServices = $null;
-    [array]$DependingServices = $null;
+        [array]$DependentServices = $null;
+        [array]$DependingServices = $null;
+        [string]$ServiceUser      = '';
 
-    #Dependent / Child
-    foreach ($dependency in $service.DependentServices) {
-        if ($null -eq $DependentServices) { $DependentServices = @(); }
-                $DependentServices += $dependency.Name;
-    }
-    
-    #Depends / Parent
-    foreach ($dependency in $service.ServicesDependedOn) {
-        if ($null -eq $DependingServices) { $DependingServices = @(); }
+        foreach ($wmiService in $ServiceWmiInfo) {
+            if ($wmiService.Name -eq $service.ServiceName) {
+                $ServiceUser = $wmiService.StartName;
+                break;
+            }
+        }
+
+        #Dependent / Child
+        foreach ($dependency in $service.DependentServices) {
+            if ($null -eq $DependentServices) {
+                $DependentServices = @();
+            }
+            $DependentServices += $dependency.Name;
+        }
+        
+        #Depends / Parent
+        foreach ($dependency in $service.ServicesDependedOn) {
+            if ($null -eq $DependingServices) {
+                $DependingServices = @();
+            }
             $DependingServices += $dependency.Name;
-    }
+        }
 
         $ServiceData.Add(
             $service.Name, @{
@@ -57,6 +76,7 @@ function Get-IcingaServices()
                         'raw' = [int]$service.StartType;
                         'value' = $service.StartType;
                     };
+                    'ServiceUser' = $ServiceUser;
                 }
             }
         );

@@ -91,5 +91,5 @@ function Invoke-IcingaCheckUsedPartitionSpace()
         $DiskPackage.AddCheck($IcingaCheck);
     }
 
-    exit (New-IcingaCheckResult -Check $DiskPackage -NoPerfData $NoPerfData -Compile);
+    return (New-IcingaCheckResult -Check $DiskPackage -NoPerfData $NoPerfData -Compile);
 }

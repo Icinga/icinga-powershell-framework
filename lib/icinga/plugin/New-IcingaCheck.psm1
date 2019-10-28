@@ -36,9 +36,45 @@ function New-IcingaCheck()
     $Check | Add-Member -membertype NoteProperty -name 'translation'  -value $Translation;
     $Check | Add-Member -membertype NoteProperty -name 'checks'       -value $null;
     $Check | Add-Member -membertype NoteProperty -name 'completed'    -value $FALSE;
+    $Check | Add-Member -membertype NoteProperty -name 'checkcommand' -value '';
+
+    $Check | Add-Member -membertype ScriptMethod -name 'HandleDaemon' -value {
+        # Only apply this once the checkcommand is set
+        if ([string]::IsNullOrEmpty($this.checkcommand) -Or $global:IcingaDaemonData.FrameworkRunningAsDaemon -eq $FALSE) {
+            return;
+        }
+
+        if ($global:IcingaDaemonData.ContainsKey('BackgroundDaemon') -eq $FALSE) {
+            return;
+        }
+
+        if ($global:IcingaDaemonData.BackgroundDaemon.ContainsKey('ServiceCheckScheduler') -eq $FALSE) {
+            return;
+        }
+
+        if ($global:IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler.ContainsKey($this.checkcommand)) {
+            if ($global:IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler[$this.checkcommand]['results'].ContainsKey($this.name) -eq $FALSE) {
+                $global:IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler[$this.checkcommand]['results'].Add(
+                    $this.name,
+                    [hashtable]::Synchronized(@{})
+                );
+            }
+            $global:IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler[$this.checkcommand]['results'][$this.name].Add(
+                (Get-IcingaUnixTime),
+                $this.value
+            );
+        }
+    }
 
     $Check | Add-Member -membertype ScriptMethod -name 'AddSpacing' -value {
         $this.spacing += 1;
+    }
+
+    $Check | Add-Member -membertype ScriptMethod -name 'AssignCheckCommand' -value {
+        param($CheckCommand);
+
+        $this.checkcommand = $CheckCommand;
+        $this.HandleDaemon();
     }
 
     $Check | Add-Member -membertype ScriptMethod -name 'WarnOutOfRange' -value {
@@ -408,6 +444,8 @@ function New-IcingaCheck()
     $Check | Add-Member -membertype ScriptMethod -name 'TranslateValue' -value {
         param($value);
 
+        $value = Format-IcingaPerfDataValue $value;
+
         if ($null -eq $this.translation -Or $null -eq $value) {
             return $value;
         }
@@ -523,7 +561,7 @@ function New-IcingaCheck()
         param($msgArray, [string]$spaces);
 
         foreach ($msg in $msgArray) {
-            Write-Host ([string]::Format('{0}{1}', $spaces, $msg));
+            Write-IcingaPluginOutput ([string]::Format('{0}{1}', $spaces, $msg));
         }
     }
 
@@ -633,30 +671,27 @@ function New-IcingaCheck()
     $Check | Add-Member -membertype ScriptMethod -name 'GetPerfData' -value {
 
         if ($this.completed -Or -Not $this.perfdata) {
-            return '';
+            return $null;
         }
 
         $this.AutodiscoverMinMax();
 
-        if ([string]::IsNullOrEmpty($this.minimum) -eq $FALSE) {
-            $this.minimum = [string]::Format(';{0}', $this.minimum);
-        }
-        if ([string]::IsNullOrEmpty($this.maximum) -eq $FALSE) {
-            $this.maximum = [string]::Format(';{0}', $this.maximum);
-        }
+        $this.completed    = $TRUE;
+        [string]$LabelName = (Format-IcingaPerfDataLabel $this.name);
 
-        $this.completed = $TRUE;
+        $perfdata = @{
+            'label'    = $LabelName;
+            'perfdata' = '';
+            'unit'     = $this.unit;
+            'value'    = (Format-IcingaPerfDataValue $this.value);
+            'warning'  = (Format-IcingaPerfDataValue $this.warning);
+            'critical' = (Format-IcingaPerfDataValue $this.critical);
+            'minimum'  = (Format-IcingaPerfDataValue $this.minimum);
+            'maximum'  = (Format-IcingaPerfDataValue $this.maximum);
+            'package'  = $FALSE;
+        };
 
-        return [string]::Format(
-            "'{0}'={1}{2};{3};{4}{5}{6} ",
-            $this.name,
-            $this.value,
-            $this.unit,
-            $this.warning,
-            $this.critical,
-            $this.minimum,
-            $this.maximum
-        );
+        return $perfdata;
     }
 
     $Check | Add-Member -membertype ScriptMethod -name 'AutodiscoverMinMax' -value {
@@ -677,6 +712,7 @@ function New-IcingaCheck()
     }
 
     $Check.ValidateUnit();
+    $Check.HandleDaemon();
 
     return $Check;
 }

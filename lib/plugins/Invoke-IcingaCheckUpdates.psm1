@@ -83,8 +83,12 @@ function Invoke-IcingaCheckUpdates()
     $UpdateCount.AddCheck($IcingaCheck);
 
     $UpdatePackage  = New-IcingaCheckPackage -Name 'Updates' -OperatorAnd -Verbose $Verbose -Checks @(
-        $UpdateCount, $UpdateList
+        $UpdateCount
     );
 
-    exit (New-IcingaCheckResult -Name 'Pending Updates' -Check $UpdatePackage -NoPerfData $NoPerfData -Compile);
+    if ($PendingCount -ne 0) {
+        $UpdatePackage.AddCheck($UpdateList);
+    }
+
+    return (New-IcingaCheckResult -Name 'Pending Updates' -Check $UpdatePackage -NoPerfData $NoPerfData -Compile);
 }

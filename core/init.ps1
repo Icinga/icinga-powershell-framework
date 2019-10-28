@@ -9,6 +9,10 @@ Set-Variable -Name Icinga2 -Option Constant -Value @{
     Function = @(
         'Use-Icinga',
         'Import-IcingaLib',
+        'Get-IcingaPluginDir',
+        'Get-IcingaCustomPluginDir',
+        'Get-IcingaCacheDir',
+        'Get-IcingaPowerShellConfigDir',
         'Get-Icinga-Lib',
         'Get-Icinga-Object',
         'Get-Icinga-Service',

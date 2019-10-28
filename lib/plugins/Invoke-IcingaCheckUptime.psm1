@@ -63,5 +63,5 @@ function Invoke-IcingaCheckUptime()
 
     $CheckPackage = New-IcingaCheckPackage -Name $Name -OperatorAnd -Checks $IcingaCheck -Verbose $Verbose;
 
-    exit (New-IcingaCheckresult -Check $CheckPackage -NoPerfData $NoPerfData -Compile);
+    return (New-IcingaCheckresult -Check $CheckPackage -NoPerfData $NoPerfData -Compile);
 }
