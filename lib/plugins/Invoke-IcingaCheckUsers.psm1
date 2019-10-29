@@ -37,39 +37,39 @@ function Invoke-IcingaCheckUsers()
 {
     param (
         [array]$Username,
-        [int]$Warning            = $null,
-        [int]$Critical           = $null,
+        [int]$Warning        = $null,
+        [int]$Critical       = $null,
         [switch]$NoPerfData,
         [ValidateSet(0, 1, 2, 3)]
-        [int]$Verbosity          = 0
+        [int]$Verbosity      = 0
    );
-    
-    $UsersPackage  = New-IcingaCheckPackage -Name 'Users' -OperatorAnd -Verbose $Verbosity;
-    $LoggedOnUsers = Get-IcingaLoggedOnUsers -UserFilter $Username;
 
-    if ($Username.Count -ne 0) {
-        foreach ($User in $Username) {
-            $IcingaCheck = $null;
-            [int]$LoginCount = 0;
+   $UsersPackage  = New-IcingaCheckPackage -Name 'Users' -OperatorAnd -Verbose $Verbosity;
+   $LoggedOnUsers = Get-IcingaLoggedOnUsers -UserFilter $Username;
 
-            if ($LoggedOnUsers.users.ContainsKey($User)) {
-                $LoginCount = $LoggedOnUsers.users.$User.count;
-            }
+   if ($Username.Count -ne 0) {
+      foreach ($User in $Username) {
+         $IcingaCheck = $null;
+         [int]$LoginCount = 0;
 
-            $IcingaCheck = New-IcingaCheck -Name ([string]::Format('Logged On User "{0}"', $User)) -Value $LoginCount;
-            $IcingaCheck.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
-            $UsersPackage.AddCheck($IcingaCheck);
-        }
-    } else {
-        foreach ($User in $LoggedOnUsers.users.Keys) {
-            $UsersPackage.AddCheck(
-                (New-IcingaCheck -Name ([string]::Format('Logged On User "{0}"', $User)) -Value $LoggedOnUsers.users.$User.count)
-            );
-        }
-        $IcingaCheck = New-IcingaCheck -Name 'Logged On Users' -Value $LoggedOnUsers.count;
-        $IcingaCheck.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
-        $UsersPackage.AddCheck($IcingaCheck)
-    }
-    
-    return (New-IcingaCheckResult -Name 'Users' -Check $UsersPackage -NoPerfData $NoPerfData -Compile);
+         if ($LoggedOnUsers.users.ContainsKey($User)) {
+               $LoginCount = $LoggedOnUsers.users.$User.count;
+         }
+
+         $IcingaCheck = New-IcingaCheck -Name ([string]::Format('Logged On User "{0}"', $User)) -Value $LoginCount;
+         $IcingaCheck.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
+         $UsersPackage.AddCheck($IcingaCheck);
+      }
+   } else {
+      foreach ($User in $LoggedOnUsers.users.Keys) {
+         $UsersPackage.AddCheck(
+               (New-IcingaCheck -Name ([string]::Format('Logged On User "{0}"', $User)) -Value $LoggedOnUsers.users.$User.count)
+         );
+      }
+      $IcingaCheck = New-IcingaCheck -Name 'Logged On Users' -Value $LoggedOnUsers.count;
+      $IcingaCheck.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
+      $UsersPackage.AddCheck($IcingaCheck)
+   }
+   
+   return (New-IcingaCheckResult -Name 'Users' -Check $UsersPackage -NoPerfData $NoPerfData -Compile);
 }

@@ -3,8 +3,8 @@ Import-IcingaLib icinga\plugin;
 function Invoke-IcingaCheckEventlog()
 {
     param(
-        $Warning                 = $null,
-        $Critical                = $null,
+        $Warning                  = $null,
+        $Critical                 = $null,
         [string]$LogName,
         [array]$IncludeEventId,
         [array]$ExcludeEventId,
@@ -19,7 +19,7 @@ function Invoke-IcingaCheckEventlog()
         [switch]$DisableTimeCache = $FALSE,
         [switch]$NoPerfData,
         [ValidateSet(0, 1, 2, 3)]
-        [int]$Verbosity          = 0
+        [int]$Verbosity           = 0
     );
 
     $EventLogPackage = New-IcingaCheckPackage -Name 'EventLog' -OperatorAnd -Verbose $Verbosity;

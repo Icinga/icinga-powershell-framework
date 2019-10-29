@@ -34,25 +34,25 @@ Import-IcingaLib core\tools;
 
 function Invoke-IcingaCheckUptime()
 {
-    param(
-        [string]$Warning         = $null,
-        [string]$Critical        = $null,
-        [switch]$NoPerfData,
-        [ValidateSet(0, 1, 2, 3)]
-        [int]$Verbosity          = 0
+   param(
+      [string]$Warning    = $null,
+      [string]$Critical   = $null,
+      [switch]$NoPerfData,
+      [ValidateSet(0, 1, 2, 3)]
+      [int]$Verbosity     = 0
    );
 
-    $WindowsData = Get-IcingaWindows;
-    $Name        = ([string]::Format('Windows Uptime: {0}', (ConvertFrom-TimeSpan -Seconds $WindowsData.windows.metadata.uptime.value)));
+   $WindowsData = Get-IcingaWindows;
+   $Name        = ([string]::Format('Windows Uptime: {0}', (ConvertFrom-TimeSpan -Seconds $WindowsData.windows.metadata.uptime.value)));
 
-    $IcingaCheck = New-IcingaCheck -Name 'Windows Uptime' -Value $WindowsData.windows.metadata.uptime.value -Unit 's';
-    $IcingaCheck.WarnOutOfRange(
-        (ConvertTo-SecondsFromIcingaThresholds -Threshold $Warning)
-    ).CritOutOfRange(
-        (ConvertTo-SecondsFromIcingaThresholds -Threshold $Critical)
-    ) | Out-Null;
+   $IcingaCheck = New-IcingaCheck -Name 'Windows Uptime' -Value $WindowsData.windows.metadata.uptime.value -Unit 's';
+   $IcingaCheck.WarnOutOfRange(
+      (ConvertTo-SecondsFromIcingaThresholds -Threshold $Warning)
+   ).CritOutOfRange(
+      (ConvertTo-SecondsFromIcingaThresholds -Threshold $Critical)
+   ) | Out-Null;
 
-    $CheckPackage = New-IcingaCheckPackage -Name $Name -OperatorAnd -Checks $IcingaCheck -Verbose $Verbosity;
+   $CheckPackage = New-IcingaCheckPackage -Name $Name -OperatorAnd -Checks $IcingaCheck -Verbose $Verbosity;
 
-    return (New-IcingaCheckresult -Check $CheckPackage -NoPerfData $NoPerfData -Compile);
+   return (New-IcingaCheckresult -Check $CheckPackage -NoPerfData $NoPerfData -Compile);
 }
