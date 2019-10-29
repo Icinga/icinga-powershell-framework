@@ -165,184 +165,180 @@ function Get-IcingaCheckCommandConfig()
         # Loop through parameters of a given command
         foreach ($parameter in $Data.parameters.parameter) {
 
-            # Filter for Parameter 'core', because its set by default
-            if ($parameter.name -ne 'core') {
+            # IsNumeric-Check on position to determine the order-value
+            If (Test-Numeric($parameter.position) -eq $TRUE) {
+                [string]$Order = [int]$parameter.position + 1;
+            } else {
+                [string]$Order = 99
+            }
 
-                # IsNumeric-Check on position to determine the order-value
-                If (Test-Numeric($parameter.position) -eq $TRUE) {
-                    [string]$Order = [int]$parameter.position + 1;
-                } else {
-                    [string]$Order = 99
-                }
+            $IcingaCustomVariable = [string]::Format('$PowerShell_{0}_{1}$', (Get-Culture).TextInfo.ToTitleCase($parameter.type.name), $parameter.Name);
 
-                $IcingaCustomVariable = [string]::Format('$PowerShell_{0}_{1}$', (Get-Culture).TextInfo.ToTitleCase($parameter.type.name), $parameter.Name);
+            # Todo: Should we improve this? Actually the handling would be identical, we just need to assign
+            #       the proper field for this
+            if ($IcingaCustomVariable -eq '$PowerShell_Int32_Verbose$' -Or $IcingaCustomVariable -eq '$PowerShell_Int_Verbose$') {
+                $IcingaCustomVariable = '$PowerShell_Object_Verbose$';
+            }
 
-                # Todo: Should we improve this? Actually the handling would be identical, we just need to assign
-                #       the proper field for this
-                if ($IcingaCustomVariable -eq '$PowerShell_Int32_Verbose$' -Or $IcingaCustomVariable -eq '$PowerShell_Int_Verbose$') {
-                    $IcingaCustomVariable = '$PowerShell_Object_Verbose$';
-                }
-
-                # Add arguments to a given command
-                if ($parameter.type.name -eq 'switch') {
-                    $Basket.Command[$Data.Name].arguments.Add(
-                        [string]::Format('-{0}', $parameter.Name), @{
-                            'set_if' = $IcingaCustomVariable;
-                            'set_if_format' = 'string';
-                            'order' = $Order;
-                        }
-                    );
-
-                    $Basket.Command[$Data.Name].vars.Add($parameter.Name, $FALSE);
-
-                # Conditional whether type of parameter is array
-                } elseif ($parameter.type.name -eq 'array') {
-                    $Basket.Command[$Data.Name].arguments.Add(
-                        [string]::Format('-{0}', $parameter.Name), @{
-                            'value' = @{
-                                'type' = 'Function';
-                                'body' = [string]::Format(
-                                    'var arr = macro("{0}");{1}if (len(arr) == 0) {2}{1}return "$null";{1}{3}{1}return arr.join(",");',
-                                    $IcingaCustomVariable,
-                                    "`r`n",
-                                    '{',
-                                    '}'
-                                );
-                            }
-                            'order' = $Order;
-                        }
-                    );
-                } else {
-                    # Default to Object
-                    $Basket.Command[$Data.Name].arguments.Add(
-                        [string]::Format('-{0}', $parameter.Name), @{
-                            'value' = $IcingaCustomVariable;
-                            'order' = $Order;
-                        }
-                    );
-
-                    if ($parameter.name -ne 'Verbose') {
-                        $Basket.Command[$Data.Name].vars.Add($parameter.Name, '$$null');
-                    } else {
-                        $Basket.Command[$Data.Name].vars.Add($parameter.Name, "0");
+            # Add arguments to a given command
+            if ($parameter.type.name -eq 'switch') {
+                $Basket.Command[$Data.Name].arguments.Add(
+                    [string]::Format('-{0}', $parameter.Name), @{
+                        'set_if' = $IcingaCustomVariable;
+                        'set_if_format' = 'string';
+                        'order' = $Order;
                     }
-                }
+                );
 
-                # Determine wether a parameter is required based on given syntax-information
-                if ($parameter.required -eq $TRUE) {
-                    $Required = 'y';
-                } else {
-                    $Required = 'n';
-                }
+                $Basket.Command[$Data.Name].vars.Add($parameter.Name, $FALSE);
 
-                $IcingaCustomVariable = [string]::Format('PowerShell_{0}_{1}', (Get-Culture).TextInfo.ToTitleCase($parameter.type.name), $parameter.Name);
-
-                # Todo: Should we improve this? Actually the handling would be identical, we just need to assign
-                #       the proper field for this
-                if ($IcingaCustomVariable -eq 'PowerShell_Int32_Verbose' -Or $IcingaCustomVariable -eq 'PowerShell_Int_Verbose') {
-                    $IcingaCustomVariable = 'PowerShell_Object_Verbose';
-                }
-
-                [bool]$ArgumentKnown = $FALSE;
-
-                foreach ($argument in $Basket.Datafield.Keys) {
-                    if ($Basket.Datafield[$argument].varname -eq $IcingaCustomVariable) {
-                        $ArgumentKnown = $TRUE;
-                        break;
+            # Conditional whether type of parameter is array
+            } elseif ($parameter.type.name -eq 'array') {
+                $Basket.Command[$Data.Name].arguments.Add(
+                    [string]::Format('-{0}', $parameter.Name), @{
+                        'value' = @{
+                            'type' = 'Function';
+                            'body' = [string]::Format(
+                                'var arr = macro("{0}");{1}if (len(arr) == 0) {2}{1}return "$null";{1}{3}{1}return arr.join(",");',
+                                $IcingaCustomVariable,
+                                "`r`n",
+                                '{',
+                                '}'
+                            );
+                        }
+                        'order' = $Order;
                     }
+                );
+            } else {
+                # Default to Object
+                $Basket.Command[$Data.Name].arguments.Add(
+                    [string]::Format('-{0}', $parameter.Name), @{
+                        'value' = $IcingaCustomVariable;
+                        'order' = $Order;
+                    }
+                );
+
+                if ($parameter.name -ne 'Verbose') {
+                    $Basket.Command[$Data.Name].vars.Add($parameter.Name, '$$null');
+                } else {
+                    $Basket.Command[$Data.Name].vars.Add($parameter.Name, "0");
+                }
+            }
+
+            # Determine wether a parameter is required based on given syntax-information
+            if ($parameter.required -eq $TRUE) {
+                $Required = 'y';
+            } else {
+                $Required = 'n';
+            }
+
+            $IcingaCustomVariable = [string]::Format('PowerShell_{0}_{1}', (Get-Culture).TextInfo.ToTitleCase($parameter.type.name), $parameter.Name);
+
+            # Todo: Should we improve this? Actually the handling would be identical, we just need to assign
+            #       the proper field for this
+            if ($IcingaCustomVariable -eq 'PowerShell_Int32_Verbose' -Or $IcingaCustomVariable -eq 'PowerShell_Int_Verbose') {
+                $IcingaCustomVariable = 'PowerShell_Object_Verbose';
+            }
+
+            [bool]$ArgumentKnown = $FALSE;
+
+            foreach ($argument in $Basket.Datafield.Keys) {
+                if ($Basket.Datafield[$argument].varname -eq $IcingaCustomVariable) {
+                    $ArgumentKnown = $TRUE;
+                    break;
+                }
+            }
+
+            if ($ArgumentKnown) {
+                continue;
+            }
+
+            $DataListName = [string]::Format('PowerShell {0}', $parameter.Name)
+
+            if ($parameter.type.name -eq 'switch') {
+                $IcingaDataType='Boolean';
+            } elseif ($parameter.type.name -eq 'Object') {
+                if ($parameter.Name -eq 'Verbose') {
+                    $IcingaDataType='Datalist'
                 }
 
-                if ($ArgumentKnown) {
-                    continue;
-                }
+                $IcingaDataType='String';
 
-                $DataListName = [string]::Format('PowerShell {0}', $parameter.Name)
+            } elseif ($parameter.type.name -eq 'Array') {
+                $IcingaDataType='Array';
+            } else {
+                $IcingaDataType='String';
+            }
 
-                if ($parameter.type.name -eq 'switch') {
-                    $IcingaDataType='Boolean';
+            if($Basket.Datafield.ContainsKey('0') -eq $FALSE){
+                $Basket.Datafield.Add(
+                    '0', @{
+                        'varname' = 'PowerShell_Switch_NoPerfData';
+                        'caption' = 'Ignore Performance Data';
+                        'description' = 'Specifies if the plugin will return performance data output or not';
+                        'datatype' = 'Icinga\Module\Director\DataType\DataTypeBoolean';
+                        'format' = $NULL;
+                        'originalId' = '0';
+                    }
+                );
+            }
+
+            if($Basket.Datafield.ContainsKey('1') -eq $FALSE){
+                $Basket.Datafield.Add(
+                    '1', @{
+                        'varname' = 'PowerShell_Object_Verbose';
+                        'caption' = 'Verbose';
+                        'description' = 'Specifies if the plugin will return performance data output or not';
+                        'datatype' = 'Icinga\Module\Director\DataType\DataTypeDatalist';
+                        'format' = $NULL;
+                        'originalId' = '1';
+                        'settings' = @{
+                            'datalist' = 'PowerShell Verbose';
+                            'datatype' = 'string';
+                            'behavior' = 'strict';
+                        }
+                    }
+                );
+            }
+
+            $IcingaDataType = [string]::Format('Icinga\Module\Director\DataType\DataType{0}', $IcingaDataType)
+            
+            if ($Basket.Datafield.Values.varname -ne $IcingaCustomVariable) {
+                $Basket.Datafield.Add(
+                    [string]$FieldID, @{
+                        'varname' = $IcingaCustomVariable;
+                        'caption' = $parameter.Name;
+                        'description' = $parameter.Description.Text;
+                        'datatype' = $IcingaDataType;
+                        'format' = $NULL;
+                        'originalId' = [string]$FieldID;
+                    }
+                );
+
+                if ($parameter.Name -eq 'Verbose') {
+                    $Basket.Datafield[[string]$FieldID].Add(
+                        'settings', @{
+                            'behavior' = 'strict';
+                            'datatype' = 'string';
+                            'datalist' = $DataListName;
+                        }
+                    );
                 } elseif ($parameter.type.name -eq 'Object') {
-                    if ($parameter.Name -eq 'Verbose') {
-                        $IcingaDataType='Datalist'
-                    }
-
-                    $IcingaDataType='String';
-
-                } elseif ($parameter.type.name -eq 'Array') {
-                    $IcingaDataType='Array';
+                    $Basket.Datafield[[string]$FieldID].Add(
+                        'settings', @{
+                            'visbility' = 'visible';
+                        }
+                    );
                 } else {
-                    $IcingaDataType='String';
-                }
-
-                if($Basket.Datafield.ContainsKey('0') -eq $FALSE){
-                    $Basket.Datafield.Add(
-                        '0', @{
-                            'varname' = 'PowerShell_Switch_NoPerfData';
-                            'caption' = 'Ignore Performance Data';
-                            'description' = 'Specifies if the plugin will return performance data output or not';
-                            'datatype' = 'Icinga\Module\Director\DataType\DataTypeBoolean';
-                            'format' = $NULL;
-                            'originalId' = '0';
+                    $Basket.Datafield[[string]$FieldID].Add(
+                        'settings', @{
+                            'visbility' = 'visible';
                         }
                     );
                 }
 
-                if($Basket.Datafield.ContainsKey('1') -eq $FALSE){
-                    $Basket.Datafield.Add(
-                        '1', @{
-                            'varname' = 'PowerShell_Object_Verbose';
-                            'caption' = 'Verbose';
-                            'description' = 'Specifies if the plugin will return performance data output or not';
-                            'datatype' = 'Icinga\Module\Director\DataType\DataTypeDatalist';
-                            'format' = $NULL;
-                            'originalId' = '1';
-                            'settings' = @{
-                                'datalist' = 'PowerShell Verbose';
-                                'datatype' = 'string';
-                                'behavior' = 'strict';
-                            }
-                        }
-                    );
-                }
-
-                $IcingaDataType = [string]::Format('Icinga\Module\Director\DataType\DataType{0}', $IcingaDataType)
-                
-                if ($Basket.Datafield.Values.varname -ne $IcingaCustomVariable) {
-                    $Basket.Datafield.Add(
-                        [string]$FieldID, @{
-                            'varname' = $IcingaCustomVariable;
-                            'caption' = $parameter.Name;
-                            'description' = $parameter.Description.Text;
-                            'datatype' = $IcingaDataType;
-                            'format' = $NULL;
-                            'originalId' = [string]$FieldID;
-                        }
-                    );
-
-                    if ($parameter.Name -eq 'Verbose') {
-                        $Basket.Datafield[[string]$FieldID].Add(
-                            'settings', @{
-                                'behavior' = 'strict';
-                                'datatype' = 'string';
-                                'datalist' = $DataListName;
-                            }
-                        );
-                    } elseif ($parameter.type.name -eq 'Object') {
-                        $Basket.Datafield[[string]$FieldID].Add(
-                            'settings', @{
-                                'visbility' = 'visible';
-                            }
-                        );
-                    } else {
-                        $Basket.Datafield[[string]$FieldID].Add(
-                            'settings', @{
-                                'visbility' = 'visible';
-                            }
-                        );
-                    }
-
-                    # Increment FieldID, so unique datafields are added.
-                    [int]$FieldID = [int]$FieldID + 1;
-                }
+                # Increment FieldID, so unique datafields are added.
+                [int]$FieldID = [int]$FieldID + 1;
             }
 
             # Increment FieldNumeration, so unique fields for a given command are added.
