@@ -16,7 +16,7 @@ Import-IcingaLib icinga\plugin;
    [OK]: Check package "Process Check" is [OK]
    | 'Process Count "conhost"'=3;; 
 .EXAMPLE
-   PS>Invoke-IcingaCheckProcessCount -Process conhost,wininit -Warning 5 -Critical 10 -Verbose 4
+   PS>Invoke-IcingaCheckProcessCount -Process conhost,wininit -Warning 5 -Critical 10 -Verbosity 4
    [OK]: Check package "Process Check" is [OK] (Match All)
     \_ [OK]: Process Count "conhost" is 3
     \_ [OK]: Process Count "wininit" is 1
@@ -40,16 +40,17 @@ Import-IcingaLib icinga\plugin;
 function Invoke-IcingaCheckProcessCount()
 {
     param(
-        [int]$Warning,
-        [int]$Critical,
+        [int]$Warning       = $null,
+        [int]$Critical      = $null,
         [array]$Process,
         [switch]$NoPerfData,
-        $Verbose
+        [ValidateSet(0, 1, 2, 3)]
+        [int]$Verbosity          = 0
     );
 
     $ProcessInformation = (Get-IcingaProcessData -Name $Process)
 
-    $ProcessPackage = New-icingaCheckPackage -Name "Process Check" -OperatorAnd -Verbose $Verbose -NoPerfData $NoPerfData;
+    $ProcessPackage = New-icingaCheckPackage -Name "Process Check" -OperatorAnd -Verbose $Verbosity -NoPerfData $NoPerfData;
 
     if ($Process.Count -eq 0) {
         $ProcessCount = $ProcessInformation['Process Count'];
