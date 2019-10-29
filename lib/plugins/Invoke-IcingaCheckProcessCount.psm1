@@ -39,33 +39,33 @@ Import-IcingaLib icinga\plugin;
 
 function Invoke-IcingaCheckProcessCount()
 {
-    param(
-        [int]$Warning       = $null,
-        [int]$Critical      = $null,
-        [array]$Process,
-        [switch]$NoPerfData,
-        [ValidateSet(0, 1, 2, 3)]
-        [int]$Verbosity          = 0
-    );
+   param(
+      [int]$Warning       = $null,
+      [int]$Critical      = $null,
+      [array]$Process,
+      [switch]$NoPerfData,
+      [ValidateSet(0, 1, 2, 3)]
+      [int]$Verbosity     = 0
+   );
 
-    $ProcessInformation = (Get-IcingaProcessData -Name $Process)
+   $ProcessInformation = (Get-IcingaProcessData -Name $Process)
 
-    $ProcessPackage = New-icingaCheckPackage -Name "Process Check" -OperatorAnd -Verbose $Verbosity -NoPerfData $NoPerfData;
+   $ProcessPackage = New-icingaCheckPackage -Name "Process Check" -OperatorAnd -Verbose $Verbosity -NoPerfData $NoPerfData;
 
-    if ($Process.Count -eq 0) {
-        $ProcessCount = $ProcessInformation['Process Count'];
-        $IcingaCheck = New-IcingaCheck -Name ([string]::Format('Process Count')) -Value $ProcessCount;
-        $IcingaCheck.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
-        $ProcessPackage.AddCheck($IcingaCheck);
-    } else {
-        foreach ($proc in $process) {
-            $ProcessCount = $ProcessInformation."Processes".$proc.processlist.Count;
-            $IcingaCheck = New-IcingaCheck -Name ([string]::Format('Process Count "{0}"', $proc)) -Value $ProcessCount;
-            $IcingaCheck.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
-            $ProcessPackage.AddCheck($IcingaCheck);
-        }
-    }
+   if ($Process.Count -eq 0) {
+      $ProcessCount = $ProcessInformation['Process Count'];
+      $IcingaCheck = New-IcingaCheck -Name ([string]::Format('Process Count')) -Value $ProcessCount;
+      $IcingaCheck.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
+      $ProcessPackage.AddCheck($IcingaCheck);
+   } else {
+      foreach ($proc in $process) {
+         $ProcessCount = $ProcessInformation."Processes".$proc.processlist.Count;
+         $IcingaCheck = New-IcingaCheck -Name ([string]::Format('Process Count "{0}"', $proc)) -Value $ProcessCount;
+         $IcingaCheck.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
+         $ProcessPackage.AddCheck($IcingaCheck);
+      }
+   }
 
 
-    return (New-IcingaCheckResult -Check $ProcessPackage -NoPerfData $NoPerfData -Compile);
+   return (New-IcingaCheckResult -Check $ProcessPackage -NoPerfData $NoPerfData -Compile);
 }

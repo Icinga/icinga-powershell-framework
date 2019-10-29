@@ -40,10 +40,10 @@ function Invoke-IcingaCheckCPU()
     param(
         [int]$Warning       = $null,
         [int]$Critical      = $null,
-        [string]$Core               = '*',
+        [string]$Core       = '*',
         [switch]$NoPerfData,
         [ValidateSet(0, 1, 2, 3)]
-        [int]$Verbosity          = 0
+        [int]$Verbosity     = 0
     );
 
     $CpuCounter  = New-IcingaPerformanceCounter -Counter ([string]::Format('\Processor({0})\% processor time', $Core));

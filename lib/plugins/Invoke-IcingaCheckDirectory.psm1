@@ -58,29 +58,29 @@ Import-IcingaLib provider\directory;
 
 function Invoke-IcingaCheckDirectory()
 {
-    param(
-        [string]$Path,
-        [array]$FileNames,
-        [switch]$Recurse,
-        [int]$Critical      = $null,
-        [int]$Warning       = $null,
-        [string]$YoungerThen,
-        [string]$OlderThen,
-        [ValidateSet(0, 1, 2, 3)]
-        [int]$Verbosity          = 0
+   param(
+      [string]$Path,
+      [array]$FileNames,
+      [switch]$Recurse,
+      [int]$Critical      = $null,
+      [int]$Warning       = $null,
+      [string]$YoungerThen,
+      [string]$OlderThen,
+      [ValidateSet(0, 1, 2, 3)]
+      [int]$Verbosity     = 0
    );
 
-    $DirectoryData  = Get-IcingaDirectoryAll -Path $Path -FileNames $FileNames `
-                        -Recurse $Recurse -YoungerThen $YoungerThen -OlderThen $OlderThen;
-    $DirectoryCheck = New-IcingaCheck -Name $Path -Value $DirectoryData.Count -NoPerfData;
+   $DirectoryData  = Get-IcingaDirectoryAll -Path $Path -FileNames $FileNames `
+                     -Recurse $Recurse -YoungerThen $YoungerThen -OlderThen $OlderThen;
+   $DirectoryCheck = New-IcingaCheck -Name $Path -Value $DirectoryData.Count -NoPerfData;
 
-    $DirectoryCheck.WarnOutOfRange(
-        ($Warning)
-    ).CritOutOfRange(
-        ($Critical)
-    ) | Out-Null;
+   $DirectoryCheck.WarnOutOfRange(
+      ($Warning)
+   ).CritOutOfRange(
+      ($Critical)
+   ) | Out-Null;
 
-    $DirectoryPackage = New-IcingaCheckPackage -Name $Path -OperatorAnd -Checks $DirectoryCheck -Verbose $Verbosity;
+   $DirectoryPackage = New-IcingaCheckPackage -Name $Path -OperatorAnd -Checks $DirectoryCheck -Verbose $Verbosity;
 
-    return (New-IcingaCheckresult -Check $DirectoryPackage -NoPerfData $TRUE -Compile);
+   return (New-IcingaCheckresult -Check $DirectoryPackage -NoPerfData $TRUE -Compile);
 }

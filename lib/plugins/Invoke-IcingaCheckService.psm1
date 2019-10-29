@@ -32,40 +32,40 @@ Import-IcingaLib icinga\plugin;
 
 function Invoke-IcingaCheckService()
 {
-    param(
-        [array]$Service,
-        [ValidateSet('Stopped', 'StartPending', 'StopPending', 'Running', 'ContinuePending', 'PausePending', 'Paused')]
-        [string]$Status,
-        [ValidateSet(0, 1, 2, 3)]
-        [int]$Verbosity          = 0
-    );
+   param(
+      [array]$Service,
+      [ValidateSet('Stopped', 'StartPending', 'StopPending', 'Running', 'ContinuePending', 'PausePending', 'Paused')]
+      [string]$Status,
+      [ValidateSet(0, 1, 2, 3)]
+      [int]$Verbosity = 0
+   );
 
-    $ServicesPackage  = New-IcingaCheckPackage -Name 'Services' -OperatorAnd -Verbose $Verbosity;
+   $ServicesPackage  = New-IcingaCheckPackage -Name 'Services' -OperatorAnd -Verbose $Verbosity;
 
-    if ($Service.Count -ne 1) {
-        foreach ($services in $Service) {
-            $IcingaCheck = $null;
+   if ($Service.Count -ne 1) {
+      foreach ($services in $Service) {
+         $IcingaCheck = $null;
 
-            $FoundService    = Get-IcingaServices -Service $services;
-            $ServiceName     = Get-IcingaServiceCheckName -ServiceInput $services -Service $FoundService;
-            $ConvertedStatus = ConvertTo-ServiceStatusCode -Status $Status;
-            $StatusRaw       = $FoundService.Values.configuration.Status.raw;
-        
-            $IcingaCheck = New-IcingaCheck -Name $ServiceName -Value $StatusRaw -ObjectExists $FoundService -Translation $ProviderEnums.ServiceStatusName;
-            $IcingaCheck.CritIfNotMatch($ConvertedStatus) | Out-Null;
-            $ServicesPackage.AddCheck($IcingaCheck)
-        }
-    } else {
+         $FoundService    = Get-IcingaServices -Service $services;
+         $ServiceName     = Get-IcingaServiceCheckName -ServiceInput $services -Service $FoundService;
+         $ConvertedStatus = ConvertTo-ServiceStatusCode -Status $Status;
+         $StatusRaw       = $FoundService.Values.configuration.Status.raw;
+      
+         $IcingaCheck = New-IcingaCheck -Name $ServiceName -Value $StatusRaw -ObjectExists $FoundService -Translation $ProviderEnums.ServiceStatusName;
+         $IcingaCheck.CritIfNotMatch($ConvertedStatus) | Out-Null;
+         $ServicesPackage.AddCheck($IcingaCheck)
+      }
+   } else {
 
-    $FoundService = Get-IcingaServices -Service $Service;
-    $ServiceName  = Get-IcingaServiceCheckName -ServiceInput $Service -Service $FoundService;
-    $Status       = ConvertTo-ServiceStatusCode -Status $Status;
-    $StatusRaw    = $FoundService.Values.configuration.Status.raw;
+   $FoundService = Get-IcingaServices -Service $Service;
+   $ServiceName  = Get-IcingaServiceCheckName -ServiceInput $Service -Service $FoundService;
+   $Status       = ConvertTo-ServiceStatusCode -Status $Status;
+   $StatusRaw    = $FoundService.Values.configuration.Status.raw;
 
-    $IcingaCheck = New-IcingaCheck -Name $ServiceName -Value $StatusRaw -ObjectExists $FoundService -Translation $ProviderEnums.ServiceStatusName;
-    $IcingaCheck.CritIfNotMatch($Status) | Out-Null;
-    $ServicesPackage.AddCheck($IcingaCheck);
+   $IcingaCheck = New-IcingaCheck -Name $ServiceName -Value $StatusRaw -ObjectExists $FoundService -Translation $ProviderEnums.ServiceStatusName;
+   $IcingaCheck.CritIfNotMatch($Status) | Out-Null;
+   $ServicesPackage.AddCheck($IcingaCheck);
 
-    }
-    return (New-IcingaCheckResult -Name 'Services' -Check $ServicesPackage -NoPerfData $TRUE -Compile);
+   }
+   return (New-IcingaCheckResult -Name 'Services' -Check $ServicesPackage -NoPerfData $TRUE -Compile);
 }
