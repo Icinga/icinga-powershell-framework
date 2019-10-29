@@ -1,3 +1,19 @@
+<#
+.SYNOPSIS
+   Converts unit sizes to byte.
+.DESCRIPTION
+   This module converts a given unit size to byte.
+   e.g Kilobyte to Byte.
+
+   More Information on https://github.com/LordHepipud/icinga-module-windows
+.EXAMPLE
+   PS> ConvertTo-Byte -Unit TB 200
+   200000000000000
+.LINK
+   https://github.com/LordHepipud/icinga-module-windows
+.NOTES
+#>
+
 function ConvertTo-Byte()
 {
     param(
@@ -21,6 +37,22 @@ function ConvertTo-Byte()
 
     return $result;
 }
+
+<#
+.SYNOPSIS
+   Converts unit sizes to kilobyte.
+.DESCRIPTION
+   This module converts a given unit size to kilobyte.
+   e.g byte to kilobyte.
+
+   More Information on https://github.com/LordHepipud/icinga-module-windows
+.EXAMPLE
+   PS> ConvertTo-KiloByte -Unit TB 200
+   200000000000
+.LINK
+   https://github.com/LordHepipud/icinga-module-windows
+.NOTES
+#>
 
 function ConvertTo-KiloByte()
 {
@@ -46,6 +78,22 @@ function ConvertTo-KiloByte()
     return $result;
 }
 
+<#
+.SYNOPSIS
+   Converts unit sizes to megabyte.
+.DESCRIPTION
+   This module converts a given unit size to megabyte.
+   e.g byte to megabyte.
+
+   More Information on https://github.com/LordHepipud/icinga-module-windows
+.EXAMPLE
+   PS> ConvertTo-KiloByte -Unit TB 200
+   200000000
+.LINK
+   https://github.com/LordHepipud/icinga-module-windows
+.NOTES
+#>
+
 function ConvertTo-MegaByte()
 {
     param(
@@ -69,6 +117,22 @@ function ConvertTo-MegaByte()
     
     return $result;
 }
+
+<#
+.SYNOPSIS
+   Converts unit sizes to gigabyte.
+.DESCRIPTION
+   This module converts a given unit size to gigabyte.
+   e.g byte to gigabyte.
+
+   More Information on https://github.com/LordHepipud/icinga-module-windows
+.EXAMPLE
+   PS> ConvertTo-GigaByte -Unit TB 200
+   200000
+.LINK
+   https://github.com/LordHepipud/icinga-module-windows
+.NOTES
+#>
 
 function ConvertTo-GigaByte()
 {
@@ -94,6 +158,22 @@ function ConvertTo-GigaByte()
     return $result;
 }
 
+<#
+.SYNOPSIS
+   Converts unit sizes to terabyte.
+.DESCRIPTION
+   This module converts a given unit size to terabyte.
+   e.g byte to terabyte.
+
+   More Information on https://github.com/LordHepipud/icinga-module-windows
+.EXAMPLE
+   PS> ConvertTo-TeraByte -Unit GB 2000000
+   2000
+.LINK
+   https://github.com/LordHepipud/icinga-module-windows
+.NOTES
+#>
+
 function ConvertTo-TeraByte()
 {
     param(
@@ -117,6 +197,22 @@ function ConvertTo-TeraByte()
     
     return $result;
 }
+
+<#
+.SYNOPSIS
+   Converts unit sizes to petabyte.
+.DESCRIPTION
+   This module converts a given unit size to petabyte.
+   e.g byte to petabyte.
+
+   More Information on https://github.com/LordHepipud/icinga-module-windows
+.EXAMPLE
+   PS> ConvertTo-PetaByte -Unit GB 2000000
+   2
+.LINK
+   https://github.com/LordHepipud/icinga-module-windows
+.NOTES
+#>
 
 function ConvertTo-PetaByte()
 {

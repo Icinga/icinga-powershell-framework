@@ -1,5 +1,26 @@
 Import-IcingaLib core\tools;
-# year month week days hours minutes seconds milliseconds
+
+<#
+.SYNOPSIS
+   Converts unit to seconds.
+.DESCRIPTION
+   This module converts a given time unit to seconds.
+   e.g hours to seconds.
+
+   More Information on https://github.com/LordHepipud/icinga-module-windows
+
+.PARAMETER Value
+   Specify unit to be converted to seconds. Allowed units: ms, s, m, h, d, w, M, y
+   ms = miliseconds; s = seconds; m = minutes; h = hours; d = days; w = weeks; M = months; y = years;
+
+   Like 20d for 20 days.
+.EXAMPLE
+   PS> ConvertTo-Seconds 30d
+   2592000
+.LINK
+   https://github.com/LordHepipud/icinga-module-windows
+.NOTES
+#>
 
 function ConvertTo-Seconds()
 {
