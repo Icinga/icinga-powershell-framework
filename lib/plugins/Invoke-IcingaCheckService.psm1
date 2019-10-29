@@ -34,11 +34,13 @@ function Invoke-IcingaCheckService()
 {
     param(
         [array]$Service,
+        [ValidateSet('Stopped', 'StartPending', 'StopPending', 'Running', 'ContinuePending', 'PausePending', 'Paused')]
         [string]$Status,
-        [int]$Verbose
+        [ValidateSet(0, 1, 2, 3)]
+        [int]$Verbosity          = 0
     );
 
-    $ServicesPackage  = New-IcingaCheckPackage -Name 'Services' -OperatorAnd -Verbose $Verbose;
+    $ServicesPackage  = New-IcingaCheckPackage -Name 'Services' -OperatorAnd -Verbose $Verbosity;
 
     if ($Service.Count -ne 1) {
         foreach ($services in $Service) {

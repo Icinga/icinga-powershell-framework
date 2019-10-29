@@ -11,19 +11,19 @@ Import-IcingaLib provider\directory;
    This module is intended to be used to check how many files and directories are within are specified path. 
    Based on the thresholds set the status will change between 'OK', 'WARNING' or 'CRITICAL'. The function will return one of these given codes.
 .EXAMPLE
-   PS>Invoke-IcingaCheckDirectory -Path "C:\Users\Icinga\Downloads" -Warning 20 -Critical 30 -Verbose 3
+   PS>Invoke-IcingaCheckDirectory -Path "C:\Users\Icinga\Downloads" -Warning 20 -Critical 30 -Verbosity 3
    [OK]: Check package "C:\Users\Icinga\Downloads" is [OK] (Match All)
     \_ [OK]: C:\Users\Icinga\Downloads is 19
 .EXAMPLE
-   PS>Invoke-IcingaCheckDirectory -Path "C:\Users\Icinga\Downloads" -Warning 20 -Critical 30 -Verbose 3
+   PS>Invoke-IcingaCheckDirectory -Path "C:\Users\Icinga\Downloads" -Warning 20 -Critical 30 -Verbosity 3
    [WARNING]: Check package "C:\Users\Icinga\Downloads" is [WARNING] (Match All)
     \_ [WARNING]: C:\Users\Icinga\Downloads is 24
 .EXAMPLE
-   PS>Invoke-IcingaCheckDirectory -Path "C:\Users\Icinga\Downloads" -Warning 20 -Critical 30 -Verbose 3 -YoungerThen 20d -OlderThen 10d
+   PS>Invoke-IcingaCheckDirectory -Path "C:\Users\Icinga\Downloads" -Warning 20 -Critical 30 -Verbosity 3 -YoungerThen 20d -OlderThen 10d
    [OK]: Check package "C:\Users\Icinga\Downloads" is [OK] (Match All)
     \_ [OK]: C:\Users\Icinga\Downloads is 1
 .EXAMPLE
-   PS>Invoke-IcingaCheckDirectory -Path "C:\Users\Icinga\Downloads" -FileNames "*.txt","*.sql" -Warning 20 -Critical 30 -Verbose 3
+   PS>Invoke-IcingaCheckDirectory -Path "C:\Users\Icinga\Downloads" -FileNames "*.txt","*.sql" -Warning 20 -Critical 30 -Verbosity 3
    [OK]: Check package "C:\Users\Icinga\Downloads" is [OK] (Match All)
     \_ [OK]: C:\Users\Icinga\Downloads is 4
 .PARAMETER Warning
@@ -62,12 +62,13 @@ function Invoke-IcingaCheckDirectory()
         [string]$Path,
         [array]$FileNames,
         [switch]$Recurse,
-        [int]$Critical,
-        [int]$Warning,
+        [int]$Critical      = $null,
+        [int]$Warning       = $null,
         [string]$YoungerThen,
         [string]$OlderThen,
-        [int]$Verbose
-    );
+        [ValidateSet(0, 1, 2, 3)]
+        [int]$Verbosity          = 0
+   );
 
     $DirectoryData  = Get-IcingaDirectoryAll -Path $Path -FileNames $FileNames `
                         -Recurse $Recurse -YoungerThen $YoungerThen -OlderThen $OlderThen;
@@ -79,7 +80,7 @@ function Invoke-IcingaCheckDirectory()
         ($Critical)
     ) | Out-Null;
 
-    $DirectoryPackage = New-IcingaCheckPackage -Name $Path -OperatorAnd -Checks $DirectoryCheck -Verbose $Verbose;
+    $DirectoryPackage = New-IcingaCheckPackage -Name $Path -OperatorAnd -Checks $DirectoryCheck -Verbose $Verbosity;
 
     return (New-IcingaCheckresult -Check $DirectoryPackage -NoPerfData $TRUE -Compile);
 }
