@@ -53,5 +53,5 @@ function Show-IcingaPerformanceCounters()
         $counters.Add('error', $_.Exception.Message);
     }
 
-    return $counters;
+    return $counters.Keys;
 }
