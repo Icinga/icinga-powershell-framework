@@ -7,7 +7,7 @@ function Get-IcingaDirectoryAll()
         [array]$FileNames,
         [bool]$Recurse,
         [string]$YoungerThen,
-        [string]$OlderThen,
+        [string]$OlderThen
     );
 
     if ($Recurse -eq $TRUE) {
