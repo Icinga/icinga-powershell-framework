@@ -62,8 +62,8 @@ function Invoke-IcingaCheckDirectory()
       [string]$Path,
       [array]$FileNames,
       [switch]$Recurse,
-      [int]$Critical      = $null,
-      [int]$Warning       = $null,
+      $Critical           = $null,
+      $Warning            = $null,
       [string]$YoungerThen,
       [string]$OlderThen,
       [ValidateSet(0, 1, 2, 3)]

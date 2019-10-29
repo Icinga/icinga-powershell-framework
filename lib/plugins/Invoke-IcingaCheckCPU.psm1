@@ -38,8 +38,8 @@ Import-IcingaLib icinga\plugin;
 function Invoke-IcingaCheckCPU()
 {
     param(
-        [int]$Warning       = $null,
-        [int]$Critical      = $null,
+        $Warning            = $null,
+        $Critical           = $null,
         [string]$Core       = '*',
         [switch]$NoPerfData,
         [ValidateSet(0, 1, 2, 3)]

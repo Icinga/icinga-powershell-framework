@@ -40,8 +40,8 @@ Import-IcingaLib icinga\plugin;
 function Invoke-IcingaCheckProcessCount()
 {
    param(
-      [int]$Warning       = $null,
-      [int]$Critical      = $null,
+      $Warning            = $null,
+      $Critical           = $null,
       [array]$Process,
       [switch]$NoPerfData,
       [ValidateSet(0, 1, 2, 3)]
