@@ -44,39 +44,39 @@ Import-IcingaLib icinga\plugin;
 
 function Invoke-IcingaCheckUsedPartitionSpace()
 {
-    param(
-        [int]$Warning                 = $null,
-        [int]$Critical                = $null,
-        [array]$Include               = @(),
-        [array]$Exclude               = @(),
-        [switch]$NoPerfData,
-        [ValidateSet(0, 1, 2, 3)]
-        [int]$Verbosity               = 0
-    );
+   param(
+      [int]$Warning       = $null,
+      [int]$Critical      = $null,
+      [array]$Include     = @(),
+      [array]$Exclude     = @(),
+      [switch]$NoPerfData,
+      [ValidateSet(0, 1, 2, 3)]
+      [int]$Verbosity     = 0
+   );
 
-    $DiskFree = Get-IcingaDiskPartitions;
-    $DiskPackage = New-IcingaCheckPackage -Name 'Used Partition Space' -OperatorAnd -Verbos $Verbosity;
+   $DiskFree = Get-IcingaDiskPartitions;
+   $DiskPackage = New-IcingaCheckPackage -Name 'Used Partition Space' -OperatorAnd -Verbos $Verbosity;
 
-    foreach ($Letter in $DiskFree.Keys) {
-        if ($Include.Count -ne 0) {
-            $Include = $Include.trim(' :/\');
-            if (-Not ($Include.Contains($Letter))) {
-                continue;
-            }
-        }
+   foreach ($Letter in $DiskFree.Keys) {
+      if ($Include.Count -ne 0) {
+         $Include = $Include.trim(' :/\');
+         if (-Not ($Include.Contains($Letter))) {
+               continue;
+         }
+      }
 
 
-        if ($Exclude.Count -ne 0) {
-            $Exclude = $Exclude.trim(' :/\');
-            if ($Exclude.Contains($Letter)) {
-                continue;
-            }
-        }
+      if ($Exclude.Count -ne 0) {
+         $Exclude = $Exclude.trim(' :/\');
+         if ($Exclude.Contains($Letter)) {
+               continue;
+         }
+      }
 
-        $IcingaCheck = New-IcingaCheck -Name ([string]::Format('Partition {0}', $Letter)) -Value (100-($DiskFree.([string]::Format($Letter))."Free Space")) -Unit '%';
-        $IcingaCheck.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
-        $DiskPackage.AddCheck($IcingaCheck);
-    }
+      $IcingaCheck = New-IcingaCheck -Name ([string]::Format('Partition {0}', $Letter)) -Value (100-($DiskFree.([string]::Format($Letter))."Free Space")) -Unit '%';
+      $IcingaCheck.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
+      $DiskPackage.AddCheck($IcingaCheck);
+   }
 
-    return (New-IcingaCheckResult -Check $DiskPackage -NoPerfData $NoPerfData -Compile);
+   return (New-IcingaCheckResult -Check $DiskPackage -NoPerfData $NoPerfData -Compile);
 }
