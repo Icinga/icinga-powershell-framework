@@ -37,8 +37,8 @@ function Invoke-IcingaCheckUsers()
 {
     param (
         [array]$Username,
-        [int]$Warning        = $null,
-        [int]$Critical       = $null,
+        $Warning             = $null,
+        $Critical            = $null,
         [switch]$NoPerfData,
         [ValidateSet(0, 1, 2, 3)]
         [int]$Verbosity      = 0

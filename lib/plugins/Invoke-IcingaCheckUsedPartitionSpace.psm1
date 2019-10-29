@@ -45,8 +45,8 @@ Import-IcingaLib icinga\plugin;
 function Invoke-IcingaCheckUsedPartitionSpace()
 {
    param(
-      [int]$Warning       = $null,
-      [int]$Critical      = $null,
+      $Warning            = $null,
+      $Critical           = $null,
       [array]$Include     = @(),
       [array]$Exclude     = @(),
       [switch]$NoPerfData,

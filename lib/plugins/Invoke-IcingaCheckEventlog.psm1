@@ -14,8 +14,8 @@ function Invoke-IcingaCheckEventlog()
         [array]$ExcludeEntryType,
         [array]$IncludeMessage,
         [array]$ExcludeMessage,
-        $After = $null,
-        $Before = $null,
+        $After                    = $null,
+        $Before                   = $null,
         [switch]$DisableTimeCache = $FALSE,
         [switch]$NoPerfData,
         [ValidateSet(0, 1, 2, 3)]
