@@ -12,15 +12,14 @@ Import-IcingaLib core\tools;
 .FUNCTIONALITY
    This module is intended to check how long a Windows system has been up for.
    Based on the thresholds set the status will change between 'OK', 'WARNING' or 'CRITICAL'. The function will return one of these given codes.
-   
 .EXAMPLE
    PS> Invoke-IcingaCheckUptime -Warning 18d -Critical 20d
    [WARNING]: Check package "Windows Uptime: Days: 19 Hours: 13 Minutes: 48 Seconds: 29" is [WARNING]
    | 'Windows Uptime'=1691309,539176s;1555200;1728000 
-.PARAMETER IcingaCheckUsers_String_Warning
+.PARAMETER Warning
    Used to specify a Warning threshold. In this case a string.
    Allowed units include: ms, s, m, h, d, w, M, y
-.PARAMETER IcingaCheckUsers_String_Critical
+.PARAMETER Critical
    Used to specify a Critical threshold. In this case a string.
    Allowed units include: ms, s, m, h, d, w, M, y
 .INPUTS
