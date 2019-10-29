@@ -37,13 +37,14 @@ function Invoke-IcingaCheckUsers()
 {
     param (
         [array]$Username,
-        [int]$Warning,
-        [int]$Critical,
+        [int]$Warning            = $null,
+        [int]$Critical           = $null,
         [switch]$NoPerfData,
-        [int]$Verbose
-    );
+        [ValidateSet(0, 1, 2, 3)]
+        [int]$Verbosity          = 0
+   );
     
-    $UsersPackage  = New-IcingaCheckPackage -Name 'Users' -OperatorAnd -Verbose $Verbose;
+    $UsersPackage  = New-IcingaCheckPackage -Name 'Users' -OperatorAnd -Verbose $Verbosity;
     $LoggedOnUsers = Get-IcingaLoggedOnUsers -UserFilter $Username;
 
     if ($Username.Count -ne 0) {
