@@ -59,11 +59,11 @@ function Invoke-IcingaCheckService()
 
    $FoundService = Get-IcingaServices -Service $Service;
    $ServiceName  = Get-IcingaServiceCheckName -ServiceInput $Service -Service $FoundService;
-   $Status       = ConvertTo-ServiceStatusCode -Status $Status;
+   $IntStatus    = ConvertTo-ServiceStatusCode -Status $Status;
    $StatusRaw    = $FoundService.Values.configuration.Status.raw;
 
    $IcingaCheck = New-IcingaCheck -Name $ServiceName -Value $StatusRaw -ObjectExists $FoundService -Translation $ProviderEnums.ServiceStatusName;
-   $IcingaCheck.CritIfNotMatch($Status) | Out-Null;
+   $IcingaCheck.CritIfNotMatch($IntStatus) | Out-Null;
    $ServicesPackage.AddCheck($IcingaCheck);
 
    }
