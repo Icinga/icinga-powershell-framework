@@ -11,3 +11,17 @@ function Get-IcingaMemoryPerformanceCounter()
 
     return $Result;
 }
+
+function Get-IcingaPageFilePerformanceCounter()
+{
+    $PageFileStart       = (Show-IcingaPerformanceCounters -CounterCategory 'Paging File');
+    $PageFileCounter     = New-IcingaPerformanceCounterArray -Counter $PageFileStart;
+    [hashtable]$Result = @{};
+
+    foreach ($item in $PageFileCounter.Keys) {
+        $counter       = $item.trimstart('\Paging File\');
+        $Result.Add($counter, $PageFileCounter[$item]);
+    }
+
+    return $Result;
+}
