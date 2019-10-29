@@ -33,11 +33,11 @@ function Invoke-IcingaCheckUpdates()
 {
     param (
         [array]$UpdateFilter,
-        [int]$Warning         = $null,
-        [int]$Critical        = $null,
+        $Warning             = $null,
+        $Critical            = $null,
         [switch]$NoPerfData,
         [ValidateSet(0, 1, 2, 3)]
-        [int]$Verbosity       = 0
+        [int]$Verbosity      = 0
     );
 
     $PendingUpdates = Get-IcingaUpdatesPending;
