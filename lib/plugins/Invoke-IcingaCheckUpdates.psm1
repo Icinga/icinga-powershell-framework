@@ -33,10 +33,11 @@ function Invoke-IcingaCheckUpdates()
 {
     param (
         [array]$UpdateFilter,
-        [int]$Warning,
-        [int]$Critical,
+        [int]$Warning            = $null,
+        [int]$Critical           = $null,
         [switch]$NoPerfData,
-        [int]$Verbose
+        [ValidateSet(0, 1, 2, 3)]
+        [int]$Verbosity          = 0
     );
 
     $PendingUpdates = Get-IcingaUpdatesPending;
@@ -74,7 +75,7 @@ function Invoke-IcingaCheckUpdates()
     $IcingaCheck.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
     $UpdateCount.AddCheck($IcingaCheck);
 
-    $UpdatePackage  = New-IcingaCheckPackage -Name 'Updates' -OperatorAnd -Verbose $Verbose -Checks @(
+    $UpdatePackage  = New-IcingaCheckPackage -Name 'Updates' -OperatorAnd -Verbose $Verbosity -Checks @(
         $UpdateCount
     );
 

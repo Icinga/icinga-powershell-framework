@@ -35,11 +35,12 @@ Import-IcingaLib core\tools;
 function Invoke-IcingaCheckUptime()
 {
     param(
-        [string]$Warning,
-        [string]$Critical,
+        [string]$Warning         = $null,
+        [string]$Critical        = $null,
         [switch]$NoPerfData,
-        [int]$Verbose
-    );
+        [ValidateSet(0, 1, 2, 3)]
+        [int]$Verbosity          = 0
+   );
 
     $WindowsData = Get-IcingaWindows;
     $Name        = ([string]::Format('Windows Uptime: {0}', (ConvertFrom-TimeSpan -Seconds $WindowsData.windows.metadata.uptime.value)));
@@ -51,7 +52,7 @@ function Invoke-IcingaCheckUptime()
         (ConvertTo-SecondsFromIcingaThresholds -Threshold $Critical)
     ) | Out-Null;
 
-    $CheckPackage = New-IcingaCheckPackage -Name $Name -OperatorAnd -Checks $IcingaCheck -Verbose $Verbose;
+    $CheckPackage = New-IcingaCheckPackage -Name $Name -OperatorAnd -Checks $IcingaCheck -Verbose $Verbosity;
 
     return (New-IcingaCheckresult -Check $CheckPackage -NoPerfData $NoPerfData -Compile);
 }
