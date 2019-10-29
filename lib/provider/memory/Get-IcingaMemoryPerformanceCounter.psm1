@@ -1,6 +1,6 @@
 function Get-IcingaMemoryPerformanceCounter()
 {
-    $MemoryStart       = (Show-IcingaPerformanceCounters -CounterCategory 'Memory').Keys;
+    $MemoryStart       = (Show-IcingaPerformanceCounters -CounterCategory 'Memory');
     $MemoryCounter     = New-IcingaPerformanceCounterArray -Counter $MemoryStart;
     [hashtable]$Result = @{};
 
