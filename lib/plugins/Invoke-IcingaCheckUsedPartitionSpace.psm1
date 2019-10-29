@@ -45,16 +45,17 @@ Import-IcingaLib icinga\plugin;
 function Invoke-IcingaCheckUsedPartitionSpace()
 {
     param(
-        [int]$Warning,
-        [int]$Critical,
+        [int]$Warning                 = $null,
+        [int]$Critical                = $null,
         [array]$Include               = @(),
         [array]$Exclude               = @(),
         [switch]$NoPerfData,
-        $Verbose
+        [ValidateSet(0, 1, 2, 3)]
+        [int]$Verbosity               = 0
     );
 
     $DiskFree = Get-IcingaDiskPartitions;
-    $DiskPackage = New-IcingaCheckPackage -Name 'Used Partition Space' -OperatorAnd -Verbos $Verbose;
+    $DiskPackage = New-IcingaCheckPackage -Name 'Used Partition Space' -OperatorAnd -Verbos $Verbosity;
 
     foreach ($Letter in $DiskFree.Keys) {
         if ($Include.Count -ne 0) {

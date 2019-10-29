@@ -38,15 +38,16 @@ Import-IcingaLib icinga\plugin;
 function Invoke-IcingaCheckCPU()
 {
     param(
-        [int]$Warning,
-        [int]$Critical,
-        $Core               = '*',
+        [int]$Warning       = $null,
+        [int]$Critical      = $null,
+        [string]$Core               = '*',
         [switch]$NoPerfData,
-        $Verbose
+        [ValidateSet(0, 1, 2, 3)]
+        [int]$Verbosity          = 0
     );
 
     $CpuCounter  = New-IcingaPerformanceCounter -Counter ([string]::Format('\Processor({0})\% processor time', $Core));
-    $CpuPackage  = New-IcingaCheckPackage -Name 'CPU Load' -OperatorAnd -Verbos $Verbose;
+    $CpuPackage  = New-IcingaCheckPackage -Name 'CPU Load' -OperatorAnd -Verbose $Verbosity;
     $CpuCount    = ([string](Get-IcingaCpuCount)).Length;
 
     if ($CpuCounter.Counters.Count -ne 0) {
