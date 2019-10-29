@@ -1,5 +1,39 @@
 Import-IcingaLib icinga\plugin;
 
+<#
+.SYNOPSIS
+   Performs checks on various performance counter
+.DESCRIPTION
+   Invoke-IcingaCheckDirectory returns either 'OK', 'WARNING' or 'CRITICAL', based on the thresholds set.
+   e.g 
+
+   More Information on https://github.com/LordHepipud/icinga-module-windows
+.FUNCTIONALITY
+   This module is intended to be used to perform checks on different performance counter.
+   Based on the thresholds set the status will change between 'OK', 'WARNING' or 'CRITICAL'. The function will return one of these given codes.
+.EXAMPLE
+   PS>
+.EXAMPLE
+   PS>
+.EXAMPLE
+   PS>
+.EXAMPLE
+   PS>
+.PARAMETER Warning
+   Used to specify a Warning threshold. In this case an ??? value.
+.PARAMETER Critical
+   Used to specify a Critical threshold. In this case an ??? value.
+.PARAMETER PerfCounter
+   Used to specify an array of performance counter to check against.
+.INPUTS
+   System.String
+.OUTPUTS
+   System.String
+.LINK
+   https://github.com/LordHepipud/icinga-module-windows
+.NOTES
+#>
+
 function Invoke-IcingaCheckPerfcounter()
 {
     param(

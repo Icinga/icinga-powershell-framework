@@ -1,5 +1,61 @@
 Import-IcingaLib icinga\plugin;
 
+<#
+.SYNOPSIS
+   ???
+.DESCRIPTION
+   ???
+   e.g 
+
+   More Information on https://github.com/LordHepipud/icinga-module-windows
+.FUNCTIONALITY
+   ???
+   Based on the thresholds set the status will change between 'OK', 'WARNING' or 'CRITICAL'. The function will return one of these given codes.
+.EXAMPLE
+   PS>
+.EXAMPLE
+   PS>
+.EXAMPLE
+   PS>
+.EXAMPLE
+   PS>
+.PARAMETER Warning
+   Used to specify a Warning threshold. In this case an ??? value.
+.PARAMETER Critical
+   Used to specify a Critical threshold. In this case an ??? value.
+.PARAMETER LogName
+   Used to specify a certain log.
+.PARAMETER IncludeEventId
+   Used to specify an array of events identified by their id to be included.
+.PARAMETER ExcludeEventId
+   Used to specify an array of events identified by their id to be excluded.
+.PARAMETER IncludeUsername
+   Used to specify an array of usernames within the eventlog to be included.
+.PARAMETER ExcludeUsername
+   Used to specify an array of usernames within the eventlog to be excluded.
+.PARAMETER IncludeEntryType
+   Used to specify an array of entry types within the eventlog to be included.
+.PARAMETER ExcludeEntryType
+   Used to specify an array of entry types within the eventlog to be excluded.
+.PARAMETER IncludeMessage
+   Used to specify an array of messages within the eventlog to be included.
+.PARAMETER ExcludeMessage
+   Used to specify an array of messages within the eventlog to be excluded.
+.PARAMETER After
+   ???
+.PARAMETER Before
+   ???
+.PARAMETER DisableTimeCache
+   Switch to disable the time cache on a check. If this parameter is set the time cache is disabled.
+.INPUTS
+   System.String
+.OUTPUTS
+   System.String
+.LINK
+   https://github.com/LordHepipud/icinga-module-windows
+.NOTES
+#>
+
 function Invoke-IcingaCheckEventlog()
 {
     param(
