@@ -5,20 +5,19 @@ Import-IcingaLib icinga\plugin;
    Performs checks on various performance counter
 .DESCRIPTION
    Invoke-IcingaCheckDirectory returns either 'OK', 'WARNING' or 'CRITICAL', based on the thresholds set.
-   e.g 
+   Use "Show-IcingaPerformanceCounterCategories" to see all performance counter categories available.
+   To gain insight on an specific performance counter use "Show-IcingaPerformanceCounters <performance counter category>"
+   e.g '
 
    More Information on https://github.com/LordHepipud/icinga-module-windows
 .FUNCTIONALITY
    This module is intended to be used to perform checks on different performance counter.
    Based on the thresholds set the status will change between 'OK', 'WARNING' or 'CRITICAL'. The function will return one of these given codes.
 .EXAMPLE
-   PS>
-.EXAMPLE
-   PS>
-.EXAMPLE
-   PS>
-.EXAMPLE
-   PS>
+   PS> Invoke-IcingaCheckPerfCounter -PerfCounter '\processor(*)\% processor time' -Warning 60 -Critical 90
+   [WARNING]: Check package "Performance Counter" is [WARNING]
+   | 'processor1_processor_time'=68.95;60;90 'processor3_processor_time'=4.21;60;90 'processor5_processor_time'=9.5;60;90 'processor_Total_processor_time'=20.6;60;90 'processor0_processor_time'=5.57;60;90 'processor2_processor_time'=0;60;90 'processor4_processor_time'=6.66;60;90
+   1
 .PARAMETER Warning
    Used to specify a Warning threshold. In this case an ??? value.
 .PARAMETER Critical
