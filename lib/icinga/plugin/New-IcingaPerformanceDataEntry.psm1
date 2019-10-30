@@ -32,7 +32,7 @@ function New-IcingaPerformanceDataEntry()
 
     return ([string]::Format(
         "'{0}'={1}{2};{3};{4}{5}{6} ",
-        $LabelName,
+        $LabelName.ToLower(),
         (Format-IcingaPerfDataValue $PerfValue),
         $PerfDataObject.unit,
         (Format-IcingaPerfDataValue $PerfDataObject.warning),
