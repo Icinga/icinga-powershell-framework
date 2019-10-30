@@ -17,17 +17,12 @@ Import-IcingaLib core\tools;
    [WARNING]: % Memory Check 78.74 is greater than 60
    1
 .EXAMPLE
-   PS> Invoke-IcingaCheckMemory -Unit GB -Critical 1850000KB -Warning 2500000KB -CriticalPercent 80 -WarningPercent 30 -Verbosity 3
-   [Warning]: Check package "Memory Usage" is [Warning] (Match All)
-    \_ [WARNING]: Memory Percent 35.95% is greater than 30%
-    \_ [OK]: PageFile Percent is 16.42%
-   | 'Memory_Percent'=35.95%;30;80;0;100 'Used_Bytes_in_GB'=3.44;2.5;1.85 'PageFile_Percent'=16.42%;;;0;100 
-   1
-.PARAMETER Warning
+   PS> 
+.PARAMETER WarningBytes
    Used to specify a Warning threshold. In this case an string value.
 
    The string has to be like, "20B", "20KB", "20MB", "20GB", "20TB", "20TB"
-.PARAMETER Critical
+.PARAMETER CriticalBytes
    Used to specify a Critical threshold. In this case an string value.
 
    The string has to be like, "20B", "20KB", "20MB", "20GB", "20TB", "20TB"
@@ -39,22 +34,19 @@ Import-IcingaLib core\tools;
 .PARAMETER CriticalPercent
    Used to specify a Critical threshold. In this case an integer value.
 
-   Like 30 for 30%. If memory usage is above 30%, the check will return CRITICAL.
+   Like 30 for 30%. If memory usage is below 30%, the check will return CRITICAL.
 
 .PARAMETER CriticalPercent
    Used to specify a Critical threshold. In this case an integer value.
 
-   Like 30 for 30%. If memory usage is above 30%, the check will return Warning.
-
-.PARAMETER Unit
-   Determines output Unit. Allowed Units: 'B', 'KB', 'MB', 'GB', 'TB', 'PB'
+   Like 30 for 30%. If memory usage is below 30%, the check will return Warning.
 
 .INPUTS
    System.String
 
 .OUTPUTS
    System.String
-   
+
 .LINK
    https://github.com/LordHepipud/icinga-module-windows
 .NOTES
@@ -63,34 +55,38 @@ Import-IcingaLib core\tools;
 function Invoke-IcingaCheckMemory()
 {
     param(
-        [string]$Critical   = $null,
-        [string]$Warning    = $null,
-        [string]$Unit       = 'B',
-        $CriticalPercent    = $null,
-        $WarningPercent     = $null,
+        [string]$CriticalBytes = $null,
+        [string]$WarningBytes  = $null,
+        $CriticalPercent       = $null,
+        $WarningPercent        = $null,
         [switch]$PageFile,
         [ValidateSet(0, 1, 2, 3)]
-        [int]$Verbosity     = 0,
+        [int]$Verbosity        = 0,
         [switch]$NoPerfData
      );
 
-    $CrticalConverted = Convert-Bytes $Critical -Unit $Unit
-    $WarningConverted = Convert-Bytes $Warning -Unit $Unit
-
+   If ([string]::IsNullOrEmpty($CriticalBytes) -eq $FALSE) {
+      [decimal]$CrticalConverted = Convert-Bytes $CriticalBytes -Unit B
+   }
+   If ([string]::IsNullOrEmpty($WarningBytes) -eq $FALSE) {
+      [decimal]$WarningConverted = Convert-Bytes $WarningBytes -Unit B
+   }
     $MemoryPackage = New-IcingaCheckPackage -Name 'Memory Usage' -OperatorAnd -Verbos $Verbosity;
     $MemoryData    = (Get-IcingaMemoryPerformanceCounter);
   
-
-    $MemoryPerc    = New-IcingaCheck -Name 'Memory Percent' -Value $MemoryData['Memory Used %'] -Unit '%';
-    $MemoryByte    = New-IcingaCheck -Name "Used Bytes in $Unit" -Value (Convert-Bytes ([string]::Format('{0}B', $MemoryData['Memory used Bytes'])) -Unit $Unit);
+    $MemoryPerc             = New-IcingaCheck -Name 'Memory Percent Available' -Value $MemoryData['Memory Available %'] -Unit '%';
+    $MemoryByteUsed         = New-IcingaCheck -Name "Used Bytes" -Value $MemoryData['Memory Used Bytes'] -Unit 'B';
+    $MemoryByteAvailable    = New-IcingaCheck -Name "Available Bytes" -Value $MemoryData['Memory Available Bytes'] -Unit 'B';
     #$PageFileCheck = New-IcingaCheck -Name 'PageFile Percent' -Value $MemoryData['PageFile %'] -Unit '%';
 
     # PageFile To-Do
-    $MemoryByte.WarnOutOfRange($WarningConverted).CritOutOfRange($CrticalConverted) | Out-Null;
-    $MemoryPerc.WarnOutOfRange($WarningPercent).CritOutOfRange($CriticalPercent) | Out-Null;
+    $MemoryByteAvailable.WarnIfLowerThan($WarningConverted).CritIfLowerThan($CrticalConverted) | Out-Null;
+    $MemoryPerc.WarnIfLowerThan($WarningPercent).CritIfLowerThan($CriticalPercent) | Out-Null;
     
     $MemoryPackage.AddCheck($MemoryPerc);
-    $MemoryPackage.AddCheck($MemoryByte);
+    $MemoryPackage.AddCheck($MemoryByteAvailable);
+    $MemoryPackage.AddCheck($MemoryByteUsed);
+
     #$MemoryPackage.AddCheck($PageFileCheck);
     
     return (New-IcingaCheckResult -Check $MemoryPackage -NoPerfData $NoPerfData -Compile);
