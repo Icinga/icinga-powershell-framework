@@ -5,7 +5,7 @@ function Convert-Bytes()
        [string]$Unit
     );
 
-    If (($Value -Match "(^[0-9]*) ?(B|KB|MB|GB|TB|PT|Kibi|Mibi|Gibi|Tibi|Pibi)")) {
+    If (($Value -Match "(^[\d\.]*) ?(B|KB|MB|GB|TB|PT|Kibi|Mibi|Gibi|Tibi|Pibi)")) {
         [single]$CurrentValue = $Matches[1];
         [string]$CurrentUnit = $Matches[2];
 
@@ -16,7 +16,7 @@ function Convert-Bytes()
     
         
         switch ($Unit) {
-            #{ 'B' -contains $_}  { $FinalValue = ConvertTo-ByteSI $CurrentValue -Unit B;      $boolOption = $true;}
+            { 'B' -contains $_}  { $FinalValue = $CurrentValue;      $boolOption = $true;}
             { 'KB' -contains $_} { $FinalValue = ConvertTo-KiloByte $CurrentValue -Unit B;  $boolOption = $true;}
             { 'MB' -contains $_} { $FinalValue = ConvertTo-MegaByte $CurrentValue -Unit B;  $boolOption = $true;}
             { 'GB' -contains $_} { $FinalValue = ConvertTo-GigaByte $CurrentValue -Unit B;  $boolOption = $true;}
