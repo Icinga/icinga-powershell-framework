@@ -42,9 +42,9 @@ function Invoke-IcingaCheckUptime()
    );
 
    $WindowsData = Get-IcingaWindows;
-   $Name        = ([string]::Format('Windows Uptime: {0}', (ConvertFrom-TimeSpan -Seconds $WindowsData.windows.metadata.uptime.value)));
+   $Name        = ([string]::Format('System Uptime: {0}', (ConvertFrom-TimeSpan -Seconds $WindowsData.windows.metadata.uptime.value)));
 
-   $IcingaCheck = New-IcingaCheck -Name 'Windows Uptime' -Value $WindowsData.windows.metadata.uptime.value -Unit 's';
+   $IcingaCheck = New-IcingaCheck -Name 'System Uptime' -Value $WindowsData.windows.metadata.uptime.value -Unit 's';
    $IcingaCheck.WarnOutOfRange(
       (ConvertTo-SecondsFromIcingaThresholds -Threshold $Warning)
    ).CritOutOfRange(
