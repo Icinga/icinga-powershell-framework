@@ -6,8 +6,8 @@ function Get-IcingaDirectoryAll()
         [string]$Path,
         [array]$FileNames,
         [bool]$Recurse,
-        [string]$YoungerThen,
-        [string]$OlderThen
+        [string]$YoungerThan,
+        [string]$OlderThan
     );
 
     if ($Recurse -eq $TRUE) {
@@ -16,17 +16,17 @@ function Get-IcingaDirectoryAll()
         $DirectoryData = Get-ChildItem -Path $Path -Include $FileNames;
     }
     
-    if ([string]::IsNullOrEmpty($OlderThen) -eq $FALSE -And [string]::IsNullOrEmpty($YoungerThen) -eq $FALSE) {
-      $OlderThen = Set-NumericNegative (ConvertTo-Seconds $OlderThen);
-      $DirectoryData = ($DirectoryData | Where-Object {$_.LastWriteTime -lt (Get-Date).AddSeconds($OlderThen)})
-      $YoungerThen = Set-NumericNegative (ConvertTo-Seconds $YoungerThen);
-      $DirectoryData = ($DirectoryData | Where-Object {$_.LastWriteTime -gt (Get-Date).AddSeconds($YoungerThen)})
-    } elseif ([string]::IsNullOrEmpty($OlderThen) -eq $FALSE) {
-      $OlderThen = Set-NumericNegative (ConvertTo-Seconds $OlderThen);
-      $DirectoryData = ($DirectoryData | Where-Object {$_.LastWriteTime -lt (Get-Date).AddSeconds($OlderThen)})
-    } elseif ([string]::IsNullOrEmpty($YoungerThen) -eq $FALSE) {
-      $YoungerThen = Set-NumericNegative (ConvertTo-Seconds $YoungerThen);
-      $DirectoryData = ($DirectoryData | Where-Object {$_.LastWriteTime -gt ((Get-Date).AddSeconds($YoungerThen))})
+    if ([string]::IsNullOrEmpty($OlderThan) -eq $FALSE -And [string]::IsNullOrEmpty($YoungerThan) -eq $FALSE) {
+      $OlderThan = Set-NumericNegative (ConvertTo-Seconds $OlderThan);
+      $DirectoryData = ($DirectoryData | Where-Object {$_.LastWriteTime -lt (Get-Date).AddSeconds($OlderThan)})
+      $YoungerThan = Set-NumericNegative (ConvertTo-Seconds $YoungerThan);
+      $DirectoryData = ($DirectoryData | Where-Object {$_.LastWriteTime -gt (Get-Date).AddSeconds($YoungerThan)})
+    } elseif ([string]::IsNullOrEmpty($OlderThan) -eq $FALSE) {
+      $OlderThan = Set-NumericNegative (ConvertTo-Seconds $OlderThan);
+      $DirectoryData = ($DirectoryData | Where-Object {$_.LastWriteTime -lt (Get-Date).AddSeconds($OlderThan)})
+    } elseif ([string]::IsNullOrEmpty($YoungerThan) -eq $FALSE) {
+      $YoungerThan = Set-NumericNegative (ConvertTo-Seconds $YoungerThan);
+      $DirectoryData = ($DirectoryData | Where-Object {$_.LastWriteTime -gt ((Get-Date).AddSeconds($YoungerThan))})
     }
 
     return $DirectoryData;
