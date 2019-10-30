@@ -26,6 +26,7 @@
     'B'  = 'bytes';
     'KB' = 'kilobytes';
     'MB' = 'megabytes';
+    'GB' = 'gigabytes';
     'TB' = 'terabytes';
     'c'  = 'counter';
 };
