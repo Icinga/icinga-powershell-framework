@@ -56,14 +56,14 @@ function Invoke-IcingaCheckUsers()
                $LoginCount = $LoggedOnUsers.users.$User.count;
          }
 
-         $IcingaCheck = New-IcingaCheck -Name ([string]::Format('Logged On User "{0}"', $User)) -Value $LoginCount;
+         $IcingaCheck = New-IcingaCheck -Name ([string]::Format('Logged On Users "{0}"', $User)) -Value $LoginCount;
          $IcingaCheck.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
          $UsersPackage.AddCheck($IcingaCheck);
       }
    } else {
       foreach ($User in $LoggedOnUsers.users.Keys) {
          $UsersPackage.AddCheck(
-               (New-IcingaCheck -Name ([string]::Format('Logged On User "{0}"', $User)) -Value $LoggedOnUsers.users.$User.count)
+               (New-IcingaCheck -Name ([string]::Format('Logged On Users "{0}"', $User)) -Value $LoggedOnUsers.users.$User.count)
          );
       }
       $IcingaCheck = New-IcingaCheck -Name 'Logged On Users' -Value $LoggedOnUsers.count;
