@@ -8,7 +8,7 @@ function New-StringTree()
         return '';
     }
 
-    [string]$spaces = ' \_ ';
+    [string]$spaces = '\_ ';
     
     while ($Spacing -gt 1) {
         $Spacing -= 1;
