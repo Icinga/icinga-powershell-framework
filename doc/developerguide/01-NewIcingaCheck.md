@@ -44,6 +44,7 @@ For performance metrics you can provide a `Unit` to ensure your graphing is disp
 | B    | Bytes        | The input is indicated as quantity in bytes     |
 | KB   | Kilobytes    | The input is indicated as quantity in kilobytes |
 | MB   | Megabytes    | The input is indicated as quantity in megabytes |
+| GB   | Gigabytes    | The input is indicated as quantity in gigabytes |
 | TB   | Terabytes    | The input is indicated as quantity in terabytes |
 | c    | Counter      | A continues counter increasing values over time |
 
