@@ -9,7 +9,7 @@ function ConvertFrom-TimeSpan()
     $TimeSpan = [TimeSpan]::FromSeconds($Seconds);
 
     return [string]::Format(
-        'Days: {0} Hours: {1} Minutes: {2} Seconds: {3}',
+        '{0}d {1}h {2}m {3}s',
         $TimeSpan.Days,
         $TimeSpan.Hours,
         $TimeSpan.Minutes,
