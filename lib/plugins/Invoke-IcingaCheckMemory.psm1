@@ -44,16 +44,17 @@ function Invoke-IcingaCheckMemory()
         $WarningPercent     = $null,
         [switch]$PageFile,
         [ValidateSet(0, 1, 2, 3)]
-        [int]$Verbosity     = 0
+        [int]$Verbosity     = 0,
+        [switch]$NoPerfData
      );
 
     $MemoryPackage = New-IcingaCheckPackage -Name 'Memory Usage' -OperatorAnd -Verbos $Verbosity;
     $MemoryData    = (Get-IcingaMemoryPerformanceCounterFormated);
   
 
-    $MemoryPerc = New-IcingaCheck -Name 'Memory Percent' -Value $MemoryData.'Memory %' -NoPerfData;
-    $MemoryByte = New-IcingaCheck -Name 'Memory GigaByte' -Value $MemoryData.'Memory GigaByte' -NoPerfData;
-    $PageFile   = New-IcingaCheck -Name 'PageFile Percent' -Value $MemoryData.'PageFile %' -NoPerfData;
+    $MemoryPerc    = New-IcingaCheck -Name 'Memory Percent' -Value $MemoryData['Memory %'] -Unit '%';
+    $MemoryByte    = New-IcingaCheck -Name 'Memory GigaByte' -Value $MemoryData['Memory GigaByte'] -Unit 'GB';
+    $PageFileCheck = New-IcingaCheck -Name 'PageFile Percent' -Value $MemoryData['PageFile %'] -Unit '%';
 
     # PageFile To-Do
     $MemoryPerc.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
@@ -61,6 +62,7 @@ function Invoke-IcingaCheckMemory()
     
     $MemoryPackage.AddCheck($MemoryPerc);
     $MemoryPackage.AddCheck($MemoryByte);
+    $MemoryPackage.AddCheck($PageFileCheck);
     
-     return (New-IcingaCheckResult -Check $MemoryPackage -NoPerfData $TRUE -Compile);
+    return (New-IcingaCheckResult -Check $MemoryPackage -NoPerfData $NoPerfData -Compile);
 }
