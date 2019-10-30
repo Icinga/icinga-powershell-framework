@@ -14,7 +14,7 @@
 .NOTES
 #>
 
-function ConvertTo-Byte()
+function ConvertTo-ByteSI()
 {
     param(
        [single]$Value,
