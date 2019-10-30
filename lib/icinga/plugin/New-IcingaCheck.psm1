@@ -15,28 +15,33 @@ function New-IcingaCheck()
     );
 
     $Check = New-Object -TypeName PSObject;
-    $Check | Add-Member -membertype NoteProperty -name 'name'         -value $Name;
-    $Check | Add-Member -membertype NoteProperty -name 'verbose'      -value 0;
-    $Check | Add-Member -membertype NoteProperty -name 'messages'     -value @();
-    $Check | Add-Member -membertype NoteProperty -name 'oks'          -value @();
-    $Check | Add-Member -membertype NoteProperty -name 'warnings'     -value @();
-    $Check | Add-Member -membertype NoteProperty -name 'criticals'    -value @();
-    $Check | Add-Member -membertype NoteProperty -name 'unknowns'     -value @();
-    $Check | Add-Member -membertype NoteProperty -name 'value'        -value $Value;
-    $Check | Add-Member -membertype NoteProperty -name 'exitcode'     -value -1;
-    $Check | Add-Member -membertype NoteProperty -name 'unit'         -value $Unit;
-    $Check | Add-Member -membertype NoteProperty -name 'spacing'      -value 0;
-    $Check | Add-Member -membertype NoteProperty -name 'compiled'     -value $FALSE;
-    $Check | Add-Member -membertype NoteProperty -name 'perfdata'     -value (-Not $NoPerfData);
-    $Check | Add-Member -membertype NoteProperty -name 'warning'      -value '';
-    $Check | Add-Member -membertype NoteProperty -name 'critical'     -value '';
-    $Check | Add-Member -membertype NoteProperty -name 'minimum'      -value $Minimum;
-    $Check | Add-Member -membertype NoteProperty -name 'maximum'      -value $Maximum;
-    $Check | Add-Member -membertype NoteProperty -name 'objectexists' -value $ObjectExists;
-    $Check | Add-Member -membertype NoteProperty -name 'translation'  -value $Translation;
-    $Check | Add-Member -membertype NoteProperty -name 'checks'       -value $null;
-    $Check | Add-Member -membertype NoteProperty -name 'completed'    -value $FALSE;
-    $Check | Add-Member -membertype NoteProperty -name 'checkcommand' -value '';
+    $Check | Add-Member -membertype NoteProperty -name 'name'           -value $Name;
+    $Check | Add-Member -membertype NoteProperty -name 'verbose'        -value 0;
+    $Check | Add-Member -membertype NoteProperty -name 'messages'       -value @();
+    $Check | Add-Member -membertype NoteProperty -name 'oks'            -value @();
+    $Check | Add-Member -membertype NoteProperty -name 'warnings'       -value @();
+    $Check | Add-Member -membertype NoteProperty -name 'criticals'      -value @();
+    $Check | Add-Member -membertype NoteProperty -name 'unknowns'       -value @();
+    $Check | Add-Member -membertype NoteProperty -name 'okchecks'       -value @();
+    $Check | Add-Member -membertype NoteProperty -name 'warningchecks'  -value @();
+    $Check | Add-Member -membertype NoteProperty -name 'criticalchecks' -value @();
+    $Check | Add-Member -membertype NoteProperty -name 'unknownchecks'  -value @();
+    $Check | Add-Member -membertype NoteProperty -name 'value'          -value $Value;
+    $Check | Add-Member -membertype NoteProperty -name 'exitcode'       -value -1;
+    $Check | Add-Member -membertype NoteProperty -name 'unit'           -value $Unit;
+    $Check | Add-Member -membertype NoteProperty -name 'spacing'        -value 0;
+    $Check | Add-Member -membertype NoteProperty -name 'compiled'       -value $FALSE;
+    $Check | Add-Member -membertype NoteProperty -name 'perfdata'       -value (-Not $NoPerfData);
+    $Check | Add-Member -membertype NoteProperty -name 'warning'        -value '';
+    $Check | Add-Member -membertype NoteProperty -name 'critical'       -value '';
+    $Check | Add-Member -membertype NoteProperty -name 'minimum'        -value $Minimum;
+    $Check | Add-Member -membertype NoteProperty -name 'maximum'        -value $Maximum;
+    $Check | Add-Member -membertype NoteProperty -name 'objectexists'   -value $ObjectExists;
+    $Check | Add-Member -membertype NoteProperty -name 'translation'    -value $Translation;
+    $Check | Add-Member -membertype NoteProperty -name 'checks'         -value $null;
+    $Check | Add-Member -membertype NoteProperty -name 'completed'      -value $FALSE;
+    $Check | Add-Member -membertype NoteProperty -name 'checkcommand'   -value '';
+    $Check | Add-Member -membertype NoteProperty -name 'checkpackage'   -value $FALSE;
 
     $Check | Add-Member -membertype ScriptMethod -name 'HandleDaemon' -value {
         # Only apply this once the checkcommand is set
@@ -75,6 +80,18 @@ function New-IcingaCheck()
 
         $this.checkcommand = $CheckCommand;
         $this.HandleDaemon();
+    }
+
+    $Check | Add-Member -membertype ScriptMethod -name 'GetWarnings' -value {
+        return $this.warningchecks;
+    }
+
+    $Check | Add-Member -membertype ScriptMethod -name 'GetCriticals' -value {
+        return $this.criticalchecks;
+    }
+
+    $Check | Add-Member -membertype ScriptMethod -name 'GetUnknowns' -value {
+        return $this.unknownchecks;
     }
 
     $Check | Add-Member -membertype ScriptMethod -name 'WarnOutOfRange' -value {
@@ -503,7 +520,7 @@ function New-IcingaCheck()
         param($message, [int]$exitcode);
 
         [string]$outputMessage = [string]::Format(
-            '{0}: {1}',
+            '{0} {1}',
             $IcingaEnums.IcingaExitCodeText[$exitcode],
             $message
         );
@@ -524,6 +541,27 @@ function New-IcingaCheck()
             };
             $IcingaEnums.IcingaExitCode.Unknown {
                 $this.unknowns += $outputMessage;
+                break;
+            };
+        }
+    }
+
+    $Check | Add-Member -membertype ScriptMethod -name 'AddCheckStateArrays' -value {
+        switch ([int]$this.exitcode) {
+            $IcingaEnums.IcingaExitCode.Ok {
+                $this.okchecks += $this.name;
+                break;
+            };
+            $IcingaEnums.IcingaExitCode.Warning {
+                $this.warningchecks += $this.name;
+                break;
+            };
+            $IcingaEnums.IcingaExitCode.Critical {
+                $this.criticalchecks += $this.name;
+                break;
+            };
+            $IcingaEnums.IcingaExitCode.Unknown {
+                $this.unknownchecks += $this.name;
                 break;
             };
         }
@@ -649,6 +687,7 @@ function New-IcingaCheck()
 
         $this.AddOkOutput();
         $this.compiled = $TRUE;
+        $this.AddCheckStateArrays();
     }
 
     $Check | Add-Member -membertype ScriptMethod -name 'Compile' -value {
@@ -664,6 +703,8 @@ function New-IcingaCheck()
         if ($Verbose) {
             $this.PrintOutputMessages();
         }
+
+        $this.AddCheckStateArrays();
 
         return $this.exitcode;
     }
