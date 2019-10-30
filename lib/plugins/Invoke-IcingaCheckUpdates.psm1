@@ -75,7 +75,7 @@ function Invoke-IcingaCheckUpdates()
     $IcingaCheck.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
     $UpdateCount.AddCheck($IcingaCheck);
 
-    $UpdatePackage  = New-IcingaCheckPackage -Name 'Updates' -OperatorAnd -Verbose $Verbosity -Checks @(
+    $UpdatePackage  = New-IcingaCheckPackage -Name 'Windows Updates' -OperatorAnd -Verbose $Verbosity -Checks @(
         $UpdateCount
     );
 
