@@ -40,24 +40,27 @@ function Invoke-IcingaCheckMemory()
     param(
         $Critical           = $null,
         $Warning            = $null,
+        $CriticalPercent    = $null,
+        $WarningPercent     = $null,
         [switch]$PageFile,
         [ValidateSet(0, 1, 2, 3)]
         [int]$Verbosity     = 0
      );
 
-    if ($PageFile -eq $TRUE) {
-        $MemoryData = (Get-IcingaPageFilePerformanceCounter).'(*)\% usage'.'\Paging File(_Total)\% usage'.value
-    } else {
-        $MemoryData = (Get-IcingaMemoryPerformanceCounter).'% committed bytes in use'.value;
-    }
+    $MemoryPackage = New-IcingaCheckPackage -Name 'Memory Usage' -OperatorAnd -Verbos $Verbosity;
+    $MemoryData    = (Get-IcingaMemoryPerformanceCounterFormated);
+  
 
-    $MemoryCheck = New-IcingaCheck -Name '% Memory Check' -Value $MemoryData -NoPerfData;
+    $MemoryPerc = New-IcingaCheck -Name 'Memory Percent' -Value $MemoryData.'Memory %' -NoPerfData;
+    $MemoryByte = New-IcingaCheck -Name 'Memory GigaByte' -Value $MemoryData.'Memory GigaByte' -NoPerfData;
+    $PageFile   = New-IcingaCheck -Name 'PageFile Percent' -Value $MemoryData.'PageFile %' -NoPerfData;
 
-    $MemoryCheck.WarnOutOfRange(
-        ($Warning)
-     ).CritOutOfRange(
-        ($Critical)
-     ) | Out-Null;
-
-     return (New-IcingaCheckresult -Check $MemoryCheck -NoPerfData $TRUE -Compile);
+    # PageFile To-Do
+    $MemoryPerc.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
+    $MemoryByte.WarnOutOfRange($WarningPercent).CritOutOfRange($CriticalPercent) | Out-Null;
+    
+    $MemoryPackage.AddCheck($MemoryPerc);
+    $MemoryPackage.AddCheck($MemoryByte);
+    
+     return (New-IcingaCheckResult -Check $MemoryPackage -NoPerfData $TRUE -Compile);
 }
