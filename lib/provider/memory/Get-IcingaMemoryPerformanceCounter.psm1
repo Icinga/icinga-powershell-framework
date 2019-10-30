@@ -1,21 +1,18 @@
 function Get-IcingaMemoryPerformanceCounter()
 {
-    $MemoryPercent = New-IcingaPerformanceCounterArray -Counter "\Memory\% committed bytes in use","\Memory\committed bytes","\Paging File(_Total)\% usage"
-    [hashtable]$Result = @{};
+    $MemoryPercent = New-IcingaPerformanceCounterArray -Counter "\Memory\% committed bytes in use","\Memory\Available Bytes","\Paging File(_Total)\% usage"
+    [hashtable]$Initial = @{};
+    [hashtable]$MemoryData = @{};
 
     foreach ($item in $MemoryPercent.Keys) {
-        $Result.Add($item, $MemoryPercent[$item]);
+        $Initial.Add($item, $MemoryPercent[$item]);
     }
 
-    return $Result;
-}
+    $MemoryData.Add('Memory Available Bytes', [decimal]($Initial.'\Memory\Available Bytes'.value));
+    $MemoryData.Add('Memory Total Bytes', (Get-CimInstance Win32_ComputerSystem).TotalPhysicalMemory);
+    $MemoryData.Add('Memory Used Bytes', $MemoryData.'Memory Total Bytes' - $MemoryData.'Memory Available Bytes');
+    $MemoryData.Add('Memory Used %', $MemoryData.'Memory Available Bytes' / $MemoryData.'Memory Total Bytes' * 100);
+    $MemoryData.Add('PageFile %', $Initial.'\Paging File(_Total)\% usage'.value);
 
-function Get-IcingaMemoryPerformanceCounterFormated()
-{
-    [hashtable]$Result = @{};
-    $Result.Add('Memory %', (Get-IcingaMemoryPerformanceCounter).'\Memory\% committed bytes in use'.value);
-    $Result.Add('Memory GigaByte', (ConvertTo-GigaByte ([decimal](Get-IcingaMemoryPerformanceCounter).'\Memory\committed bytes'.value) -Unit Byte));
-    $Result.Add('PageFile %', (Get-IcingaMemoryPerformanceCounter).'\Paging File(_Total)\% usage'.value);
-    
-    return $Result;
+    return $MemoryData;
 }
