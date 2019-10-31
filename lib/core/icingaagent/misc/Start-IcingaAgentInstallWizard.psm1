@@ -68,7 +68,7 @@ function Start-IcingaAgentInstallWizard()
     if ($IcingaAgent.Installed -eq $FALSE) {
         if ([string]::IsNullOrEmpty($PackageSource)) {
             if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to install the Icinga Agent now?' -Default 'y').result -eq 1) {
-                if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to use a different package source then "https://packages.icinga.com/windows/" ?' -Default 'n').result -eq 0) {
+                if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to use a different package source then "https://packages.icinga.com/windows/"?' -Default 'n').result -eq 0) {
                     $PackageSource = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please specify your package source' -Default 'v').answer;
                     $InstallerArguments += "-PackageSource '$PackageSource'";
                 } else {
@@ -80,7 +80,7 @@ function Start-IcingaAgentInstallWizard()
             }
 
             if ([string]::IsNullOrEmpty($AgentVersion)) {
-                $AgentVersion = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please specify the version you wish to install ("latest", "snapshot", or a version like "2.11.0")' -Default 'v').answer;
+                $AgentVersion = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please specify the version you wish to install ("latest", "snapshot", or a version like "2.11.0")' -Default 'v' -DefaultInput 'latest').answer;
                 $InstallerArguments += "-AgentVersion '$AgentVersion'";
 
                 Write-Host ([string]::Format('Installing Icinga Version: "{0}"', $AgentVersion));
@@ -254,7 +254,7 @@ function Start-IcingaAgentInstallWizard()
     }
 
     if ($null -eq $InstallFrameworkService) {
-        if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to install the PowerShell Framework as Service?' -Default 'y').result -eq 1) {
+        if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to install the PowerShell Framework as a Service?' -Default 'y').result -eq 1) {
             $result = Get-IcingaFrameworkServiceBinary;
             $InstallerArguments += "-InstallFrameworkService 1";
             $InstallerArguments += [string]::Format("-FrameworkServiceUrl '{0}'", $result.FrameworkServiceUrl);
