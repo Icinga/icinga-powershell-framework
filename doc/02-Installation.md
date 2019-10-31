@@ -1,13 +1,13 @@
 Installing the Module
 ===
 
-Installing the module is managed by differen ways, depending on the user environment including available possibitilies
+Installing the module is managed by different ways, depending on the user environment including available possibitilies
 
 Instructions
 ---
 
 * Install the Module with the [Kickstart Script](installation/01-KickstartScript.md)
-* Install the module [manually](installation/02-ManualInstallation.md)
+* Install the Module [manually](installation/02-ManualInstallation.md)
 
 Testing the installation
 ---
