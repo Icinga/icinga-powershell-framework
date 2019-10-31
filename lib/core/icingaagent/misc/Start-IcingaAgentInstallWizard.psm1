@@ -24,7 +24,11 @@ function Start-IcingaAgentInstallWizard()
         [switch]$RunInstaller,
         [switch]$Reconfigure,
         [string]$ServiceUser,
-        [securestring]$ServicePass   = $null
+        [securestring]$ServicePass   = $null,
+        $InstallFrameworkService     = $null,
+        $FrameworkServiceUrl         = $null,
+        $ServiceDirectory            = $null,
+        $ServiceBin                  = $null
     );
 
     [array]$InstallerArguments = @();
@@ -249,6 +253,20 @@ function Start-IcingaAgentInstallWizard()
         }
     }
 
+    if ($null -eq $InstallFrameworkService) {
+        if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to install the PowerShell Framework as Service?' -Default 'y').result -eq 1) {
+            $result = Get-IcingaFrameworkServiceBinary;
+            $InstallerArguments += "-InstallFrameworkService 1";
+            $InstallerArguments += [string]::Format("-FrameworkServiceUrl '{0}'", $result.FrameworkServiceUrl);
+            $InstallerArguments += [string]::Format("-ServiceDirectory '{0}'", $result.ServiceDirectory);
+            $InstallerArguments += [string]::Format("-ServiceBin '{0}'", $result.ServiceBin);
+            $ServiceBin = $result.ServiceBin;
+        }
+    } elseif ($InstallFrameworkService -eq $TRUE) {
+        $result     = Get-IcingaFrameworkServiceBinary -FrameworkServiceUrl $FrameworkServiceUrl -ServiceDirectory $ServiceDirectory;
+        $ServiceBin = $result.ServiceBin;
+    }
+
     if ($InstallerArguments.Count -ne 0) {
         $InstallerArguments += "-RunInstaller";
         Write-Host 'The wizard is complete. These are the configured settings:';
@@ -276,12 +294,15 @@ function Start-IcingaAgentInstallWizard()
             Set-IcingaAcl "$Env:ProgramData\icinga2\etc";
             Set-IcingaAcl "$Env:ProgramData\icinga2\var";
             Set-IcingaAcl (Get-IcingaCacheDir);
+            Install-IcingaFrameworkService -Path $ServiceBin -User $ServiceUser -Password $ServicePass | Out-Null;
+            Register-IcingaBackgroundDaemon -Command 'Start-IcingaServiceCheckDaemon';
             Install-IcingaAgentBaseFeatures;
             Install-IcingaAgentCertificates -Hostname $Hostname -Endpoint $CAEndpoint -Port $CAPort -CACert $CAFile -Ticket $Ticket | Out-Null;
             Write-IcingaAgentApiConfig -Port $CAPort;
             Write-IcingaAgentZonesConfig -Endpoints $Endpoints -EndpointConnections $EndpointConnections -ParentZone $ParentZone -GlobalZones $GlobalZoneConfig -Hostname $Hostname;
             Test-IcingaAgent;
-            Restart-Service icinga2;
+            Restart-IcingaService 'icingapowershell';
+            Restart-IcingaService 'icinga2';
         }
     }
 }
