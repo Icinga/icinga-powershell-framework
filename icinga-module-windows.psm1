@@ -165,3 +165,8 @@ function Get-IcingaPowerShellConfigDir()
 {
     return (Join-Path -Path $PSScriptRoot -ChildPath 'config');
 }
+
+function Get-IcingaPowerShellModuleFile()
+{
+    return (Join-Path -Path $PSScriptRoot -ChildPath 'icinga-module-windows.psm1');
+}
