@@ -31,6 +31,16 @@ function Get-IcingaFrameworkServiceBinary()
 
     Invoke-WebRequest -Uri $FrameworkServiceUrl -UseBasicParsing -OutFile $ZipArchive;
 
+    if ((Test-Path $ServiceBin)) {
+        Write-Host 'Icinga Service Binary already present. Skipping extrating';
+
+        return @{
+            'FrameworkServiceUrl' = $FrameworkServiceUrl;
+            'ServiceDirectory'    = $ServiceDirectory;
+            'ServiceBin'          = $ServiceBin;
+        };
+    }
+
     if ((Expand-IcingaZipArchive -Path $ZipArchive -Destination $ServiceDirectory) -eq $FALSE) {
         throw 'Failed to expand the downloaded ZIP archive';
     }
