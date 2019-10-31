@@ -34,7 +34,7 @@ function Convert-Bytes()
                 } 
             }
         }
-        return $FinalValue;
+        return @{'value' = $FinalValue; 'pastunit' = $CurrentUnit; 'endunit' = $Unit};
     }
     Throw 'Invalid input';
 }
