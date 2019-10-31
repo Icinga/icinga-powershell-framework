@@ -66,13 +66,16 @@ function Invoke-IcingaCheckDirectory()
       $Warning            = $null,
       [string]$YoungerThan,
       [string]$OlderThan,
+      [string]$FileSizeGreaterThan,
+      [string]$FileSizeSmallerThan,
       [ValidateSet(0, 1, 2, 3)]
       [int]$Verbosity     = 0,
       [switch]$NoPerfData
    );
 
    $DirectoryData  = Get-IcingaDirectoryAll -Path $Path -FileNames $FileNames `
-                     -Recurse $Recurse -YoungerThan $YoungerThan -OlderThan $OlderThan;
+                     -Recurse $Recurse -YoungerThan $YoungerThan -OlderThan $OlderThan `
+                     -FileSizeGreaterThan $FileSizeGreaterThan -FileSizeSmallerThan $FileSizeSmallerThan;
    $DirectoryCheck = New-IcingaCheck -Name 'File Count' -Value $DirectoryData.Count;
 
    $DirectoryCheck.WarnOutOfRange(
