@@ -4,6 +4,7 @@ function Get-IcingaAgentInstallerAnswerInput()
         $Prompt,
         [ValidateSet("y","n","v")]
         $Default,
+        $DefaultInput   = '',
         [switch]$Secure
     );
 
@@ -13,6 +14,10 @@ function Get-IcingaAgentInstallerAnswerInput()
         $DefaultAnswer = ' (Y/n)';
     } elseif ($Default -eq 'n') {
         $DefaultAnswer = ' (y/N)';
+    } elseif ($Default -eq 'v') {
+        if ([string]::IsNullOrEmpty($DefaultInput) -eq $FALSE) {
+            $DefaultAnswer = [string]::Format(' (Default: "{0}")', $DefaultInput);
+        }
     }
 
     if (-Not $Secure) {
@@ -35,6 +40,10 @@ function Get-IcingaAgentInstallerAnswerInput()
             'result' = $returnValue;
             'answer' = '';
         }
+    }
+
+    if ([string]::IsNullOrEmpty($answer)) {
+        $answer = $DefaultInput;
     }
 
     return @{
