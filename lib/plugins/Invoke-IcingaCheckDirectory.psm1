@@ -19,7 +19,7 @@ Import-IcingaLib provider\directory;
    [WARNING]: Check package "C:\Users\Icinga\Downloads" is [WARNING] (Match All)
     \_ [WARNING]: C:\Users\Icinga\Downloads is 24
 .EXAMPLE
-   PS>Invoke-IcingaCheckDirectory -Path "C:\Users\Icinga\Downloads" -Warning 20 -Critical 30 -Verbosity 3 -YoungerThen 20d -OlderThen 10d
+   PS>Invoke-IcingaCheckDirectory -Path "C:\Users\Icinga\Downloads" -Warning 20 -Critical 30 -Verbosity 3 -ChangeYoungerThen 20d -ChangeOlderThen 10d
    [OK]: Check package "C:\Users\Icinga\Downloads" is [OK] (Match All)
     \_ [OK]: C:\Users\Icinga\Downloads is 1
 .EXAMPLE
@@ -39,14 +39,34 @@ Import-IcingaLib provider\directory;
    e.g '*.txt', '*.sql' # Fiends all files ending with .txt and .sql
 .PARAMETER Recurse
    A switch, which can be set to filter through directories recursively.
-.PARAMETER YoungerThen
+.PARAMETER ChangeYoungerThen
    String that expects input format like "20d", which translates to 20 days. Allowed units: ms, s, m, h, d, w, M, y.
 
-   Thereby all files younger then 20 days are considered within the check
-.PARAMETER OlderThen
+   Thereby all files which have a change date younger then 20 days are considered within the check.
+.PARAMETER ChangeOlderThen
    String that expects input format like "20d", which translates to 20 days. Allowed units: ms, s, m, h, d, w, M, y.
 
-   Thereby all files older then 20 days are considered within the check
+   Thereby all files which have a change date older then 20 days are considered within the check.
+.PARAMETER CreationYoungerThen
+   String that expects input format like "20d", which translates to 20 days. Allowed units: ms, s, m, h, d, w, M, y.
+
+   Thereby all files which have a creation date younger then 20 days are considered within the check.
+.PARAMETER CreationOlderThen
+   String that expects input format like "20d", which translates to 20 days. Allowed units: ms, s, m, h, d, w, M, y.
+
+   Thereby all files which have a creation date older then 20 days are considered within the check.
+
+.PARAMETER ChangeTimeEqual
+   String that expects input format like "20d", which translates to 20 days. Allowed units: ms, s, m, h, d, w, M, y.
+
+   Thereby all files which have been changed 20 days ago are considered within the check.
+
+.PARAMETER CreationTimeEqual
+   String that expects input format like "20d", which translates to 20 days. Allowed units: ms, s, m, h, d, w, M, y.
+
+   Thereby all files which have been created 20 days ago are considered within the check.
+
+
 .INPUTS
    System.String
 .OUTPUTS
@@ -64,8 +84,12 @@ function Invoke-IcingaCheckDirectory()
       [switch]$Recurse,
       $Critical           = $null,
       $Warning            = $null,
-      [string]$YoungerThan,
-      [string]$OlderThan,
+      [string]$ChangeTimeEqual,
+      [string]$ChangeYoungerThan,
+      [string]$ChangeOlderThan,
+      [string]$CreationTimeEqual,
+      [string]$CreationOlderThan,
+      [string]$CreationYoungerThan,
       [string]$FileSizeGreaterThan,
       [string]$FileSizeSmallerThan,
       [ValidateSet(0, 1, 2, 3)]
@@ -73,9 +97,10 @@ function Invoke-IcingaCheckDirectory()
       [switch]$NoPerfData
    );
 
-   $DirectoryData  = Get-IcingaDirectoryAll -Path $Path -FileNames $FileNames `
-                     -Recurse $Recurse -YoungerThan $YoungerThan -OlderThan $OlderThan `
-                     -FileSizeGreaterThan $FileSizeGreaterThan -FileSizeSmallerThan $FileSizeSmallerThan;
+   $DirectoryData  = Get-IcingaDirectoryAll -Path $Path -FileNames $FileNames -Recurse $Recurse `
+                     -ChangeYoungerThan $ChangeYoungerThan -ChangeOlderThan $ChangeOlderThan `
+                     -CreationYoungerThan $CreationYoungerThan -CreationOlderThan $CreationOlderThan `
+                     -CreationTimeEqual $CreationTimeEqual -ChangeTimeEqual $ChangeTimeEqual;
    $DirectoryCheck = New-IcingaCheck -Name 'File Count' -Value $DirectoryData.Count;
 
    $DirectoryCheck.WarnOutOfRange(
