@@ -2,7 +2,7 @@
 .Synopsis
    Icinga PowerShell Module - Powerfull PowerShell Framework for monitoring Windows Systems
 .DESCRIPTION
-   More Information on https://github.com/LordHepipud/icinga-module-windows
+   More Information on https://github.com/Icinga/icinga-powershell-framework
 .EXAMPLE
    Install-Icinga
  .NOTES
@@ -51,7 +51,8 @@ function Import-IcingaLib()
         # possible development changes without having to create new PowerShell environments
         [Switch]$ForceReload,
         [switch]$Init,
-        [switch]$Custom
+        [switch]$Custom,
+        [switch]$WriteManifests
     );
 
     # This is just to only allow a global loading of the module. Import-IcingaLib is ignored on every other
@@ -85,6 +86,9 @@ function Import-IcingaLib()
                 }
             } else {
                 Import-Module ([string]::Format('{0}', $modulePath)) -Global; 
+                if ($WriteManifests) {
+                    Publish-IcingaModuleManifests -Module $moduleName;
+                }
             }
         }
     } else {
@@ -98,6 +102,9 @@ function Import-IcingaLib()
         }
 
         Import-Module ([string]::Format('{0}.psm1', $module)) -Global;
+        if ($WriteManifests) {
+            Publish-IcingaModuleManifests -Module $moduleName;
+        }
     }
 }
 
@@ -168,5 +175,5 @@ function Get-IcingaPowerShellConfigDir()
 
 function Get-IcingaPowerShellModuleFile()
 {
-    return (Join-Path -Path $PSScriptRoot -ChildPath 'icinga-module-windows.psm1');
+    return (Join-Path -Path $PSScriptRoot -ChildPath 'icinga-powershell-framework.psm1');
 }

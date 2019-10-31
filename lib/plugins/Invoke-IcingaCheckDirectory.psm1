@@ -6,7 +6,7 @@ Import-IcingaLib provider\directory;
 .DESCRIPTION
    Invoke-IcingaCheckDirectory returns either 'OK', 'WARNING' or 'CRITICAL', based on the thresholds set.
    e.g 'C:\Users\Icinga\Backup' contains 200 files, WARNING is set to 150, CRITICAL is set to 300. In this case the check will return CRITICAL
-   More Information on https://github.com/LordHepipud/icinga-module-windows
+   More Information on https://github.com/Icinga/icinga-powershell-framework
 .FUNCTIONALITY
    This module is intended to be used to check how many files and directories are within are specified path. 
    Based on the thresholds set the status will change between 'OK', 'WARNING' or 'CRITICAL'. The function will return one of these given codes.
@@ -72,7 +72,7 @@ Import-IcingaLib provider\directory;
 .OUTPUTS
    System.String
 .LINK
-   https://github.com/LordHepipud/icinga-module-windows
+   https://github.com/Icinga/icinga-powershell-framework
 .NOTES
 #>
 

@@ -8,7 +8,7 @@ Import-IcingaLib icinga\plugin;
 .DESCRIPTION
    Invoke-IcingaCheckCPU returns either 'OK', 'WARNING' or 'CRITICAL', based on the thresholds set.
    e.g A system has 4 cores, each running at 60% usage, WARNING is set to 50%, CRITICAL is set to 75%. In this case the check will return WARNING.
-   More Information on https://github.com/LordHepipud/icinga-module-windows
+   More Information on https://github.com/Icinga/icinga-powershell-framework
 .FUNCTIONALITY
    This module is intended to be used to check on the current cpu usage of a specified core.
    Based on the thresholds set the status will change between 'OK', 'WARNING' or 'CRITICAL'. The function will return one of these given codes.
@@ -31,7 +31,7 @@ Import-IcingaLib icinga\plugin;
 .OUTPUTS
    System.String
 .LINK
-   https://github.com/LordHepipud/icinga-module-windows
+   https://github.com/Icinga/icinga-powershell-framework
 .NOTES
 #>
 

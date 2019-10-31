@@ -4,7 +4,7 @@
 .DESCRIPTION
    Invoke-IcingaCheckCheckSum returns either 'OK' or 'CRITICAL', whether the check matches or not.
 
-   More Information on https://github.com/LordHepipud/icinga-module-windows
+   More Information on https://github.com/Icinga/icinga-powershell-framework
 .FUNCTIONALITY
    This module is intended to be used to check a hash against a filehash of a file, to determine whether changes have occured.
    Based on the match result the status will change between 'OK' or 'CRITICAL'. The function will return one of these given codes.
@@ -38,7 +38,7 @@
    System.String
 
 .LINK
-   https://github.com/LordHepipud/icinga-module-windows
+   https://github.com/Icinga/icinga-powershell-framework
 .NOTES
 #>
 
