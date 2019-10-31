@@ -46,7 +46,7 @@ function Invoke-IcingaCheckCheckSum()
 {
     param(
         [string]$Path       = $null,
-        [ValidateSet]('SHA1', 'SHA256', 'SHA384', 'SHA512', 'MD5')
+        [ValidateSet('SHA1', 'SHA256', 'SHA384', 'SHA512', 'MD5')]
         [string]$Algorithm  = 'SHA256',
         [string]$Hash       = $null,
         [switch]$NoPerfData,
