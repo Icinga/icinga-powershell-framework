@@ -1,5 +1,9 @@
 function Start-IcingaPowerShellDaemon()
 {
+    param(
+        [switch]$RunAsService
+    );
+
     $ScriptBlock = {
         param($IcingaDaemonData);
 
@@ -32,4 +36,10 @@ function Start-IcingaPowerShellDaemon()
     $global:IcingaDaemonData.Add('Config', (Read-IcingaPowerShellConfig));
 
     New-IcingaThreadInstance -Name "Icinga_PowerShell_Background_Daemon" -ThreadPool $IcingaDaemonData.IcingaThreadPool.BackgroundPool -ScriptBlock $ScriptBlock -Arguments @( $global:IcingaDaemonData ) -Start;
+
+    if ($RunAsService) {
+        while ($TRUE) {
+            Start-Sleep -Seconds 100;
+        }
+    }
 }
