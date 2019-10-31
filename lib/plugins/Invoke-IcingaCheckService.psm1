@@ -37,12 +37,14 @@ function Invoke-IcingaCheckService()
       [ValidateSet('Stopped', 'StartPending', 'StopPending', 'Running', 'ContinuePending', 'PausePending', 'Paused')]
       [string]$Status = 'Running',
       [ValidateSet(0, 1, 2, 3)]
-      [int]$Verbosity = 0
+      [int]$Verbosity = 0,
+      [switch]$NoPerfData
    );
 
-   $ServicesPackage  = New-IcingaCheckPackage -Name 'Services' -OperatorAnd -Verbose $Verbosity;
+   $ServicesPackage      = New-IcingaCheckPackage -Name 'Services' -OperatorAnd -Verbose $Verbosity;
+   $ServicesCountPackage = New-IcingaCheckPackage -Name 'Count Services' -OperatorAnd -Verbose $Verbosity -Hidden;
 
-   if ($Service.Count -ne 1) {
+      [int]$StoppedCount,[int]$StartPendingCount,[int]$StopPendingCount,[int]$RunningCount,[int]$ContinuePendingCount,[int]$PausePendingCount,[int]$PausedCount,[int]$ServicesCounted = 0
       foreach ($services in $Service) {
          $IcingaCheck = $null;
 
@@ -50,22 +52,41 @@ function Invoke-IcingaCheckService()
          $ServiceName     = Get-IcingaServiceCheckName -ServiceInput $services -Service $FoundService;
          $ConvertedStatus = ConvertTo-ServiceStatusCode -Status $Status;
          $StatusRaw       = $FoundService.Values.configuration.Status.raw;
-      
+
          $IcingaCheck = New-IcingaCheck -Name $ServiceName -Value $StatusRaw -ObjectExists $FoundService -Translation $ProviderEnums.ServiceStatusName;
          $IcingaCheck.CritIfNotMatch($ConvertedStatus) | Out-Null;
          $ServicesPackage.AddCheck($IcingaCheck)
+
+         switch($StatusRaw) {
+            {1 -contains $_} { $StoppedCount++;         $ServicesCounted++}
+            {2 -contains $_} { $StartPendingCount++;    $ServicesCounted++}
+            {3 -contains $_} { $StopPendingCount++;     $ServicesCounted++}
+            {4 -contains $_} { $RunningCount++;         $ServicesCounted++}
+            {5 -contains $_} { $ContinuePendingCount++; $ServicesCounted++}
+            {6 -contains $_} { $PausePendingCount++;    $ServicesCounted++}
+            {7 -contains $_} { $PausedCount++;          $ServicesCounted++}
+         }
       }
-   } else {
+   $IcingaStopped         = New-IcingaCheck -Name 'stopped services'           -Value $StoppedCount;
+   $IcingaStartPending    = New-IcingaCheck -Name 'pending started services'   -Value $StartPendingCount;
+   $IcingaStopPending     = New-IcingaCheck -Name 'pending stopped services'   -Value $StopPendingCount;
+   $IcingaRunning         = New-IcingaCheck -Name 'running services'           -Value $RunningCount;
+   $IcingaContinuePending = New-IcingaCheck -Name 'pending continued services' -Value $ContinuePendingCount;
+   $IcingaPausePending    = New-IcingaCheck -Name 'pending paused services'    -Value $PausePendingCount;
+   $IcingaPaused          = New-IcingaCheck -Name 'paused services'            -Value $PausePendingCount;
+   
+   $IcingaCount           = New-IcingaCheck -Name 'service count'              -Value $ServicesCounted;
 
-   $FoundService = Get-IcingaServices -Service $Service;
-   $ServiceName  = Get-IcingaServiceCheckName -ServiceInput $Service -Service $FoundService;
-   $IntStatus    = ConvertTo-ServiceStatusCode -Status $Status;
-   $StatusRaw    = $FoundService.Values.configuration.Status.raw;
+   $ServicesCountPackage.AddCheck($IcingaStopped)
+   $ServicesCountPackage.AddCheck($IcingaStartPending)
+   $ServicesCountPackage.AddCheck($IcingaStopPending)
+   $ServicesCountPackage.AddCheck($IcingaRunning)
+   $ServicesCountPackage.AddCheck($IcingaContinuePending)
+   $ServicesCountPackage.AddCheck($IcingaPausePending)
+   $ServicesCountPackage.AddCheck($IcingaPaused)
 
-   $IcingaCheck = New-IcingaCheck -Name $ServiceName -Value $StatusRaw -ObjectExists $FoundService -Translation $ProviderEnums.ServiceStatusName;
-   $IcingaCheck.CritIfNotMatch($IntStatus) | Out-Null;
-   $ServicesPackage.AddCheck($IcingaCheck);
+   $ServicesCountPackage.AddCheck($IcingaCount)
+   $ServicesPackage.AddCheck($ServicesCountPackage)
 
-   }
-   return (New-IcingaCheckResult -Name 'Services' -Check $ServicesPackage -NoPerfData $TRUE -Compile);
+   return (New-IcingaCheckResult -Name 'Services' -Check $ServicesPackage -NoPerfData $NoPerfData -Compile);
 }
