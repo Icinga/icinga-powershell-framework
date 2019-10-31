@@ -6,7 +6,7 @@
    Get-IcingaCheckCommandConfig returns a JSON-file of one or all 'Invoke-IcingaCheck'-Commands, which can be imported via Icinga-Director
    When no single command is specified all commands will be exported, and vice versa.
 
-   More Information on https://github.com/LordHepipud/icinga-module-windows
+   More Information on https://github.com/Icinga/icinga-powershell-framework
 
 .FUNCTIONALITY
    This module is intended to be used to export one or all PowerShell-Modules with the namespace 'Invoke-IcingaCheck'.
@@ -56,7 +56,7 @@
    System.String
 
 .LINK
-   https://github.com/LordHepipud/icinga-module-windows
+   https://github.com/Icinga/icinga-powershell-framework
 
 .NOTES
 #>

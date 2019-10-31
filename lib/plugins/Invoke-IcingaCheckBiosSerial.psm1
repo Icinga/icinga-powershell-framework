@@ -5,7 +5,7 @@ Import-IcingaLib provider\bios;
    Finds out the Bios Serial
 .DESCRIPTION
    Invoke-IcingaCheckBiosSerial returns either the Bios Serial or nothing.
-   More Information on https://github.com/LordHepipud/icinga-module-windows
+   More Information on https://github.com/Icinga/icinga-powershell-framework
 .FUNCTIONALITY
    This module is intended to be used to find out the Bios Serial of a given system
    Either the a Bios Serial is returned or not. Thereby the Check is always okay.
@@ -15,7 +15,7 @@ Import-IcingaLib provider\bios;
 .OUTPUTS
    System.String
 .LINK
-   https://github.com/LordHepipud/icinga-module-windows
+   https://github.com/Icinga/icinga-powershell-framework
 .NOTES
 #>
 

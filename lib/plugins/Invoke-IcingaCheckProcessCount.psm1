@@ -7,7 +7,7 @@ Import-IcingaLib icinga\plugin;
 .DESCRIPTION
    Invoke-IcingaCheckDirectory returns either 'OK', 'WARNING' or 'CRITICAL', based on the thresholds set.
    e.g there are three conhost processes running, WARNING is set to 3, CRITICAL is set to 4. In this case the check will return WARNING.
-   More Information on https://github.com/LordHepipud/icinga-module-windows
+   More Information on https://github.com/Icinga/icinga-powershell-framework
 .FUNCTIONALITY
    This module is intended to be used to check how many processes of a process exist.
    Based on the thresholds set the status will change between 'OK', 'WARNING' or 'CRITICAL'. The function will return one of these given codes.
@@ -33,7 +33,7 @@ Import-IcingaLib icinga\plugin;
 .OUTPUTS
    System.String
 .LINK
-   https://github.com/LordHepipud/icinga-module-windows
+   https://github.com/Icinga/icinga-powershell-framework
 .NOTES
 #>
 

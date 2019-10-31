@@ -5,12 +5,12 @@
    This module sets a numeric value to be negative.
    e.g 12 to -12
 
-   More Information on https://github.com/LordHepipud/icinga-module-windows
+   More Information on https://github.com/Icinga/icinga-powershell-framework
 .EXAMPLE
    PS> Set-NumericNegative 32
    -32
 .LINK
-   https://github.com/LordHepipud/icinga-module-windows
+   https://github.com/Icinga/icinga-powershell-framework
 .NOTES
 #>
 
