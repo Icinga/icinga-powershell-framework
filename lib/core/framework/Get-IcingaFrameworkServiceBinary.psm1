@@ -9,7 +9,7 @@ function Get-IcingaFrameworkServiceBinary()
 
     if ([string]::IsNullOrEmpty($FrameworkServiceUrl)) {
         if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you provide a custom source of the service binary?' -Default 'n').result -eq 1) {
-            $LatestRelease       = (Invoke-WebRequest -Uri 'https://github.com/Icinga/icinga-windows-service/releases/latest' -UseBasicParsing).BaseResponse.ResponseUri.AbsoluteUri;
+            $LatestRelease       = (Invoke-WebRequest -Uri 'https://github.com/Icinga/icinga-powershell-service/releases/latest' -UseBasicParsing).BaseResponse.ResponseUri.AbsoluteUri;
             $FrameworkServiceUrl = $LatestRelease.Replace('/tag/', '/download/');
             $Tag                 = $FrameworkServiceUrl.Split('/')[-1];
             $FrameworkServiceUrl = [string]::Format('{0}/icinga-service-{1}.zip', $FrameworkServiceUrl, $Tag);
