@@ -130,14 +130,31 @@ function Start-IcingaAgentInstallWizard()
         $InstallerArguments += ("-Endpoints " + ([string]::Join(',', $Endpoints)));
     }
 
+    if ($null -eq $CAPort) {
+        if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Are you using a different port than 5665 for Icinga communications?' -Default 'n').result -eq 0) {
+            $CAPort = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please enter the port for Icinga 2 communication' -Default 'v').answer;
+            $InstallerArguments += "-CAPort $CAPort";
+        } else {
+            $InstallerArguments += "-CAPort 5665";
+            $CAPort = 5665;
+        }
+    }
+
     if ($EndpointConnections.Count -eq 0 -And $AcceptConnections -eq 1) {
-        $ArrayString = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please specify the network destinations this agent will connect to ("," separated, like: "[127.0.0.1], [127.0.0.2]")' -Default 'v').answer;
+        $NetworkDefault = '';
+        foreach ($Endpoint in $Endpoints) {
+            $NetworkDefault += [string]::Format('[{0}]:{1},', $Endpoint, $CAPort);
+        }
+        if ([string]::IsNullOrEmpty($NetworkDefault) -eq $FALSE) {
+            $NetworkDefault = $NetworkDefault.Substring(0, $NetworkDefault.Length - 1);
+        }
+        $ArrayString = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please specify the network destinations this agent will connect to, separated by ","' -Default 'v' -DefaultInput $NetworkDefault).answer;
         $EndpointConnections = ($ArrayString.Replace(' ', '')).Split(',');
         $InstallerArguments += ("-EndpointConnections " + ([string]::Join(',', $EndpointConnections)));
     }
 
     if ([string]::IsNullOrEmpty($ParentZone)) {
-        $ParentZone = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please specify the parent zone this agent will connect to' -Default 'v').answer;
+        $ParentZone = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please specify the parent zone this agent will connect to' -Default 'v' -DefaultInput 'master').answer;
         $InstallerArguments += "-ParentZone $ParentZone";
     }
 
@@ -193,17 +210,8 @@ function Start-IcingaAgentInstallWizard()
 
     if ($CanConnectToParent) {
         if ([string]::IsNullOrEmpty($CAEndpoint)) {
-            $CAEndpoint = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please enter the FQDN for either ONE of your Icinga parent node/nodes or your Icinga 2 CA master (if you can connect to it)' -Default 'v').answer;
+            $CAEndpoint = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please enter the FQDN for either ONE of your Icinga parent node/nodes or your Icinga 2 CA master' -Default 'v' -DefaultInput $Endpoints[0]).answer;
             $InstallerArguments += "-CAEndpoint $CAEndpoint";
-        }
-        if ($null -eq $CAPort) {
-            if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Are you using a different port then 5665 for Icinga communications?' -Default 'n').result -eq 0) {
-                $CAPort = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please enter your port to communicate with the Icinga 2 CA' -Default 'v').answer;
-                $InstallerArguments += "-CAPort $CAPort";
-            } else {
-                $InstallerArguments += "-CAPort 5665";
-                $CAPort = 5665;
-            }
         }
         if ($null -eq $Ticket) {
             if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you have a Icinga Ticket available to sign your certificate?' -Default 'y').result -eq 1) {
