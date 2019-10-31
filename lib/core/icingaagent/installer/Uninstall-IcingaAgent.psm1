@@ -9,6 +9,8 @@ function Uninstall-IcingaAgent()
 
     Write-Host 'Removing current installed Icinga Agent';
 
+    Stop-IcingaService 'icinga2';
+
     $Uninstaller = Start-IcingaProcess -Executable 'MsiExec.exe' -Arguments ([string]::Format('{0} /q', $IcingaData.Uninstaller)) -FlushNewLine;
 
     if ($Uninstaller.ExitCode -ne 0) {
