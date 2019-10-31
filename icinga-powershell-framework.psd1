@@ -1,7 +1,7 @@
 @{
 
 # Script module or binary module file associated with this manifest.
-ModuleToProcess = 'icinga-module-windows.psm1'
+ModuleToProcess = 'icinga-powershell-framework.psm1'
 
 # Module version number
 ModuleVersion = '0.0.1'

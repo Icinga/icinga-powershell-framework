@@ -6,12 +6,12 @@ Requirements
 
 As PowerShell Scripts / Modules can not be installed directly as Windows Service, we will require a little assistance here.
 
-In order to make this work, you will require the Icinga Windows Service which can be downloaded directly from the [GitHub Repository](https://github.com/LordHepipud/icinga-windows-service).
+In order to make this work, you will require the Icinga Windows Service which can be downloaded directly from the [GitHub Repository](https://github.com/Icinga/icinga-windows-service).
 
 Install the Service
 ---
 
-At first you will require the Service Binary from the [Icinga Windows Service GitHub Repository](https://github.com/LordHepipud/icinga-windows-service) and copy the binary locally to your system. A recommended path would be your Program Files / Program Files (x86) directory.
+At first you will require the Service Binary from the [Icinga Windows Service GitHub Repository](https://github.com/Icinga/icinga-windows-service) and copy the binary locally to your system. A recommended path would be your Program Files / Program Files (x86) directory.
 
 Any other custom location is fully supported, has to be however accessable from the Windows Service Environment.
 
