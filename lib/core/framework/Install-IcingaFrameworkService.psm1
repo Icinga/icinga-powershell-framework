@@ -1,8 +1,8 @@
-function Install-IcingaPowerShellService()
+function Install-IcingaFrameworkService()
 {
     param(
         $Path,
-        $Username,
+        $User,
         [SecureString]$Password
     );
 
@@ -22,5 +22,5 @@ function Install-IcingaPowerShellService()
         throw ([string]::Format('Failed to install Icinga PowerShell Service: {0}{1}', $ServiceCreation.Message, $ServiceCreation.Error));
     }
 
-    return (Set-IcingaAgentServiceUser -User $Username -Password $Password -Service 'icingapowershell');
+    return (Set-IcingaAgentServiceUser -User $User -Password $Password -Service 'icingapowershell');
 }
