@@ -25,7 +25,7 @@ Description = 'Icinga 2 Windows Agent Module, which allows to entirely monitor t
 PowerShellVersion = '3.0'
 
 # Aus diesem Modul zu exportierende Funktionen. Um optimale Leistung zu erzielen, verwenden Sie keine Platzhalter und löschen den Eintrag nicht. Verwenden Sie ein leeres Array, wenn keine zu exportierenden Funktionen vorhanden sind.
-FunctionsToExport = @( 'Use-Icinga', 'Import-IcingaLib', 'Publish-IcingaModuleManifests', 'Get-IcingaPluginDir', 'Get-IcingaCustomPluginDir', 'Get-IcingaCacheDir', 'Get-IcingaPowerShellConfigDir' )
+FunctionsToExport = @( 'Use-Icinga', 'Import-IcingaLib', 'Publish-IcingaModuleManifests', 'Get-IcingaPluginDir', 'Get-IcingaCustomPluginDir', 'Get-IcingaCacheDir', 'Get-IcingaPowerShellConfigDir', 'Get-IcingaPowerShellModuleFile' )
 
 # Aus diesem Modul zu exportierende Cmdlets. Um optimale Leistung zu erzielen, verwenden Sie keine Plat'zhalter und löschen den Eintrag nicht. Verwenden Sie ein leeres Array, wenn keine zu exportierenden Cmdlets vorhanden sind.
 CmdletsToExport = @()

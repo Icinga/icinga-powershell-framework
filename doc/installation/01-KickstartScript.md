@@ -12,7 +12,10 @@ Getting Started
 [Net.ServicePointManager]::SecurityProtocol = "tls12, tls11";
 $ProgressPreference = "SilentlyContinue";
 
-$Script = (Invoke-WebRequest -UseBasicParsing -Uri 'https://raw.githubusercontent.com/LordHepipud/icinga-framework-kickstart/master/script/icinga-framework-kickstart.ps1').Content;
+$global:IcingaFrameworkKickstartSource = 'https://raw.githubusercontent.com/LordHepipud/icinga-framework-kickstart/master/script/icinga-framework-kickstart.ps1';
+
+$Script = (Invoke-WebRequest -UseBasicParsing -Uri $global:IcingaFrameworkKickstartSource).Content;
+$Script += "`r`n`r`n Start-IcingaFrameworkWizard;";
 
 Invoke-Command -ScriptBlock ([Scriptblock]::Create($Script));
 ```
