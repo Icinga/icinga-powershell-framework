@@ -7,7 +7,7 @@ Import-IcingaLib icinga\plugin;
    Checks if a service has a specified status.
 .DESCRIPTION
    Invoke-icingaCheckService returns either 'OK' or 'CRITICAL', if a service status is matching status to be checked.
-   More Information on https://github.com/LordHepipud/icinga-module-windows
+   More Information on https://github.com/Icinga/icinga-powershell-framework
 .FUNCTIONALITY
    This module is intended to be used to check whether one or more services have a certain status. 
    As soon as one of the specified services does not match the status, the function returns 'CRITICAL' instead of 'OK'.
@@ -26,7 +26,7 @@ Import-IcingaLib icinga\plugin;
 .OUTPUTS
    System.String
 .LINK
-   https://github.com/LordHepipud/icinga-module-windows
+   https://github.com/Icinga/icinga-powershell-framework
 .NOTES
 #>
 

@@ -7,7 +7,7 @@ Import-IcingaLib icinga\plugin;
    Invoke-IcingaCheckEventlog returns either 'OK', 'WARNING' or 'CRITICAL', based on the thresholds set.
    e.g Eventlog returns 500 entrys with the specified parameters, WARNING is set to 200, CRITICAL is set to 800. Thereby the check will return WARNING.
 
-   More Information on https://github.com/LordHepipud/icinga-module-windows
+   More Information on https://github.com/Icinga/icinga-powershell-framework
 .FUNCTIONALITY
    This Module is intended to be used to check how many eventlog occurences of a given type there are.
    Based on the thresholds set the status will change between 'OK', 'WARNING' or 'CRITICAL'. The function will return one of these given codes.
@@ -63,7 +63,7 @@ Import-IcingaLib icinga\plugin;
 .OUTPUTS
    System.String
 .LINK
-   https://github.com/LordHepipud/icinga-module-windows
+   https://github.com/Icinga/icinga-powershell-framework
 .NOTES
 #>
 

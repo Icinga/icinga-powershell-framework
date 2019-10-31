@@ -4,12 +4,12 @@
 .DESCRIPTION
    This module tests whether a value is numeric
 
-   More Information on https://github.com/LordHepipud/icinga-module-windows
+   More Information on https://github.com/Icinga/icinga-powershell-framework
 .EXAMPLE
    PS> Test-Numeric 32
    True
 .LINK
-   https://github.com/LordHepipud/icinga-module-windows
+   https://github.com/Icinga/icinga-powershell-framework
 .NOTES
 #>
 function Test-Numeric ($number) {

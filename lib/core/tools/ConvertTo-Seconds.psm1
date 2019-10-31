@@ -7,7 +7,7 @@ Import-IcingaLib core\tools;
    This module converts a given time unit to seconds.
    e.g hours to seconds.
 
-   More Information on https://github.com/LordHepipud/icinga-module-windows
+   More Information on https://github.com/Icinga/icinga-powershell-framework
 
 .PARAMETER Value
    Specify unit to be converted to seconds. Allowed units: ms, s, m, h, d, w, M, y
@@ -18,7 +18,7 @@ Import-IcingaLib core\tools;
    PS> ConvertTo-Seconds 30d
    2592000
 .LINK
-   https://github.com/LordHepipud/icinga-module-windows
+   https://github.com/Icinga/icinga-powershell-framework
 .NOTES
 #>
 
