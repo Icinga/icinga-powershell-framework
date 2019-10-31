@@ -52,10 +52,6 @@ Import-IcingaLib core\tools;
 .NOTES
 #>
 
-<#
-if ($bytes > 1099511627776) { return sprintf('%.2f TB', $bytes / 1099511627776); } elseif ($bytes > 1073741824) { return sprintf('%.2f GB', $bytes / 1073741824); } elseif ($bytes > 1048576) { return sprintf('%.2f MB', $bytes / 1048576); } else { return sprintf('%.2f KB', $bytes / 1024);
-#>
-
 function Invoke-IcingaCheckMemory()
 {
     param(
@@ -104,8 +100,6 @@ function Invoke-IcingaCheckMemory()
    #$MemoryByteAvailable    = New-IcingaCheck -Name "Available Bytes" -Value $MemoryData['Memory Available Bytes'] -Unit 'B';
    #$PageFileCheck          = New-IcingaCheck -Name 'PageFile Percent' -Value $MemoryData['PageFile %'] -Unit '%';
 
-
-   #Kommastellen bedenken!
    # PageFile To-Do
    $MemoryByteUsed.WarnOutOfRange($WarningConverted).CritOutOfRange($CrticalConverted) | Out-Null;
    $MemoryPerc.WarnOutOfRange($WarningPercent).CritOutOfRange($CriticalPercent) | Out-Null;
@@ -113,7 +107,6 @@ function Invoke-IcingaCheckMemory()
    $MemoryPackage.AddCheck($MemoryPerc);
    #$MemoryPackage.AddCheck($MemoryByteAvailable);
    $MemoryPackage.AddCheck($MemoryByteUsed);
-
    #$MemoryPackage.AddCheck($PageFileCheck);
     
    return (New-IcingaCheckResult -Check $MemoryPackage -NoPerfData $NoPerfData -Compile);
