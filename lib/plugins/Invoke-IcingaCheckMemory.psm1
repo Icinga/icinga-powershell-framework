@@ -52,6 +52,10 @@ Import-IcingaLib core\tools;
 .NOTES
 #>
 
+<#
+if ($bytes > 1099511627776) { return sprintf('%.2f TB', $bytes / 1099511627776); } elseif ($bytes > 1073741824) { return sprintf('%.2f GB', $bytes / 1073741824); } elseif ($bytes > 1048576) { return sprintf('%.2f MB', $bytes / 1048576); } else { return sprintf('%.2f KB', $bytes / 1024);
+#>
+
 function Invoke-IcingaCheckMemory()
 {
     param(
@@ -59,35 +63,58 @@ function Invoke-IcingaCheckMemory()
         [string]$WarningBytes  = $null,
         $CriticalPercent       = $null,
         $WarningPercent        = $null,
-        [switch]$PageFile,
+#        [switch]$PageFile,
         [ValidateSet(0, 1, 2, 3)]
         [int]$Verbosity        = 0,
         [switch]$NoPerfData
      );
 
    If ([string]::IsNullOrEmpty($CriticalBytes) -eq $FALSE) {
-      [decimal]$CrticalConverted = Convert-Bytes $CriticalBytes -Unit B
+      $CrticalConvertedAll = Convert-Bytes $CriticalBytes -Unit B
+      [decimal]$CriticalConverted = $CriticalConvertedAll.value
+
    }
    If ([string]::IsNullOrEmpty($WarningBytes) -eq $FALSE) {
-      [decimal]$WarningConverted = Convert-Bytes $WarningBytes -Unit B
+      $WarningConvertedAll = Convert-Bytes $WarningBytes -Unit B
+      [decimal]$WarningConverted = $WarningConvertedAll.value
    }
-    $MemoryPackage = New-IcingaCheckPackage -Name 'Memory Usage' -OperatorAnd -Verbos $Verbosity;
-    $MemoryData    = (Get-IcingaMemoryPerformanceCounter);
+
+   $MemoryPackage = New-IcingaCheckPackage -Name 'Memory Usage' -OperatorAnd -Verbos $Verbosity;
+   $MemoryData    = (Get-IcingaMemoryPerformanceCounter);
+
+   # Auto-Detect?
+   If (($MemoryData['Memory Total Bytes'] / [math]::Pow(2, 50)) -ge 1) {
+      $Unit = "PB"
+   } elseif (($MemoryData['Memory Total Bytes'] / [math]::Pow(2, 40)) -ge 1) {
+      $Unit = "TB"
+   } elseif (($MemoryData['Memory Total Bytes'] / [math]::Pow(2, 30)) -ge 1) {
+      $Unit = "GB"
+   } elseif (($MemoryData['Memory Total Bytes'] / [math]::Pow(2, 20)) -ge 1) {
+      $Unit = "MB"
+   } elseif (($MemoryData['Memory Total Bytes'] / [math]::Pow(2, 10)) -ge 1) {
+      $Unit = "KB"
+   } else {
+      $Unit = "B"
+   }
+
+   Write-Host $Unit
   
-    $MemoryPerc             = New-IcingaCheck -Name 'Memory Percent Available' -Value $MemoryData['Memory Available %'] -Unit '%';
-    $MemoryByteUsed         = New-IcingaCheck -Name "Used Bytes" -Value $MemoryData['Memory Used Bytes'] -Unit 'B';
-    $MemoryByteAvailable    = New-IcingaCheck -Name "Available Bytes" -Value $MemoryData['Memory Available Bytes'] -Unit 'B';
-    #$PageFileCheck = New-IcingaCheck -Name 'PageFile Percent' -Value $MemoryData['PageFile %'] -Unit '%';
+   $MemoryPerc             = New-IcingaCheck -Name 'Memory Percent Used' -Value $MemoryData['Memory Used %'] -Unit '%';
+   $MemoryByteUsed         = New-IcingaCheck -Name "Used Bytes" -Value $MemoryData['Memory Used Bytes'] -Unit 'B';
+   #$MemoryByteAvailable    = New-IcingaCheck -Name "Available Bytes" -Value $MemoryData['Memory Available Bytes'] -Unit 'B';
+   #$PageFileCheck          = New-IcingaCheck -Name 'PageFile Percent' -Value $MemoryData['PageFile %'] -Unit '%';
 
-    # PageFile To-Do
-    $MemoryByteAvailable.WarnIfLowerThan($WarningConverted).CritIfLowerThan($CrticalConverted) | Out-Null;
-    $MemoryPerc.WarnIfLowerThan($WarningPercent).CritIfLowerThan($CriticalPercent) | Out-Null;
-    
-    $MemoryPackage.AddCheck($MemoryPerc);
-    $MemoryPackage.AddCheck($MemoryByteAvailable);
-    $MemoryPackage.AddCheck($MemoryByteUsed);
 
-    #$MemoryPackage.AddCheck($PageFileCheck);
+   #Kommastellen bedenken!
+   # PageFile To-Do
+   $MemoryByteUsed.WarnOutOfRange($WarningConverted).CritOutOfRange($CrticalConverted) | Out-Null;
+   $MemoryPerc.WarnOutOfRange($WarningPercent).CritOutOfRange($CriticalPercent) | Out-Null;
+   
+   $MemoryPackage.AddCheck($MemoryPerc);
+   #$MemoryPackage.AddCheck($MemoryByteAvailable);
+   $MemoryPackage.AddCheck($MemoryByteUsed);
+
+   #$MemoryPackage.AddCheck($PageFileCheck);
     
-    return (New-IcingaCheckResult -Check $MemoryPackage -NoPerfData $NoPerfData -Compile);
+   return (New-IcingaCheckResult -Check $MemoryPackage -NoPerfData $NoPerfData -Compile);
 }
