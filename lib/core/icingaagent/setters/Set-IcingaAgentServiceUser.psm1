@@ -2,7 +2,8 @@ function Set-IcingaAgentServiceUser()
 {
     param(
         [string]$User,
-        [securestring]$Password
+        [securestring]$Password,
+        [string]$Service        = 'icinga2'
     );
 
     if ([string]::IsNullOrEmpty($User)) {
@@ -14,14 +15,14 @@ function Set-IcingaAgentServiceUser()
         $User = [string]::Format('.\{0}', $User);
     }
 
-    $ArgString = 'config icinga2 obj= "{0}" password="{1}"';
+    $ArgString = 'config {0} obj= "{1}" password="{2}"';
     if($null -eq $Password) {
-        $ArgString = 'config icinga2 obj= "{0}"{1}';
+        $ArgString = 'config {0} obj= "{1}"{2}';
     }
 
     $Output = Start-IcingaProcess `
         -Executable 'sc.exe' `
-        -Arguments ([string]::Format($ArgString, $User, (ConvertFrom-IcingaSecureString $Password))) `
+        -Arguments ([string]::Format($ArgString, $Service, $User, (ConvertFrom-IcingaSecureString $Password))) `
         -FlushNewLines $TRUE;
 
     if ($Output.ExitCode -eq 0) {
