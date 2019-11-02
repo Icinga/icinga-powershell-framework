@@ -6,6 +6,11 @@ function Install-IcingaFrameworkService()
         [SecureString]$Password
     );
 
+    if ([string]::IsNullOrEmpty($Path)) {
+        Write-Host 'No path specified for Framework service. Service will not be installed';
+        return;
+    }
+
     if ((Test-Path $Path) -eq $FALSE) {
         throw 'Please specify the path directly to the service binary';
     }
