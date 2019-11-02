@@ -20,7 +20,7 @@ function Register-IcingaDirectorSelfServiceHost()
 
     $ProgressPreference = "SilentlyContinue";
 
-    $EndpointUrl = [string]::Format('{0}/self-service/register-host?name={1}&key={2}', $DirectorUrl, $Hostname, $ApiKey);
+    $EndpointUrl = Join-WebPath -Path $DirectorUrl -ChildPath ([string]::Format('/self-service/register-host?name={0}&key={1}', $Hostname, $ApiKey));
 
     $response = Invoke-WebRequest -Uri $EndpointUrl -UseBasicParsing -Headers @{ 'accept' = 'application/json'; 'X-Director-Accept' = 'application/json' } -Method 'POST';
 
@@ -31,8 +31,14 @@ function Register-IcingaDirectorSelfServiceHost()
     $JsonContent = ConvertFrom-Json -InputObject $response.Content;
 
     if (Test-PSCustomObjectMember -PSObject $JsonContent -Name 'error') {
+        if ($JsonContent.error -like '*already been registered*') {
+            return $null;
+        }
+
         throw 'Icinga Director Self-Service has thrown an error: ' + $JsonContent.error;
     }
+
+    Set-IcingaPowerShellConfig -Path 'IcingaDirector.SelfService.ApiKey' -Value $JsonContent;
 
     return $JsonContent;
 }
