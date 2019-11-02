@@ -15,7 +15,7 @@ function Get-IcingaDirectorSelfServiceConfig()
 
     $ProgressPreference = "SilentlyContinue";
 
-    $EndpointUrl = [string]::Format('{0}/self-service/powershell-parameters?key={1}', $DirectorUrl, $ApiKey);
+    $EndpointUrl = Join-WebPath -Path $DirectorUrl -ChildPath ([string]::Format('/self-service/powershell-parameters?key={0}', $ApiKey));
 
     $response = Invoke-WebRequest -Uri $EndpointUrl -UseBasicParsing -Headers @{ 'accept' = 'application/json'; 'X-Director-Accept' = 'application/json' } -Method 'POST';
 

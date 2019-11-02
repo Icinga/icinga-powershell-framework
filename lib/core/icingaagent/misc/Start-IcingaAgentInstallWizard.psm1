@@ -28,11 +28,40 @@ function Start-IcingaAgentInstallWizard()
         $InstallFrameworkService     = $null,
         $FrameworkServiceUrl         = $null,
         $ServiceDirectory            = $null,
-        $ServiceBin                  = $null
+        $ServiceBin                  = $null,
+        $UseDirectorSelfService      = $null,
+        [bool]$SkipDirectorQuestion  = $FALSE,
+        [string]$DirectorUrl,
+        [string]$SelfServiceAPIKey,
+        $OverrideDirectorVars        = $null,
+        [hashtable]$ProvidedArgs     = @{}
     );
 
     [array]$InstallerArguments = @();
     [array]$GlobalZoneConfig   = @();
+
+    if ($SkipDirectorQuestion -eq $FALSE) {
+        if ($null -eq $UseDirectorSelfService) {
+            if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to use the Icinga Director Self-Service API?' -Default 'y').result -eq 1) {
+                $UseDirectorSelfService = $TRUE;
+            } else {
+                $UseDirectorSelfService = $FALSE;
+                $InstallerArguments += '-UseDirectorSelfService 0';
+            }
+        }
+        if ($UseDirectorSelfService) {
+            $InstallerArguments += '-UseDirectorSelfService 1';
+            Start-IcingaAgentDirectorWizard `
+                -DirectorUrl $DirectorUrl `
+                -SelfServiceAPIKey $SelfServiceAPIKey `
+                -OverrideDirectorVars $OverrideDirectorVars `
+                -InstallFrameworkService $InstallFrameworkService `
+                -ServiceDirectory $ServiceDirectory `
+                -ServiceBin $ServiceBin `
+                -RunInstaller $RunInstaller;
+            return;
+        }
+    }
 
     if ([string]::IsNullOrEmpty($Hostname) -And $AutoUseFQDN -eq $FALSE -And $AutoUseHostname -eq $FALSE) {
         if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to manually specify a hostname?' -Default 'n').result -eq 1) {
@@ -261,27 +290,87 @@ function Start-IcingaAgentInstallWizard()
             $InstallerArguments += [string]::Format("-ServiceDirectory '{0}'", $result.ServiceDirectory);
             $InstallerArguments += [string]::Format("-ServiceBin '{0}'", $result.ServiceBin);
             $ServiceBin = $result.ServiceBin;
+        } else {
+            $InstallerArguments += "-InstallFrameworkService 0";
         }
     } elseif ($InstallFrameworkService -eq $TRUE) {
         $result     = Get-IcingaFrameworkServiceBinary -FrameworkServiceUrl $FrameworkServiceUrl -ServiceDirectory $ServiceDirectory;
         $ServiceBin = $result.ServiceBin;
+    } else {
+        $InstallerArguments += "-InstallFrameworkService 0";
     }
 
     if ($InstallerArguments.Count -ne 0) {
         $InstallerArguments += "-RunInstaller";
         Write-Host 'The wizard is complete. These are the configured settings:';
+
+        foreach ($entry in $ProvidedArgs.Keys) {
+            if ($entry -eq 'ProvidedArgs' -Or $entry -eq 'SkipDirectorQuestion') {
+                continue;
+            }
+
+            [bool]$SkipArgument = $FALSE;
+
+            if ($OverrideDirectorVars -eq $FALSE) {
+                switch ($entry) {
+                    'InstallFrameworkService' { break; };
+                    'FrameworkServiceUrl' { break; };
+                    'ServiceDirectory' { break; };
+                    'ServiceBin' { break; };
+                    'UseDirectorSelfService' { break; };
+                    'DirectorUrl' { break; };
+                    'SelfServiceAPIKey' { break; };
+                    'OverrideDirectorVars' { break; };
+                    Default {
+                        $SkipArgument = $TRUE;
+                        break;
+                    }
+                }
+
+                if ($SkipArgument) {
+                    continue;
+                }
+            }
+
+            [bool]$KnownArgument = $FALSE;
+            foreach ($item in $InstallerArguments) {
+                if ($item -like "-$entry *" -Or $item -eq "-$entry") {
+                    $KnownArgument = $TRUE;
+                    break;
+                }
+            }
+
+            if ($KnownArgument) {
+                continue;
+            }
+
+            $Value = $ProvidedArgs[$entry];
+            if ($Value -is [System.Object]) {
+                $Value = [string]::Join(',', $Value);
+            }
+
+            if ($OverrideDirectorVars -eq $FALSE) {
+                #$ClearedArguments += [string]::Format("-{0} '{1}'", $entry, $Value);
+                #continue;
+            }
+
+            $InstallerArguments += [string]::Format("-{0} '{1}'", $entry, $Value);
+        }
+
         Write-Host ($InstallerArguments | Out-String);
 
-        if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Is this configuration correct?' -Default 'y').result -eq 1) {
-            if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to run the installer now? (Otherwise only the configration command will be printed)' -Default 'y').result -eq 1) {
-                Write-Host 'To execute your Icinga Agent installation based on your answers again on this or another machine, simply run this command:'
+        if (-Not $RunInstaller) {
+            if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Is this configuration correct?' -Default 'y').result -eq 1) {
+                if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to run the installer now? (Otherwise only the configration command will be printed)' -Default 'y').result -eq 1) {
+                    Write-Host 'To execute your Icinga Agent installation based on your answers again on this or another machine, simply run this command:'
 
-                $RunInstaller = $TRUE;
+                    $RunInstaller = $TRUE;
+                } else {
+                    Write-Host 'To execute your Icinga Agent installation based on your answers, simply run this command:'
+                }
             } else {
-                Write-Host 'To execute your Icinga Agent installation based on your answers, simply run this command:'
+                Write-Host 'Please run the wizard again to modify your answers or modify the command below:'
             }
-        } else {
-            Write-Host 'Please run the wizard again to modify your answers or modify the command below:'
         }
         Get-IcingaAgentInstallCommand -InstallerArguments $InstallerArguments -PrintConsole;
     }
@@ -289,8 +378,8 @@ function Start-IcingaAgentInstallWizard()
     if ($RunInstaller) {
         if ((Install-IcingaAgent -Version $AgentVersion -Source $PackageSource -AllowUpdates $AllowVersionChanges) -Or $Reconfigure) {
             Move-IcingaAgentDefaultConfig;
-            Set-IcingaAgentServiceUser -User $ServiceUser -Password $ServicePass;
-            Set-IcingaAgentServicePermission;
+            Set-IcingaAgentServiceUser -User $ServiceUser -Password $ServicePass | Out-Null;
+            Set-IcingaAgentServicePermission | Out-Null;
             Set-IcingaAcl "$Env:ProgramData\icinga2\etc";
             Set-IcingaAcl "$Env:ProgramData\icinga2\var";
             Set-IcingaAcl (Get-IcingaCacheDir);
