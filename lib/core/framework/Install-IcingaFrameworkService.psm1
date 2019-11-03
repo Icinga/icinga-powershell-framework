@@ -32,6 +32,9 @@ function Install-IcingaFrameworkService()
     # will not start without this workaround.
     # Todo: Figure out the reason and fix it properly
     Set-IcingaAgentServiceUser -User 'LocalSystem' -Service 'icingapowershell' | Out-Null;
+    Restart-IcingaService 'icingapowershell';
+    Start-Sleep -Seconds 1;
+    Stop-IcingaService 'icingapowershell';
 
     return (Set-IcingaAgentServiceUser -User $User -Password $Password -Service 'icingapowershell');
 }
