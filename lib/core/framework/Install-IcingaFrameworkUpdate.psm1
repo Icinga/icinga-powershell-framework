@@ -90,6 +90,8 @@ function Install-IcingaFrameworkUpdate()
     Move-Item -Path (Join-Path -Path $ModuleDirectory -ChildPath $Extracted) -Destination $NewDirectory;
 
     Unblock-IcingaPowerShellFiles -Path $NewDirectory;
+    # Fix new permissions for cache folder
+    Set-IcingaAcl -Directory (Get-IcingaCacheDir);
 
     Test-IcingaAgent;
 
