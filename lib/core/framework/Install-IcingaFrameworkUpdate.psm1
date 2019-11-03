@@ -5,10 +5,11 @@ function Install-IcingaFrameworkUpdate()
     );
 
     $ProgressPreference = "SilentlyContinue";
+    $Tag                = 'Unknown';
 
     if ([string]::IsNullOrEmpty($FrameworkUrl)) {
         if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you provide a custom repository of the framework?' -Default 'n').result -eq 1) {
-            $branch = (Read-IcingaWizardAnswerInput -Prompt 'Which version to you want to install? (snapshot/stable)' -Default 'v' -DefaultInput 'stable').answer
+            $branch = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Which version to you want to install? (snapshot/stable)' -Default 'v' -DefaultInput 'stable').answer
             if ($branch.ToLower() -eq 'snapshot') {
                 $FrameworkUrl  = 'https://github.com/Icinga/icinga-powershell-framework/archive/master.zip';
             } else {
@@ -16,6 +17,13 @@ function Install-IcingaFrameworkUpdate()
                 $FrameworkUrl  = $LatestRelease.Replace('/releases/tag/', '/archive/');
                 $Tag           = $FrameworkUrl.Split('/')[-1];
                 $FrameworkUrl  = [string]::Format('{0}/{1}.zip', $FrameworkUrl, $Tag);
+
+                $CurrentVersion = Get-IcingaPowerShellModuleVersion 'icinga-powershell-framework';
+
+                if ($null -ne $CurrentVersion -And $CurrentVersion -eq $Tag) {
+                    Write-Host 'Your Icinga Framework is already up-to-date';
+                    return;
+                }
             }
         } else {
             $FrameworkUrl = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please enter the full path to your icinga framework repository' -Default 'v').answer;
@@ -23,7 +31,7 @@ function Install-IcingaFrameworkUpdate()
     }
 
     $ModuleDirectory = Get-IcingaFrameworkRootPath;
-    $DownloadPath    = (Join-Path -Path $ENv:TEMP -ChildPath 'icinga-powershell-framework-zip');
+    $DownloadPath    = (Join-Path -Path $ENv:TEMP -ChildPath 'icinga-powershell-framework.zip');
     Write-Host ([string]::Format('Downloading Icinga Framework into "{0}"', $DownloadPath));
 
     Invoke-WebRequest -UseBasicParsing -Uri $FrameworkUrl -OutFile $DownloadPath;
@@ -77,10 +85,11 @@ function Install-IcingaFrameworkUpdate()
         Move-Item -Path $NewDirectory -Destination (Join-Path -Path $BackupDir -ChildPath (Get-Date -Format "MM-dd-yyyy-HH-mm-ffff"));
     }
 
-    Write-Host 'Installing new module version';
-    Move-Item -Path (Join-Path -Path $Destination -ChildPath $Extracted) -Destination $NewDirectory;
+    Write-Host ([string]::Format('Installing new module version "{0}"', $Tag));
+    Start-Sleep -Seconds 2;
+    Move-Item -Path (Join-Path -Path $ModuleDirectory -ChildPath $Extracted) -Destination $NewDirectory;
 
-    Unblock-IcingaFramework -Path $NewDirectory;
+    Unblock-IcingaPowerShellFiles -Path $NewDirectory;
 
     Test-IcingaAgent;
 
