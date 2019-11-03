@@ -421,11 +421,7 @@ function Start-IcingaAgentInstallWizard()
     if ($RunInstaller) {
         if ((Install-IcingaAgent -Version $AgentVersion -Source $PackageSource -AllowUpdates $AllowVersionChanges) -Or $Reconfigure) {
             Move-IcingaAgentDefaultConfig;
-            Set-IcingaAgentServiceUser -User $ServiceUser -Password $ServicePass | Out-Null;
-            Set-IcingaAgentServicePermission | Out-Null;
-            Set-IcingaAcl "$Env:ProgramData\icinga2\etc";
-            Set-IcingaAcl "$Env:ProgramData\icinga2\var";
-            Set-IcingaAcl (Get-IcingaCacheDir);
+            Set-IcingaAgentServiceUser -User $ServiceUser -Password $ServicePass -SetPermission | Out-Null;
             Install-IcingaFrameworkService -Path $ServiceBin -User $ServiceUser -Password $ServicePass | Out-Null;
             Register-IcingaBackgroundDaemon -Command 'Start-IcingaServiceCheckDaemon';
             Install-IcingaAgentBaseFeatures;
