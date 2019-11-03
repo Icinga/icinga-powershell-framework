@@ -16,6 +16,12 @@ function Use-Icinga()
         [switch]$Daemon  = $FALSE
     );
 
+    # Ensure we autoload the Icinga Plugin collection, provided by the external
+    # module 'icinga-powershell-plugins'
+    if (Get-Command 'Use-IcingaPlugins' -ErrorAction SilentlyContinue) {
+        Use-IcingaPlugins;
+    }
+
     # This function will allow us to load this entire module including possible
     # actions, making it available within our shell environment
     # First load our custom modules
