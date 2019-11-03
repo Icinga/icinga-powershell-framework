@@ -70,6 +70,8 @@ function Start-IcingaAgentInstallWizard()
                 $SelfServiceAPIKey   = $Result.Value;
                 $InstallerArguments  = $Result.Args;
             }
+            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'Ticket' -Value $Ticket -InstallerArguments $InstallerArguments;
+            $Ticket              = $Result.Value;
             $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'PackageSource' -Value $PackageSource -InstallerArguments $InstallerArguments;
             $PackageSource       = $Result.Value;
             $InstallerArguments  = $Result.Args;
