@@ -386,9 +386,9 @@ function Start-IcingaAgentInstallWizard()
     if ($null -eq $InstallFrameworkPlugins) {
         if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to install the Icinga Plugins?' -Default 'y').result -eq 1) {
             $result = Install-IcingaFrameworkPlugins -PluginsUrl $PluginsUrl;
-            $PluginsUrl = $result.PluginsUrl;
+            $PluginsUrl = $result.PluginUrl;
             $InstallerArguments += "-InstallFrameworkPlugins 1";
-            $InstallerArguments += "-$PluginsUrl '$PluginsUrl'";
+            $InstallerArguments += "-PluginsUrl '$PluginsUrl'";
         } else {
             $InstallerArguments += "-InstallFrameworkPlugins 0";
         }
