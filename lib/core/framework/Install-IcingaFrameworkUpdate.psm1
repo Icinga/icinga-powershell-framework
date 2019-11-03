@@ -61,6 +61,7 @@ function Install-IcingaFrameworkUpdate()
 
     if ($ServiceStatus -eq 'Running') {
         Stop-IcingaService 'icingapowershell';
+        Start-Sleep -Seconds 1;
     }
 
     $NewDirectory = (Join-Path -Path $ModuleDirectory -ChildPath 'icinga-powershell-framework');
