@@ -2,22 +2,20 @@ function Start-IcingaAgentDirectorWizard()
 {
     param(
         [string]$DirectorUrl,
-        [string]$SelfServiceAPIKey,
+        [string]$SelfServiceAPIKey = $null,
         $OverrideDirectorVars      = $null,
-        $InstallFrameworkService   = $null,
-        $ServiceDirectory          = $null,
-        $ServiceBin                = $null,
         [bool]$RunInstaller        = $FALSE
     );
 
+    [hashtable]$DirectorOverrideArgs        = @{}
     if ([string]::IsNullOrEmpty($DirectorUrl)) {
         $DirectorUrl = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please specify the Url pointing to your Icinga Director' -Default 'v').answer;
     }
 
-    [bool]$HostKnown      = $FALSE;
+    [bool]$HostKnown     = $FALSE;
     [string]$TemplateKey = $SelfServiceAPIKey;
 
-    if ($null -eq $OverrideDirectorVars) {
+    if ($null -eq $OverrideDirectorVars -And $RunInstaller -eq $FALSE) {
         if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to manually override arguments provided by the Director API?' -Default 'n').result -eq 0) {
             $OverrideDirectorVars = $TRUE;
         } else{
@@ -43,9 +41,13 @@ function Start-IcingaAgentDirectorWizard()
     $Arguments = Get-IcingaDirectorSelfServiceConfig -DirectorUrl $DirectorUrl -ApiKey $SelfServiceAPIKey;
     $Arguments = Convert-IcingaDirectorSelfServiceArguments -JsonInput $Arguments;
 
-    if ($OverrideDirectorVars -eq $TRUE) {
-        $NewArguments = Start-IcingaDirectorAPIArgumentOverride -Arguments $Arguments;
-        $Arguments = $NewArguments;
+    if ($OverrideDirectorVars -eq $TRUE -And -Not $RunInstaller) {
+        $DirectorOverrideArgs = Start-IcingaDirectorAPIArgumentOverride -Arguments $Arguments;
+        foreach ($entry in $DirectorOverrideArgs.Keys) {
+            if ($Arguments.ContainsKey($entry)) {
+                $Arguments[$entry] = $DirectorOverrideArgs[$entry];
+            }
+        }
     }
 
     if ($HostKnown -eq $FALSE) {
@@ -62,48 +64,29 @@ function Start-IcingaAgentDirectorWizard()
 
         $Arguments = Get-IcingaDirectorSelfServiceConfig -DirectorUrl $DirectorUrl -ApiKey $SelfServiceAPIKey;
         $Arguments = Convert-IcingaDirectorSelfServiceArguments -JsonInput $Arguments;
-        if ($OverrideDirectorVars -eq $TRUE) {
-            $NewArguments = Start-IcingaDirectorAPIArgumentOverride -Arguments $Arguments;
-            $Arguments = $NewArguments;
+        if ($OverrideDirectorVars -eq $TRUE -And -Not $RunInstaller) {
+            $DirectorOverrideArgs = Start-IcingaDirectorAPIArgumentOverride -Arguments $Arguments;
+            foreach ($entry in $DirectorOverrideArgs.Keys) {
+                if ($Arguments.ContainsKey($entry)) {
+                    $Arguments[$entry] = $DirectorOverrideArgs[$entry];
+                }
+            }
         }
     }
 
-    $Arguments.Add(
-        'UseDirectorSelfService', $TRUE
-    );
-    $Arguments.Add(
-        'OverrideDirectorVars', $FALSE
-    );
-    $Arguments.Add(
+    $DirectorOverrideArgs.Add(
         'DirectorUrl', $DirectorUrl
     );
-    $Arguments.Add(
-        'SelfServiceAPIKey', $TemplateKey
-    );
-    $Arguments.Add(
-        'SkipDirectorQuestion', $TRUE
-    );
-    $Arguments.Add(
-        'InstallFrameworkService', $InstallFrameworkService
-    );
-    $Arguments.Add(
-        'ServiceDirectory', $ServiceDirectory
-    );
-    $Arguments.Add(
-        'ServiceBin', $ServiceBin
-    );
-    $Arguments.Add(
-        'ProvidedArgs', $Arguments
-    );
-
-    if ($RunInstaller) {
-        Start-IcingaAgentInstallWizard @Arguments;
-        return;
+    if ([string]::IsNullOrEmpty($TemplateKey) -eq $FALSE) {
+        $DirectorOverrideArgs.Add(
+            'SelfServiceAPIKey', $TemplateKey
+        );
     }
 
-    if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'The Director wizard is complete. Do you want to start the installation now?' -Default 'y').result -eq 1) {
-        Start-IcingaAgentInstallWizard @Arguments;
-    }
+    return @{
+        'Arguments' = $Arguments;
+        'Overrides' = $DirectorOverrideArgs;
+    };
 }
 
 function Start-IcingaDirectorAPIArgumentOverride()
@@ -118,7 +101,28 @@ function Start-IcingaDirectorAPIArgumentOverride()
 
     foreach ($entry in $Arguments.Keys) {
         $value = (Get-IcingaAgentInstallerAnswerInput -Prompt ([string]::Format('Please enter the new value for the argument "{0}"', $entry)) -Default 'v' -DefaultInput $Arguments[$entry]).answer;
-        $NewArguments.Add($entry, $value);
+        if ($Arguments[$entry] -is [array]) {
+            if ([string]::IsNullOrEmpty($value) -eq $FALSE) { 
+                [array]$tmpArray = $value.Split(',');
+                if ($null -ne (Compare-Object -ReferenceObject $Arguments[$entry] -DifferenceObject $tmpArray)) {
+                    $NewArguments.Add(
+                        $entry,
+                        ([string]::Join(',', $tmpArray))
+                    );
+                }
+            }
+            continue;
+        } elseif ($Arguments[$entry] -is [bool]) {
+            if ($value -eq 'true' -or $value -eq 'y' -or $value -eq '1' -or $value -eq 'yes' -or $value -eq 1) {
+                $value = 1;
+            } else {
+                $value = 0;
+            }
+        }
+
+        if ($Arguments[$entry] -ne $value) {
+            $NewArguments.Add($entry, $value);
+        }
     }
 
     return $NewArguments;
