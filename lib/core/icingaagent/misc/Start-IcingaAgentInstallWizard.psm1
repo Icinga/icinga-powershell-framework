@@ -474,7 +474,7 @@ function Set-IcingaWizardArgument()
         }
         $InstallerArguments += "-$WizardArg $Override";
         return @{
-            'Value' = $Override;
+            'Value' = $DirectorArgs.Overrides[$WizardArg];
             'Args'  = $InstallerArguments;
         };
     }
@@ -483,15 +483,13 @@ function Set-IcingaWizardArgument()
 
     if ($DirectorArgs.Arguments.ContainsKey($WizardArg)) {
         $RetValue = $DirectorArgs.Arguments[$WizardArg];
-        if ($Value -is [array]) {
-            $RetValue = [string]::Join(',', $RetValue);
-        }
     } else {
         if ($null -ne $Value -Or [string]::IsNullOrEmpty($Value) -eq $FALSE) {
+            $TmpValue = $Value;
             if ($Value -is [array]) {
-                $Value = [string]::Join(',', $Value);
+                $TmpValue = [string]::Join(',', $TmpValue);
             }
-            $InstallerArguments += "-$WizardArg $Value";
+            $InstallerArguments += "-$WizardArg $TmpValue";
             return @{
                 'Value' = $Value;
                 'Args'  = $InstallerArguments;
@@ -505,10 +503,11 @@ function Set-IcingaWizardArgument()
     }
 
     if ([string]::IsNullOrEmpty($Value) -eq $FALSE) {
+        $TmpValue = $Value;
         if ($Value -is [array]) {
-            $Value = [string]::Join(',', $Value);
+            $TmpValue = [string]::Join(',', $Value);
         }
-        $InstallerArguments += "-$WizardArg $Value";
+        $InstallerArguments += "-$WizardArg $TmpValue";
         return @{
             'Value' = $Value;
             'Args'  = $InstallerArguments;
