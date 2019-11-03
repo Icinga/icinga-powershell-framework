@@ -471,6 +471,8 @@ function New-IcingaCheck()
 
         if ((Test-Numeric $checkValue)) {
             $checkValue = [int]$checkValue;
+        } else {
+            $checkValue = [string]$checkValue;
         }
 
         if ($this.translation.ContainsKey($checkValue)) {
