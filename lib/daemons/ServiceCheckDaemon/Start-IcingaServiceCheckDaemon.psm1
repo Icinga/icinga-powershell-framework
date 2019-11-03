@@ -46,11 +46,29 @@ function Start-IcingaServiceCheckTask()
         $PassedTime   = 0;
         $SortedResult = $null;
         $OldData      = @{};
+        $PerfCache    = @{};
 
         if (-Not ($IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler.ContainsKey($CheckCommand))) {
             $IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler.Add($CheckCommand, [hashtable]::Synchronized(@{}));
             $IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler[$CheckCommand].Add('results', [hashtable]::Synchronized(@{}));
             $IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler[$CheckCommand].Add('average', [hashtable]::Synchronized(@{}));
+        }
+
+        $LoadedCacheData = Get-IcingaCacheData -Space 'sc_daemon' -CacheStore 'checkresult_store' -KeyName $CheckCommand;
+
+        if ($null -ne $LoadedCacheData) {
+            foreach ($entry in $LoadedCacheData.PSObject.Properties) {
+                $IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler[$CheckCommand]['results'].Add(
+                    $entry.name,
+                    [hashtable]::Synchronized(@{})
+                );
+                foreach ($item in $entry.Value.PSObject.Properties) {
+                    $IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler[$CheckCommand]['results'][$entry.name].Add(
+                        $item.Name,
+                        $item.Value
+                    );
+                }
+            }
         }
 
         while ($TRUE) {
@@ -63,6 +81,7 @@ function Start-IcingaServiceCheckTask()
                     foreach ($result in $IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler[$CheckCommand]['results'].Keys) {
                         $SortedResult = $IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler[$CheckCommand]['results'][$result].GetEnumerator() | Sort-Object name -Descending;
                         Add-IcingaHashtableItem -Hashtable $OldData -Key $result -Value @{};
+                        Add-IcingaHashtableItem -Hashtable $PerfCache -Key ([string]$result) -Value @{};
 
                         foreach ($index in $TimeIndexes) {
                             $ObjectCount   = 0;
@@ -74,6 +93,7 @@ function Start-IcingaServiceCheckTask()
                                     $ObjectCount += 1;
                                     $ObjectValue += $timeEntry.Value;
                                     Remove-IcingaHashtableItem -Hashtable $OldData[$result] -Key $timeEntry;
+                                    Add-IcingaHashtableItem -Hashtable $PerfCache[$result] -Key ([string]$timeEntry.Key) -Value ([string]$timeEntry.Value);
                                 } else {
                                     Add-IcingaHashtableItem -Hashtable $OldData[$result] -Key $timeEntry -Value $null;
                                 }
@@ -96,6 +116,8 @@ function Start-IcingaServiceCheckTask()
                     }
 
                     Set-IcingaCacheData -Space 'sc_daemon' -CacheStore 'checkresult' -KeyName $CheckCommand -Value $IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler[$CheckCommand]['average'];
+                    # Write collected metrics to disk in case we reload the daemon. We will load them back into the module after reload then
+                    Set-IcingaCacheData -Space 'sc_daemon' -CacheStore 'checkresult_store' -KeyName $CheckCommand -Value $PerfCache;
                 } catch {
                     # Todo: Add error reporting / handling
                 }
@@ -103,6 +125,7 @@ function Start-IcingaServiceCheckTask()
                 $PassedTime   = 0;
                 $SortedResult = $null;
                 $OldData      = @{};
+                $PerfCache    = @{};
             }
             $PassedTime += 1;
             Start-Sleep -Seconds 1;
