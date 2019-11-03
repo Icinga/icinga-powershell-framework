@@ -77,6 +77,10 @@ function Install-IcingaFrameworkUpdate()
             Write-Host 'Importing custom modules into new module version...';
             Copy-Item -Path (Join-Path -Path $NewDirectory -ChildPath 'custom') -Destination $ExtractDir -Force -Recurse;
         }
+        if ((Test-Path (Join-Path -Path $NewDirectory -ChildPath 'config'))) {
+            Write-Host 'Importing config into new module version...';
+            Copy-Item -Path (Join-Path -Path $NewDirectory -ChildPath 'config') -Destination $ExtractDir -Force -Recurse;
+        }
         Write-Host 'Creating backup directory';
         if ((Test-Path $OldBackupDir)) {
             Write-Host 'Importing old backups into new module version...';
