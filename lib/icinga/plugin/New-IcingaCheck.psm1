@@ -494,7 +494,7 @@ function New-IcingaCheck()
         $this.SetExitCode($state);
         $this.AddMessage(
             [string]::Format(
-                '{0} {1}{4} is {2} {3}{4}',
+                '{0}: Value "{1}{4}" is {2} threshold "{3}{4}"',
                 $this.name,
                 $this.TranslateValue($this.value),
                 $type,
@@ -670,7 +670,7 @@ function New-IcingaCheck()
             $this.exitcode = $IcingaEnums.IcingaExitCode.Ok;
             $this.AddMessage(
                 [string]::Format(
-                    '{0} is {1}{2}',
+                    '{0}: {1}{2}',
                     $this.name,
                     $this.TranslateValue($this.value),
                     $this.unit
