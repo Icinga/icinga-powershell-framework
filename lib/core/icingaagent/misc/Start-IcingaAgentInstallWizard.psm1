@@ -2,15 +2,15 @@ function Start-IcingaAgentInstallWizard()
 {
     param(
         [string]$Hostname,
-        [switch]$AutoUseFQDN         = $FALSE,
-        [switch]$AutoUseHostname     = $FALSE,
-        [switch]$LowerCase           = $FALSE,
-        [switch]$UpperCase           = $FALSE,
+        $AutoUseFQDN,
+        $AutoUseHostname,
+        $LowerCase,
+        $UpperCase,
         $AddDirectorGlobal           = $null,
         $AddGlobalTemplates          = $null,
         [string]$PackageSource,
         [string]$AgentVersion,
-        [switch]$AllowVersionChanges = $FALSE,
+        $AllowVersionChanges,
         $UpdateAgent                 = $null,
         $AcceptConnections           = $null,
         [array]$Endpoints            = @(),
@@ -20,7 +20,8 @@ function Start-IcingaAgentInstallWizard()
         [string]$CAEndpoint,
         $CAPort                      = $null,
         [string]$Ticket,
-        [string]$CAFile,
+        [string]$CAFile              = $null,
+        $EmptyCA                     = $null,
         [switch]$RunInstaller,
         [switch]$Reconfigure,
         [string]$ServiceUser,
@@ -32,9 +33,8 @@ function Start-IcingaAgentInstallWizard()
         $UseDirectorSelfService      = $null,
         [bool]$SkipDirectorQuestion  = $FALSE,
         [string]$DirectorUrl,
-        [string]$SelfServiceAPIKey,
-        $OverrideDirectorVars        = $null,
-        [hashtable]$ProvidedArgs     = @{}
+        [string]$SelfServiceAPIKey   = $null,
+        $OverrideDirectorVars        = $null
     );
 
     [array]$InstallerArguments = @();
@@ -50,34 +50,98 @@ function Start-IcingaAgentInstallWizard()
             }
         }
         if ($UseDirectorSelfService) {
+
             $InstallerArguments += '-UseDirectorSelfService 1';
-            Start-IcingaAgentDirectorWizard `
+            $DirectorArgs = Start-IcingaAgentDirectorWizard `
                 -DirectorUrl $DirectorUrl `
                 -SelfServiceAPIKey $SelfServiceAPIKey `
                 -OverrideDirectorVars $OverrideDirectorVars `
-                -InstallFrameworkService $InstallFrameworkService `
-                -ServiceDirectory $ServiceDirectory `
-                -ServiceBin $ServiceBin `
                 -RunInstaller $RunInstaller;
-            return;
+
+            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'DirectorUrl' -Value $DirectorUrl -InstallerArguments $InstallerArguments;
+            $DirectorUrl         = $Result.Value;
+            $InstallerArguments  = $Result.Args;
+            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'SelfServiceAPIKey' -Value $SelfServiceAPIKey -InstallerArguments $InstallerArguments -Default $null;
+            if ([string]::IsNullOrEmpty($Result.Value) -eq $FALSE) {
+                Write-Host 'Setting self service arg'
+                $SelfServiceAPIKey   = $Result.Value;
+                $InstallerArguments  = $Result.Args;
+            }
+            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'PackageSource' -Value $PackageSource -InstallerArguments $InstallerArguments;
+            $PackageSource       = $Result.Value;
+            $InstallerArguments  = $Result.Args;
+            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'AgentVersion' -Value $AgentVersion -InstallerArguments $InstallerArguments;
+            $AgentVersion        = $Result.Value;
+            $InstallerArguments  = $Result.Args;
+            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'CAPort' -Value $CAPort -InstallerArguments $InstallerArguments;
+            $CAPort              = $Result.Value;
+            $InstallerArguments  = $Result.Args;
+            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'AllowVersionChanges' -Value $AllowVersionChanges -InstallerArguments $InstallerArguments;
+            $AllowVersionChanges = $Result.Value;
+            $InstallerArguments  = $Result.Args;
+            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'GlobalZones' -Value $GlobalZones -InstallerArguments $InstallerArguments;
+            $GlobalZones         = $Result.Value;
+            $InstallerArguments  = $Result.Args;
+            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'ParentZone' -Value $ParentZone -InstallerArguments $InstallerArguments;
+            $ParentZone          = $Result.Value;
+            $InstallerArguments  = $Result.Args;
+            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'CAEndpoint' -Value $CAEndpoint -InstallerArguments $InstallerArguments;
+            $CAEndpoint          = $Result.Value;
+            $InstallerArguments  = $Result.Args;
+            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'Endpoints' -Value $Endpoints -InstallerArguments $InstallerArguments;
+            $Endpoints           = $Result.Value;
+            $InstallerArguments  = $Result.Args;
+            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'AddFirewallRule' -Value $AddFirewallRule -InstallerArguments $InstallerArguments;
+            $AddFirewallRule     = $Result.Value;
+            $InstallerArguments  = $Result.Args;
+            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'AcceptConnections' -Value $AcceptConnections -InstallerArguments $InstallerArguments;
+            $AcceptConnections   = $Result.Value;
+            $InstallerArguments  = $Result.Args;
+            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'ServiceUser' -Value $ServiceUser -InstallerArguments $InstallerArguments;
+            $ServiceUser         = $Result.Value;
+            $InstallerArguments  = $Result.Args;
+            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'UpdateAgent' -Value $UpdateAgent -InstallerArguments $InstallerArguments;
+            $UpdateAgent         = $Result.Value;
+            $InstallerArguments  = $Result.Args;
+            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'AddDirectorGlobal' -Value $AddDirectorGlobal -InstallerArguments $InstallerArguments;
+            $AddDirectorGlobal   = $Result.Value;
+            $InstallerArguments  = $Result.Args;
+            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'AddGlobalTemplates' -Value $AddGlobalTemplates -InstallerArguments $InstallerArguments;
+            $AddGlobalTemplates  = $Result.Value;
+            $InstallerArguments  = $Result.Args;
+            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'LowerCase' -Value $LowerCase -Default $FALSE -InstallerArguments $InstallerArguments;
+            $LowerCase           = $Result.Value;
+            $InstallerArguments  = $Result.Args;
+            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'UpperCase' -Value $UpperCase -Default $FALSE -InstallerArguments $InstallerArguments;
+            $UpperCase           = $Result.Value;
+            $InstallerArguments  = $Result.Args;
+            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'AutoUseFQDN' -Value $AutoUseFQDN -Default $FALSE -InstallerArguments $InstallerArguments;
+            $AutoUseFQDN         = $Result.Value;
+            $InstallerArguments  = $Result.Args;
+            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'AutoUseHostname' -Value $AutoUseHostname -Default $FALSE -InstallerArguments $InstallerArguments;
+            $AutoUseHostname     = $Result.Value;
+            $InstallerArguments  = $Result.Args;
+            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'EndpointConnections' -Value $EndpointConnections -InstallerArguments $InstallerArguments;
+            $EndpointConnections = $Result.Value;
+            $InstallerArguments  = $Result.Args;
         }
     }
 
     if ([string]::IsNullOrEmpty($Hostname) -And $AutoUseFQDN -eq $FALSE -And $AutoUseHostname -eq $FALSE) {
         if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to manually specify a hostname?' -Default 'n').result -eq 1) {
             if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to automatically fetch the hostname with its FQDN?' -Default 'y').result -eq 1) {
-                $InstallerArguments += '-AutoUseFQDN';
+                $InstallerArguments += '-AutoUseFQDN 1';
                 $AutoUseFQDN = $TRUE;
             } else {
-                $InstallerArguments += '-AutoUseHostname';
+                $InstallerArguments += '-AutoUseHostname 1';
                 $AutoUseHostname = $TRUE;
             }
             if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to modify the hostname to only include lower case characters?' -Default 'y').result -eq 1) {
-                $InstallerArguments += '-LowerCase';
+                $InstallerArguments += '-LowerCase 1';
                 $LowerCase = $TRUE;
             } else {
                 if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to modify the hostname to only include upper case characters?' -Default 'n').result -eq 0) {
-                    $InstallerArguments += '-UpperCase';
+                    $InstallerArguments += '-UpperCase 1';
                     $UpperCase = $TRUE;
                 }
             }
@@ -130,7 +194,7 @@ function Start-IcingaAgentInstallWizard()
                 $AgentVersion = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please specify the version you wish to install ("latest", "snapshot", or a version like "2.11.0")' -Default 'v').answer;
                 $AllowVersionChanges = $TRUE;
                 $InstallerArguments += "-AgentVersion '$AgentVersion'";
-                $InstallerArguments += '-AllowVersionChanges';
+                $InstallerArguments += '-AllowVersionChanges 1';
 
                 Write-Host ([string]::Format('Updating/Downgrading Icinga 2 Agent to version: "{0}"', $AgentVersion));
             }
@@ -194,12 +258,13 @@ function Start-IcingaAgentInstallWizard()
     if ($null -eq $AddDirectorGlobal) {
         if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to add the global zone "director-global"?' -Default 'y').result -eq 1) {
             $AddDirectorGlobal = $TRUE;
+            $InstallerArguments += ("-AddDirectorGlobal 1");
         } else {
             $AddDirectorGlobal = $FALSE;
+            $InstallerArguments += ("-AddDirectorGlobal 0");
         }
     }
 
-    $InstallerArguments += ("-AddDirectorGlobal $AddDirectorGlobal");
     if ($AddDirectorGlobal) {
         $GlobalZoneConfig += 'director-global';
     }
@@ -207,12 +272,13 @@ function Start-IcingaAgentInstallWizard()
     if ($null -eq $AddGlobalTemplates) {
         if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to add the global zone "global-templates"?' -Default 'y').result -eq 1) {
             $AddGlobalTemplates = $TRUE;
+            $InstallerArguments += ("-AddGlobalTemplates 1");
         } else {
             $AddGlobalTemplates = $FALSE;
+            $InstallerArguments += ("-AddGlobalTemplates 0");
         }
     }
 
-    $InstallerArguments += ("-AddGlobalTemplates $AddGlobalTemplates");
     if ($AddGlobalTemplates) {
         $GlobalZoneConfig += 'global-templates';
     }
@@ -233,12 +299,16 @@ function Start-IcingaAgentInstallWizard()
 
     [bool]$CanConnectToParent = $FALSE;
 
-    if ($AcceptConnections -eq 0) {
+    if ($null -eq $AcceptConnections) {
         if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Is this Agent able to connect to its parent node for certificate generation?' -Default 'y').result -eq 1) {
             $CanConnectToParent = $TRUE;
+            $InstallerArguments += ("-AcceptConnections 1");
+        } else {
+            $InstallerArguments += ("-AcceptConnections 0");
         }
-    } else {
+    } elseif ($AcceptConnections) {
         $CanConnectToParent = $TRUE;
+        $InstallerArguments += ("-AcceptConnections 1");
     }
 
     if ($CanConnectToParent) {
@@ -255,11 +325,22 @@ function Start-IcingaAgentInstallWizard()
             }
         }
     } else {
-        if ([string]::IsNullOrEmpty($CAFile)) {
+        if ([string]::IsNullOrEmpty($CAFile) -And $null -eq $EmptyCA) {
             if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Is your public Icinga 2 CA (ca.crt) available on a local, network or web share?' -Default 'y').result -eq 1) {
                 $CAFile = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please provide the full path to your ca.crt file' -Default 'v').answer;
                 $InstallerArguments += "-CAFile $CAFile";
+                $InstallerArguments += "-EmptyCA 0";
+            } else {
+                $InstallerArguments += "-CAFile ''";
+                $InstallerArguments += "-EmptyCA 1"
             }
+        } else {
+            if ([string]::IsNullOrEmpty($CAFile)) {
+                $InstallerArguments += "-CAFile ''";
+            } else {
+                $InstallerArguments += "-CAFile $CAFile";
+            }
+            $InstallerArguments += "-EmptyCA $EmptyCA"
         }
     }
 
@@ -304,60 +385,9 @@ function Start-IcingaAgentInstallWizard()
         $InstallerArguments += "-RunInstaller";
         Write-Host 'The wizard is complete. These are the configured settings:';
 
-        foreach ($entry in $ProvidedArgs.Keys) {
-            if ($entry -eq 'ProvidedArgs' -Or $entry -eq 'SkipDirectorQuestion') {
-                continue;
-            }
-
-            [bool]$SkipArgument = $FALSE;
-
-            if ($OverrideDirectorVars -eq $FALSE) {
-                switch ($entry) {
-                    'InstallFrameworkService' { break; };
-                    'FrameworkServiceUrl' { break; };
-                    'ServiceDirectory' { break; };
-                    'ServiceBin' { break; };
-                    'UseDirectorSelfService' { break; };
-                    'DirectorUrl' { break; };
-                    'SelfServiceAPIKey' { break; };
-                    'OverrideDirectorVars' { break; };
-                    Default {
-                        $SkipArgument = $TRUE;
-                        break;
-                    }
-                }
-
-                if ($SkipArgument) {
-                    continue;
-                }
-            }
-
-            [bool]$KnownArgument = $FALSE;
-            foreach ($item in $InstallerArguments) {
-                if ($item -like "-$entry *" -Or $item -eq "-$entry") {
-                    $KnownArgument = $TRUE;
-                    break;
-                }
-            }
-
-            if ($KnownArgument) {
-                continue;
-            }
-
-            $Value = $ProvidedArgs[$entry];
-            if ($Value -is [System.Object]) {
-                $Value = [string]::Join(',', $Value);
-            }
-
-            if ($OverrideDirectorVars -eq $FALSE) {
-                #$ClearedArguments += [string]::Format("-{0} '{1}'", $entry, $Value);
-                #continue;
-            }
-
-            $InstallerArguments += [string]::Format("-{0} '{1}'", $entry, $Value);
-        }
-
+        Write-Host '========'
         Write-Host ($InstallerArguments | Out-String);
+        Write-Host '========'
 
         if (-Not $RunInstaller) {
             if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Is this configuration correct?' -Default 'y').result -eq 1) {
@@ -396,6 +426,69 @@ function Start-IcingaAgentInstallWizard()
     }
 }
 
+function Set-IcingaWizardArgument()
+{
+    param(
+        [hashtable]$DirectorArgs,
+        [string]$WizardArg,
+        $Value,
+        $Default                 = $null,
+        $InstallerArguments
+    );
+
+    if ($DirectorArgs.Overrides.ContainsKey($WizardArg)) {
+        $Override = $DirectorArgs.Overrides[$WizardArg];
+        if ($Value -is [array]) {
+            $Override = [string]::Join(',', $Override);
+        }
+        $InstallerArguments += "-$WizardArg $Override";
+        return @{
+            'Value' = $Override;
+            'Args'  = $InstallerArguments;
+        };
+    }
+
+    $RetValue = $null;
+
+    if ($DirectorArgs.Arguments.ContainsKey($WizardArg)) {
+        $RetValue = $DirectorArgs.Arguments[$WizardArg];
+        if ($Value -is [array]) {
+            $RetValue = [string]::Join(',', $RetValue);
+        }
+    } else {
+        if ($null -ne $Value -Or [string]::IsNullOrEmpty($Value) -eq $FALSE) {
+            if ($Value -is [array]) {
+                $Value = [string]::Join(',', $Value);
+            }
+            $InstallerArguments += "-$WizardArg $Value";
+            return @{
+                'Value' = $Value;
+                'Args'  = $InstallerArguments;
+            };
+        } else {
+            return @{
+                'Value' = $Default;
+                'Args'  = $InstallerArguments;
+            };
+        }
+    }
+
+    if ([string]::IsNullOrEmpty($Value) -eq $FALSE) {
+        if ($Value -is [array]) {
+            $Value = [string]::Join(',', $Value);
+        }
+        $InstallerArguments += "-$WizardArg $Value";
+        return @{
+            'Value' = $Value;
+            'Args'  = $InstallerArguments;
+        };
+    }
+
+    return @{
+        'Value' = $RetValue;
+        'Args'  = $InstallerArguments;
+    };
+}
 function Get-IcingaAgentInstallCommand()
 {
     param(
@@ -411,9 +504,9 @@ function Get-IcingaAgentInstallCommand()
     );
 
     if ($PrintConsole) {
-        Write-Host '####'
+        Write-Host '===='
         Write-Host $Installer -ForegroundColor ([System.ConsoleColor]::Cyan);
-        Write-Host '####'
+        Write-Host '===='
     } else {
         return $Installer;
     }
