@@ -15,7 +15,7 @@ function Convert-IcingaDirectorSelfServiceArguments()
         AllowVersionChanges = $JsonInput.allow_updates;
         GlobalZones         = $JsonInput.global_zones;
         ParentZone          = $JsonInput.parent_zone;
-        CAEndpoint          = $JsonInput.ca_server;
+        #CAEndpoint          = $JsonInput.ca_server;
         Endpoints           = $JsonInput.parent_endpoints;
         AddFirewallRule     = $JsonInput.agent_add_firewall_rule;
         AcceptConnections   = $JsonInput.agent_add_firewall_rule;
@@ -57,6 +57,11 @@ function Convert-IcingaDirectorSelfServiceArguments()
         $NetworkDefault = $NetworkDefault.Substring(0, $NetworkDefault.Length - 1);
         $DirectorArguments.Add(
             'EndpointConnections', $NetworkDefault
+        );
+
+        $EndpointConnections = $NetworkDefault.Split(',');
+        $DirectorArguments.Add(
+            'CAEndpoint', (Get-IPConfigFromString $EndpointConnections[0]).address
         );
     }
 
