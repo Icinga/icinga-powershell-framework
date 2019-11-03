@@ -3,7 +3,8 @@ function Set-IcingaAgentServiceUser()
     param(
         [string]$User,
         [securestring]$Password,
-        [string]$Service        = 'icinga2'
+        [string]$Service        = 'icinga2',
+        [switch]$SetPermission
     );
 
     if ([string]::IsNullOrEmpty($User)) {
@@ -26,6 +27,11 @@ function Set-IcingaAgentServiceUser()
         -FlushNewLines $TRUE;
 
     if ($Output.ExitCode -eq 0) {
+
+        if ($SetPermission) {
+            Set-IcingaUserPermissions;
+        }
+
         Write-Host 'Service User successfully updated'
         return $TRUE;
     } else {
