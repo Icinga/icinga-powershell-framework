@@ -12,6 +12,7 @@ function Start-IcingaAgentInstallWizard()
         [string]$AgentVersion,
         $AllowVersionChanges,
         $UpdateAgent                 = $null,
+        $AddFirewallRule             = $null,
         $AcceptConnections           = $null,
         [array]$Endpoints            = @(),
         [array]$EndpointConnections  = @(),
@@ -99,6 +100,9 @@ function Start-IcingaAgentInstallWizard()
             $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'AcceptConnections' -Value $AcceptConnections -InstallerArguments $InstallerArguments;
             $AcceptConnections   = $Result.Value;
             $InstallerArguments  = $Result.Args;
+            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'AddFirewallRule' -Value $AddFirewallRule -InstallerArguments $InstallerArguments;
+            $AddFirewallRule     = $Result.Value;
+            $InstallerArguments  = $Result.Args;            
             $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'ServiceUser' -Value $ServiceUser -InstallerArguments $InstallerArguments;
             $ServiceUser         = $Result.Value;
             $InstallerArguments  = $Result.Args;
@@ -236,6 +240,18 @@ function Start-IcingaAgentInstallWizard()
         } else {
             $InstallerArguments += "-CAPort 5665";
             $CAPort = 5665;
+        }
+    }
+
+    if ($AcceptConnections -eq 0) {
+        if ($null -eq $AddFirewallRule) {
+            if ((Get-IcingaAgentInstallerAnswerInput -Prompt ([string]::Format('Do you want to open the Windows Firewall for incoming traffic on Port "{0}"?', $CAPort)) -Default 'y').result -eq 1) {
+                $InstallerArguments += "-AddFirewallRule 1";
+                $AddFirewallRule = $TRUE;
+            } else {
+                $InstallerArguments += "-AddFirewallRule 0";
+                $AddFirewallRule = $FALSE;
+            }
         }
     }
 
@@ -428,6 +444,10 @@ function Start-IcingaAgentInstallWizard()
             Install-IcingaAgentCertificates -Hostname $Hostname -Endpoint $CAEndpoint -Port $CAPort -CACert $CAFile -Ticket $Ticket | Out-Null;
             Write-IcingaAgentApiConfig -Port $CAPort;
             Write-IcingaAgentZonesConfig -Endpoints $Endpoints -EndpointConnections $EndpointConnections -ParentZone $ParentZone -GlobalZones $GlobalZoneConfig -Hostname $Hostname;
+            if ($AddFirewallRule) {
+                # First cleanup the system by removing all old Firewalls
+                Enable-IcingaFirewall -IcingaPort $CAPort -Force;
+            }
             Test-IcingaAgent;
             Restart-IcingaService 'icingapowershell';
             Restart-IcingaService 'icinga2';
