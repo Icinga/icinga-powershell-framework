@@ -51,9 +51,6 @@ function Start-IcingaAgentDirectorWizard()
     }
 
     if ($HostKnown -eq $FALSE) {
-        Write-Host $SelfServiceAPIKey;
-        Write-Host (Get-IcingaHostname @Arguments);
-        Write-Host $DirectorUrl;
         $SelfServiceAPIKey = Register-IcingaDirectorSelfServiceHost -DirectorUrl $DirectorUrl -ApiKey $SelfServiceAPIKey -Hostname (Get-IcingaHostname @Arguments);
 
         # Host is already registered
@@ -74,8 +71,13 @@ function Start-IcingaAgentDirectorWizard()
         }
     }
 
+    $IcingaTicket = Get-IcingaDirectorSelfServiceTicket -DirectorUrl $DirectorUrl -ApiKey $SelfServiceAPIKey;
+
     $DirectorOverrideArgs.Add(
         'DirectorUrl', $DirectorUrl
+    );
+    $DirectorOverrideArgs.Add(
+        'Ticket', $IcingaTicket
     );
     if ([string]::IsNullOrEmpty($TemplateKey) -eq $FALSE) {
         $DirectorOverrideArgs.Add(
