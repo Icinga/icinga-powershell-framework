@@ -34,7 +34,9 @@ function Start-IcingaAgentInstallWizard()
         [bool]$SkipDirectorQuestion  = $FALSE,
         [string]$DirectorUrl,
         [string]$SelfServiceAPIKey   = $null,
-        $OverrideDirectorVars        = $null
+        $OverrideDirectorVars        = $null,
+        $InstallFrameworkPlugins     = $null,
+        $PluginsUrl                  = $null
     );
 
     [array]$InstallerArguments = @();
@@ -360,6 +362,17 @@ function Start-IcingaAgentInstallWizard()
         } else {
             $InstallerArguments += "-ServiceUser 'NT Authority\NetworkService'";
             $ServiceUser = 'NT Authority\NetworkService';
+        }
+    }
+
+    if ($null -eq $InstallFrameworkPlugins) {
+        if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to install the Icinga Plugins?' -Default 'y').result -eq 1) {
+            $result = Install-IcingaFrameworkPlugins -PluginsUrl $PluginsUrl;
+            $PluginsUrl = $result.PluginsUrl;
+            $InstallerArguments += "-InstallFrameworkPlugins 1";
+            $InstallerArguments += "-$PluginsUrl '$PluginsUrl'";
+        } else {
+            $InstallerArguments += "-InstallFrameworkPlugins 0";
         }
     }
 
