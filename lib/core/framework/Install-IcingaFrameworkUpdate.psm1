@@ -57,6 +57,12 @@ function Install-IcingaFrameworkUpdate()
         return;
     }
 
+    $ServiceStatus = (Get-Service 'icingapowershell' -ErrorAction SilentlyContinue).Status;
+
+    if ($ServiceStatus -eq 'Running') {
+        Stop-IcingaService 'icingapowershell';
+    }
+
     $NewDirectory = (Join-Path -Path $ModuleDirectory -ChildPath 'icinga-powershell-framework');
     $ExtractDir   = (Join-Path -Path $ModuleDirectory -ChildPath $Extracted);
     $BackupDir    = (Join-Path -Path $ExtractDir      -ChildPath 'previous');
@@ -94,6 +100,10 @@ function Install-IcingaFrameworkUpdate()
     Set-IcingaAcl -Directory (Get-IcingaCacheDir);
 
     Test-IcingaAgent;
+
+    if ($ServiceStatus -eq 'Running') {
+        Start-IcingaService 'icingapowershell';
+    }
 
     Write-Host 'Framework update has been completed';
 }
