@@ -219,16 +219,6 @@ function Start-IcingaAgentInstallWizard()
         }
     }
 
-    if ($null -eq $AcceptConnections) {
-        if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Will this Agent connect to its parent endpoint(s)?' -Default 'y').result -eq 1) {
-            $InstallerArguments += "-AcceptConnections 1";
-            $AcceptConnections = 1;
-        } else {
-            $InstallerArguments += "-AcceptConnections 0";
-            $AcceptConnections = 0;
-        }
-    }
-
     if ($Endpoints.Count -eq 0) {
         $ArrayString = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please specify all endpoints this Agent will report to (separated by ",")' -Default 'v').answer;
         $Endpoints = ($ArrayString.Replace(' ', '')).Split(',');
@@ -243,6 +233,20 @@ function Start-IcingaAgentInstallWizard()
             $InstallerArguments += "-CAPort 5665";
             $CAPort = 5665;
         }
+    }
+
+    [bool]$CanConnectToParent = $FALSE;
+
+    if ($null -eq $AcceptConnections) {
+        if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Is this Agent able to connect to its parent node for certificate generation and general communication?' -Default 'y').result -eq 1) {
+            $CanConnectToParent = $TRUE;
+            $InstallerArguments += ("-AcceptConnections 1");
+        } else {
+            $InstallerArguments += ("-AcceptConnections 0");
+        }
+    } elseif ($AcceptConnections) {
+        $CanConnectToParent = $TRUE;
+        $InstallerArguments += ("-AcceptConnections 1");
     }
 
     if ($AcceptConnections -eq 0) {
@@ -315,20 +319,6 @@ function Start-IcingaAgentInstallWizard()
         }
     } else {
         $GlobalZoneConfig += $GlobalZones;
-    }
-
-    [bool]$CanConnectToParent = $FALSE;
-
-    if ($null -eq $AcceptConnections) {
-        if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Is this Agent able to connect to its parent node for certificate generation?' -Default 'y').result -eq 1) {
-            $CanConnectToParent = $TRUE;
-            $InstallerArguments += ("-AcceptConnections 1");
-        } else {
-            $InstallerArguments += ("-AcceptConnections 0");
-        }
-    } elseif ($AcceptConnections) {
-        $CanConnectToParent = $TRUE;
-        $InstallerArguments += ("-AcceptConnections 1");
     }
 
     if ($CanConnectToParent) {
