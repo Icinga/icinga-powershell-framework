@@ -139,17 +139,25 @@ function Start-IcingaAgentInstallWizard()
         if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to manually specify a hostname?' -Default 'n').result -eq 1) {
             if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to automatically fetch the hostname with its FQDN?' -Default 'y').result -eq 1) {
                 $InstallerArguments += '-AutoUseFQDN 1';
-                $AutoUseFQDN = $TRUE;
+                $InstallerArguments += '-AutoUseHostname 0';
+                $AutoUseFQDN         = $TRUE;
+                $AutoUseHostname     = $FALSE;
             } else {
+                $InstallerArguments += '-AutoUseFQDN 0';
                 $InstallerArguments += '-AutoUseHostname 1';
-                $AutoUseHostname = $TRUE;
+                $AutoUseFQDN         = $FALSE;
+                $AutoUseHostname     = $TRUE;
             }
             if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to modify the hostname to only include lower case characters?' -Default 'y').result -eq 1) {
                 $InstallerArguments += '-LowerCase 1';
+                $InstallerArguments += '-UpperCase 0';
                 $LowerCase = $TRUE;
+                $UpperCase = $FALSE;
             } else {
                 if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to modify the hostname to only include upper case characters?' -Default 'n').result -eq 0) {
+                    $InstallerArguments += '-LowerCase 0';
                     $InstallerArguments += '-UpperCase 1';
+                    $LowerCase = $FALSE;
                     $UpperCase = $TRUE;
                 }
             }
