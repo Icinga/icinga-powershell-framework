@@ -8,7 +8,7 @@ Below you will find a list of functions and detailed descriptions including use 
 
 The `IcingaCheck` is the basic start point for determining on how a certain value is performing. Checks will provide a bunch of internal commands within the PowerShell Object to analyse a value and get the Icinga result `Ok`, `Warning`, `Critical` including performance metrics.
 
-Checks are always used wihtin Check Plugins to have a standardised method for properly handling the input.
+Checks are always used within Check Plugins to have a standardised method for properly handling the input.
 
 It will be used like in this example:
 
@@ -16,7 +16,7 @@ It will be used like in this example:
 $IcingaCheck = New-IcingaCheck -Name 'My Check' -Value 25 -Unit '%';
 ```
 
-You will have to provide a `Name` for each check which **must** be unique within each Check Plugin. This will make it easier to differentiate between checks for results. The `Value` is mandatory as this will be the base for each single check to fetch the actual status.
+You will have to provide a `Name` for each check which **must** be unique within each Check Plugin. This will make it easier to differentiate between checks for results. The `Value` is mandatory as this will be the basis for each single check to fetch the actual status.
 
 For performance metrics you can provide a `Unit` to ensure your graphing is displaying values as the should be
 
