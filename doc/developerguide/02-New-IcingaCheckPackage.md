@@ -6,7 +6,7 @@ Below you will find a list of functions and detailed descriptions including use 
 | --- | --- | --- |
 | Cmdlet | PowerShell Object | Check Object containing other check objects |
 
-The `IcingaCheckPackage` is the first step to take to write more advanced checks. A `IcingaCheckPackage` offers the possibility to build a check containing varius `IcingaChecks`. Just like the `IcingaCheck`, the `IcingaCheckPackage` also provides a bunch of internal commands within the PowerShell Object to analyse a value and get the Icinga result `Ok`, `Warning`, `Critical` including performance metrics. In this case the result is based on the result of the logical connection between added `IcingaChecks` within the `IcingaCheckPackage`
+The `IcingaCheckPackage` is the first step to take to write more advanced checks. A `IcingaCheckPackage` offers the possibility to build a check containing varius `IcingaChecks`. Just like the `IcingaCheck`, the `IcingaCheckPackage` also provides a bunch of internal commands within the PowerShell Object to analyse a value and get the Icinga result `Ok`, `Warning`, `Critical`. In this case the result of the check package is based on the result of the logical conjunction between added `IcingaChecks` within the `IcingaCheckPackage`
 
 It will be used like in this example:
 
