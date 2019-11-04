@@ -28,3 +28,23 @@ $IcingaPackage = New-IcingaCheckPackage -Name 'My Package' -OperatorAnd;
 | Checks       | Array     |           | Array of checks to be added to the check package |
 | Verbose      | int       |           | Defines the level of output detail from 0 lowest to 3 highest detail |
 | Hidden       | Switch    |           | If set, the check package doesn't generate output |
+
+
+### Examples
+
+#### Example 1
+
+Simple check package which requires both checks to be okay. Two simple check items with two different values in this case `37` and `18`. Based on the thresholds set, `20` for `warning` and `35` for `critical`, one of the checks will be `ok`, while the other enters the `critical` state. Both get added to an check package, which handles them with a logical AND conjunction. Thereby the IcingaPackage enters the `critical state`.
+
+```powershell
+$IcingaCheck1 = New-IcingaCheck -Name 'My Check 1' -Value 37 -Unit '%';
+$IcingaCheck1.WarnOutOfRange(20).CritOutOfRange(35) | Out-Null;
+
+$IcingaCheck2 = New-IcingaCheck -Name 'My Check 2' -Value 18 -Unit '%';
+$IcingaCheck2.WarnOutOfRange(20).CritOutOfRange(35) | Out-Null;
+
+$IcingaPackage = New-IcingaCheckPackage -Name 'My Package' -OperatorAnd;
+$IcingaPackage.AddCheck($IcingaCheck1);
+$IcingaPackage.AddCheck($IcingaCheck2);
+```
+
