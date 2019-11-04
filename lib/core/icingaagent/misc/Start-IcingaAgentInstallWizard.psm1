@@ -335,7 +335,7 @@ function Start-IcingaAgentInstallWizard()
 
     if ($CanConnectToParent) {
         if ([string]::IsNullOrEmpty($CAEndpoint)) {
-            $CAEndpoint = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please enter the FQDN for either ONE of your Icinga parent node/nodes or your Icinga 2 CA master' -Default 'v' -DefaultInput (Get-IPConfigFromString $EndpointConnections[0]).address).answer;
+            $CAEndpoint = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please enter the IP/FQDN for either ONE of your Icinga parent nodes or your Icinga 2 CA master' -Default 'v' -DefaultInput (Get-IPConfigFromString $EndpointConnections[0]).address).answer;
             $InstallerArguments += "-CAEndpoint $CAEndpoint";
         }
         if ($null -eq $Ticket) {
