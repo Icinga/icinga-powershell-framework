@@ -33,7 +33,7 @@ Of course if you wish to actively send data to Icinga Web 2 for example, you can
 Start-Icinga-Checker
 ```
 
-For additional setup possibilities, please take a look on the following pages:
+For additional setup possibilities, please take a look at the following pages:
 
 * [Use the module as Icinga Plugin Framework](12-Icinga2AgentExample.md)
 * [Install the module as Windows Service](10-InstallService.md)

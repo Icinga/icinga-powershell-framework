@@ -10,4 +10,4 @@ The following requirements have to be fullfilled:
 * Windows 7 / Windows 2008 R2 or later
 * PowerShell Version 4.x or higher
 
-If you are ready to get started, take a look on the [installation guide](02-Installation.md).
+If you are ready to get started, take a look at the [installation guide](02-Installation.md).
