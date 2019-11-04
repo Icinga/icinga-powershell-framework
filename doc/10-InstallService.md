@@ -13,7 +13,7 @@ Install the Service
 
 At first you will require the Service Binary from the [Icinga Windows Service GitHub Repository](https://github.com/Icinga/icinga-powershell-service) and copy the binary locally to your system. A recommended path would be your Program Files / Program Files (x86) directory.
 
-Any other custom location is fully supported, has to be however accessable from the Windows Service Environment.
+Any other custom location is fully supported, has to be however accessible from the Windows Service Environment.
 
 Once you have found a location, the PowerShell Module will assist you with setting up the service itself. In this documentation we will assume the path you have chosen to copy the binary to is
 
