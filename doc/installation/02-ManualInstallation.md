@@ -41,4 +41,4 @@ The prefered way is to simply unblock the script files, allowing them to be exec
 Get-ChildItem -Path 'C:\Program Files\WindowsPowershell\Modules\icinga-powershell-framework' -Recurse | Unblock-File
 ```
 
-Once done, please try again if you are now able to run the module on your host. If you are still not able to run the module and/or its scripts, please have a look on the Microsoft documentation for the [Set-Execution-Policy](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.security/set-executionpolicy?view=powershell-6) Cmdlet to modify the Execution Policy for running PowerShell modules on your host, matching your internal guidelines.
+Once done, please try again if you are now able to run the module on your host. If you are still not able to run the module and/or its scripts, please have a look at the Microsoft documentation for the [Set-Execution-Policy](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.security/set-executionpolicy?view=powershell-6) Cmdlet to modify the Execution Policy for running PowerShell modules on your host, matching your internal guidelines.
