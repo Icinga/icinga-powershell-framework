@@ -252,13 +252,15 @@ function Start-IcingaAgentInstallWizard()
     if ($null -eq $AcceptConnections) {
         if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Is this Agent able to connect to its parent node for certificate generation and general communication?' -Default 'y').result -eq 1) {
             $CanConnectToParent = $TRUE;
+            $AcceptConnections = 1;
             $InstallerArguments += ("-AcceptConnections 1");
         } else {
+            $AcceptConnections = 0;
             $InstallerArguments += ("-AcceptConnections 0");
         }
     } elseif ($AcceptConnections) {
         $CanConnectToParent = $TRUE;
-        $InstallerArguments += ("-AcceptConnections 1");
+        $InstallerArguments += ("-AcceptConnections $AcceptConnections");
     }
 
     if ($null -eq $AddFirewallRule) {
