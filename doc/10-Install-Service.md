@@ -30,20 +30,9 @@ icinga-service.exe
 Now lets install the service with the help of the PowerShell Module:
 
 ```powershell
-Install-IcingaFrameworkService -ServicePath 'C:\Program Files\Icinga-Framework-Service\icinga-service.exe'
+Install-IcingaFrameworkService -Path 'C:\Program Files\Icinga-Framework-Service\icinga-service.exe'
 ```
 
 You can validate if the service has been installed properly by using the Get Service Cmdlet:
-
-```powershell
-Get-IcingaFrameworkService
-```
-
-Of course there are more Cmdlets available, making the management of this Icinga Service alot easier, which should be self explaining:
-
-* Start-IcingaFrameworkService
-* Stop-IcingaFrameworkService
-* Restart-IcingaFrameworkService
-* Uninstall-IcingaFrameworkService
 
 Each enabled background daemon component is afterwards being started and executed.
