@@ -261,15 +261,13 @@ function Start-IcingaAgentInstallWizard()
         $InstallerArguments += ("-AcceptConnections 1");
     }
 
-    if ($AcceptConnections -eq 0) {
-        if ($null -eq $AddFirewallRule) {
-            if ((Get-IcingaAgentInstallerAnswerInput -Prompt ([string]::Format('Do you want to open the Windows Firewall for incoming traffic on Port "{0}"?', $CAPort)) -Default 'y').result -eq 1) {
-                $InstallerArguments += "-AddFirewallRule 1";
-                $AddFirewallRule = $TRUE;
-            } else {
-                $InstallerArguments += "-AddFirewallRule 0";
-                $AddFirewallRule = $FALSE;
-            }
+    if ($null -eq $AddFirewallRule) {
+        if ((Get-IcingaAgentInstallerAnswerInput -Prompt ([string]::Format('Do you want to open the Windows Firewall for incoming traffic on Port "{0}"?', $CAPort)) -Default 'y').result -eq 1) {
+            $InstallerArguments += "-AddFirewallRule 1";
+            $AddFirewallRule = $TRUE;
+        } else {
+            $InstallerArguments += "-AddFirewallRule 0";
+            $AddFirewallRule = $FALSE;
         }
     }
 
