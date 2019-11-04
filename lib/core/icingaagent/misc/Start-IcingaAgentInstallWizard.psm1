@@ -21,6 +21,7 @@ function Start-IcingaAgentInstallWizard()
         [string]$CAEndpoint,
         $CAPort                      = $null,
         [string]$Ticket,
+        $EmptyTicket,
         [string]$CAFile              = $null,
         $EmptyCA                     = $null,
         [switch]$RunInstaller,
@@ -338,13 +339,26 @@ function Start-IcingaAgentInstallWizard()
             $CAEndpoint = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please enter the IP/FQDN for either ONE of your Icinga parent nodes or your Icinga 2 CA master' -Default 'v' -DefaultInput (Get-IPConfigFromString $EndpointConnections[0]).address).answer;
             $InstallerArguments += "-CAEndpoint $CAEndpoint";
         }
-        if ($null -eq $Ticket) {
+        if ([string]::IsNullOrEmpty($Ticket) -And $null -eq $EmptyTicket) {
             if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you have a Icinga Ticket available to sign your certificate?' -Default 'y').result -eq 1) {
                 $Ticket = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please enter your Icinga Ticket' -Default 'v').answer;
-                $InstallerArguments += "-Ticket $Ticket";
+                if ([string]::IsNullOrEmpty($Ticket)) {
+                    $InstallerArguments += "-EmptyTicket 1"
+                } else {
+                    $InstallerArguments += "-EmptyTicket 0"
+                }
+                $InstallerArguments += "-Ticket '$Ticket'";
             } else {
                 $InstallerArguments += "-Ticket ''";
+                $InstallerArguments += "-EmptyTicket 1"
             }
+        } else {
+            if ([string]::IsNullOrEmpty($Ticket)) {
+                $InstallerArguments += "-Ticket ''";
+            } else {
+                $InstallerArguments += "-Ticket '$Ticket";
+            }
+            $InstallerArguments += "-EmptyTicket $EmptyTicket"
         }
     } else {
         if ([string]::IsNullOrEmpty($CAFile) -And $null -eq $EmptyCA) {
