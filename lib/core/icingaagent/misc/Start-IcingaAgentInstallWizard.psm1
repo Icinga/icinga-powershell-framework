@@ -135,7 +135,7 @@ function Start-IcingaAgentInstallWizard()
         }
     }
 
-    if ([string]::IsNullOrEmpty($Hostname) -And $AutoUseFQDN -eq $FALSE -And $AutoUseHostname -eq $FALSE) {
+    if ([string]::IsNullOrEmpty($Hostname) -And $null -eq $AutoUseFQDN -And $null -eq $AutoUseHostname) {
         if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to manually specify a hostname?' -Default 'n').result -eq 1) {
             if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to automatically fetch the hostname with its FQDN?' -Default 'y').result -eq 1) {
                 $InstallerArguments += '-AutoUseFQDN 1';
