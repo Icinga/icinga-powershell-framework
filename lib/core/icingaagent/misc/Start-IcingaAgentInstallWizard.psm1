@@ -364,8 +364,12 @@ function Start-IcingaAgentInstallWizard()
         if ([string]::IsNullOrEmpty($CAFile) -And $null -eq $EmptyCA) {
             if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Is your public Icinga 2 CA (ca.crt) available on a local, network or web share?' -Default 'y').result -eq 1) {
                 $CAFile = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please provide the full path to your ca.crt file' -Default 'v').answer;
-                $InstallerArguments += "-CAFile $CAFile";
-                $InstallerArguments += "-EmptyCA 0";
+                if ([string]::IsNullOrEmpty($CAFile)) {
+                    $InstallerArguments += "-EmptyCA 1"
+                } else {
+                    $InstallerArguments += "-EmptyCA 0"
+                }
+                $InstallerArguments += "-CAFile '$CAFile'";
             } else {
                 $InstallerArguments += "-CAFile ''";
                 $InstallerArguments += "-EmptyCA 1"
@@ -374,7 +378,7 @@ function Start-IcingaAgentInstallWizard()
             if ([string]::IsNullOrEmpty($CAFile)) {
                 $InstallerArguments += "-CAFile ''";
             } else {
-                $InstallerArguments += "-CAFile $CAFile";
+                $InstallerArguments += "-CAFile '$CAFile'";
             }
             $InstallerArguments += "-EmptyCA $EmptyCA"
         }
