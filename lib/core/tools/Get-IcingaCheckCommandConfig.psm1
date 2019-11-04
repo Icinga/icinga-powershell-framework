@@ -145,7 +145,6 @@ function Get-IcingaCheckCommandConfig()
         $Data            = (Get-Help $check);
         $ParameterList   = (Get-Command -Name $check).Parameters;
         $PluginNameSpace = $Data.Name.Replace('Invoke-', '');
-        $IsDataList      = $FALSE;
 
         # Add command Structure
         $Basket.Command.Add(
@@ -167,6 +166,8 @@ function Get-IcingaCheckCommandConfig()
 
         # Loop through parameters of a given command
         foreach ($parameter in $Data.parameters.parameter) {
+
+            $IsDataList      = $FALSE;
 
             # IsNumeric-Check on position to determine the order-value
             If (Test-Numeric($parameter.position) -eq $TRUE) {
@@ -270,6 +271,7 @@ function Get-IcingaCheckCommandConfig()
 
             $IcingaDataType = [string]::Format('Icinga\Module\Director\DataType\DataType{0}', $IcingaDataType)
 
+            #Write-Host $Basket.Datafield.Values.varname
             if ($Basket.Datafield.Values.varname -ne $IcingaCustomVariable) {
                 $Basket.Datafield.Add(
                     [string]$FieldID, @{
