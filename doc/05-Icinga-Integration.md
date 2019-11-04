@@ -16,5 +16,5 @@ Configuring Check-Commands
 
 To get started, there are two ways to configure check command objects:
 
-* [Automated configuration](icingaintegration/01-DirectorBaskets.md) with Baskets
-* [Manual configuration](icingaintegration/02-Icinga2AgentExample.md) of check commands
+* [Automated configuration](icingaintegration/01-Director-Baskets.md) with Baskets
+* [Manual configuration](icingaintegration/02-Manual-Integration.md) of check commands
