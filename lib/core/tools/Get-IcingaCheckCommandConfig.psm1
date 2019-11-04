@@ -101,43 +101,6 @@ function Get-IcingaCheckCommandConfig()
         }
     );
 
-    # "Verbose" gets added to all Checks build and exported no matter what, so we add it from the start
-    <#if ($Basket.DataList.ContainsKey('PowerShell Verbose') -eq $FALSE) {
-        $Basket.DataList.Add(
-            'PowerShell Verbose', @{
-                'list_name' = 'PowerShell Verbose';
-                'owner' = $env:username;
-                'originalId' = '2';
-                'entries' = @(
-                    @{
-                    'entry_name' = '0';
-                    'entry_value' = "Show Default";
-                    'format' = 'string';
-                    'allowed_roles' = $NULL;
-                    },
-                    @{
-                    'entry_name' = '1';
-                    'entry_value' = "Show Operator";
-                    'format' = 'string';
-                    'allowed_roles' = $NULL;
-                    },
-                    @{
-                    'entry_name' = '2';
-                    'entry_value' = "Show Problems";
-                    'format' = 'string';
-                    'allowed_roles' = $NULL;
-                    },
-                    @{
-                    'entry_name' = '3';
-                    'entry_value' = "Show All";
-                    'format' = 'string';
-                    'allowed_roles' = $NULL;
-                    }
-                );
-            }
-        );
-    }#>
-
     # Loop through ${CheckName}, to get information on every command specified/all commands.
     foreach ($check in $CheckName) {
     
@@ -271,7 +234,6 @@ function Get-IcingaCheckCommandConfig()
 
             $IcingaDataType = [string]::Format('Icinga\Module\Director\DataType\DataType{0}', $IcingaDataType)
 
-            #Write-Host $Basket.Datafield.Values.varname
             if ($Basket.Datafield.Values.varname -ne $IcingaCustomVariable) {
                 $Basket.Datafield.Add(
                     [string]$FieldID, @{
