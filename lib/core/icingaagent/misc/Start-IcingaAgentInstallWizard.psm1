@@ -424,7 +424,7 @@ function Start-IcingaAgentInstallWizard()
 
         if (-Not $RunInstaller) {
             if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Is this configuration correct?' -Default 'y').result -eq 1) {
-                if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to run the installer now? (Otherwise only the configration command will be printed)' -Default 'y').result -eq 1) {
+                if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to run the installer now? (Otherwise only the configuration command will be printed)' -Default 'y').result -eq 1) {
                     Write-Host 'To execute your Icinga Agent installation based on your answers again on this or another machine, simply run this command:'
 
                     $RunInstaller = $TRUE;
