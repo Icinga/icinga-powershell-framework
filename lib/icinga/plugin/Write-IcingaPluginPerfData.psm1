@@ -5,6 +5,14 @@ function Write-IcingaPluginPerfData()
         $CheckCommand
     );
 
+    if ($PerformanceData.package -eq $FALSE) {
+        $PerformanceData = @{
+            $PerformanceData.label = $PerformanceData;
+        }
+    } else {
+        $PerformanceData = $PerformanceData.perfdata;
+    }
+
     $CheckResultCache = Get-IcingaCacheData -Space 'sc_daemon' -CacheStore 'checkresult' -KeyName $CheckCommand;
 
     if ($global:IcingaDaemonData.FrameworkRunningAsDaemon -eq $FALSE) {
