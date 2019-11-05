@@ -189,13 +189,18 @@ function Start-IcingaAgentInstallWizard()
                 Write-Host ([string]::Format('Using package source "{0}" for the Icinga 2 Agent package', $PackageSource));
                 $AllowVersionChanges = $TRUE;
                 $InstallerArguments += '-AllowVersionChanges 1';
-            }
 
-            if ([string]::IsNullOrEmpty($AgentVersion)) {
-                $AgentVersion = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please specify the version you wish to install ("latest", "snapshot", or a version like "2.11.0")' -Default 'v' -DefaultInput 'latest').answer;
+                if ([string]::IsNullOrEmpty($AgentVersion)) {
+                    $AgentVersion = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please specify the version you wish to install ("latest", "snapshot", or a version like "2.11.0")' -Default 'v' -DefaultInput 'latest').answer;
+                    $InstallerArguments += "-AgentVersion '$AgentVersion'";
+    
+                    Write-Host ([string]::Format('Installing Icinga Version: "{0}"', $AgentVersion));
+                }
+            } else {
+                $AllowVersionChanges = $FALSE;
+                $InstallerArguments += '-AllowVersionChanges 0';
                 $InstallerArguments += "-AgentVersion '$AgentVersion'";
-
-                Write-Host ([string]::Format('Installing Icinga Version: "{0}"', $AgentVersion));
+                $AgentVersion        = '';
             }
         }
     } else {
