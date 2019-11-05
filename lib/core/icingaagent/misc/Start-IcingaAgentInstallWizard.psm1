@@ -363,7 +363,11 @@ function Start-IcingaAgentInstallWizard()
             } else {
                 $InstallerArguments += "-Ticket '$Ticket'";
             }
-            $InstallerArguments += "-EmptyTicket $EmptyTicket"
+            if ($null -eq $EmptyTicket) {
+                $InstallerArguments += "-EmptyTicket 1"
+            } else {
+                $InstallerArguments += "-EmptyTicket $EmptyTicket"
+            }
         }
     } else {
         if ([string]::IsNullOrEmpty($CAFile) -And $null -eq $EmptyCA) {
@@ -385,7 +389,11 @@ function Start-IcingaAgentInstallWizard()
             } else {
                 $InstallerArguments += "-CAFile '$CAFile'";
             }
-            $InstallerArguments += "-EmptyCA $EmptyCA"
+            if ($null -eq $EmptyCA) {
+                $InstallerArguments += "-EmptyCA 1"
+            } else {
+                $InstallerArguments += "-EmptyCA $EmptyCA"
+            }
         }
     }
 
