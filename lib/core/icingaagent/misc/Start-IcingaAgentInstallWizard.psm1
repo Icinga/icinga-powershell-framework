@@ -361,7 +361,7 @@ function Start-IcingaAgentInstallWizard()
             if ([string]::IsNullOrEmpty($Ticket)) {
                 $InstallerArguments += "-Ticket ''";
             } else {
-                $InstallerArguments += "-Ticket '$Ticket";
+                $InstallerArguments += "-Ticket '$Ticket'";
             }
             $InstallerArguments += "-EmptyTicket $EmptyTicket"
         }
