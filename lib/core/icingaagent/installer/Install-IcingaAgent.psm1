@@ -7,11 +7,6 @@ function Install-IcingaAgent()
         [bool]$AllowUpdates = $FALSE
     );
 
-    $IcingaData       = Get-IcingaAgentInstallation;
-    $InstalledVersion = Get-IcingaAgentVersion;
-    $IcingaInstaller  = Get-IcingaAgentMSIPackage -Source $Source -Version $Version -SkipDownload;
-    $InstallTarget    = $IcingaData.RootDir;
-
     if ([string]::IsNullOrEmpty($Version)) {
         Write-Host 'No Icinga Agent version specified. Skipping installation.';
         return $FALSE;
@@ -21,6 +16,11 @@ function Install-IcingaAgent()
         Write-Host 'The Icinga Agent is already installed on this system. To perform updates or downgrades, please add the "-AllowUpdates" argument';
         return $FALSE;
     }
+
+    $IcingaData       = Get-IcingaAgentInstallation;
+    $InstalledVersion = Get-IcingaAgentVersion;
+    $IcingaInstaller  = Get-IcingaAgentMSIPackage -Source $Source -Version $Version -SkipDownload;
+    $InstallTarget    = $IcingaData.RootDir;
 
     if ($Version -eq 'snapshot') {
         if ($IcingaData.InstallDate -ge $IcingaInstaller.LastUpdate -And [string]::IsNullOrEmpty($InstalledVersion.Snapshot) -eq $FALSE) {
