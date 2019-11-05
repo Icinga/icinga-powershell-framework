@@ -67,7 +67,6 @@ function Start-IcingaAgentInstallWizard()
             $InstallerArguments  = $Result.Args;
             $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'SelfServiceAPIKey' -Value $SelfServiceAPIKey -InstallerArguments $InstallerArguments -Default $null;
             if ([string]::IsNullOrEmpty($Result.Value) -eq $FALSE) {
-                Write-Host 'Setting self service arg'
                 $SelfServiceAPIKey   = $Result.Value;
                 $InstallerArguments  = $Result.Args;
             }
