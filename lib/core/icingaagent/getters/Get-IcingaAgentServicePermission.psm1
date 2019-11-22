@@ -1,6 +1,6 @@
 function Get-IcingaAgentServicePermission()
 {
-    $SystemPermissions = New-TemporaryFile;
+    $SystemPermissions = New-IcingaTemporaryFile;
     $SystemOutput      = Start-IcingaProcess -Executable 'secedit.exe' -Arguments ([string]::Format('/export /cfg "{0}.inf"', $SystemPermissions));
 
     if ($SystemOutput.ExitCode -ne 0) {

@@ -5,7 +5,7 @@ function Set-IcingaAgentServicePermission()
         return;
     }
 
-    $SystemPermissions = New-TemporaryFile;
+    $SystemPermissions = New-IcingaTemporaryFile;
     $ServiceUser       = Get-IcingaServiceUser;
     $ServiceUserSID    = Get-IcingaUserSID $ServiceUser;
     $SystemContent     = Get-IcingaAgentServicePermission;
