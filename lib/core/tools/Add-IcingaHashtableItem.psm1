@@ -16,7 +16,8 @@ function Add-IcingaHashtableItem()
         return $TRUE;
     } else {
         if ($Override) {
-            $Hashtable[$Key] = $Value;
+            $Hashtable.Remove($Key);
+            $Hashtable.Add($Key, $Value);
             return $TRUE;
         }
     }
