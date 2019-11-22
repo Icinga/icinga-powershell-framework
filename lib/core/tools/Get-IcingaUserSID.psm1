@@ -17,7 +17,7 @@ function Get-IcingaUserSID()
     }
 
     try {
-        $NTUser       = [System.Security.Principal.NTAccount]::New($Domain, $Username);
+        $NTUser       = New-Object System.Security.Principal.NTAccount($Domain, $Username);
         $SecurityData = $NTUser.Translate([System.Security.Principal.SecurityIdentifier]);
     } catch {
         throw $_.Exception;
