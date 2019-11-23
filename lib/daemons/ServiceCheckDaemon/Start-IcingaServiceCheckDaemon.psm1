@@ -47,6 +47,31 @@ function Start-IcingaServiceCheckTask()
         $SortedResult = $null;
         $OldData      = @{};
         $PerfCache    = @{};
+        $AverageCalc  = @{};
+        [int]$MaxTime = 0;
+
+        foreach ($index in $TimeIndexes) {
+            # Only allow numeric index values
+            if ((Test-Numeric $index) -eq $FALSE) {
+                continue;
+            }
+            if ($AverageCalc.ContainsKey([string]$index) -eq $FALSE) {
+                $AverageCalc.Add(
+                    [string]$index,
+                    @{
+                        'Interval' = [int]$index;
+                        'Time'     = [int]$index * 60;
+                        'Sum'      = 0;
+                        'Count'    = 0;
+                    }
+                );
+            }
+            if ($MaxTime -le [int]$index) {
+                $MaxTime = [int]$index;
+            }
+        }
+
+        [int]$MaxTimeInSeconds = $MaxTime * 60;
 
         if (-Not ($IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler.ContainsKey($CheckCommand))) {
             $IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler.Add($CheckCommand, [hashtable]::Synchronized(@{}));
@@ -84,29 +109,32 @@ function Start-IcingaServiceCheckTask()
                         Add-IcingaHashtableItem -Hashtable $OldData -Key $HashIndex -Value @{} | Out-Null;
                         Add-IcingaHashtableItem -Hashtable $PerfCache -Key $HashIndex -Value @{} | Out-Null;
 
-                        foreach ($index in $TimeIndexes) {
-                            $ObjectCount   = 0;
-                            $ObjectValue   = 0;
-                            $TimeInSeconds = $index * 60;
-
-                            foreach ($timeEntry in $SortedResult) {
-                                if (($UnixTime - $TimeInSeconds) -le [int]$timeEntry.Key) {
-                                    $ObjectCount += 1;
-                                    $ObjectValue += $timeEntry.Value;
-                                    Remove-IcingaHashtableItem -Hashtable $OldData[$HashIndex] -Key $timeEntry;
-                                    Add-IcingaHashtableItem -Hashtable $PerfCache[$HashIndex] -Key ([string]$timeEntry.Key) -Value ([string]$timeEntry.Value) | Out-Null;
-                                } else {
-                                    Add-IcingaHashtableItem -Hashtable $OldData[$HashIndex] -Key $timeEntry -Value $null | Out-Null;
+                        foreach ($timeEntry in $SortedResult) {
+                            foreach ($calc in $AverageCalc.Keys) {
+                                if (($UnixTime - $AverageCalc[$calc].Time) -le [int]$timeEntry.Key) {
+                                    $AverageCalc[$calc].Sum   += $timeEntry.Value;
+                                    $AverageCalc[$calc].Count += 1;
                                 }
                             }
+                            if (($UnixTime - $MaxTimeInSeconds) -le [int]$timeEntry.Key) {
+                                Add-IcingaHashtableItem -Hashtable $PerfCache[$HashIndex] -Key ([string]$timeEntry.Key) -Value ([string]$timeEntry.Value) | Out-Null;
+                            } else {
+                                Add-IcingaHashtableItem -Hashtable $OldData[$HashIndex] -Key $timeEntry -Value $null | Out-Null;
+                            }
+                        }
 
-                            $AverageValue         = ($ObjectValue / $ObjectCount);
-                            [string]$MetricName   = [string]::Format('{0}_{1}', $HashIndex, $index);
-                            $MetricName           = Format-IcingaPerfDataLabel $MetricName;
+                        foreach ($calc in $AverageCalc.Keys) {
+                            $AverageValue         = ($AverageCalc[$calc].Sum / $AverageCalc[$calc].Count);
+                            [string]$MetricName   = Format-IcingaPerfDataLabel (
+                                [string]::Format('{0}_{1}', $HashIndex, $AverageCalc[$calc].Interval)
+                            );
 
                             Add-IcingaHashtableItem `
                                 -Hashtable $IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler[$CheckCommand]['average'] `
                                 -Key $MetricName -Value $AverageValue -Override | Out-Null;
+
+                            $AverageCalc[$calc].Sum   = 0;
+                            $AverageCalc[$calc].Count = 0;
                         }
                     }
 
