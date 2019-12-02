@@ -19,13 +19,17 @@ function Convert-IcingaDirectorSelfServiceArguments()
         Endpoints           = $JsonInput.parent_endpoints;
         AddFirewallRule     = $JsonInput.agent_add_firewall_rule;
         AcceptConnections   = $JsonInput.agent_add_firewall_rule;
-        #ServiceUser         = $JsonInput.service_user; # This is yet missing within the Icinga Director API
-        ServiceUser         = 'NT Authority\NetworkService';
+        ServiceUser         = $JsonInput.icinga_service_user;
         UpdateAgent         = $TRUE;
         AddDirectorGlobal   = $FALSE;
         AddGlobalTemplates  = $FALSE;
         RunInstaller        = $TRUE;
     };
+
+    # Use NetworkService as default if nothing was transmitted by Director
+    if ([string]::IsNullOrEmpty($DirectorArguments['ServiceUser'])) {
+        $DirectorArguments['ServiceUser'] = 'NT Authority\NetworkService';
+    }
 
     if ($JsonInput.transform_hostname -eq 1) {
         $DirectorArguments.Add(
