@@ -4,7 +4,8 @@ function Start-IcingaAgentDirectorWizard()
         [string]$DirectorUrl,
         [string]$SelfServiceAPIKey = $null,
         $OverrideDirectorVars      = $null,
-        [bool]$RunInstaller        = $FALSE
+        [bool]$RunInstaller        = $FALSE,
+        [switch]$ForceTemplateKey
     );
 
     [hashtable]$DirectorOverrideArgs        = @{}
@@ -23,22 +24,44 @@ function Start-IcingaAgentDirectorWizard()
         }
     }
 
-    $SelfServiceAPIKey = Get-IcingaPowerShellConfig -Path 'IcingaDirector.SelfService.ApiKey';
-    if ([string]::IsNullOrEmpty($SelfServiceAPIKey)) {
-        $LegacyTokenPath = Join-Path -Path Get-IcingaAgentConfigDirectory -ChildPath 'icingadirector.token';
-        if (Test-Path $LegacyTokenPath) {
-            $SelfServiceAPIKey =  Get-Content -Path $LegacyTokenPath;
-            Set-IcingaPowerShellConfig -Path 'IcingaDirector.SelfService.ApiKey' -Value $SelfServiceAPIKey;
+    $LocalAPIKey = Get-IcingaPowerShellConfig -Path 'IcingaDirector.SelfService.ApiKey';
+
+    if ($ForceTemplateKey) {
+        if ($SelfServiceAPIKey -eq $LocalAPIKey) {
+            $ForceTemplateKey = $FALSE;
+        }
+    }
+
+    if ($ForceTemplateKey -eq $FALSE) {
+        $SelfServiceAPIKey = $LocalAPIKey;
+        if ([string]::IsNullOrEmpty($SelfServiceAPIKey)) {
+            $LegacyTokenPath = Join-Path -Path Get-IcingaAgentConfigDirectory -ChildPath 'icingadirector.token';
+            if (Test-Path $LegacyTokenPath) {
+                $SelfServiceAPIKey =  Get-Content -Path $LegacyTokenPath;
+                Set-IcingaPowerShellConfig -Path 'IcingaDirector.SelfService.ApiKey' -Value $SelfServiceAPIKey;
+            }
         }
     }
 
     if ([string]::IsNullOrEmpty($SelfServiceAPIKey)) {
         $SelfServiceAPIKey = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please enter your Self-Service API key' -Default 'v').answer;
     } else {
-        $HostKnown = $TRUE;
+        if ($ForceTemplateKey -eq $FALSE) {
+            $HostKnown = $TRUE;
+        }
     }
 
-    $Arguments = Get-IcingaDirectorSelfServiceConfig -DirectorUrl $DirectorUrl -ApiKey $SelfServiceAPIKey;
+    try {
+        $Arguments = Get-IcingaDirectorSelfServiceConfig -DirectorUrl $DirectorUrl -ApiKey $SelfServiceAPIKey;
+    } catch {
+        Write-Host ([string]::Format('Failed to connect to your Icinga Director at "{0}". Please try again', $DirectorUrl));
+
+        return Start-IcingaAgentDirectorWizard `
+            -SelfServiceAPIKey ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Please re-enter your SelfService API Key for the Host-Template in case the key is no longer assigned to your host' -Default 'v' -DefaultInput $SelfServiceAPIKey).answer) `
+            -OverrideDirectorVars $OverrideDirectorVars `
+            -ForceTemplateKey;
+    }
+
     $Arguments = Convert-IcingaDirectorSelfServiceArguments -JsonInput $Arguments;
 
     if ($OverrideDirectorVars -eq $TRUE -And -Not $RunInstaller) {
@@ -51,7 +74,14 @@ function Start-IcingaAgentDirectorWizard()
     }
 
     if ($HostKnown -eq $FALSE) {
-        $SelfServiceAPIKey = Register-IcingaDirectorSelfServiceHost -DirectorUrl $DirectorUrl -ApiKey $SelfServiceAPIKey -Hostname (Get-IcingaHostname @Arguments);
+        while ($TRUE) {
+            try {
+                $SelfServiceAPIKey = Register-IcingaDirectorSelfServiceHost -DirectorUrl $DirectorUrl -ApiKey $SelfServiceAPIKey -Hostname (Get-IcingaHostname @Arguments);
+                break;
+            } catch {
+                $SelfServiceAPIKey = (Get-IcingaAgentInstallerAnswerInput -Prompt ([string]::Format('Failed to register host within Icinga Director. Please re-enter your SelfService API Key. If this prompt continues, drop your host key at "Hosts -> {0} -> Agent"', (Get-IcingaHostname @Arguments))) -Default 'v' -DefaultInput $SelfServiceAPIKey).answer;
+            }
+        }
 
         # Host is already registered
         if ($null -eq $SelfServiceAPIKey) {

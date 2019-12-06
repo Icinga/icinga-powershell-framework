@@ -40,5 +40,7 @@ function Register-IcingaDirectorSelfServiceHost()
 
     Set-IcingaPowerShellConfig -Path 'IcingaDirector.SelfService.ApiKey' -Value $JsonContent;
 
+    Write-Host 'Host was successfully registered within Icinga Director';
+
     return $JsonContent;
 }
