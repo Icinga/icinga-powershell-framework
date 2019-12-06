@@ -4,111 +4,69 @@ function Install-IcingaFrameworkUpdate()
         [string]$FrameworkUrl
     );
 
-    $ProgressPreference = "SilentlyContinue";
-    $Tag                = 'Unknown';
+    $RepositoryName = 'icinga-powershell-framework';
+    $Archive        = Get-IcingaPowerShellModuleArchive -DownloadUrl $FrameworkUrl -ModuleName 'Icinga Framework' -Repository $RepositoryName;
 
-    if ([string]::IsNullOrEmpty($FrameworkUrl)) {
-        if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you provide a custom repository of the framework?' -Default 'n').result -eq 1) {
-            $branch = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Which version to you want to install? (snapshot/stable)' -Default 'v' -DefaultInput 'stable').answer
-            if ($branch.ToLower() -eq 'snapshot') {
-                $FrameworkUrl  = 'https://github.com/Icinga/icinga-powershell-framework/archive/master.zip';
-            } else {
-                $LatestRelease = (Invoke-WebRequest -Uri 'https://github.com/Icinga/icinga-powershell-framework/releases/latest' -UseBasicParsing).BaseResponse.ResponseUri.AbsoluteUri;
-                $FrameworkUrl  = $LatestRelease.Replace('/releases/tag/', '/archive/');
-                $Tag           = $FrameworkUrl.Split('/')[-1];
-                $FrameworkUrl  = [string]::Format('{0}/{1}.zip', $FrameworkUrl, $Tag);
+    Write-Host ([string]::Format('Installing module into "{0}"', ($Archive.Directory)));
+    Expand-IcingaZipArchive -Path $Archive.Archive -Destination $Archive.Directory | Out-Null;
 
-                $CurrentVersion = Get-IcingaPowerShellModuleVersion 'icinga-powershell-framework';
-
-                if ($null -ne $CurrentVersion -And $CurrentVersion -eq $Tag) {
-                    Write-Host 'Your Icinga Framework is already up-to-date';
-                    return;
-                }
-            }
-        } else {
-            $FrameworkUrl = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please enter the full path to your icinga framework repository' -Default 'v').answer;
-        }
-    }
-
-    $ModuleDirectory = Get-IcingaFrameworkRootPath;
-    $DownloadPath    = (Join-Path -Path $ENv:TEMP -ChildPath 'icinga-powershell-framework.zip');
-    Write-Host ([string]::Format('Downloading Icinga Framework into "{0}"', $DownloadPath));
-
-    Invoke-WebRequest -UseBasicParsing -Uri $FrameworkUrl -OutFile $DownloadPath;
-
-    Write-Host ([string]::Format('Installing module into "{0}"', ($ModuleDirectory)));
-    Expand-IcingaZipArchive -Path $DownloadPath -Destination $ModuleDirectory | Out-Null;
-
-    $FolderContent = Get-ChildItem -Path $ModuleDirectory;
-    $Extracted     = '';
+    $FolderContent = Get-ChildItem -Path $Archive.Directory;
+    $ModuleContent = $Archive.Directory;
 
     foreach ($entry in $FolderContent) {
-        if ($entry -eq 'icinga-powershell-framework') {
-            # Skip the framework directory directly
-            continue;
-        }
-        if ($entry -like 'icinga-powershell-framework-*') {
-            $Extracted = $entry;
+        if ($entry -like ([string]::Format('{0}*', $RepositoryName))) {
+            $ModuleContent = Join-Path -Path $ModuleContent -ChildPath $entry;
+            break;
         }
     }
 
-    if ([string]::IsNullOrEmpty($Extracted)) {
-        Write-Host 'No update package could be found.'
-        return;
-    }
+    Write-Host ([string]::Format('Using content of folder "{0}" for updates', $ModuleContent));
 
     $ServiceStatus = (Get-Service 'icingapowershell' -ErrorAction SilentlyContinue).Status;
 
     if ($ServiceStatus -eq 'Running') {
+        Write-Host 'Stopping Icinga PowerShell service';
         Stop-IcingaService 'icingapowershell';
         Start-Sleep -Seconds 1;
     }
 
-    $NewDirectory = (Join-Path -Path $ModuleDirectory -ChildPath 'icinga-powershell-framework');
-    $ExtractDir   = (Join-Path -Path $ModuleDirectory -ChildPath $Extracted);
-    $BackupDir    = (Join-Path -Path $ExtractDir      -ChildPath 'previous');
-    $OldBackupDir = (Join-Path -Path $NewDirectory    -ChildPath 'previous');
+    $ModuleDirectory = (Join-Path -Path $Archive.ModuleRoot -ChildPath $RepositoryName);
 
-    if ((Test-Path $NewDirectory)) {
-        if ((Test-Path (Join-Path -Path $NewDirectory -ChildPath 'cache'))) {
-            Write-Host 'Importing cache into new module version...';
-            Copy-Item -Path (Join-Path -Path $NewDirectory -ChildPath 'cache') -Destination $ExtractDir -Force -Recurse;
-        }
-        if ((Test-Path (Join-Path -Path $NewDirectory -ChildPath 'custom'))) {
-            Write-Host 'Importing custom modules into new module version...';
-            Copy-Item -Path (Join-Path -Path $NewDirectory -ChildPath 'custom') -Destination $ExtractDir -Force -Recurse;
-        }
-        if ((Test-Path (Join-Path -Path $NewDirectory -ChildPath 'config'))) {
-            Write-Host 'Importing config into new module version...';
-            Copy-Item -Path (Join-Path -Path $NewDirectory -ChildPath 'config') -Destination $ExtractDir -Force -Recurse;
-        }
-        Write-Host 'Creating backup directory';
-        if ((Test-Path $OldBackupDir)) {
-            Write-Host 'Importing old backups into new module version...';
-            Move-Item -Path $OldBackupDir -Destination $ExtractDir;
-        } else {
-            Write-Host 'No previous backups found. Creating new backup space';
-            if ((Test-Path $BackupDir) -eq $FALSE) {
-                New-Item -Path $BackupDir -ItemType Container | Out-Null;
-            }
-        }
-        Write-Host 'Moving old module into backup directory';
-        Move-Item -Path $NewDirectory -Destination (Join-Path -Path $BackupDir -ChildPath (Get-Date -Format "MM-dd-yyyy-HH-mm-ffff"));
+    if ((Test-Path $ModuleDirectory) -eq $FALSE) {
+        Write-Host 'Failed to update the component. Module Root-Directory was not found';
+        return;
     }
 
-    Write-Host ([string]::Format('Installing new module version "{0}"', $Tag));
-    Start-Sleep -Seconds 2;
-    Move-Item -Path (Join-Path -Path $ModuleDirectory -ChildPath $Extracted) -Destination $NewDirectory;
+    $Files = Get-ChildItem $ModuleDirectory -File '*';
 
-    Unblock-IcingaPowerShellFiles -Path $NewDirectory;
-    # Fix new permissions for cache folder
-    Set-IcingaAcl -Directory (Get-IcingaCacheDir);
+    Write-Host 'Removing files from framework';
+
+    foreach ($ModuleFile in $Files) {
+        Remove-ItemSecure -Path $ModuleFile -Force | Out-Null;
+    }
+
+    Remove-ItemSecure -Path (Join-Path $ModuleDirectory -ChildPath 'doc') -Recurse -Force | Out-Null;
+    Remove-ItemSecure -Path (Join-Path $ModuleDirectory -ChildPath 'lib') -Recurse -Force | Out-Null;
+    Remove-ItemSecure -Path (Join-Path $ModuleDirectory -ChildPath 'manifests') -Recurse -Force | Out-Null;
+
+    Write-Host 'Copying new files to framework';
+    Copy-ItemSecure -Path (Join-Path $ModuleContent -ChildPath 'doc') -Destination $ModuleDirectory -Recurse -Force | Out-Null;
+    Copy-ItemSecure -Path (Join-Path $ModuleContent -ChildPath 'lib') -Destination $ModuleDirectory -Recurse -Force | Out-Null;
+    Copy-ItemSecure -Path (Join-Path $ModuleContent -ChildPath 'manifests') -Destination $ModuleDirectory -Recurse -Force | Out-Null;
+    Copy-ItemSecure -Path (Join-Path -Path $ModuleContent -ChildPath '/*') -Destination $ModuleDirectory -Recurse -Force | Out-Null;
+
+    Unblock-IcingaPowerShellFiles -Path $ModuleDirectory;
+
+    Write-Host 'Cleaning temporary content';
+    Start-Sleep -Seconds 1;
+    Remove-ItemSecure -Path $Archive.Directory -Recurse -Force | Out-Null;
+
+    Write-Host 'Framework update has been completed. Please start a new PowerShell instance now to complete the update';
 
     Test-IcingaAgent;
 
     if ($ServiceStatus -eq 'Running') {
+        Write-Host 'Starting Icinga PowerShell service';
         Start-IcingaService 'icingapowershell';
     }
-
-    Write-Host 'Framework update has been completed';
 }
