@@ -24,6 +24,11 @@ function Install-IcingaFrameworkPlugins()
 
     $PluginDirectory = (Join-Path -Path $Archive.ModuleRoot -ChildPath $RepositoryName);
 
+    if ((Test-Path $PluginDirectory) -eq $FALSE) {
+        Write-Host ([string]::Format('Plugin Module Directory "{0}" is not present. Creating Directory', $PluginDirectory));
+        New-Item -Path $PluginDirectory -ItemType Directory | Out-Null;
+    }
+
     Write-Host 'Copying files to plugins';
     Copy-ItemSecure -Path (Join-Path -Path $ModuleContent -ChildPath '/*') -Destination $PluginDirectory -Recurse -Force | Out-Null;
 
