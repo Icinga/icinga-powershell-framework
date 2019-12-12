@@ -24,7 +24,7 @@ function ConvertTo-IcingaIPv6BinaryString()
     param(
         [string]$IP
     );
-    [string]$IP = Expand-IcingaIPv6String $IP;
+    [string]$IP   = Expand-IcingaIPv6String $IP;
     [array]$IPArr = $IP.Split(':');
 
     $IPArr = $IPArr.ToCharArray();
@@ -34,5 +34,8 @@ function ConvertTo-IcingaIPv6BinaryString()
     $IP = $IP -join '';
     $IP = $IP -replace '\s','';
 
-    return @{'value' = $IP; 'name' = 'IPv6'}
+    return @{
+       'value' = $IP;
+       'name' = 'IPv6'
+   }
 }

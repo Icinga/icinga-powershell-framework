@@ -31,6 +31,11 @@ function Get-IcingaNetworkInterface()
         [string]$IP
     );
 
+    if ([string]::IsNullOrEmpty($IP)) {
+        Write-Host 'Please specify a valid IP-Address or FQDN';
+        return $null;
+    }
+
     try {
         $IP = ([System.Net.Dns]::GetHostAddresses($IP)).IPAddressToString;
     } catch {

@@ -28,14 +28,14 @@ function Expand-IcingaIPv6String()
         [String]$IP
     );
 
-    $Counter = 0
-    $RelV = -1
+    $Counter = 0;
+    $RelV    = -1;
 
-    for($Index = 0; $Index -lt $IP.Length; $Index++) {
+    for ($Index = 0; $Index -lt $IP.Length; $Index++) {
         if ($IP[$Index] -eq ':') {
-            $Counter++
+            $Counter++;
             if (($Index - 1) -ge 0 -and $IP[$Index - 1] -eq ':'){
-                $RelV = $Index
+                $RelV = $Index;
             }
         }
     }
@@ -46,7 +46,7 @@ function Expand-IcingaIPv6String()
     }
 
     if ($Counter -lt 7) {
-        $IP = $IP.Substring(0, $RelV) + (':'*(7 - $Counter)) + $IP.Substring($RelV)
+        $IP = $IP.Substring(0, $RelV) + (':'*(7 - $Counter)) + $IP.Substring($RelV);
     }
 
     $Result = @();
@@ -59,7 +59,7 @@ function Expand-IcingaIPv6String()
             [System.Globalization.CultureInfo]::InvariantCulture,
             [Ref]$Value
         ) | Out-Null;
-        $Result += ('{0:X4}' -f $Value)
+        $Result += ('{0:X4}' -f $Value);
     }
     $Result = $Result -join ':';
 

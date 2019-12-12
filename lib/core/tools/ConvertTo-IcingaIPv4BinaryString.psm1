@@ -24,11 +24,15 @@ function ConvertTo-IcingaIPv4BinaryString()
     param(
         [string]$IP
     );
+
     $IP = $IP -split '\.' | ForEach-Object {    
-        [System.Convert]::ToString($_,2).PadLeft(8,'0');
+        [System.Convert]::ToString($_, 2).PadLeft(8, '0');
     }
     $IP = $IP -join '';
     $IP = $IP -replace '\s','';
     
-    return @{'value' = $IP; 'name' = 'IPv4'}
+    return @{
+       'value' = $IP;
+       'name' = 'IPv4'
+   }
 }
