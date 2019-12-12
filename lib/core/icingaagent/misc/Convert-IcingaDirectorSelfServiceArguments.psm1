@@ -20,6 +20,7 @@ function Convert-IcingaDirectorSelfServiceArguments()
         AddFirewallRule     = $JsonInput.agent_add_firewall_rule;
         AcceptConnections   = $JsonInput.agent_add_firewall_rule;
         ServiceUser         = $JsonInput.icinga_service_user;
+        IcingaMaster        = $JsonInput.IcingaMaster;
         UpdateAgent         = $TRUE;
         AddDirectorGlobal   = $FALSE;
         AddGlobalTemplates  = $FALSE;

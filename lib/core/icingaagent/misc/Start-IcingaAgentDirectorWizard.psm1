@@ -76,7 +76,7 @@ function Start-IcingaAgentDirectorWizard()
     if ($HostKnown -eq $FALSE) {
         while ($TRUE) {
             try {
-                $SelfServiceAPIKey = Register-IcingaDirectorSelfServiceHost -DirectorUrl $DirectorUrl -ApiKey $SelfServiceAPIKey -Hostname (Get-IcingaHostname @Arguments);
+                $SelfServiceAPIKey = Register-IcingaDirectorSelfServiceHost -DirectorUrl $DirectorUrl -ApiKey $SelfServiceAPIKey -Hostname (Get-IcingaHostname @Arguments) -Endpoint $Arguments.IcingaMaster;
                 break;
             } catch {
                 $SelfServiceAPIKey = (Get-IcingaAgentInstallerAnswerInput -Prompt ([string]::Format('Failed to register host within Icinga Director. Please re-enter your SelfService API Key. If this prompt continues, drop your host key at "Hosts -> {0} -> Agent"', (Get-IcingaHostname @Arguments))) -Default 'v' -DefaultInput $SelfServiceAPIKey).answer;

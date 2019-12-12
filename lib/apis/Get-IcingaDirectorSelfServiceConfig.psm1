@@ -29,5 +29,7 @@ function Get-IcingaDirectorSelfServiceConfig()
         throw 'Icinga Director Self-Service has thrown an error: ' + $JsonContent.error;
     }
 
+    $JsonContent = Add-PSCustomObjectMember -Object $JsonContent -Key 'IcingaMaster' -Value $response.BaseResponse.ResponseUri.Host;
+
     return $JsonContent;
 }
