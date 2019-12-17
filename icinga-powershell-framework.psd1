@@ -18,7 +18,7 @@
             ProjectUri = 'https://github.com/Icinga/icinga-powershell-framework'
             ReleaseNotes = 'https://github.com/Icinga/icinga-powershell-framework/releases'
         };
-        Version = 'v1.0.0-rc1';
+        Version = 'v1.0.0-rc3';
     }
     HelpInfoURI = 'https://github.com/Icinga/icinga-powershell-framework'
 }
