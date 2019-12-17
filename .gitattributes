@@ -1,0 +1,5 @@
+# Exclude files related to git when generating an archive
+.git* export-ignore
+
+# Include version information on `git archive'
+VERSION export-subst
