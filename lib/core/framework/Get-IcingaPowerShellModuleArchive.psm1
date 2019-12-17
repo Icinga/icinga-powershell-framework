@@ -15,7 +15,7 @@ function Get-IcingaPowerShellModuleArchive()
             if ($branch.ToLower() -eq 'snapshot') {
                 $DownloadUrl   = [string]::Format('https://github.com/Icinga/{0}/archive/master.zip', $Repository);
             } else {
-                $LatestRelease = (Invoke-WebRequest -Uri 'https://github.com/Icinga/icinga-powershell-framework/releases/latest' -UseBasicParsing).BaseResponse.ResponseUri.AbsoluteUri;
+                $LatestRelease = (Invoke-WebRequest -Uri ([string]::Format('https://github.com/Icinga/{0}/releases/latest', $Repository)) -UseBasicParsing).BaseResponse.ResponseUri.AbsoluteUri;
                 $DownloadUrl   = $LatestRelease.Replace('/releases/tag/', '/archive/');
                 $Tag           = $DownloadUrl.Split('/')[-1];
                 $DownloadUrl   = [string]::Format('{0}/{1}.zip', $DownloadUrl, $Tag);
