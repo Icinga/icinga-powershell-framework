@@ -37,7 +37,7 @@ function Get-IcingaNetworkInterface()
     }
 
     try {
-        $IP = ([System.Net.Dns]::GetHostAddresses($IP)).IPAddressToString;
+        [array]$IP = ([System.Net.Dns]::GetHostAddresses($IP)).IPAddressToString;
     } catch {
         Write-Host 'Invalid IP was provided!';
         return $null;
@@ -53,72 +53,109 @@ function Get-IcingaNetworkInterface()
     foreach ( $Info in $InterfaceInfo ) {
         $Counter++;
 
-        $Divide = $Info.DestinationPrefix;
-        $IP,$Mask = $Divide.Split('/');
+        $Divide   = $Info.DestinationPrefix;
+        $IP, $Mask = $Divide.Split('/');
 
+        foreach ($destinationIP in $IPBinStringMaster) {
+            [string]$Key     = '';
+            [string]$MaskKey = '';
 ############################################################################
 ################################  IPv4  ####################################
 ############################################################################
-        if ($IPBinStringMaster.name -eq 'IPv4') {
-            if ($IP -like '*.*') {
+            if ($destinationIP.name -eq 'IPv4') {
+                if ($IP -like '*.*') {
 ############################################################################
-                if ([int]$Mask -lt 10) {
-                    [string]$MaskKey = [string]::Format('00{0}', $Mask);
-                } else {
-                    [string]$MaskKey = [string]::Format('0{0}', $Mask);
-                }
-
-                [string]$Key = [string]::Format('{0}-{1}', $MaskKey, $Counter);
-
-                $InterfaceData.Add(
-                    $Key, @{
-                        'Binary IP String' = (ConvertTo-IcingaIPBinaryString -IP $IP).value;
-                        'Mask' = $Mask;
-                        'Interface' = $Info.ifIndex;
+                    if ([int]$Mask -lt 10) {
+                        $MaskKey = [string]::Format('00{0}', $Mask);
+                    } else {
+                        $MaskKey = [string]::Format('0{0}', $Mask);
                     }
-                );
 ############################################################################
-            }
-        }
-############################################################################
-################################  IPv4  ####################################
-############################################################################
-        if ($IPBinStringMaster.name -eq 'IPv6') {
-            if ($IP -like '*:*') {
-############################################################################
-                if ([int]$Mask -lt 10) {
-                    [string]$MaskKey = [string]::Format('00{0}', $Mask);
-                } elseif ([int]$Mask -lt 100) {
-                    [string]$MaskKey = [string]::Format('0{0}', $Mask);
-                } else {
-                    [string]$MaskKey = $Mask;
                 }
-
-                [string]$Key = [string]::Format('{0}-{1}', $MaskKey, $Counter);
-
-                $InterfaceData.Add(
-                    $Key, @{
-                        'Binary IP String' = (ConvertTo-IcingaIPBinaryString -IP $IP);
-                        'Mask' = $Mask;
-                        'Interface' = $Info.ifIndex;
-                    }
-                );
-############################################################################
             }
+############################################################################
+################################  IPv6  ####################################
+############################################################################
+            if ($destinationIP.name -eq 'IPv6') {
+                if ($IP -like '*:*') {
+############################################################################
+                    if ([int]$Mask -lt 10) {
+                        $MaskKey = [string]::Format('00{0}', $Mask);
+                    } elseif ([int]$Mask -lt 100) {
+                        $MaskKey = [string]::Format('0{0}', $Mask);
+                    } else {
+                        $MaskKey = $Mask;
+                    }
+############################################################################
+                }
+            }
+
+            $Key = [string]::Format('{0}-{1}', $MaskKey, $Counter);
+
+            if ($InterfaceData.ContainsKey($Key)) {
+                continue;
+            }
+
+            $InterfaceData.Add(
+                $Key, @{
+                    'Binary IP String' = (ConvertTo-IcingaIPBinaryString -IP $IP).value;
+                    'Mask' = $Mask;
+                    'Interface' = $Info.ifIndex;
+                }
+            );
         }
     }
 
     $InterfaceDataOrdered = $InterfaceData.GetEnumerator() | Sort-Object -Property Name -Descending;
+    $ExternalInterfaces   = @{};
 
     foreach ( $Route in $InterfaceDataOrdered ) {
-        [string]$RegexPattern = [string]::Format("^.{{{0}}}", $Route.Value.Mask);
-        [string]$ToBeMatched = $Route.Value."Binary IP String";
-        $Match1=[regex]::Matches($ToBeMatched, $RegexPattern).Value;
-        $Match2=[regex]::Matches($IPBinStringMaster.Value, $RegexPattern).Value;
+        foreach ($destinationIP in $IPBinStringMaster) {
+            [string]$RegexPattern = [string]::Format("^.{{{0}}}", $Route.Value.Mask);
+            [string]$ToBeMatched = $Route.Value."Binary IP String";
+            $Match1=[regex]::Matches($ToBeMatched, $RegexPattern).Value;
+            $Match2=[regex]::Matches($destinationIP.Value, $RegexPattern).Value;
 
-        If ($Match1 -like $Match2) {
-            return ((Get-NetIPAddress -InterfaceIndex $Route.Value.Interface -AddressFamily $IPBinStringMaster.name).IPAddress);
+            If ($Match1 -like $Match2) {
+                $ExternalInterface = ((Get-NetIPAddress -InterfaceIndex $Route.Value.Interface -AddressFamily $destinationIP.Name).IPAddress);
+                if ($ExternalInterfaces.ContainsKey($ExternalInterface)) {
+                    $ExternalInterfaces[$ExternalInterface].count += 1;
+                } else {
+                    $ExternalInterfaces.Add(
+                        $ExternalInterface,
+                        @{
+                            'count' = 1
+                        }
+                    );
+                }
+            }
         }
     }
-    return  ((Get-NetIPAddress -InterfaceIndex (Get-NetRoute | Where-Object -Property DestinationPrefix -like '0.0.0.0/0')[0].IfIndex -AddressFamily $IPBinStringMaster.name).IPAddress).split('%')[0];
+
+    if ($ExternalInterfaces.Count -eq 0) {
+        foreach ($destinationIP in $IPBinStringMaster) {
+            $ExternalInterface = ((Get-NetIPAddress -InterfaceIndex (Get-NetRoute | Where-Object -Property DestinationPrefix -like '0.0.0.0/0')[0].IfIndex -AddressFamily $destinationIP.name).IPAddress).split('%')[0];
+            if ($ExternalInterfaces.ContainsKey($ExternalInterface)) {
+                $ExternalInterfaces[$ExternalInterface].count += 1;
+            } else {
+                $ExternalInterfaces.Add(
+                    $ExternalInterface,
+                    @{
+                        'count' = 1
+                    }
+                );
+            }
+        }   
+    }
+
+    $InternalCount = 0;
+    $UseInterface  = '';
+    foreach ($interface in $ExternalInterfaces.Keys) {
+        $currentCount = $ExternalInterfaces[$interface].count;
+        if ($currentCount -gt $InternalCount) {
+            $InternalCount = $currentCount;
+            $UseInterface = $interface;
+        }
+    }
+    return $UseInterface;
 }
