@@ -18,7 +18,7 @@ Please take a look at the following content to get to know the possibilities of 
 Developer Guide
 ------------
 
-If you wish to extend the Framework by yourself or write custom plugins for your environment, please have a look at the [Developer Guide](doc/04-DeveloperGuide.md) for detailed explanations of functions and code examples.
+If you wish to extend the Framework by yourself or write custom plugins for your environment, please have a look at the [Developer Guide](doc/04-Developer-Guide.md) for detailed explanations of functions and code examples.
 
 Contributing
 ------------
