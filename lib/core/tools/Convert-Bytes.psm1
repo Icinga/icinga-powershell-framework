@@ -21,7 +21,7 @@ function Convert-Bytes()
             { 'MB' -contains $_} { $FinalValue = ConvertTo-MegaByte $CurrentValue -Unit B;  $boolOption = $true;}
             { 'GB' -contains $_} { $FinalValue = ConvertTo-GigaByte $CurrentValue -Unit B;  $boolOption = $true;}
             { 'TB' -contains $_} { $FinalValue = ConvertTo-TeraByte $CurrentValue -Unit B;  $boolOption = $true;}
-            { 'PT' -contains $_} { $FinalValue = ConvertTo-PetaByte $CurrentValue -Unit B;  $boolOption = $true;}
+            { 'PB' -contains $_} { $FinalValue = ConvertTo-PetaByte $CurrentValue -Unit B;  $boolOption = $true;}
             { 'KiB' -contains $_} { $FinalValue = ConvertTo-KiBByte $CurrentValue -Unit B;  $boolOption = $true;}
             { 'MiB' -contains $_} { $FinalValue = ConvertTo-MiBByte $CurrentValue -Unit B;  $boolOption = $true;}
             { 'GiB' -contains $_} { $FinalValue = ConvertTo-GiBByte $CurrentValue -Unit B;  $boolOption = $true;}

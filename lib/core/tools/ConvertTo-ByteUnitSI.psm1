@@ -27,7 +27,7 @@ function ConvertTo-ByteSI()
         { 'MB', 'MegaByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 6)); $boolOption = $true; }        
         { 'GB', 'GigaByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 9)); $boolOption = $true; }
         { 'TB', 'TeraByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 12)); $boolOption = $true; }
-        { 'PT', 'PetaByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 15)); $boolOption = $true; }
+        { 'PB', 'PetaByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 15)); $boolOption = $true; }
         default { 
             if (-Not $boolOption) {
                 Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
@@ -67,7 +67,7 @@ function ConvertTo-KiloByte()
         { 'MB', 'MegaByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 3)); $boolOption = $true; }        
         { 'GB', 'GigaByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 6)); $boolOption = $true; }
         { 'TB', 'TeraByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 9)); $boolOption = $true; }
-        { 'PT', 'PetaByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 12)); $boolOption = $true; }
+        { 'PB', 'PetaByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 12)); $boolOption = $true; }
         default { 
             if (-Not $boolOption) {
                 Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
@@ -107,7 +107,7 @@ function ConvertTo-MegaByte()
         { 'MB', 'MegaByte' -contains $_ } { $result = $Value; $boolOption = $true; }       
         { 'GB', 'GigaByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 3)); $boolOption = $true; }
         { 'TB', 'TeraByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 6)); $boolOption = $true; }
-        { 'PT', 'PetaByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 9)); $boolOption = $true; }
+        { 'PB', 'PetaByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 9)); $boolOption = $true; }
         default { 
             if (-Not $boolOption) {
                 Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
@@ -147,7 +147,7 @@ function ConvertTo-GigaByte()
         { 'MB', 'MegaByte' -contains $_ } { $result = ($Value / [math]::Pow(10, 3)); $boolOption = $true; }
         { 'GB', 'GigaByte' -contains $_ } { $result = $Value; $boolOption = $true; }
         { 'TB', 'TeraByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 3)); $boolOption = $true; }
-        { 'PT', 'PetaByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 6)); $boolOption = $true; }
+        { 'PB', 'PetaByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 6)); $boolOption = $true; }
         default { 
             if (-Not $boolOption) {
                 Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
@@ -187,7 +187,7 @@ function ConvertTo-TeraByte()
         { 'MB', 'MegaByte' -contains $_ } { $result = ($Value / [math]::Pow(10, 6)); $boolOption = $true; }
         { 'GB', 'GigaByte' -contains $_ } { $result = ($Value / [math]::Pow(10, 3)); $boolOption = $true; }
         { 'TB', 'TeraByte' -contains $_ } { $result = $Value; $boolOption = $true; }
-        { 'PT', 'PetaByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 3)); $boolOption = $true; }
+        { 'PB', 'PetaByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 3)); $boolOption = $true; }
         default { 
             if (-Not $boolOption) {
                 Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
@@ -227,7 +227,7 @@ function ConvertTo-PetaByte()
         { 'MB', 'MegaByte' -contains $_ } { $result = ($Value / [math]::Pow(10, 9)); $boolOption = $true; }
         { 'GB', 'GigaByte' -contains $_ } { $result = ($Value / [math]::Pow(10, 6)); $boolOption = $true; }
         { 'TB', 'TeraByte' -contains $_ } { $result = ($Value / [math]::Pow(10, 3)); $boolOption = $true; }
-        { 'PT', 'PetaByte' -contains $_ } { $result = $Value; $boolOption = $true; }
+        { 'PB', 'PetaByte' -contains $_ } { $result = $Value; $boolOption = $true; }
         default { 
             if (-Not $boolOption) {
                 Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
