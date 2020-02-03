@@ -148,7 +148,7 @@ function Get-IcingaCheckCommandConfig()
             }
 
             # Add arguments to a given command
-            if ($parameter.type.name -eq 'switch') {
+            if ($parameter.type.name -eq 'SwitchParameter') {
                 $Basket.Command[$Data.Name].arguments.Add(
                     [string]::Format('-{0}', $parameter.Name), @{
                         'set_if' = $IcingaCustomVariable;
@@ -160,7 +160,7 @@ function Get-IcingaCheckCommandConfig()
                 $Basket.Command[$Data.Name].vars.Add($parameter.Name, $FALSE);
 
             # Conditional whether type of parameter is array
-            } elseif ($parameter.type.name -eq 'array') {
+            } elseif ($parameter.type.name -eq 'Array') {
                 $Basket.Command[$Data.Name].arguments.Add(
                     [string]::Format('-{0}', $parameter.Name), @{
                         'value' = @{
