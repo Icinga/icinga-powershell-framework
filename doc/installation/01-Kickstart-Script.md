@@ -1,7 +1,7 @@
 Install the framework with the Kickstart Script
 ===
 
-The easiest way to install the framework is by using the Kickstart Script provided from [this repository](https://github.com/Icinga/icinga-framework-kickstart).
+The easiest way to install the framework is by using the Kickstart Script provided from [this repository](https://github.com/Icinga/icinga-powershell-kickstart).
 
 The code provided there will ask questions on where to install the framework and where the framework files are provided from. The code below is a straight copy of the initial required code-block. Simply open a PowerShell instance as administrator and copy the following code block into it:
 
