@@ -30,7 +30,7 @@ function ConvertTo-ByteSI()
         { 'PT', 'PetaByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 15)); $boolOption = $true; }
         default { 
             if (-Not $boolOption) {
-                Throw 'Invalid input';
+                Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
             } 
         }
     }
@@ -70,7 +70,7 @@ function ConvertTo-KiloByte()
         { 'PT', 'PetaByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 12)); $boolOption = $true; }
         default { 
             if (-Not $boolOption) {
-                Throw 'Invalid input';
+                Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
             }  
         }
     }
@@ -110,7 +110,7 @@ function ConvertTo-MegaByte()
         { 'PT', 'PetaByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 9)); $boolOption = $true; }
         default { 
             if (-Not $boolOption) {
-                Throw 'Invalid input';
+                Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
             } 
         }
     }
@@ -150,7 +150,7 @@ function ConvertTo-GigaByte()
         { 'PT', 'PetaByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 6)); $boolOption = $true; }
         default { 
             if (-Not $boolOption) {
-                Throw 'Invalid input';
+                Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
             }  
         }
     }
@@ -190,7 +190,7 @@ function ConvertTo-TeraByte()
         { 'PT', 'PetaByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 3)); $boolOption = $true; }
         default { 
             if (-Not $boolOption) {
-                Throw 'Invalid input';
+                Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
             }  
         }
     }
@@ -230,7 +230,7 @@ function ConvertTo-PetaByte()
         { 'PT', 'PetaByte' -contains $_ } { $result = $Value; $boolOption = $true; }
         default { 
             if (-Not $boolOption) {
-                Throw 'Invalid input';
+                Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
             }  
         }
     }

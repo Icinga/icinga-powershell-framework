@@ -30,11 +30,12 @@ function Convert-Bytes()
 
             default { 
                 if (-Not $boolOption) {
-                    Throw 'Invalid input';
+                    Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
                 } 
             }
         }
         return @{'value' = $FinalValue; 'pastunit' = $CurrentUnit; 'endunit' = $Unit};
     }
-    Throw 'Invalid input';
+
+    Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
 }

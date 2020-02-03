@@ -14,7 +14,7 @@ function ConvertTo-ByteIEC()
         { 'Piti', 'PitiByte' -contains $_ } { $result = ($Value * [math]::Pow(2, 50)); $boolOption = $true; }
         default { 
             if (-Not $boolOption) {
-                Throw 'Invalid input';
+                Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
             } 
         }
     }
@@ -38,7 +38,7 @@ function ConvertTo-KibiByte()
         { 'Piti', 'PitiByte' -contains $_ } { $result = ($Value * [math]::Pow(2, 40)); $boolOption = $true; }
         default { 
             if (-Not $boolOption) {
-                Throw 'Invalid input';
+                Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
             }  
         }
     }
@@ -62,7 +62,7 @@ function ConvertTo-MibiByte()
         { 'Piti', 'PitiByte' -contains $_ } { $result = ($Value * [math]::Pow(2, 30)); $boolOption = $true; }
         default { 
             if (-Not $boolOption) {
-                Throw 'Invalid input';
+                Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
             } 
         }
     }
@@ -86,7 +86,7 @@ function ConvertTo-GibiByte()
         { 'Piti', 'PitiByte' -contains $_ } { $result = ($Value * [math]::Pow(2, 20)); $boolOption = $true; }
         default { 
             if (-Not $boolOption) {
-                Throw 'Invalid input';
+                Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
             }  
         }
     }
@@ -110,7 +110,7 @@ function ConvertTo-TibiByte()
         { 'Piti', 'PitiByte' -contains $_ } { $result = ($Value * [math]::Pow(2, 10)); $boolOption = $true; }
         default { 
             if (-Not $boolOption) {
-                Throw 'Invalid input';
+                Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
             }  
         }
     }
@@ -134,7 +134,7 @@ function ConvertTo-PitiByte()
         { 'Piti', 'PitiByte' -contains $_ } { $result = $Value; $boolOption = $true; }
         default { 
             if (-Not $boolOption) {
-                Throw 'Invalid input';
+                Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
             }  
         }
     }
