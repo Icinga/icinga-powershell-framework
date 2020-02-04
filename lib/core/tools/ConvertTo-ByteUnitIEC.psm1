@@ -7,9 +7,9 @@ function ConvertTo-ByteIEC()
 
     switch ($Unit) {
         { 'B', 'Byte' -contains $_ } { $result = $Value; $boolOption = $true; }
-        { 'KiB', 'KiBByte' -contains $_ } { $result = ($Value * [math]::Pow(2, 10)); $boolOption = $true; }
+        { 'KiB', 'Kibibyte' -contains $_ } { $result = ($Value * [math]::Pow(2, 10)); $boolOption = $true; }
         { 'MiB', 'Mebibyte' -contains $_ } { $result = ($Value * [math]::Pow(2, 20)); $boolOption = $true; }        
-        { 'GiB', 'GiBByte' -contains $_ } { $result = ($Value * [math]::Pow(2, 30)); $boolOption = $true; }
+        { 'GiB', 'Gibibyte' -contains $_ } { $result = ($Value * [math]::Pow(2, 30)); $boolOption = $true; }
         { 'TiB', 'Tebibyte' -contains $_ } { $result = ($Value * [math]::Pow(2, 40)); $boolOption = $true; }
         { 'PiB', 'Pebibyte' -contains $_ } { $result = ($Value * [math]::Pow(2, 50)); $boolOption = $true; }
         default { 
@@ -22,7 +22,7 @@ function ConvertTo-ByteIEC()
     return $result;
 }
 
-function ConvertTo-KiBByte()
+function ConvertTo-Kibibyte()
 {
     param(
         [single]$Value,
@@ -31,9 +31,9 @@ function ConvertTo-KiBByte()
 
     switch ($Unit) {
         { 'B', 'Byte' -contains $_ } { $result = ($Value / [math]::Pow(2, 10)); $boolOption = $true; }
-        { 'KiB', 'KiBByte' -contains $_ } { $result = $Value; $boolOption = $true; }
+        { 'KiB', 'Kibibyte' -contains $_ } { $result = $Value; $boolOption = $true; }
         { 'MiB', 'Mebibyte' -contains $_ } { $result = ($Value * [math]::Pow(2, 10)); $boolOption = $true; }        
-        { 'GiB', 'GiBByte' -contains $_ } { $result = ($Value * [math]::Pow(2, 20)); $boolOption = $true; }
+        { 'GiB', 'Gibibyte' -contains $_ } { $result = ($Value * [math]::Pow(2, 20)); $boolOption = $true; }
         { 'TiB', 'Tebibyte' -contains $_ } { $result = ($Value * [math]::Pow(2, 30)); $boolOption = $true; }
         { 'PiB', 'Pebibyte' -contains $_ } { $result = ($Value * [math]::Pow(2, 40)); $boolOption = $true; }
         default { 
@@ -46,7 +46,7 @@ function ConvertTo-KiBByte()
     return $result;
 }
 
-function ConvertTo-MiBByte()
+function ConvertTo-Mebibyte()
 {
     param(
         [single]$Value,
@@ -55,9 +55,9 @@ function ConvertTo-MiBByte()
 
     switch ($Unit) {
         { 'B', 'Byte' -contains $_ } { $result = ($Value / [math]::Pow(2, 20)); $boolOption = $true; }
-        { 'KiB', 'KiBByte' -contains $_ } { $result = ($Value / [math]::Pow(2, 10)); $boolOption = $true; }
+        { 'KiB', 'Kibibyte' -contains $_ } { $result = ($Value / [math]::Pow(2, 10)); $boolOption = $true; }
         { 'MiB', 'Mebibyte' -contains $_ } { $result = $Value; $boolOption = $true; }       
-        { 'GiB', 'GiBByte' -contains $_ } { $result = ($Value * [math]::Pow(2, 10)); $boolOption = $true; }
+        { 'GiB', 'Gibibyte' -contains $_ } { $result = ($Value * [math]::Pow(2, 10)); $boolOption = $true; }
         { 'TiB', 'Tebibyte' -contains $_ } { $result = ($Value * [math]::Pow(2, 20)); $boolOption = $true; }
         { 'PiB', 'Pebibyte' -contains $_ } { $result = ($Value * [math]::Pow(2, 30)); $boolOption = $true; }
         default { 
@@ -70,7 +70,7 @@ function ConvertTo-MiBByte()
     return $result;
 }
 
-function ConvertTo-GiBByte()
+function ConvertTo-Gibibyte()
 {
     param(
         [single]$Value,
@@ -79,9 +79,9 @@ function ConvertTo-GiBByte()
 
     switch ($Unit) {
         { 'B', 'Byte' -contains $_ } { $result = ($Value / [math]::Pow(2, 30)); $boolOption = $true; }
-        { 'KiB', 'KiBByte' -contains $_ } { $result = ($Value / [math]::Pow(2, 20)); $boolOption = $true; }
+        { 'KiB', 'Kibibyte' -contains $_ } { $result = ($Value / [math]::Pow(2, 20)); $boolOption = $true; }
         { 'MiB', 'Mebibyte' -contains $_ } { $result = ($Value / [math]::Pow(2, 10)); $boolOption = $true; }
-        { 'GiB', 'GiBByte' -contains $_ } { $result = $Value; $boolOption = $true; }
+        { 'GiB', 'Gibibyte' -contains $_ } { $result = $Value; $boolOption = $true; }
         { 'TiB', 'Tebibyte' -contains $_ } { $result = ($Value * [math]::Pow(2, 10)); $boolOption = $true; }
         { 'PiB', 'Pebibyte' -contains $_ } { $result = ($Value * [math]::Pow(2, 20)); $boolOption = $true; }
         default { 
@@ -94,7 +94,7 @@ function ConvertTo-GiBByte()
     return $result;
 }
 
-function ConvertTo-TiBByte()
+function ConvertTo-Tebibyte()
 {
     param(
         [single]$Value,
@@ -103,9 +103,9 @@ function ConvertTo-TiBByte()
 
     switch ($Unit) {
         { 'B', 'Byte' -contains $_ } { $result = ($Value / [math]::Pow(2, 40)); $boolOption = $true; }
-        { 'KiB', 'KiBByte' -contains $_ } { $result = ($Value / [math]::Pow(2, 30)); $boolOption = $true; }
+        { 'KiB', 'Kibibyte' -contains $_ } { $result = ($Value / [math]::Pow(2, 30)); $boolOption = $true; }
         { 'MiB', 'Mebibyte' -contains $_ } { $result = ($Value / [math]::Pow(2, 20)); $boolOption = $true; }
-        { 'GiB', 'GiBByte' -contains $_ } { $result = ($Value / [math]::Pow(2, 10)); $boolOption = $true; }
+        { 'GiB', 'Gibibyte' -contains $_ } { $result = ($Value / [math]::Pow(2, 10)); $boolOption = $true; }
         { 'TiB', 'Tebibyte' -contains $_ } { $result = $Value; $boolOption = $true; }
         { 'PiB', 'Pebibyte' -contains $_ } { $result = ($Value * [math]::Pow(2, 10)); $boolOption = $true; }
         default { 
@@ -118,7 +118,7 @@ function ConvertTo-TiBByte()
     return $result;
 }
 
-function ConvertTo-PiBByte()
+function ConvertTo-Pebibyte()
 {
     param(
         [single]$Value,
@@ -127,9 +127,9 @@ function ConvertTo-PiBByte()
 
     switch ($Unit) {
         { 'B', 'Byte' -contains $_ } { $result = ($Value / [math]::Pow(2, 50)); $boolOption = $true; }
-        { 'KiB', 'KiBByte' -contains $_ } { $result = ($Value / [math]::Pow(2, 40)); $boolOption = $true; }
+        { 'KiB', 'Kibibyte' -contains $_ } { $result = ($Value / [math]::Pow(2, 40)); $boolOption = $true; }
         { 'MiB', 'Mebibyte' -contains $_ } { $result = ($Value / [math]::Pow(2, 30)); $boolOption = $true; }
-        { 'GiB', 'GiBByte' -contains $_ } { $result = ($Value / [math]::Pow(2, 20)); $boolOption = $true; }
+        { 'GiB', 'Gibibyte' -contains $_ } { $result = ($Value / [math]::Pow(2, 20)); $boolOption = $true; }
         { 'TiB', 'Tebibyte' -contains $_ } { $result = ($Value / [math]::Pow(2, 10)); $boolOption = $true; }
         { 'PiB', 'Pebibyte' -contains $_ } { $result = $Value; $boolOption = $true; }
         default { 

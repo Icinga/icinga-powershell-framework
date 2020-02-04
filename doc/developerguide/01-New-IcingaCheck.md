@@ -42,10 +42,10 @@ For performance metrics you can provide a `Unit` to ensure your graphing is disp
 | ms   | Milliseconds | The input is indicated as time in milliseconds  |
 | us   | Microseconds | The input is indicated as time in microseconds  |
 | B    | Bytes        | The input is indicated as quantity in bytes     |
-| KB   | Kilobytes    | The input is indicated as quantity in kilobytes |
-| MB   | Megabytes    | The input is indicated as quantity in megabytes |
-| GB   | Gigabytes    | The input is indicated as quantity in gigabytes |
-| TB   | Terabytes    | The input is indicated as quantity in terabytes |
+| KB   | Kilobytes    | The input is indicated as quantity in Kilobytes |
+| MB   | Megabytes    | The input is indicated as quantity in Megabytes |
+| GB   | Gigabytes    | The input is indicated as quantity in Gigabytes |
+| TB   | Terabytes    | The input is indicated as quantity in Terabytes |
 | c    | Counter      | A continues counter increasing values over time |
 
 ## Object Functions

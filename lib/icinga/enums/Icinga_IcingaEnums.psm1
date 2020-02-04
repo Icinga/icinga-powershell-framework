@@ -24,10 +24,10 @@
     'us' = 'microseconds';
     '%'  = 'percent';
     'B'  = 'bytes';
-    'KB' = 'kilobytes';
-    'MB' = 'megabytes';
-    'GB' = 'gigabytes';
-    'TB' = 'terabytes';
+    'KB' = 'Kilobytes';
+    'MB' = 'Megabytes';
+    'GB' = 'Gigabytes';
+    'TB' = 'Terabytes';
     'c'  = 'counter';
 };
 

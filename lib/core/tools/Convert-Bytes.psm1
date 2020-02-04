@@ -17,16 +17,16 @@ function Convert-Bytes()
         
         switch ($Unit) {
             { 'B' -contains $_}  { $FinalValue = $CurrentValue;      $boolOption = $true;}
-            { 'KB' -contains $_} { $FinalValue = ConvertTo-KiloByte $CurrentValue -Unit B;  $boolOption = $true;}
-            { 'MB' -contains $_} { $FinalValue = ConvertTo-MegaByte $CurrentValue -Unit B;  $boolOption = $true;}
-            { 'GB' -contains $_} { $FinalValue = ConvertTo-GigaByte $CurrentValue -Unit B;  $boolOption = $true;}
-            { 'TB' -contains $_} { $FinalValue = ConvertTo-TeraByte $CurrentValue -Unit B;  $boolOption = $true;}
-            { 'PB' -contains $_} { $FinalValue = ConvertTo-PetaByte $CurrentValue -Unit B;  $boolOption = $true;}
-            { 'KiB' -contains $_} { $FinalValue = ConvertTo-KiBByte $CurrentValue -Unit B;  $boolOption = $true;}
-            { 'MiB' -contains $_} { $FinalValue = ConvertTo-MiBByte $CurrentValue -Unit B;  $boolOption = $true;}
-            { 'GiB' -contains $_} { $FinalValue = ConvertTo-GiBByte $CurrentValue -Unit B;  $boolOption = $true;}
-            { 'TiB' -contains $_} { $FinalValue = ConvertTo-TiBByte $CurrentValue -Unit B;  $boolOption = $true;}
-            { 'PiB' -contains $_} { $FinalValue = ConvertTo-PetaByte $CurrentValue -Unit B;  $boolOption = $true;}
+            { 'KB' -contains $_} { $FinalValue = ConvertTo-Kilobyte $CurrentValue -Unit B;  $boolOption = $true;}
+            { 'MB' -contains $_} { $FinalValue = ConvertTo-Megabyte $CurrentValue -Unit B;  $boolOption = $true;}
+            { 'GB' -contains $_} { $FinalValue = ConvertTo-Gigabyte $CurrentValue -Unit B;  $boolOption = $true;}
+            { 'TB' -contains $_} { $FinalValue = ConvertTo-Terabyte $CurrentValue -Unit B;  $boolOption = $true;}
+            { 'PB' -contains $_} { $FinalValue = ConvertTo-Petabyte $CurrentValue -Unit B;  $boolOption = $true;}
+            { 'KiB' -contains $_} { $FinalValue = ConvertTo-Kibibyte $CurrentValue -Unit B;  $boolOption = $true;}
+            { 'MiB' -contains $_} { $FinalValue = ConvertTo-Mebibyte $CurrentValue -Unit B;  $boolOption = $true;}
+            { 'GiB' -contains $_} { $FinalValue = ConvertTo-Gibibyte $CurrentValue -Unit B;  $boolOption = $true;}
+            { 'TiB' -contains $_} { $FinalValue = ConvertTo-Tebibyte $CurrentValue -Unit B;  $boolOption = $true;}
+            { 'PiB' -contains $_} { $FinalValue = ConvertTo-Petabyte $CurrentValue -Unit B;  $boolOption = $true;}
 
             default { 
                 if (-Not $boolOption) {
