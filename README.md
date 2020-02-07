@@ -14,6 +14,7 @@ Please take a look at the following content to get to know the possibilities of 
 * [Introduction](doc/01-Introduction.md)
 * [Installation Guide](doc/02-Installation.md)
 * [Icinga Integration](doc/05-Icinga-Integration.md)
+* [PowerShell as Service](doc/service/01-Install-Service.md)
 
 Developer Guide
 ------------
