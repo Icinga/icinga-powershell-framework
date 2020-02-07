@@ -8,6 +8,8 @@ function Get-IcingaPowerShellModuleArchive()
 
     $ProgressPreference = "SilentlyContinue";
     $Tag                = 'master';
+    # Fix TLS errors while connecting to GitHub with old PowerShell versions
+    [Net.ServicePointManager]::SecurityProtocol = "tls12, tls11";
 
     if ([string]::IsNullOrEmpty($DownloadUrl)) {
         if ((Get-IcingaAgentInstallerAnswerInput -Prompt ([string]::Format('Do you provide a custom repository for "{0}"?', $ModuleName)) -Default 'n').result -eq 1) {
