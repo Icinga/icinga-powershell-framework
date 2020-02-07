@@ -113,11 +113,21 @@ function Get-IcingaNetworkInterface()
         foreach ($destinationIP in $IPBinStringMaster) {
             [string]$RegexPattern = [string]::Format("^.{{{0}}}", $Route.Value.Mask);
             [string]$ToBeMatched = $Route.Value."Binary IP String";
+            if ($null -eq $ToBeMatched) {
+                continue;
+            }
+
             $Match1=[regex]::Matches($ToBeMatched, $RegexPattern).Value;
             $Match2=[regex]::Matches($destinationIP.Value, $RegexPattern).Value;
 
             If ($Match1 -like $Match2) {
-                $ExternalInterface = ((Get-NetIPAddress -InterfaceIndex $Route.Value.Interface -AddressFamily $destinationIP.Name).IPAddress);
+                $ExternalInterface = ((Get-NetIPAddress -InterfaceIndex $Route.Value.Interface -AddressFamily $destinationIP.Name -ErrorAction SilentlyContinue).IPAddress);
+
+                # If no interface was found -> skip this entry
+                if ($null -eq $ExternalInterface) {
+                    continue;
+                }
+
                 if ($ExternalInterfaces.ContainsKey($ExternalInterface)) {
                     $ExternalInterfaces[$ExternalInterface].count += 1;
                 } else {
