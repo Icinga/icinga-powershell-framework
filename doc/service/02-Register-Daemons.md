@@ -58,3 +58,5 @@ Write Custom Daemons
 In addition you are free to write your own extensions you can register within the framework. Every PowerShell daemon which is available within a single PowerShell session - even from different modules - can be used.
 
 Best practice would be to create an own custom PowerShell Module which will create a new thread and executing certain tasks. Once this module is available in your PowerShell session, you can simply register and use it.
+
+For a detailed guide you should check out the [daemon developer guide](../developerguide/10-Custom-Daemons.md).
