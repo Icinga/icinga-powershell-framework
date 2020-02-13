@@ -424,6 +424,10 @@ function Start-IcingaAgentInstallWizard()
         } else {
             $InstallerArguments += "-InstallFrameworkPlugins 0";
         }
+    } elseif ($InstallFrameworkPlugins -eq 1) {
+        $result = Install-IcingaFrameworkPlugins -PluginsUrl $PluginsUrl;
+        $InstallerArguments += "-InstallFrameworkPlugins 1";
+        $InstallerArguments += "-PluginsUrl '$PluginsUrl'";
     }
 
     if ($null -eq $InstallFrameworkService) {
