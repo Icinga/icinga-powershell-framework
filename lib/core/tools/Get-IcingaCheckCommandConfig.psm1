@@ -250,7 +250,7 @@ function Get-IcingaCheckCommandConfig()
                     $Basket.Datafield[[string]$FieldID].Add(
                         'settings', @{
                             'datalist' = $DataListName;
-                            'datatype' = 'string';
+                            'data_type' = 'string';
                             'behavior' = 'strict';
                         }
                     );
