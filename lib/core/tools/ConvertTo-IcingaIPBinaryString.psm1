@@ -21,16 +21,17 @@
 
 function ConvertTo-IcingaIPBinaryString()
 {
-    param(
-        $IP
-    );
-    if ($IP -like '*.*') {
-        $IP = ConvertTo-IcingaIPv4BinaryString -IP $IP;
-    } elseif ($IP -like '*:*') {
-        $IP = ConvertTo-IcingaIPv6BinaryString -IP $IP;
-    } else {
-        return 'Invalid IP was provided!';
-    }
+   param(
+      $IP
+   );
 
-    return $IP;
+   if ($IP -like '*.*') {
+      $IP = ConvertTo-IcingaIPv4BinaryString -IP $IP;
+   } elseif ($IP -like '*:*') {
+      $IP = ConvertTo-IcingaIPv6BinaryString -IP $IP;
+   } else {
+      return 'Invalid IP was provided!';
+   }
+
+   return $IP;
 }
