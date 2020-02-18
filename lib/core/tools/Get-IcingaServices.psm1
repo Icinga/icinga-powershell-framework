@@ -24,6 +24,7 @@ function Get-IcingaServices()
     
         [array]$DependentServices = $null;
         [array]$DependingServices = $null;
+        $ServiceExitCode          = 0;
         [string]$ServiceUser      = '';
 
         if ($Exclude -contains $service.ServiceName) {
@@ -32,7 +33,8 @@ function Get-IcingaServices()
 
         foreach ($wmiService in $ServiceWmiInfo) {
             if ($wmiService.Name -eq $service.ServiceName) {
-                $ServiceUser = $wmiService.StartName;
+                $ServiceUser     = $wmiService.StartName;
+                $ServiceExitCode = $wmiService.ExitCode;
                 break;
             }
         }
@@ -82,7 +84,7 @@ function Get-IcingaServices()
                         'value' = $service.StartType;
                     };
                     'ServiceUser' = $ServiceUser;
-                    'ExitCode' = [int]$service.ExitCode;
+                    'ExitCode'    = $ServiceExitCode;
                 }
             }
         );
