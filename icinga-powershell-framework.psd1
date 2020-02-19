@@ -13,7 +13,7 @@
     AliasesToExport = @()
     PrivateData = @{
         PSData = @{
-            Tags = @( 'icinga', 'icinga2', 'icinga 2', 'Icinga PowerShell Framework', 'Icinga PowerShell', 'Icinga for Windows', 'Icinga Windows')
+            Tags = @( 'icinga','icinga2','IcingaPowerShellFramework','IcingaPowerShell','IcingaforWindows','IcingaWindows')
             LicenseUri = 'https://github.com/Icinga/icinga-powershell-framework/blob/master/LICENSE'
             ProjectUri = 'https://github.com/Icinga/icinga-powershell-framework'
             ReleaseNotes = 'https://github.com/Icinga/icinga-powershell-framework/releases'
