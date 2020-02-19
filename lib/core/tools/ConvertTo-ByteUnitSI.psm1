@@ -23,14 +23,14 @@ function ConvertTo-ByteSI()
 
     switch ($Unit) {
         { 'B', 'Byte' -contains $_ } { $result = $Value; $boolOption = $true; }
-        { 'KB', 'KiloByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 3)); $boolOption = $true; }
-        { 'MB', 'MegaByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 6)); $boolOption = $true; }        
-        { 'GB', 'GigaByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 9)); $boolOption = $true; }
-        { 'TB', 'TeraByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 12)); $boolOption = $true; }
-        { 'PT', 'PetaByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 15)); $boolOption = $true; }
+        { 'KB', 'Kilobyte' -contains $_ } { $result = ($Value * [math]::Pow(10, 3)); $boolOption = $true; }
+        { 'MB', 'Megabyte' -contains $_ } { $result = ($Value * [math]::Pow(10, 6)); $boolOption = $true; }        
+        { 'GB', 'Gigabyte' -contains $_ } { $result = ($Value * [math]::Pow(10, 9)); $boolOption = $true; }
+        { 'TB', 'Terabyte' -contains $_ } { $result = ($Value * [math]::Pow(10, 12)); $boolOption = $true; }
+        { 'PB', 'Petabyte' -contains $_ } { $result = ($Value * [math]::Pow(10, 15)); $boolOption = $true; }
         default { 
             if (-Not $boolOption) {
-                Throw 'Invalid input';
+                Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
             } 
         }
     }
@@ -40,21 +40,21 @@ function ConvertTo-ByteSI()
 
 <#
 .SYNOPSIS
-   Converts unit sizes to kilobyte.
+   Converts unit sizes to Kilobyte.
 .DESCRIPTION
-   This module converts a given unit size to kilobyte.
-   e.g byte to kilobyte.
+   This module converts a given unit size to Kilobyte.
+   e.g byte to Kilobyte.
 
    More Information on https://github.com/Icinga/icinga-powershell-framework
 .EXAMPLE
-   PS> ConvertTo-KiloByte -Unit TB 200
+   PS> ConvertTo-Kilobyte -Unit TB 200
    200000000000
 .LINK
    https://github.com/Icinga/icinga-powershell-framework
 .NOTES
 #>
 
-function ConvertTo-KiloByte()
+function ConvertTo-Kilobyte()
 {
     param(
         [single]$Value,
@@ -63,14 +63,14 @@ function ConvertTo-KiloByte()
 
     switch ($Unit) {
         { 'B', 'Byte' -contains $_ } { $result = ($Value / [math]::Pow(10, 3)); $boolOption = $true; }
-        { 'KB', 'KiloByte' -contains $_ } { $result = $Value; $boolOption = $true; }
-        { 'MB', 'MegaByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 3)); $boolOption = $true; }        
-        { 'GB', 'GigaByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 6)); $boolOption = $true; }
-        { 'TB', 'TeraByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 9)); $boolOption = $true; }
-        { 'PT', 'PetaByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 12)); $boolOption = $true; }
+        { 'KB', 'Kilobyte' -contains $_ } { $result = $Value; $boolOption = $true; }
+        { 'MB', 'Megabyte' -contains $_ } { $result = ($Value * [math]::Pow(10, 3)); $boolOption = $true; }        
+        { 'GB', 'Gigabyte' -contains $_ } { $result = ($Value * [math]::Pow(10, 6)); $boolOption = $true; }
+        { 'TB', 'Terabyte' -contains $_ } { $result = ($Value * [math]::Pow(10, 9)); $boolOption = $true; }
+        { 'PB', 'Petabyte' -contains $_ } { $result = ($Value * [math]::Pow(10, 12)); $boolOption = $true; }
         default { 
             if (-Not $boolOption) {
-                Throw 'Invalid input';
+                Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
             }  
         }
     }
@@ -80,21 +80,21 @@ function ConvertTo-KiloByte()
 
 <#
 .SYNOPSIS
-   Converts unit sizes to megabyte.
+   Converts unit sizes to Megabyte.
 .DESCRIPTION
-   This module converts a given unit size to megabyte.
-   e.g byte to megabyte.
+   This module converts a given unit size to Megabyte.
+   e.g byte to Megabyte.
 
    More Information on https://github.com/Icinga/icinga-powershell-framework
 .EXAMPLE
-   PS> ConvertTo-KiloByte -Unit TB 200
+   PS> ConvertTo-Kilobyte -Unit TB 200
    200000000
 .LINK
    https://github.com/Icinga/icinga-powershell-framework
 .NOTES
 #>
 
-function ConvertTo-MegaByte()
+function ConvertTo-Megabyte()
 {
     param(
         [single]$Value,
@@ -103,14 +103,14 @@ function ConvertTo-MegaByte()
 
     switch ($Unit) {
         { 'B', 'Byte' -contains $_ } { $result = ($Value / [math]::Pow(10, 6)); $boolOption = $true; }
-        { 'KB', 'KiloByte' -contains $_ } { $result = ($Value / [math]::Pow(10, 3)); $boolOption = $true; }
-        { 'MB', 'MegaByte' -contains $_ } { $result = $Value; $boolOption = $true; }       
-        { 'GB', 'GigaByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 3)); $boolOption = $true; }
-        { 'TB', 'TeraByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 6)); $boolOption = $true; }
-        { 'PT', 'PetaByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 9)); $boolOption = $true; }
+        { 'KB', 'Kilobyte' -contains $_ } { $result = ($Value / [math]::Pow(10, 3)); $boolOption = $true; }
+        { 'MB', 'Megabyte' -contains $_ } { $result = $Value; $boolOption = $true; }       
+        { 'GB', 'Gigabyte' -contains $_ } { $result = ($Value * [math]::Pow(10, 3)); $boolOption = $true; }
+        { 'TB', 'Terabyte' -contains $_ } { $result = ($Value * [math]::Pow(10, 6)); $boolOption = $true; }
+        { 'PB', 'Petabyte' -contains $_ } { $result = ($Value * [math]::Pow(10, 9)); $boolOption = $true; }
         default { 
             if (-Not $boolOption) {
-                Throw 'Invalid input';
+                Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
             } 
         }
     }
@@ -120,21 +120,21 @@ function ConvertTo-MegaByte()
 
 <#
 .SYNOPSIS
-   Converts unit sizes to gigabyte.
+   Converts unit sizes to Gigabyte.
 .DESCRIPTION
-   This module converts a given unit size to gigabyte.
-   e.g byte to gigabyte.
+   This module converts a given unit size to Gigabyte.
+   e.g byte to Gigabyte.
 
    More Information on https://github.com/Icinga/icinga-powershell-framework
 .EXAMPLE
-   PS> ConvertTo-GigaByte -Unit TB 200
+   PS> ConvertTo-Gigabyte -Unit TB 200
    200000
 .LINK
    https://github.com/Icinga/icinga-powershell-framework
 .NOTES
 #>
 
-function ConvertTo-GigaByte()
+function ConvertTo-Gigabyte()
 {
     param(
         [single]$Value,
@@ -143,14 +143,14 @@ function ConvertTo-GigaByte()
 
     switch ($Unit) {
         { 'B', 'Byte' -contains $_ } { $result = ($Value / [math]::Pow(10, 9)); $boolOption = $true; }
-        { 'KB', 'KiloByte' -contains $_ } { $result = ($Value / [math]::Pow(10, 6)); $boolOption = $true; }
-        { 'MB', 'MegaByte' -contains $_ } { $result = ($Value / [math]::Pow(10, 3)); $boolOption = $true; }
-        { 'GB', 'GigaByte' -contains $_ } { $result = $Value; $boolOption = $true; }
-        { 'TB', 'TeraByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 3)); $boolOption = $true; }
-        { 'PT', 'PetaByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 6)); $boolOption = $true; }
+        { 'KB', 'Kilobyte' -contains $_ } { $result = ($Value / [math]::Pow(10, 6)); $boolOption = $true; }
+        { 'MB', 'Megabyte' -contains $_ } { $result = ($Value / [math]::Pow(10, 3)); $boolOption = $true; }
+        { 'GB', 'Gigabyte' -contains $_ } { $result = $Value; $boolOption = $true; }
+        { 'TB', 'Terabyte' -contains $_ } { $result = ($Value * [math]::Pow(10, 3)); $boolOption = $true; }
+        { 'PB', 'Petabyte' -contains $_ } { $result = ($Value * [math]::Pow(10, 6)); $boolOption = $true; }
         default { 
             if (-Not $boolOption) {
-                Throw 'Invalid input';
+                Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
             }  
         }
     }
@@ -160,21 +160,21 @@ function ConvertTo-GigaByte()
 
 <#
 .SYNOPSIS
-   Converts unit sizes to terabyte.
+   Converts unit sizes to Terabyte.
 .DESCRIPTION
-   This module converts a given unit size to terabyte.
-   e.g byte to terabyte.
+   This module converts a given unit size to Terabyte.
+   e.g byte to Terabyte.
 
    More Information on https://github.com/Icinga/icinga-powershell-framework
 .EXAMPLE
-   PS> ConvertTo-TeraByte -Unit GB 2000000
+   PS> ConvertTo-Terabyte -Unit GB 2000000
    2000
 .LINK
    https://github.com/Icinga/icinga-powershell-framework
 .NOTES
 #>
 
-function ConvertTo-TeraByte()
+function ConvertTo-Terabyte()
 {
     param(
         [single]$Value,
@@ -183,14 +183,14 @@ function ConvertTo-TeraByte()
 
     switch ($Unit) {
         { 'B', 'Byte' -contains $_ } { $result = ($Value / [math]::Pow(10, 12)); $boolOption = $true; }
-        { 'KB', 'KiloByte' -contains $_ } { $result = ($Value / [math]::Pow(10, 9)); $boolOption = $true; }
-        { 'MB', 'MegaByte' -contains $_ } { $result = ($Value / [math]::Pow(10, 6)); $boolOption = $true; }
-        { 'GB', 'GigaByte' -contains $_ } { $result = ($Value / [math]::Pow(10, 3)); $boolOption = $true; }
-        { 'TB', 'TeraByte' -contains $_ } { $result = $Value; $boolOption = $true; }
-        { 'PT', 'PetaByte' -contains $_ } { $result = ($Value * [math]::Pow(10, 3)); $boolOption = $true; }
+        { 'KB', 'Kilobyte' -contains $_ } { $result = ($Value / [math]::Pow(10, 9)); $boolOption = $true; }
+        { 'MB', 'Megabyte' -contains $_ } { $result = ($Value / [math]::Pow(10, 6)); $boolOption = $true; }
+        { 'GB', 'Gigabyte' -contains $_ } { $result = ($Value / [math]::Pow(10, 3)); $boolOption = $true; }
+        { 'TB', 'Terabyte' -contains $_ } { $result = $Value; $boolOption = $true; }
+        { 'PB', 'Petabyte' -contains $_ } { $result = ($Value * [math]::Pow(10, 3)); $boolOption = $true; }
         default { 
             if (-Not $boolOption) {
-                Throw 'Invalid input';
+                Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
             }  
         }
     }
@@ -200,21 +200,21 @@ function ConvertTo-TeraByte()
 
 <#
 .SYNOPSIS
-   Converts unit sizes to petabyte.
+   Converts unit sizes to Petabyte.
 .DESCRIPTION
-   This module converts a given unit size to petabyte.
-   e.g byte to petabyte.
+   This module converts a given unit size to Petabyte.
+   e.g byte to Petabyte.
 
    More Information on https://github.com/Icinga/icinga-powershell-framework
 .EXAMPLE
-   PS> ConvertTo-PetaByte -Unit GB 2000000
+   PS> ConvertTo-Petabyte -Unit GB 2000000
    2
 .LINK
    https://github.com/Icinga/icinga-powershell-framework
 .NOTES
 #>
 
-function ConvertTo-PetaByte()
+function ConvertTo-Petabyte()
 {
     param(
         [single]$Value,
@@ -223,14 +223,14 @@ function ConvertTo-PetaByte()
 
     switch ($Unit) {
         { 'B', 'Byte' -contains $_ } { $result = ($Value / [math]::Pow(10, 15)); $boolOption = $true; }
-        { 'KB', 'KiloByte' -contains $_ } { $result = ($Value / [math]::Pow(10, 12)); $boolOption = $true; }
-        { 'MB', 'MegaByte' -contains $_ } { $result = ($Value / [math]::Pow(10, 9)); $boolOption = $true; }
-        { 'GB', 'GigaByte' -contains $_ } { $result = ($Value / [math]::Pow(10, 6)); $boolOption = $true; }
-        { 'TB', 'TeraByte' -contains $_ } { $result = ($Value / [math]::Pow(10, 3)); $boolOption = $true; }
-        { 'PT', 'PetaByte' -contains $_ } { $result = $Value; $boolOption = $true; }
+        { 'KB', 'Kilobyte' -contains $_ } { $result = ($Value / [math]::Pow(10, 12)); $boolOption = $true; }
+        { 'MB', 'Megabyte' -contains $_ } { $result = ($Value / [math]::Pow(10, 9)); $boolOption = $true; }
+        { 'GB', 'Gigabyte' -contains $_ } { $result = ($Value / [math]::Pow(10, 6)); $boolOption = $true; }
+        { 'TB', 'Terabyte' -contains $_ } { $result = ($Value / [math]::Pow(10, 3)); $boolOption = $true; }
+        { 'PB', 'Petabyte' -contains $_ } { $result = $Value; $boolOption = $true; }
         default { 
             if (-Not $boolOption) {
-                Throw 'Invalid input';
+                Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
             }  
         }
     }

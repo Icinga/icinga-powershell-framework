@@ -6,5 +6,5 @@ function Read-IcingaAgentDebugLogFile()
         return;
     }
 
-    Get-Content -Path $Logfile -Wait;
+    Get-Content -Path $Logfile -Tail 20 -Wait;
 }

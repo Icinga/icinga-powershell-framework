@@ -5,14 +5,15 @@
  #>
 
 [hashtable]$Permission = @{
-    PerformanceCounter = 'A Plugin failed to fetch Performance Counter information. This may be caused when the used Service User is not permitted to access these information. To fix this, please add the User the Icinga Agent is running on into the "Performance Log Users" group and restart the service.';
-    CacheFolder        = "A plugin failed to write new data into the configured cache directory. Please update the permissions of this folder to allow write access for the user the Icinga Service is running with or use another folder as cache directory.";
+    PerformanceCounter    = 'A Plugin failed to fetch Performance Counter information. This may be caused when the used Service User is not permitted to access these information. To fix this, please add the User the Icinga Agent is running on into the "Performance Log Users" group and restart the service.';
+    CacheFolder           = "A plugin failed to write new data into the configured cache directory. Please update the permissions of this folder to allow write access for the user the Icinga Service is running with or use another folder as cache directory.";
 };
 
 [hashtable]$Inputs = @{
-    PerformanceCounter = 'A plugin failed to fetch Performance Counter information. Please ensure the counter is written properly and available on your system.';
-    EventLogLogName    = 'Failed to fetch EventLog information. Please specify a valid LogName.';
-    EventLog           = 'Failed to fetch EventLog information. Please check your inputs for EntryTypes and other categories and try again.';
+    PerformanceCounter    = 'A plugin failed to fetch Performance Counter information. Please ensure the counter is written properly and available on your system.';
+    EventLogLogName       = 'Failed to fetch EventLog information. Please specify a valid LogName.';
+    EventLog              = 'Failed to fetch EventLog information. Please check your inputs for EntryTypes and other categories and try again.';
+    ConversionUnitMissing = 'Unable to parse input value. You have to add an unit to your input value. Example: "10GB". Allowed units are: "B, KB, MB, GB, TB, PB, KiB, MiB, GiB, TiB, PiB".';
 };
 
 <#

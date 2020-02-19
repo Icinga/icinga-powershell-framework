@@ -12,3 +12,4 @@ A detailed overview of functions can be found below
 
 * [New-IcingaCheck](developerguide/01-New-IcingaCheck.md)
 * [New-IcingaCheckPackage](developerguide/02-New-IcingaCheckPackage.md)
+* [Custom Daemons](developerguide/10-Custom-Daemons.md)

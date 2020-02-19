@@ -7,14 +7,14 @@ function ConvertTo-ByteIEC()
 
     switch ($Unit) {
         { 'B', 'Byte' -contains $_ } { $result = $Value; $boolOption = $true; }
-        { 'Kibi', 'KibiByte' -contains $_ } { $result = ($Value * [math]::Pow(2, 10)); $boolOption = $true; }
-        { 'Mibi', 'MibiByte' -contains $_ } { $result = ($Value * [math]::Pow(2, 20)); $boolOption = $true; }        
-        { 'Gibi', 'GibiByte' -contains $_ } { $result = ($Value * [math]::Pow(2, 30)); $boolOption = $true; }
-        { 'Tibi', 'TibiByte' -contains $_ } { $result = ($Value * [math]::Pow(2, 40)); $boolOption = $true; }
-        { 'Piti', 'PitiByte' -contains $_ } { $result = ($Value * [math]::Pow(2, 50)); $boolOption = $true; }
+        { 'KiB', 'Kibibyte' -contains $_ } { $result = ($Value * [math]::Pow(2, 10)); $boolOption = $true; }
+        { 'MiB', 'Mebibyte' -contains $_ } { $result = ($Value * [math]::Pow(2, 20)); $boolOption = $true; }        
+        { 'GiB', 'Gibibyte' -contains $_ } { $result = ($Value * [math]::Pow(2, 30)); $boolOption = $true; }
+        { 'TiB', 'Tebibyte' -contains $_ } { $result = ($Value * [math]::Pow(2, 40)); $boolOption = $true; }
+        { 'PiB', 'Pebibyte' -contains $_ } { $result = ($Value * [math]::Pow(2, 50)); $boolOption = $true; }
         default { 
             if (-Not $boolOption) {
-                Throw 'Invalid input';
+                Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
             } 
         }
     }
@@ -22,7 +22,7 @@ function ConvertTo-ByteIEC()
     return $result;
 }
 
-function ConvertTo-KibiByte()
+function ConvertTo-Kibibyte()
 {
     param(
         [single]$Value,
@@ -31,14 +31,14 @@ function ConvertTo-KibiByte()
 
     switch ($Unit) {
         { 'B', 'Byte' -contains $_ } { $result = ($Value / [math]::Pow(2, 10)); $boolOption = $true; }
-        { 'Kibi', 'KibiByte' -contains $_ } { $result = $Value; $boolOption = $true; }
-        { 'Mibi', 'MibiByte' -contains $_ } { $result = ($Value * [math]::Pow(2, 10)); $boolOption = $true; }        
-        { 'Gibi', 'GibiByte' -contains $_ } { $result = ($Value * [math]::Pow(2, 20)); $boolOption = $true; }
-        { 'Tibi', 'TibiByte' -contains $_ } { $result = ($Value * [math]::Pow(2, 30)); $boolOption = $true; }
-        { 'Piti', 'PitiByte' -contains $_ } { $result = ($Value * [math]::Pow(2, 40)); $boolOption = $true; }
+        { 'KiB', 'Kibibyte' -contains $_ } { $result = $Value; $boolOption = $true; }
+        { 'MiB', 'Mebibyte' -contains $_ } { $result = ($Value * [math]::Pow(2, 10)); $boolOption = $true; }        
+        { 'GiB', 'Gibibyte' -contains $_ } { $result = ($Value * [math]::Pow(2, 20)); $boolOption = $true; }
+        { 'TiB', 'Tebibyte' -contains $_ } { $result = ($Value * [math]::Pow(2, 30)); $boolOption = $true; }
+        { 'PiB', 'Pebibyte' -contains $_ } { $result = ($Value * [math]::Pow(2, 40)); $boolOption = $true; }
         default { 
             if (-Not $boolOption) {
-                Throw 'Invalid input';
+                Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
             }  
         }
     }
@@ -46,7 +46,7 @@ function ConvertTo-KibiByte()
     return $result;
 }
 
-function ConvertTo-MibiByte()
+function ConvertTo-Mebibyte()
 {
     param(
         [single]$Value,
@@ -55,14 +55,14 @@ function ConvertTo-MibiByte()
 
     switch ($Unit) {
         { 'B', 'Byte' -contains $_ } { $result = ($Value / [math]::Pow(2, 20)); $boolOption = $true; }
-        { 'Kibi', 'KibiByte' -contains $_ } { $result = ($Value / [math]::Pow(2, 10)); $boolOption = $true; }
-        { 'Mibi', 'MibiByte' -contains $_ } { $result = $Value; $boolOption = $true; }       
-        { 'Gibi', 'GibiByte' -contains $_ } { $result = ($Value * [math]::Pow(2, 10)); $boolOption = $true; }
-        { 'Tibi', 'TibiByte' -contains $_ } { $result = ($Value * [math]::Pow(2, 20)); $boolOption = $true; }
-        { 'Piti', 'PitiByte' -contains $_ } { $result = ($Value * [math]::Pow(2, 30)); $boolOption = $true; }
+        { 'KiB', 'Kibibyte' -contains $_ } { $result = ($Value / [math]::Pow(2, 10)); $boolOption = $true; }
+        { 'MiB', 'Mebibyte' -contains $_ } { $result = $Value; $boolOption = $true; }       
+        { 'GiB', 'Gibibyte' -contains $_ } { $result = ($Value * [math]::Pow(2, 10)); $boolOption = $true; }
+        { 'TiB', 'Tebibyte' -contains $_ } { $result = ($Value * [math]::Pow(2, 20)); $boolOption = $true; }
+        { 'PiB', 'Pebibyte' -contains $_ } { $result = ($Value * [math]::Pow(2, 30)); $boolOption = $true; }
         default { 
             if (-Not $boolOption) {
-                Throw 'Invalid input';
+                Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
             } 
         }
     }
@@ -70,7 +70,7 @@ function ConvertTo-MibiByte()
     return $result;
 }
 
-function ConvertTo-GibiByte()
+function ConvertTo-Gibibyte()
 {
     param(
         [single]$Value,
@@ -79,14 +79,14 @@ function ConvertTo-GibiByte()
 
     switch ($Unit) {
         { 'B', 'Byte' -contains $_ } { $result = ($Value / [math]::Pow(2, 30)); $boolOption = $true; }
-        { 'Kibi', 'KibiByte' -contains $_ } { $result = ($Value / [math]::Pow(2, 20)); $boolOption = $true; }
-        { 'Mibi', 'MibiByte' -contains $_ } { $result = ($Value / [math]::Pow(2, 10)); $boolOption = $true; }
-        { 'Gibi', 'GibiByte' -contains $_ } { $result = $Value; $boolOption = $true; }
-        { 'Tibi', 'TibiByte' -contains $_ } { $result = ($Value * [math]::Pow(2, 10)); $boolOption = $true; }
-        { 'Piti', 'PitiByte' -contains $_ } { $result = ($Value * [math]::Pow(2, 20)); $boolOption = $true; }
+        { 'KiB', 'Kibibyte' -contains $_ } { $result = ($Value / [math]::Pow(2, 20)); $boolOption = $true; }
+        { 'MiB', 'Mebibyte' -contains $_ } { $result = ($Value / [math]::Pow(2, 10)); $boolOption = $true; }
+        { 'GiB', 'Gibibyte' -contains $_ } { $result = $Value; $boolOption = $true; }
+        { 'TiB', 'Tebibyte' -contains $_ } { $result = ($Value * [math]::Pow(2, 10)); $boolOption = $true; }
+        { 'PiB', 'Pebibyte' -contains $_ } { $result = ($Value * [math]::Pow(2, 20)); $boolOption = $true; }
         default { 
             if (-Not $boolOption) {
-                Throw 'Invalid input';
+                Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
             }  
         }
     }
@@ -94,7 +94,7 @@ function ConvertTo-GibiByte()
     return $result;
 }
 
-function ConvertTo-TibiByte()
+function ConvertTo-Tebibyte()
 {
     param(
         [single]$Value,
@@ -103,14 +103,14 @@ function ConvertTo-TibiByte()
 
     switch ($Unit) {
         { 'B', 'Byte' -contains $_ } { $result = ($Value / [math]::Pow(2, 40)); $boolOption = $true; }
-        { 'Kibi', 'KibiByte' -contains $_ } { $result = ($Value / [math]::Pow(2, 30)); $boolOption = $true; }
-        { 'Mibi', 'MibiByte' -contains $_ } { $result = ($Value / [math]::Pow(2, 20)); $boolOption = $true; }
-        { 'Gibi', 'GibiByte' -contains $_ } { $result = ($Value / [math]::Pow(2, 10)); $boolOption = $true; }
-        { 'Tibi', 'TibiByte' -contains $_ } { $result = $Value; $boolOption = $true; }
-        { 'Piti', 'PitiByte' -contains $_ } { $result = ($Value * [math]::Pow(2, 10)); $boolOption = $true; }
+        { 'KiB', 'Kibibyte' -contains $_ } { $result = ($Value / [math]::Pow(2, 30)); $boolOption = $true; }
+        { 'MiB', 'Mebibyte' -contains $_ } { $result = ($Value / [math]::Pow(2, 20)); $boolOption = $true; }
+        { 'GiB', 'Gibibyte' -contains $_ } { $result = ($Value / [math]::Pow(2, 10)); $boolOption = $true; }
+        { 'TiB', 'Tebibyte' -contains $_ } { $result = $Value; $boolOption = $true; }
+        { 'PiB', 'Pebibyte' -contains $_ } { $result = ($Value * [math]::Pow(2, 10)); $boolOption = $true; }
         default { 
             if (-Not $boolOption) {
-                Throw 'Invalid input';
+                Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
             }  
         }
     }
@@ -118,7 +118,7 @@ function ConvertTo-TibiByte()
     return $result;
 }
 
-function ConvertTo-PitiByte()
+function ConvertTo-Pebibyte()
 {
     param(
         [single]$Value,
@@ -127,14 +127,14 @@ function ConvertTo-PitiByte()
 
     switch ($Unit) {
         { 'B', 'Byte' -contains $_ } { $result = ($Value / [math]::Pow(2, 50)); $boolOption = $true; }
-        { 'Kibi', 'KibiByte' -contains $_ } { $result = ($Value / [math]::Pow(2, 40)); $boolOption = $true; }
-        { 'Mibi', 'MibiByte' -contains $_ } { $result = ($Value / [math]::Pow(2, 30)); $boolOption = $true; }
-        { 'Gibi', 'GibiByte' -contains $_ } { $result = ($Value / [math]::Pow(2, 20)); $boolOption = $true; }
-        { 'Tibi', 'TibiByte' -contains $_ } { $result = ($Value / [math]::Pow(2, 10)); $boolOption = $true; }
-        { 'Piti', 'PitiByte' -contains $_ } { $result = $Value; $boolOption = $true; }
+        { 'KiB', 'Kibibyte' -contains $_ } { $result = ($Value / [math]::Pow(2, 40)); $boolOption = $true; }
+        { 'MiB', 'Mebibyte' -contains $_ } { $result = ($Value / [math]::Pow(2, 30)); $boolOption = $true; }
+        { 'GiB', 'Gibibyte' -contains $_ } { $result = ($Value / [math]::Pow(2, 20)); $boolOption = $true; }
+        { 'TiB', 'Tebibyte' -contains $_ } { $result = ($Value / [math]::Pow(2, 10)); $boolOption = $true; }
+        { 'PiB', 'Pebibyte' -contains $_ } { $result = $Value; $boolOption = $true; }
         default { 
             if (-Not $boolOption) {
-                Throw 'Invalid input';
+                Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
             }  
         }
     }
