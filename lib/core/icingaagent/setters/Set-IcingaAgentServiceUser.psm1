@@ -16,7 +16,7 @@ function Set-IcingaAgentServiceUser()
         $User = [string]::Format('.\{0}', $User);
     }
 
-    $ArgString = 'config {0} obj= "{1}" password="{2}"';
+    $ArgString = 'config {0} obj= "{1}" password= "{2}"';
     if($null -eq $Password) {
         $ArgString = 'config {0} obj= "{1}"{2}';
     }
