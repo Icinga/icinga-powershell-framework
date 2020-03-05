@@ -36,6 +36,14 @@ function New-IcingaCheckPackage()
     $Check | Add-Member -membertype NoteProperty -name 'criticalchecks' -value @();
     $Check | Add-Member -membertype NoteProperty -name 'unknownchecks'  -value @();
 
+    $Check | Add-Member -membertype ScriptMethod -name 'HasChecks' -value {
+        if ($this.checks -ne 0) {
+            return $TRUE
+        }
+
+        return $FALSE;
+    }
+
     $Check | Add-Member -membertype ScriptMethod -name 'Initialise' -value {
         foreach ($check in $this.checks) {
             $this.InitCheck($check);
