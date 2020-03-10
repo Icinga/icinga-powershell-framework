@@ -12,7 +12,7 @@ function Get-IcingaUserSID()
         $Domain   = $TmpArray[0];
         $Username = $TmpArray[1];
     } else {
-        $Domain   = Get-IcingaHostname;
+        $Domain   = Get-IcingaNetbiosName;
         $Username = $User;
     }
 
