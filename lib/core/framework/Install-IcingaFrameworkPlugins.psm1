@@ -7,6 +7,12 @@ function Install-IcingaFrameworkPlugins()
     $RepositoryName = 'icinga-powershell-plugins';
     $Archive        = Get-IcingaPowerShellModuleArchive -DownloadUrl $PluginsUrl -ModuleName 'Icinga Plugins' -Repository $RepositoryName;
 
+    if ($Archive.Installed -eq $FALSE) {
+        return @{
+            'PluginUrl' = $Archive.DownloadUrl
+        };
+    }
+
     Write-Host ([string]::Format('Installing module into "{0}"', ($Archive.Directory)));
     Expand-IcingaZipArchive -Path $Archive.Archive -Destination $Archive.Directory | Out-Null;
 

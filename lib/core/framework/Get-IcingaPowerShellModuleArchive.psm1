@@ -26,7 +26,14 @@ function Get-IcingaPowerShellModuleArchive()
 
                 if ($null -ne $CurrentVersion -And $CurrentVersion -eq $Tag) {
                     Write-Host ([string]::Format('Your "{0}" is already up-to-date', $ModuleName));
-                    return;
+                    return @{
+                        'DownloadUrl' = $DownloadUrl;
+                        'Version'     = $Tag;
+                        'Directory'   = '';
+                        'Archive'     = '';
+                        'ModuleRoot'  = (Get-IcingaFrameworkRootPath);
+                        'Installed'   = $FALSE;
+                    };
                 }
             }
         } else {
@@ -56,5 +63,6 @@ function Get-IcingaPowerShellModuleArchive()
         'Directory'   = $DownloadDirectory;
         'Archive'     = $DownloadDestination;
         'ModuleRoot'  = (Get-IcingaFrameworkRootPath);
+        'Installed'   = $TRUE;
     };
 }
