@@ -10,7 +10,7 @@ function Get-IcingaDirectorSelfServiceConfig()
     }
 
     if ([string]::IsNullOrEmpty($ApiKey)) {
-        throw 'Please enter either a template or your host key';
+        throw 'Please enter either a template or your host key. If this message persists, ensure your host is not having a template key assigned already. If so, you can try dropping it within the Icinga Director.';
     }
 
     $ProgressPreference = "SilentlyContinue";
