@@ -33,13 +33,16 @@ function Start-IcingaAgentDirectorWizard()
     }
 
     if ($ForceTemplateKey -eq $FALSE) {
-        $SelfServiceAPIKey = $LocalAPIKey;
-        if ([string]::IsNullOrEmpty($SelfServiceAPIKey)) {
+        if ([string]::IsNullOrEmpty($LocalAPIKey)) {
             $LegacyTokenPath = Join-Path -Path Get-IcingaAgentConfigDirectory -ChildPath 'icingadirector.token';
             if (Test-Path $LegacyTokenPath) {
                 $SelfServiceAPIKey =  Get-Content -Path $LegacyTokenPath;
                 Set-IcingaPowerShellConfig -Path 'IcingaDirector.SelfService.ApiKey' -Value $SelfServiceAPIKey;
+            } else {
+                $ForceTemplateKey = $TRUE;
             }
+        } else {
+            $SelfServiceAPIKey = $LocalAPIKey;
         }
     }
 
