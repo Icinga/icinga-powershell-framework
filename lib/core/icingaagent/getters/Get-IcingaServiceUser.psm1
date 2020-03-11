@@ -6,5 +6,11 @@ function Get-IcingaServiceUser()
     }
 
     $Services    = $Services.GetEnumerator() | Select-Object -First 1;
-    return ($Services.Value.configuration.ServiceUser).Replace('.\', '');
+    $ServiceUser = ($Services.Value.configuration.ServiceUser).Replace('.\', '');
+
+    if ($ServiceUser -eq 'LocalSystem') {
+        $ServiceUser = 'NT Authority\SYSTEM';
+    }
+
+    return $ServiceUser;
 }

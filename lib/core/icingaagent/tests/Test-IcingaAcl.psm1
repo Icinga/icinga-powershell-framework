@@ -9,17 +9,26 @@ function Test-IcingaAcl()
         throw 'The specified directory was not found';
     }
 
-    $FolderACL   = Get-Acl $Directory;
-    $ServiceUser = Get-IcingaServiceUser;
-    $UserFound   = $FALSE;
-    $HasAccess   = $FALSE;
+    $FolderACL      = Get-Acl $Directory;
+    $ServiceUser    = Get-IcingaServiceUser;
+    $UserFound      = $FALSE;
+    $HasAccess      = $FALSE;
+    $ServiceUserSID = Get-IcingaUserSID $ServiceUser;
+
     foreach ($user in $FolderACL.Access) {
         # Not only check here for the exact name but also for included strings like NT AU or NT-AU or even further later on
         # As the Get-Acl Cmdlet will translate usernames into the own language, resultng in 'NT AUTHORITY\NetworkService' being translated
         # to 'NT-AUTORITÄT\Netzwerkdienst' for example
-        if ($user.IdentityReference -like "*$ServiceUser" -Or ($ServiceUser -Like '*NT AU*' -And ($user.IdentityReference -Like '*NT AU*' -Or $user.IdentityReference -Like '*NT-AU*'))) {
+        $UserSID = $null;
+        try {
+            $UserSID = Get-IcingaUserSID $user.IdentityReference;
+        } catch {
+            $UserSID = $null;
+        }
+
+        if ($ServiceUserSID -eq $UserSID) {
             $UserFound = $TRUE;
-            if ($user.FileSystemRights -Like '*Modify*' -And $user.FileSystemRights -Like '*Synchronize*') {
+            if (($user.FileSystemRights -Like '*Modify*' -And $user.FileSystemRights -Like '*Synchronize*') -Or $user.FileSystemRights -like '*FullControl*') {
                 $HasAccess = $TRUE;
             }
         }
