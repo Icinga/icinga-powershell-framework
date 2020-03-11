@@ -9,6 +9,10 @@ function Test-IcingaAgentServicePermission()
     $SystemContent     = Get-IcingaAgentServicePermission;
     [bool]$FoundSID    = $FALSE;
 
+    if ($ServiceUser -eq 'NT Authority\SYSTEM') {
+        return $TRUE;
+    }
+
     if ([string]::IsNullOrEmpty($ServiceUser)) {
         if (-Not $Silent) {
             Write-IcingaTestOutput -Severity 'FAILED' -Message 'There is no user assigned to the Icinga 2 service or the service is not yet installed';

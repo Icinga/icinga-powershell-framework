@@ -4,6 +4,10 @@ function Get-IcingaUserSID()
         [string]$User
     );
 
+    if ($User -eq 'LocalSystem') {
+        $User = 'NT Authority\SYSTEM';
+    }
+
     [string]$Username = '';
     [string]$Domain   = '';
 
