@@ -15,8 +15,7 @@ function Read-IcingaRESTMessage()
 
     #Path
     $PathMatch = $Matches[3];
-    $PathMatch -match '(.+)\?(.*)' | Out-Null
-    $Path      = $Matches[1];
+    $PathMatch -match '(.+)\?(.*)' | Out-Null;
     $Arguments = $Matches[2];
     $Request.RequestPath.Add('FullPath', $Matches[1]);
     $Request.RequestPath.Add('PathArray', $Matches[1].TrimStart('/').Split('/'));
@@ -26,14 +25,14 @@ function Read-IcingaRESTMessage()
     # Arguments
     $ArgumentsSplit = $Arguments.Split('&');
     $ArgumentsSplit+='\\\\\\\\\\\\=FIN';
-    foreach ( $Argument in $ArgumentsSplit | sort -descending) {
+    foreach ( $Argument in $ArgumentsSplit | Sort-Object -descending) {
         $Argument -match '(.+)=(.+)' | Out-Null;
         If (($Matches[1] -ne $Current) -And ($NULL -ne $Current)) {
             $Request.RequestArguments.Add( $Current, $ArgumentContent );
             [array]$ArgumentContent = $null;
         }
         $Current = $Matches[1];
-        [array]$ArgumentContent+=($Matches[2]);
+        [array]$ArgumentContent += ($Matches[2]);
     }
 
     # Header
