@@ -12,8 +12,9 @@
 function Use-Icinga()
 {
     param(
-        [switch]$LibOnly = $FALSE,
-        [switch]$Daemon  = $FALSE
+        [switch]$LibOnly   = $FALSE,
+        [switch]$Daemon    = $FALSE,
+        [switch]$DebugMode = $FALSE
     );
 
     # Ensure we autoload the Icinga Plugin collection, provided by the external
@@ -29,6 +30,8 @@ function Use-Icinga()
     Import-IcingaLib '\' -Init;
 
     if ($LibOnly -eq $FALSE) {
+        Register-IcingaEventLog;
+
         $global:IcingaThreads       = [hashtable]::Synchronized(@{});
         $global:IcingaThreadContent = [hashtable]::Synchronized(@{});
         $global:IcingaThreadPool    = [hashtable]::Synchronized(@{});
@@ -38,6 +41,7 @@ function Use-Icinga()
                 'IcingaThreadContent'      = $global:IcingaThreadContent;
                 'IcingaThreadPool'         = $global:IcingaThreadPool;
                 'FrameworkRunningAsDaemon' = $Daemon;
+                'DebugMode'                = $DebugMode;
             }
         );
     }
