@@ -13,7 +13,7 @@ function New-IcingaTCPClient()
     Write-IcingaDebugMessage -Message (
         [string]::Format(
             'New incoming client connection for endpoint {0}',
-            $Client.Client.RemoteEndPoint
+            (Get-IcingaTCPClientRemoteEndpoint -Client $Client)
         )
     );
 

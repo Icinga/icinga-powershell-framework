@@ -11,7 +11,7 @@ function Close-IcingaTCPConnection()
     Write-IcingaDebugMessage -Message (
         [string]::Format(
             'Closing client connection for endpoint {0}',
-            $Client.Client.RemoteEndPoint
+            (Get-IcingaTCPClientRemoteEndpoint -Client $Client)
         )
     );
 
