@@ -4,6 +4,10 @@ function Write-IcingaDebugMessage()
         [string]$Message
     );
 
+    if ([string]::IsNullOrEmpty($Message)) {
+        return;
+    }
+
     if ($global:IcingaDaemonData.DebugMode -eq $FALSE) {
         return;
     }
