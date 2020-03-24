@@ -8,6 +8,13 @@ function Close-IcingaTCPConnection()
         return;
     }
 
+    Write-IcingaDebugMessage -Message (
+        [string]::Format(
+            'Closing client connection for endpoint {0}',
+            $Client.Client.RemoteEndPoint
+        )
+    );
+
     $Client.Close();
     $Client.Dispose();
     $Client = $null;

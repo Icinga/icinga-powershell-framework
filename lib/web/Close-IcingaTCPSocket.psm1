@@ -8,5 +8,12 @@ function Close-IcingaTCPSocket()
         return;
     }
 
+    Write-IcingaDebugMessage -Message (
+        [string]::Format(
+            'Closing TCP socket {0}',
+            $Socket.LocalEndpoint
+        )
+    );
+
     $Socket.Stop();
 }

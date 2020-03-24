@@ -11,7 +11,21 @@ function New-IcingaTCPSocket()
 
     $TCPSocket = [System.Net.Sockets.TcpListener]$Port;
 
+    Write-IcingaDebugMessage -Message (
+        [string]::Format(
+            'Creating new TCP socket on Port {0}. Endpoint configuration {1}',
+            $Port,
+            $TCPSocket.LocalEndpoint
+        )
+    );
+
     if ($Start) {
+        Write-IcingaDebugMessage -Message (
+            [string]::Format(
+                'Starting TCP socket for endpoint {0}',
+                $TCPSocket.LocalEndpoint
+            )
+        );
         $TCPSocket.Start();
     }
 

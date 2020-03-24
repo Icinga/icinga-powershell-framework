@@ -10,5 +10,12 @@ function New-IcingaTCPClient()
 
     [System.Net.Sockets.TcpClient]$Client = $Socket.AcceptTcpClient();
 
+    Write-IcingaDebugMessage -Message (
+        [string]::Format(
+            'New incoming client connection for endpoint {0}',
+            $Client.Client.RemoteEndPoint
+        )
+    );
+
     return $Client;
 }
