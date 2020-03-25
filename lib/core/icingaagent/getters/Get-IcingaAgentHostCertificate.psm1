@@ -21,7 +21,7 @@ function Get-IcingaAgentHostCertificate()
     
     return @{
         'CertFile'   = $CertPath;
-        'Subject'    = $Certificate.SubjectName;
+        'Subject'    = $Certificate.Subject;
         'Thumbprint' = $Certificate.Thumbprint;
     };
 }
