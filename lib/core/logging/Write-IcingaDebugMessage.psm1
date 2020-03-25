@@ -8,7 +8,7 @@ function Write-IcingaDebugMessage()
         return;
     }
 
-    if ($global:IcingaDaemonData.DebugMode -eq $FALSE) {
+    if ($null -eq $global:IcingaDaemonData -Or $global:IcingaDaemonData.DebugMode -eq $FALSE) {
         return;
     }
 
