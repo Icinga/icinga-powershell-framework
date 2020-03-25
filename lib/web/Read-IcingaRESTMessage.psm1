@@ -15,8 +15,8 @@ function Read-IcingaRESTMessage()
 
     #Path
     $PathMatch = $Matches[3];
-    $PathMatch -match '(.+)\?(.*)' | Out-Null;
-    $Arguments = $Matches[2];
+    $PathMatch -match '((\/[^\/\?]+)*)\??([^\/]*)' | Out-Null;
+    $Arguments = $Matches[3];
     $Request.RequestPath.Add('FullPath', $Matches[1]);
     $Request.RequestPath.Add('PathArray', $Matches[1].TrimStart('/').Split('/'));
 
