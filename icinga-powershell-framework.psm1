@@ -53,6 +53,18 @@ function Use-Icinga()
                 'DebugMode'                = $DebugMode;
             }
         );
+    } else {
+        # This will fix the debug mode in case we are only using Libs
+        # without any other variable content and daemon handling
+        if ($null -eq $global:IcingaDaemonData) {
+            $global:IcingaDaemonData = [hashtable]::Synchronized(@{});
+        }
+        if ($global:IcingaDaemonData.ContainsKey('DebugMode') -eq $FALSE) {
+            $global:IcingaDaemonData.DebugMode = $DebugMode;
+        }
+        if ($global:IcingaDaemonData.ContainsKey('FrameworkRunningAsDaemon') -eq $FALSE) {
+            $global:IcingaDaemonData.FrameworkRunningAsDaemon = $Daemon;
+        }
     }
 }
 
