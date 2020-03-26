@@ -6,6 +6,14 @@ function ConvertTo-IcingaX509Certificate()
         [switch]$Force             = $FALSE
     );
 
+    if ([string]::IsNullOrEmpty($CertFile)) {
+        throw 'Please specify a valid path to an existing certificate (.cer, .pem, .cert)';
+    }
+
+    if ((Test-Path $CertFile) -eq $FALSE) {
+        throw 'The provided path to your certificate was not valid';
+    }
+
     # Use an empty password for converted certificates
     $Password       = $null;
     # Use a target file to specify if we use temp files or not
