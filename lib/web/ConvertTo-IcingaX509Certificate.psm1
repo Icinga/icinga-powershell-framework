@@ -9,7 +9,7 @@ function ConvertTo-IcingaX509Certificate()
     # Use an empty password for converted certificates
     $Password       = $null;
     # Use a target file to specify if we use temp files or not
-    $TargetFile     = $null;
+    $TargetFile     = $OutFile;
     # Temp Cert
     [bool]$TempFile = $FALSE;
 
