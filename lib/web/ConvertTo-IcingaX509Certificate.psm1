@@ -41,7 +41,9 @@ function ConvertTo-IcingaX509Certificate()
     # Now load the actual certificate from the path
     $Certificate = New-Object Security.Cryptography.X509Certificates.X509Certificate2 $TargetFile;
     # Delete the PFX-Certificate which will be present after certutil merge
-    Remove-Item $TargetFile -Force -ErrorAction SilentlyContinue;
+    if ($TempFile) {
+        Remove-Item $TargetFile -Force -ErrorAction SilentlyContinue;
+    }
 
     # Return the certificate
     return $Certificate
