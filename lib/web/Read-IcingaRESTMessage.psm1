@@ -1,20 +1,34 @@
 function Read-IcingaRESTMessage()
 {
     param(
-        [string]$RestMessage = $null
+        [string]$RestMessage   = $null,
+        [hashtable]$Connection = $null
+    );
+
+    # Just in case we didnt receive anything - no need to
+    # parse through everything
+    if ([string]::IsNullOrEmpty($RestMessage)) {
+        return $null;
+    }
+
+    Write-IcingaDebugMessage (
+        [string]::Format(
+            'Receiving client message{0}{0}{1}',
+            (New-IcingaNewline),
+            $RestMessage
+        )
     );
 
     [hashtable]$Request = @{};
-    $RestMessage -match '(\d+) (.+) (.+) (.+)' | Out-Null;
+    $RestMessage -match '(.+) (.+) (.+)' | Out-Null;
  
-    $Request.Add('MessageLength', $Matches[1]);
-    $Request.Add('Method', $Matches[2]);
-    $Request.Add('FullRequest', $Matches[3]);
+    $Request.Add('Method', $Matches[1]);
+    $Request.Add('FullRequest', $Matches[2]);
     $Request.Add('RequestPath', @{});
     $Request.Add('RequestArguments', @{});
 
     #Path
-    $PathMatch = $Matches[3];
+    $PathMatch = $Matches[2];
     $PathMatch -match '((\/[^\/\?]+)*)\??([^\/]*)' | Out-Null;
     $Arguments = $Matches[3];
     $Request.RequestPath.Add('FullPath', $Matches[1]);
@@ -52,6 +66,15 @@ function Read-IcingaRESTMessage()
     # Body
     $RestMessage -match '(\{(.*\n)*}|\{.*\})' | Out-Null;
     $Request.Add('Body', $Matches[1]);
+
+    # We received a content length, but couldnt load the body. Some clients will send the body as separate message
+    # Lets try to read the body content
+    if ($null -ne $Connection) {
+        if ($Request.ContainsKey('ContentLength') -And $Request.ContentLength -gt 0 -And ($Request.ContainsKey('Body') -eq $FALSE -Or [string]::IsNullOrEmpty($Request.Body))) {
+            $Request.Body = Read-IcingaTCPStream -Client $Connection.Client -Stream $Connection.Stream -ReadLength $Request.ContentLength;
+            Write-IcingaDebugMessage -Message 'Body Content' -Objects $Request;
+        }
+    }
 
     return $Request;
 }
