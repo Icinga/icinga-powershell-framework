@@ -9,8 +9,13 @@ function New-IcingaSSLStream()
         return $null;
     }
 
-    $SSLStream = New-Object System.Net.Security.SslStream($Client.GetStream(), $false)
-    $SSLStream.AuthenticateAsServer($Certificate, $false, [System.Security.Authentication.SslProtocols]::Tls12, $true) | Out-Null;
+    try {
+        $SSLStream = New-Object System.Net.Security.SslStream($Client.GetStream(), $false)
+        $SSLStream.AuthenticateAsServer($Certificate, $false, [System.Security.Authentication.SslProtocols]::Tls12, $true) | Out-Null;
+    } catch {
+        Write-IcingaEventMessage -EventId 1500 -Namespace 'Framework' -Objects $Client.Client;
+        return $null;
+    }
 
     return $SSLStream;
 }
