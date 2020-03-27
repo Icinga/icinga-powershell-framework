@@ -2,27 +2,29 @@ function Read-IcingaTCPStream()
 {
     param(
         [System.Net.Sockets.TcpClient]$Client  = @{},
-        [System.Net.Security.SslStream]$Stream = $null
+        [System.Net.Security.SslStream]$Stream = $null,
+        [int]$ReadLength                       = 0
     );
 
-    # Get the maxium size of our buffer
-    [byte[]]$bytes = New-Object byte[] $Client.ReceiveBufferSize;
-    # Read the content of our SSL stream
-    $Stream.Read($bytes, 0, $Client.ReceiveBufferSize);
-
-    # Now ready the actual content size of the received message
-    [int]$count = 0;
-    for ($i=0; $i -le $Client.ReceiveBufferSize; $i++) {
-        if ($bytes[$i] -ne 0) {
-            $count = $count + 1;
-        } else {
-            break;
-        }
+    if ($ReadLength -eq 0) {
+        $ReadLength = $Client.ReceiveBufferSize;
     }
 
+    if ($null -eq $Stream) {
+        return $null;
+    }
+
+    # Get the maxium size of our buffer
+    [byte[]]$bytes = New-Object byte[] $ReadLength;
+
+    # Read the content of our SSL stream
+    $MessgeSize = $Stream.Read($bytes, 0, $ReadLength);
+
+    Write-IcingaDebugMessage -Message 'Network Stream message size and content in bytes' -Objects $MessgeSize, $bytes;
+
     # Resize our array to the correct size
-    [byte[]]$resized = New-Object byte[] $count;
-    [array]::Copy($bytes, 0, $resized, 0, $count);
+    [byte[]]$resized = New-Object byte[] $MessgeSize;
+    [array]::Copy($bytes, 0, $resized, 0, $MessgeSize);
 
     # Return our message content
     return [System.Text.Encoding]::UTF8.GetString($resized);
