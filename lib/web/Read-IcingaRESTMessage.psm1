@@ -40,13 +40,17 @@ function Read-IcingaRESTMessage()
     $ArgumentsSplit = $Arguments.Split('&');
     $ArgumentsSplit+='\\\\\\\\\\\\=FIN';
     foreach ( $Argument in $ArgumentsSplit | Sort-Object -descending) {
-        $Argument -match '(.+)=(.+)' | Out-Null;
-        If (($Matches[1] -ne $Current) -And ($NULL -ne $Current)) {
-            $Request.RequestArguments.Add( $Current, $ArgumentContent );
-            [array]$ArgumentContent = $null;
+        if ($Argument.Contains('=')) {
+            $Argument -match '(.+)=(.+)' | Out-Null;
+            If (($Matches[1] -ne $Current) -And ($NULL -ne $Current)) {
+                $Request.RequestArguments.Add( $Current, $ArgumentContent );
+                [array]$ArgumentContent = $null;
+            }
+            $Current = $Matches[1];
+            [array]$ArgumentContent += ($Matches[2]);
+        } else {
+            $Request.RequestArguments.Add( $Argument, $null );
         }
-        $Current = $Matches[1];
-        [array]$ArgumentContent += ($Matches[2]);
     }
 
     # Header
