@@ -29,15 +29,6 @@ function Use-Icinga()
     Import-IcingaLib '\' -Init -Custom;
     Import-IcingaLib '\' -Init;
 
-    $EventLogMessages = Invoke-IcingaNamespaceCmdlets -Command 'Register-IcingaEventLogMessages*';
-    foreach ($entry in $EventLogMessages.Values) {
-        foreach ($event in $entry.Keys) {
-            Add-IcingaHashtableItem -Hashtable $global:IcingaEventLogEnums `
-                                    -Key $event `
-                                    -Value $entry[$event] | Out-Null;
-        }
-    }
-
     if ($LibOnly -eq $FALSE) {
         Register-IcingaEventLog;
 
@@ -64,6 +55,21 @@ function Use-Icinga()
         }
         if ($global:IcingaDaemonData.ContainsKey('FrameworkRunningAsDaemon') -eq $FALSE) {
             $global:IcingaDaemonData.FrameworkRunningAsDaemon = $Daemon;
+        }
+    }
+
+    # Enable DebugMode in case it is enabled in our config
+    if (Get-IcingaFrameworkDebugMode) {
+        Enable-IcingaFrameworkDebugMode;
+        $DebugMode = $TRUE;
+    }
+
+    $EventLogMessages = Invoke-IcingaNamespaceCmdlets -Command 'Register-IcingaEventLogMessages*';
+    foreach ($entry in $EventLogMessages.Values) {
+        foreach ($event in $entry.Keys) {
+            Add-IcingaHashtableItem -Hashtable $global:IcingaEventLogEnums `
+                                    -Key $event `
+                                    -Value $entry[$event] | Out-Null;
         }
     }
 }
