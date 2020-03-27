@@ -16,7 +16,7 @@
         1500 = @{
             'EntryType' = 'Error';
             'Message'   = 'Failed to securely establish a communiation between this server and the client';
-            'Details'   = 'The client connection could not be established between this server. This issue is mostly caused by using Self-Signed/Icinga 2 Agent certificates for the server and the client not trusting the certificate. To resolve this issue, either use trusted certificates signed by your trusted CA or setup the client to accept untrusted certificates';
+            'Details'   = 'A client connection could not be established to this server. This issue is mostly caused by using Self-Signed/Icinga 2 Agent certificates for the server and the client not trusting the certificate. To resolve this issue, either use trusted certificates signed by your trusted CA or setup the client to accept untrusted certificates';
             'EventId'   = 1500;
         };
         1501 = @{
