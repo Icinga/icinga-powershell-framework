@@ -1,7 +1,8 @@
 function Write-IcingaDebugMessage()
 {
     param(
-        [string]$Message
+        [string]$Message,
+        [array]$Objects  = @()
     );
 
     if ([string]::IsNullOrEmpty($Message)) {
@@ -12,5 +13,8 @@ function Write-IcingaDebugMessage()
         return;
     }
 
-    Write-EventLog -LogName Application -Source 'Icinga for Windows' -EntryType Information -EventId 1000 -Message $Message;
+    [array]$DebugContent = @($Message);
+    $DebugContent += $Objects;
+
+    Write-IcingaEventMessage -EventId 1000 -Namespace 'Framework' -Objects $DebugContent;
 }

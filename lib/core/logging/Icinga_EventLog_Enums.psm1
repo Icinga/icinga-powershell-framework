@@ -7,7 +7,12 @@
  #>
  [hashtable]$IcingaEventLogEnums += @{
     'Framework' = @{
-        # TODO: Add event log messages
+        1000 = @{
+            'EntryType' = 'Information';
+            'Message'   = 'Generic debug message issued by the Framework or its components';
+            'Details'   = 'The Framework or is components can issue generic debug message in case the debug log is enabled. Please ensure to disable it, if not used. You can do so with the command "Disable-IcingaFrameworkDebugMode"';
+            'EventId'   = 1000;
+        };
     }
 };
 
