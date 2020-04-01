@@ -25,15 +25,29 @@ function New-IcingaCheckCommand()
     );
 
     [string]$CommandFile = [string]::Format(
-        '{0}.psm1',
-        $CommandName
+        'icinga-powershell-{0}.psm1',
+        $Name.ToLower()
+    );
+    [string]$PSDFile = [string]::Format(
+        'icinga-powershell-{0}.psd1',
+        $Name.ToLower()
     );
 
-    [string]$ScriptFile = Join-Path -Path (Get-IcingaCustomPluginDir) -ChildPath $CommandFile;
+    [string]$ModuleFolder = Join-Path -Path (Get-IcingaFrameworkRootPath) -ChildPath (
+        [string]::Format('icinga-powershell-{0}', $Name.ToLower())
+    );
+    [string]$ScriptFile   = Join-Path -Path $ModuleFolder -ChildPath $CommandFile;
+    [string]$PSDFile      = Join-Path -Path $ModuleFolder -ChildPath $PSDFile;
+
+    if ((Test-Path $ModuleFolder) -eq $TRUE) {
+        throw 'This module folder does already exist.';
+    }
 
     if ((Test-Path $ScriptFile) -eq $TRUE) {
-        throw 'This Check-Command does already exist.';
+        throw 'This check command does already exist.';
     }
+
+    New-Item -Path $ModuleFolder -ItemType Directory | Out-Null;
 
     Add-Content -Path $ScriptFile -Value 'Import-IcingaLib icinga\plugin;';
 
@@ -88,9 +102,19 @@ function New-IcingaCheckCommand()
     $DefaultEditor = (Get-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.psm1\OpenWithList' -Name a).a;
     $DefaultEditor = $DefaultEditor.Replace('.exe', '');
 
+    New-ModuleManifest `
+        -Path $PSDFile `
+        -ModuleToProcess $CommandFile `
+        -RequiredModules @('icinga-powershell-framework') `
+        -FunctionsToExport @('*') `
+        -CmdletsToExport @('*') `
+        -VariablesToExport '*' | Out-Null;
+
+    Unblock-IcingaPowerShellFiles -Path $ModuleFolder;
+
     Import-Module $ScriptFile -Global;
 
-    if ([string]::IsNullOrEmpty($DefaultEditor) -eq $FALSE -And ((Get-Command $DefaultEditor -ErrorAction SilentlyContinue) -eq $null) -And ((Test-Path $DefaultEditor) -eq $FALSE)) {
+    if ([string]::IsNullOrEmpty($DefaultEditor) -eq $FALSE -And ($null -eq (Get-Command $DefaultEditor -ErrorAction SilentlyContinue)) -And ((Test-Path $DefaultEditor) -eq $FALSE)) {
         Write-Host 'No default editor for .psm1 files found. Specify a default editor to automaticly open the newly generated check plugin.';
         return;
     }
