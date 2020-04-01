@@ -2,6 +2,24 @@
 
 With the [Icinga PowerShell Framework](https://icinga.com/docs/windows/latest) you have the possibility to create new check plugins with very small effort. Below you will find a step-by-step tutorial for writing an example one.
 
+## File Structure
+
+For plugins we will have to distinguish between general components. The plugin file itself with the Cmdlet and the general check/treshold comparison and possible data providers, delivery the content for our modules. If you for example write plugins for your application monitoring and you require different functions to collect these information, the way to gois to separate the collector functions from the plugin itself.
+
+This will result in the following file structure
+
+```text
+module
+  |_ plugin.psd1
+  |_ plugin.psm1
+  |_ provider
+     |_ your_plugin_provider.psm1
+```
+
+This will ensure these functions can be called separately from the plugin itself and make re-using them a lot easier. In addition, it will help other developers to build dependencies based on your module and data collectors to allow an easier re-usage of already existing components.
+
+Additional required files within the `provider` folder can be included by using the `NestedModules` array within your `psd1` file. This will ensure these files are automatically loaded once a new PowerShell session is started.
+
 ## Creating A New Module
 
 The best approach for creating a custom plugin is by creating an independent module which is installed in your PowerShell modules directly. This will ensure you are not overwriting your custom data with possible framework updates.
@@ -545,21 +563,6 @@ The following `Verbose` options are available
 We will not provide an example in this guide, but we would like to add that this is not the final complexity level of plugins. Each `check package` for example could contain multiple `check packages` with `checks` and even more `check packages`.
 
 You simply have to ensure you are adding `checks` and `check packages` correctly into each object and parse your primary `check package` to the `check result Cmdlet`. The Framework will then deal with the entire operation and calculation itself
-
-### Plugin Providers
-
-In addition we would like you keep the plugin and possible data providers separated. If you for example write plugins for your application monitoring and you require different functions to collect these information, the guided way is to separate the collector functions from the plugin itself.
-
-The file structure will look like this
-
-```text
-plugin folder
-  |_ plugin.psm1
-  |_ provider_folder
-     |_ your_plugin_provider.psm1
-```
-
-This will ensure these functions can be called separately from the plugin itself and make re-using them a lot easier.
 
 ### Icinga Configuration
 
