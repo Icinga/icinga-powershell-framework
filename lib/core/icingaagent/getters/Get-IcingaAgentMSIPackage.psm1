@@ -25,7 +25,6 @@ function Get-IcingaAgentMSIPackage()
 
         foreach ($line in $Content) {
             if ($line -like '*.msi*' -And $line -like "*$Architecture*") {
-                #Write-Host '#####' $line
                 $MSIPackage = $line.SubString(
                     $line.IndexOf('Icinga2-'),
                     $line.IndexOf('.msi') - $line.IndexOf('Icinga2-')
@@ -43,7 +42,7 @@ function Get-IcingaAgentMSIPackage()
                         break;
                     }
                 } elseif ($Version -eq 'latest') {
-                    if ($line -like '*snapshot*') {
+                    if ($line -like '*snapshot*' -Or $line -like '*-rc*') {
                         continue;
                     }
                     $UsePackage = $MSIPackage;
