@@ -1,3 +1,22 @@
+<#
+.SYNOPSIS
+   Sets a config entry for a given path to a certain value
+.DESCRIPTION
+   Sets a config entry for a given path to a certain value
+.FUNCTIONALITY
+   Sets a config entry for a given path to a certain value
+.EXAMPLE
+   PS>Set-IcingaPowerShellConfig -Path 'framework.daemons.servicecheck' -Value $DaemonConfig;
+.PARAMETER Path
+   The path to the config item to be set
+.PARAMETER Value
+   The value to be set for a specific config path
+.INPUTS
+   System.String
+.LINK
+   https://github.com/Icinga/icinga-powershell-framework
+#>
+
 function Set-IcingaPowerShellConfig()
 {
     param(

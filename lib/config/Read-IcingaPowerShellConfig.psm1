@@ -1,3 +1,18 @@
+<#
+.SYNOPSIS
+   Reads the entire configuration and returns it as custom object
+.DESCRIPTION
+   Reads the entire configuration and returns it as custom object
+.FUNCTIONALITY
+   Reads the entire configuration and returns it as custom object
+.EXAMPLE
+   PS>Read-IcingaPowerShellConfig;
+.OUTPUTS
+   System.Object
+.LINK
+   https://github.com/Icinga/icinga-powershell-framework
+#>
+
 function Read-IcingaPowerShellConfig()
 {
     $ConfigDir  = Get-IcingaPowerShellConfigDir;

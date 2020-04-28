@@ -1,3 +1,27 @@
+<#
+.SYNOPSIS
+   Will fetch the current host configuration or general configuration depending
+   if a host or template key is specified from the Icinga Director Self-Service API
+.DESCRIPTION
+   Use the Self-Service API of the Icinga Director to connect to it and fetch the
+   configuration to apply for this host. The configuration itself is differentiated
+   if a template or the specific host key is used
+.FUNCTIONALITY
+   Fetches host or general configuration form the Icinga Director Self-Service API
+.EXAMPLE
+   PS>Get-IcingaDirectorSelfServiceConfig -DirectorUrl 'https://example.com/icingaweb2/director -ApiKey 457g6b98054v76vb5490ß276bv0457v6054b76;
+.PARAMETER DirectorUrl
+   The URL pointing directly to the Icinga Web 2 Director module
+.PARAMETER ApiKey
+   Either the template or host key to authenticate against the Self-Service API
+.INPUTS
+   System.String
+.OUTPUTS
+   System.Object
+.LINK
+   https://github.com/Icinga/icinga-powershell-framework
+#>
+
 function Get-IcingaDirectorSelfServiceConfig()
 {
     param(

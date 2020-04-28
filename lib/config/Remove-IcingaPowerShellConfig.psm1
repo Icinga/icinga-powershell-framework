@@ -1,3 +1,20 @@
+<#
+.SYNOPSIS
+   Removes a config entry from a given path
+.DESCRIPTION
+   Removes a config entry from a given path
+.FUNCTIONALITY
+   Removes a config entry from a given path
+.EXAMPLE
+   PS>Remove-IcingaPowerShellConfig -Path 'framework.daemons';
+.PARAMETER Path
+   The path to the config item to remove
+.INPUTS
+   System.Object
+.LINK
+   https://github.com/Icinga/icinga-powershell-framework
+#>
+
 function Remove-IcingaPowerShellConfig()
 {
     param(

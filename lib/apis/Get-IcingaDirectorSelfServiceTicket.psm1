@@ -1,3 +1,26 @@
+<#
+.SYNOPSIS
+   Will fetch the ticket for certificate signing by using the Icinga Director
+   Self-Service API
+.DESCRIPTION
+   Use the Self-Service API of the Icinga Director to connect to it and fetch the
+   ticket to sign Icinga 2 certificate requests
+.FUNCTIONALITY
+   Fetches the ticket for certificate signing form the Icinga Director Self-Service API
+.EXAMPLE
+   PS>Get-IcingaDirectorSelfServiceTicket -DirectorUrl 'https://example.com/icingaweb2/director -ApiKey 457g6b98054v76vb5490ß276bv0457v6054b76;
+.PARAMETER DirectorUrl
+   The URL pointing directly to the Icinga Web 2 Director module
+.PARAMETER ApiKey
+   The host key to authenticate against the Self-Service API
+.INPUTS
+   System.String
+.OUTPUTS
+   System.Object
+.LINK
+   https://github.com/Icinga/icinga-powershell-framework
+#>
+
 function Get-IcingaDirectorSelfServiceTicket()
 {
     param(
