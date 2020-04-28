@@ -474,6 +474,7 @@ function Start-IcingaAgentInstallWizard()
 
     if ($RunInstaller) {
         if ((Install-IcingaAgent -Version $AgentVersion -Source $PackageSource -AllowUpdates $AllowVersionChanges) -Or $Reconfigure) {
+            Reset-IcingaAgentConfigFile;
             Move-IcingaAgentDefaultConfig;
             Set-IcingaAgentNodeName -Hostname $Hostname;
             Set-IcingaAgentServiceUser -User $ServiceUser -Password $ServicePass -SetPermission | Out-Null;
