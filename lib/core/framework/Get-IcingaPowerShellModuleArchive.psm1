@@ -1,3 +1,39 @@
+<#
+.SYNOPSIS
+   Download a PowerShell Module from a custom source or from GitHub
+   by providing a repository and the user space
+.DESCRIPTION
+   Download a PowerShell Module from a custom source or from GitHub
+   by providing a repository and the user space
+.FUNCTIONALITY
+   Download and install a PowerShell module from a custom or GitHub source
+.EXAMPLE
+   PS>Get-IcingaPowerShellModuleArchive -ModuleName 'Plugins' -Repository 'icinga-powershell-plugins' -Stable 1;
+.EXAMPLE
+   PS>Get-IcingaPowerShellModuleArchive -ModuleName 'Plugins' -Repository 'icinga-powershell-plugins' -Stable 1 -DryRun 1;
+.PARAMETER DownloadUrl
+   The Url to a ZIP-Archive to download from (skips the wizard)
+.PARAMETER ModuleName
+   The name which is used inside output messages
+.PARAMETER Repository
+   The repository to download the ZIP-Archive from
+.PARAMETER GitHubUser
+   The user from which a repository is downloaded from
+.PARAMETER Stable
+   Download the latest stable release
+.PARAMETER Snapshot
+   Download the latest package from the master branch
+.PARAMETER DryRun
+   Only return the finished build Url including the version to install but
+   do not modify the system in any way
+.INPUTS
+   System.String
+.OUTPUTS
+   System.Hashtable
+.LINK
+   https://github.com/Icinga/icinga-powershell-framework
+#>
+
 function Get-IcingaPowerShellModuleArchive()
 {
     param(

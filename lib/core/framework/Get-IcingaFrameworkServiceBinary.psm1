@@ -1,3 +1,29 @@
+<#
+.SYNOPSIS
+   Downloads a ZIP-Archive for the Icinga for Windows Service Binary
+   and installs it into a specified directory
+.DESCRIPTION
+   Wizard function to download the Icinga for Windows Service binary from
+   a public ressource or from a local webstore / webshare and extract
+   the ZIP-Archive into a target destination
+.FUNCTIONALITY
+   Downloads and unzips the Icinga for Windows service binary ZIP-Archive
+.EXAMPLE
+   PS>Get-IcingaFrameworkServiceBinary -FrameworkServiceUrl 'https://github.com/Icinga/icinga-powershell-service/releases/download/v1.0.0/icinga-service-v1.0.0.zip' -ServiceDirectory 'C:\Program Files\icinga-framework-service';
+.EXAMPLE
+   PS>Get-IcingaFrameworkServiceBinary -FrameworkServiceUrl 'C:/users/public/icinga-service-v1.0.0.zip' -ServiceDirectory 'C:\Program Files\icinga-framework-service';
+.PARAMETER FrameworkServiceUrl
+   The URL / Source for downloading the ZIP-Archive from.
+.PARAMETER Destination
+   The target destination to extract the ZIP-Archive to and to place the service binary
+.INPUTS
+   System.String
+.OUTPUTS
+   System.Hashtable
+.LINK
+   https://github.com/Icinga/icinga-powershell-framework
+#>
+
 function Get-IcingaFrameworkServiceBinary()
 {
     param(

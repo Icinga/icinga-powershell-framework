@@ -1,3 +1,24 @@
+<#
+.SYNOPSIS
+   Extracts a ZIP-Archive to a certain location
+.DESCRIPTION
+   Unzips a ZIP-Archive on to a certain location
+.FUNCTIONALITY
+   Unzips a ZIP-Archive on to a certain location
+.EXAMPLE
+   PS>Expand-IcingaZipArchive -Path 'C:\users\public\test.zip' -Destination 'C:\users\public\';
+.PARAMETER Path
+   The location of your ZIP-Archive
+.PARAMETER Destination
+   The target destination to extract the ZIP-Archive to
+.INPUTS
+   System.String
+.OUTPUTS
+   System.Boolean
+.LINK
+   https://github.com/Icinga/icinga-powershell-framework
+#>
+
 function Expand-IcingaZipArchive()
 {
     param(
