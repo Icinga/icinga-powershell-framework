@@ -66,7 +66,7 @@ function Get-IcingaAgentMSIPackage()
 
     return @{
         'InstallerPath' = $DownloadPath;
-        'Version'       = ($UsePackage).Replace('Icinga2-v', '').Replace($Architecture, '').Replace('.msi', '').Replace('-', '');
+        'Version'       = ($UsePackage).Replace('Icinga2-v', '').Replace([string]::Format('-{0}.msi', $Architecture), '')
         'LastUpdate'    = $LastUpdate;
     }
 }
