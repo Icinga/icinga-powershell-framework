@@ -48,11 +48,19 @@ function Install-IcingaAgentCertificates()
 
             Write-Host ([string]::Format('Fetching trusted master certificate from "{0}"', $Endpoint));
 
-            $arguments = [string]::Format('pki save-cert --key {0}{1}.key --trustedcert {0}trusted-parent.crt --host {2}',
-                $CertificateDirectory,
-                $Hostname,
-                $Endpoint
-            );
+            # Argument --key for save-cert is deprecated starting with Icinga 2.12.0
+            if (Compare-IcingaVersions -RequiredVersion '2.12.0') {
+                $arguments = [string]::Format('pki save-cert --trustedcert {0}trusted-parent.crt --host {1}',
+                    $CertificateDirectory,
+                    $Endpoint
+                );
+            } else {
+                $arguments = [string]::Format('pki save-cert --key {0}{1}.key --trustedcert {0}trusted-parent.crt --host {2}',
+                    $CertificateDirectory,
+                    $Hostname,
+                    $Endpoint
+                );
+            }
 
             if ((Start-IcingaAgentCertificateProcess -Arguments $arguments) -eq $FALSE) {
                 Write-Host 'Unable to connect to your provided Icinga CA. Please verify the entered configuration is correct.' `
