@@ -1,3 +1,41 @@
+<#
+.SYNOPSIS
+   Installs a PowerShell Module within the 'icinga-powershell-' namespace
+   from GitHub or custom locations and installs it into the module directory
+   the Framework itself is installed to
+.DESCRIPTION
+   Installs a PowerShell Module within the 'icinga-powershell-' namespace
+   from GitHub or custom locations and installs it into the module directory
+   the Framework itself is installed to
+.FUNCTIONALITY
+   Download and install a PowerShell module from the 'icinga-powershell-' namespace
+.EXAMPLE
+   PS>Install-IcingaFrameworkComponent -Name 'plugins' -Stable;
+.EXAMPLE
+   PS>Install-IcingaFrameworkComponent -Name 'plugins' -Stable -DryRun;
+.PARAMETER Name
+   The name of the module to install. The namespace 'icinga-powershell-' is added
+   by the function automatically
+.PARAMETER GitHubUser
+   Overwrite the default GitHub user for a different one to download modules from
+.PARAMETER Url
+   Specify a direct Url to a ZIP-Archive for external or local web ressources or
+   local network shares
+.PARAMETER Stable
+   Download the latest stable version from a GitHub source
+.PARAMETER Snapshot
+   Download the latest master branch from a GitHub source
+.PARAMETER DryRun
+   Only fetch possible Urls and return the result. No download or installation
+   will be done
+.INPUTS
+   System.String
+.OUTPUTS
+   System.Hashtable
+.LINK
+   https://github.com/Icinga/icinga-powershell-framework
+#>
+
 function Install-IcingaFrameworkComponent()
 {
     param(
