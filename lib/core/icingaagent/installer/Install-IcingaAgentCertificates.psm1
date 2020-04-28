@@ -50,15 +50,17 @@ function Install-IcingaAgentCertificates()
 
             # Argument --key for save-cert is deprecated starting with Icinga 2.12.0
             if (Compare-IcingaVersions -RequiredVersion '2.12.0') {
-                $arguments = [string]::Format('pki save-cert --trustedcert {0}trusted-parent.crt --host {1}',
+                $arguments = [string]::Format('pki save-cert --trustedcert {0}trusted-parent.crt --host {1} --port {2}',
                     $CertificateDirectory,
-                    $Endpoint
+                    $Endpoint,
+                    $Port
                 );
             } else {
-                $arguments = [string]::Format('pki save-cert --key {0}{1}.key --trustedcert {0}trusted-parent.crt --host {2}',
+                $arguments = [string]::Format('pki save-cert --key {0}{1}.key --trustedcert {0}trusted-parent.crt --host {2} --port {3}',
                     $CertificateDirectory,
                     $Hostname,
-                    $Endpoint
+                    $Endpoint,
+                    $Port
                 );
             }
 
