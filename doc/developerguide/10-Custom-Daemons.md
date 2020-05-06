@@ -296,7 +296,13 @@ function Start-IcingaAgentServiceTest()
                 if ($ServiceState.Status -ne 'Running') {
                     try {
                         # Try to restart the service
-                        Restart-Service 'icinga2';
+                        Restart-Service 'icinga2' -ErrorAction Stop;
+
+                        Add-IcingaHashtableItem `
+                            -Hashtable $IcingaDaemonData.BackgroundDaemon.TestIcingaAgentService.ServiceState `
+                            -Key 'restart_error' `
+                            -Value 0 `
+                            -Override | Out-Null;
                     } catch {
                         # Add an error counter in case we failed
                         $RestartErrors += 1;
@@ -378,7 +384,13 @@ function Start-IcingaAgentServiceTest()
                 if ($ServiceState.Status -ne 'Running') {
                     try {
                         # Try to restart the service
-                        Restart-Service 'icinga2';
+                        Restart-Service 'icinga2' -ErrorAction Stop;
+
+                        Add-IcingaHashtableItem `
+                            -Hashtable $IcingaDaemonData.BackgroundDaemon.TestIcingaAgentService.ServiceState `
+                            -Key 'restart_error' `
+                            -Value 0 `
+                            -Override | Out-Null;
                     } catch {
                         # Add an error counter in case we failed
                         $RestartErrors += 1;
