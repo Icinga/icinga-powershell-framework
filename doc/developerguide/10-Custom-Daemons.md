@@ -8,7 +8,7 @@ Creating A New Module
 
 The best approach for creating a custom daemon is by creating an independent module which is installed in your PowerShell modules directly. This will ensure you are not overwriting your custom data with possible framework updates.
 
-In this guide, we will assume the name of the module is `icinga-psdaemon-agentservice`.
+In this guide, we will assume the name of the module is `icinga-powershell-agentservice`.
 
 At first we will have to create a new module. Navigate to the PowerShell modules folder the Framework itself is installed to. In this tutorial we will assume the location is
 
@@ -16,14 +16,14 @@ At first we will have to create a new module. Navigate to the PowerShell modules
 C:\Program Files\WindowsPowerShell\Modules
 ```
 
-Now create a new folder with the name `icinga-psdaemon-agentservice` and navigate into it.
+Now create a new folder with the name `icinga-powershell-agentservice` and navigate into it.
 
-As we require a `psm1` file which contains our code, we will create a new file with the name `icinga-psdaemon-agentservice.psm1`. This will allow the PowerShell autoloader to load the module automaticly.
+As we require a `psm1` file which contains our code, we will create a new file with the name `icinga-powershell-agentservice.psm1`. This will allow the PowerShell autoloader to load the module automaticly.
 
 **Note:** It could be possible, depending on your [execution policies](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.security/set-executionpolicy?view=powershell-6), that your module is not loaded properly. If this is the case, you can try to unblock the file by opening a PowerShell and use the `Unblock-File` Cmdelet
 
 ```powershell
-Unblock-File -Path 'C:\Program Files\WindowsPowerShell\Modules\icinga-psdaemon-agentservice\icinga-psdaemon-agentservice.psm1'
+Unblock-File -Path 'C:\Program Files\WindowsPowerShell\Modules\icinga-powershell-agentservice\icinga-powershell-agentservice.psm1'
 ```
 
 Testing The Module
@@ -31,7 +31,7 @@ Testing The Module
 
 Once the modules files are created and unblocked, we can start testing if the autoloader is properly working and our module is detected.
 
-For this open the file `icinga-psdaemon-agentservice.psm1` in your prefered editor and add the following code snippet
+For this open the file `icinga-powershell-agentservice.psm1` in your prefered editor and add the following code snippet
 
 ```powershell
 function Test-MyIcingaAgentServiceCommand()
@@ -45,7 +45,7 @@ Now open a **new** PowerShell terminal or write `powershell` into an already ope
 If everything went properly, you should now read the output `Module was loaded` in our prompt. If not, you can try to import the module by using
 
 ```powershell
-Import-Module 'C:\Program Files\WindowsPowerShell\Modules\icinga-psdaemon-agentservice\icinga-psdaemon-agentservice.psm1';
+Import-Module 'C:\Program Files\WindowsPowerShell\Modules\icinga-powershell-agentservice\icinga-powershell-agentservice.psm1';
 ```
 
 inside your console prompt. After that try again to execute the command `Test-MyIcingaAgentServiceCommand` and check if it works this time. If not, you might check the naming of your module to ensure `folder name` and `.psm1 file name` is identical.
