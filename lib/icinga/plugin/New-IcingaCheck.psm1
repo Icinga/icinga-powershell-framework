@@ -147,6 +147,8 @@ function New-IcingaCheck()
             );
         }
 
+        $this.warning = $warning;
+
         return $this;
     }
 
@@ -160,6 +162,8 @@ function New-IcingaCheck()
                 'not like'
             );
         }
+
+        $this.warning = $warning;
 
         return $this;
     }
@@ -175,6 +179,8 @@ function New-IcingaCheck()
             );
         }
 
+        $this.warning = $warning;
+
         return $this;
     }
 
@@ -188,6 +194,8 @@ function New-IcingaCheck()
                 'not matching'
             );
         }
+
+        $this.warning = $warning;
 
         return $this;
     }
@@ -203,6 +211,8 @@ function New-IcingaCheck()
             );
         }
 
+        $this.warning = [string]::Format('{0}:{1}', $min, $max);
+
         return $this;
     }
 
@@ -216,6 +226,8 @@ function New-IcingaCheck()
                 'between'
             );
         }
+
+        $this.warning = [string]::Format('{0}:{1}', $min, $max);
 
         return $this;
     }
@@ -231,6 +243,8 @@ function New-IcingaCheck()
             );
         }
 
+        $this.warning = $warning;
+
         return $this;
     }
 
@@ -244,6 +258,8 @@ function New-IcingaCheck()
                 'lower or equal than'
             );
         }
+
+        $this.warning = $warning;
 
         return $this;
     }
@@ -259,6 +275,8 @@ function New-IcingaCheck()
             );
         }
 
+        $this.warning = $warning;
+
         return $this;
     }
 
@@ -272,6 +290,8 @@ function New-IcingaCheck()
                 'greater or equal than'
             );
         }
+
+        $this.warning = $warning;
 
         return $this;
     }
@@ -329,6 +349,8 @@ function New-IcingaCheck()
             );
         }
 
+        $this.critical = $critical;
+
         return $this;
     }
 
@@ -342,6 +364,8 @@ function New-IcingaCheck()
                 'not like'
             );
         }
+
+        $this.critical = $critical;
 
         return $this;
     }
@@ -357,6 +381,8 @@ function New-IcingaCheck()
             );
         }
 
+        $this.critical = $critical;
+
         return $this;
     }
 
@@ -370,6 +396,8 @@ function New-IcingaCheck()
                 'not matching'
             );
         }
+
+        $this.critical = $critical;
 
         return $this;
     }
@@ -385,6 +413,8 @@ function New-IcingaCheck()
             );
         }
 
+        $this.critical = [string]::Format('{0}:{1}', $min, $max);
+
         return $this;
     }
 
@@ -398,6 +428,8 @@ function New-IcingaCheck()
                 'between'
             );
         }
+
+        $this.critical = [string]::Format('{0}:{1}', $min, $max);
 
         return $this;
     }
@@ -413,6 +445,8 @@ function New-IcingaCheck()
             );
         }
 
+        $this.critical = $critical;
+
         return $this;
     }
 
@@ -426,6 +460,8 @@ function New-IcingaCheck()
                 'lower or equal than'
             );
         }
+
+        $this.critical = $critical;
 
         return $this;
     }
@@ -441,6 +477,8 @@ function New-IcingaCheck()
             );
         }
 
+        $this.critical = $critical;
+
         return $this;
     }
 
@@ -454,6 +492,8 @@ function New-IcingaCheck()
                 'greater or equal than'
             );
         }
+
+        $this.critical = $critical;
 
         return $this;
     }
@@ -721,14 +761,17 @@ function New-IcingaCheck()
 
         $this.completed    = $TRUE;
         [string]$LabelName = (Format-IcingaPerfDataLabel $this.name);
+        $value             = ConvertTo-Integer -Value $this.value -NullAsEmpty;
+        $warning           = ConvertTo-Integer -Value $this.warning -NullAsEmpty;
+        $critical          = ConvertTo-Integer -Value $this.critical -NullAsEmpty;
 
         $perfdata = @{
             'label'    = $LabelName;
             'perfdata' = '';
             'unit'     = $this.unit;
-            'value'    = (Format-IcingaPerfDataValue $this.value);
-            'warning'  = (Format-IcingaPerfDataValue $this.warning);
-            'critical' = (Format-IcingaPerfDataValue $this.critical);
+            'value'    = (Format-IcingaPerfDataValue $value);
+            'warning'  = (Format-IcingaPerfDataValue $warning);
+            'critical' = (Format-IcingaPerfDataValue $critical);
             'minimum'  = (Format-IcingaPerfDataValue $this.minimum);
             'maximum'  = (Format-IcingaPerfDataValue $this.maximum);
             'package'  = $FALSE;
