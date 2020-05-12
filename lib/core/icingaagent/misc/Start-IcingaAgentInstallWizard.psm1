@@ -70,68 +70,68 @@ function Start-IcingaAgentInstallWizard()
                 $SelfServiceAPIKey   = $Result.Value;
                 $InstallerArguments  = $Result.Args;
             }
-            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'Ticket' -Value $Ticket -InstallerArguments $InstallerArguments;
-            $Ticket              = $Result.Value;
-            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'PackageSource' -Value $PackageSource -InstallerArguments $InstallerArguments;
-            $PackageSource       = $Result.Value;
-            $InstallerArguments  = $Result.Args;
-            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'AgentVersion' -Value $AgentVersion -InstallerArguments $InstallerArguments;
-            $AgentVersion        = $Result.Value;
-            $InstallerArguments  = $Result.Args;
-            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'CAPort' -Value $CAPort -InstallerArguments $InstallerArguments;
-            $CAPort              = $Result.Value;
-            $InstallerArguments  = $Result.Args;
-            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'AllowVersionChanges' -Value $AllowVersionChanges -InstallerArguments $InstallerArguments;
-            $AllowVersionChanges = $Result.Value;
-            $InstallerArguments  = $Result.Args;
-            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'GlobalZones' -Value $GlobalZones -InstallerArguments $InstallerArguments;
-            $GlobalZones         = $Result.Value;
-            $InstallerArguments  = $Result.Args;
-            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'ParentZone' -Value $ParentZone -InstallerArguments $InstallerArguments;
-            $ParentZone          = $Result.Value;
-            $InstallerArguments  = $Result.Args;
-            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'CAEndpoint' -Value $CAEndpoint -InstallerArguments $InstallerArguments;
-            $CAEndpoint          = $Result.Value;
-            $InstallerArguments  = $Result.Args;
-            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'Endpoints' -Value $Endpoints -InstallerArguments $InstallerArguments;
-            $Endpoints           = $Result.Value;
-            $InstallerArguments  = $Result.Args;
-            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'AddFirewallRule' -Value $AddFirewallRule -InstallerArguments $InstallerArguments;
-            $AddFirewallRule     = $Result.Value;
-            $InstallerArguments  = $Result.Args;
-            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'AcceptConnections' -Value $AcceptConnections -InstallerArguments $InstallerArguments;
-            $AcceptConnections   = $Result.Value;
-            $InstallerArguments  = $Result.Args;
-            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'AddFirewallRule' -Value $AddFirewallRule -InstallerArguments $InstallerArguments;
-            $AddFirewallRule     = $Result.Value;
-            $InstallerArguments  = $Result.Args;            
-            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'ServiceUser' -Value $ServiceUser -InstallerArguments $InstallerArguments;
-            $ServiceUser         = $Result.Value;
-            $InstallerArguments  = $Result.Args;
-            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'UpdateAgent' -Value $UpdateAgent -InstallerArguments $InstallerArguments;
-            $UpdateAgent         = $Result.Value;
-            $InstallerArguments  = $Result.Args;
-            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'AddDirectorGlobal' -Value $AddDirectorGlobal -InstallerArguments $InstallerArguments;
-            $AddDirectorGlobal   = $Result.Value;
-            $InstallerArguments  = $Result.Args;
-            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'AddGlobalTemplates' -Value $AddGlobalTemplates -InstallerArguments $InstallerArguments;
-            $AddGlobalTemplates  = $Result.Value;
-            $InstallerArguments  = $Result.Args;
-            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'LowerCase' -Value $LowerCase -Default $FALSE -InstallerArguments $InstallerArguments;
-            $LowerCase           = $Result.Value;
-            $InstallerArguments  = $Result.Args;
-            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'UpperCase' -Value $UpperCase -Default $FALSE -InstallerArguments $InstallerArguments;
-            $UpperCase           = $Result.Value;
-            $InstallerArguments  = $Result.Args;
-            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'AutoUseFQDN' -Value $AutoUseFQDN -Default $FALSE -InstallerArguments $InstallerArguments;
-            $AutoUseFQDN         = $Result.Value;
-            $InstallerArguments  = $Result.Args;
-            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'AutoUseHostname' -Value $AutoUseHostname -Default $FALSE -InstallerArguments $InstallerArguments;
-            $AutoUseHostname     = $Result.Value;
-            $InstallerArguments  = $Result.Args;
-            $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'EndpointConnections' -Value $EndpointConnections -InstallerArguments $InstallerArguments;
-            $EndpointConnections = $Result.Value;
-            $InstallerArguments  = $Result.Args;
+            $Result               = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'Ticket' -Value $Ticket -InstallerArguments $InstallerArguments;
+            $Ticket               = $Result.Value;
+            $Result               = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'PackageSource' -Value $PackageSource -InstallerArguments $InstallerArguments;
+            $PackageSource        = $Result.Value;
+            $InstallerArguments   = $Result.Args;
+            $Result               = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'AgentVersion' -Value $AgentVersion -InstallerArguments $InstallerArguments;
+            $AgentVersion         = $Result.Value;
+            $InstallerArguments   = $Result.Args;
+            $Result               = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'CAPort' -Value $CAPort -InstallerArguments $InstallerArguments;
+            $CAPort               = $Result.Value;
+            $InstallerArguments   = $Result.Args;
+            $Result               = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'AllowVersionChanges' -Value $AllowVersionChanges -InstallerArguments $InstallerArguments;
+            $AllowVersionChanges  = $Result.Value;
+            $InstallerArguments   = $Result.Args;
+            $Result               = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'GlobalZones' -Value $GlobalZones -InstallerArguments $InstallerArguments;
+            $GlobalZones          = $Result.Value;
+            $InstallerArguments   = $Result.Args;
+            $Result               = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'ParentZone' -Value $ParentZone -InstallerArguments $InstallerArguments;
+            $ParentZone           = $Result.Value;
+            $InstallerArguments   = $Result.Args;
+            $Result               = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'CAEndpoint' -Value $CAEndpoint -InstallerArguments $InstallerArguments;
+            $CAEndpoint           = $Result.Value;
+            $InstallerArguments   = $Result.Args;
+            $Result               = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'Endpoints' -Value $Endpoints -InstallerArguments $InstallerArguments;
+            $Endpoints            = $Result.Value;
+            $InstallerArguments   = $Result.Args;
+            $Result               = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'AddFirewallRule' -Value $AddFirewallRule -InstallerArguments $InstallerArguments;
+            $AddFirewallRule      = $Result.Value;
+            $InstallerArguments   = $Result.Args;
+            $Result               = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'AcceptConnections' -Value $AcceptConnections -InstallerArguments $InstallerArguments;
+            $AcceptConnections    = $Result.Value;
+            $InstallerArguments   = $Result.Args;       
+            $Result               = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'ServiceUser' -Value $ServiceUser -InstallerArguments $InstallerArguments;
+            $ServiceUser          = $Result.Value;
+            $InstallerArguments   = $Result.Args;
+            $Result               = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'UpdateAgent' -Value $UpdateAgent -InstallerArguments $InstallerArguments;
+            $UpdateAgent          = $Result.Value;
+            $InstallerArguments   = $Result.Args;
+            $Result               = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'AddDirectorGlobal' -Value $AddDirectorGlobal -InstallerArguments $InstallerArguments;
+            $AddDirectorGlobal    = $Result.Value;
+            $InstallerArguments   = $Result.Args;
+            $Result               = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'AddGlobalTemplates' -Value $AddGlobalTemplates -InstallerArguments $InstallerArguments;
+            $AddGlobalTemplates   = $Result.Value;
+            $InstallerArguments   = $Result.Args;
+            $Result               = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'LowerCase' -Value $LowerCase -Default $FALSE -InstallerArguments $InstallerArguments;
+            $LowerCase            = $Result.Value;
+            $InstallerArguments   = $Result.Args;
+            $Result               = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'UpperCase' -Value $UpperCase -Default $FALSE -InstallerArguments $InstallerArguments;
+            $UpperCase            = $Result.Value;
+            $InstallerArguments   = $Result.Args;
+            $Result               = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'AutoUseFQDN' -Value $AutoUseFQDN -Default $FALSE -InstallerArguments $InstallerArguments;
+            $AutoUseFQDN          = $Result.Value;
+            $InstallerArguments   = $Result.Args;
+            $Result               = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'AutoUseHostname' -Value $AutoUseHostname -Default $FALSE -InstallerArguments $InstallerArguments;
+            $AutoUseHostname      = $Result.Value;
+            $InstallerArguments   = $Result.Args;
+            $Result               = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'EndpointConnections' -Value $EndpointConnections -InstallerArguments $InstallerArguments;
+            $EndpointConnections  = $Result.Value;
+            $InstallerArguments   = $Result.Args;
+            $Result               = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'OverrideDirectorVars' -Value $OverrideDirectorVars -InstallerArguments $InstallerArguments;
+            $OverrideDirectorVars = $Result.Value;
+            $InstallerArguments   = $Result.Args;
         }
     }
 
@@ -265,7 +265,9 @@ function Start-IcingaAgentInstallWizard()
         }
     } elseif ($AcceptConnections) {
         $CanConnectToParent = $TRUE;
-        $InstallerArguments += ("-AcceptConnections $AcceptConnections");
+        if ((Test-IcingaWizardArgument -Argument 'AcceptConnections') -eq $FALSE) {
+            $InstallerArguments += ([string]::Format('-AcceptConnections {0}', [int]$AcceptConnections));
+        }
     }
 
     if ($null -eq $AddFirewallRule) {
@@ -428,6 +430,10 @@ function Start-IcingaAgentInstallWizard()
         $result = Install-IcingaFrameworkPlugins -PluginsUrl $PluginsUrl;
         $InstallerArguments += "-InstallFrameworkPlugins 1";
         $InstallerArguments += "-PluginsUrl '$PluginsUrl'";
+    } else {
+        if ((Test-IcingaWizardArgument -Argument 'InstallFrameworkPlugins') -eq $FALSE) {
+            $InstallerArguments += "-InstallFrameworkPlugins 0";
+        }
     }
 
     if ($null -eq $InstallFrameworkService) {
@@ -495,6 +501,106 @@ function Start-IcingaAgentInstallWizard()
     }
 }
 
+function Add-InstallerArgument()
+{
+    param(
+        $InstallerArguments,
+        [string]$Key,
+        $Value,
+        [switch]$ReturnValue
+    );
+
+    [bool]$IsArray = $Value -is [array];
+
+    # Check for arrays
+    if ($IsArray) {
+        [array]$NewArray = @();
+        foreach ($entry in $Value) {
+            $NewArray += Add-InstallerArgument -Value $entry -ReturnValue;
+        }
+
+        if ($ReturnValue) {
+            return ([string]::Join(',', $NewArray));
+        }
+
+        $InstallerArguments += [string]::Format(
+            '-{0} {1}',
+            $Key,
+            [string]::Join(',', $NewArray)
+        );
+
+        return $InstallerArguments;
+    }
+
+    # Check for integers
+    if (Test-Numeric $Value) {
+        if ($ReturnValue) {
+            return $Value;
+        }
+
+        $InstallerArguments += [string]::Format(
+            '-{0} {1}',
+            $Key,
+            $Value
+        );
+
+        return $InstallerArguments;
+    }
+
+    # Check for integer conversion
+    $IntValue = ConvertTo-Integer -Value $Value;
+    if ([string]$Value -ne [string]$IntValue) {
+        if ($ReturnValue) {
+            return $IntValue;
+        }
+
+        $InstallerArguments += [string]::Format(
+            '-{0} {1}',
+            $Key,
+            $IntValue
+        );
+
+        return $InstallerArguments;
+    }
+
+    $Type     = $Value.GetType().Name;
+    $NewValue = $null;
+
+    if ($Type -eq 'String') {
+        $NewValue = [string]::Format(
+            "'{0}'",
+            $Value
+        );
+
+        if ($ReturnValue) {
+            return $NewValue;
+        }
+
+        $InstallerArguments += [string]::Format(
+            '-{0} {1}',
+            $Key,
+            $NewValue
+        );
+
+        return $InstallerArguments;
+    }
+}
+
+function Test-IcingaWizardArgument()
+{
+    param(
+        [string]$Argument
+    );
+
+    foreach ($entry in $InstallerArguments) {
+        if ($entry -like [string]::Format('-{0} *', $Argument)) {
+            return $TRUE;
+        }
+    }
+
+    return $FALSE;
+}
+
 function Set-IcingaWizardArgument()
 {
     param(
@@ -506,11 +612,12 @@ function Set-IcingaWizardArgument()
     );
 
     if ($DirectorArgs.Overrides.ContainsKey($WizardArg)) {
-        $Override = $DirectorArgs.Overrides[$WizardArg];
-        if ($Value -is [array]) {
-            $Override = [string]::Join(',', $Override);
-        }
-        $InstallerArguments += "-$WizardArg $Override";
+
+        $InstallerArguments = Add-InstallerArgument `
+            -InstallerArguments $InstallerArguments `
+            -Key $WizardArg `
+            -Value $DirectorArgs.Overrides[$WizardArg];
+
         return @{
             'Value' = $DirectorArgs.Overrides[$WizardArg];
             'Args'  = $InstallerArguments;
@@ -523,11 +630,12 @@ function Set-IcingaWizardArgument()
         $RetValue = $DirectorArgs.Arguments[$WizardArg];
     } else {
         if ($null -ne $Value -Or [string]::IsNullOrEmpty($Value) -eq $FALSE) {
-            $TmpValue = $Value;
-            if ($Value -is [array]) {
-                $TmpValue = [string]::Join(',', $TmpValue);
-            }
-            $InstallerArguments += "-$WizardArg $TmpValue";
+
+            $InstallerArguments = Add-InstallerArgument `
+                -InstallerArguments $InstallerArguments `
+                -Key $WizardArg `
+                -Value $Value;
+
             return @{
                 'Value' = $Value;
                 'Args'  = $InstallerArguments;
@@ -541,11 +649,12 @@ function Set-IcingaWizardArgument()
     }
 
     if ([string]::IsNullOrEmpty($Value) -eq $FALSE) {
-        $TmpValue = $Value;
-        if ($Value -is [array]) {
-            $TmpValue = [string]::Join(',', $Value);
-        }
-        $InstallerArguments += "-$WizardArg $TmpValue";
+
+        $InstallerArguments = Add-InstallerArgument `
+                -InstallerArguments $InstallerArguments `
+                -Key $WizardArg `
+                -Value $Value;
+
         return @{
             'Value' = $Value;
             'Args'  = $InstallerArguments;

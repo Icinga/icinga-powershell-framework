@@ -112,6 +112,10 @@ function Start-IcingaAgentDirectorWizard()
     $DirectorOverrideArgs.Add(
         'Ticket', $IcingaTicket
     );
+    $DirectorOverrideArgs.Add(
+        'OverrideDirectorVars', 0
+    );
+    
     if ([string]::IsNullOrEmpty($TemplateKey) -eq $FALSE) {
         $DirectorOverrideArgs.Add(
             'SelfServiceAPIKey', $TemplateKey
@@ -136,13 +140,16 @@ function Start-IcingaDirectorAPIArgumentOverride()
 
     foreach ($entry in $Arguments.Keys) {
         $value = (Get-IcingaAgentInstallerAnswerInput -Prompt ([string]::Format('Please enter the new value for the argument "{0}"', $entry)) -Default 'v' -DefaultInput $Arguments[$entry]).answer;
-        if ($Arguments[$entry] -is [array]) {
-            if ([string]::IsNullOrEmpty($value) -eq $FALSE) { 
+        if ($Arguments[$entry] -is [array] -Or ($value -is [string] -And $value.Contains(','))) {
+            if ([string]::IsNullOrEmpty($value) -eq $FALSE) {
+                while ($value.Contains(', ')) {
+                    $value = $value.Replace(', ', ',');
+                }
                 [array]$tmpArray = $value.Split(',');
                 if ($null -ne (Compare-Object -ReferenceObject $Arguments[$entry] -DifferenceObject $tmpArray)) {
                     $NewArguments.Add(
                         $entry,
-                        ([string]::Join(',', $tmpArray))
+                        $tmpArray
                     );
                 }
             }
