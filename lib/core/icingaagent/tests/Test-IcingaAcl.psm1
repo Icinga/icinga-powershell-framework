@@ -41,11 +41,11 @@ function Test-IcingaAcl()
                 Write-IcingaTestOutput -Severity 'PASSED' -Message ([string]::Format($messageFormat, $Directory, 'is accessible and writeable', $ServiceUser));
             } else {
                 Write-IcingaTestOutput -Severity 'FAILED' -Message ([string]::Format($messageFormat, $Directory, 'is accessible but NOT writeable', $ServiceUser));
-                Write-Host "\_ Please run the following command to fix this issue: Set-IcingaAcl -Directory '$Directory'";
+                Write-IcingaConsolePlain "\_ Please run the following command to fix this issue: Set-IcingaAcl -Directory '$Directory'";
             }
         } else {
             Write-IcingaTestOutput -Severity 'FAILED' -Message ([string]::Format($messageFormat, $Directory, 'is not accessible', $ServiceUser));
-            Write-Host "\_ Please run the following command to fix this issue: Set-IcingaAcl -Directory '$Directory'";
+            Write-IcingaConsolePlain "\_ Please run the following command to fix this issue: Set-IcingaAcl -Directory '$Directory'";
         }
     }
 

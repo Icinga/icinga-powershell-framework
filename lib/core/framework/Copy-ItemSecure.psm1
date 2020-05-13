@@ -50,7 +50,7 @@ function Copy-ItemSecure()
         }
         return $TRUE;
     } catch {
-        Write-Host ([string]::Format('Failed to copy items from path "{0}" to "{1}": {2}', $Path, $Destination, $_.Exception)) -ForegroundColor Red;
+        Write-IcingaConsoleError -Message 'Failed to copy items from path "{0}" to "{1}": {2}' -Objects $Path, $Destination, $_.Exception;
     }
     return $FALSE;
 }

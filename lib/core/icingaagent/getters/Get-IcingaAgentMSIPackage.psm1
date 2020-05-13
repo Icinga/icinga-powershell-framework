@@ -60,7 +60,7 @@ function Get-IcingaAgentMSIPackage()
 
     if ($SkipDownload -eq $FALSE) {
         $DownloadPath = Join-Path $Env:TEMP -ChildPath $UsePackage;
-        Write-Host ([string]::Format('Downloading Icinga 2 Agent installer "{0}" into temp directory "{1}"', $UsePackage, $DownloadPath));
+        Write-IcingaConsoleNotice ([string]::Format('Downloading Icinga 2 Agent installer "{0}" into temp directory "{1}"', $UsePackage, $DownloadPath));
         Invoke-WebRequest -Uri (Join-WebPath -Path $Source -ChildPath $UsePackage) -OutFile $DownloadPath;
     }
 

@@ -1,7 +1,7 @@
 function Set-IcingaAgentServicePermission()
 {
     if (Test-IcingaAgentServicePermission -Silent) {
-        Write-Host 'The Icinga Service User already has permission to run as service';
+        Write-IcingaConsoleNotice 'The Icinga Service User already has permission to run as service';
         return;
     }
 

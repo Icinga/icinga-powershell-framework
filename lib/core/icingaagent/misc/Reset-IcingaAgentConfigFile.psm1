@@ -22,7 +22,7 @@ function Reset-IcingaAgentConfigFile()
     $OriginalConfig  = Join-Path -Path $ConfigDir -ChildPath 'icinga2.confdirector.bak';
 
     if ((Test-Path $OriginalConfig)) {
-        Write-Host 'Found icinga2.conf backup file created by old PowerShell module. Restoring original configuration';
+        Write-IcingaConsoleWarning 'Found icinga2.conf backup file created by old PowerShell module. Restoring original configuration';
 
         Move-Item -Path $OldConfig      -Destination $OldConfigBackup;
         Move-Item -Path $OriginalConfig -Destination $OldConfig;

@@ -61,7 +61,7 @@ function Get-IcingaPowerShellModuleArchive()
                 $CurrentVersion = Get-IcingaPowerShellModuleVersion $Repository;
 
                 if ($null -ne $CurrentVersion -And $CurrentVersion -eq $Tag) {
-                    Write-Host ([string]::Format('Your "{0}" is already up-to-date', $ModuleName));
+                    Write-IcingaConsoleNotice -Message 'Your "{0}" is already up-to-date' -Objects $ModuleName;
                     return @{
                         'DownloadUrl' = $DownloadUrl;
                         'Version'     = $Tag;
@@ -80,15 +80,15 @@ function Get-IcingaPowerShellModuleArchive()
     try {
         $DownloadDirectory   = New-IcingaTemporaryDirectory;
         $DownloadDestination = (Join-Path -Path $DownloadDirectory -ChildPath ([string]::Format('{0}.zip', $Repository)));
-        Write-Host ([string]::Format('Downloading "{0}" into "{1}"', $ModuleName, $DownloadDirectory));
+        Write-IcingaConsoleNotice ([string]::Format('Downloading "{0}" into "{1}"', $ModuleName, $DownloadDirectory));
 
         Invoke-WebRequest -UseBasicParsing -Uri $DownloadUrl -OutFile $DownloadDestination;
     } catch {
-        Write-Host ([string]::Format('Failed to download "{0}" into "{1}". Starting cleanup process', $ModuleName, $DownloadDirectory));
+        Write-IcingaConsoleError ([string]::Format('Failed to download "{0}" into "{1}". Starting cleanup process', $ModuleName, $DownloadDirectory));
         Start-Sleep -Seconds 2;
         Remove-Item -Path $DownloadDirectory -Recurse -Force;
 
-        Write-Host 'Starting to re-run the download wizard';
+        Write-IcingaConsoleNotice 'Starting to re-run the download wizard';
 
         return Get-IcingaPowerShellModuleArchive -ModuleName $ModuleName -Repository $Repository;
     }

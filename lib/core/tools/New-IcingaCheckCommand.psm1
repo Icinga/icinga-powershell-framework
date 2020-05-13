@@ -96,7 +96,7 @@ function New-IcingaCheckCommand()
 
     Add-Content -Path $ScriptFile -Value "}";
 
-    Write-Host ([string]::Format('The Check-Command "{0}" was successfully added.', $CommandName));
+    Write-IcingaConsoleNotice ([string]::Format('The Check-Command "{0}" was successfully added.', $CommandName));
 
     # Try to open the default Editor for the new Cmdlet
     $DefaultEditor = (Get-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.psm1\OpenWithList' -Name a).a;
@@ -115,7 +115,7 @@ function New-IcingaCheckCommand()
     Import-Module $ScriptFile -Global;
 
     if ([string]::IsNullOrEmpty($DefaultEditor) -eq $FALSE -And ($null -eq (Get-Command $DefaultEditor -ErrorAction SilentlyContinue)) -And ((Test-Path $DefaultEditor) -eq $FALSE)) {
-        Write-Host 'No default editor for .psm1 files found. Specify a default editor to automaticly open the newly generated check plugin.';
+        Write-IcingaConsoleWarning 'No default editor for .psm1 files found. Specify a default editor to automaticly open the newly generated check plugin.';
         return;
     }
 

@@ -8,7 +8,7 @@ function Enable-IcingaFirewall()
     $FirewallConfig = Get-IcingaFirewallConfig -NoOutput;
 
     if ($FirewallConfig.IcingaFirewall -And $Force -eq $FALSE) {
-        Write-Host 'Icinga Firewall is already enabled'
+        Write-IcingaConsoleNotice 'Icinga Firewall is already enabled'
         return;
     }
 
@@ -28,8 +28,8 @@ function Enable-IcingaFirewall()
     $FirewallResult = Start-IcingaProcess -Executable 'netsh' -Arguments $FirewallRule;
 
     if ($FirewallResult.ExitCode -ne 0) {
-        Write-Host ([string]::Format('Failed to open Icinga firewall for port "{0}": {1}[2}', $IcingaPort, $FirewallResult.Message, $FirewallResult.Error));
+        Write-IcingaConsoleError ([string]::Format('Failed to open Icinga firewall for port "{0}": {1}[2}', $IcingaPort, $FirewallResult.Message, $FirewallResult.Error));
     } else {
-        Write-Host ([string]::Format('Successfully enabled firewall for port "{0}"', $IcingaPort));
+        Write-IcingaConsoleNotice ([string]::Format('Successfully enabled firewall for port "{0}"', $IcingaPort));
     }
 }

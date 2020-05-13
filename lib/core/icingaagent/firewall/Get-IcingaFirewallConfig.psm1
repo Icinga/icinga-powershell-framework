@@ -11,7 +11,7 @@ function Get-IcingaFirewallConfig()
 
     if ($LegacyFirewall.ExitCode -eq 0) {
         if ($NoOutput -eq $FALSE) {
-            Write-Host 'Legacy firewall configuration has been detected.';
+            Write-IcingaConsoleWarning 'Legacy firewall configuration has been detected.';
         }
         $LegacyFirewallPresent = $TRUE;
     }
@@ -20,12 +20,12 @@ function Get-IcingaFirewallConfig()
 
     if ($IcingaFirewall.ExitCode -eq 0) {
         if ($NoOutput -eq $FALSE) {
-            Write-Host 'Icinga firewall is present.';
+            Write-IcingaConsoleNotice 'Icinga firewall is present.';
         }
         $IcingaFirewallPresent = $TRUE;
     } else {
         if ($NoOutput -eq $FALSE) {
-            Write-Host 'Icinga firewall is not present';
+            Write-IcingaConsoleError 'Icinga firewall is not present';
         }
     }
 

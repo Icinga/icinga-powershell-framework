@@ -41,7 +41,7 @@ function Expand-IcingaIPv6String()
     }
 
     if ($RelV -lt 0 -and $Counter -ne 7) {
-        Write-Host "Invalid IP was provided!";
+        Write-IcingaConsoleError "Invalid IP was provided!";
         return $null;
     }
 

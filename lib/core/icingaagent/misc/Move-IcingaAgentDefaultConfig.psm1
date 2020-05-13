@@ -4,7 +4,7 @@ function Move-IcingaAgentDefaultConfig()
     $BackupFile = Join-Path -Path $ConfigDir -ChildPath 'ps_backup\backup_executed.key';
 
     if ((Test-Path $BackupFile)) {
-        Write-Host 'A backup of your default configuration is not required. A backup was already made.';
+        Write-IcingaConsoleNotice 'A backup of your default configuration is not required. A backup was already made.';
         return;
     }
 
@@ -19,5 +19,5 @@ function Move-IcingaAgentDefaultConfig()
     New-Item (Join-Path -Path $ConfigDir -ChildPath 'zones.conf') -ItemType File | Out-Null;
     New-Item -Path $BackupFile -ItemType File | Out-Null;
 
-    Write-Host 'Successfully backed up Icinga 2 Agent default config';
+    Write-IcingaConsoleNotice 'Successfully backed up Icinga 2 Agent default config';
 }

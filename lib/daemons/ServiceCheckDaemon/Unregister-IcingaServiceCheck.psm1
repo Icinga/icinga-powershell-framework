@@ -12,5 +12,5 @@ function Unregister-IcingaServiceCheck()
 
     Remove-IcingaPowerShellConfig -Path $Path;
 
-    Write-Host 'Icinga Service Check has been configured';
+    Write-IcingaConsolePlain 'Icinga Service Check has been configured';
 }

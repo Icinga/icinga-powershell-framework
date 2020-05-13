@@ -7,10 +7,10 @@ function Uninstall-IcingaFrameworkService()
 
     switch ($ServiceCreation.ExitCode) {
         0 {
-            Write-Host 'Icinga PowerShell Service was successfully removed';
+            Write-IcingaConsoleNotice 'Icinga PowerShell Service was successfully removed';
         }
         1060 {
-            Write-Host 'The Icinga PowerShell Service is not installed';
+            Write-IcingaConsoleWarning 'The Icinga PowerShell Service is not installed';
         }
         Default {
             throw ([string]::Format('Failed to install Icinga PowerShell Service: {0}{1}', $ServiceCreation.Message, $ServiceCreation.Error));

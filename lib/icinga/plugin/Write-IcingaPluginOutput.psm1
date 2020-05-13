@@ -5,7 +5,7 @@ function Write-IcingaPluginOutput()
     );
 
     if ($global:IcingaDaemonData.FrameworkRunningAsDaemon -eq $FALSE) {
-        Write-Host $Output;
+        Write-IcingaConsolePlain $Output;
     } else {
         if ($global:IcingaDaemonData.IcingaThreadContent.ContainsKey('Scheduler')) {
             $global:IcingaDaemonData.IcingaThreadContent['Scheduler']['PluginCache'] += $Output;

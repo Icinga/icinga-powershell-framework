@@ -7,7 +7,7 @@ function Install-IcingaFrameworkService()
     );
 
     if ([string]::IsNullOrEmpty($Path)) {
-        Write-Host 'No path specified for Framework service. Service will not be installed';
+        Write-IcingaConsoleError 'No path specified for Framework service. Service will not be installed';
         return;
     }
 
@@ -17,10 +17,10 @@ function Install-IcingaFrameworkService()
 
     if ((Test-Path $UpdateFile)) {
 
-        Write-Host 'Updating Icinga PowerShell Service binary';
+        Write-IcingaConsoleNotice 'Updating Icinga PowerShell Service binary';
 
         if ($ServiceStatus -eq 'Running') {
-            Write-Host 'Stopping Icinga PowerShell service';
+            Write-IcingaConsoleNotice 'Stopping Icinga PowerShell service';
             Stop-IcingaService 'icingapowershell';
             Start-Sleep -Seconds 1;
         }
@@ -47,7 +47,7 @@ function Install-IcingaFrameworkService()
             throw ([string]::Format('Failed to install Icinga PowerShell Service: {0}{1}', $ServiceCreation.Message, $ServiceCreation.Error));
         }
     } else {
-        Write-Host 'The Icinga PowerShell Service is already installed';
+        Write-IcingaConsoleWarning 'The Icinga PowerShell Service is already installed';
     }
 
     # This is just a hotfix to ensure we setup the service properly before assigning it to
@@ -60,7 +60,7 @@ function Install-IcingaFrameworkService()
     Stop-IcingaService 'icingapowershell';
 
     if ($ServiceStatus -eq 'Running') {
-        Write-Host 'Starting Icinga PowerShell service';
+        Write-IcingaConsoleNotice 'Starting Icinga PowerShell service';
         Start-IcingaService 'icingapowershell';
         Start-Sleep -Seconds 1;
     }

@@ -320,19 +320,19 @@ function Get-IcingaCheckCommandConfig()
         Set-Content -Path $OutDirectory -Value $output;
 
         # Output-Text
-        Write-Host "The following commands have been exported:"
+        Write-IcingaConsoleNotice "The following commands have been exported:"
         foreach ($check in $CheckName) {
-            Write-Host "- '$check'";
+            Write-IcingaConsoleNotice "- '$check'";
         }
-        Write-Host "JSON export created in '${OutDirectory}'"
+        Write-IcingaConsoleNotice "JSON export created in '${OutDirectory}'"
         return;
     }
 
-    Write-Host "Check Command JSON for the following commands:"
+    Write-IcingaConsoleNotice "Check Command JSON for the following commands:"
     foreach ($check in $CheckName) {
-        Write-Host "- '$check'"
+        Write-IcingaConsoleNotice "- '$check'"
     }
-    Write-Host '############################################################';
+    Write-IcingaConsoleNotice '############################################################';
 
     return $output;
 }

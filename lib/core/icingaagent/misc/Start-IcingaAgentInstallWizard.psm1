@@ -171,7 +171,7 @@ function Start-IcingaAgentInstallWizard()
         }
     }
 
-    Write-Host ([string]::Format('Using hostname "{0}" for the Icinga 2 Agent configuration', $Hostname));
+    Write-IcingaConsoleNotice ([string]::Format('Using hostname "{0}" for the Icinga 2 Agent configuration', $Hostname));
 
     $IcingaAgent = Get-IcingaAgentInstallation;
     if ($IcingaAgent.Installed -eq $FALSE) {
@@ -185,7 +185,7 @@ function Start-IcingaAgentInstallWizard()
                     $InstallerArguments += "-PackageSource '$PackageSource'";
                 }
 
-                Write-Host ([string]::Format('Using package source "{0}" for the Icinga 2 Agent package', $PackageSource));
+                Write-IcingaConsoleNotice ([string]::Format('Using package source "{0}" for the Icinga 2 Agent package', $PackageSource));
                 $AllowVersionChanges = $TRUE;
                 $InstallerArguments += '-AllowVersionChanges 1';
 
@@ -193,7 +193,7 @@ function Start-IcingaAgentInstallWizard()
                     $AgentVersion = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please specify the version you wish to install ("latest", "snapshot", or a version like "2.11.0")' -Default 'v' -DefaultInput 'latest').answer;
                     $InstallerArguments += "-AgentVersion '$AgentVersion'";
     
-                    Write-Host ([string]::Format('Installing Icinga Version: "{0}"', $AgentVersion));
+                    Write-IcingaConsoleNotice ([string]::Format('Installing Icinga Version: "{0}"', $AgentVersion));
                 }
             } else {
                 $AllowVersionChanges = $FALSE;
@@ -221,7 +221,7 @@ function Start-IcingaAgentInstallWizard()
                 $AgentVersion = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please specify the version you wish to install ("latest", "snapshot", or a version like "2.11.0")' -Default 'v').answer;
                 $InstallerArguments += "-AgentVersion '$AgentVersion'";
 
-                Write-Host ([string]::Format('Updating/Downgrading Icinga 2 Agent to version: "{0}"', $AgentVersion));
+                Write-IcingaConsoleNotice ([string]::Format('Updating/Downgrading Icinga 2 Agent to version: "{0}"', $AgentVersion));
             }
 
             if ([string]::IsNullOrEmpty($PackageSource)) {
@@ -456,23 +456,23 @@ function Start-IcingaAgentInstallWizard()
 
     if ($InstallerArguments.Count -ne 0) {
         $InstallerArguments += "-RunInstaller";
-        Write-Host 'The wizard is complete. These are the configured settings:';
+        Write-IcingaConsoleNotice 'The wizard is complete. These are the configured settings:';
 
-        Write-Host '========'
-        Write-Host ($InstallerArguments | Out-String);
-        Write-Host '========'
+        Write-IcingaConsolePlain '========';
+        Write-IcingaConsolePlain ($InstallerArguments | Out-String);
+        Write-IcingaConsolePlain '========';
 
         if (-Not $RunInstaller) {
             if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Is this configuration correct?' -Default 'y').result -eq 1) {
                 if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to run the installer now? (Otherwise only the configuration command will be printed)' -Default 'y').result -eq 1) {
-                    Write-Host 'To execute your Icinga Agent installation based on your answers again on this or another machine, simply run this command:'
+                    Write-IcingaConsoleNotice 'To execute your Icinga Agent installation based on your answers again on this or another machine, simply run this command:';
 
                     $RunInstaller = $TRUE;
                 } else {
-                    Write-Host 'To execute your Icinga Agent installation based on your answers, simply run this command:'
+                    Write-IcingaConsoleNotice 'To execute your Icinga Agent installation based on your answers, simply run this command:';
                 }
             } else {
-                Write-Host 'Please run the wizard again to modify your answers or modify the command below:'
+                Write-IcingaConsoleNotice 'Please run the wizard again to modify your answers or modify the command below:';
             }
         }
         Get-IcingaAgentInstallCommand -InstallerArguments $InstallerArguments -PrintConsole;
@@ -681,9 +681,9 @@ function Get-IcingaAgentInstallCommand()
     );
 
     if ($PrintConsole) {
-        Write-Host '===='
-        Write-Host $Installer -ForegroundColor ([System.ConsoleColor]::Cyan);
-        Write-Host '===='
+        Write-IcingaConsolePlain '===='
+        Write-IcingaConsolePlain $Installer;
+        Write-IcingaConsolePlain '===='
     } else {
         return $Installer;
     }

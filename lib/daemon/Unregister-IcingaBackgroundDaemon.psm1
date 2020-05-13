@@ -13,5 +13,5 @@ function Unregister-IcingaBackgroundDaemon()
 
     Remove-IcingaPowerShellConfig -Path $Path;
 
-    Write-Host 'Background daemon has been removed';
+    Write-IcingaConsoleNotice 'Background daemon has been removed';
 }

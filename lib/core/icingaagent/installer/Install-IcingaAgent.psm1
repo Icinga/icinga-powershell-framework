@@ -8,12 +8,12 @@ function Install-IcingaAgent()
     );
 
     if ([string]::IsNullOrEmpty($Version)) {
-        Write-Host 'No Icinga Agent version specified. Skipping installation.';
+        Write-IcingaConsoleError 'No Icinga Agent version specified. Skipping installation.';
         return $FALSE;
     }
 
     if ($IcingaData.Installed -eq $TRUE -and $AllowUpdates -eq $FALSE) {
-        Write-Host 'The Icinga Agent is already installed on this system. To perform updates or downgrades, please add the "-AllowUpdates" argument';
+        Write-IcingaConsoleWarning 'The Icinga Agent is already installed on this system. To perform updates or downgrades, please add the "-AllowUpdates" argument';
         return $FALSE;
     }
 
@@ -24,12 +24,12 @@ function Install-IcingaAgent()
 
     if ($Version -eq 'snapshot') {
         if ($IcingaData.InstallDate -ge $IcingaInstaller.LastUpdate -And [string]::IsNullOrEmpty($InstalledVersion.Snapshot) -eq $FALSE) {
-            Write-Host 'There is no new snapshot package available which requires to be installed.'
+            Write-IcingaConsoleNotice 'There is no new snapshot package available which requires to be installed.'
             return $FALSE;
         }
         $IcingaInstaller.Version = 'snapshot';
     } elseif ($IcingaInstaller.Version -eq $InstalledVersion.Full) {
-        Write-Host ([string]::Format(
+        Write-IcingaConsoleNotice ([string]::Format(
             'No installation required. Your installed version [{0}] is matching the online version [{1}]',
             $InstalledVersion.Full,
             $IcingaInstaller.Version
@@ -63,7 +63,7 @@ function Install-IcingaAgent()
         }
     }
 
-    Write-Host ([string]::Format('Installing new Icinga Agent version into "{0}"', $InstallFolderMsg));
+    Write-IcingaConsoleNotice ([string]::Format('Installing new Icinga Agent version into "{0}"', $InstallFolderMsg));
 
     if ($IcingaData.Installed) {
         if ((Uninstall-IcingaAgent) -eq $FALSE) {
@@ -74,10 +74,10 @@ function Install-IcingaAgent()
     $InstallProcess = Start-IcingaProcess -Executable 'MsiExec.exe' -Arguments ([string]::Format('/quiet /i "{0}" {1}', $IcingaInstaller.InstallerPath, $InstallTarget)) -FlushNewLines;
 
     if ($InstallProcess.ExitCode -ne 0) {
-        Write-Host ([string]::Format('Failed to install Icinga 2 Agent: {0}{1}', $InstallProcess.Message, $InstallProcess.Error));
+        Write-IcingaConsoleError -Message 'Failed to install Icinga 2 Agent: {0}{1}' -Objects $InstallProcess.Message, $InstallProcess.Error;
         return $FALSE;
     }
     
-    Write-Host 'Icinga Agent was successfully installed';
+    Write-IcingaConsoleNotice 'Icinga Agent was successfully installed';
     return $TRUE;
 }

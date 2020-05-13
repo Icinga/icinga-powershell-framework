@@ -22,7 +22,7 @@ function Remove-ItemSecure()
         }
         return $TRUE;
     } catch {
-        Write-Host ([string]::Format('Failed to remove items from path "{0}": {1}', $Path, $_.Exception)) -ForegroundColor Red;
+        Write-IcingaConsoleError ([string]::Format('Failed to remove items from path "{0}": {1}', $Path, $_.Exception));
     }
     return $FALSE;
 }

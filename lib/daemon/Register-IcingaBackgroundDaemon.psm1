@@ -18,5 +18,5 @@ function Register-IcingaBackgroundDaemon()
     Set-IcingaPowerShellConfig -Path ([string]::Format('{0}.Command', $Path)) -Value $Command;
     Set-IcingaPowerShellConfig -Path ([string]::Format('{0}.Arguments', $Path)) -Value $Arguments;
 
-    Write-Host ([string]::Format('Background daemon Cmdlet "{0}" has been configured', $Command));
+    Write-IcingaConsoleNotice ([string]::Format('Background daemon Cmdlet "{0}" has been configured', $Command));
 }

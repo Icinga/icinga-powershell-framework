@@ -13,7 +13,7 @@ function Install-IcingaFrameworkPlugins()
         };
     }
 
-    Write-Host ([string]::Format('Installing module into "{0}"', ($Archive.Directory)));
+    Write-IcingaConsoleNotice ([string]::Format('Installing module into "{0}"', ($Archive.Directory)));
     Expand-IcingaZipArchive -Path $Archive.Archive -Destination $Archive.Directory | Out-Null;
 
     $FolderContent = Get-ChildItem -Path $Archive.Directory;
@@ -26,19 +26,19 @@ function Install-IcingaFrameworkPlugins()
         }
     }
 
-    Write-Host ([string]::Format('Using content of folder "{0}" for updates', $ModuleContent));
+    Write-IcingaConsoleNotice ([string]::Format('Using content of folder "{0}" for updates', $ModuleContent));
 
     $PluginDirectory = (Join-Path -Path $Archive.ModuleRoot -ChildPath $RepositoryName);
 
     if ((Test-Path $PluginDirectory) -eq $FALSE) {
-        Write-Host ([string]::Format('Plugin Module Directory "{0}" is not present. Creating Directory', $PluginDirectory));
+        Write-IcingaConsoleNotice ([string]::Format('Plugin Module Directory "{0}" is not present. Creating Directory', $PluginDirectory));
         New-Item -Path $PluginDirectory -ItemType Directory | Out-Null;
     }
 
-    Write-Host 'Copying files to plugins';
+    Write-IcingaConsoleNotice 'Copying files to plugins';
     Copy-ItemSecure -Path (Join-Path -Path $ModuleContent -ChildPath '/*') -Destination $PluginDirectory -Recurse -Force | Out-Null;
 
-    Write-Host 'Cleaning temporary content';
+    Write-IcingaConsoleNotice 'Cleaning temporary content';
     Start-Sleep -Seconds 1;
     Remove-ItemSecure -Path $Archive.Directory -Recurse -Force | Out-Null;
 
@@ -47,7 +47,7 @@ function Install-IcingaFrameworkPlugins()
     # include the plugins
     Use-Icinga;
 
-    Write-Host 'Icinga Plugin update has been completed';
+    Write-IcingaConsoleNotice 'Icinga Plugin update has been completed';
 
     return @{
         'PluginUrl' = $Archive.DownloadUrl

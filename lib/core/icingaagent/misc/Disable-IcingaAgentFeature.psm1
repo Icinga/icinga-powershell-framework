@@ -9,7 +9,7 @@ function Disable-IcingaAgentFeature()
     }
 
     if ((Test-IcingaAgentFeatureEnabled -Feature $Feature) -eq $FALSE) {
-        Write-Host ([string]::Format('This feature is already disabled [{0}]', $Feature));
+        Write-IcingaConsoleWarning ([string]::Format('This feature is already disabled [{0}]', $Feature));
         return;
     }
 
@@ -20,5 +20,5 @@ function Disable-IcingaAgentFeature()
         throw ([string]::Format('Failed to disable Icinga Feature: {0}', $Process.Message));
     }
 
-    Write-Host ([string]::Format('Feature "{0}" was successfully disabled', $Feature));
+    Write-IcingaConsoleNotice ([string]::Format('Feature "{0}" was successfully disabled', $Feature));
 }

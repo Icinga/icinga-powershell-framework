@@ -13,7 +13,7 @@ function Test-IcingaAgentConfig()
     } else {
         Write-IcingaTestOutput -Severity 'FAILED' -Message 'Icinga Agent configuration is containing errors. Run this command for getting a detailed error report: "Test-IcingaAgentConfig -WriteStackTrace | Out-Null"';
         if ($WriteStackTrace) {
-            Write-Host $ConfigResult.Message;
+            Write-IcingaConsolePlain $ConfigResult.Message;
         }
         return $FALSE;
     }

@@ -5,10 +5,10 @@ function Unblock-IcingaPowerShellFiles()
     );
 
     if ([string]::IsNullOrEmpty($Path)) {
-        Write-Host 'The specified directory was not found';
+        Write-IcingaConsoleError 'The specified directory was not found';
         return;
     }
 
-    Write-Host 'Unblocking Icinga PowerShell Files';
+    Write-IcingaConsoleNotice 'Unblocking Icinga PowerShell Files';
     Get-ChildItem -Path $Path -Recurse | Unblock-File; 
 }

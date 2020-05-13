@@ -16,5 +16,5 @@ function Write-IcingaAgentApiConfig()
     $ApiConf = $ApiConf.Substring(0, $ApiConf.Length - 4);
     
     Set-Content -Path (Join-Path -Path (Get-IcingaAgentConfigDirectory) -ChildPath 'features-available\api.conf') -Value $ApiConf;
-    Write-Host 'Api configuration has been written successfully';
+    Write-IcingaConsoleNotice 'Api configuration has been written successfully';
 }

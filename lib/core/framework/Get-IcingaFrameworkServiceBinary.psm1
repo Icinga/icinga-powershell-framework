@@ -45,7 +45,7 @@ function Get-IcingaFrameworkServiceBinary()
     }
 
     if ([string]::IsNullOrEmpty($FrameworkServiceUrl)) {
-        Write-Host 'No Url to download the Icinga Service Binary from has been specified. Please try again.';
+        Write-IcingaConsoleError 'No Url to download the Icinga Service Binary from has been specified. Please try again.';
         return Get-IcingaFrameworkServiceBinary;
     }
 
@@ -66,7 +66,7 @@ function Get-IcingaFrameworkServiceBinary()
     try {
         Invoke-WebRequest -Uri $FrameworkServiceUrl -UseBasicParsing -OutFile $ZipArchive;
     } catch {
-        Write-Host ([string]::Format('Failed to download the Icinga Service Binary from "{0}". Please try again.', $FrameworkServiceUrl));
+        Write-IcingaConsoleError -Message 'Failed to download the Icinga Service Binary from "{0}". Please try again.' -Objects $FrameworkServiceUrl;
         return Get-IcingaFrameworkServiceBinary;
     }
 

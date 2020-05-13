@@ -71,7 +71,7 @@ function Exit-IcingaThrowException()
     );
 
     if ($global:IcingaDaemonData.FrameworkRunningAsDaemon -eq $FALSE) {
-        Write-Host $OutputMessage;
+        Write-IcingaConsolePlain $OutputMessage;
         exit $IcingaEnums.IcingaExitCode.Unknown;
     }
 }

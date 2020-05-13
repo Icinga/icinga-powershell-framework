@@ -27,7 +27,7 @@ function Expand-IcingaZipArchive()
     );
 
     if ((Test-Path $Path) -eq $FALSE -Or (Test-Path $Destination) -eq $FALSE) {
-        Write-Host 'The path to the zip archive or the destination path do not exist';
+        Write-IcingaConsoleError 'The path to the zip archive or the destination path do not exist';
         return $FALSE;
     }
 
