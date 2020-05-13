@@ -16,6 +16,7 @@ function Start-IcingaAgentInstallWizard()
         $AcceptConnections           = $null,
         [array]$Endpoints            = @(),
         [array]$EndpointConnections  = @(),
+        $ConvertEndpointIPConfig     = $null,
         [string]$ParentZone,
         [array]$GlobalZones          = $null,
         [string]$CAEndpoint,
@@ -218,7 +219,7 @@ function Start-IcingaAgentInstallWizard()
 
         if ($UpdateAgent -eq 1) {
             if ([string]::IsNullOrEmpty($AgentVersion)) {
-                $AgentVersion = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please specify the version you wish to install ("latest", "snapshot", or a version like "2.11.0")' -Default 'v').answer;
+                $AgentVersion = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please specify the version you wish to install ("latest", "snapshot", or a version like "2.11.0")' -Default 'v' -DefaultInput 'latest').answer;
                 $InstallerArguments += "-AgentVersion '$AgentVersion'";
 
                 Write-Host ([string]::Format('Updating/Downgrading Icinga 2 Agent to version: "{0}"', $AgentVersion));
@@ -237,7 +238,7 @@ function Start-IcingaAgentInstallWizard()
     }
 
     if ($Endpoints.Count -eq 0) {
-        $ArrayString = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please specify all endpoints this Agent will report to (separated by ",")' -Default 'v').answer;
+        $ArrayString = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please specify all Icinga endpoints this Agent will report to separated by "," (Example: master-icinga2a, master-icinga2b)' -Default 'v').answer;
         $Endpoints = ($ArrayString.Replace(' ', '')).Split(',');
         $InstallerArguments += ("-Endpoints " + ([string]::Join(',', $Endpoints)));
     }
@@ -255,7 +256,7 @@ function Start-IcingaAgentInstallWizard()
     [bool]$CanConnectToParent = $FALSE;
 
     if ($null -eq $AcceptConnections) {
-        if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Is this Agent able to connect to its parent node for certificate generation and general communication?' -Default 'y').result -eq 1) {
+        if ((Get-IcingaAgentInstallerAnswerInput -Prompt "Is this Agent able to connect to it's parent node for certificate requests and general communication?" -Default 'y').result -eq 1) {
             $CanConnectToParent = $TRUE;
             $AcceptConnections = 1;
             $InstallerArguments += ("-AcceptConnections 1");
@@ -280,6 +281,21 @@ function Start-IcingaAgentInstallWizard()
         }
     }
 
+    if ($null -eq $ConvertEndpointIPConfig) {
+        if ((Get-IcingaAgentInstallerAnswerInput -Prompt ([string]::Format('Do you want to convert all possible provided FQDN address for endpoint/network configuration for Icinga 2 to plain IP-Address?', $CAPort)) -Default 'y').result -eq 1) {
+            $InstallerArguments     += "-ConvertEndpointIPConfig 1";
+            $ConvertEndpointIPConfig = $TRUE;
+            $EndpointsConversion     = Convert-IcingaEndpointsToIPv4 -NetworkConfig $Endpoints;
+            if ($EndpointsConversion.HasErrors) {
+                Write-Host 'Not all of your endpoints configuration could be converted and was therefor dropped';
+            }
+            $Endpoints               = $EndpointsConversion.Network;
+        } else {
+            $InstallerArguments     += "-ConvertEndpointIPConfig 0";
+            $ConvertEndpointIPConfig = $FALSE;
+        }
+    }
+
     if ($EndpointConnections.Count -eq 0 -And $AcceptConnections -eq 1) {
         $NetworkDefault = '';
         foreach ($Endpoint in $Endpoints) {
@@ -288,8 +304,15 @@ function Start-IcingaAgentInstallWizard()
         if ([string]::IsNullOrEmpty($NetworkDefault) -eq $FALSE) {
             $NetworkDefault = $NetworkDefault.Substring(0, $NetworkDefault.Length - 1);
         }
-        $ArrayString = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please specify the network destinations this agent will connect to, separated by ","' -Default 'v' -DefaultInput $NetworkDefault).answer;
+        $ArrayString = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please specify the network destinations this Agent will connect to separated by "," (Example: 192.168.0.1, [192.168.0.2]:5665, [icinga2.example.com]:5665)' -Default 'v' -DefaultInput $NetworkDefault).answer;
         $EndpointConnections = ($ArrayString.Replace(' ', '')).Split(',');
+
+        if ($ConvertEndpointIPConfig) {
+            $EndpointsConversion = Convert-IcingaEndpointsToIPv4 -NetworkConfig $EndpointConnections;
+            if ($EndpointsConversion.HasErrors -eq $FALSE) {
+                $EndpointConnections = $EndpointsConversion.Network;
+            }
+        }
         $InstallerArguments += ("-EndpointConnections " + ([string]::Join(',', $EndpointConnections)));
     }
 
@@ -342,7 +365,7 @@ function Start-IcingaAgentInstallWizard()
 
     if ($CanConnectToParent) {
         if ([string]::IsNullOrEmpty($CAEndpoint)) {
-            $CAEndpoint = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please enter the IP/FQDN for either ONE of your Icinga parent nodes or your Icinga 2 CA master' -Default 'v' -DefaultInput (Get-IPConfigFromString $EndpointConnections[0]).address).answer;
+            $CAEndpoint = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please enter the IP/FQDN for either ONE of your Icinga parent nodes or your Icinga 2 CA master for requesting certificates' -Default 'v' -DefaultInput (Get-IPConfigFromString $EndpointConnections[0]).address).answer;
             $InstallerArguments += "-CAEndpoint $CAEndpoint";
         }
         if ([string]::IsNullOrEmpty($Ticket) -And $null -eq $EmptyTicket) {
@@ -400,7 +423,7 @@ function Start-IcingaAgentInstallWizard()
 
     if ([string]::IsNullOrEmpty($ServiceUser)) {
         if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to change the user the Icinga Agent service is running with (Default: "NT Authority\NetworkService")?' -Default 'n').result -eq 0) {
-            $ServiceUser = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please enter the user you wish the Icinga Agent service to run with' -Default 'v').answer;
+            $ServiceUser = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please enter the user you wish the Icinga Agent service to run with' -Default 'v' -DefaultInput 'NT Authority\NetworkService').answer;
             $InstallerArguments += "-ServiceUser $ServiceUser";
             if ($null -eq $ServicePass) {
                 if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Does your Icinga Service user require a password to login (not required for System users)?' -Default 'y').result -eq 1) {
