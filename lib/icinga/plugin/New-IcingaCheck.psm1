@@ -94,6 +94,22 @@ function New-IcingaCheck()
         return $this.unknownchecks;
     }
 
+    $Check | Add-Member -membertype ScriptMethod -name 'SetUnknown' -value {
+        $this.AddInternalCheckMessage(
+            $IcingaEnums.IcingaExitCode.Unknown,
+            $null,
+            $null
+        );
+    }
+
+    $Check | Add-Member -membertype ScriptMethod -name 'SetWarning' -value {
+        $this.AddInternalCheckMessage(
+            $IcingaEnums.IcingaExitCode.Warning,
+            $null,
+            $null
+        );
+    }
+
     $Check | Add-Member -membertype ScriptMethod -name 'WarnOutOfRange' -value {
         param($warning);
 
@@ -294,6 +310,14 @@ function New-IcingaCheck()
         $this.warning = $warning;
 
         return $this;
+    }
+
+    $Check | Add-Member -membertype ScriptMethod -name 'SetCritical' -value {
+        $this.AddInternalCheckMessage(
+            $IcingaEnums.IcingaExitCode.Critical,
+            $null,
+            $null
+        );
     }
 
     $Check | Add-Member -membertype ScriptMethod -name 'CritOutOfRange' -value {
@@ -534,17 +558,25 @@ function New-IcingaCheck()
         }
 
         $this.SetExitCode($state);
-        $this.AddMessage(
-            [string]::Format(
-                '{0}: Value "{1}{4}" is {2} threshold "{3}{4}"',
+
+        if ($null -eq $value -And $null -eq $type) {
+            $this.AddMessage(
                 $this.name,
-                $this.TranslateValue($this.value),
-                $type,
-                $this.TranslateValue($value),
-                $this.unit
-            ),
-            $state
-        );
+                $state
+            );
+        } else {
+            $this.AddMessage(
+                [string]::Format(
+                    '{0}: Value "{1}{4}" is {2} threshold "{3}{4}"',
+                    $this.name,
+                    $this.TranslateValue($this.value),
+                    $type,
+                    $this.TranslateValue($value),
+                    $this.unit
+                ),
+                $state
+            );
+        }
 
         switch ($state) {
             $IcingaEnums.IcingaExitCode.Warning {
