@@ -16,7 +16,7 @@ function Get-IcingaAgentInstallerAnswerInput()
         $DefaultAnswer = ' (y/N)';
     } elseif ($Default -eq 'v') {
         if ([string]::IsNullOrEmpty($DefaultInput) -eq $FALSE) {
-            $DefaultAnswer = [string]::Format(' (Default: "{0}")', $DefaultInput);
+            $DefaultAnswer = [string]::Format(' (Defaults: "{0}")', $DefaultInput);
         }
     }
 
