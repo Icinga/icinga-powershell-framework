@@ -39,7 +39,7 @@ function Install-IcingaAgentCertificates()
     }
 
     if ([string]::IsNullOrEmpty($Endpoint) -And [string]::IsNullOrEmpty($CACert)) {
-        Write-IcingaConsoleNotice 'Your host certificates have been generated successfully. Please either specify an endpoint to connect to or provide the path to a valid ca.crt.';
+        Write-IcingaConsoleWarning 'Your host certificates have been generated successfully. Please either specify an endpoint to connect to or provide the path to a valid ca.crt';
         return $TRUE;
     }
 
@@ -194,7 +194,7 @@ function Test-IcingaAgentCertificates()
         }
     }
 
-    Write-IcingaConsoleNotice 'Icinga host certificates are present and valid. No generation required.';
+    Write-IcingaConsoleNotice 'Icinga host certificates are present and valid. No generation required';
 
     return $TRUE;
 }

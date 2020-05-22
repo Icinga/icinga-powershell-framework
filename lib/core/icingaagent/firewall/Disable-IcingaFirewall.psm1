@@ -11,7 +11,7 @@ function Disable-IcingaFirewall()
         if ($Firewall.ExitCode -ne 0) {
             Write-IcingaConsoleError ([string]::Format('Failed to remove legacy firewall: {0}{1}', $Firewall.Message, $Firewall.Error));
         } else {
-            Write-IcingaConsoleNotice 'Successfully removed legacy Firewall rule';
+            Write-IcingaConsoleNotice 'Successfully removed legacy firewall rule';
         }
     }
 
@@ -24,7 +24,7 @@ function Disable-IcingaFirewall()
         if ($Firewall.ExitCode -ne 0) {
             Write-IcingaConsoleError ([string]::Format('Failed to remove Icinga firewall: {0}{1}', $Firewall.Message, $Firewall.Error));
         } else {
-            Write-IcingaConsoleNotice 'Successfully removed Icinga Firewall rule';
+            Write-IcingaConsoleNotice 'Successfully removed Icinga firewall rule';
         }
     }
 }

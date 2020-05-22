@@ -12,7 +12,7 @@ function Set-IcingaAgentServicePermission()
     $NewSystemContent  = @();
 
     if ([string]::IsNullOrEmpty($ServiceUser)) {
-        Write-IcingaTestOutput -Severity 'FAILED' -Message 'There is no user assigned to the Icinga 2 service or the service is not yet installed';
+        Write-IcingaTestOutput -Severity 'Failed' -Message 'There is no user assigned to the Icinga 2 service or the service is not yet installed';
         return $FALSE;
     }
 
