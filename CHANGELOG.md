@@ -18,6 +18,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 ### Breaking changes
 
 * The `-AcceptConnections` argument for the install wizard had the opposite effect in the previous versions. Please review your configuration on a test setup before proceeding with a mass-rollout to ensure the Agent behaves as expected
+* The wizard now ships with a new argument `-ConvertEndpointIPConfig` which will convert hostnames or FQDN entries for connection information to IP addresses. If you are having a CLI string available and neither want to be asked this question or change current behaviour, set the argument to 0: `-ConvertEndpointIPConfig 0`
 
 ### Enhancements
 
