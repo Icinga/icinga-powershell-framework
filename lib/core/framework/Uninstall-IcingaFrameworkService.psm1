@@ -1,3 +1,21 @@
+<#
+.SYNOPSIS
+    Uninstalls the Icinga PowerShell Service as a Windows Service
+.DESCRIPTION
+    Uninstalls the Icinga PowerShell Service as a Windows Service. The service binary
+    will be left on the system.
+.FUNCTIONALITY
+    Uninstalls the Icinga PowerShell Service as a Windows Service
+.EXAMPLE
+    PS>Uninstall-IcingaFrameworkService;
+.INPUTS
+   System.String
+.OUTPUTS
+   System.Object
+.LINK
+   https://github.com/Icinga/icinga-powershell-framework
+#>
+
 function Uninstall-IcingaFrameworkService()
 {
     Stop-IcingaService 'icingapowershell';

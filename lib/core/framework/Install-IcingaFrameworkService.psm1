@@ -1,3 +1,29 @@
+<#
+.SYNOPSIS
+    Installs the Icinga PowerShell Services as a Windows service
+.DESCRIPTION
+    Uses the Icinga Service binary which is already installed on the system to register
+    it as a Windows service and sets the proper user for it
+.FUNCTIONALITY
+    Installs the Icinga PowerShell Services as a Windows service
+.EXAMPLE
+    PS>Install-IcingaFrameworkService -Path C:\Program Files\icinga-service\icinga-service.exe;
+.EXAMPLE
+    PS>Install-IcingaFrameworkService -Path C:\Program Files\icinga-service\icinga-service.exe -User 'NT Authority\NetworkService';
+.PARAMETER Path
+    The location on where the service binary executable is found
+.PARAMETER User
+    The service user the service is running with
+.PARAMETER Password
+    If the specified service user is requiring a password for registering you can provide it here as secure string
+.INPUTS
+   System.String
+.OUTPUTS
+   System.Object
+.LINK
+   https://github.com/Icinga/icinga-powershell-framework
+#>
+
 function Install-IcingaFrameworkService()
 {
     param(

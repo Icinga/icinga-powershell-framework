@@ -1,3 +1,27 @@
+<#
+.SYNOPSIS
+    Update the current version of the PowerShell Framework with a newer or older one
+.DESCRIPTION
+    Allows you to specify a download url or being asked by a wizard on where a update for
+    the PowerShell framework can be fetched from and applies the up- or downgrade
+.FUNCTIONALITY
+    Update the current version of the PowerShell Framework with a newer or older one
+.EXAMPLE
+    PS>Install-IcingaFrameworkUpdate;
+.EXAMPLE
+    PS>Install-IcingaFrameworkUpdate -FrameworkUrl 'C:/icinga/framework.zip';
+.EXAMPLE
+    PS>Install-IcingaFrameworkUpdate -FrameworkUrl 'https://github.com/Icinga/icinga-powershell-framework/archive/v1.0.2.zip';
+.PARAMETER FrameworkUrl
+    The url to a remote or local ressource pointing directly to a .zip file containing the required files for updating
+.INPUTS
+   System.String
+.OUTPUTS
+   Null
+.LINK
+   https://github.com/Icinga/icinga-powershell-framework
+#>
+
 function Install-IcingaFrameworkUpdate()
 {
     param(
