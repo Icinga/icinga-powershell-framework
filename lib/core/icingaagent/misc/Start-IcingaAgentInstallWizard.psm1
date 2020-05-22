@@ -282,16 +282,16 @@ function Start-IcingaAgentInstallWizard()
     }
 
     if ($null -eq $ConvertEndpointIPConfig) {
-        if ((Get-IcingaAgentInstallerAnswerInput -Prompt ([string]::Format('Do you want to convert all possible provided FQDN address for endpoint/network configuration for Icinga 2 to plain IP-Address?', $CAPort)) -Default 'y').result -eq 1) {
+        if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to convert endpoint connection data to IP adresses?' -Default 'y').result -eq 1) {
             $InstallerArguments     += "-ConvertEndpointIPConfig 1";
             $ConvertEndpointIPConfig = $TRUE;
             if ($EndpointConnections.Count -eq 0) {
-                $EndpointsConversion     = Convert-IcingaEndpointsToIPv4 -NetworkConfig $Endpoints;
+                $EndpointsConversion = Convert-IcingaEndpointsToIPv4 -NetworkConfig $Endpoints;
             } else {
-                $EndpointsConversion     = Convert-IcingaEndpointsToIPv4 -NetworkConfig $EndpointConnections;
+                $EndpointsConversion = Convert-IcingaEndpointsToIPv4 -NetworkConfig $EndpointConnections;
             }
             if ($EndpointsConversion.HasErrors) {
-                Write-Host ([string]::Format('Not all of your endpoint configuration could be resolved and is not reachable by this host. These endpoints were dropped: {0}', ([string]::Join(', ', $EndpointsConversion.Unresolved))));
+                Write-Host ([string]::Format('Not all of your endpoint connection data could be resolved and are not reachable by this host. These endpoints were dropped: {0}', ([string]::Join(', ', $EndpointsConversion.Unresolved))));
             }
             $EndpointConnections     = $EndpointsConversion.Network;
         } else {
