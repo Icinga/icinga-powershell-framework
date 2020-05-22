@@ -285,11 +285,15 @@ function Start-IcingaAgentInstallWizard()
         if ((Get-IcingaAgentInstallerAnswerInput -Prompt ([string]::Format('Do you want to convert all possible provided FQDN address for endpoint/network configuration for Icinga 2 to plain IP-Address?', $CAPort)) -Default 'y').result -eq 1) {
             $InstallerArguments     += "-ConvertEndpointIPConfig 1";
             $ConvertEndpointIPConfig = $TRUE;
-            $EndpointsConversion     = Convert-IcingaEndpointsToIPv4 -NetworkConfig $Endpoints;
-            if ($EndpointsConversion.HasErrors) {
-                Write-Host 'Not all of your endpoints configuration could be converted and was therefor dropped';
+            if ($EndpointConnections.Count -eq 0) {
+                $EndpointsConversion     = Convert-IcingaEndpointsToIPv4 -NetworkConfig $Endpoints;
+            } else {
+                $EndpointsConversion     = Convert-IcingaEndpointsToIPv4 -NetworkConfig $EndpointConnections;
             }
-            $Endpoints               = $EndpointsConversion.Network;
+            if ($EndpointsConversion.HasErrors) {
+                Write-Host ([string]::Format('Not all of your endpoint configuration could be resolved and is not reachable by this host. These endpoints were dropped: {0}', ([string]::Join(', ', $EndpointsConversion.Unresolved))));
+            }
+            $EndpointConnections     = $EndpointsConversion.Network;
         } else {
             $InstallerArguments     += "-ConvertEndpointIPConfig 0";
             $ConvertEndpointIPConfig = $FALSE;
