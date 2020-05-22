@@ -20,11 +20,11 @@ $IcingaPackage = New-IcingaCheckPackage -Name 'My Package' -OperatorAnd;
 | Argument     | Input  | Mandatory | Description |
 | ---          | ---    | ---       | ---         |
 | Name         | String    |  *        | The unique name of each package within a plugin. Will be displayed in the check output.  |
-| OperatorAnd  | Switch    |           | Logical relation of the check within the package becomes an AND |
-| OperatorOr   | Switch    |           | Logical relation of the check within the package becomes an Or |
-| OperatorNone | Switch    |           | - |
-| OperatorMin  | Int       |           | - |
-| OperatorMax  | Int       |           | - |
+| OperatorAnd  | Switch    |           | Every added check/package requires to return Ok for this package to be Ok |
+| OperatorOr   | Switch    |           | One added check/package requires to return Ok for this package to be Ok |
+| OperatorNone | Switch    |           | None of added check/package has to return Ok for this package to be Ok |
+| OperatorMin  | Int       |           | Minimum of `n` added checks/packages requires to return Ok for this package to be Ok |
+| OperatorMax  | Int       |           | Maximum of `n` added checks/packages requires to return Ok for this package to be Ok |
 | Checks       | Array     |           | Array of checks to be added to the check package |
 | Verbose      | int       |           | Defines the level of output detail from 0 lowest to 3 highest detail |
 | Hidden       | Switch    |           | If set, the check package doesn't generate output |

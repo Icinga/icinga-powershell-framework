@@ -32,14 +32,14 @@ function Get-IcingaNetworkInterface()
     );
 
     if ([string]::IsNullOrEmpty($IP)) {
-        Write-Host 'Please specify a valid IP-Address or FQDN';
+        Write-IcingaConsoleError 'Please specify a valid IP-Address or FQDN';
         return $null;
     }
 
     try {
         [array]$IP = ([System.Net.Dns]::GetHostAddresses($IP)).IPAddressToString;
     } catch {
-        Write-Host 'Invalid IP was provided!';
+        Write-IcingaConsoleError 'Invalid IP was provided!';
         return $null;
     }
 

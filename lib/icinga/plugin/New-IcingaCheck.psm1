@@ -94,6 +94,22 @@ function New-IcingaCheck()
         return $this.unknownchecks;
     }
 
+    $Check | Add-Member -membertype ScriptMethod -name 'SetUnknown' -value {
+        $this.AddInternalCheckMessage(
+            $IcingaEnums.IcingaExitCode.Unknown,
+            $null,
+            $null
+        );
+    }
+
+    $Check | Add-Member -membertype ScriptMethod -name 'SetWarning' -value {
+        $this.AddInternalCheckMessage(
+            $IcingaEnums.IcingaExitCode.Warning,
+            $null,
+            $null
+        );
+    }
+
     $Check | Add-Member -membertype ScriptMethod -name 'WarnOutOfRange' -value {
         param($warning);
 
@@ -147,6 +163,8 @@ function New-IcingaCheck()
             );
         }
 
+        $this.warning = $warning;
+
         return $this;
     }
 
@@ -160,6 +178,8 @@ function New-IcingaCheck()
                 'not like'
             );
         }
+
+        $this.warning = $warning;
 
         return $this;
     }
@@ -175,6 +195,8 @@ function New-IcingaCheck()
             );
         }
 
+        $this.warning = $warning;
+
         return $this;
     }
 
@@ -188,6 +210,8 @@ function New-IcingaCheck()
                 'not matching'
             );
         }
+
+        $this.warning = $warning;
 
         return $this;
     }
@@ -203,6 +227,8 @@ function New-IcingaCheck()
             );
         }
 
+        $this.warning = [string]::Format('{0}:{1}', $min, $max);
+
         return $this;
     }
 
@@ -216,6 +242,8 @@ function New-IcingaCheck()
                 'between'
             );
         }
+
+        $this.warning = [string]::Format('{0}:{1}', $min, $max);
 
         return $this;
     }
@@ -231,6 +259,8 @@ function New-IcingaCheck()
             );
         }
 
+        $this.warning = $warning;
+
         return $this;
     }
 
@@ -244,6 +274,8 @@ function New-IcingaCheck()
                 'lower or equal than'
             );
         }
+
+        $this.warning = $warning;
 
         return $this;
     }
@@ -259,6 +291,8 @@ function New-IcingaCheck()
             );
         }
 
+        $this.warning = $warning;
+
         return $this;
     }
 
@@ -273,7 +307,17 @@ function New-IcingaCheck()
             );
         }
 
+        $this.warning = $warning;
+
         return $this;
+    }
+
+    $Check | Add-Member -membertype ScriptMethod -name 'SetCritical' -value {
+        $this.AddInternalCheckMessage(
+            $IcingaEnums.IcingaExitCode.Critical,
+            $null,
+            $null
+        );
     }
 
     $Check | Add-Member -membertype ScriptMethod -name 'CritOutOfRange' -value {
@@ -329,6 +373,8 @@ function New-IcingaCheck()
             );
         }
 
+        $this.critical = $critical;
+
         return $this;
     }
 
@@ -342,6 +388,8 @@ function New-IcingaCheck()
                 'not like'
             );
         }
+
+        $this.critical = $critical;
 
         return $this;
     }
@@ -357,6 +405,8 @@ function New-IcingaCheck()
             );
         }
 
+        $this.critical = $critical;
+
         return $this;
     }
 
@@ -370,6 +420,8 @@ function New-IcingaCheck()
                 'not matching'
             );
         }
+
+        $this.critical = $critical;
 
         return $this;
     }
@@ -385,6 +437,8 @@ function New-IcingaCheck()
             );
         }
 
+        $this.critical = [string]::Format('{0}:{1}', $min, $max);
+
         return $this;
     }
 
@@ -398,6 +452,8 @@ function New-IcingaCheck()
                 'between'
             );
         }
+
+        $this.critical = [string]::Format('{0}:{1}', $min, $max);
 
         return $this;
     }
@@ -413,6 +469,8 @@ function New-IcingaCheck()
             );
         }
 
+        $this.critical = $critical;
+
         return $this;
     }
 
@@ -426,6 +484,8 @@ function New-IcingaCheck()
                 'lower or equal than'
             );
         }
+
+        $this.critical = $critical;
 
         return $this;
     }
@@ -441,6 +501,8 @@ function New-IcingaCheck()
             );
         }
 
+        $this.critical = $critical;
+
         return $this;
     }
 
@@ -454,6 +516,8 @@ function New-IcingaCheck()
                 'greater or equal than'
             );
         }
+
+        $this.critical = $critical;
 
         return $this;
     }
@@ -494,17 +558,25 @@ function New-IcingaCheck()
         }
 
         $this.SetExitCode($state);
-        $this.AddMessage(
-            [string]::Format(
-                '{0}: Value "{1}{4}" is {2} threshold "{3}{4}"',
+
+        if ($null -eq $value -And $null -eq $type) {
+            $this.AddMessage(
                 $this.name,
-                $this.TranslateValue($this.value),
-                $type,
-                $this.TranslateValue($value),
-                $this.unit
-            ),
-            $state
-        );
+                $state
+            );
+        } else {
+            $this.AddMessage(
+                [string]::Format(
+                    '{0}: Value "{1}{4}" is {2} threshold "{3}{4}"',
+                    $this.name,
+                    $this.TranslateValue($this.value),
+                    $type,
+                    $this.TranslateValue($value),
+                    $this.unit
+                ),
+                $state
+            );
+        }
 
         switch ($state) {
             $IcingaEnums.IcingaExitCode.Warning {
@@ -721,14 +793,17 @@ function New-IcingaCheck()
 
         $this.completed    = $TRUE;
         [string]$LabelName = (Format-IcingaPerfDataLabel $this.name);
+        $value             = ConvertTo-Integer -Value $this.value -NullAsEmpty;
+        $warning           = ConvertTo-Integer -Value $this.warning -NullAsEmpty;
+        $critical          = ConvertTo-Integer -Value $this.critical -NullAsEmpty;
 
         $perfdata = @{
             'label'    = $LabelName;
             'perfdata' = '';
             'unit'     = $this.unit;
-            'value'    = (Format-IcingaPerfDataValue $this.value);
-            'warning'  = (Format-IcingaPerfDataValue $this.warning);
-            'critical' = (Format-IcingaPerfDataValue $this.critical);
+            'value'    = (Format-IcingaPerfDataValue $value);
+            'warning'  = (Format-IcingaPerfDataValue $warning);
+            'critical' = (Format-IcingaPerfDataValue $critical);
             'minimum'  = (Format-IcingaPerfDataValue $this.minimum);
             'maximum'  = (Format-IcingaPerfDataValue $this.maximum);
             'package'  = $FALSE;

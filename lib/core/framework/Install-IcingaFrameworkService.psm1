@@ -1,3 +1,29 @@
+<#
+.SYNOPSIS
+    Installs the Icinga PowerShell Services as a Windows service
+.DESCRIPTION
+    Uses the Icinga Service binary which is already installed on the system to register
+    it as a Windows service and sets the proper user for it
+.FUNCTIONALITY
+    Installs the Icinga PowerShell Services as a Windows service
+.EXAMPLE
+    PS>Install-IcingaFrameworkService -Path C:\Program Files\icinga-service\icinga-service.exe;
+.EXAMPLE
+    PS>Install-IcingaFrameworkService -Path C:\Program Files\icinga-service\icinga-service.exe -User 'NT Authority\NetworkService';
+.PARAMETER Path
+    The location on where the service binary executable is found
+.PARAMETER User
+    The service user the service is running with
+.PARAMETER Password
+    If the specified service user is requiring a password for registering you can provide it here as secure string
+.INPUTS
+   System.String
+.OUTPUTS
+   System.Object
+.LINK
+   https://github.com/Icinga/icinga-powershell-framework
+#>
+
 function Install-IcingaFrameworkService()
 {
     param(
@@ -7,7 +33,7 @@ function Install-IcingaFrameworkService()
     );
 
     if ([string]::IsNullOrEmpty($Path)) {
-        Write-Host 'No path specified for Framework service. Service will not be installed';
+        Write-IcingaConsoleWarning 'No path specified for Framework service. Service will not be installed';
         return;
     }
 
@@ -17,10 +43,10 @@ function Install-IcingaFrameworkService()
 
     if ((Test-Path $UpdateFile)) {
 
-        Write-Host 'Updating Icinga PowerShell Service binary';
+        Write-IcingaConsoleNotice 'Updating Icinga PowerShell Service binary';
 
         if ($ServiceStatus -eq 'Running') {
-            Write-Host 'Stopping Icinga PowerShell service';
+            Write-IcingaConsoleNotice 'Stopping Icinga PowerShell service';
             Stop-IcingaService 'icingapowershell';
             Start-Sleep -Seconds 1;
         }
@@ -47,7 +73,7 @@ function Install-IcingaFrameworkService()
             throw ([string]::Format('Failed to install Icinga PowerShell Service: {0}{1}', $ServiceCreation.Message, $ServiceCreation.Error));
         }
     } else {
-        Write-Host 'The Icinga PowerShell Service is already installed';
+        Write-IcingaConsoleWarning 'The Icinga PowerShell Service is already installed';
     }
 
     # This is just a hotfix to ensure we setup the service properly before assigning it to
@@ -60,7 +86,7 @@ function Install-IcingaFrameworkService()
     Stop-IcingaService 'icingapowershell';
 
     if ($ServiceStatus -eq 'Running') {
-        Write-Host 'Starting Icinga PowerShell service';
+        Write-IcingaConsoleNotice 'Starting Icinga PowerShell service';
         Start-IcingaService 'icingapowershell';
         Start-Sleep -Seconds 1;
     }

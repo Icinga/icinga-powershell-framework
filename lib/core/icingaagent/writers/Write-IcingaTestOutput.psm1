@@ -1,7 +1,7 @@
 function Write-IcingaTestOutput()
 {
     param(
-        [ValidateSet('PASSED', 'WARNING', 'FAILED')]
+        [ValidateSet('Passed', 'Warning', 'Failed')]
         $Severity,
         $Message
     );
@@ -9,15 +9,15 @@ function Write-IcingaTestOutput()
     $Color = 'Green';
 
     Switch ($Severity) {
-        'PASSED' {
+        'Passed' {
             $Color = 'Green';
             break;
         };
-        'WARNING' {
+        'Warning' {
             $Color = 'Yellow';
             break;
         };
-        'FAILED' {
+        'Failed' {
             $Color = 'Red';
             break;
         };

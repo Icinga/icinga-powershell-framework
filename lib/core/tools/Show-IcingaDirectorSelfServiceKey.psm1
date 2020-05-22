@@ -4,8 +4,8 @@ function Show-IcingaDirecorSelfServiceKey()
     $Value = Get-IcingaPowerShellConfig $Path;
 
     if ($null -ne $Value) {
-        Write-Host ([string]::Format('Self-Service Key: "{0}"', $Value));
+        Write-IcingaConsoleNotice ([string]::Format('Self-Service Key: "{0}"', $Value));
     } else {
-        Write-Host 'There is no Self-Service Api key configured on this system';
+        Write-IcingaConsoleWarning 'There is no Self-Service Api key configured on this system';
     }
 }

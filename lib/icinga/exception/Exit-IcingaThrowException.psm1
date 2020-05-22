@@ -5,7 +5,7 @@ function Exit-IcingaThrowException()
         [string]$StringPattern,
         [string]$CustomMessage,
         [string]$ExceptionThrown,
-        [ValidateSet('Permission','Input','Unhandled')]
+        [ValidateSet('Permission','Input','Configuration','Unhandled','Custom')]
         [string]$ExceptionType    = 'Unhandled',
         [switch]$Force
     );
@@ -32,8 +32,15 @@ function Exit-IcingaThrowException()
             $ExceptionTypeString = 'Invalid Input';
             $ExceptionMessageLib = $IcingaExceptions.Inputs;
         };
+        'Configuration' {
+            $ExceptionTypeString = 'Invalid Configuration';
+            $ExceptionMessageLib = $IcingaExceptions.Configuration;
+        };
         'Unhandled' {
             $ExceptionTypeString = 'Unhandled';
+        };
+        'Custom' {
+            $ExceptionTypeString = 'Custom';
         };
     }
 
@@ -47,9 +54,10 @@ function Exit-IcingaThrowException()
             }
         }
     } else {
-        $ExceptionName   = 'Unhandled Exception';
+        $ExceptionName   = [string]::Format('{0} Exception', $ExceptionTypeString);
         $ExceptionThrown = [string]::Format(
-            'Unhandled exception occured:{0}{1}',
+            '{0} exception occured:{1}{2}',
+            $ExceptionTypeString,
             "`r`n",
             $InputString
         );
@@ -71,7 +79,7 @@ function Exit-IcingaThrowException()
     );
 
     if ($global:IcingaDaemonData.FrameworkRunningAsDaemon -eq $FALSE) {
-        Write-Host $OutputMessage;
+        Write-IcingaConsolePlain $OutputMessage;
         exit $IcingaEnums.IcingaExitCode.Unknown;
     }
 }

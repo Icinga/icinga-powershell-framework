@@ -14,7 +14,7 @@ function Get-IcingaHelpThresholds()
         return;
     }
 
-    Write-Host
+    Write-IcingaConsolePlain
     '
     Icinga is providing a basic handling for thresholds to make it easier to check if certain values of metrics should rise an event or not.
     By default, you are always fine to specify simple numeric values for thresholds throughout the entire Check-Plugins.

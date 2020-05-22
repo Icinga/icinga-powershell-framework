@@ -32,10 +32,10 @@ function Set-IcingaAgentServiceUser()
             Set-IcingaUserPermissions;
         }
 
-        Write-Host 'Service User successfully updated'
+        Write-IcingaConsoleNotice 'Service User successfully updated'
         return $TRUE;
     } else {
-        Write-Host ([string]::Format('Failed to update the service user: {0}', $Output.Message));
+        Write-IcingaConsoleError ([string]::Format('Failed to update the service user: {0}', $Output.Message));
         return $FALSE;
     }
 }

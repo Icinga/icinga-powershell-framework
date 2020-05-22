@@ -10,7 +10,7 @@ function Set-IcingaRegisteredServiceCheckConfig()
     $Services = Get-IcingaRegisteredServiceChecks;
 
     if ($Services.ContainsKey($ServiceId) -eq $FALSE) {
-        Write-Host 'Service Id was not found';
+        Write-IcingaConsoleError 'Service Id was not found';
         return;
     }
 
@@ -31,8 +31,8 @@ function Set-IcingaRegisteredServiceCheckConfig()
     }
 
     if ($Modified) {
-        Write-Host 'Service configuration was successfully updated';
+        Write-IcingaConsoleNotice 'Service configuration was successfully updated';
     } else {
-        Write-Host 'No arguments were specified to update the service configuraiton';
+        Write-IcingaConsoleWarning 'No arguments were specified to update the service configuration';
     }
 }

@@ -1,7 +1,7 @@
 function Set-IcingaAgentServicePermission()
 {
     if (Test-IcingaAgentServicePermission -Silent) {
-        Write-Host 'The Icinga Service User already has permission to run as service';
+        Write-IcingaConsoleNotice 'The Icinga Service User already has permission to run as service';
         return;
     }
 
@@ -12,7 +12,7 @@ function Set-IcingaAgentServicePermission()
     $NewSystemContent  = @();
 
     if ([string]::IsNullOrEmpty($ServiceUser)) {
-        Write-IcingaTestOutput -Severity 'FAILED' -Message 'There is no user assigned to the Icinga 2 service or the service is not yet installed';
+        Write-IcingaTestOutput -Severity 'Failed' -Message 'There is no user assigned to the Icinga 2 service or the service is not yet installed';
         return $FALSE;
     }
 

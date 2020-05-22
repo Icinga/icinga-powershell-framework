@@ -25,7 +25,6 @@ function Get-IcingaAgentMSIPackage()
 
         foreach ($line in $Content) {
             if ($line -like '*.msi*' -And $line -like "*$Architecture*") {
-                #Write-Host '#####' $line
                 $MSIPackage = $line.SubString(
                     $line.IndexOf('Icinga2-'),
                     $line.IndexOf('.msi') - $line.IndexOf('Icinga2-')
@@ -43,7 +42,7 @@ function Get-IcingaAgentMSIPackage()
                         break;
                     }
                 } elseif ($Version -eq 'latest') {
-                    if ($line -like '*snapshot*') {
+                    if ($line -like '*snapshot*' -Or $line -like '*-rc*') {
                         continue;
                     }
                     $UsePackage = $MSIPackage;
@@ -61,13 +60,13 @@ function Get-IcingaAgentMSIPackage()
 
     if ($SkipDownload -eq $FALSE) {
         $DownloadPath = Join-Path $Env:TEMP -ChildPath $UsePackage;
-        Write-Host ([string]::Format('Downloading Icinga 2 Agent installer "{0}" into temp directory "{1}"', $UsePackage, $DownloadPath));
+        Write-IcingaConsoleNotice ([string]::Format('Downloading Icinga 2 Agent installer "{0}" into temp directory "{1}"', $UsePackage, $DownloadPath));
         Invoke-WebRequest -Uri (Join-WebPath -Path $Source -ChildPath $UsePackage) -OutFile $DownloadPath;
     }
 
     return @{
         'InstallerPath' = $DownloadPath;
-        'Version'       = ($UsePackage).Replace('Icinga2-v', '').Replace($Architecture, '').Replace('.msi', '').Replace('-', '');
+        'Version'       = ($UsePackage).Replace('Icinga2-v', '').Replace([string]::Format('-{0}.msi', $Architecture), '')
         'LastUpdate'    = $LastUpdate;
     }
 }

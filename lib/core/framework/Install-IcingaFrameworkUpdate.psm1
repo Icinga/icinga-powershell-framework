@@ -1,3 +1,27 @@
+<#
+.SYNOPSIS
+    Update the current version of the PowerShell Framework with a newer or older one
+.DESCRIPTION
+    Allows you to specify a download url or being asked by a wizard on where a update for
+    the PowerShell framework can be fetched from and applies the up- or downgrade
+.FUNCTIONALITY
+    Update the current version of the PowerShell Framework with a newer or older one
+.EXAMPLE
+    PS>Install-IcingaFrameworkUpdate;
+.EXAMPLE
+    PS>Install-IcingaFrameworkUpdate -FrameworkUrl 'C:/icinga/framework.zip';
+.EXAMPLE
+    PS>Install-IcingaFrameworkUpdate -FrameworkUrl 'https://github.com/Icinga/icinga-powershell-framework/archive/v1.0.2.zip';
+.PARAMETER FrameworkUrl
+    The url to a remote or local ressource pointing directly to a .zip file containing the required files for updating
+.INPUTS
+   System.String
+.OUTPUTS
+   Null
+.LINK
+   https://github.com/Icinga/icinga-powershell-framework
+#>
+
 function Install-IcingaFrameworkUpdate()
 {
     param(
@@ -13,7 +37,7 @@ function Install-IcingaFrameworkUpdate()
         };
     }
 
-    Write-Host ([string]::Format('Installing module into "{0}"', ($Archive.Directory)));
+    Write-IcingaConsoleNotice ([string]::Format('Installing module into "{0}"', ($Archive.Directory)));
     Expand-IcingaZipArchive -Path $Archive.Archive -Destination $Archive.Directory | Out-Null;
 
     $FolderContent = Get-ChildItem -Path $Archive.Directory;
@@ -26,12 +50,12 @@ function Install-IcingaFrameworkUpdate()
         }
     }
 
-    Write-Host ([string]::Format('Using content of folder "{0}" for updates', $ModuleContent));
+    Write-IcingaConsoleNotice ([string]::Format('Using content of folder "{0}" for updates', $ModuleContent));
 
     $ServiceStatus = (Get-Service 'icingapowershell' -ErrorAction SilentlyContinue).Status;
 
     if ($ServiceStatus -eq 'Running') {
-        Write-Host 'Stopping Icinga PowerShell service';
+        Write-IcingaConsoleNotice 'Stopping Icinga PowerShell service';
         Stop-IcingaService 'icingapowershell';
         Start-Sleep -Seconds 1;
     }
@@ -39,13 +63,13 @@ function Install-IcingaFrameworkUpdate()
     $ModuleDirectory = (Join-Path -Path $Archive.ModuleRoot -ChildPath $RepositoryName);
 
     if ((Test-Path $ModuleDirectory) -eq $FALSE) {
-        Write-Host 'Failed to update the component. Module Root-Directory was not found';
+        Write-IcingaConsoleError 'Failed to update the component. Module Root-Directory was not found';
         return;
     }
 
     $Files = Get-ChildItem $ModuleDirectory -File '*';
 
-    Write-Host 'Removing files from framework';
+    Write-IcingaConsoleNotice 'Removing files from framework';
 
     foreach ($ModuleFile in $Files) {
         Remove-ItemSecure -Path $ModuleFile -Force | Out-Null;
@@ -55,7 +79,7 @@ function Install-IcingaFrameworkUpdate()
     Remove-ItemSecure -Path (Join-Path $ModuleDirectory -ChildPath 'lib') -Recurse -Force | Out-Null;
     Remove-ItemSecure -Path (Join-Path $ModuleDirectory -ChildPath 'manifests') -Recurse -Force | Out-Null;
 
-    Write-Host 'Copying new files to framework';
+    Write-IcingaConsoleNotice 'Copying new files to framework';
     Copy-ItemSecure -Path (Join-Path $ModuleContent -ChildPath 'doc') -Destination $ModuleDirectory -Recurse -Force | Out-Null;
     Copy-ItemSecure -Path (Join-Path $ModuleContent -ChildPath 'lib') -Destination $ModuleDirectory -Recurse -Force | Out-Null;
     Copy-ItemSecure -Path (Join-Path $ModuleContent -ChildPath 'manifests') -Destination $ModuleDirectory -Recurse -Force | Out-Null;
@@ -63,16 +87,16 @@ function Install-IcingaFrameworkUpdate()
 
     Unblock-IcingaPowerShellFiles -Path $ModuleDirectory;
 
-    Write-Host 'Cleaning temporary content';
+    Write-IcingaConsoleNotice 'Cleaning temporary content';
     Start-Sleep -Seconds 1;
     Remove-ItemSecure -Path $Archive.Directory -Recurse -Force | Out-Null;
 
-    Write-Host 'Framework update has been completed. Please start a new PowerShell instance now to complete the update';
+    Write-IcingaConsoleNotice 'Framework update has been completed. Please start a new PowerShell instance now to complete the update';
 
     Test-IcingaAgent;
 
     if ($ServiceStatus -eq 'Running') {
-        Write-Host 'Starting Icinga PowerShell service';
+        Write-IcingaConsoleNotice 'Starting Icinga PowerShell service';
         Start-IcingaService 'icingapowershell';
     }
 }

@@ -18,6 +18,13 @@
     3 = '[UNKNOWN]';
 };
 
+[hashtable]$IcingaExitCodeColor = @{
+    0 = 'Green';
+    1 = 'Yellow';
+    2 = 'Red';
+    3 = 'Magenta';
+};
+
 [hashtable]$IcingaMeasurementUnits = @{
     's'  = 'seconds';
     'ms' = 'milliseconds';
@@ -41,6 +48,7 @@
 [hashtable]$IcingaEnums = @{
     IcingaExitCode         = $IcingaExitCode;
     IcingaExitCodeText     = $IcingaExitCodeText;
+    IcingaExitCodeColor    = $IcingaExitCodeColor;
     IcingaMeasurementUnits = $IcingaMeasurementUnits;
 }
 

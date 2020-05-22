@@ -17,7 +17,7 @@ function Write-IcingaPluginPerfData()
 
     if ($global:IcingaDaemonData.FrameworkRunningAsDaemon -eq $FALSE) {
         [string]$PerfDataOutput = (Get-IcingaPluginPerfDataContent -PerfData $PerformanceData -CheckResultCache $CheckResultCache);
-        Write-Host ([string]::Format('| {0}', $PerfDataOutput));
+        Write-IcingaConsolePlain ([string]::Format('| {0}', $PerfDataOutput));
     } else {
         [void](Get-IcingaPluginPerfDataContent -PerfData $PerformanceData -CheckResultCache $CheckResultCache -AsObject $TRUE);
     }

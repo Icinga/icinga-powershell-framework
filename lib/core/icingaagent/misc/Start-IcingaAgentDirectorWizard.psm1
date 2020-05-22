@@ -57,7 +57,7 @@ function Start-IcingaAgentDirectorWizard()
     try {
         $Arguments = Get-IcingaDirectorSelfServiceConfig -DirectorUrl $DirectorUrl -ApiKey $SelfServiceAPIKey;
     } catch {
-        Write-Host ([string]::Format('Failed to connect to your Icinga Director at "{0}". Please try again', $DirectorUrl));
+        Write-IcingaConsoleError ([string]::Format('Failed to connect to your Icinga Director at "{0}". Please try again', $DirectorUrl));
 
         return Start-IcingaAgentDirectorWizard `
             -SelfServiceAPIKey ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Please re-enter your SelfService API Key for the Host-Template in case the key is no longer assigned to your host' -Default 'v' -DefaultInput $SelfServiceAPIKey).answer) `
@@ -88,7 +88,7 @@ function Start-IcingaAgentDirectorWizard()
 
         # Host is already registered
         if ($null -eq $SelfServiceAPIKey) {
-            Write-Host 'The wizard is unable to complete as this host is already registered but the local API key is not stored within the config'
+            Write-IcingaConsoleError 'The wizard is unable to complete as this host is already registered but the local API key is not stored within the config'
             return;
         }
 
@@ -112,6 +112,10 @@ function Start-IcingaAgentDirectorWizard()
     $DirectorOverrideArgs.Add(
         'Ticket', $IcingaTicket
     );
+    $DirectorOverrideArgs.Add(
+        'OverrideDirectorVars', 0
+    );
+    
     if ([string]::IsNullOrEmpty($TemplateKey) -eq $FALSE) {
         $DirectorOverrideArgs.Add(
             'SelfServiceAPIKey', $TemplateKey
@@ -131,18 +135,21 @@ function Start-IcingaDirectorAPIArgumentOverride()
     );
 
     $NewArguments = @{};
-    Write-Host 'Please follow the wizard and manually override all entries you intend to';
-    Write-Host '====';
+    Write-IcingaConsoleNotice 'Please follow the wizard and manually override all entries you intend to';
+    Write-IcingaConsoleNotice '====';
 
     foreach ($entry in $Arguments.Keys) {
         $value = (Get-IcingaAgentInstallerAnswerInput -Prompt ([string]::Format('Please enter the new value for the argument "{0}"', $entry)) -Default 'v' -DefaultInput $Arguments[$entry]).answer;
-        if ($Arguments[$entry] -is [array]) {
-            if ([string]::IsNullOrEmpty($value) -eq $FALSE) { 
+        if ($Arguments[$entry] -is [array] -Or ($value -is [string] -And $value.Contains(','))) {
+            if ([string]::IsNullOrEmpty($value) -eq $FALSE) {
+                while ($value.Contains(', ')) {
+                    $value = $value.Replace(', ', ',');
+                }
                 [array]$tmpArray = $value.Split(',');
                 if ($null -ne (Compare-Object -ReferenceObject $Arguments[$entry] -DifferenceObject $tmpArray)) {
                     $NewArguments.Add(
                         $entry,
-                        ([string]::Join(',', $tmpArray))
+                        $tmpArray
                     );
                 }
             }

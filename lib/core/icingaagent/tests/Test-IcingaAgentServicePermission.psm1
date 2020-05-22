@@ -15,7 +15,7 @@ function Test-IcingaAgentServicePermission()
 
     if ([string]::IsNullOrEmpty($ServiceUser)) {
         if (-Not $Silent) {
-            Write-IcingaTestOutput -Severity 'FAILED' -Message 'There is no user assigned to the Icinga 2 service or the service is not yet installed';
+            Write-IcingaTestOutput -Severity 'Failed' -Message 'There is no user assigned to the Icinga 2 service or the service is not yet installed';
         }
         return $FALSE;
     }
@@ -40,9 +40,9 @@ function Test-IcingaAgentServicePermission()
 
     if (-Not $Silent) {
         if ($FoundSID) {
-            Write-IcingaTestOutput -Severity 'PASSED' -Message ([string]::Format('The specified user "{0}" is allowed to run as service.', $ServiceUser));
+            Write-IcingaTestOutput -Severity 'Passed' -Message ([string]::Format('The specified user "{0}" is allowed to run as service', $ServiceUser));
         } else {
-            Write-IcingaTestOutput -Severity 'FAILED' -Message ([string]::Format('The specified user "{0}" is not allowed to run as service.', $ServiceUser));
+            Write-IcingaTestOutput -Severity 'Failed' -Message ([string]::Format('The specified user "{0}" is not allowed to run as service', $ServiceUser));
         }
     }
 

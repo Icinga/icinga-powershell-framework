@@ -9,7 +9,7 @@ function Enable-IcingaAgentFeature()
     }
 
     if ((Test-IcingaAgentFeatureEnabled -Feature $Feature)) {
-        Write-Host ([string]::Format('This feature is already enabled [{0}]', $Feature));
+        Write-IcingaConsoleNotice ([string]::Format('This feature is already enabled [{0}]', $Feature));
         return;
     }
 
@@ -20,5 +20,5 @@ function Enable-IcingaAgentFeature()
         throw ([string]::Format('Failed to enable Icinga Feature: {0}', $Process.Message));
     }
 
-    Write-Host ([string]::Format('Feature "{0}" was successfully enabled', $Feature));
+    Write-IcingaConsoleNotice ([string]::Format('Feature "{0}" was successfully enabled', $Feature));
 }
