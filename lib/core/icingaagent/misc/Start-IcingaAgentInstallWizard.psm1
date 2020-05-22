@@ -286,12 +286,12 @@ function Start-IcingaAgentInstallWizard()
             $InstallerArguments     += "-ConvertEndpointIPConfig 1";
             $ConvertEndpointIPConfig = $TRUE;
             if ($EndpointConnections.Count -eq 0) {
-                $EndpointsConversion = Convert-IcingaEndpointsToIPv4 -NetworkConfig $Endpoints;
+                $EndpointsConversion = Convert-IcingaEndpointsToIPv4 -NetworkConfig $Endpoints.Split(',');
             } else {
-                $EndpointsConversion = Convert-IcingaEndpointsToIPv4 -NetworkConfig $EndpointConnections;
+                $EndpointsConversion = Convert-IcingaEndpointsToIPv4 -NetworkConfig $EndpointConnections.Split(',');
             }
             if ($EndpointsConversion.HasErrors) {
-                Write-Host ([string]::Format('Not all of your endpoint connection data could be resolved and are not reachable by this host. These endpoints were dropped: {0}', ([string]::Join(', ', $EndpointsConversion.Unresolved))));
+                Write-IcingaConsoleWarning -Message 'Not all of your endpoint connection data could be resolved. These endpoints were dropped: {0}' -Objects ([string]::Join(', ', $EndpointsConversion.Unresolved));
             }
             $EndpointConnections     = $EndpointsConversion.Network;
         } else {
@@ -308,11 +308,11 @@ function Start-IcingaAgentInstallWizard()
         if ([string]::IsNullOrEmpty($NetworkDefault) -eq $FALSE) {
             $NetworkDefault = $NetworkDefault.Substring(0, $NetworkDefault.Length - 1);
         }
-        $ArrayString = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please specify the network destinations this Agent will connect to separated by "," (Example: 192.168.0.1, [192.168.0.2]:5665, [icinga2.example.com]:5665)' -Default 'v' -DefaultInput $NetworkDefault).answer;
+        $ArrayString = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please specify the network destinations this Agent will connect to separated by "," (Examples: 192.168.0.1, [192.168.0.2]:5665, [icinga2.example.com]:5665)' -Default 'v' -DefaultInput $NetworkDefault).answer;
         $EndpointConnections = ($ArrayString.Replace(' ', '')).Split(',');
 
         if ($ConvertEndpointIPConfig) {
-            $EndpointsConversion = Convert-IcingaEndpointsToIPv4 -NetworkConfig $EndpointConnections;
+            $EndpointsConversion = Convert-IcingaEndpointsToIPv4 -NetworkConfig $EndpointConnections.Split(',');
             if ($EndpointsConversion.HasErrors -eq $FALSE) {
                 $EndpointConnections = $EndpointsConversion.Network;
             }
