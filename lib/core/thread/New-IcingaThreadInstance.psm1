@@ -12,6 +12,15 @@ function New-IcingaThreadInstance()
         $Name = New-IcingaThreadHash -ShellScript $ScriptBlock -Arguments $Arguments;
     }
 
+    Write-IcingaDebugMessage -Message (
+        [string]::Format(
+            'Creating new thread instance {0}{1}Arguments:{1}{2}',
+            $Name,
+            "`r`n",
+            ($Arguments | Out-String)
+        )
+    );
+
     $Shell = [PowerShell]::Create();
     $Shell.RunspacePool = $ThreadPool;
     [void]$Shell.AddScript($ScriptBlock);

@@ -12,8 +12,9 @@
 function Use-Icinga()
 {
     param(
-        [switch]$LibOnly = $FALSE,
-        [switch]$Daemon  = $FALSE
+        [switch]$LibOnly   = $FALSE,
+        [switch]$Daemon    = $FALSE,
+        [switch]$DebugMode = $FALSE
     );
 
     # Ensure we autoload the Icinga Plugin collection, provided by the external
@@ -29,6 +30,8 @@ function Use-Icinga()
     Import-IcingaLib '\' -Init;
 
     if ($LibOnly -eq $FALSE) {
+        Register-IcingaEventLog;
+
         $global:IcingaThreads       = [hashtable]::Synchronized(@{});
         $global:IcingaThreadContent = [hashtable]::Synchronized(@{});
         $global:IcingaThreadPool    = [hashtable]::Synchronized(@{});
@@ -38,8 +41,36 @@ function Use-Icinga()
                 'IcingaThreadContent'      = $global:IcingaThreadContent;
                 'IcingaThreadPool'         = $global:IcingaThreadPool;
                 'FrameworkRunningAsDaemon' = $Daemon;
+                'DebugMode'                = $DebugMode;
             }
         );
+    } else {
+        # This will fix the debug mode in case we are only using Libs
+        # without any other variable content and daemon handling
+        if ($null -eq $global:IcingaDaemonData) {
+            $global:IcingaDaemonData = [hashtable]::Synchronized(@{});
+        }
+        if ($global:IcingaDaemonData.ContainsKey('DebugMode') -eq $FALSE) {
+            $global:IcingaDaemonData.DebugMode = $DebugMode;
+        }
+        if ($global:IcingaDaemonData.ContainsKey('FrameworkRunningAsDaemon') -eq $FALSE) {
+            $global:IcingaDaemonData.FrameworkRunningAsDaemon = $Daemon;
+        }
+    }
+
+    # Enable DebugMode in case it is enabled in our config
+    if (Get-IcingaFrameworkDebugMode) {
+        Enable-IcingaFrameworkDebugMode;
+        $DebugMode = $TRUE;
+    }
+
+    $EventLogMessages = Invoke-IcingaNamespaceCmdlets -Command 'Register-IcingaEventLogMessages*';
+    foreach ($entry in $EventLogMessages.Values) {
+        foreach ($event in $entry.Keys) {
+            Add-IcingaHashtableItem -Hashtable $global:IcingaEventLogEnums `
+                                    -Key $event `
+                                    -Value $entry[$event] | Out-Null;
+        }
     }
 }
 
@@ -157,6 +188,44 @@ function Publish-IcingaModuleManifests()
     }
 
     Set-Content -Path $PSDFile -Value $NewContent;
+}
+
+function Publish-IcingaEventlogDocumentation()
+{
+    param(
+        [string]$Namespace,
+        [string]$OutFile
+    );
+
+    [string]$DocContent = [string]::Format(
+        '# {0} Eventlog Documentation',
+        $Namespace
+    );
+    $DocContent += New-IcingaNewLine;
+    $DocContent += New-IcingaNewLine;
+    $DocContent += "Below you will find a list of EventId's which are exported by this module. The short and detailed message are both written directly into the eventlog. This documentation shall simply provide a summary of available EventId's";
+
+    $SortedArray = $IcingaEventLogEnums[$Namespace].Keys.GetEnumerator() | Sort-Object;
+
+    foreach ($entry in $SortedArray) {
+        $entry = $IcingaEventLogEnums[$Namespace][$entry];
+
+        $DocContent = [string]::Format(
+            '{0}{2}{2}## Event Id {1}{2}{2}| Category | Short Message | Detailed Message |{2}| --- | --- | --- |{2}| {3} | {4} | {5} |',
+            $DocContent,
+            $entry.EventId,
+            (New-IcingaNewLine),
+            $entry.EntryType,
+            $entry.Message,
+            $entry.Details
+        );
+    }
+
+    if ([string]::IsNullOrEmpty($OutFile)) {
+        Write-Host $DocContent;
+    } else {
+        Set-Content -Path $OutFile -Value $DocContent;
+    }
 }
 
 function Get-IcingaPluginDir()
