@@ -4,7 +4,7 @@ function Move-IcingaAgentDefaultConfig()
     $BackupFile = Join-Path -Path $ConfigDir -ChildPath 'ps_backup\backup_executed.key';
 
     if ((Test-Path $BackupFile)) {
-        Write-IcingaConsoleNotice 'A backup of your default configuration is not required. A backup was already made.';
+        Write-IcingaConsoleNotice 'A backup of your default configuration is not required. A backup was already made';
         return;
     }
 

@@ -194,7 +194,7 @@ function Test-IcingaAgentCertificates()
         }
     }
 
-    Write-IcingaConsoleNotice 'Icinga host certificates are present and valid. No generation required.';
+    Write-IcingaConsoleNotice 'Icinga host certificates are present and valid. No generation required';
 
     return $TRUE;
 }
