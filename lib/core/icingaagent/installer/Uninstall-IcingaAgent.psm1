@@ -1,5 +1,9 @@
 function Uninstall-IcingaAgent()
 {
+    param (
+        [switch]$RemoveDataFolder = $FALSE
+    );
+
     $IcingaData = Get-IcingaAgentInstallation;
 
     if ($IcingaData.Installed -eq $FALSE) {
@@ -17,7 +21,15 @@ function Uninstall-IcingaAgent()
         Write-IcingaConsoleError ([string]::Format('Failed to remove Icinga 2 Agent: {0}{1}', $Uninstaller.Message, $Uninstaller.Error));
         return $FALSE;
     }
-    
+
+    if ($RemoveDataFolder) {
+        [string]$IcingaProgramData = Join-Path -Path $Env:ProgramData -ChildPath 'icinga2';
+        Write-IcingaConsoleNotice -Message 'Removing Icinga 2 directoy from ProgramData: "{0}"' -Objects $IcingaProgramData;
+        if ((Remove-ItemSecure -Path $IcingaProgramData -Recurse -Force) -eq $FALSE) {
+            return $FALSE;
+        }
+    }
+
     Write-IcingaConsoleNotice 'Icinga Agent was successfully removed';
     return $TRUE;
 }
