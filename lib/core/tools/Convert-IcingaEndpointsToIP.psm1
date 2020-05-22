@@ -25,9 +25,10 @@ function Convert-IcingaEndpointsToIPv4()
         [array]$NetworkConfig
     );
 
-    [array]$ResolvedNetwork = @();
-    [bool]$HasUnresolved    = $FALSE;
-    [string]$Domain         = $ENV:UserDNSDomain;
+    [array]$ResolvedNetwork   = @();
+    [array]$UnresolvedNetwork = @();
+    [bool]$HasUnresolved      = $FALSE;
+    [string]$Domain           = $ENV:UserDNSDomain;
 
     foreach ($entry in $NetworkConfig) {
         $Network = Get-IPConfigFromString -IPConfig $entry;
@@ -48,13 +49,15 @@ function Convert-IcingaEndpointsToIPv4()
                 );
                 $ResolvedNetwork += $entry.Replace($Network.address, $ResolvedIP);
             } catch {
-                $HasUnresolved = $TRUE;
+                $UnresolvedNetwork += $entry;
+                $HasUnresolved      = $TRUE;
             }
         }
     }
 
     return @{
-        'Network'   = $ResolvedNetwork;
-        'HasErrors' = $HasUnresolved;
+        'Network'    = $ResolvedNetwork;
+        'HasErrors'  = $HasUnresolved;
+        'Unresolved' = $UnresolvedNetwork;
     };
 }
