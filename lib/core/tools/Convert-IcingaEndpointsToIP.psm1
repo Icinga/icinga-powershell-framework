@@ -49,7 +49,7 @@ function Convert-IcingaEndpointsToIPv4()
                 );
                 $ResolvedNetwork += $entry.Replace($Network.address, $ResolvedIP);
             } catch {
-                $UnresolvedNetwork += $entry;
+                $UnresolvedNetwork += $Network.address;
                 $HasUnresolved      = $TRUE;
             }
         }
