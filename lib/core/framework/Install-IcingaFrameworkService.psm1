@@ -33,7 +33,7 @@ function Install-IcingaFrameworkService()
     );
 
     if ([string]::IsNullOrEmpty($Path)) {
-        Write-IcingaConsoleError 'No path specified for Framework service. Service will not be installed';
+        Write-IcingaConsoleWarning 'No path specified for Framework service. Service will not be installed';
         return;
     }
 
