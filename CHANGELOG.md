@@ -2,7 +2,7 @@
 
 **The latest release announcements are available on [https://icinga.com/blog/](https://icinga.com/blog/).**
 
-Please read the [upgrading](https://icinga.com/docs/windows/latest/doc/30-upgrading-framework.md/)
+Please read the [upgrading](https://icinga.com/docs/windows/latest/doc/30-upgrading-framework)
 documentation before upgrading to a new release.
 
 Released closed milestones can be found on [GitHub](https://github.com/Icinga/icinga-powershell-framework/milestones?state=closed).
