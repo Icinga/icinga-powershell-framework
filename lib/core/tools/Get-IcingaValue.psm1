@@ -16,6 +16,10 @@
    Configures the command to return the lower number of both inputs
 .PARAMETER Maximum
    Configures the command to return the higher number of both inputs
+.EXAMPLE
+   PS> Get-IcingaValue -Value 10 -Compare 12 -Minimum;
+.EXAMPLE
+   PS> Get-IcingaValue -Value 10 -Compare 12 -Maximum;
 .INPUTS
    System.Integer
 .OUTPUTS
