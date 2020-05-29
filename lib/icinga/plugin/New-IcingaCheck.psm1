@@ -100,6 +100,8 @@ function New-IcingaCheck()
             $null,
             $null
         );
+
+        return $this;
     }
 
     $Check | Add-Member -membertype ScriptMethod -name 'SetWarning' -value {
@@ -108,6 +110,8 @@ function New-IcingaCheck()
             $null,
             $null
         );
+
+        return $this;
     }
 
     $Check | Add-Member -membertype ScriptMethod -name 'WarnOutOfRange' -value {
@@ -318,6 +322,8 @@ function New-IcingaCheck()
             $null,
             $null
         );
+
+        return $this;
     }
 
     $Check | Add-Member -membertype ScriptMethod -name 'CritOutOfRange' -value {
