@@ -16,12 +16,8 @@ function Enable-IcingaUntrustedCertificateValidation()
 
         [System.Net.ServicePointManager]::CertificatePolicy = New-Object IcingaUntrustedCertificateValidation;
 
-        Write-Host 'Successfully enabled untrusted certificate validation for this shell instance';
+        Write-IcingaConsoleNotice 'Successfully enabled untrusted certificate validation for this shell instance';
     } catch {
-        Write-Host (
-            [string]::Format(
-                'Failed to enable untrusted certificate policy: {0}', $_.Exception.Message
-            )
-        );
+        Write-IcingaConsoleError -Message 'Failed to enable untrusted certificate policy: {0}' -Objects $_.Exception.Message;
     }
 }

@@ -252,13 +252,13 @@ function Start-IcingaAgentInstallWizard()
     }
 
     if ($Endpoints.Count -eq 0) {
-        $ArrayString = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please specify the parent node(s) separated by "," (Example: "master-icinga2a, master-icinga2b")' -Default 'v').answer;
+        $ArrayString = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please specify the parent node(s) separated by "," (Examples: "master1, master2" or "master1.example.com, master2.example.com")' -Default 'v').answer;
         $Endpoints = ($ArrayString.Replace(' ', '')).Split(',');
         $InstallerArguments += ("-Endpoints " + ([string]::Join(',', $Endpoints)));
     }
 
     if ($null -eq $CAPort) {
-        if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Are you using a custom port for Icinga communication?' -Default 'n').result -eq 0) {
+        if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Are you using another port than 5665 for Icinga communication?' -Default 'n').result -eq 0) {
             $CAPort = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please enter the port for Icinga communication' -Default 'v' -DefaultInput '5665').answer;
             $InstallerArguments += "-CAPort $CAPort";
         } else {
@@ -473,7 +473,7 @@ function Start-IcingaAgentInstallWizard()
     }
 
     if ($null -eq $InstallFrameworkPlugins) {
-        if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to install the Icinga Plugins?' -Default 'y').result -eq 1) {
+        if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to install the Icinga PowerShell Plugins?' -Default 'y').result -eq 1) {
             $result = Install-IcingaFrameworkPlugins -PluginsUrl $PluginsUrl;
             $PluginsUrl = $result.PluginUrl;
             $InstallerArguments += "-InstallFrameworkPlugins 1";
@@ -492,7 +492,7 @@ function Start-IcingaAgentInstallWizard()
     }
 
     if ($null -eq $InstallFrameworkService) {
-        if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to install the PowerShell Framework as a service?' -Default 'y').result -eq 1) {
+        if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to install the Icinga PowerShell Framework as a service?' -Default 'y').result -eq 1) {
             $result = Get-IcingaFrameworkServiceBinary;
             $InstallerArguments += "-InstallFrameworkService 1";
             $InstallerArguments += [string]::Format("-FrameworkServiceUrl '{0}'", $result.FrameworkServiceUrl);

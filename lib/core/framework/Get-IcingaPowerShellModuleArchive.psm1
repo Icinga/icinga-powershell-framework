@@ -60,7 +60,7 @@ function Get-IcingaPowerShellModuleArchive()
     if ([string]::IsNullOrEmpty($DownloadUrl)) {
         if ($SkipRepo -Or (Get-IcingaAgentInstallerAnswerInput -Prompt ([string]::Format('Do you provide a custom repository for "{0}"?', $ModuleName)) -Default 'n').result -eq 1) {
             if ($Release -eq $FALSE -And $Snapshot -eq $FALSE) {
-                $branch = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Which version do you want to install? (release/snapshot)' -Default 'v' -DefaultInput 'release').answer;
+                $branch = (Get-IcingaAgentInstallerAnswerInput -Prompt ([string]::Format('Which version of the "{0}" do you want to install? (release/snapshot)', $ModuleName)) -Default 'v' -DefaultInput 'release').answer;
             } elseif ($Release) {
                 $branch = 'release';
             } else {
@@ -74,7 +74,7 @@ function Get-IcingaPowerShellModuleArchive()
                     $DownloadUrl   = $LatestRelease.Replace('/releases/tag/', '/archive/');
                     $Tag           = $DownloadUrl.Split('/')[-1];
                 } catch {
-                    Write-Host 'Failed to fetch latest release from GitHub. Either the module or the GitHub account do not exist';
+                    Write-IcingaConsoleError -Message 'Failed to fetch latest release for "{0}" from GitHub. Either the module or the GitHub account do not exist' -Objects $ModuleName;
                 }
 
                 $DownloadUrl   = [string]::Format('{0}/{1}.zip', $DownloadUrl, $Tag);
@@ -94,7 +94,7 @@ function Get-IcingaPowerShellModuleArchive()
                 }
             }
         } else {
-            $DownloadUrl = (Get-IcingaAgentInstallerAnswerInput -Prompt ([string]::Format('Please enter the full Url to your "{0}" Zip-Archive', $ModuleName)) -Default 'v').answer;
+            $DownloadUrl = (Get-IcingaAgentInstallerAnswerInput -Prompt ([string]::Format('Please enter the full path of the custom repository for the "{0}" (location of zip file)', $ModuleName)) -Default 'v').answer;
         }
     }
 

@@ -10,7 +10,7 @@ function Start-IcingaAgentDirectorWizard()
 
     [hashtable]$DirectorOverrideArgs        = @{}
     if ([string]::IsNullOrEmpty($DirectorUrl)) {
-        $DirectorUrl = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please specify the Url pointing to your Icinga Director' -Default 'v').answer;
+        $DirectorUrl = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please specify the Url pointing to your Icinga Director (Example: "https://example.com/icingaweb2/director")' -Default 'v').answer;
     }
 
     [bool]$HostKnown     = $FALSE;

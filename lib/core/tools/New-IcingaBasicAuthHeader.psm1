@@ -33,7 +33,7 @@ function New-IcingaBasicAuthHeader()
     );
 
     if ($null -eq $Password -or [string]::IsNullOrEmpty($Username)) {
-        Write-Host 'Please specify your Username and Password to continue';
+        Write-IcingaConsoleWarning 'Please specify your username and password to continue';
         return @{};
     }
 

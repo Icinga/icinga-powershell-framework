@@ -3,9 +3,9 @@ function Disable-IcingaUntrustedCertificateValidation()
     try {
         [System.Net.ServicePointManager]::CertificatePolicy = $null;
 
-        Write-Host 'Successfully disabled untrusted certificate validation for this shell instance';
+        Write-IcingaConsoleNotice 'Successfully disabled untrusted certificate validation for this shell instance';
     } catch {
-        Write-Host (
+        Write-IcingaConsoleError (
             [string]::Format(
                 'Failed to disable untrusted certificate policy: {0}', $_.Exception.Message
             )
