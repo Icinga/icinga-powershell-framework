@@ -25,6 +25,36 @@
             'Details'   = 'A client connection was terminated by the Framework because no secure SSL handshake could be established. This issue in general is followed by EventId 1500.';
             'EventId'   = 1501;
         };
+        1550 = @{
+            'EntryType' = 'Error';
+            'Message'   = 'Unsupported web authentication used';
+            'Details'   = 'A web client tried to authenticate with an unsupported authorization method.';
+            'EventId'   = 1550;
+        };
+        1551 = @{
+            'EntryType' = 'Warning';
+            'Message'   = 'Invalid authentication credentials provided';
+            'Details'   = 'A web request for a client was rejected because of invalid formated base64 encoded credentials.';
+            'EventId'   = 1551;
+        };
+        1552 = @{
+            'EntryType' = 'Error';
+            'Message'   = 'Failed to parse use credentials from base64 encoding';
+            'Details'   = 'Provided user credentials encoded as base64 could not be converted to domain, user and password objects.';
+            'EventId'   = 1552;
+        };
+        1560 = @{
+            'EntryType' = 'Error';
+            'Message'   = 'Failed to test user login as no Principal Context could be established';
+            'Details'   = 'A web client trying to authenticate failed as no Principal Context for the provided domain could be established.';
+            'EventId'   = 1560;
+        };
+        1561 = @{
+            'EntryType' = 'Error';
+            'Message'   = 'Failed to authenticate user with given credentials';
+            'Details'   = 'A web client trying to authenticate failed as the provided user credentials could not be verified.';
+            'EventId'   = 1561;
+        };
     }
 };
 
