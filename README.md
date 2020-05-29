@@ -1,4 +1,4 @@
-Icinga Module for Windows
+Icinga PowerShell Framework
 ==============
 
 The Icinga PowerShell Framework provides a wide range of configuration and check possibilities to ensure an easy integration and full monitoring of Windows environments.
