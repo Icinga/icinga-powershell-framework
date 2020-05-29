@@ -29,4 +29,4 @@ The Icinga PowerShell Framework is an Open Source project and lives from your co
 
 * Please check whether a related issue alredy exists on our [Issue Tracker](https://github.com/Icinga/icinga-powershell-framework/issues)
 * Send a [Pull Request](https://github.com/Icinga/icinga-powershell-framework/pulls)
-* The master branche shall never be corrupt!
+* The master branch shall never be corrupt!
