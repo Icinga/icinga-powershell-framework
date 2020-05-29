@@ -8,9 +8,9 @@
 .FUNCTIONALITY
    Download and install a PowerShell module from a custom or GitHub source
 .EXAMPLE
-   PS>Get-IcingaPowerShellModuleArchive -ModuleName 'Plugins' -Repository 'icinga-powershell-plugins' -Stable 1;
+   PS>Get-IcingaPowerShellModuleArchive -ModuleName 'Plugins' -Repository 'icinga-powershell-plugins' -Release 1;
 .EXAMPLE
-   PS>Get-IcingaPowerShellModuleArchive -ModuleName 'Plugins' -Repository 'icinga-powershell-plugins' -Stable 1 -DryRun 1;
+   PS>Get-IcingaPowerShellModuleArchive -ModuleName 'Plugins' -Repository 'icinga-powershell-plugins' -Release 1 -DryRun 1;
 .PARAMETER DownloadUrl
    The Url to a ZIP-Archive to download from (skips the wizard)
 .PARAMETER ModuleName
@@ -19,8 +19,8 @@
    The repository to download the ZIP-Archive from
 .PARAMETER GitHubUser
    The user from which a repository is downloaded from
-.PARAMETER Stable
-   Download the latest stable release
+.PARAMETER Release
+   Download the latest release
 .PARAMETER Snapshot
    Download the latest package from the master branch
 .PARAMETER DryRun
@@ -41,7 +41,7 @@ function Get-IcingaPowerShellModuleArchive()
         [string]$ModuleName  = '',
         [string]$Repository  = '',
         [string]$GitHubUser  = 'Icinga',
-        [bool]$Stable        = $FALSE,
+        [bool]$Release       = $FALSE,
         [bool]$Snapshot      = $FALSE,
         [bool]$DryRun        = $FALSE
     );
@@ -50,7 +50,7 @@ function Get-IcingaPowerShellModuleArchive()
     $Tag                = 'master';
     [bool]$SkipRepo     = $FALSE;
 
-    if ($Stable -Or $Snapshot) {
+    if ($Release -Or $Snapshot) {
         $SkipRepo = $TRUE;
     }
 
@@ -59,10 +59,10 @@ function Get-IcingaPowerShellModuleArchive()
 
     if ([string]::IsNullOrEmpty($DownloadUrl)) {
         if ($SkipRepo -Or (Get-IcingaAgentInstallerAnswerInput -Prompt ([string]::Format('Do you provide a custom repository for "{0}"?', $ModuleName)) -Default 'n').result -eq 1) {
-            if ($Stable -eq $FALSE -And $Snapshot -eq $FALSE) {
-                $branch = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Which version to you want to install? (snapshot/stable)' -Default 'v' -DefaultInput 'stable').answer;
-            } elseif ($Stable) {
-                $branch = 'stable';
+            if ($Release -eq $FALSE -And $Snapshot -eq $FALSE) {
+                $branch = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Which version do you want to install? (release/snapshot)' -Default 'v' -DefaultInput 'release').answer;
+            } elseif ($Release) {
+                $branch = 'release';
             } else {
                 $branch = 'snapshot'
             }

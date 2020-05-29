@@ -15,6 +15,10 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 * [#62](https://github.com/Icinga/icinga-powershell-framework/issues/62) Deprecates `--key` argument for certificate generation for Icinga 2.12.0 and later
 
+### Deprecations
+
+* The value `latest` for the installation wizard argument `AgentVersion` is deprecated and has been replaced by `release`
+
 ### Breaking changes
 
 * The `-AcceptConnections` argument for the install wizard had the opposite effect in the previous versions. Please review your configuration on a test setup before proceeding with a mass-rollout to ensure the Agent behaves as expected

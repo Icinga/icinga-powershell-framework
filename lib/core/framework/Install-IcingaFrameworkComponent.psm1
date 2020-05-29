@@ -10,9 +10,9 @@
 .FUNCTIONALITY
    Download and install a PowerShell module from the 'icinga-powershell-' namespace
 .EXAMPLE
-   PS>Install-IcingaFrameworkComponent -Name 'plugins' -Stable;
+   PS>Install-IcingaFrameworkComponent -Name 'plugins' -Release;
 .EXAMPLE
-   PS>Install-IcingaFrameworkComponent -Name 'plugins' -Stable -DryRun;
+   PS>Install-IcingaFrameworkComponent -Name 'plugins' -Release -DryRun;
 .PARAMETER Name
    The name of the module to install. The namespace 'icinga-powershell-' is added
    by the function automatically
@@ -21,8 +21,8 @@
 .PARAMETER Url
    Specify a direct Url to a ZIP-Archive for external or local web ressources or
    local network shares
-.PARAMETER Stable
-   Download the latest stable version from a GitHub source
+.PARAMETER Release
+   Download the latest Release version from a GitHub source
 .PARAMETER Snapshot
    Download the latest master branch from a GitHub source
 .PARAMETER DryRun
@@ -42,7 +42,7 @@ function Install-IcingaFrameworkComponent()
         [string]$Name,
         [string]$GitHubUser = 'Icinga',
         [string]$Url,
-        [switch]$Stable     = $FALSE,
+        [switch]$Release    = $FALSE,
         [switch]$Snapshot   = $FALSE,
         [switch]$DryRun     = $FALSE
     );
@@ -63,7 +63,7 @@ function Install-IcingaFrameworkComponent()
                             )
                         ) `
                         -Repository $RepositoryName `
-                        -Stable $Stable `
+                        -Release $Release `
                         -Snapshot $Snapshot `
                         -DryRun $DryRun;
 

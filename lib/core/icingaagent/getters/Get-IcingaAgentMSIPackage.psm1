@@ -7,7 +7,7 @@ function Get-IcingaAgentMSIPackage()
     );
 
     if ([string]::IsNullOrEmpty($Version)) {
-        throw 'Please specify a valid version: "snapshot", "latest" or a specific version like "2.11.0"';
+        throw 'Please specify a valid version: "release", "snapshot" or a specific version like "2.11.0"';
     }
 
     if ([string]::IsNullOrEmpty($Source)) {
@@ -19,7 +19,7 @@ function Get-IcingaAgentMSIPackage()
     $Architecture = Get-IcingaAgentArchitecture;
     $LastUpdate   = $null;
 
-    if ($Version -eq 'snapshot' -Or $Version -eq 'latest') {
+    if ($Version -eq 'snapshot' -Or $Version -eq 'release') {
         $Content      = (Invoke-WebRequest -Uri $Source -UseBasicParsing).RawContent.Split("`r`n");
         $UsePackage   = $null;
 
@@ -41,7 +41,7 @@ function Get-IcingaAgentMSIPackage()
                         $UsePackage = $MSIPackage;
                         break;
                     }
-                } elseif ($Version -eq 'latest') {
+                } elseif ($Version -eq 'release') {
                     if ($line -like '*snapshot*' -Or $line -like '*-rc*') {
                         continue;
                     }
