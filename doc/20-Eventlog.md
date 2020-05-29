@@ -19,3 +19,33 @@ Below you will find a list of EventId's which are exported by this module. The s
 | Category | Short Message | Detailed Message |
 | --- | --- | --- |
 | Error | Client connection was interrupted because of invalid SSL stream | A client connection was terminated by the Framework because no secure SSL handshake could be established. This issue in general is followed by EventId 1500. |
+
+## Event Id 1550
+
+| Category | Short Message | Detailed Message |
+| --- | --- | --- |
+| Error | Unsupported web authentication used | A web client tried to authenticate with an unsupported authorization method. |
+
+## Event Id 1551
+
+| Category | Short Message | Detailed Message |
+| --- | --- | --- |
+| Warning | Invalid authentication credentials provided | A web request for a client was rejected because of invalid formated base64 encoded credentials. |
+
+## Event Id 1552
+
+| Category | Short Message | Detailed Message |
+| --- | --- | --- |
+| Error | Failed to parse use credentials from base64 encoding | Provided user credentials encoded as base64 could not be converted to domain, user and password objects. |
+
+## Event Id 1560
+
+| Category | Short Message | Detailed Message |
+| --- | --- | --- |
+| Error | Failed to test user login as no Principal Context could be established | A web client trying to authenticate failed as no Principal Context for the provided domain could be established. |
+
+## Event Id 1561
+
+| Category | Short Message | Detailed Message |
+| --- | --- | --- |
+| Error | Failed to authenticate user with given credentials | A web client trying to authenticate failed as the provided user credentials could not be verified. |
