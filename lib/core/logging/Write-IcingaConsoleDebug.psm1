@@ -21,14 +21,18 @@
 
 function Write-IcingaConsoleDebug()
 {
-    param (
-        [string]$Message,
-        [array]$Objects
-    );
+   param (
+       [string]$Message,
+       [array]$Objects
+   );
 
-    Write-IcingaConsoleOutput `
-        -Message $Message `
-        -Objects $Objects `
-        -ForeColor 'Blue' `
-        -Severity 'Debug';
+   if ((Get-IcingaFrameworkDebugMode) -eq $FALSE) {
+      return;
+   }
+
+   Write-IcingaConsoleOutput `
+      -Message $Message `
+      -Objects $Objects `
+      -ForeColor 'Blue' `
+      -Severity 'Debug';
 }
