@@ -16,3 +16,4 @@ A detailed overview of functions can be found below
 * [Custom Daemons](developerguide/10-Custom-Daemons.md)
 * [Custom Plugins](developerguide/11-Custom-Plugins.md)
 * [Using Console Outputs](developerguide/20-Using-Console-Outputs.md)
+* [Using EventLog Output](developerguide/20-Using-EventLog-Outputs.md)
