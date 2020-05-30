@@ -31,6 +31,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#67](https://github.com/Icinga/icinga-powershell-framework/issues/67) Adds support to flush entire Icinga 2 ProgamData directory on uninstallation
 * [#68](https://github.com/Icinga/icinga-powershell-framework/issues/68) Improves the setup wizard by providing better understandable prompts including examples and various smaller bugfixes
 * Console prints are now containing a severity message to better keep an eye on possible warnings/errors
+* [#69](https://github.com/Icinga/icinga-powershell-framework/issues/69) Improves stability of installation/uninstallation of the Agent by using different PowerShell instances for service and installation/uninstallation handling
 
 ### Bugfixes
 

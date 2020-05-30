@@ -24,9 +24,14 @@ function Restart-IcingaService()
         $Service
     );
 
-    if (Get-Service $Service -ErrorAction SilentlyContinue) {
+    if (Get-Service "$Service" -ErrorAction SilentlyContinue) {
         Write-IcingaConsoleNotice ([string]::Format('Restarting service "{0}"', $Service));
-        Restart-Service $Service;
+        powershell.exe -Command {
+            $Service = $args[0]
+
+            Restart-Service "$Service";
+        } -Args $Service;
+        
     } else {
         Write-IcingaConsoleWarning -Message 'The service "{0}" is not installed' -Objects $Service;
     }

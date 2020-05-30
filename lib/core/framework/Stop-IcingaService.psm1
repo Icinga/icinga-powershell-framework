@@ -26,7 +26,11 @@ function Stop-IcingaService()
 
     if (Get-Service $Service -ErrorAction SilentlyContinue) {
         Write-IcingaConsoleNotice -Message 'Stopping service "{0}"' -Objects $Service;
-        Stop-Service $Service;
+        powershell.exe -Command {
+            $Service = $args[0]
+
+            Stop-Service "$Service";
+        } -Args $Service;
     } else {
         Write-IcingaConsoleWarning -Message 'The service "{0}" is not installed' -Objects $Service;
     }

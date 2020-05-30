@@ -26,7 +26,11 @@ function Start-IcingaService()
 
     if (Get-Service $Service -ErrorAction SilentlyContinue) {
         Write-IcingaConsoleNotice -Message 'Starting service "{0}"' -Objects $Service;
-        Start-Service $Service;
+        powershell.exe -Command {
+            $Service = $args[0]
+
+            Start-Service "$Service";
+        } -Args $Service;
     } else {
         Write-IcingaConsoleWarning -Message 'The service "{0}" is not installed' -Objects $Service;
     }

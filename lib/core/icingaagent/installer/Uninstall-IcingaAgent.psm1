@@ -4,18 +4,32 @@ function Uninstall-IcingaAgent()
         [switch]$RemoveDataFolder = $FALSE
     );
 
-    $IcingaData = Get-IcingaAgentInstallation;
+    $IcingaData                = Get-IcingaAgentInstallation;
+    [string]$IcingaProgramData = Join-Path -Path $Env:ProgramData -ChildPath 'icinga2';
 
     if ($IcingaData.Installed -eq $FALSE) {
-        Write-IcingaConsoleError 'Unable to uninstall the Icinga Agent. The Agent is not installed';
-        return;
+        Write-IcingaConsoleNotice 'Unable to uninstall the Icinga Agent. The Agent is not installed';
+        if ($RemoveDataFolder) {
+            if (Test-Path $IcingaProgramData) {
+                Write-IcingaConsoleNotice -Message 'Removing Icinga Agent directory: "{0}"' -Objects $IcingaProgramData;
+                return ((Remove-ItemSecure -Path $IcingaProgramData -Recurse -Force) -eq $FALSE);
+            } else {
+                Write-IcingaConsoleNotice -Message 'Icinga Agent directory "{0}" does not exist' -Objects $IcingaProgramData;
+            }
+        }
+        return $FALSE;
     }
 
-    Write-IcingaConsoleNotice 'Removing current Icinga Agent';
+    $Uninstaller = powershell.exe -Command {
+        $IcingaData = $args[0]
+        Use-Icinga;
 
-    Stop-IcingaService 'icinga2';
+        Stop-Service 'icinga2' -ErrorAction SilentlyContinue | Out-Null;
 
-    $Uninstaller = Start-IcingaProcess -Executable 'MsiExec.exe' -Arguments ([string]::Format('{0} /q', $IcingaData.Uninstaller)) -FlushNewLine;
+        $Uninstaller = Start-IcingaProcess -Executable 'MsiExec.exe' -Arguments ([string]::Format('{0} /q', $IcingaData.Uninstaller)) -FlushNewLine;
+
+        return $Uninstaller;
+    } -Args $IcingaData;
 
     if ($Uninstaller.ExitCode -ne 0) {
         Write-IcingaConsoleError ([string]::Format('Failed to remove Icinga Agent: {0}{1}', $Uninstaller.Message, $Uninstaller.Error));
@@ -23,7 +37,6 @@ function Uninstall-IcingaAgent()
     }
 
     if ($RemoveDataFolder) {
-        [string]$IcingaProgramData = Join-Path -Path $Env:ProgramData -ChildPath 'icinga2';
         Write-IcingaConsoleNotice -Message 'Removing Icinga Agent directory: "{0}"' -Objects $IcingaProgramData;
         if ((Remove-ItemSecure -Path $IcingaProgramData -Recurse -Force) -eq $FALSE) {
             return $FALSE;
