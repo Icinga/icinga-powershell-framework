@@ -10,7 +10,8 @@ function Install-IcingaAgentCertificates()
     );
 
     if ([string]::IsNullOrEmpty($Hostname)) {
-        throw 'Failed to install Icinga Agent certificates. Please provide a hostname';
+        Write-IcingaConsoleError 'Failed to install Icinga Agent certificates. Please provide a hostname';
+        return $FALSE;
     }
 
     # Default for Icinga 2.8.0 and above
@@ -34,13 +35,14 @@ function Install-IcingaAgentCertificates()
         );
 
         if ((Start-IcingaAgentCertificateProcess -Arguments $arguments) -eq $FALSE) {
-            throw 'Failed to generate host certificate';
+            Write-IcingaConsoleError 'Failed to generate host certificate';
+            return $FALSE;
         }
     }
 
     if ([string]::IsNullOrEmpty($Endpoint) -And [string]::IsNullOrEmpty($CACert)) {
         Write-IcingaConsoleWarning 'Your host certificates have been generated successfully. Please either specify an endpoint to connect to or provide the path to a valid ca.crt';
-        return $TRUE;
+        return $FALSE;
     }
 
     if (-Not [string]::IsNullOrEmpty($Endpoint)) {
@@ -68,7 +70,7 @@ function Install-IcingaAgentCertificates()
                 Write-IcingaConsoleError 'Unable to connect to your provided Icinga CA. Please verify the entered configuration is correct.' `
                             'If you are not able to connect to your Icinga CA from this machine, you will have to provide the path' `
                             'to your Icinga ca.crt and use the CA-Proxy certificate handling.';
-                return $TRUE;
+                return $FALSE;
             }
         }
 
@@ -88,7 +90,8 @@ function Install-IcingaAgentCertificates()
             );
 
             if ((Start-IcingaAgentCertificateProcess -Arguments $arguments) -eq $FALSE) {
-                throw 'Failed to sign Icinga certificate';
+                Write-IcingaConsoleError 'Failed to sign Icinga certificate';
+                return $FALSE;
             }
 
             if ([string]::IsNullOrEmpty($Ticket)) {

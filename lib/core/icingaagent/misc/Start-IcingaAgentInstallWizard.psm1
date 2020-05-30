@@ -544,9 +544,9 @@ function Start-IcingaAgentInstallWizard()
             }
             Register-IcingaBackgroundDaemon -Command 'Start-IcingaServiceCheckDaemon';
             Install-IcingaAgentBaseFeatures;
-            Install-IcingaAgentCertificates -Hostname $Hostname -Endpoint $CAEndpoint -Port $CAPort -CACert $CAFile -Ticket $Ticket | Out-Null;
+            $CertsInstalled = Install-IcingaAgentCertificates -Hostname $Hostname -Endpoint $CAEndpoint -Port $CAPort -CACert $CAFile -Ticket $Ticket;
             Write-IcingaAgentApiConfig -Port $CAPort;
-            if ($EmptyCA -eq $TRUE) {
+            if ($EmptyCA -eq $TRUE -Or $CertsInstalled -eq $FALSE) {
                 Disable-IcingaAgentFeature 'api';
                 Write-IcingaConsoleWarning -Message '{0}{1}{2}{3}{4}' -Objects 'Your Icinga Agent API feature has been disabled. Please provide either your ca.crt ', 
                                                     'or connect to a parent node for certificate requests. You can run "Install-IcingaAgentCertificates" ',
