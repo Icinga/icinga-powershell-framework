@@ -15,7 +15,7 @@ Please take a look at the following content to get to know the possibilities of 
 * [Installation Guide](doc/02-Installation.md)
 * [Icinga Integration](doc/05-Icinga-Integration.md)
 * [Icinga PowerShell Framework as Service](doc/service/01-Install-Service.md)
-* [Changelog](CHANGELOG.md)
+* [Changelog](doc/31-Changelog.md)
 
 Developer Guide
 ------------
