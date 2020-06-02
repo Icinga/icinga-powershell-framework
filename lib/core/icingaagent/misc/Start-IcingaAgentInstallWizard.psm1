@@ -205,7 +205,7 @@ function Start-IcingaAgentInstallWizard()
                 $InstallerArguments += '-AllowVersionChanges 1';
 
                 if ([string]::IsNullOrEmpty($AgentVersion)) {
-                    $AgentVersion = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please specify the version you wish to install ("release", "snapshot" or a specific version like "2.11.3")' -Default 'v' -DefaultInput 'release').answer;
+                    $AgentVersion = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please specify the version you want to install ("release", "snapshot" or a specific version like "2.11.3")' -Default 'v' -DefaultInput 'release').answer;
                     $InstallerArguments += "-AgentVersion '$AgentVersion'";
     
                     Write-IcingaConsoleNotice ([string]::Format('Installing Icinga version: "{0}"', $AgentVersion));
@@ -233,7 +233,7 @@ function Start-IcingaAgentInstallWizard()
 
         if ($UpdateAgent -eq 1) {
             if ([string]::IsNullOrEmpty($AgentVersion)) {
-                $AgentVersion = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please specify the version you wish to install ("release", "snapshot" or a specific version like "2.11.3")' -Default 'v' -DefaultInput 'release').answer;
+                $AgentVersion = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please specify the version you want to install ("release", "snapshot" or a specific version like "2.11.3")' -Default 'v' -DefaultInput 'release').answer;
                 $InstallerArguments += "-AgentVersion '$AgentVersion'";
 
                 Write-IcingaConsoleNotice ([string]::Format('Updating/Downgrading Icinga 2 Agent to version: "{0}"', $AgentVersion));
