@@ -5,7 +5,7 @@ function Test-IcingaAcl()
         [switch]$WriteOutput
     );
 
-    if (-Not (Test-Path $Directory)) {
+    if ([string]::IsNullOrEmpty($Directory) -Or -Not (Test-Path $Directory)) {
         throw 'The specified directory was not found';
     }
 
