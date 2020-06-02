@@ -1,24 +1,24 @@
-Installing the Module
+Installing the Icinga PowerShell Framework
 ===
 
-Installing the module is managed by different ways, depending on the user environment including available possibitilies
+Installing the Icinga PowerShell Framework is managed by different ways, depending on the user environment including available possibitilies
 
 Instructions
 ---
 
-* Install the Module with the [Kickstart Script](installation/01-Kickstart-Script.md)
-* Install the Module [manually](installation/02-Manual-Installation.md)
+* Install the Icinga PowerShell Framework with the [Kickstart Script](installation/01-Kickstart-Script.md)
+* Install the Icinga PowerShell Framework [manually](installation/02-Manual-Installation.md)
 
 Testing the installation
 ---
 
-Once the module is installed you can try if the installation was successfully by using the command
+Once the Icinga PowerShell Framework is installed you can try if the installation was successfully by using the command
 
 ```powershell
 Use-Icinga
 ```
 
-This command will initialise the entire module and load all available Cmdlets.
+This command will initialise the entire Icinga PowerShell Framework and load all available Cmdlets.
 
 Whenever you intend to use specific Cmdlets of the framework for Icinga Plugins, Testing or configuration you will require to run this command for each new PowerShell instance to initialise the framework.
 
