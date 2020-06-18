@@ -14,6 +14,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 ### Bugfixes
 
 * [#70](https://github.com/Icinga/icinga-powershell-framework/issues/70) Fixes zones configuration for multiple parent endpoints
+* [#72](https://github.com/Icinga/icinga-powershell-framework/issues/72) Fixes installation target directory not used properly while directory exist already
 
 ## 1.1.0 (2020-06-02)
 
