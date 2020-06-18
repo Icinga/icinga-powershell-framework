@@ -59,12 +59,12 @@ function Convert-IcingaDirectorSelfServiceArguments()
         $NetworkDefault += [string]::Format('[{0}]:{1},', $Endpoint, $JsonInput.agent_listen_port);
     }
     if ([string]::IsNullOrEmpty($NetworkDefault) -eq $FALSE) {
-        $NetworkDefault = $NetworkDefault.Substring(0, $NetworkDefault.Length - 1);
+        $NetworkDefault = $NetworkDefault.Substring(0, $NetworkDefault.Length - 1).Split(',');
         $DirectorArguments.Add(
             'EndpointConnections', $NetworkDefault
         );
 
-        $EndpointConnections = $NetworkDefault.Split(',');
+        $EndpointConnections = $NetworkDefault;
         $DirectorArguments.Add(
             'CAEndpoint', (Get-IPConfigFromString $EndpointConnections[0]).address
         );
