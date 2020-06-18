@@ -310,7 +310,7 @@ function Start-IcingaAgentInstallWizard()
             if ($EndpointConnections.Count -eq 0) {
                 $EndpointsConversion = Convert-IcingaEndpointsToIPv4 -NetworkConfig $Endpoints.Split(',');
             } else {
-                $EndpointsConversion = Convert-IcingaEndpointsToIPv4 -NetworkConfig $EndpointConnections.Split(',');
+                $EndpointsConversion = Convert-IcingaEndpointsToIPv4 -NetworkConfig $EndpointConnections;
             }
             if ($EndpointsConversion.HasErrors) {
                 Write-IcingaConsoleWarning -Message 'Not all of your endpoint connection data could be resolved. These endpoints were dropped: {0}' -Objects ([string]::Join(', ', $EndpointsConversion.Unresolved));
@@ -340,6 +340,12 @@ function Start-IcingaAgentInstallWizard()
             }
         }
         $InstallerArguments += ("-EndpointConnections " + ([string]::Join(',', $EndpointConnections)));
+    } elseif ($EndpointConnections.Count -ne 0 -And $AcceptConnections -eq 0 -And $ConvertEndpointIPConfig) {
+        $EndpointsConversion = Convert-IcingaEndpointsToIPv4 -NetworkConfig $EndpointConnections;
+        if ($EndpointsConversion.HasErrors) {
+            Write-IcingaConsoleWarning -Message 'Not all of your endpoint connection data could be resolved. These endpoints were dropped: {0}' -Objects ([string]::Join(', ', $EndpointsConversion.Unresolved));
+        }
+        $EndpointConnections = $EndpointsConversion.Network;
     }
 
     if ([string]::IsNullOrEmpty($ParentZone)) {
