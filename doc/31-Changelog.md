@@ -7,6 +7,14 @@ documentation before upgrading to a new release.
 
 Released closed milestones can be found on [GitHub](https://github.com/Icinga/icinga-powershell-framework/milestones?state=closed).
 
+## 1.1.1 (2020-06-30)
+
+[Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/8?closed=1)
+
+### Bugfixes
+
+* [#70](https://github.com/Icinga/icinga-powershell-framework/issues/70) Fixes zones configuration for multiple parent endpoints
+
 ## 1.1.0 (2020-06-02)
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/4?closed=1)
