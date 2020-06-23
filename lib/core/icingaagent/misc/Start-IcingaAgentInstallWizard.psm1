@@ -10,6 +10,7 @@ function Start-IcingaAgentInstallWizard()
         $AddGlobalTemplates          = $null,
         [string]$PackageSource,
         [string]$AgentVersion,
+        [string]$InstallDir,
         $AllowVersionChanges,
         $UpdateAgent                 = $null,
         $AddFirewallRule             = $null,
@@ -78,6 +79,9 @@ function Start-IcingaAgentInstallWizard()
             $InstallerArguments   = $Result.Args;
             $Result               = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'AgentVersion' -Value $AgentVersion -InstallerArguments $InstallerArguments;
             $AgentVersion         = $Result.Value;
+            $InstallerArguments   = $Result.Args;
+            $Result               = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'InstallDir' -Value $InstallDir -InstallerArguments $InstallerArguments;
+            $InstallDir           = $Result.Value;
             $InstallerArguments   = $Result.Args;
             $Result               = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'CAPort' -Value $CAPort -InstallerArguments $InstallerArguments;
             $CAPort               = $Result.Value;
@@ -534,7 +538,7 @@ function Start-IcingaAgentInstallWizard()
     }
 
     if ($RunInstaller) {
-        if ((Install-IcingaAgent -Version $AgentVersion -Source $PackageSource -AllowUpdates $AllowVersionChanges) -Or $Reconfigure) {
+        if ((Install-IcingaAgent -Version $AgentVersion -Source $PackageSource -AllowUpdates $AllowVersionChanges -InstallDir $InstallDir) -Or $Reconfigure) {
             Reset-IcingaAgentConfigFile;
             Move-IcingaAgentDefaultConfig;
             Set-IcingaAgentNodeName -Hostname $Hostname;
