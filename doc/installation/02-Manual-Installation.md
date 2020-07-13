@@ -42,3 +42,15 @@ Get-ChildItem -Path 'C:\Program Files\WindowsPowershell\Modules\icinga-powershel
 ```
 
 Once done, please try again if you are now able to run the module on your host. If you are still not able to run the module and/or its scripts, please have a look at the Microsoft documentation for the [Set-Execution-Policy](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.security/set-executionpolicy?view=powershell-6) Cmdlet to modify the Execution Policy for running PowerShell modules on your host, matching your internal guidelines.
+
+Start the Installation Wizard
+---
+
+Once the entire Framework is installed and the module is runnable, you can start the installation wizard of the Agent:
+
+```powershell
+Use-Icinga;
+Start-IcingaAgentInstallWizard;
+```
+
+The wizard will then guide you through the entire configuration and installation. Once completed, you will receive a configuration string with all your configured settings to easily run the same command on another machine or for automated installation.
