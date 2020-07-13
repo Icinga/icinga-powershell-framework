@@ -11,6 +11,15 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/7?closed=1)
 
+## 1.1.2 (2020-07-01)
+
+[Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/9?closed=1)
+
+### Bugfixes
+
+* [#74](https://github.com/Icinga/icinga-powershell-framework/issues/74) Disabling Agent features for last list item is not possible
+* [#75](https://github.com/Icinga/icinga-powershell-framework/issues/75) 'notification' feature is not disabled during installation
+
 ## 1.1.1 (2020-06-18)
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/8?closed=1)
