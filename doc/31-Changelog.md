@@ -11,6 +11,8 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/7?closed=1)
 
+* [#78](https://github.com/Icinga/icinga-powershell-framework/issues/78) Fix Icinga Agent package fetching for x86 architecture
+
 ## 1.1.2 (2020-07-01)
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/9?closed=1)
