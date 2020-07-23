@@ -12,6 +12,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/7?closed=1)
 
 * [#78](https://github.com/Icinga/icinga-powershell-framework/issues/78) Fix Icinga Agent package fetching for x86 architecture
+* [#79](https://github.com/Icinga/icinga-powershell-framework/issues/79) Fix ConvertTo-Seconds to output valid numeric data with multiple digits
 
 ## 1.1.2 (2020-07-01)
 

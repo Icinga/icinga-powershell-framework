@@ -57,13 +57,13 @@ function ConvertTo-Seconds()
     }
 
     [single]$ValueSplitted = $NumberPart;
-    $result             = 0;
+    $result                = 0;
 
     if ($Negate) {
-        $ValueSplitted *= -1;
+        $ValueSplitted    *= -1;
     }
 
-    [string]$errorMsg   = (
+    [string]$errorMsg = (
         [string]::Format('Invalid unit type "{0}" specified for convertion. Allowed units: ms, s, m, h, d, w, M, y', $UnitPart)
     );
 
@@ -105,7 +105,13 @@ function ConvertTo-SecondsFromIcingaThresholds()
         $NewContent += (Get-IcingaThresholdsAsSeconds -Value $entry)
     }
 
-    return [string]::Join(':', $NewContent);
+    [string]$Value = [string]::Join(':', $NewContent);
+
+    if ($Value.Contains(':') -eq $FALSE) {
+        return [convert]::ToDouble($Value);
+    }
+
+    return $Value;
 }
 
 function Get-IcingaThresholdsAsSeconds()
