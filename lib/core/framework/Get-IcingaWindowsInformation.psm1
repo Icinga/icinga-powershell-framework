@@ -2,7 +2,8 @@ function Get-IcingaWindowsInformation()
 {
     param (
         [string]$ClassName,
-        $Filter
+        $Filter,
+        [switch]$ForceWMI  = $FALSE
     );
 
     $Arguments = @{
@@ -15,7 +16,7 @@ function Get-IcingaWindowsInformation()
         );
     }
 
-    if ((Get-Command 'Get-CimInstance' -ErrorAction SilentlyContinue)) {
+    if ($ForceWMI -eq $FALSE -And (Get-Command 'Get-CimInstance' -ErrorAction SilentlyContinue)) {
         try {
             return (Get-CimInstance @Arguments -ErrorAction Stop)  
         } catch {
