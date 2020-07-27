@@ -9,9 +9,9 @@ function Get-IcingaServices()
     $ServiceWmiInfo     = $null;
 
     if ($Service.Count -eq 0) {
-        $ServiceWmiInfo = Get-WmiObject Win32_Service;
+        $ServiceWmiInfo = Get-IcingaWindowsInformation Win32_Service;
     } else {
-        $ServiceWmiInfo = Get-WmiObject -Class Win32_Service | Where-Object { $Service -Contains $_.Name } | Select-Object StartName, Name;
+        $ServiceWmiInfo = Get-IcingaWindowsInformation Win32_Service | Where-Object { $Service -Contains $_.Name } | Select-Object StartName, Name;
     }
 
     if ($null -eq $ServiceInformation) {

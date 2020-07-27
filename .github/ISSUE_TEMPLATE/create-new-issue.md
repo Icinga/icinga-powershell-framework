@@ -35,4 +35,4 @@ labels:
 <!--- Include as many relevant details about the environment you experienced the problem in -->
 * PowerShell Version used (`$PSVersionTable.PSVersion`):
 
-* Operating System and version (`Get-WmiObject Win32_OperatingSystem | Select-Object Version, BuildNumber, Caption`):
+* Operating System and version (`Get-IcingaWindowsInformation Win32_OperatingSystem | Select-Object Version, BuildNumber, Caption`):

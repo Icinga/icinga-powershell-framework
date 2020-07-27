@@ -1,6 +1,6 @@
 function Get-IcingaNetbiosName()
 {
-    $ComputerData = Get-WmiObject Win32_ComputerSystem;
+    $ComputerData = Get-IcingaWindowsInformation Win32_ComputerSystem;
 
     return $ComputerData.Name;
 }
