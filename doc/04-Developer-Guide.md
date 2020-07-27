@@ -14,6 +14,13 @@ A detailed overview of functions can be found below
 * [New-IcingaCheckPackage](developerguide/02-New-IcingaCheckPackage.md)
 * [New-IcingaCheckResult](developerguide/03-New-IcingaCheckResult.md)
 
+General Handling
+---
+
+There are some general guidelines, functions and toolsets available making the development in general easier. Here you can find a list of topics
+
+* [Cim-Instance/Wmi-Object fetching](developerguide/50-Fetching-Cim_and_Wmi_Data.md)
+
 Example Usage
 ---
 
