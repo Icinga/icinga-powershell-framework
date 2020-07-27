@@ -22,20 +22,20 @@ function Get-IcingaWindowsInformation()
         } catch {
             $ErrorName    = $_.Exception.NativeErrorCode;
             $ErrorMessage = $_.Exception.Message;
+            $ErrorCode    = $_.Exception.StatusCode;
 
-            switch ($_.Exception.StatusCode) {
+            switch ($ErrorCode) {
+                # Permission error
+                2 {
+                    Exit-IcingaThrowException -ExceptionType 'Permission' -ExceptionThrown $IcingaExceptions.Permission.CimInstance -CustomMessage $ClassName -Force;
+                };
                 # InvalidClass
                 5 {
                     Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.CimClassNameUnknown -CustomMessage $ClassName -Force;
                 };
-                # TODO: Find error Id for permission errors
-                # Permission error
-                #x {
-                #    Exit-IcingaThrowException -ExceptionType 'Permission' -ExceptionThrown $IcingaExceptions.Permission.CimInstance -CustomMessage $ClassName -Force;
-                #};
                 # All other errors
                 default {
-                    Exit-IcingaThrowException -ExceptionType 'Custom' -InputString $ErrorMessage -CustomMessage ([string]::Format('CimInstanceUnhandledError: Class "{0}": Error "{1}"', $ClassName, $ErrorName)) -Force;
+                    Exit-IcingaThrowException -ExceptionType 'Custom' -InputString $ErrorMessage -CustomMessage ([string]::Format('CimInstanceUnhandledError: Class "{0}": Error "{1}": Id "{2}"', $ClassName, $ErrorName, $ErrorCode)) -Force;
                 }
             }
         }
@@ -47,8 +47,22 @@ function Get-IcingaWindowsInformation()
         } catch {
             $ErrorName    = $_.CategoryInfo.Category;
             $ErrorMessage = $_.Exception.Message;
+            $ErrorCode    = ($_.Exception.HResult -band 0xFFFF);
 
-            Exit-IcingaThrowException -ExceptionType 'Custom' -InputString $ErrorMessage -CustomMessage ([string]::Format('WmiObjectUnhandledError: Class "{0}": Error "{1}"', $ClassName, $ErrorName)) -Force;
+            switch ($ErrorCode) {
+                # Permission error
+                5376 {
+                    Exit-IcingaThrowException -ExceptionType 'Permission' -ExceptionThrown $IcingaExceptions.Permission.WMIObject -CustomMessage $ClassName -Force;
+                };
+                # InvalidClass
+                5377 {
+                    Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.WmiObjectClassUnknown -CustomMessage $ClassName -Force;
+                };
+                # All other errors
+                default {
+                    Exit-IcingaThrowException -ExceptionType 'Custom' -InputString $ErrorMessage -CustomMessage ([string]::Format('WmiObjectUnhandledError: Class "{0}": Error "{1}": Id "{2}"', $ClassName, $ErrorName, $ErrorCode)) -Force;
+                }
+            }
         }
     }
 
