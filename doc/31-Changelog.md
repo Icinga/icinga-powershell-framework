@@ -19,6 +19,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 * [#78](https://github.com/Icinga/icinga-powershell-framework/issues/78) Fix Icinga Agent package fetching for x86 architecture
 * [#79](https://github.com/Icinga/icinga-powershell-framework/issues/79) Fix ConvertTo-Seconds to output valid numeric data with multiple digits
+* [#81](https://github.com/Icinga/icinga-powershell-framework/issues/81), [#82](https://github.com/Icinga/icinga-powershell-framework/issues/82) Fix error on EventLog initialising in case `Icinga for Windows` application is not registered on new machines
 
 ## 1.1.2 (2020-07-01)
 
