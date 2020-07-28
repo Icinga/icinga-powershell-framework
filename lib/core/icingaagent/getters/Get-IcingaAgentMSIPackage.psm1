@@ -24,7 +24,7 @@ function Get-IcingaAgentMSIPackage()
         $UsePackage   = $null;
 
         foreach ($line in $Content) {
-            if ($line -like '*.msi*' -And $line -like "*$Architecture.msi") {
+            if ($line -like '*.msi*' -And $line -like "*$Architecture.msi*") {
                 $MSIPackage = $line.SubString(
                     $line.IndexOf('Icinga2-'),
                     $line.IndexOf('.msi') - $line.IndexOf('Icinga2-')
