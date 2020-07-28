@@ -107,7 +107,7 @@ function ConvertTo-SecondsFromIcingaThresholds()
 
     [string]$Value = [string]::Join(':', $NewContent);
 
-    if ($Value.Contains(':') -eq $FALSE) {
+    if ([string]::IsNullOrEmpty($Value) -eq $FALSE -And $Value.Contains(':') -eq $FALSE) {
         return [convert]::ToDouble($Value);
     }
 
