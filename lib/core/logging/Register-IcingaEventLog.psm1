@@ -1,11 +1,21 @@
 function Register-IcingaEventLog()
 {
-    $Registered = [System.Diagnostics.EventLog]::SourceExists(
-        'Icinga for Windows'
-    );
+    try {
+        # Run this in a Try-Catch-Block, as we will run into an exception if it is not
+        # present in the Application where it should be once we try to load the
+        # Security log. If it is not found in the "public" Event-Log data, the
+        # App is not registered
+        $Registered = [System.Diagnostics.EventLog]::SourceExists(
+            'Icinga for Windows'
+        );
 
-    if ($Registered) {
-        return;
+        if ($Registered) {
+            return;
+        }
+    } catch {
+        # Nothing to handle here. We should simply register our application
+        # whtin the Application Event-Log. We will only run into this catch
+        # block if the app was not registered.
     }
 
     New-EventLog -LogName Application -Source 'Icinga for Windows';
