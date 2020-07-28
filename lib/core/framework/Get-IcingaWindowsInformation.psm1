@@ -49,13 +49,13 @@ function Get-IcingaWindowsInformation()
             $ErrorMessage = $_.Exception.Message;
             $ErrorCode    = ($_.Exception.HResult -band 0xFFFF);
 
-            switch ($ErrorCode) {
+            switch ($ErrorName) {
                 # Permission error
-                5376 {
+                'InvalidOperation' {
                     Exit-IcingaThrowException -ExceptionType 'Permission' -ExceptionThrown $IcingaExceptions.Permission.WMIObject -CustomMessage $ClassName -Force;
                 };
-                # InvalidClass
-                5377 {
+                # Invalid Class
+                'InvalidType' {
                     Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.WmiObjectClassUnknown -CustomMessage $ClassName -Force;
                 };
                 # All other errors
