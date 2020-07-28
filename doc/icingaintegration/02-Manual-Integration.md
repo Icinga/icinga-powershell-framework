@@ -31,38 +31,49 @@ Check-Command definition for Icinga
 A example Check-Command for Icinga could look like this:
 
 ```icinga
-object CheckCommand "Windows Check CPU" {
+object CheckCommand "PowerShell Base" {
     import "plugin-check-command"
     command = [
         "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
     ]
     timeout = 3m
+}
+
+object CheckCommand "Invoke-IcingaCheckCPU" {
+    import "PowerShell Base"
+
     arguments += {
         "-C" = {
             order = 0
             value = "Use-Icinga; exit Invoke-IcingaCheckCPU"
         }
+        "-Core" = {
+            order = 4
+            value = "$IcingaCheckCPU_String_Core$"
+        }
         "-Critical" = {
-            order = 2
-            value = "$PowerShell_Critical$"
+            order = 3
+            value = "$IcingaCheckCPU_Object_Critical$"
         }
         "-NoPerfData" = {
-            order = 6
-            set_if = "$PowerShell_NoPerfData$"
+            order = 99
+            value = "$IcingaCheckCPU_Switchparameter_NoPerfData$"
         }
-        "-Verbose" = {
-            order = 4
-            value = "$PowerShell_Verbose$"
+        "-Verbosity" = {
+            order = 5
+            value = "$IcingaCheckCPU_Int32_Verbosity$"
         }
         "-Warning" = {
-            order = 1
-            value = "$PowerShell_Warning$"
+            order = 2
+            value = "$IcingaCheckCPU_Object_Warning$"
         }
     }
-    vars.PowerShell_Critical = "$$null"
-    vars.PowerShell_NoPerfData = "0"
-    vars.PowerShell_Verbose = "0"
-    vars.PowerShell_Warning = "$$null"
+
+    vars.IcingaCheckCPU_String_Core = "*"
+    vars.IcingaCheckCPU_Object_Critical = "$$null"
+    vars.IcingaCheckCPU_Switchparameter_NoPerfData = false
+    vars.IcingaCheckCPU_Int32_Verbosity = 0
+    vars.IcingaCheckCPU_Object_Warning = "$$null"
 }
 ```
 
