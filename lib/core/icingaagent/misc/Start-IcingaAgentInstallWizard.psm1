@@ -544,6 +544,11 @@ function Start-IcingaAgentInstallWizard()
     }
 
     if ($RunInstaller) {
+        if ((Test-IcingaAgentNETFrameworkDependency) -eq $FALSE) {
+            Write-IcingaConsoleError -Message 'You cannot install the Icinga Agent on this system as the required .NET Framework version is not installed. Please install .NET Framework 4.6.0 or later and use the above provided install arguments to try again.'
+            return;
+        }
+
         if ((Install-IcingaAgent -Version $AgentVersion -Source $PackageSource -AllowUpdates $AllowVersionChanges -InstallDir $InstallDir) -Or $Reconfigure) {
             Reset-IcingaAgentConfigFile;
             Move-IcingaAgentDefaultConfig;

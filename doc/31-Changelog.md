@@ -17,7 +17,8 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 ### Enhancements
 
-* Adds new Cmdlet `Show-IcingaPerformanceCounterInstances` to display all avaiable instances for Performance Counters
+* Adds new Cmdlet `Show-IcingaPerformanceCounterInstances` to display all available instances for Performance Counters
+* [#76](https://github.com/Icinga/icinga-powershell-framework/issues/76) Adds support to test for required .NET Framework Version 4.6.0 or above before trying to install the Icinga Agent
 
 ### Bugfixes
 
