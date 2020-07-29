@@ -15,6 +15,10 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 * [#80](https://github.com/Icinga/icinga-powershell-framework/issues/80) Adds wrapper function `Get-IcingaWindowsInformation` for WMI and CIM calls to properly handle config/permission errors
 
+### Enhancements
+
+* Adds new Cmdlet `Show-IcingaPerformanceCounterInstances` to display all avaiable instances for Performance Counters
+
 ### Bugfixes
 
 * [#78](https://github.com/Icinga/icinga-powershell-framework/issues/78) Fix Icinga Agent package fetching for x86 architecture
