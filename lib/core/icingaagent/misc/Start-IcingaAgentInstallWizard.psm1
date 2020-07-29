@@ -472,8 +472,8 @@ function Start-IcingaAgentInstallWizard()
                     $ServicePass = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please enter the password for your service user' -Secure -Default 'v').answer;
                     $InstallerArguments += "-ServicePass $ServicePass";
                 } else {
-                    $ServicePass = '';
-                    $InstallerArguments += "-ServicePass ''";
+                    $ServicePass         = $null
+                    $InstallerArguments += '-ServicePass $null';
                 }
             }
         } else {
