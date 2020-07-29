@@ -30,4 +30,4 @@ To get started easier you can find detailed examples for developing modules/inte
 * [Custom Plugins](developerguide/11-Custom-Plugins.md)
 * [Custom API-Endpoints](developerguide/12-Custom-API-Endpoints.md)
 * [Using Console Outputs](developerguide/20-Using-Console-Outputs.md)
-* [Using EventLog Output](developerguide/20-Using-EventLog-Outputs.md)
+* [Using EventLog Output](developerguide/21-Using-EventLog-Outputs.md)
