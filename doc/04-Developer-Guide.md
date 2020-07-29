@@ -20,6 +20,7 @@ General Handling
 There are some general guidelines, functions and toolsets available making the development in general easier. Here you can find a list of topics
 
 * [Cim-Instance/Wmi-Object fetching](developerguide/50-Fetching-Cim_and_Wmi_Data.md)
+* [Working with Performance Counters](developerguide/51-Working-with-Performance-Counters.md)
 
 Example Usage
 ---
