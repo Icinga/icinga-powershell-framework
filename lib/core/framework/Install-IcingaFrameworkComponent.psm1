@@ -51,6 +51,8 @@ function Install-IcingaFrameworkComponent()
         throw 'Please specify a component name to install from a GitHub/Local space';
     }
 
+    Set-IcingaTLSVersion;
+
     $TextInfo       = (Get-Culture).TextInfo;
     $ComponentName  = $TextInfo.ToTitleCase($Name);
     $RepositoryName = [string]::Format('icinga-powershell-{0}', $Name);

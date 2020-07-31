@@ -49,6 +49,7 @@ function Register-IcingaDirectorSelfServiceHost()
         throw 'Please enter the API key of the template you wish to use';
     }
 
+    Set-IcingaTLSVersion;
     $ProgressPreference = "SilentlyContinue";
     $DirectorConfigJson = $null;
 

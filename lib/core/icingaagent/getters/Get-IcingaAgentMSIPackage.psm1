@@ -14,6 +14,7 @@ function Get-IcingaAgentMSIPackage()
         throw 'Please specify a valid download URL, like "https://packages.icinga.com/windows/"';
     }
 
+    Set-IcingaTLSVersion;
     # Disable the progress bar for the WebRequest
     $ProgressPreference = "SilentlyContinue";
     $Architecture = Get-IcingaAgentArchitecture;

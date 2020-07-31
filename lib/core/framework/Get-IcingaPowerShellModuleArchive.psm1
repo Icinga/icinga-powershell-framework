@@ -46,6 +46,7 @@ function Get-IcingaPowerShellModuleArchive()
         [bool]$DryRun        = $FALSE
     );
 
+    Set-IcingaTLSVersion;
     $ProgressPreference = "SilentlyContinue";
     $Tag                = 'master';
     [bool]$SkipRepo     = $FALSE;

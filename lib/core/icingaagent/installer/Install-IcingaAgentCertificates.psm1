@@ -214,6 +214,7 @@ function Copy-IcingaAgentCACertificate()
         Copy-Item -Path $CAPath -Destination (Join-Path -Path $Desination -ChildPath 'ca.crt') | Out-Null;
         Write-IcingaConsoleNotice ([string]::Format('Copied ca.crt from "{0}" to "{1}', $CAPath, $Desination));
     } else {
+        Set-IcingaTLSVersion;
         # It could also be a web ressource
         try {
             $response   = Invoke-WebRequest $CAPath -UseBasicParsing;

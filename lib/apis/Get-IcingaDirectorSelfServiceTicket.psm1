@@ -38,6 +38,8 @@ function Get-IcingaDirectorSelfServiceTicket()
       return;
    }
 
+   Set-IcingaTLSVersion;
+
    [string]$url = Join-WebPath -Path $DirectorUrl -ChildPath ([string]::Format('/self-service/ticket?key={0}', $ApiKey));
 
    $response = Invoke-WebRequest -Uri $url -UseBasicParsing -Headers @{ 'accept' = 'application/json'; 'X-Director-Accept' = 'application/json' } -Method 'POST';

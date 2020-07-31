@@ -31,6 +31,7 @@ function Get-IcingaFrameworkServiceBinary()
         [string]$ServiceDirectory
     );
 
+    Set-IcingaTLSVersion;
     $ProgressPreference = "SilentlyContinue";
 
     if ([string]::IsNullOrEmpty($FrameworkServiceUrl)) {
