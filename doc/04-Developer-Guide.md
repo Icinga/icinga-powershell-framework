@@ -20,6 +20,7 @@ General Handling
 There are some general guidelines, functions and toolsets available making the development in general easier. Here you can find a list of topics
 
 * [Cim-Instance/Wmi-Object fetching](developerguide/50-Fetching-Cim_and_Wmi_Data.md)
+* [Working with Performance Counters](developerguide/51-Working-with-Performance-Counters.md)
 
 Example Usage
 ---
@@ -30,4 +31,4 @@ To get started easier you can find detailed examples for developing modules/inte
 * [Custom Plugins](developerguide/11-Custom-Plugins.md)
 * [Custom API-Endpoints](developerguide/12-Custom-API-Endpoints.md)
 * [Using Console Outputs](developerguide/20-Using-Console-Outputs.md)
-* [Using EventLog Output](developerguide/20-Using-EventLog-Outputs.md)
+* [Using EventLog Output](developerguide/21-Using-EventLog-Outputs.md)

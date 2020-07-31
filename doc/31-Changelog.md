@@ -15,12 +15,18 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 * [#80](https://github.com/Icinga/icinga-powershell-framework/issues/80) Adds wrapper function `Get-IcingaWindowsInformation` for WMI and CIM calls to properly handle config/permission errors
 
+### Enhancements
+
+* Adds new Cmdlet `Show-IcingaPerformanceCounterInstances` to display all available instances for Performance Counters
+* [#76](https://github.com/Icinga/icinga-powershell-framework/issues/76) Adds support to test for required .NET Framework Version 4.6.0 or above before trying to install the Icinga Agent
+
 ### Bugfixes
 
 * [#78](https://github.com/Icinga/icinga-powershell-framework/issues/78) Fix Icinga Agent package fetching for x86 architecture
 * [#79](https://github.com/Icinga/icinga-powershell-framework/issues/79) Fix ConvertTo-Seconds to output valid numeric data with multiple digits
 * [#81](https://github.com/Icinga/icinga-powershell-framework/issues/81), [#82](https://github.com/Icinga/icinga-powershell-framework/issues/82) Fix error on EventLog initialising in case `Icinga for Windows` application is not registered on new machines
 * [#84](https://github.com/Icinga/icinga-powershell-framework/issues/84), Fix conversion of `ConvertTo-Seconds` and `ConvertTo-SecondsFromIcingaThresholds` while the input value is `$null`
+* [#85](https://github.com/Icinga/icinga-powershell-framework/issues/85), Fix incorrect handling to empty service user password which was configured as empty `String` instead of `$null` `SecureString` object
 
 ## 1.1.2 (2020-07-01)
 

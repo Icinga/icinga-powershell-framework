@@ -28,17 +28,10 @@
      $pc_instance | Add-Member -membertype NoteProperty -name 'SkipWait'    -value $SkipWait;
  
      $pc_instance | Add-Member -membertype ScriptMethod -name 'Init' -value {
- 
-        # TODO: Re-Implement debug logging
-         <#$Icinga2.Log.Write(
-             $Icinga2.Enums.LogState.Debug,
-             [string]::Format('Creating new Counter for Category {0} with Instance {1} and Counter {2}. Full Name "{3}"',
-                 $this.Category,
-                 $this.Instance,
-                 $this.Counter,
-                 $this.FullName
-             )
-         );#>
+
+        Write-IcingaConsoleDebug `
+            -Message 'Creating new Counter for Category "{0}" with Instance "{1}" and Counter "{2}". Full Name "{3}"' `
+            -Objects $this.Category, $this.Instance, $this.Counter, $this.FullName;
  
          # Create the Performance Counter object we want to access
          $this.PerfCounter              = New-Object System.Diagnostics.PerformanceCounter;
