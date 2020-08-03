@@ -45,7 +45,7 @@ function Install-IcingaAgent()
 
     if ([string]::IsNullOrEmpty($InstallDir) -eq $FALSE) {
         if ((Test-Path $InstallDir) -eq $FALSE) {
-            New-Item -Path $InstallDir -Force | Out-Null;
+            New-Item -Path $InstallDir -ItemType Directory -Force | Out-Null;
         }
         $InstallTarget = $InstallDir;
     }
