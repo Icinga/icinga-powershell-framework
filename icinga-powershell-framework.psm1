@@ -265,24 +265,45 @@ function Invoke-IcingaCommand()
 {
     [CmdletBinding()]
     param (
-        $ScriptBlock
+        $ScriptBlock,
+        [switch]$SkipHeader = $FALSE
     );
 
     powershell.exe -NoExit -Command {
-        $Script = $args[0]
+        $Script       = $args[0];
+        [bool]$Header = $args[1].IsPresent;
+        $RootPath     = $args[2];
+
+        # Load our Icinga Framework
         Use-Icinga;
 
+        # Set the location to the Icinga Framework module folder
+        Set-Location $RootPath;
+
+        # If we added a block to execute, do it right here and exit the shell
+        # with the last exit code of the command
         if ([string]::IsNullOrEmpty($Script) -eq $FALSE) {
             Invoke-Command -ScriptBlock ([Scriptblock]::Create($Script));
             exit $LASTEXITCODE;
         }
+
+        # Print a header informing our user that loaded the Icinga Framework with a specific
+        # version. We can also skip the header by using $SKipHeader
+        if ($null -eq $Header -Or $Header -eq $FALSE -Or -Not $Header) {
+            $FrameworkVersion = Get-IcingaPowerShellModuleVersion 'icinga-powershell-framework';
+            Write-IcingaConsolePlain '******************************************************';
+            Write-IcingaConsolePlain '** Icinga PowerShell Framework {0}' -Objects $FrameworkVersion;
+            Write-IcingaConsolePlain '** Copyright (c) 2020 Icinga GmbH | MIT';
+            Write-IcingaConsolePlain '******************************************************';
+        }
+
         # Set our "path" to something different so we know that we loaded the Framework
         function prompt {
             Write-Host -Object "icinga" -NoNewline;
             return "> "
         }
 
-    } -Args $ScriptBlock;
+    } -Args $ScriptBlock, $SkipHeader, $PSScriptRoot;
 }
 
 Set-Alias icinga Invoke-IcingaCommand -Description "Execute Icinga Framework commands in a new PowerShell instance for testing or quick access to data";
