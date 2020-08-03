@@ -269,10 +269,23 @@ function Invoke-IcingaCommand()
         [switch]$SkipHeader = $FALSE
     );
 
+    Import-LocalizedData `
+        -BaseDirectory $PSScriptRoot `
+        -FileName 'icinga-powershell-framework.psd1' `
+        -BindingVariable IcingaFrameworkData;
+
+    # Print a header informing our user that loaded the Icinga Framework with a specific
+    # version. We can also skip the header by using $SKipHeader
+    if ($SkipHeader -eq $FALSE) {
+        Write-Host '******************************************************';
+        Write-Host ([string]::Format('** Icinga PowerShell Framework {0}', $IcingaFrameworkData.PrivateData.Version));
+        Write-Host ([string]::Format('** Copyright {0}', $IcingaFrameworkData.Copyright));
+        Write-Host '******************************************************';
+    }
+
     powershell.exe -NoExit -Command {
-        $Script       = $args[0];
-        [bool]$Header = $args[1].IsPresent;
-        $RootPath     = $args[2];
+        $Script        = $args[0];
+        $RootPath      = $args[1];        
 
         # Load our Icinga Framework
         Use-Icinga;
@@ -287,23 +300,13 @@ function Invoke-IcingaCommand()
             exit $LASTEXITCODE;
         }
 
-        # Print a header informing our user that loaded the Icinga Framework with a specific
-        # version. We can also skip the header by using $SKipHeader
-        if ($null -eq $Header -Or $Header -eq $FALSE -Or -Not $Header) {
-            $FrameworkVersion = Get-IcingaPowerShellModuleVersion 'icinga-powershell-framework';
-            Write-IcingaConsolePlain '******************************************************';
-            Write-IcingaConsolePlain '** Icinga PowerShell Framework {0}' -Objects $FrameworkVersion;
-            Write-IcingaConsolePlain '** Copyright (c) 2020 Icinga GmbH | MIT';
-            Write-IcingaConsolePlain '******************************************************';
-        }
-
         # Set our "path" to something different so we know that we loaded the Framework
         function prompt {
             Write-Host -Object "icinga" -NoNewline;
             return "> "
         }
 
-    } -Args $ScriptBlock, $SkipHeader, $PSScriptRoot;
+    } -Args $ScriptBlock, $PSScriptRoot;
 }
 
 Set-Alias icinga Invoke-IcingaCommand -Description "Execute Icinga Framework commands in a new PowerShell instance for testing or quick access to data";
