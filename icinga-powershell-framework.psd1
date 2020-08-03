@@ -7,10 +7,10 @@
     Copyright = '(c) 2020 Icinga GmbH | MIT'
     Description = 'Icinga for Windows module which allows to entirely monitor the Windows Host system.'
     PowerShellVersion = '4.0'
-    FunctionsToExport = @( 'Use-Icinga', 'Invoke-IcingaCommand', 'Import-IcingaLib', 'Publish-IcingaModuleManifests', 'Publish-IcingaEventlogDocumentation', 'Get-IcingaPluginDir', 'Get-IcingaCustomPluginDir', 'Get-IcingaCacheDir', 'Get-IcingaPowerShellConfigDir', 'Get-IcingaFrameworkRootPath', 'Get-IcingaPowerShellModuleFile' )
+    FunctionsToExport = @( '*' )
     CmdletsToExport = @()
     VariablesToExport = '*'
-    AliasesToExport = @( 'icinga' )
+    AliasesToExport = @( '*' )
     PrivateData = @{
         PSData = @{
             Tags = @( 'icinga','icinga2','IcingaPowerShellFramework','IcingaPowerShell','IcingaforWindows','IcingaWindows')
