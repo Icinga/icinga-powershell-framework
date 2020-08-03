@@ -31,6 +31,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#89](https://github.com/Icinga/icinga-powershell-framework/issues/89), Fix file type question during `Get-IcingaCheckCommandConfig` generation in Windows 2012 R2 and older
 * [#90](https://github.com/Icinga/icinga-powershell-framework/issues/90), Fix file type question during Icinga Agent installation on Windows 2012 R2 while using a custom installation target
 * [#91](https://github.com/Icinga/icinga-powershell-framework/issues/91), Fix wrong default values being set for installer arguments by using the Icinga Director Self-Service API
+* [#92](https://github.com/Icinga/icinga-powershell-framework/issues/92), Fix `Set-IcingaAcl` which fails on older Windows systems with a security id error and not at all/not properly setting required permissions for directories
 
 ## 1.1.2 (2020-07-01)
 

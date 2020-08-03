@@ -9,7 +9,7 @@ function Set-IcingaAcl()
         return;
     }
 
-    $DirectoryAcl        = Get-Acl -Path $Directory;
+    $DirectoryAcl        = (Get-Item -Path $Directory).GetAccessControl('Access');
     $DirectoryAccessRule = New-Object System.Security.AccessControl.FileSystemAccessRule(
         (Get-IcingaServiceUser),
         'Modify',
