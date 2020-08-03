@@ -276,7 +276,7 @@ function Invoke-IcingaCommand()
 
     # Print a header informing our user that loaded the Icinga Framework with a specific
     # version. We can also skip the header by using $SKipHeader
-    if ($SkipHeader -eq $FALSE) {
+    if ([string]::IsNullOrEmpty($ScriptBlock) -And $SkipHeader -eq $FALSE) {
         Write-Host '******************************************************';
         Write-Host ([string]::Format('** Icinga PowerShell Framework {0}', $IcingaFrameworkData.PrivateData.Version));
         Write-Host ([string]::Format('** Copyright {0}', $IcingaFrameworkData.Copyright));
