@@ -35,11 +35,13 @@ function Use-Icinga()
         $global:IcingaThreads       = [hashtable]::Synchronized(@{});
         $global:IcingaThreadContent = [hashtable]::Synchronized(@{});
         $global:IcingaThreadPool    = [hashtable]::Synchronized(@{});
+        $global:IcingaTimers        = [hashtable]::Synchronized(@{});
         $global:IcingaDaemonData    = [hashtable]::Synchronized(
             @{
                 'IcingaThreads'            = $global:IcingaThreads;
                 'IcingaThreadContent'      = $global:IcingaThreadContent;
                 'IcingaThreadPool'         = $global:IcingaThreadPool;
+                'IcingaTimers'             = $global:IcingaTimers;
                 'FrameworkRunningAsDaemon' = $Daemon;
                 'DebugMode'                = $DebugMode;
             }
