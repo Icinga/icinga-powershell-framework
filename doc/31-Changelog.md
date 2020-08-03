@@ -30,6 +30,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#85](https://github.com/Icinga/icinga-powershell-framework/issues/85), Fix incorrect handling to empty service user password which was configured as empty `String` instead of `$null` `SecureString` object
 * [#89](https://github.com/Icinga/icinga-powershell-framework/issues/89), Fix file type question during `Get-IcingaCheckCommandConfig` generation in Windows 2012 R2 and older
 * [#90](https://github.com/Icinga/icinga-powershell-framework/issues/90), Fix file type question during Icinga Agent installation on Windows 2012 R2 while using a custom installation target
+* [#91](https://github.com/Icinga/icinga-powershell-framework/issues/91), Fix wrong default values being set for installer arguments by using the Icinga Director Self-Service API
 
 ## 1.1.2 (2020-07-01)
 

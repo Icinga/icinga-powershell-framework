@@ -711,8 +711,8 @@ function Set-IcingaWizardArgument()
     if ($DirectorArgs.Arguments.ContainsKey($WizardArg)) {
         $RetValue = $DirectorArgs.Arguments[$WizardArg];
     } else {
-        if ($null -ne $Value -Or [string]::IsNullOrEmpty($Value) -eq $FALSE) {
 
+        if ($null -ne $Value -And [string]::IsNullOrEmpty($Value) -eq $FALSE) {
             $InstallerArguments = Add-InstallerArgument `
                 -InstallerArguments $InstallerArguments `
                 -Key $WizardArg `
