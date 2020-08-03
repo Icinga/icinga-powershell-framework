@@ -310,3 +310,4 @@ function Invoke-IcingaCommand()
 }
 
 Set-Alias icinga Invoke-IcingaCommand -Description "Execute Icinga Framework commands in a new PowerShell instance for testing or quick access to data";
+Export-ModuleMember -Alias * -Function *;
