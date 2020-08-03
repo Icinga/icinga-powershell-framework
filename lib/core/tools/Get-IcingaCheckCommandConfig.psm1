@@ -310,7 +310,7 @@ function Get-IcingaCheckCommandConfig()
     if ([string]::IsNullOrEmpty($OutDirectory) -eq $false) {
         $OutDirectory = (Join-Path -Path $OutDirectory -ChildPath $FileName);
         if ((Test-Path($OutDirectory)) -eq $false) {
-            New-Item -Path $OutDirectory -Force | Out-Null;
+            New-Item -Path $OutDirectory -ItemType File -Force | Out-Null;
         }
 
         if ((Test-Path($OutDirectory)) -eq $false) {

@@ -28,6 +28,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#81](https://github.com/Icinga/icinga-powershell-framework/issues/81), [#82](https://github.com/Icinga/icinga-powershell-framework/issues/82) Fix error on EventLog initialising in case `Icinga for Windows` application is not registered on new machines
 * [#84](https://github.com/Icinga/icinga-powershell-framework/issues/84), Fix conversion of `ConvertTo-Seconds` and `ConvertTo-SecondsFromIcingaThresholds` while the input value is `$null`
 * [#85](https://github.com/Icinga/icinga-powershell-framework/issues/85), Fix incorrect handling to empty service user password which was configured as empty `String` instead of `$null` `SecureString` object
+* [#89](https://github.com/Icinga/icinga-powershell-framework/issues/89), Fix file type question during `Get-IcingaCheckCommandConfig` generation in Windows 2012 R2 and older
 
 ## 1.1.2 (2020-07-01)
 
