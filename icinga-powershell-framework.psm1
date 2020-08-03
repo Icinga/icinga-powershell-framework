@@ -260,3 +260,29 @@ function Get-IcingaPowerShellModuleFile()
 {
     return (Join-Path -Path $PSScriptRoot -ChildPath 'icinga-powershell-framework.psm1');
 }
+
+function Invoke-IcingaCommand()
+{
+    [CmdletBinding()]
+    param (
+        $ScriptBlock
+    );
+
+    powershell.exe -NoExit -Command {
+        $Script = $args[0]
+        Use-Icinga;
+
+        if ([string]::IsNullOrEmpty($Script) -eq $FALSE) {
+            Invoke-Command -ScriptBlock ([Scriptblock]::Create($Script));
+            exit $LASTEXITCODE;
+        }
+        # Set our "path" to something different so we know that we loaded the Framework
+        function prompt {
+            Write-Host -Object "icinga" -NoNewline;
+            return "> "
+        }
+
+    } -Args $ScriptBlock;
+}
+
+Set-Alias icinga Invoke-IcingaCommand -Description "Execute Icinga Framework commands in a new PowerShell instance for testing or quick access to data";

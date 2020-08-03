@@ -21,6 +21,7 @@ There are some general guidelines, functions and toolsets available making the d
 
 * [Cim-Instance/Wmi-Object fetching](developerguide/50-Fetching-Cim_and_Wmi_Data.md)
 * [Working with Performance Counters](developerguide/51-Working-with-Performance-Counters.md)
+* [Testing of Commands](developerguide/52-Testing-of-Commands.md)
 
 Example Usage
 ---
