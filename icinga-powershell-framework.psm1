@@ -6,7 +6,6 @@
 .EXAMPLE
    Install-Icinga
  .NOTES
-    
 #>
 
 function Use-Icinga()
@@ -70,8 +69,8 @@ function Use-Icinga()
     foreach ($entry in $EventLogMessages.Values) {
         foreach ($event in $entry.Keys) {
             Add-IcingaHashtableItem -Hashtable $global:IcingaEventLogEnums `
-                                    -Key $event `
-                                    -Value $entry[$event] | Out-Null;
+                -Key $event `
+                -Value $entry[$event] | Out-Null;
         }
     }
 }
@@ -79,12 +78,6 @@ function Use-Icinga()
 function Import-IcingaLib()
 {
     param(
-        [Parameter(
-            Position=0, 
-            Mandatory=$true, 
-            ValueFromPipeline=$true,
-            ValueFromPipelineByPropertyName=$true)
-        ]
         [String]$Lib,
         # The Force Reload will remove the module in case it's loaded and reload it to track
         # possible development changes without having to create new PowerShell environments
@@ -114,22 +107,22 @@ function Import-IcingaLib()
     if ((Test-Path $module -PathType Container)) {
 
         Get-ChildItem -Path $module -Recurse -Filter *.psm1 |
-        ForEach-Object {
-            [string]$modulePath = $_.FullName;
-            $moduleName = $_.Name.Replace('.psm1', '');
+            ForEach-Object {
+                [string]$modulePath = $_.FullName;
+                $moduleName = $_.Name.Replace('.psm1', '');
 
-            if ($ListOfLoadedModules -like "*$moduleName*") {
-                if ($ForceReload) {
-                    Remove-Module -Name $moduleName
-                    Import-Module ([string]::Format('{0}', $modulePath)) -Global; 
-                }
-            } else {
-                Import-Module ([string]::Format('{0}', $modulePath)) -Global; 
-                if ($WriteManifests) {
-                    Publish-IcingaModuleManifests -Module $moduleName;
+                if ($ListOfLoadedModules -like "*$moduleName*") {
+                    if ($ForceReload) {
+                        Remove-Module -Name $moduleName
+                        Import-Module ([string]::Format('{0}', $modulePath)) -Global;
+                    }
+                } else {
+                    Import-Module ([string]::Format('{0}', $modulePath)) -Global;
+                    if ($WriteManifests) {
+                        Publish-IcingaModuleManifest -Module $moduleName;
+                    }
                 }
             }
-        }
     } else {
         $module = $module.Replace('.psm1', ''); # Cut possible .psm1 ending
         $moduleName = $module.Split('\')[-1]; # Get the last element
@@ -142,12 +135,12 @@ function Import-IcingaLib()
 
         Import-Module ([string]::Format('{0}.psm1', $module)) -Global;
         if ($WriteManifests) {
-            Publish-IcingaModuleManifests -Module $moduleName;
+            Publish-IcingaModuleManifest -Module $moduleName;
         }
     }
 }
 
-function Publish-IcingaModuleManifests()
+function Publish-IcingaModuleManifest()
 {
     param(
         [string]$Module
@@ -161,7 +154,7 @@ function Publish-IcingaModuleManifests()
         return;
     }
 
-    New-ModuleManifest -path $PSDFile -ModuleVersion 1.0 -Author $env:USERNAME -CompanyName 'Icinga GmbH' -Copyright '(c) 2019 Icinga GmbH. All rights reserved.' -PowerShellVersion 4.0;
+    New-ModuleManifest -Path $PSDFile -ModuleVersion 1.0 -Author $env:USERNAME -CompanyName 'Icinga GmbH' -Copyright '(c) 2019 Icinga GmbH. All rights reserved.' -PowerShellVersion 4.0;
     $Content    = Get-Content $PSDFile;
     $NewContent = @();
 
@@ -224,7 +217,7 @@ function Publish-IcingaEventlogDocumentation()
     }
 
     if ([string]::IsNullOrEmpty($OutFile)) {
-        Write-Host $DocContent;
+        Write-Output $DocContent;
     } else {
         Set-Content -Path $OutFile -Value $DocContent;
     }
@@ -279,15 +272,15 @@ function Invoke-IcingaCommand()
     # Print a header informing our user that loaded the Icinga Framework with a specific
     # version. We can also skip the header by using $SKipHeader
     if ([string]::IsNullOrEmpty($ScriptBlock) -And $SkipHeader -eq $FALSE) {
-        Write-Host '******************************************************';
-        Write-Host ([string]::Format('** Icinga PowerShell Framework {0}', $IcingaFrameworkData.PrivateData.Version));
-        Write-Host ([string]::Format('** Copyright {0}', $IcingaFrameworkData.Copyright));
-        Write-Host '******************************************************';
+        Write-Output '******************************************************';
+        Write-Output ([string]::Format('** Icinga PowerShell Framework {0}', $IcingaFrameworkData.PrivateData.Version));
+        Write-Output ([string]::Format('** Copyright {0}', $IcingaFrameworkData.Copyright));
+        Write-Output '******************************************************';
     }
 
     powershell.exe -NoExit -Command {
         $Script        = $args[0];
-        $RootPath      = $args[1];        
+        $RootPath      = $args[1];
 
         # Load our Icinga Framework
         Use-Icinga;
