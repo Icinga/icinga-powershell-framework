@@ -36,6 +36,6 @@ function ConvertTo-IcingaIPv6BinaryString()
 
     return @{
         'value' = $IP;
-        'name' = 'IPv6'
+        'name'  = 'IPv6'
     }
 }

@@ -150,9 +150,9 @@ function Get-IcingaCheckCommandConfig()
             if ($parameter.type.name -eq 'SwitchParameter') {
                 $Basket.Command[$Data.Name].arguments.Add(
                     [string]::Format('-{0}', $parameter.Name), @{
-                        'set_if' = $IcingaCustomVariable;
+                        'set_if'        = $IcingaCustomVariable;
                         'set_if_format' = 'string';
-                        'order' = $Order;
+                        'order'         = $Order;
                     }
                 );
 
@@ -236,21 +236,21 @@ function Get-IcingaCheckCommandConfig()
             if ($Basket.Datafield.Values.varname -ne $IcingaCustomVariable) {
                 $Basket.Datafield.Add(
                     [string]$FieldID, @{
-                        'varname' = $IcingaCustomVariable;
-                        'caption' = $parameter.Name;
+                        'varname'     = $IcingaCustomVariable;
+                        'caption'     = $parameter.Name;
                         'description' = $parameter.Description.Text;
-                        'datatype' = $IcingaDataType;
-                        'format' = $NULL;
-                        'originalId' = [string]$FieldID;
+                        'datatype'    = $IcingaDataType;
+                        'format'      = $NULL;
+                        'originalId'  = [string]$FieldID;
                     }
                 );
 
                 if ($IsDataList) {
                     $Basket.Datafield[[string]$FieldID].Add(
                         'settings', @{
-                            'datalist' = $DataListName;
+                            'datalist'  = $DataListName;
                             'data_type' = 'string';
-                            'behavior' = 'strict';
+                            'behavior'  = 'strict';
                         }
                     );
                 } else {

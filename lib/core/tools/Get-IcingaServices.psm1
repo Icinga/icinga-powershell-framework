@@ -57,34 +57,34 @@ function Get-IcingaServices()
 
         $ServiceData.Add(
             $service.Name, @{
-                'metadata' = @{
-                    'DisplayName' = $service.DisplayName;
-                    'ServiceName' = $service.ServiceName;
-                    'Site' = $service.Site;
-                    'Container' = $service.Container;
+                'metadata'      = @{
+                    'DisplayName'   = $service.DisplayName;
+                    'ServiceName'   = $service.ServiceName;
+                    'Site'          = $service.Site;
+                    'Container'     = $service.Container;
                     'ServiceHandle' = $service.ServiceHandle;
-                    'Dependent' = $DependentServices;
-                    'Depends' = $DependingServices;
+                    'Dependent'     = $DependentServices;
+                    'Depends'       = $DependingServices;
                 };
                 'configuration' = @{
                     'CanPauseAndContinue' = $service.CanPauseAndContinue;
-                    'CanShutdown' = $service.CanShutdown;
-                    'CanStop' = $service.CanStop;
-                    'Status' = @{
-                        'raw' = [int]$service.Status;
+                    'CanShutdown'         = $service.CanShutdown;
+                    'CanStop'             = $service.CanStop;
+                    'Status'              = @{
+                        'raw'   = [int]$service.Status;
                         'value' = $service.Status;
                     };
-                    'ServiceType' = @{
-                        'raw' = [int]$service.ServiceType;
+                    'ServiceType'         = @{
+                        'raw'   = [int]$service.ServiceType;
                         'value' = $service.ServiceType;
                     };
-                    'ServiceHandle' = $service.ServiceHandle;
-                    'StartType' = @{
-                        'raw' = [int]$service.StartType;
+                    'ServiceHandle'       = $service.ServiceHandle;
+                    'StartType'           = @{
+                        'raw'   = [int]$service.StartType;
                         'value' = $service.StartType;
                     };
-                    'ServiceUser' = $ServiceUser;
-                    'ExitCode'    = $ServiceExitCode;
+                    'ServiceUser'         = $ServiceUser;
+                    'ExitCode'            = $ServiceExitCode;
                 }
             }
         );

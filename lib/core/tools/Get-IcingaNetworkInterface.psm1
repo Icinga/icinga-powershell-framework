@@ -91,8 +91,8 @@ function Get-IcingaNetworkInterface()
             $InterfaceData.Add(
                 $Key, @{
                     'Binary IP String' = (ConvertTo-IcingaIPBinaryString -IP $IP).value;
-                    'Mask' = $Mask;
-                    'Interface' = $Info.ifIndex;
+                    'Mask'             = $Mask;
+                    'Interface'        = $Info.ifIndex;
                 }
             );
         }

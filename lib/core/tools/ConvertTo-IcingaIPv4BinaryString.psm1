@@ -39,6 +39,6 @@ function ConvertTo-IcingaIPv4BinaryString()
 
     return @{
         'value' = $IP;
-        'name' = 'IPv4'
+        'name'  = 'IPv4'
     }
 }

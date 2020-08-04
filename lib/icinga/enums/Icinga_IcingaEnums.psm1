@@ -5,10 +5,10 @@
  #>
 
 [hashtable]$IcingaExitCode = @{
-    Ok        = 0;
-    Warning   = 1;
-    Critical  = 2;
-    Unknown   = 3;
+    Ok       = 0;
+    Warning  = 1;
+    Critical = 2;
+    Unknown  = 3;
 };
 
 [hashtable]$IcingaExitCodeText = @{
