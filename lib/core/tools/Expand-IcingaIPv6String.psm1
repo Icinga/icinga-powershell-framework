@@ -8,7 +8,7 @@
 .FUNCTIONALITY
    This module is intended to be used to expand an IPv6 address.
 .EXAMPLE
-   PS> Expand-IcingaIPv6String ffe8::71:ab:   
+   PS> Expand-IcingaIPv6String ffe8::71:ab:
    FFE8:0000:0000:0000:0000:0071:00AB:0000
 .PARAMETER IP
    Used to specify an IPv6 address.
@@ -34,7 +34,7 @@ function Expand-IcingaIPv6String()
     for ($Index = 0; $Index -lt $IP.Length; $Index++) {
         if ($IP[$Index] -eq ':') {
             $Counter++;
-            if (($Index - 1) -ge 0 -and $IP[$Index - 1] -eq ':'){
+            if (($Index - 1) -ge 0 -and $IP[$Index - 1] -eq ':') {
                 $RelV = $Index;
             }
         }

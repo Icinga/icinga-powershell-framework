@@ -1,7 +1,7 @@
 function ConvertFrom-IcingaSecureString()
 {
     param([SecureString]$SecureString);
- 
+
     if ($SecureString -eq $null) {
         return '';
     }

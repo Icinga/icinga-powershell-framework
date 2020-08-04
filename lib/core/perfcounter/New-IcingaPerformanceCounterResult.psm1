@@ -9,30 +9,30 @@
  # containing the parent counter name including the values and
  # samples for every single instance
  #>
- function New-IcingaPerformanceCounterResult()
- {
-     param(
-         [string]$FullName           = '',
-         [array]$PerformanceCounters = @()
-     );
+function New-IcingaPerformanceCounterResult()
+{
+    param(
+        [string]$FullName           = '',
+        [array]$PerformanceCounters = @()
+    );
 
-     $pc_instance = New-Object -TypeName PSObject;
-     $pc_instance | Add-Member -membertype NoteProperty -name 'FullName' -value $FullName;
-     $pc_instance | Add-Member -membertype NoteProperty -name 'Counters' -value $PerformanceCounters;
- 
-     $pc_instance | Add-Member -membertype ScriptMethod -name 'Name' -value {
-         return $this.FullName;
-     }
- 
-     $pc_instance | Add-Member -membertype ScriptMethod -name 'Value' -value {
-         [hashtable]$CounterResults = @{};
- 
-         foreach ($counter in $this.Counters) {
-             $CounterResults.Add($counter.Name(), $counter.Value());
-         }
- 
-         return $CounterResults;
-     }
- 
-     return $pc_instance;
- }
+    $pc_instance = New-Object -TypeName PSObject;
+    $pc_instance | Add-Member -MemberType NoteProperty -Name 'FullName' -Value $FullName;
+    $pc_instance | Add-Member -MemberType NoteProperty -Name 'Counters' -Value $PerformanceCounters;
+
+    $pc_instance | Add-Member -MemberType ScriptMethod -Name 'Name' -Value {
+        return $this.FullName;
+    }
+
+    $pc_instance | Add-Member -MemberType ScriptMethod -Name 'Value' -Value {
+        [hashtable]$CounterResults = @{};
+
+        foreach ($counter in $this.Counters) {
+            $CounterResults.Add($counter.Name(), $counter.Value());
+        }
+
+        return $CounterResults;
+    }
+
+    return $pc_instance;
+}

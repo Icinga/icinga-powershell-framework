@@ -10,7 +10,7 @@
 .PARAMETER ConfigObject
    The custom config object to check for
 .PARAMETER ConfigKey
-   The key which is checked 
+   The key which is checked
 .INPUTS
    System.String
 .OUTPUTS

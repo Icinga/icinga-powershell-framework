@@ -9,10 +9,10 @@ function New-IcingaCheckresult()
     );
 
     $CheckResult = New-Object -TypeName PSObject;
-    $CheckResult | Add-Member -membertype NoteProperty -name 'check'      -value $Check;
-    $CheckResult | Add-Member -membertype NoteProperty -name 'noperfdata' -value $NoPerfData;
+    $CheckResult | Add-Member -MemberType NoteProperty -Name 'check'      -Value $Check;
+    $CheckResult | Add-Member -MemberType NoteProperty -Name 'noperfdata' -Value $NoPerfData;
 
-    $CheckResult | Add-Member -membertype ScriptMethod -name 'Compile' -value {
+    $CheckResult | Add-Member -MemberType ScriptMethod -Name 'Compile' -Value {
         if ($null -eq $this.check) {
             return $IcingaEnums.IcingaExitCode.Unknown;
         }

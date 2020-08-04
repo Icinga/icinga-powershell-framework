@@ -15,35 +15,35 @@ function New-IcingaCheck()
     );
 
     $Check = New-Object -TypeName PSObject;
-    $Check | Add-Member -membertype NoteProperty -name 'name'           -value $Name;
-    $Check | Add-Member -membertype NoteProperty -name 'verbose'        -value 0;
-    $Check | Add-Member -membertype NoteProperty -name 'messages'       -value @();
-    $Check | Add-Member -membertype NoteProperty -name 'oks'            -value @();
-    $Check | Add-Member -membertype NoteProperty -name 'warnings'       -value @();
-    $Check | Add-Member -membertype NoteProperty -name 'criticals'      -value @();
-    $Check | Add-Member -membertype NoteProperty -name 'unknowns'       -value @();
-    $Check | Add-Member -membertype NoteProperty -name 'okchecks'       -value @();
-    $Check | Add-Member -membertype NoteProperty -name 'warningchecks'  -value @();
-    $Check | Add-Member -membertype NoteProperty -name 'criticalchecks' -value @();
-    $Check | Add-Member -membertype NoteProperty -name 'unknownchecks'  -value @();
-    $Check | Add-Member -membertype NoteProperty -name 'value'          -value $Value;
-    $Check | Add-Member -membertype NoteProperty -name 'exitcode'       -value -1;
-    $Check | Add-Member -membertype NoteProperty -name 'unit'           -value $Unit;
-    $Check | Add-Member -membertype NoteProperty -name 'spacing'        -value 0;
-    $Check | Add-Member -membertype NoteProperty -name 'compiled'       -value $FALSE;
-    $Check | Add-Member -membertype NoteProperty -name 'perfdata'       -value (-Not $NoPerfData);
-    $Check | Add-Member -membertype NoteProperty -name 'warning'        -value '';
-    $Check | Add-Member -membertype NoteProperty -name 'critical'       -value '';
-    $Check | Add-Member -membertype NoteProperty -name 'minimum'        -value $Minimum;
-    $Check | Add-Member -membertype NoteProperty -name 'maximum'        -value $Maximum;
-    $Check | Add-Member -membertype NoteProperty -name 'objectexists'   -value $ObjectExists;
-    $Check | Add-Member -membertype NoteProperty -name 'translation'    -value $Translation;
-    $Check | Add-Member -membertype NoteProperty -name 'checks'         -value $null;
-    $Check | Add-Member -membertype NoteProperty -name 'completed'      -value $FALSE;
-    $Check | Add-Member -membertype NoteProperty -name 'checkcommand'   -value '';
-    $Check | Add-Member -membertype NoteProperty -name 'checkpackage'   -value $FALSE;
+    $Check | Add-Member -MemberType NoteProperty -Name 'name'           -Value $Name;
+    $Check | Add-Member -MemberType NoteProperty -Name 'verbose'        -Value 0;
+    $Check | Add-Member -MemberType NoteProperty -Name 'messages'       -Value @();
+    $Check | Add-Member -MemberType NoteProperty -Name 'oks'            -Value @();
+    $Check | Add-Member -MemberType NoteProperty -Name 'warnings'       -Value @();
+    $Check | Add-Member -MemberType NoteProperty -Name 'criticals'      -Value @();
+    $Check | Add-Member -MemberType NoteProperty -Name 'unknowns'       -Value @();
+    $Check | Add-Member -MemberType NoteProperty -Name 'okchecks'       -Value @();
+    $Check | Add-Member -MemberType NoteProperty -Name 'warningchecks'  -Value @();
+    $Check | Add-Member -MemberType NoteProperty -Name 'criticalchecks' -Value @();
+    $Check | Add-Member -MemberType NoteProperty -Name 'unknownchecks'  -Value @();
+    $Check | Add-Member -MemberType NoteProperty -Name 'value'          -Value $Value;
+    $Check | Add-Member -MemberType NoteProperty -Name 'exitcode'       -Value -1;
+    $Check | Add-Member -MemberType NoteProperty -Name 'unit'           -Value $Unit;
+    $Check | Add-Member -MemberType NoteProperty -Name 'spacing'        -Value 0;
+    $Check | Add-Member -MemberType NoteProperty -Name 'compiled'       -Value $FALSE;
+    $Check | Add-Member -MemberType NoteProperty -Name 'perfdata'       -Value (-Not $NoPerfData);
+    $Check | Add-Member -MemberType NoteProperty -Name 'warning'        -Value '';
+    $Check | Add-Member -MemberType NoteProperty -Name 'critical'       -Value '';
+    $Check | Add-Member -MemberType NoteProperty -Name 'minimum'        -Value $Minimum;
+    $Check | Add-Member -MemberType NoteProperty -Name 'maximum'        -Value $Maximum;
+    $Check | Add-Member -MemberType NoteProperty -Name 'objectexists'   -Value $ObjectExists;
+    $Check | Add-Member -MemberType NoteProperty -Name 'translation'    -Value $Translation;
+    $Check | Add-Member -MemberType NoteProperty -Name 'checks'         -Value $null;
+    $Check | Add-Member -MemberType NoteProperty -Name 'completed'      -Value $FALSE;
+    $Check | Add-Member -MemberType NoteProperty -Name 'checkcommand'   -Value '';
+    $Check | Add-Member -MemberType NoteProperty -Name 'checkpackage'   -Value $FALSE;
 
-    $Check | Add-Member -membertype ScriptMethod -name 'HandleDaemon' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'HandleDaemon' -Value {
         # Only apply this once the checkcommand is set
         if ([string]::IsNullOrEmpty($this.checkcommand) -Or $global:IcingaDaemonData.FrameworkRunningAsDaemon -eq $FALSE) {
             return;
@@ -71,30 +71,30 @@ function New-IcingaCheck()
         }
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'AddSpacing' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'AddSpacing' -Value {
         $this.spacing += 1;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'AssignCheckCommand' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'AssignCheckCommand' -Value {
         param($CheckCommand);
 
         $this.checkcommand = $CheckCommand;
         $this.HandleDaemon();
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'GetWarnings' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'GetWarnings' -Value {
         return $this.warningchecks;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'GetCriticals' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'GetCriticals' -Value {
         return $this.criticalchecks;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'GetUnknowns' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'GetUnknowns' -Value {
         return $this.unknownchecks;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'SetUnknown' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'SetUnknown' -Value {
         $this.AddInternalCheckMessage(
             $IcingaEnums.IcingaExitCode.Unknown,
             $null,
@@ -104,7 +104,7 @@ function New-IcingaCheck()
         return $this;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'SetWarning' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'SetWarning' -Value {
         $this.AddInternalCheckMessage(
             $IcingaEnums.IcingaExitCode.Warning,
             $null,
@@ -114,7 +114,7 @@ function New-IcingaCheck()
         return $this;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'WarnOutOfRange' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'WarnOutOfRange' -Value {
         param($warning);
 
         if ([string]::IsNullOrEmpty($warning)) {
@@ -156,7 +156,7 @@ function New-IcingaCheck()
         return $this;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'WarnIfLike' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'WarnIfLike' -Value {
         param($warning);
 
         if ($this.value -Like $warning) {
@@ -172,7 +172,7 @@ function New-IcingaCheck()
         return $this;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'WarnIfNotLike' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'WarnIfNotLike' -Value {
         param($warning);
 
         if (-Not ($this.value -Like $warning)) {
@@ -188,7 +188,7 @@ function New-IcingaCheck()
         return $this;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'WarnIfMatch' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'WarnIfMatch' -Value {
         param($warning);
 
         if ($this.value -eq $warning) {
@@ -204,7 +204,7 @@ function New-IcingaCheck()
         return $this;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'WarnIfNotMatch' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'WarnIfNotMatch' -Value {
         param($warning);
 
         if ($this.value -ne $warning) {
@@ -220,7 +220,7 @@ function New-IcingaCheck()
         return $this;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'WarnIfBetweenAndEqual' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'WarnIfBetweenAndEqual' -Value {
         param($min, $max);
 
         if ($this.value -ge $min -And $this.value -le $max) {
@@ -236,7 +236,7 @@ function New-IcingaCheck()
         return $this;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'WarnIfBetween' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'WarnIfBetween' -Value {
         param($min, $max);
 
         if ($this.value -gt $min -And $this.value -lt $max) {
@@ -252,7 +252,7 @@ function New-IcingaCheck()
         return $this;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'WarnIfLowerThan' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'WarnIfLowerThan' -Value {
         param($warning);
 
         if ($this.value -lt $warning) {
@@ -268,7 +268,7 @@ function New-IcingaCheck()
         return $this;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'WarnIfLowerEqualThan' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'WarnIfLowerEqualThan' -Value {
         param($warning);
 
         if ($this.value -le $warning) {
@@ -284,7 +284,7 @@ function New-IcingaCheck()
         return $this;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'WarnIfGreaterThan' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'WarnIfGreaterThan' -Value {
         param($warning);
 
         if ($this.value -gt $warning) {
@@ -300,7 +300,7 @@ function New-IcingaCheck()
         return $this;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'WarnIfGreaterEqualThan' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'WarnIfGreaterEqualThan' -Value {
         param($warning);
 
         if ($this.value -ge $warning) {
@@ -316,7 +316,7 @@ function New-IcingaCheck()
         return $this;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'SetCritical' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'SetCritical' -Value {
         $this.AddInternalCheckMessage(
             $IcingaEnums.IcingaExitCode.Critical,
             $null,
@@ -326,7 +326,7 @@ function New-IcingaCheck()
         return $this;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'CritOutOfRange' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'CritOutOfRange' -Value {
         param($critical);
 
         if ([string]::IsNullOrEmpty($critical)) {
@@ -368,7 +368,7 @@ function New-IcingaCheck()
         return $this;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'CritIfLike' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'CritIfLike' -Value {
         param($critical);
 
         if ($this.value -Like $critical) {
@@ -384,7 +384,7 @@ function New-IcingaCheck()
         return $this;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'CritIfNotLike' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'CritIfNotLike' -Value {
         param($critical);
 
         if (-Not ($this.value -Like $critical)) {
@@ -400,7 +400,7 @@ function New-IcingaCheck()
         return $this;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'CritIfMatch' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'CritIfMatch' -Value {
         param($critical);
 
         if ($this.value -eq $critical) {
@@ -416,7 +416,7 @@ function New-IcingaCheck()
         return $this;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'CritIfNotMatch' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'CritIfNotMatch' -Value {
         param($critical);
 
         if ($this.value -ne $critical) {
@@ -432,7 +432,7 @@ function New-IcingaCheck()
         return $this;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'CritIfBetweenAndEqual' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'CritIfBetweenAndEqual' -Value {
         param($min, $max);
 
         if ($this.value -ge $min -And $this.value -le $max) {
@@ -448,7 +448,7 @@ function New-IcingaCheck()
         return $this;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'CritIfBetween' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'CritIfBetween' -Value {
         param($min, $max);
 
         if ($this.value -gt $min -And $this.value -lt $max) {
@@ -464,7 +464,7 @@ function New-IcingaCheck()
         return $this;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'CritIfLowerThan' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'CritIfLowerThan' -Value {
         param($critical);
 
         if ($this.value -lt $critical) {
@@ -480,7 +480,7 @@ function New-IcingaCheck()
         return $this;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'CritIfLowerEqualThan' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'CritIfLowerEqualThan' -Value {
         param($critical);
 
         if ($this.value -le $critical) {
@@ -496,7 +496,7 @@ function New-IcingaCheck()
         return $this;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'CritIfGreaterThan' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'CritIfGreaterThan' -Value {
         param($critical);
 
         if ($this.value -gt $critical) {
@@ -512,7 +512,7 @@ function New-IcingaCheck()
         return $this;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'CritIfGreaterEqualThan' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'CritIfGreaterEqualThan' -Value {
         param($critical);
 
         if ($this.value -ge $critical) {
@@ -528,7 +528,7 @@ function New-IcingaCheck()
         return $this;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'TranslateValue' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'TranslateValue' -Value {
         param($value);
 
         $value = Format-IcingaPerfDataValue $value;
@@ -552,14 +552,17 @@ function New-IcingaCheck()
         return $value;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'AddInternalCheckMessage' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'AddInternalCheckMessage' -Value {
         param($state, $value, $type);
 
         if ($this.objectexists -ne -1 -And $null -eq $this.objectexists) {
             $this.SetExitCode($IcingaEnums.IcingaExitCode.Unknown);
-            $this.AddMessage([string]::Format(
-                '{0} does not exist', $this.name
-            ), $IcingaEnums.IcingaExitCode.Unknown);
+            $this.AddMessage(
+                [string]::Format(
+                    '{0} does not exist', $this.name
+                ),
+                $IcingaEnums.IcingaExitCode.Unknown
+            );
             return;
         }
 
@@ -596,7 +599,7 @@ function New-IcingaCheck()
         }
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'AddMessage' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'AddMessage' -Value {
         param($message, [int]$exitcode);
 
         [string]$outputMessage = [string]::Format(
@@ -626,7 +629,7 @@ function New-IcingaCheck()
         }
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'AddCheckStateArrays' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'AddCheckStateArrays' -Value {
         switch ([int]$this.exitcode) {
             $IcingaEnums.IcingaExitCode.Ok {
                 $this.okchecks += $this.name;
@@ -647,27 +650,27 @@ function New-IcingaCheck()
         }
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'PrintOkMessages' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'PrintOkMessages' -Value {
         param([string]$spaces);
         $this.OutputMessageArray($this.oks, $spaces);
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'PrintWarningMessages' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'PrintWarningMessages' -Value {
         param([string]$spaces);
         $this.OutputMessageArray($this.warnings, $spaces);
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'PrintCriticalMessages' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'PrintCriticalMessages' -Value {
         param([string]$spaces);
         $this.OutputMessageArray($this.criticals, $spaces);
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'PrintUnknownMessages' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'PrintUnknownMessages' -Value {
         param([string]$spaces);
         $this.OutputMessageArray($this.unknowns, $spaces);
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'PrintAllMessages' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'PrintAllMessages' -Value {
         [string]$spaces = New-StringTree $this.spacing;
         $this.OutputMessageArray($this.unknowns, $spaces);
         $this.OutputMessageArray($this.criticals, $spaces);
@@ -675,7 +678,7 @@ function New-IcingaCheck()
         $this.OutputMessageArray($this.oks, $spaces);
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'OutputMessageArray' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'OutputMessageArray' -Value {
         param($msgArray, [string]$spaces);
 
         foreach ($msg in $msgArray) {
@@ -683,7 +686,7 @@ function New-IcingaCheck()
         }
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'PrintOutputMessages' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'PrintOutputMessages' -Value {
         [string]$spaces = New-StringTree $this.spacing;
         if ($this.unknowns.Count -ne 0) {
             $this.PrintUnknownMessages($spaces);
@@ -698,7 +701,7 @@ function New-IcingaCheck()
         }
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'SetExitCode' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'SetExitCode' -Value {
         param([int]$code);
 
         # Only overwrite the exit code in case our new value is greater then
@@ -729,23 +732,23 @@ function New-IcingaCheck()
         $this.exitcode = $code;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'ValidateUnit' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'ValidateUnit' -Value {
         if ($null -ne $this.unit -And (-Not $IcingaEnums.IcingaMeasurementUnits.ContainsKey($this.unit))) {
             $this.AddMessage(
-                    [string]::Format(
-                        'Error on check "{0}": Usage of invalid plugin unit "{1}". Allowed units are: {2}',
-                        $this.name,
-                        $this.unit,
-                        (($IcingaEnums.IcingaMeasurementUnits.Keys | Sort-Object name)  -Join ', ')
-                    ),
-                    $IcingaEnums.IcingaExitCode.Unknown
+                [string]::Format(
+                    'Error on check "{0}": Usage of invalid plugin unit "{1}". Allowed units are: {2}',
+                    $this.name,
+                    $this.unit,
+                    (($IcingaEnums.IcingaMeasurementUnits.Keys | Sort-Object name)  -Join ', ')
+                ),
+                $IcingaEnums.IcingaExitCode.Unknown
             )
             $this.unit = '';
             $this.exitcode = $IcingaEnums.IcingaExitCode.Unknown;
         }
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'AddOkOutput' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'AddOkOutput' -Value {
         if ([int]$this.exitcode -eq -1) {
             $this.exitcode = $IcingaEnums.IcingaExitCode.Ok;
             $this.AddMessage(
@@ -760,7 +763,7 @@ function New-IcingaCheck()
         }
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'SilentCompile' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'SilentCompile' -Value {
         if ($this.compiled) {
             return;
         }
@@ -770,7 +773,7 @@ function New-IcingaCheck()
         $this.AddCheckStateArrays();
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'Compile' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'Compile' -Value {
         param([bool]$Verbose = $FALSE);
 
         if ($this.compiled) {
@@ -789,7 +792,7 @@ function New-IcingaCheck()
         return $this.exitcode;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'GetPerfData' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'GetPerfData' -Value {
 
         if ($this.completed -Or -Not $this.perfdata) {
             return $null;
@@ -818,7 +821,7 @@ function New-IcingaCheck()
         return $perfdata;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'AutodiscoverMinMax' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'AutodiscoverMinMax' -Value {
         if ([string]::IsNullOrEmpty($this.minimum) -eq $FALSE -Or [string]::IsNullOrEmpty($this.maximum) -eq $FALSE) {
             return;
         }

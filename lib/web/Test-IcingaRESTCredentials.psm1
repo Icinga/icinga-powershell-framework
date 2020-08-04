@@ -1,3 +1,4 @@
+
 <#
 .SYNOPSIS
    Tests provided credentials against either the local machine or a domain controller
@@ -37,7 +38,7 @@ function Test-IcingaRESTCredentials()
     [string]$AuthMethod = [System.DirectoryServices.AccountManagement.ContextType]::Machine;
     [string]$AuthDomain = $env:COMPUTERNAME;
 
-     # If we specify a domain, we should authenticate against our Domain
+    # If we specify a domain, we should authenticate against our Domain
     if ([string]::IsNullOrEmpty($Domain) -eq $FALSE) {
         $AuthMethod = [System.DirectoryServices.AccountManagement.ContextType]::Domain;
         $AuthDomain = $Domain;
@@ -63,9 +64,10 @@ function Test-IcingaRESTCredentials()
     try {
         # Try to authenticate and either return true or false as integer
         [bool]$AuthResult = [int]($AccountService.ValidateCredentials(
-            (ConvertFrom-IcingaSecureString $UserName),
-            (ConvertFrom-IcingaSecureString $Password)
-        ));
+                (ConvertFrom-IcingaSecureString $UserName),
+                (ConvertFrom-IcingaSecureString $Password)
+            )
+        );
 
         return $AuthResult;
     } catch {

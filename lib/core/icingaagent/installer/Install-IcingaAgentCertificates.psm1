@@ -68,8 +68,8 @@ function Install-IcingaAgentCertificates()
 
             if ((Start-IcingaAgentCertificateProcess -Arguments $arguments) -eq $FALSE) {
                 Write-IcingaConsoleError 'Unable to connect to your provided Icinga CA. Please verify the entered configuration is correct.' `
-                            'If you are not able to connect to your Icinga CA from this machine, you will have to provide the path' `
-                            'to your Icinga ca.crt and use the CA-Proxy certificate handling.';
+                    'If you are not able to connect to your Icinga CA from this machine, you will have to provide the path' `
+                    'to your Icinga ca.crt and use the CA-Proxy certificate handling.';
                 return $FALSE;
             }
         }
@@ -178,7 +178,7 @@ function Test-IcingaAgentCertificates()
     }
 
     if ((-Not (Test-Path ((Join-Path -Path $CertDirectory -ChildPath $Hostname) + '.key'))) `
-        -Or -Not (Test-Path ((Join-Path -Path $CertDirectory -ChildPath $Hostname) + '.crt'))) {
+            -Or -Not (Test-Path ((Join-Path -Path $CertDirectory -ChildPath $Hostname) + '.crt'))) {
         return $FALSE;
     }
 

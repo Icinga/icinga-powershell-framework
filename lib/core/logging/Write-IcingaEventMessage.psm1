@@ -1,6 +1,6 @@
 function Write-IcingaEventMessage()
 {
-    param(
+    param (
         [int]$EventId      = 0,
         [string]$Namespace = $null,
         [array]$Objects    = @()
@@ -44,7 +44,7 @@ function Write-IcingaEventMessage()
         (New-IcingaNewLine),
         $Details,
         $ObjectDump
-        
+
     );
 
     if ($null -eq $EntryType -Or $null -eq $Message) {
@@ -52,8 +52,8 @@ function Write-IcingaEventMessage()
     }
 
     Write-EventLog -LogName Application `
-                   -Source 'Icinga for Windows' `
-                   -EntryType $EntryType `
-                   -EventId $EventId `
-                   -Message $EventLogMessage;
+        -Source 'Icinga for Windows' `
+        -EntryType $EntryType `
+        -EventId $EventId `
+        -Message $EventLogMessage;
 }

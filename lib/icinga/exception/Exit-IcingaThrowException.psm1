@@ -5,7 +5,7 @@ function Exit-IcingaThrowException()
         [string]$StringPattern,
         [string]$CustomMessage,
         [string]$ExceptionThrown,
-        [ValidateSet('Permission','Input','Configuration','Unhandled','Custom')]
+        [ValidateSet('Permission', 'Input', 'Configuration', 'Unhandled', 'Custom')]
         [string]$ExceptionType    = 'Unhandled',
         [switch]$Force
     );

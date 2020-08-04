@@ -21,7 +21,7 @@ function Get-IcingaServices()
     [hashtable]$ServiceData = @{};
 
     foreach ($service in $ServiceInformation) {
-    
+
         [array]$DependentServices = $null;
         [array]$DependingServices = $null;
         $ServiceExitCode          = 0;
@@ -46,7 +46,7 @@ function Get-IcingaServices()
             }
             $DependentServices += $dependency.Name;
         }
-        
+
         #Depends / Parent
         foreach ($dependency in $service.ServicesDependedOn) {
             if ($null -eq $DependingServices) {

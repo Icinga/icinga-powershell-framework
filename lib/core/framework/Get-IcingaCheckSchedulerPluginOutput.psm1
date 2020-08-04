@@ -35,6 +35,6 @@ function Get-IcingaCheckSchedulerPluginOutput()
 
     $CheckResult = [string]::Join("`r`n", $IcingaDaemonData.IcingaThreadContent.Scheduler.PluginCache);
     $IcingaDaemonData.IcingaThreadContent.Scheduler.PluginCache = @();
-    
+
     return $CheckResult;
 }

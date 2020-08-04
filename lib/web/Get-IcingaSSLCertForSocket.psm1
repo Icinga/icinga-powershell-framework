@@ -23,10 +23,12 @@ function Get-IcingaSSLCertForSocket()
     # Windows cert store. Try to look it up an return it if
     # it is found
     if ([string]::IsNullOrEmpty($CertThumbprint) -eq $FALSE) {
-        $Certificates = Get-ChildItem -Path 'cert:\*' -Recurse `
-                                      -Include $CertThumbprint `
-                                      -ErrorAction SilentlyContinue `
-                                      -WarningAction SilentlyContinue;
+        $Certificates = Get-ChildItem `
+            -Path 'cert:\*' `
+            -Recurse `
+            -Include $CertThumbprint `
+            -ErrorAction SilentlyContinue `
+            -WarningAction SilentlyContinue;
 
         if ($Certificates.Count -ne 0) {
             return $Certificates[0];

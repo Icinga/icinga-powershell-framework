@@ -57,17 +57,17 @@ function Install-IcingaFrameworkComponent()
     $ComponentName  = $TextInfo.ToTitleCase($Name);
     $RepositoryName = [string]::Format('icinga-powershell-{0}', $Name);
     $Archive        = Get-IcingaPowerShellModuleArchive `
-                        -DownloadUrl $Url `
-                        -GitHubUser $GitHubUser `
-                        -ModuleName (
-                            [string]::Format(
-                                'Icinga {0}', $ComponentName
-                            )
-                        ) `
-                        -Repository $RepositoryName `
-                        -Release $Release `
-                        -Snapshot $Snapshot `
-                        -DryRun $DryRun;
+        -DownloadUrl $Url `
+        -GitHubUser $GitHubUser `
+        -ModuleName (
+            [string]::Format(
+                'Icinga {0}', $ComponentName
+            )
+        ) `
+        -Repository $RepositoryName `
+        -Release $Release `
+        -Snapshot $Snapshot `
+        -DryRun $DryRun;
 
     if ($Archive.Installed -eq $FALSE -Or $DryRun) {
         return @{

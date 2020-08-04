@@ -3,7 +3,7 @@ function Enable-IcingaUntrustedCertificateValidation()
     try {
         # There is no other way as to use C# for this specific
         # case to configure the certificate validation check
-        add-type @"
+        Add-Type @"
         using System.Net;
         using System.Security.Cryptography.X509Certificates;
 

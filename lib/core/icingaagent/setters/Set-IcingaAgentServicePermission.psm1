@@ -42,5 +42,5 @@ function Set-IcingaAgentServicePermission()
 
     Remove-Item $SystemPermissions*;
 
-    Test-IcingaAgentServicePermission | Out-Null;    
+    Test-IcingaAgentServicePermission | Out-Null;
 }

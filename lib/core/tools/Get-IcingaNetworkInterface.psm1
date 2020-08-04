@@ -11,7 +11,7 @@
    PS> Get-IcingaNetworkInterface 'icinga.com'
    192.168.243.88
 .EXAMPLE
-   PS> Get-IcingaNetworkInterface '8.8.8.8'   
+   PS> Get-IcingaNetworkInterface '8.8.8.8'
    192.168.243.88
 .PARAMETER IP
    Used to specify either an IPv4, IPv6 address or an FQDN.
@@ -59,26 +59,19 @@ function Get-IcingaNetworkInterface()
         foreach ($destinationIP in $IPBinStringMaster) {
             [string]$Key     = '';
             [string]$MaskKey = '';
-############################################################################
-################################  IPv4  ####################################
-############################################################################
+            <# IPv4 #>
             if ($destinationIP.name -eq 'IPv4') {
                 if ($IP -like '*.*') {
-############################################################################
                     if ([int]$Mask -lt 10) {
                         $MaskKey = [string]::Format('00{0}', $Mask);
                     } else {
                         $MaskKey = [string]::Format('0{0}', $Mask);
                     }
-############################################################################
                 }
             }
-############################################################################
-################################  IPv6  ####################################
-############################################################################
+            <# IPv6 #>
             if ($destinationIP.name -eq 'IPv6') {
                 if ($IP -like '*:*') {
-############################################################################
                     if ([int]$Mask -lt 10) {
                         $MaskKey = [string]::Format('00{0}', $Mask);
                     } elseif ([int]$Mask -lt 100) {
@@ -86,7 +79,6 @@ function Get-IcingaNetworkInterface()
                     } else {
                         $MaskKey = $Mask;
                     }
-############################################################################
                 }
             }
 
@@ -144,7 +136,7 @@ function Get-IcingaNetworkInterface()
 
     if ($ExternalInterfaces.Count -eq 0) {
         foreach ($destinationIP in $IPBinStringMaster) {
-            $ExternalInterface = ((Get-NetIPAddress -InterfaceIndex (Get-NetRoute | Where-Object -Property DestinationPrefix -like '0.0.0.0/0')[0].IfIndex -AddressFamily $destinationIP.name).IPAddress).split('%')[0];
+            $ExternalInterface = ((Get-NetIPAddress -InterfaceIndex (Get-NetRoute | Where-Object -Property DestinationPrefix -Like '0.0.0.0/0')[0].IfIndex -AddressFamily $destinationIP.name).IPAddress).split('%')[0];
             if ($ExternalInterfaces.ContainsKey($ExternalInterface)) {
                 $ExternalInterfaces[$ExternalInterface].count += 1;
             } else {
@@ -155,7 +147,7 @@ function Get-IcingaNetworkInterface()
                     }
                 );
             }
-        }   
+        }
     }
 
     $InternalCount = 0;

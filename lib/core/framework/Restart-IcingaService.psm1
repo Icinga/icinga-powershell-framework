@@ -31,7 +31,6 @@ function Restart-IcingaService()
 
             Restart-Service "$Service";
         } -Args $Service;
-        
     } else {
         Write-IcingaConsoleWarning -Message 'The service "{0}" is not installed' -Objects $Service;
     }

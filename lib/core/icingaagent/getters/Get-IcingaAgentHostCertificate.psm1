@@ -18,7 +18,7 @@ function Get-IcingaAgentHostCertificate()
     }
 
     $Certificate = New-Object Security.Cryptography.X509Certificates.X509Certificate2 $CertPath;
-    
+
     return @{
         'CertFile'   = $CertPath;
         'Subject'    = $Certificate.Subject;

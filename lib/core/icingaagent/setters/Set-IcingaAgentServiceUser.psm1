@@ -17,7 +17,7 @@ function Set-IcingaAgentServiceUser()
     }
 
     $ArgString = 'config {0} obj= "{1}" password= "{2}"';
-    if($null -eq $Password) {
+    if ($null -eq $Password) {
         $ArgString = 'config {0} obj= "{1}"{2}';
     }
 

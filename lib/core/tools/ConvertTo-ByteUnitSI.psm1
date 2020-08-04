@@ -17,21 +17,21 @@
 function ConvertTo-ByteSI()
 {
     param(
-       [single]$Value,
-       [string]$Unit
+        [single]$Value,
+        [string]$Unit
     );
 
     switch ($Unit) {
         { 'B', 'Byte' -contains $_ } { $result = $Value; $boolOption = $true; }
         { 'KB', 'Kilobyte' -contains $_ } { $result = ($Value * [math]::Pow(10, 3)); $boolOption = $true; }
-        { 'MB', 'Megabyte' -contains $_ } { $result = ($Value * [math]::Pow(10, 6)); $boolOption = $true; }        
+        { 'MB', 'Megabyte' -contains $_ } { $result = ($Value * [math]::Pow(10, 6)); $boolOption = $true; }
         { 'GB', 'Gigabyte' -contains $_ } { $result = ($Value * [math]::Pow(10, 9)); $boolOption = $true; }
         { 'TB', 'Terabyte' -contains $_ } { $result = ($Value * [math]::Pow(10, 12)); $boolOption = $true; }
         { 'PB', 'Petabyte' -contains $_ } { $result = ($Value * [math]::Pow(10, 15)); $boolOption = $true; }
-        default { 
+        default {
             if (-Not $boolOption) {
                 Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
-            } 
+            }
         }
     }
 
@@ -64,17 +64,17 @@ function ConvertTo-Kilobyte()
     switch ($Unit) {
         { 'B', 'Byte' -contains $_ } { $result = ($Value / [math]::Pow(10, 3)); $boolOption = $true; }
         { 'KB', 'Kilobyte' -contains $_ } { $result = $Value; $boolOption = $true; }
-        { 'MB', 'Megabyte' -contains $_ } { $result = ($Value * [math]::Pow(10, 3)); $boolOption = $true; }        
+        { 'MB', 'Megabyte' -contains $_ } { $result = ($Value * [math]::Pow(10, 3)); $boolOption = $true; }
         { 'GB', 'Gigabyte' -contains $_ } { $result = ($Value * [math]::Pow(10, 6)); $boolOption = $true; }
         { 'TB', 'Terabyte' -contains $_ } { $result = ($Value * [math]::Pow(10, 9)); $boolOption = $true; }
         { 'PB', 'Petabyte' -contains $_ } { $result = ($Value * [math]::Pow(10, 12)); $boolOption = $true; }
-        default { 
+        default {
             if (-Not $boolOption) {
                 Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
-            }  
+            }
         }
     }
-    
+
     return $result;
 }
 
@@ -104,17 +104,17 @@ function ConvertTo-Megabyte()
     switch ($Unit) {
         { 'B', 'Byte' -contains $_ } { $result = ($Value / [math]::Pow(10, 6)); $boolOption = $true; }
         { 'KB', 'Kilobyte' -contains $_ } { $result = ($Value / [math]::Pow(10, 3)); $boolOption = $true; }
-        { 'MB', 'Megabyte' -contains $_ } { $result = $Value; $boolOption = $true; }       
+        { 'MB', 'Megabyte' -contains $_ } { $result = $Value; $boolOption = $true; }
         { 'GB', 'Gigabyte' -contains $_ } { $result = ($Value * [math]::Pow(10, 3)); $boolOption = $true; }
         { 'TB', 'Terabyte' -contains $_ } { $result = ($Value * [math]::Pow(10, 6)); $boolOption = $true; }
         { 'PB', 'Petabyte' -contains $_ } { $result = ($Value * [math]::Pow(10, 9)); $boolOption = $true; }
-        default { 
+        default {
             if (-Not $boolOption) {
                 Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
-            } 
+            }
         }
     }
-    
+
     return $result;
 }
 
@@ -148,13 +148,13 @@ function ConvertTo-Gigabyte()
         { 'GB', 'Gigabyte' -contains $_ } { $result = $Value; $boolOption = $true; }
         { 'TB', 'Terabyte' -contains $_ } { $result = ($Value * [math]::Pow(10, 3)); $boolOption = $true; }
         { 'PB', 'Petabyte' -contains $_ } { $result = ($Value * [math]::Pow(10, 6)); $boolOption = $true; }
-        default { 
+        default {
             if (-Not $boolOption) {
                 Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
-            }  
+            }
         }
     }
-    
+
     return $result;
 }
 
@@ -188,13 +188,13 @@ function ConvertTo-Terabyte()
         { 'GB', 'Gigabyte' -contains $_ } { $result = ($Value / [math]::Pow(10, 3)); $boolOption = $true; }
         { 'TB', 'Terabyte' -contains $_ } { $result = $Value; $boolOption = $true; }
         { 'PB', 'Petabyte' -contains $_ } { $result = ($Value * [math]::Pow(10, 3)); $boolOption = $true; }
-        default { 
+        default {
             if (-Not $boolOption) {
                 Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
-            }  
+            }
         }
     }
-    
+
     return $result;
 }
 
@@ -228,12 +228,12 @@ function ConvertTo-Petabyte()
         { 'GB', 'Gigabyte' -contains $_ } { $result = ($Value / [math]::Pow(10, 6)); $boolOption = $true; }
         { 'TB', 'Terabyte' -contains $_ } { $result = ($Value / [math]::Pow(10, 3)); $boolOption = $true; }
         { 'PB', 'Petabyte' -contains $_ } { $result = $Value; $boolOption = $true; }
-        default { 
+        default {
             if (-Not $boolOption) {
                 Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
-            }  
+            }
         }
     }
-    
+
     return $result;
 }

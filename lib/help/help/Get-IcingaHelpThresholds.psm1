@@ -2,7 +2,7 @@ Import-IcingaLib icinga\plugin;
 
 function Get-IcingaHelpThresholds()
 {
-    param(
+    param (
         $Value,
         $Warning,
         $Critical
@@ -46,7 +46,7 @@ function Get-IcingaHelpThresholds()
              Get-IcingaHelpThresholds -Value 5 -Warning "30:50" -Critical "10:70"; #This will return Critical
 
     #####################
-    
+
     Outside Range
     -Warning "@40:70"
 
@@ -58,7 +58,7 @@ function Get-IcingaHelpThresholds()
              Get-IcingaHelpThresholds -Value 50 -Warning "@20:90" -Critical "@40:60"; #This will return Critical
 
     #####################
-    
+
     Above value
     -Warning "50:"
 
@@ -70,7 +70,7 @@ function Get-IcingaHelpThresholds()
              Get-IcingaHelpThresholds -Value 10 -Warning "90:" -Critical "50:"; #This will return Critical
 
     #####################
-    
+
     Below value
     -Warning "~:40"
 

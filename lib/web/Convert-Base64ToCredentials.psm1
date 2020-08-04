@@ -59,11 +59,9 @@ function Convert-Base64ToCredentials()
         );
         $Credentials.Add(
             'password',
-            (ConvertTo-IcingaSecureString `
-                $AuthString.Substring(
-                    $AuthString.IndexOf(':') + 1,
-                    $AuthString.Length - $UserData.Length - 1
-                )
+            (
+                ConvertTo-IcingaSecureString `
+                    $AuthString.Substring($AuthString.IndexOf(':') + 1, $AuthString.Length - $UserData.Length - 1)
             )
         );
 
@@ -77,8 +75,8 @@ function Convert-Base64ToCredentials()
             $Credentials.Add('domain', $AuthData[0]);
             $Credentials.Add(
                 'user',
-                (ConvertTo-IcingaSecureString `
-                    $AuthData[1]
+                (
+                    ConvertTo-IcingaSecureString $AuthData[1]
                 )
             );
             $AuthData = $null;
@@ -86,8 +84,8 @@ function Convert-Base64ToCredentials()
             $Credentials.Add('domain', $null);
             $Credentials.Add(
                 'user',
-                (ConvertTo-IcingaSecureString `
-                    $UserData
+                (
+                    ConvertTo-IcingaSecureString $UserData
                 )
             );
         }

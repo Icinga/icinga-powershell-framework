@@ -11,7 +11,7 @@ function Get-IcingaRESTPathElement()
 
     if ($Request.ContainsKey('RequestPath') -eq $FALSE) {
         return '';
-    } 
+    }
 
     if (($Index + 1) -gt $Request.RequestPath.PathArray.Count) {
         return '';

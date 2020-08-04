@@ -8,9 +8,9 @@ function Compare-IcingaVersions()
     if ([string]::IsNullOrEmpty($RequiredVersion)) {
         return $FALSE;
     }
-    
+
     $RequiredVersion = Split-IcingaVersion -Version $RequiredVersion;
-    
+
     if ([string]::IsNullOrEmpty($CurrentVersion) -eq $FALSE) {
         $CurrentVersion = Split-IcingaVersion -Version $CurrentVersion;
     } else {

@@ -18,9 +18,10 @@ function Invoke-IcingaNamespaceCmdlets()
             Import-Module $Cmdlet.Module.Path -WarningAction SilentlyContinue -ErrorAction Stop;
 
             $Content = (& $CmmandName);
-            Add-IcingaHashtableItem -Hashtable $CommandConfig `
-                                    -Key $Cmdlet.Name `
-                                    -Value $Content | Out-Null;
+            Add-IcingaHashtableItem `
+                -Hashtable $CommandConfig `
+                -Key $Cmdlet.Name `
+                -Value $Content | Out-Null;
         } catch {
             # TODO: Add event log logging on exceptions
         }

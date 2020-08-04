@@ -37,7 +37,7 @@ function New-IcingaThreadInstance()
         Add-Member -InputObject $Thread -MemberType NoteProperty -Name Handle -Value $null;
         Add-Member -InputObject $Thread -MemberType NoteProperty -Name Started -Value $FALSE;
     }
-    
+
     if ($global:IcingaDaemonData.IcingaThreads.ContainsKey($Name) -eq $FALSE) {
         $global:IcingaDaemonData.IcingaThreads.Add($Name, $Thread);
     } else {

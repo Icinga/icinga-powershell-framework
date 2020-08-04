@@ -60,6 +60,6 @@ function ConvertTo-Integer()
             return 0;
         }
     }
-    
+
     return $Value;
 }

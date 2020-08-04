@@ -5,7 +5,7 @@
  # Example usage:
  # $IcingaEventLogEnums[2000]
  #>
- [hashtable]$IcingaEventLogEnums += @{
+[hashtable]$IcingaEventLogEnums += @{
     'Framework' = @{
         1000 = @{
             'EntryType' = 'Information';

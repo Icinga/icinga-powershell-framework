@@ -5,8 +5,9 @@
 #
 function Show-IcingaPerformanceCounterCategories()
 {
-    $RegistryData    = Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Perflib\009' `
-                                        -Name 'counter' | Select-Object -ExpandProperty Counter;
+    $RegistryData    = Get-ItemProperty `
+        -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Perflib\009' `
+        -Name 'counter' | Select-Object -ExpandProperty Counter;
     [array]$Counters = @();
 
     # Now lets loop our registry data and fetch only for counter categories

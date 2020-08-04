@@ -1,6 +1,6 @@
 function Get-StringSha1()
 {
-    param(
+    param (
         [string]$Content
     );
 
@@ -9,8 +9,8 @@ function Get-StringSha1()
     $ContentBytes    = $CryptoAlgorithm.ComputeHash($ContentHash);
     $OutputHash      = '';
 
-    foreach($byte in $ContentBytes) {
-         $OutputHash += $byte.ToString()
+    foreach ($byte in $ContentBytes) {
+        $OutputHash += $byte.ToString()
     }
 
     return $OutputHash;

@@ -64,7 +64,6 @@
 function Get-IcingaCheckCommandConfig()
 {
     param(
-        [Parameter(ValueFromPipeline)]
         [array]$CheckName,
         [string]$OutDirectory
     );
@@ -74,7 +73,7 @@ function Get-IcingaCheckCommandConfig()
         $CheckName = (Get-Command Invoke-IcingaCheck*).Name
     }
 
-    [int]$FieldID = 2;              # Starts at '2', because '0' and '1' are reserved for 'Verbose' and 'NoPerfData'
+    [int]$FieldID = 2; # Starts at '2', because '0' and '1' are reserved for 'Verbose' and 'NoPerfData'
     [hashtable]$Basket = @{};
 
     # Define basic hashtable structure by adding fields: "Datafield", "DataList", "Command"
@@ -103,7 +102,7 @@ function Get-IcingaCheckCommandConfig()
 
     # Loop through ${CheckName}, to get information on every command specified/all commands.
     foreach ($check in $CheckName) {
-    
+
         # Get necessary syntax-information and more through cmdlet "Get-Help"
         $Data            = (Get-Help $check);
         $ParameterList   = (Get-Command -Name $check).Parameters;
@@ -159,8 +158,8 @@ function Get-IcingaCheckCommandConfig()
 
                 $Basket.Command[$Data.Name].vars.Add($parameter.Name, $FALSE);
 
-            # Conditional whether type of parameter is array
             } elseif ($parameter.type.name -eq 'Array') {
+                # Conditional whether type of parameter is array
                 $Basket.Command[$Data.Name].arguments.Add(
                     [string]::Format('-{0}', $parameter.Name), @{
                         'value' = @{
@@ -316,7 +315,7 @@ function Get-IcingaCheckCommandConfig()
         if ((Test-Path($OutDirectory)) -eq $false) {
             throw 'Failed to create specified directory. Please try again or use a different target location.';
         }
-        
+
         Set-Content -Path $OutDirectory -Value $output;
 
         # Output-Text

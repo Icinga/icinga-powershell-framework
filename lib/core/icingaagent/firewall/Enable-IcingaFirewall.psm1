@@ -24,7 +24,7 @@ function Enable-IcingaFirewall()
         'Inbound Firewall Rule to allow Icinga 2 masters / satellites to connect to the Icinga 2 Agent installed on this system.',
         $IcingaPort
     );
-    
+
     $FirewallResult = Start-IcingaProcess -Executable 'netsh' -Arguments $FirewallRule;
 
     if ($FirewallResult.ExitCode -ne 0) {

@@ -2,7 +2,7 @@ function Get-IcingaAgentInstallerAnswerInput()
 {
     param(
         $Prompt,
-        [ValidateSet("y","n","v")]
+        [ValidateSet("y", "n", "v")]
         $Default,
         $DefaultInput   = '',
         [switch]$Secure

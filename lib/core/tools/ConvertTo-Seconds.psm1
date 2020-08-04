@@ -37,7 +37,7 @@ function ConvertTo-Seconds()
     [bool]$Negate       = $FALSE;
     [bool]$hasUnit      = $FALSE;
 
-    foreach($char in $Value.ToCharArray()) {
+    foreach ($char in $Value.ToCharArray()) {
         if ((Test-Numeric $char)) {
             $NumberPart += $char;
         } else {
@@ -82,7 +82,7 @@ function ConvertTo-Seconds()
             { 119 -contains $_ } { $result = $ValueSplitted * 604800; break; } # w
             { 77  -contains $_ } { $result = $ValueSplitted * 2592000; break; } # M
             { 121 -contains $_ } { $result = $ValueSplitted * 31536000; break; } # y
-            default { 
+            default {
                 Throw $errorMsg;
                 break;
             }

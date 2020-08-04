@@ -14,6 +14,6 @@ function Pop-IcingaArrayListItem()
 
     $Content = $Array[0];
     $Array.RemoveAt(0);
-    
+
     return $Content;
 }

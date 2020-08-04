@@ -30,14 +30,16 @@ function New-IcingaPerformanceDataEntry()
         $maximum = [string]::Format(';{0}', $PerfDataObject.maximum);
     }
 
-    return ([string]::Format(
-        "'{0}'={1}{2};{3};{4}{5}{6} ",
-        $LabelName.ToLower(),
-        (Format-IcingaPerfDataValue $PerfValue),
-        $PerfDataObject.unit,
-        (Format-IcingaPerfDataValue $PerfDataObject.warning),
-        (Format-IcingaPerfDataValue $PerfDataObject.critical),
-        (Format-IcingaPerfDataValue $minimum),
-        (Format-IcingaPerfDataValue $maximum)
-    ));
+    return (
+        [string]::Format(
+            "'{0}'={1}{2};{3};{4}{5}{6} ",
+            $LabelName.ToLower(),
+            (Format-IcingaPerfDataValue $PerfValue),
+            $PerfDataObject.unit,
+            (Format-IcingaPerfDataValue $PerfDataObject.warning),
+            (Format-IcingaPerfDataValue $PerfDataObject.critical),
+            (Format-IcingaPerfDataValue $minimum),
+            (Format-IcingaPerfDataValue $maximum)
+        )
+    );
 }

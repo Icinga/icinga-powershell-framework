@@ -29,13 +29,13 @@ function ConvertTo-IcingaIPv6BinaryString()
 
     $IPArr = $IPArr.ToCharArray();
     $IP = $IPArr | ForEach-Object {
-        [System.Convert]::ToString("0x$_",2).PadLeft(4, '0');
+        [System.Convert]::ToString("0x$_", 2).PadLeft(4, '0');
     }
     $IP = $IP -join '';
-    $IP = $IP -replace '\s','';
+    $IP = $IP -replace '\s', '';
 
     return @{
-       'value' = $IP;
-       'name' = 'IPv6'
-   }
+        'value' = $IP;
+        'name' = 'IPv6'
+    }
 }

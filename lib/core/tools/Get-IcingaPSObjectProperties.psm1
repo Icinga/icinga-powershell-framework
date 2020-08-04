@@ -40,7 +40,7 @@ function Get-IcingaPSObjectProperties()
                     ([string]$property.Value)
                 );
             }
-            
+
         }
     }
 

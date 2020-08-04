@@ -11,7 +11,7 @@ function Start-IcingaPowerShellDaemon()
 
         try {
             $EnabledDaemons = Get-IcingaBackgroundDaemons;
-            
+
             foreach ($daemon in $EnabledDaemons.Keys) {
                 if (-Not (Test-IcingaFunction $daemon)) {
                     continue;

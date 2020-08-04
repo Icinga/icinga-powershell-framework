@@ -31,9 +31,9 @@ function Install-IcingaFrameworkPlugins()
     );
 
     [Hashtable]$Result = Install-IcingaFrameworkComponent `
-                            -Name 'plugins' `
-                            -GitHubUser 'Icinga' `
-                            -Url $PluginsUrl;
+        -Name 'plugins' `
+        -GitHubUser 'Icinga' `
+        -Url $PluginsUrl;
 
     return @{
         'PluginUrl' = $Result.RepoUrl;

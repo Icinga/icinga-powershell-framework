@@ -32,5 +32,5 @@ function Unblock-IcingaPowerShellFiles()
     }
 
     Write-IcingaConsoleNotice 'Unblocking Icinga PowerShell Files';
-    Get-ChildItem -Path $Path -Recurse | Unblock-File; 
+    Get-ChildItem -Path $Path -Recurse | Unblock-File;
 }

@@ -16,27 +16,27 @@ function New-IcingaCheckPackage()
     );
 
     $Check = New-Object -TypeName PSObject;
-    $Check | Add-Member -membertype NoteProperty -name 'name'           -value $Name;
-    $Check | Add-Member -membertype NoteProperty -name 'exitcode'       -value -1;
-    $Check | Add-Member -membertype NoteProperty -name 'verbose'        -value $Verbose;
-    $Check | Add-Member -membertype NoteProperty -name 'hidden'         -value $Hidden;
-    $Check | Add-Member -membertype NoteProperty -name 'checks'         -value $Checks;
-    $Check | Add-Member -membertype NoteProperty -name 'opand'          -value $OperatorAnd;
-    $Check | Add-Member -membertype NoteProperty -name 'opor'           -value $OperatorOr;
-    $Check | Add-Member -membertype NoteProperty -name 'opnone'         -value $OperatorNone;
-    $Check | Add-Member -membertype NoteProperty -name 'opmin'          -value $OperatorMin;
-    $Check | Add-Member -membertype NoteProperty -name 'opmax'          -value $OperatorMax;
-    $Check | Add-Member -membertype NoteProperty -name 'spacing'        -value 0;
-    $Check | Add-Member -membertype NoteProperty -name 'compiled'       -value $FALSE;
-    $Check | Add-Member -membertype NoteProperty -name 'perfdata'       -value $FALSE;
-    $Check | Add-Member -membertype NoteProperty -name 'checkcommand'   -value '';
-    $Check | Add-Member -membertype NoteProperty -name 'headermsg'      -value '';
-    $Check | Add-Member -membertype NoteProperty -name 'checkpackage'   -value $TRUE;
-    $Check | Add-Member -membertype NoteProperty -name 'warningchecks'  -value @();
-    $Check | Add-Member -membertype NoteProperty -name 'criticalchecks' -value @();
-    $Check | Add-Member -membertype NoteProperty -name 'unknownchecks'  -value @();
+    $Check | Add-Member -MemberType NoteProperty -Name 'name'           -Value $Name;
+    $Check | Add-Member -MemberType NoteProperty -Name 'exitcode'       -Value -1;
+    $Check | Add-Member -MemberType NoteProperty -Name 'verbose'        -Value $Verbose;
+    $Check | Add-Member -MemberType NoteProperty -Name 'hidden'         -Value $Hidden;
+    $Check | Add-Member -MemberType NoteProperty -Name 'checks'         -Value $Checks;
+    $Check | Add-Member -MemberType NoteProperty -Name 'opand'          -Value $OperatorAnd;
+    $Check | Add-Member -MemberType NoteProperty -Name 'opor'           -Value $OperatorOr;
+    $Check | Add-Member -MemberType NoteProperty -Name 'opnone'         -Value $OperatorNone;
+    $Check | Add-Member -MemberType NoteProperty -Name 'opmin'          -Value $OperatorMin;
+    $Check | Add-Member -MemberType NoteProperty -Name 'opmax'          -Value $OperatorMax;
+    $Check | Add-Member -MemberType NoteProperty -Name 'spacing'        -Value 0;
+    $Check | Add-Member -MemberType NoteProperty -Name 'compiled'       -Value $FALSE;
+    $Check | Add-Member -MemberType NoteProperty -Name 'perfdata'       -Value $FALSE;
+    $Check | Add-Member -MemberType NoteProperty -Name 'checkcommand'   -Value '';
+    $Check | Add-Member -MemberType NoteProperty -Name 'headermsg'      -Value '';
+    $Check | Add-Member -MemberType NoteProperty -Name 'checkpackage'   -Value $TRUE;
+    $Check | Add-Member -MemberType NoteProperty -Name 'warningchecks'  -Value @();
+    $Check | Add-Member -MemberType NoteProperty -Name 'criticalchecks' -Value @();
+    $Check | Add-Member -MemberType NoteProperty -Name 'unknownchecks'  -Value @();
 
-    $Check | Add-Member -membertype ScriptMethod -name 'HasChecks' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'HasChecks' -Value {
         if ($this.checks -ne 0) {
             return $TRUE
         }
@@ -44,13 +44,13 @@ function New-IcingaCheckPackage()
         return $FALSE;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'Initialise' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'Initialise' -Value {
         foreach ($check in $this.checks) {
             $this.InitCheck($check);
         }
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'InitCheck' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'InitCheck' -Value {
         param($check);
 
         if ($null -eq $check) {
@@ -62,7 +62,7 @@ function New-IcingaCheckPackage()
         $check.SilentCompile();
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'AddSpacing' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'AddSpacing' -Value {
         $this.spacing += 1;
         foreach ($check in $this.checks) {
             $check.spacing = $this.spacing;
@@ -70,7 +70,7 @@ function New-IcingaCheckPackage()
         }
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'AddCheck' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'AddCheck' -Value {
         param($check);
 
         if ($null -eq $check) {
@@ -81,7 +81,7 @@ function New-IcingaCheckPackage()
         $this.checks += $check;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'GetWarnings' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'GetWarnings' -Value {
         foreach ($check in $this.checks) {
             $this.warningchecks += $check.GetWarnings();
         }
@@ -89,7 +89,7 @@ function New-IcingaCheckPackage()
         return $this.warningchecks;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'GetCriticals' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'GetCriticals' -Value {
         foreach ($check in $this.checks) {
             $this.criticalchecks += $check.GetCriticals();
         }
@@ -97,7 +97,7 @@ function New-IcingaCheckPackage()
         return $this.criticalchecks;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'GetUnknowns' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'GetUnknowns' -Value {
         foreach ($check in $this.checks) {
             $this.unknownchecks += $check.GetUnknowns();
         }
@@ -105,7 +105,7 @@ function New-IcingaCheckPackage()
         return $this.unknownchecks;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'AssignCheckCommand' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'AssignCheckCommand' -Value {
         param($CheckCommand);
 
         $this.checkcommand = $CheckCommand;
@@ -115,7 +115,7 @@ function New-IcingaCheckPackage()
         }
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'Compile' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'Compile' -Value {
         param([bool]$Verbose);
 
         if ($this.compiled) {
@@ -129,24 +129,24 @@ function New-IcingaCheckPackage()
                 if ($this.CheckAllOk() -eq $FALSE) {
                     $this.GetWorstExitCode();
                 }
-            } elseif($this.opor) {
+            } elseif ($this.opor) {
                 if ($this.CheckOneOk() -eq $FALSE) {
                     $this.GetWorstExitCode();
                 }
-            } elseif($this.opnone) {
+            } elseif ($this.opnone) {
                 if ($this.CheckOneOk() -eq $TRUE) {
                     $this.GetWorstExitCode();
                     $this.exitcode = $IcingaEnums.IcingaExitCode.Critical;
                 } else {
                     $this.exitcode = $IcingaEnums.IcingaExitCode.Ok;
                 }
-            } elseif([int]$this.opmin -ne -1) {
+            } elseif ([int]$this.opmin -ne -1) {
                 if ($this.CheckMinimumOk() -eq $FALSE) {
                     $this.GetWorstExitCode();
                 } else {
                     $this.exitcode = $IcingaEnums.IcingaExitCode.Ok;
                 }
-            } elseif([int]$this.opmax -ne -1) {
+            } elseif ([int]$this.opmax -ne -1) {
                 if ($this.CheckMaximumOk() -eq $FALSE) {
                     $this.GetWorstExitCode();
                 } else {
@@ -168,11 +168,11 @@ function New-IcingaCheckPackage()
         return $this.exitcode;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'SilentCompile' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'SilentCompile' -Value {
         $this.Compile($FALSE) | Out-Null;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'GetOkCount' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'GetOkCount' -Value {
         [int]$okCount = 0;
         foreach ($check in $this.checks) {
             if ([int]$check.exitcode -eq [int]$IcingaEnums.IcingaExitCode.Ok) {
@@ -183,12 +183,14 @@ function New-IcingaCheckPackage()
         return $okCount;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'CheckMinimumOk' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'CheckMinimumOk' -Value {
         if ($this.opmin -gt $this.checks.Count) {
-            Write-IcingaPluginOutput ([string]::Format(
-                'Unknown: The minimum argument ({0}) is exceeding the amount of assigned checks ({1}) to this package "{2}"',
-                $this.opmin, $this.checks.Count, $this.name
-            ));
+            Write-IcingaPluginOutput (
+                [string]::Format(
+                    'Unknown: The minimum argument ({0}) is exceeding the amount of assigned checks ({1}) to this package "{2}"',
+                    $this.opmin, $this.checks.Count, $this.name
+                )
+            );
             $this.exitcode = $IcingaEnums.IcingaExitCode.Unknown;
             return $FALSE;
         }
@@ -202,12 +204,14 @@ function New-IcingaCheckPackage()
         return $FALSE;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'CheckMaximumOk' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'CheckMaximumOk' -Value {
         if ($this.opmax -gt $this.checks.Count) {
-            Write-IcingaPluginOutput ([string]::Format(
-                'Unknown: The maximum argument ({0}) is exceeding the amount of assigned checks ({1}) to this package "{2}"',
-                $this.opmax, $this.checks.Count, $this.name
-            ));
+            Write-IcingaPluginOutput (
+                [string]::Format(
+                    'Unknown: The maximum argument ({0}) is exceeding the amount of assigned checks ({1}) to this package "{2}"',
+                    $this.opmax, $this.checks.Count, $this.name
+                )
+            );
             $this.exitcode = $IcingaEnums.IcingaExitCode.Unknown;
             return $FALSE;
         }
@@ -221,7 +225,7 @@ function New-IcingaCheckPackage()
         return $FALSE;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'CheckAllOk' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'CheckAllOk' -Value {
         foreach ($check in $this.checks) {
             if ([int]$check.exitcode -ne [int]$IcingaEnums.IcingaExitCode.Ok) {
                 return $FALSE;
@@ -231,7 +235,7 @@ function New-IcingaCheckPackage()
         return $TRUE;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'CheckOneOk' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'CheckOneOk' -Value {
         foreach ($check in $this.checks) {
             if ([int]$check.exitcode -eq [int]$IcingaEnums.IcingaExitCode.Ok) {
                 $this.exitcode = $check.exitcode;
@@ -242,7 +246,7 @@ function New-IcingaCheckPackage()
         return $FALSE;
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'GetPackageConfigMessage' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'GetPackageConfigMessage' -Value {
         if ($this.opand) {
             return 'Match All';
         } elseif ($this.opor) {
@@ -256,7 +260,7 @@ function New-IcingaCheckPackage()
         }
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'PrintOutputMessageSorted' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'PrintOutputMessageSorted' -Value {
         param($skipHidden, $skipExitCode);
 
         if ($this.hidden -And $skipHidden) {
@@ -291,20 +295,20 @@ function New-IcingaCheckPackage()
         }
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'WriteAllOutput' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'WriteAllOutput' -Value {
         $this.PrintOutputMessageSorted($TRUE, -1);
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'PrintAllMessages' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'PrintAllMessages' -Value {
         $this.WritePackageOutputStatus();
         $this.WriteAllOutput();
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'WriteCheckErrors' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'WriteCheckErrors' -Value {
         $this.PrintOutputMessageSorted($FALSE, $IcingaEnums.IcingaExitCode.Ok);
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'PrintNoChecksConfigured' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'PrintNoChecksConfigured' -Value {
         if ($this.checks.Count -eq 0) {
             Write-IcingaPluginOutput (
                 [string]::Format(
@@ -318,7 +322,7 @@ function New-IcingaCheckPackage()
         }
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'WritePackageOutputStatus' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'WritePackageOutputStatus' -Value {
         if ($this.hidden) {
             return;
         }
@@ -344,15 +348,15 @@ function New-IcingaCheckPackage()
         );
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'PrintOutputMessages' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'PrintOutputMessages' -Value {
         [bool]$printAll = $FALSE;
 
         switch ($this.verbose) {
-            0 { 
+            0 {
                 # Default value. Only print a package but not the services include
-                break; 
+                break;
             };
-            1 { 
+            1 {
                 # Include the Operator into the check package result
                 break;
             };
@@ -375,7 +379,7 @@ function New-IcingaCheckPackage()
         }
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'AddUniqueSortedChecksToHeader' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'AddUniqueSortedChecksToHeader' -Value {
         param($checkarray, $state);
 
         [hashtable]$CheckHash = @{};
@@ -393,11 +397,11 @@ function New-IcingaCheckPackage()
                 '{0} {1} ',
                 $IcingaEnums.IcingaExitCodeText[$state],
                 [string]::Join(', ', $SortedCheckArray.Key)
-            );           
+            );
         }
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'GetWorstExitCode' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'GetWorstExitCode' -Value {
         if ([int]$this.exitcode -eq [int]$IcingaEnums.IcingaExitCode.Unknown) {
             return;
         }
@@ -428,7 +432,7 @@ function New-IcingaCheckPackage()
         );
     }
 
-    $Check | Add-Member -membertype ScriptMethod -name 'GetPerfData' -value {
+    $Check | Add-Member -MemberType ScriptMethod -Name 'GetPerfData' -Value {
         [string]$perfData             = '';
         [hashtable]$CollectedPerfData = @{};
 

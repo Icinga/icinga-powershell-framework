@@ -19,7 +19,7 @@ function Start-IcingaAgentDirectorWizard()
     if ($null -eq $OverrideDirectorVars -And $RunInstaller -eq $FALSE) {
         if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to manually override arguments provided by the Director API?' -Default 'n').result -eq 0) {
             $OverrideDirectorVars = $TRUE;
-        } else{
+        } else {
             $OverrideDirectorVars = $FALSE;
         }
     }
@@ -115,7 +115,7 @@ function Start-IcingaAgentDirectorWizard()
     $DirectorOverrideArgs.Add(
         'OverrideDirectorVars', 0
     );
-    
+
     if ([string]::IsNullOrEmpty($TemplateKey) -eq $FALSE) {
         $DirectorOverrideArgs.Add(
             'SelfServiceAPIKey', $TemplateKey

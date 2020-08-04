@@ -19,6 +19,6 @@ function Join-WebPath()
     if ($ChildPath[0] -eq '/') {
         return ([string]::Format('{0}{1}', $Path, $ChildPath));
     }
-    
+
     return ([string]::Format('{0}/{1}', $Path, $ChildPath));
 }

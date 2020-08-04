@@ -18,7 +18,7 @@ function Get-IcingaWindowsInformation()
 
     if ($ForceWMI -eq $FALSE -And (Get-Command 'Get-CimInstance' -ErrorAction SilentlyContinue)) {
         try {
-            return (Get-CimInstance @Arguments -ErrorAction Stop)  
+            return (Get-CimInstance @Arguments -ErrorAction Stop);
         } catch {
             $ErrorName    = $_.Exception.NativeErrorCode;
             $ErrorMessage = $_.Exception.Message;
@@ -43,7 +43,7 @@ function Get-IcingaWindowsInformation()
 
     if ((Get-Command 'Get-WmiObject' -ErrorAction SilentlyContinue)) {
         try {
-            return (Get-WmiObject @Arguments -ErrorAction Stop)  
+            return (Get-WmiObject @Arguments -ErrorAction Stop);
         } catch {
             $ErrorName    = $_.CategoryInfo.Category;
             $ErrorMessage = $_.Exception.Message;

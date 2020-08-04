@@ -21,7 +21,7 @@ function Read-IcingaRESTMessage()
 
     [hashtable]$Request = @{};
     $RestMessage -match '(.+) (.+) (.+)' | Out-Null;
- 
+
     $Request.Add('Method', $Matches[1]);
     $Request.Add('FullRequest', $Matches[2]);
     $Request.Add('RequestPath', @{});
@@ -39,7 +39,7 @@ function Read-IcingaRESTMessage()
     # Arguments
     $ArgumentsSplit = $Arguments.Split('&');
     $ArgumentsSplit+='\\\\\\\\\\\\=FIN';
-    foreach ( $Argument in $ArgumentsSplit | Sort-Object -descending) {
+    foreach ( $Argument in $ArgumentsSplit | Sort-Object -Descending) {
         if ($Argument.Contains('=')) {
             $Argument -match '(.+)=(.+)' | Out-Null;
             If (($Matches[1] -ne $Current) -And ($NULL -ne $Current)) {
@@ -58,7 +58,7 @@ function Read-IcingaRESTMessage()
     $SplitString = $RestMessage.split("`r`n");
     foreach ( $SingleString in $SplitString ) {
         if ( ([string]::IsNullOrEmpty($SingleString) -eq $FALSE) -And ($SingleString -match '^{.+' -eq $FALSE) ) {
-            $SingleSplitString = $SingleString.Split(':',2);
+            $SingleSplitString = $SingleString.Split(':', 2);
             $Request.Header.Add( $SingleSplitString[0], $SingleSplitString[1].Trim());
         }
     }

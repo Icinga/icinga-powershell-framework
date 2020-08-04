@@ -36,10 +36,12 @@ function Start-IcingaTimer()
     $TimerObject = New-Object System.Diagnostics.Stopwatch;
     $TimerObject.Start();
 
-    Add-IcingaHashtableItem -Key $Name -Value ([hashtable]::Synchronized(
-        @{
-            'Active' = $TRUE;
-            'Timer'  = $TimerObject;
-        }
-    )) -Hashtable $global:IcingaDaemonData.IcingaTimers -Override | Out-Null;
+    Add-IcingaHashtableItem -Key $Name -Value (
+        [hashtable]::Synchronized(
+            @{
+                'Active' = $TRUE;
+                'Timer'  = $TimerObject;
+            }
+        )
+    ) -Hashtable $global:IcingaDaemonData.IcingaTimers -Override | Out-Null;
 }

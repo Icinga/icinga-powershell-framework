@@ -21,24 +21,24 @@
 
 function ConvertTo-IcingaIPv4BinaryString()
 {
-   param(
-      [string]$IP
-   );
+    param(
+        [string]$IP
+    );
 
-   try {
-      $IP = $IP -split '\.' | ForEach-Object {    
-         [System.Convert]::ToString($_, 2).PadLeft(8, '0');
-      }
-      $IP = $IP -join '';
-      $IP = $IP -replace '\s','';
-   } catch {
-       # Todo: Should we handle errors? It might happen due to faulty routes or unhandled route config
-       #       we throw errors which should have no effect at all
-       return $null;
-   }
+    try {
+        $IP = $IP -split '\.' | ForEach-Object {
+            [System.Convert]::ToString($_, 2).PadLeft(8, '0');
+        }
+        $IP = $IP -join '';
+        $IP = $IP -replace '\s', '';
+    } catch {
+        # Todo: Should we handle errors? It might happen due to faulty routes or unhandled route config
+        #       we throw errors which should have no effect at all
+        return $null;
+    }
 
-   return @{
-      'value' = $IP;
-      'name' = 'IPv4'
-   }
+    return @{
+        'value' = $IP;
+        'name' = 'IPv4'
+    }
 }

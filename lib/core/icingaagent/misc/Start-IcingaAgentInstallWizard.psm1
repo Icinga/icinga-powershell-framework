@@ -106,7 +106,7 @@ function Start-IcingaAgentInstallWizard()
             $InstallerArguments   = $Result.Args;
             $Result               = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'AcceptConnections' -Value $AcceptConnections -InstallerArguments $InstallerArguments;
             $AcceptConnections    = $Result.Value;
-            $InstallerArguments   = $Result.Args;       
+            $InstallerArguments   = $Result.Args;
             $Result               = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'ServiceUser' -Value $ServiceUser -InstallerArguments $InstallerArguments;
             $ServiceUser          = $Result.Value;
             $InstallerArguments   = $Result.Args;
@@ -211,7 +211,7 @@ function Start-IcingaAgentInstallWizard()
                 if ([string]::IsNullOrEmpty($AgentVersion)) {
                     $AgentVersion = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please specify the version you want to install ("release", "snapshot" or a specific version like "2.11.3")' -Default 'v' -DefaultInput 'release').answer;
                     $InstallerArguments += "-AgentVersion '$AgentVersion'";
-    
+
                     Write-IcingaConsoleNotice ([string]::Format('Installing Icinga version: "{0}"', $AgentVersion));
                 }
             } else {
@@ -393,7 +393,7 @@ function Start-IcingaAgentInstallWizard()
                 $GlobalZoneConfig += $GlobalZones;
                 $InstallerArguments += ("-GlobalZones " + ([string]::Join(',', $GlobalZones)));
             } else {
-                $GlobalZones = @(); 
+                $GlobalZones = @();
                 $InstallerArguments += ("-GlobalZones @()");
             }
         } else {
@@ -563,11 +563,15 @@ function Start-IcingaAgentInstallWizard()
             Write-IcingaAgentApiConfig -Port $CAPort;
             if ($EmptyCA -eq $TRUE -Or $CertsInstalled -eq $FALSE) {
                 Disable-IcingaAgentFeature 'api';
-                Write-IcingaConsoleWarning -Message '{0}{1}{2}{3}{4}' -Objects 'Your Icinga Agent API feature has been disabled. Please provide either your ca.crt ', 
-                                                    'or connect to a parent node for certificate requests. You can run "Install-IcingaAgentCertificates" ',
-                                                    'with your configuration to properly create the host certificate and a valid certificate request. ',
-                                                    'After this you can enable the API feature by using "Enable-IcingaAgentFeature api" and restart the ',
-                                                    'Icinga Agent service "Restart-IcingaService icinga2"';
+                Write-IcingaConsoleWarning `
+                    -Message '{0}{1}{2}{3}{4}' `
+                    -Objects (
+                        'Your Icinga Agent API feature has been disabled. Please provide either your ca.crt ',
+                        'or connect to a parent node for certificate requests. You can run "Install-IcingaAgentCertificates" ',
+                        'with your configuration to properly create the host certificate and a valid certificate request. ',
+                        'After this you can enable the API feature by using "Enable-IcingaAgentFeature api" and restart the ',
+                        'Icinga Agent service "Restart-IcingaService icinga2"'
+                    );
             }
             Write-IcingaAgentZonesConfig -Endpoints $Endpoints -EndpointConnections $EndpointConnections -ParentZone $ParentZone -GlobalZones $GlobalZoneConfig -Hostname $Hostname;
             if ($AddFirewallRule) {
@@ -733,9 +737,9 @@ function Set-IcingaWizardArgument()
     if ([string]::IsNullOrEmpty($Value) -eq $FALSE) {
 
         $InstallerArguments = Add-InstallerArgument `
-                -InstallerArguments $InstallerArguments `
-                -Key $WizardArg `
-                -Value $Value;
+            -InstallerArguments $InstallerArguments `
+            -Key $WizardArg `
+            -Value $Value;
 
         return @{
             'Value' = $Value;

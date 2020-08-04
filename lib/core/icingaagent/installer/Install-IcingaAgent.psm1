@@ -29,11 +29,13 @@ function Install-IcingaAgent()
         }
         $IcingaInstaller.Version = 'snapshot';
     } elseif ($IcingaInstaller.Version -eq $InstalledVersion.Full) {
-        Write-IcingaConsoleNotice ([string]::Format(
-            'No installation required. Your installed version [{0}] is matching the online version [{1}]',
-            $InstalledVersion.Full,
-            $IcingaInstaller.Version
-        ));
+        Write-IcingaConsoleNotice (
+            [string]::Format(
+                'No installation required. Your installed version [{0}] is matching the online version [{1}]',
+                $InstalledVersion.Full,
+                $IcingaInstaller.Version
+            )
+        );
         return $FALSE;
     }
 
