@@ -31,12 +31,12 @@ function Show-IcingaTimer()
 
     $TimerObject = Get-IcingaTimer -Name $Name;
 
-    if ($null -eq $TimerObject) {
-        Write-IcingaConsoleNotice 'A timer with the name "{0}" does not exist' -Objects $Name;
-        return;
-    }
-
     if (-Not $ShowAll) {
+         if ($null -eq $TimerObject) {
+             Write-IcingaConsoleNotice 'A timer with the name "{0}" does not exist' -Objects $Name;
+            return;
+        }
+
         $TimerOutput = New-Object -TypeName PSObject;
         $TimerOutput | Add-Member -MemberType NoteProperty -Name 'Timer Name' -Value $Name;
         $TimerOutput | Add-Member -MemberType NoteProperty -Name 'Elapsed Seconds' -Value $TimerObject.Elapsed.TotalSeconds;
