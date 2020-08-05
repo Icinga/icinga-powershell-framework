@@ -18,7 +18,19 @@
         'Get-IcingaCacheDir',
         'Get-IcingaPowerShellConfigDir',
         'Get-IcingaFrameworkRootPath',
-        'Get-IcingaPowerShellModuleFile'
+        'Get-IcingaPowerShellModuleFile',
+        'Start-IcingaTimer',
+        'Test-IcingaTimer',
+        'Add-IcingaHashtableItem',
+        'Get-IcingaHashtableItem',
+        'Register-IcingaEventLog'
+    )
+    NestedModules     = @(
+        '.\lib\core\framework\Start-IcingaTimer.psm1',
+        '.\lib\core\framework\Test-IcingaTimer.psm1',
+        '.\lib\core\tools\Add-IcingaHashtableItem.psm1'
+        '.\lib\core\tools\Get-IcingaHashtableItem.psm1',
+        '.\lib\core\logging\Register-IcingaEventLog.psm1'
     )
     CmdletsToExport   = @()
     VariablesToExport = '*'

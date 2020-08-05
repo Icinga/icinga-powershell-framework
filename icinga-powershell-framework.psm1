@@ -16,18 +16,6 @@ function Use-Icinga()
         [switch]$DebugMode = $FALSE
     );
 
-    # Ensure we autoload the Icinga Plugin collection, provided by the external
-    # module 'icinga-powershell-plugins'
-    if (Get-Command 'Use-IcingaPlugins' -ErrorAction SilentlyContinue) {
-        Use-IcingaPlugins;
-    }
-
-    # This function will allow us to load this entire module including possible
-    # actions, making it available within our shell environment
-    # First load our custom modules
-    Import-IcingaLib '\' -Init -Custom;
-    Import-IcingaLib '\' -Init;
-
     if ($LibOnly -eq $FALSE) {
         Register-IcingaEventLog;
 
@@ -59,6 +47,20 @@ function Use-Icinga()
         }
     }
 
+    Start-IcingaTimer -Name 'FrameworkInitialising';
+
+    # Ensure we autoload the Icinga Plugin collection, provided by the external
+    # module 'icinga-powershell-plugins'
+    if (Get-Command 'Use-IcingaPlugins' -ErrorAction SilentlyContinue) {
+        Use-IcingaPlugins;
+    }
+
+    # This function will allow us to load this entire module including possible
+    # actions, making it available within our shell environment
+    # First load our custom modules
+    Import-IcingaLib '\' -Init -Custom;
+    Import-IcingaLib '\' -Init;
+
     # Enable DebugMode in case it is enabled in our config
     if (Get-IcingaFrameworkDebugMode) {
         Enable-IcingaFrameworkDebugMode;
@@ -73,6 +75,8 @@ function Use-Icinga()
                 -Value $entry[$event] | Out-Null;
         }
     }
+
+    Stop-IcingaTimer -Name 'FrameworkInitialising';
 }
 
 function Import-IcingaLib()
