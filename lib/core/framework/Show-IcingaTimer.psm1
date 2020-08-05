@@ -25,7 +25,8 @@
 function Show-IcingaTimer()
 {
     param (
-        [string]$Name = 'DefaultTimer'
+        [string]$Name    = 'DefaultTimer',
+        [switch]$ShowAll = $FALSE
     );
 
     $TimerObject = Get-IcingaTimer -Name $Name;
@@ -35,5 +36,26 @@ function Show-IcingaTimer()
         return;
     }
 
-    return $TimerObject.Elapsed.TotalSeconds;
+    if (-Not $ShowAll) {
+        $TimerOutput = New-Object -TypeName PSObject;
+        $TimerOutput | Add-Member -MemberType NoteProperty -Name 'Timer Name' -Value $Name;
+        $TimerOutput | Add-Member -MemberType NoteProperty -Name 'Elapsed Seconds' -Value $TimerObject.Elapsed.TotalSeconds;
+
+        $TimerOutput | Format-Table -AutoSize;
+    } else {
+        $TimerObjects = Get-IcingaHashtableItem -Key 'IcingaTimers' -Hashtable $global:IcingaDaemonData;
+
+        [array]$MultiOutput = @();
+
+        foreach ($TimerName in $TimerObjects.Keys) {
+           $TimerObject = $TimerObjects[$TimerName].Timer;
+
+           $TimerOutput = New-Object -TypeName PSObject;
+           $TimerOutput | Add-Member -MemberType NoteProperty -Name 'Timer Name' -Value $TimerName;
+           $TimerOutput | Add-Member -MemberType NoteProperty -Name 'Elapsed Seconds' -Value $TimerObject.Elapsed.TotalSeconds;
+           $MultiOutput += $TimerOutput;
+        }
+
+        $MultiOutput | Format-Table -AutoSize;
+    }
 }
