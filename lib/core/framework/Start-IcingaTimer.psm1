@@ -26,7 +26,7 @@ function Start-IcingaTimer()
         [string]$Name = 'DefaultTimer'
     );
 
-    if ((Test-IcingaTimer)) {
+    if ((Test-IcingaTimer -Name $Name)) {
         Write-IcingaConsoleNotice 'The timer with the name "{0}" is already active' -Objects $Name;
         return;
     }

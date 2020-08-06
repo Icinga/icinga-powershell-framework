@@ -3,6 +3,7 @@ function Get-IcingaWindowsInformation()
     param (
         [string]$ClassName,
         $Filter,
+        $Namespace,
         [switch]$ForceWMI  = $FALSE
     );
 
@@ -13,6 +14,11 @@ function Get-IcingaWindowsInformation()
     if ([string]::IsNullOrEmpty($Filter) -eq $FALSE) {
         $Arguments.Add(
             'Filter', $Filter
+        );
+    }
+    if ([string]::IsNullOrEmpty($Namespace) -eq $FALSE) {
+        $Arguments.Add(
+            'Namespace', $Namespace
         );
     }
 
