@@ -324,6 +324,7 @@ function Get-IcingaCheckCommandConfig()
             Write-IcingaConsoleNotice "- '$check'";
         }
         Write-IcingaConsoleNotice "JSON export created in '${OutDirectory}'"
+        Write-IcingaConsoleWarning 'By using this generated check command configuration you will require the Icinga PowerShell Framework 1.2.0 or later to be installed on ALL monitored machines!';
         return;
     }
 
@@ -331,6 +332,7 @@ function Get-IcingaCheckCommandConfig()
     foreach ($check in $CheckName) {
         Write-IcingaConsoleNotice "- '$check'"
     }
+    Write-IcingaConsoleWarning 'By using this generated check command configuration you will require the Icinga PowerShell Framework 1.2.0 or later to be installed on ALL monitored machines!';
     Write-IcingaConsoleNotice '############################################################';
 
     return $output;
