@@ -12,11 +12,9 @@ function Register-IcingaEventLog()
         if ($Registered) {
             return;
         }
-    } catch {
-        # Nothing to handle here. We should simply register our application
-        # whtin the Application Event-Log. We will only run into this catch
-        # block if the app was not registered.
-    }
 
-    New-EventLog -LogName Application -Source 'Icinga for Windows';
+        New-EventLog -LogName Application -Source 'Icinga for Windows';
+    } catch {
+        Exit-IcingaThrowException -ExceptionType 'Configuration' -ExceptionThrown $IcingaExceptions.Configuration.EventLogNotInstalled -Force;
+    }
 }

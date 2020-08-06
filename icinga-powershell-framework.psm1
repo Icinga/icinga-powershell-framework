@@ -29,8 +29,6 @@ function Use-Icinga()
     Import-IcingaLib '\' -Init;
 
     if ($LibOnly -eq $FALSE) {
-        Register-IcingaEventLog;
-
         $global:IcingaThreads       = [hashtable]::Synchronized(@{});
         $global:IcingaThreadContent = [hashtable]::Synchronized(@{});
         $global:IcingaThreadPool    = [hashtable]::Synchronized(@{});
@@ -72,6 +70,10 @@ function Use-Icinga()
                 -Key $event `
                 -Value $entry[$event] | Out-Null;
         }
+    }
+
+    if ($LibOnly -eq $FALSE) {
+        Register-IcingaEventLog;
     }
 }
 
