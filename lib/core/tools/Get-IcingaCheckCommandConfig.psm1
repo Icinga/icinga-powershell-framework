@@ -114,7 +114,7 @@ function Get-IcingaCheckCommandConfig()
                 'arguments'   = @{
                     # Set the Command handling for every check command
                     '-C' = @{
-                        'value' = [string]::Format('Use-Icinga; exit {0}', $Data.Name);
+                        'value' = [string]::Format('try {{ Use-Icinga; }} catch {{ Write-Output {1}The Icinga PowerShell Framework is either not installed on the system or not configured properly. Please check https://icinga.com/docs/windows for further details{1}; exit 3; }}; Exit-IcingaPluginNotInstalled {1}{0}{1}; exit {0}', $Data.Name, "'");
                         'order' = '0';
                     }
                 }

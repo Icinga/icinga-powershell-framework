@@ -22,7 +22,9 @@
 
 [hashtable]$Configuration = @{
     PluginArgumentConflict = 'Your plugin argument configuration is causing a conflict. Mostly this error is caused by missmatching configurations by enabling multiple switch arguments which are resulting in a conflicting configuration for the plugin.';
-    PluginArgumentmissing  = 'Your plugin argument configuration is missing mandatory arguments. This is error is caused when mandatory or required arguments are missing from a plugin call and the operation is unable to process without them.';
+    PluginArgumentMissing  = 'Your plugin argument configuration is missing mandatory arguments. This is error is caused when mandatory or required arguments are missing from a plugin call and the operation is unable to process without them.';
+    PluginNotInstalled     = 'The plugin assigned to this service check seems not to be installed on this machine. Please review your service check configuration for spelling errors and check if the plugin is installed and executable on this machine by PowerShell.';
+    PluginNotAssigned      = 'Your check for this service could not be processed because it seems like no valid Cmdlet was assigned to the check command. Please review your check command to ensure that a valid Cmdlet is assigned and executed by a PowerShell call.';
 }
 
 <#

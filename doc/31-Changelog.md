@@ -11,6 +11,10 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/7?closed=1)
 
+### Upgrading Notes
+
+* To properly catch errors on check execution you will have to import check commands as Director basket again by using `Get-IcingaCheckCommandConfig`. Further details can be found in the [upgrading docs](30-upgrading-framework.md)
+
 ### Notes
 
 * [#80](https://github.com/Icinga/icinga-powershell-framework/issues/80) Adds wrapper function `Get-IcingaWindowsInformation` for WMI and CIM calls to properly handle config/permission errors
@@ -22,6 +26,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#87](https://github.com/Icinga/icinga-powershell-framework/issues/87) Adds wrapper command to test new code or functionality of Framework and/or plugins
 * [#88](https://github.com/Icinga/icinga-powershell-framework/issues/88) Adds Start/Stop timer functionality for performance analysis
 * [#94](https://github.com/Icinga/icinga-powershell-framework/issues/94) Adds `Namespace` argument for Get-IcingaWindowsInformation for additional filtering
+* [#95](https://github.com/Icinga/icinga-powershell-framework/issues/95) Improves error handling for issues by using `Use-Icinga` initialising or by calling plugins which are not installed
 
 ### Bugfixes
 

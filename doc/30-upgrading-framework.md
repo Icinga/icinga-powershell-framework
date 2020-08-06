@@ -4,7 +4,19 @@ Upgrading Icinga PowerShell Framework is usually quite straightforward.
 
 Specific version upgrades are described below. Please note that version updates are incremental.
 
-## Upgrading to v1.1.0 (pending)
+## Upgrading to v1.2.0 (pending)
+
+### Behavior changes
+
+#### Changes on check command execution
+
+As mentioned in [#95](https://github.com/Icinga/icinga-powershell-framework/issues/95) we should make sure that in case the Framework itself is not installed on a system or plugins are missing the user is informed about this. We do how ever not intend to print huge stack traces of PowerShell errors into the console, but inform in a minimalistic way about this.
+
+For this reason we will cover with a Try-Catch statement if the `Use-Icinga` command is executed and return a proper message and error code on failures. In addition we will now check of a plugin is installed before the execution of it, ensuring that in case it is not present on the system we receive an `Unknown` message that a certain plugin is not installed or present.
+
+To apply this new behaviour you will have to generate a new check command basket file for the Icinga Director by using `Get-IcingaCheckCommandConfig` and import the new version. Once imported and deployed, the new handling will be in effect.
+
+## Upgrading to v1.1.0 (2020-06-02)
 
 ### Behavior changes
 
