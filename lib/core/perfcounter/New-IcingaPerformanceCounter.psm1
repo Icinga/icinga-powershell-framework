@@ -54,10 +54,11 @@ function New-IcingaPerformanceCounter()
     # have been found
     if ($UseCounterInstance -eq '*') {
         # In case we already loaded the counters once, return the finished array
-        # TODO: Re-Implement caching for counters
-        <#if ($Icinga2.Cache.PerformanceCounter.ContainsKey($Counter) -eq $TRUE) {
-            return (New-IcingaPerformanceCounterResult -FullName $Counter -PerformanceCounters $Icinga2.Cache.PerformanceCounter[$Counter]);
-        }#>
+        $CachedCounter = Get-IcingaPerformanceCounterCacheItem -Counter $Counter;
+
+        if ($null -ne $CachedCounter) {
+            return (New-IcingaPerformanceCounterResult -FullName $Counter -PerformanceCounters $CachedCounter);
+        }
 
         # If we need to build the array, load all instances from the counters and
         # create single performance counters and add them to a custom array and
@@ -88,8 +89,7 @@ function New-IcingaPerformanceCounter()
         # Add the parent counter including the array of Performance Counters to our
         # caching mechanism and return the New-IcingaPerformanceCounterResult object for usage
         # within the monitoring modules
-        # TODO: Re-Implement caching for counters
-        # $Icinga2.Cache.PerformanceCounter.Add($Counter, $AllCountersIntances);
+        Add-IcingaPerformanceCounterCache -Counter $Counter -Instances $AllCountersIntances;
         return (New-IcingaPerformanceCounterResult -FullName $Counter -PerformanceCounters $AllCountersIntances);
     } else {
         # This part will handle the counters without any instances as well as
@@ -97,23 +97,21 @@ function New-IcingaPerformanceCounter()
 
         # In case we already have the counter within our cache, return the
         # cached informations
-        # TODO: Re-Implement caching for counters
-        <#if ($Icinga2.Cache.PerformanceCounter.ContainsKey($Counter) -eq $TRUE) {
-            return $Icinga2.Cache.PerformanceCounter[$Counter];
-        }#>
+        $CachedCounter = Get-IcingaPerformanceCounterCacheItem -Counter $Counter;
+
+        if ($null -ne $CachedCounter) {
+            return $CachedCounter;
+        }
 
         # If the cache is not present yet, create the Performance Counter object,
         # and add it to our cache
         $NewCounter = New-IcingaPerformanceCounterObject -FullName $Counter -Category $UseCounterCategory -Counter $UseCounterName -Instance $UseCounterInstance -SkipWait $SkipWait;
-        # TODO: Re-Implement caching for counters
-        #$Icinga2.Cache.PerformanceCounter.Add($Counter, $NewCounter);
-        return $NewCounter; #TODO: Remove once caching is implemented
+        Add-IcingaPerformanceCounterCache -Counter $Counter -Instances $NewCounter;
     }
 
     # This function will always return non-instance counters or
     # specificly defined instance counters. Performance Counter Arrays
     # are returned within their function. This is just to ensure that the
     # function looks finished from developer point of view
-    # TODO: Re-Implement caching for counters, right now we return $NewCounter by default
-    #return $Icinga2.Cache.PerformanceCounter[$Counter];
+    return (Get-IcingaPerformanceCounterCacheItem -Counter $Counter);
 }

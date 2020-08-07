@@ -27,12 +27,12 @@ function New-IcingaPerformanceCounterArray()
         # NumOfCounters * 500 milliseconds for the first runs. This will speed
         # up the general loading of counters and will not require some fancy
         # pre-caching / configuration handler
-        # TODO: Re-Implement caching for counters
-        #if ($Icinga2.Cache.PerformanceCounter -ne $null) {
-        #    if ($Icinga2.Cache.PerformanceCounter.ContainsKey($counter) -eq $TRUE) {
-        $RequireSleep = $FALSE;
-        #    }
-        #}
+        $CachedCounter = Get-IcingaPerformanceCounterCacheItem -Counter $Counter;
+
+        if ($null -ne $CachedCounter) {
+            $RequireSleep = $FALSE;
+        }
+
         $obj = New-IcingaPerformanceCounter -Counter $counter -SkipWait $TRUE;
         if ($CounterResult.ContainsKey($obj.Name()) -eq $FALSE) {
             $CounterResult.Add($obj.Name(), $obj.Value());
