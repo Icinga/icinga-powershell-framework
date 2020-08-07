@@ -43,6 +43,7 @@ function Use-Icinga()
                 'DebugMode'                = $DebugMode;
             }
         );
+        New-IcingaPerformanceCounterCache;
     } else {
         # This will fix the debug mode in case we are only using Libs
         # without any other variable content and daemon handling
