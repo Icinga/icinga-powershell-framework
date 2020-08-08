@@ -9,6 +9,6 @@ function Format-IcingaPerfDataValue()
     }
 
     # Convert our value to a string and replace ',' with a '.' to allow Icinga to parse the output
-    # In addition, round every output to 2 digits
-    return (([string]([math]::round($PerfValue, 2))).Replace(',', '.'));
+    # In addition, round every output to 6 digits
+    return (([string]([math]::round($PerfValue, 6))).Replace(',', '.'));
 }

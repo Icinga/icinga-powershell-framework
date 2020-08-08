@@ -76,7 +76,7 @@ function New-IcingaPerformanceCounterObject()
 
         try {
             [string]$CounterType = $this.PerfCounter.CounterType;
-            $CounterData.Add('value', $this.PerfCounter.NextValue());
+            $CounterData.Add('value', ([math]::Round($this.PerfCounter.NextValue(), 6)));
             $CounterData.Add('sample', $this.PerfCounter.NextSample());
             $CounterData.Add('help', $this.PerfCounter.CounterHelp);
             $CounterData.Add('type', $CounterType);
