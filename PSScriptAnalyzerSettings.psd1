@@ -16,7 +16,6 @@
         'PSAvoidTrailingWhitespace',
         'PSAvoidUsingDeprecatedManifestFields',
         'PSUseToExportFieldsInManifest',
-        'PSAvoidUsingWriteHost',
         'PSUseProcessBlockForPipelineCommand',
         'PSUseConsistentIndentation',
         'PSUseCompatibleCmdlets',
@@ -26,7 +25,8 @@
     );
     ExcludeRules = @(
         'PSAvoidGlobalVars',
-        'PSUseSingularNouns'
+        'PSUseSingularNouns',
+        'PSAvoidUsingWriteHost'
     )
     Rules        = @{
         PSUseCompatibleCmdlets     = @{
