@@ -1,10 +1,8 @@
-Install the framework manually
-===
+# Install the Framework manually
 
 To install the module manually we will at first fetch information on where we can actually install the module into. PowerShell provides some default directories, which can however also extended manually.
 
-Getting Started
----
+## Getting Started
 
 To do this, we can run the following command within PowerShell
 
@@ -30,8 +28,7 @@ Get-Module -ListAvailable -Name icinga-powershell-framework
 
 If you receive an output stating that the module is installed, you are fine to continue.
 
-Execution Policies and File Blocking
----
+## Execution Policies and File Blocking
 
 In order to be able to run the module on certain Windows Hosts, it might be required to either update the execution policies and/or unblock the module script files.
 
@@ -43,14 +40,6 @@ Get-ChildItem -Path 'C:\Program Files\WindowsPowershell\Modules\icinga-powershel
 
 Once done, please try again if you are now able to run the module on your host. If you are still not able to run the module and/or its scripts, please have a look at the Microsoft documentation for the [Set-Execution-Policy](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.security/set-executionpolicy?view=powershell-6) Cmdlet to modify the Execution Policy for running PowerShell modules on your host, matching your internal guidelines.
 
-Start the Installation Wizard
----
+## Execute the Icinga Agent installation wizard
 
-Once the entire Framework is installed and the module is runnable, you can start the installation wizard of the Agent:
-
-```powershell
-Use-Icinga;
-Start-IcingaAgentInstallWizard;
-```
-
-The wizard will then guide you through the entire configuration and installation. Once completed, you will receive a configuration string with all your configured settings to easily run the same command on another machine or for automated installation.
+Once the entire Framework is installed and the module is runnable, you can start the Icinga Agent installation wizard. Please follow the [Icinga Agent Wizard](04-Icinga-Agent-Wizard.md) guide for examples and usage.

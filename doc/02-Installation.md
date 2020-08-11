@@ -8,6 +8,7 @@ Instructions
 
 * Install the Icinga PowerShell Framework with the [Kickstart Script](installation/01-Kickstart-Script.md)
 * Install the Icinga PowerShell Framework [manually](installation/02-Manual-Installation.md)
+* Install the Icinga PowerShell Framework with [PowerShell Gallery](installation/03-PowerShell-Gallery-Installation.md)
 
 Testing the installation
 ---
@@ -20,7 +21,14 @@ Use-Icinga
 
 This command will initialise the entire Icinga PowerShell Framework and load all available Cmdlets.
 
+*Note:* Starting with Icinga PowerShell Framework `1.2.0` you can simply use `icinga` to open a Icinga PowerShell Framework shell.
+
 Whenever you intend to use specific Cmdlets of the framework for Icinga Plugins, Testing or configuration you will require to run this command for each new PowerShell instance to initialise the framework.
+
+Icinga Agent installation wizard
+---
+
+Once the entire Framework is installed and the module is runnable, you can start the Icinga Agent installation wizard. Please follow the [Icinga Agent Wizard](04-Icinga-Agent-Wizard.md) guide for examples and usage.
 
 Service Installation
 ---
