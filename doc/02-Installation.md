@@ -28,7 +28,7 @@ Whenever you intend to use specific Cmdlets of the framework for Icinga Plugins,
 Icinga Agent installation wizard
 ---
 
-Once the entire Framework is installed and the module is runnable, you can start the Icinga Agent installation wizard. Please follow the [Icinga Agent Wizard](04-Icinga-Agent-Wizard.md) guide for examples and usage.
+Once the entire Framework is installed and the module is runnable, you can start the Icinga Agent installation wizard. Please follow the [Icinga Agent Wizard](installation/04-Icinga-Agent-Wizard.md) guide for examples and usage.
 
 Service Installation
 ---
