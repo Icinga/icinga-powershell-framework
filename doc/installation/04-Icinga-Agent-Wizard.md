@@ -43,7 +43,7 @@ This example will use the Icinga Director Self-Service API and use a host templa
 Last but not least we want to directly run the installer.
 
 ```powershell
-Start-IcingaAgentInstallWizard -SelfServiceAPIKey '56756378658n56t85679765n97649m7649m76' -UseDirectorSelfService 1 -DirectorUrl 'https://sales-net-icinga2a.int.netways.de/icingaweb2/director/' -OverrideDirectorVars 0 -ConvertEndpointIPConfig 1 -Ticket '' -EmptyTicket 1 -InstallFrameworkPlugins 0 -InstallFrameworkService 0 -RunInstaller;
+Start-IcingaAgentInstallWizard -SelfServiceAPIKey '56756378658n56t85679765n97649m7649m76' -UseDirectorSelfService 1 -DirectorUrl 'https://example.com/icingaweb2/director/' -OverrideDirectorVars 0 -ConvertEndpointIPConfig 1 -Ticket '' -EmptyTicket 1 -InstallFrameworkPlugins 0 -InstallFrameworkService 0 -RunInstaller;
 ```
 
 ### Config Example 2: Director Self-Service with Argument override
@@ -51,7 +51,7 @@ Start-IcingaAgentInstallWizard -SelfServiceAPIKey '56756378658n56t85679765n97649
 This is the same example as above, but this time we will override our `CAEndpoint` for the Icinga certificate authority:
 
 ```powershell
-Start-IcingaAgentInstallWizard -SelfServiceAPIKey '56756378658n56t85679765n97649m7649m76' -UseDirectorSelfService 1 -DirectorUrl 'https://sales-net-icinga2a.int.netways.de/icingaweb2/director/' -OverrideDirectorVars 0 -ConvertEndpointIPConfig 1 -Ticket '' -EmptyTicket 1 -InstallFrameworkPlugins 0 -InstallFrameworkService 0 -CAEndpoint 'icinga2-ca.example.com' -RunInstaller;
+Start-IcingaAgentInstallWizard -SelfServiceAPIKey '56756378658n56t85679765n97649m7649m76' -UseDirectorSelfService 1 -DirectorUrl 'https://example.com/icingaweb2/director/' -OverrideDirectorVars 0 -ConvertEndpointIPConfig 1 -Ticket '' -EmptyTicket 1 -InstallFrameworkPlugins 0 -InstallFrameworkService 0 -CAEndpoint 'icinga2-ca.example.com' -RunInstaller;
 ```
 
 ### Config Example 3: Configure Icinga Agent to connect to Parents and use Cert-Proxy
