@@ -34,7 +34,7 @@ This command can be executed on `any` Windows machine which has the Icinga Power
 
 Below you will find some examples for different kind of configuration commands which can be executed to configure the Icinga Agent and to install plugins.
 
-**Important Note:**
+**Important Note:** Each argument represents a corresponding question during the wizard. Some questions will result in more than one argument being set. In general it is not required to set every single available argument, as some of them are only required if certain configurations are set.
 
 ### Config Example 1: Director Self-Service
 
