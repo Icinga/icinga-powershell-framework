@@ -356,6 +356,13 @@ function Add-PowerShellDataList()
     );
 
     foreach ($entry in $Arguments) {
+        if ([string]::IsNullOrEmpty($entry)) {
+            Write-IcingaConsoleWarning `
+                -Message 'The plugin argument "{0}" contains the illegal ValidateSet $null which will not be rendered. Please remove it from the arguments list of "{1}"' `
+                -Objects $Name, $Arguments;
+
+            continue;
+        }
         $Basket.DataList[$Name]['entries'] += @{
             'entry_name'    = $entry;
             'entry_value'   = $entry;
