@@ -175,6 +175,19 @@ function Get-IcingaCheckCommandConfig()
                         'order' = $Order;
                     }
                 );
+            } elseif ($parameter.type.name -eq 'SecureString') {
+                # Convert out input string as SecureString
+                $Basket.Command[$Data.Name].arguments.Add(
+                    [string]::Format('-{0}', $parameter.Name), @{
+                        'value' = (
+                            [string]::Format(
+                                "(ConvertTo-IcingaSecureString '{0}')",
+                                $IcingaCustomVariable
+                            )
+                        )
+                        'order' = $Order;
+                    }
+                );
             } else {
                 # Default to Object
                 $Basket.Command[$Data.Name].arguments.Add(
