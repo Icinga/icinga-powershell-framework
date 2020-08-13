@@ -269,8 +269,14 @@ function New-IcingaCheckPackage()
 
         [hashtable]$MessageOrdering = @{};
         foreach ($check in $this.checks) {
-            if ([int]$check.exitcode -eq $skipExitCode -And $skipExitCode -ne -1) {
-                continue;
+            if ($this.verbose -eq 0) {
+                if ([int]$check.exitcode -eq $skipExitCode) {
+                    continue;
+                }
+            } elseif ($this.verbose -eq 1) {
+                if ([int]$check.exitcode -eq $skipExitCode -And $check.checkpackage) {
+                    continue;
+                }
             }
 
             if ($MessageOrdering.ContainsKey($check.Name) -eq $FALSE) {
@@ -296,7 +302,7 @@ function New-IcingaCheckPackage()
     }
 
     $Check | Add-Member -MemberType ScriptMethod -Name 'WriteAllOutput' -Value {
-        $this.PrintOutputMessageSorted($TRUE, -1);
+        $this.PrintOutputMessageSorted($TRUE, $IcingaEnums.IcingaExitCode.Ok);
     }
 
     $Check | Add-Member -MemberType ScriptMethod -Name 'PrintAllMessages' -Value {
@@ -357,7 +363,7 @@ function New-IcingaCheckPackage()
                 break;
             };
             1 {
-                # Include the Operator into the check package result
+                # Include the Operator into the check package result and OK checks of package
                 break;
             };
             Default {
