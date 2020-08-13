@@ -82,7 +82,7 @@ Test-IcingaAgent;`
 ```
 
 ```text
-Passed]: Icinga Agent service is installed
+[Passed]: Icinga Agent service is installed
 [Passed]: The specified user "NT AUTHORITY\NetworkService" is allowed to run as service
 [Passed]: Directory "C:\ProgramData\icinga2\etc" is accessible and writeable by the Icinga Service User "NT AUTHORITY\NetworkService"
 [Passed]: Directory "C:\ProgramData\icinga2\var" is accessible and writeable by the Icinga Service User "NT AUTHORITY\NetworkService"
