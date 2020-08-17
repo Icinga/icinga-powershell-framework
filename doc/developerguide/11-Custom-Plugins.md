@@ -84,7 +84,7 @@ function Invoke-IcingaCheckTutorial()
 
 ### Basic Plugin Architecture
 
-A basic plugin contains of multiple parts. At first we general `arguments` to parse thresholds through. In addition to that we will make use of several functions to create our check and check results. The functions [New-IcingaCheck](01-New-IcingaCheck), [New-IcingaCheckPackage](02-New-IcingaCheckPackage) and `New-IcingaCheckResult` will do the work for us.
+A basic plugin contains of multiple parts. At first we general `arguments` to parse thresholds through. In addition to that we will make use of several functions to create our check and check results. The functions [New-IcingaCheck](01-New-IcingaCheck.md), [New-IcingaCheckPackage](02-New-IcingaCheckPackage.md) and `New-IcingaCheckResult` will do the work for us.
 
 ### Writing Our Base-Skeleton
 
