@@ -22,6 +22,11 @@ function Use-Icinga()
         Use-IcingaPlugins;
     }
 
+    # Autoload the Hyper Plugins
+    if (Get-Command 'Use-IcingaHypervPlugins' -ErrorAction SilentlyContinue) {
+        Use-IcingaHypervPlugins;
+    }
+
     # This function will allow us to load this entire module including possible
     # actions, making it available within our shell environment
     # First load our custom modules
