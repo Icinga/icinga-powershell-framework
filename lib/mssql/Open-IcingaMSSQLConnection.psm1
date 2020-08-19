@@ -76,7 +76,7 @@ function Open-IcingaMSSQLConnection()
        Exit-IcingaThrowException -InputString $_.Exception.Message `
                                  -StringPattern '40' `
                                  -ExceptionType 'Connection' `
-                                 -ExceptionThrown $IcingaExceptions.Connection.SQLConnectionError
+                                 -ExceptionThrown $IcingaExceptions.Connection.MSSQLConnectionError
     }
 
     return $SqlConnection

@@ -5,7 +5,7 @@
    This Cmdlet will  build a SQL query
    and returns it as an string.
 .FUNCTIONALITY
-   Build a SQL queryNew
+   Build a SQL query
 .EXAMPLE
    PS>New-IcingaMSSQLCommand -SqlConnection $SqlConnection -SqlQuery "SELECT object_name FROM sys.dm_os_performance_counters";
 .PARAMETER SqlConnection
@@ -26,15 +26,18 @@ function New-IcingaMSSQLCommand {
         [string]$SqlQuery                                   = $null
     );
 
-    try {
-      $SqlCommand             = New-Object System.Data.SqlClient.SqlCommand;
-      $SqlCommand.Connection  = $SqlConnection;
-      $SqlCommand.CommandText = $SqlQuery;
-    }
-    catch {
-       
-    }
-    
+   $SqlCommand             = New-Object System.Data.SqlClient.SqlCommand;
+   $SqlCommand.Connection  = $SqlConnection;
+
+   if ($null -eq $SqlCommand.Connection) {
+      Exit-IcingaThrowException -ExceptionType 'Input' `
+                                -ExceptionThrown $IcingaExceptions.Inputs.MSSQLCommandMissing `‚
+                                -CustomMessage 'It seems the -SqlConnection is empty or invalid' `
+                                -Force;
+   }
+
+
+   $SqlCommand.CommandText = $SqlQuery;
 
     return $SqlCommand;
 }
