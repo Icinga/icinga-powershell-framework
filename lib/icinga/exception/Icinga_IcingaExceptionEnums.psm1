@@ -19,18 +19,23 @@
     CimClassNameUnknown     = 'The provided class name you try to fetch with Get-CimInstance is not known on this system.';
     WmiObjectClassUnknown   = 'The provided class name you try to fetch with Get-WmiObject is not known on this system.';
     MSSQLCredentialHandling = 'The connection to MSSQL was not possbible because your login credential was not correct.';
+    MSSQLCommandMissing     = 'Failed to build a SQL query'
 };
 
 [hashtable]$Configuration = @{
     PluginArgumentConflict = 'Your plugin argument configuration is causing a conflict. Mostly this error is caused by missmatching configurations by enabling multiple switch arguments which are resulting in a conflicting configuration for the plugin.';
+<<<<<<< HEAD
     PluginArgumentMissing  = 'Your plugin argument configuration is missing mandatory arguments. This is error is caused when mandatory or required arguments are missing from a plugin call and the operation is unable to process without them.';
     PluginNotInstalled     = 'The plugin assigned to this service check seems not to be installed on this machine. Please review your service check configuration for spelling errors and check if the plugin is installed and executable on this machine by PowerShell.';
     PluginNotAssigned      = 'Your check for this service could not be processed because it seems like no valid Cmdlet was assigned to the check command. Please review your check command to ensure that a valid Cmdlet is assigned and executed by a PowerShell call.';
     EventLogNotInstalled   = 'Your Icinga PowerShell Framework has been executed by an unprivileged user before it was properly installed. The Windows EventLog application could not be registered because the current user has insufficient permissions. Please log into the machine and run "Use-Icinga" once from an administrative shell to complete the setup process. Once done this error should vanish.';
+=======
+    PluginArgumentmissing  = 'Your plugin argument configuration is missing mandatory arguments. This error is caused when mandatory or required arguments are missing from a plugin call and the operation is unable to process without them.';
+>>>>>>> 9409d33... WIP
 }
 
 [hashtable]$Connection = @{
-    SQLConnectionError = 'Could not open a connection to SQL Server. This failure may be caused by the fact that under the default settings SQL Server does not allow remote connections or the host is unreachable.';
+    MSSQLConnectionError = 'Could not open a connection to SQL Server. This failure may be caused by the fact that under the default settings SQL Server does not allow remote connections or the host is unreachable.';
 }
 
 <#
