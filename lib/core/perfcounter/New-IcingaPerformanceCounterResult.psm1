@@ -1,14 +1,33 @@
 <#
- # This function will provide a virtual object, containing an array
- # of Performance Counters. The object has the following members:
- # Name
- # Value
- # This will ensure we will not have to worry about looping an array
- # of mutltiple instances within a counter handler, because this
- # function will deal with everything, returning an hashtable
- # containing the parent counter name including the values and
- # samples for every single instance
- #>
+.SYNOPSIS
+    Will provide a virtual object, containing an array of Performance Counters.
+    The object has the following members:
+    * Name
+    * Value
+.DESCRIPTION
+    Will provide a virtual object, containing an array of Performance Counters.
+    The object has the following members:
+    * Name
+    * Value
+.FUNCTIONALITY
+    Will provide a virtual object, containing an array of Performance Counters.
+    The object has the following members:
+    * Name
+    * Value
+.EXAMPLE
+    PS>New-IcingaPerformanceCounterResult -FullName '\Processor(*)\% processor time' -PerformanceCounters $PerformanceCounters;
+.PARAMETER FullName
+    The full path to the Performance Counter
+.PARAMETER PerformanceCounters
+    A list of all instances/counters for the given Performance Counter
+.INPUTS
+    System.String
+.OUTPUTS
+    System.PSObject
+.LINK
+   https://github.com/Icinga/icinga-powershell-framework
+#>
+
 function New-IcingaPerformanceCounterResult()
 {
     param(

@@ -1,14 +1,50 @@
 <#
- # This function will create a custom Performance Counter object with
- # already initialised counters, which can be accessed with the
- # following members:
- # Name
- # Value
- # Like the New-IcingaPerformanceCounterResult, this will allow to fetch the
- # current values of a single counter instance including the name
- # of the counter. Within the New-IcingaPerformanceCounterResult function,
- # objects created by this function are used.
- #>
+.SYNOPSIS
+    Creates a new Performance Counter object based on given input filters.
+    Returns a PSObject with custom members to access the data of the counter
+.DESCRIPTION
+    Creates a new Performance Counter object based on given input filters.
+    Returns a PSObject with custom members to access the data of the counter
+.FUNCTIONALITY
+    Creates a new Performance Counter object based on given input filters.
+    Returns a PSObject with custom members to access the data of the counter
+.EXAMPLE
+    PS>New-IcingaPerformanceCounterObject -FullName '\Processor(*)\% processor time' -Category 'Processor' -Instance '*' -Counter '% processor time';
+
+    Category    : Processor
+    Instance    : *
+    Counter     : % processor time
+    PerfCounter : System.Diagnostics.PerformanceCounter
+    SkipWait    : False
+.EXAMPLE
+    PS>New-IcingaPerformanceCounterObject -FullName '\Processor(*)\% processor time' -Category 'Processor' -Instance '*' -Counter '% processor time' -SkipWait;
+
+    Category    : Processor
+    Instance    : *
+    Counter     : % processor time
+    PerfCounter : System.Diagnostics.PerformanceCounter
+    SkipWait    : True
+.PARAMETER FullName
+    The full path to the Performance Counter
+.PARAMETER Category
+    The name of the category of the Performance Counter
+.PARAMETER Instance
+    The instance of the Performance Counter
+.PARAMETER Counter
+    The actual name of the counter to fetch
+.PARAMETER SkipWait
+    Set this if no sleep is intended for initialising the counter. This can be useful
+    if multiple counters are fetched during one call with this function if the sleep
+    is done afterwards manually. A sleep is set to 500ms to ensure counter data is
+    valid and contains an offset from previous/current values
+.INPUTS
+    System.String
+.OUTPUTS
+    System.PSObject
+.LINK
+   https://github.com/Icinga/icinga-powershell-framework
+#>
+
 function New-IcingaPerformanceCounterObject()
 {
     param(

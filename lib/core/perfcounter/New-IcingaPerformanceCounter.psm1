@@ -1,10 +1,37 @@
 <#
- # This is the main function which is called from this script, constructing our counters
- # and loading possible sub-instances from our Performance Counter.
- # It will return either an New-IcingaPerformanceCounterObject or New-IcingaPerformanceCounterResult
- # which both contain the same members, allowing us to dynamicly use the objects
- # without having to worry about exception.
- #>
+.SYNOPSIS
+    Creates counter objects and sub-instances from a given Performance Counter
+    Will return either a New-IcingaPerformanceCounterObject or New-IcingaPerformanceCounterResult
+    which both contain the same members, allowing for dynmically use of objects
+.DESCRIPTION
+    Creates counter objects and sub-instances from a given Performance Counter
+    Will return either a New-IcingaPerformanceCounterObject or New-IcingaPerformanceCounterResult
+    which both contain the same members, allowing for dynmically use of objects
+.FUNCTIONALITY
+    Creates counter objects and sub-instances from a given Performance Counter
+    Will return either a New-IcingaPerformanceCounterObject or New-IcingaPerformanceCounterResult
+    which both contain the same members, allowing for dynmically use of objects
+.EXAMPLE
+    PS>New-IcingaPerformanceCounter -Counter '\Processor(*)\% processor time';
+
+    FullName                       Counters
+    --------                       --------
+    \Processor(*)\% processor time {@{FullName=\Processor(2)\% processor time; Category=Processor; Instance=2; Counter=%...
+.EXAMPLE
+    PS>New-IcingaPerformanceCounter -Counter '\Processor(*)\% processor time' -SkipWait;
+.PARAMETER Counter
+    The path to the Performance Counter to fetch data for
+.PARAMETER SkipWait
+    Set this if no sleep is intended for initialising the counter. This can be useful
+    if multiple counters are fetched during one call with this function if the sleep
+    is done afterwards manually. A sleep is set to 500ms to ensure counter data is
+    valid and contains an offset from previous/current values
+.INPUTS
+   System.String
+.LINK
+   https://github.com/Icinga/icinga-powershell-framework
+#>
+
 function New-IcingaPerformanceCounter()
 {
     param(

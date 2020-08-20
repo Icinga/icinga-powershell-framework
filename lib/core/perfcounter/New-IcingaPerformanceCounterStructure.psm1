@@ -1,11 +1,61 @@
-#
-# This function will get handy in case we want to fetch Counters
-# which have instances which might be helpful to group by their
-# instances name. This will apply to Disk and Network Interface
-# outputs for example, as it would be helpful to combine all
-# counter results for a specific disk / interface in one
-# result for easier working with these informations
-#
+<#
+.SYNOPSIS
+    Will use an array of provided Performance Counter and sort the input by
+    a given counter category. In this case we can fetch all Processor instances
+    and receive values for each core which can then be accessed from a hashtable
+    with an eady query. Allows to modify output in addition
+.DESCRIPTION
+    Will use an array of provided Performance Counter and sort the input by
+    a given counter category. In this case we can fetch all Processor instances
+    and receive values for each core which can then be accessed from a hashtable
+    with an eady query. Allows to modify output in addition
+.FUNCTIONALITY
+    Will use an array of provided Performance Counter and sort the input by
+    a given counter category. In this case we can fetch all Processor instances
+    and receive values for each core which can then be accessed from a hashtable
+    with an eady query. Allows to modify output in addition
+.EXAMPLE
+    PS>New-IcingaPerformanceCounterStructure -CounterCategory 'Processor' -PerformanceCounterHash (New-IcingaPerformanceCounterArray '\Processor(*)\% processor time');
+
+    Name                           Value
+    ----                           -----
+    7                              {% processor time}
+    3                              {% processor time}
+    4                              {% processor time}
+    _Total                         {% processor time}
+    2                              {% processor time}
+    1                              {% processor time}
+    0                              {% processor time}
+    6                              {% processor time}
+    5                              {% processor time}
+.EXAMPLE
+    PS>New-IcingaPerformanceCounterStructure -CounterCategory 'Processor' -PerformanceCounterHash (New-IcingaPerformanceCounterArray '\Processor(*)\% processor time') -InstanceNameCleanupArray '_';
+
+    Name                           Value
+    ----                           -----
+    7                              {% processor time}
+    Total                          {}
+    3                              {% processor time}
+    4                              {% processor time}
+    2                              {% processor time}
+    1                              {% processor time}
+    0                              {% processor time}
+    6                              {% processor time}
+    5                              {% processor time}
+.PARAMETER CounterCategory
+    The name of the category the sort algorithm will fetch the instances from for sorting
+.PARAMETER PerformanceCounterHash
+    An array of Performance Counter objects provided by 'New-IcingaPerformanceCounterArray' to sort for
+.PARAMETER InstanceNameCleanupArray
+    An array which will be used to remove string content from the sorted instances keys. For example '_' will change
+    '_Total' to 'Total'. Replacements are done in the order added to this array
+.INPUTS
+    System.String
+.OUTPUTS
+    System.Hashtable
+.LINK
+   https://github.com/Icinga/icinga-powershell-framework
+#>
 function New-IcingaPerformanceCounterStructure()
 {
     param(
