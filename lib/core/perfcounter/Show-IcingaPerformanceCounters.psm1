@@ -1,7 +1,29 @@
-#
-# Provide the name of a category to fetch all available counters and
-# if there are any instances assigned to it
-#
+<#
+.SYNOPSIS
+    Prints a list of all available Performance Counters for a specified category
+.DESCRIPTION
+    Prints a list of all available Performance Counters for a specified category
+.FUNCTIONALITY
+    Prints a list of all available Performance Counters for a specified category
+.EXAMPLE
+    PS>Show-IcingaPerformanceCounters -CounterCategory 'Processor';
+
+    \Processor(*)\dpcs queued/sec
+    \Processor(*)\% c1 time
+    \Processor(*)\% idle time
+    \Processor(*)\c3 transitions/sec
+    \Processor(*)\% c2 time
+    \Processor(*)\% dpc time
+    \Processor(*)\% privileged time
+.PARAMETER CounterCategory
+    The name of the category to fetch availble counters for
+.INPUTS
+    System.String
+.OUTPUTS
+    System.Array
+.LINK
+    https://github.com/Icinga/icinga-powershell-framework
+#>
 function Show-IcingaPerformanceCounters()
 {
     param (

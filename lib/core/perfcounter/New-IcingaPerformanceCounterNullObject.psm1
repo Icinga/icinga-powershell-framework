@@ -1,10 +1,34 @@
 <#
- # If some informations are missing, it could happen that
- # we are unable to create a Performance Counter.
- # In this case we will use this Null Object, containing
- # the same member functions but allowing us to maintain
- # stability without unwanted exceptions
- #>
+.SYNOPSIS
+    This will create a Performance Counter object in case a counter instance
+    does not exis, but still returning default members to allow us to smoothly
+    execute our code
+.DESCRIPTION
+    This will create a Performance Counter object in case a counter instance
+    does not exis, but still returning default members to allow us to smoothly
+    execute our code
+.FUNCTIONALITY
+    This will create a Performance Counter object in case a counter instance
+    does not exis, but still returning default members to allow us to smoothly
+    execute our code
+.EXAMPLE
+    PS>New-IcingaPerformanceCounterNullObject '\Processor(20)\%processor time' -ErrorMessage 'This counter with instance 20 does not exist';
+
+    FullName                       ErrorMessage
+    --------                       ------------
+    \Processor(20)\%processor time This counter with instance 20 does not exist
+.PARAMETER FullName
+    The full path/name of the Performance Counter which does not exist
+.PARAMETER ErrorMessage
+    The error message which is included within the 'error' member of the Performance Counter
+.INPUTS
+    System.String
+.OUTPUTS
+    System.PSObject
+.LINK
+   https://github.com/Icinga/icinga-powershell-framework
+#>
+
 function New-IcingaPerformanceCounterNullObject()
 {
     param(

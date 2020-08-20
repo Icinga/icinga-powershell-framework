@@ -1,17 +1,30 @@
 <#
-  # This function will make monitoring an entire list of
-  # Performance counters even more easier. We simply provide
-  # an array of Performance Counters  to this module
-  # and we will receive a construct-save result of an
-  # hashtable with all performance counters including
-  # the corresponding values. In that case the code
-  # size decreases for larger modules.
-  # Example:
-    $counter = New-IcingaPerformanceCounterArray @(
-        '\Memory\Available Bytes',
-        '\Memory\% Committed Bytes In Use'
-    );
-  #>
+.SYNOPSIS
+    Accepts a list of Performance Counters which will all be fetched at once and
+    returned as a hashtable object. No additional configuration is required.
+.DESCRIPTION
+    Accepts a list of Performance Counters which will all be fetched at once and
+    returned as a hashtable object. No additional configuration is required.
+.FUNCTIONALITY
+    Accepts a list of Performance Counters which will all be fetched at once and
+    returned as a hashtable object. No additional configuration is required.
+.EXAMPLE
+    PS>New-IcingaPerformanceCounterArray -CounterArray '\Processor(*)\% processor time', '\Memory\committed bytes';
+
+    Name                           Value
+    ----                           -----
+    \Processor(*)\% processor time {\Processor(7)\% processor time, \Processor(6)\% processor time, \Processor(0)\% proc...
+    \Memory\committed bytes        {error, sample, type, value...}
+.PARAMETER CounterArray
+    An array of Performance Counters which will all be fetched at once
+.INPUTS
+    System.String
+.OUTPUTS
+    System.Hashtable
+.LINK
+   https://github.com/Icinga/icinga-powershell-framework
+#>
+
 function New-IcingaPerformanceCounterArray()
 {
     param(
