@@ -26,18 +26,17 @@ function New-IcingaMSSQLCommand {
         [string]$SqlQuery                                   = $null
     );
 
-   $SqlCommand             = New-Object System.Data.SqlClient.SqlCommand;
-   $SqlCommand.Connection  = $SqlConnection;
+    $SqlCommand             = New-Object System.Data.SqlClient.SqlCommand;
+    $SqlCommand.Connection  = $SqlConnection;
 
-   if ($null -eq $SqlCommand.Connection) {
-      Exit-IcingaThrowException -ExceptionType 'Input' `
-                                -ExceptionThrown $IcingaExceptions.Inputs.MSSQLCommandMissing `
-                                -CustomMessage 'It seems the -SqlConnection is empty or invalid' `
-                                -Force;
-   }
+    if ($null -eq $SqlCommand.Connection) {
+        Exit-IcingaThrowException -ExceptionType 'Input' `
+            -ExceptionThrown $IcingaExceptions.Inputs.MSSQLCommandMissing `
+            -CustomMessage 'It seems the -SqlConnection is empty or invalid' `
+            -Force;
+    }
 
-
-   $SqlCommand.CommandText = $SqlQuery;
+    $SqlCommand.CommandText = $SqlQuery;
 
     return $SqlCommand;
 }
