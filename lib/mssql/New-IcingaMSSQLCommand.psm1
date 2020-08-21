@@ -31,7 +31,7 @@ function New-IcingaMSSQLCommand {
 
    if ($null -eq $SqlCommand.Connection) {
       Exit-IcingaThrowException -ExceptionType 'Input' `
-                                -ExceptionThrown $IcingaExceptions.Inputs.MSSQLCommandMissing `‚
+                                -ExceptionThrown $IcingaExceptions.Inputs.MSSQLCommandMissing `
                                 -CustomMessage 'It seems the -SqlConnection is empty or invalid' `
                                 -Force;
    }
