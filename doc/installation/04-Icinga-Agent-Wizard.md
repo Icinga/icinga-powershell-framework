@@ -20,12 +20,12 @@ Start-IcingaAgentInstallWizard;
 
 The wizard will ask a bunch of questions, for example if you are using the semi-automated Director Self-Service API or if you configure everything by yourself.
 
-Depending on how you configure the system, there might different questions occure. The goal of the wizard is to cover most of the possible configurations available for the Icinga Agent. This includes
+Depending on how you configure the system, there might different questions occur. The goal of the wizard is to cover most of the possible configurations available for the Icinga Agent. This includes
 
 * How your certificates are generated
 * If you Icinga Agent or the Master/Satellites are establishing the connection
 * Definition of the service user the Icinga Agent will run with
-* Ensuring that the Icinga Agent with the provided configuration and settings is able to start and everyhing is valid
+* Ensuring that the Icinga Agent with the provided configuration and settings is able to start and everything is valid
 
 Once you completed the wizard you are asked if the configuration is correct and if you want to execute the configuration. In any way, you are always printed the configuration command with your configured settings. 
 This command can be executed on `any` Windows machine which has the Icinga PowerShell Framework installed. It contains the entire configuration for the system. Of course you can modify the values to match certain network zones or requirements.
@@ -38,7 +38,7 @@ Below you will find some examples for different kind of configuration commands w
 
 ### Config Example 1: Director Self-Service
 
-This example will use the Icinga Director Self-Service API and use a host template key to register the current machine within the Icinga Director and fetch the correct configuration for the host. In addition we will not override any provided variables and convert our Icinga endpoint configuration to actual IPs. For example if our Icinga parent node is registered with address `icinga2-master.example.com` the FQDN will automatically be translated to the refering IP address. This is important as in case of a DNS failure we want to ensure the monitoring is still working properly. In addition we leave the Ticket handling empty as the Self-Service will take care of it and we neihter want to install the Plugins nor the Icinga PowerShell Service.
+This example will use the Icinga Director Self-Service API and use a host template key to register the current machine within the Icinga Director and fetch the correct configuration for the host. In addition we will not override any provided variables and convert our Icinga endpoint configuration to actual IPs. For example if our Icinga parent node is registered with address `icinga2-master.example.com` the FQDN will automatically be translated to the referring IP address. This is important as in case of a DNS failure we want to ensure the monitoring is still working properly. In addition we leave the Ticket handling empty as the Self-Service will take care of it and we neither want to install the Plugins nor the Icinga PowerShell Service.
 
 Last but not least we want to directly run the installer.
 
@@ -74,7 +74,7 @@ Of course you can install the Icinga PowerShell Service directly during the runt
 
 **Explanation:**
 
-The argument `FrameworkServiceUrl` is asking for a path pointing to the `.zip` file which contains the service binary. The file can either be located on a web ressource or a local/network share. The `ServiceDirectory` argument will point to the target on where the `.exe` file itself is being extracted to. This location is then being used to register the Windows Service object to which is later executed. In general there is an additional argument `ServiceBin` available which will define the direct path to the service binary. This can be left empty how ever of the official `.zip` file of Icinga for the service package is used.
+The argument `FrameworkServiceUrl` is asking for a path pointing to the `.zip` file which contains the service binary. The file can either be located on a web resource or a local/network share. The `ServiceDirectory` argument will point to the target on where the `.exe` file itself is being extracted to. This location is then being used to register the Windows Service object to which is later executed. In general there is an additional argument `ServiceBin` available which will define the direct path to the service binary. This can be left empty how ever of the official `.zip` file of Icinga for the service package is used.
 
 ### Config Example 5: Install the Icinga Plugins during wizard run
 
@@ -84,12 +84,12 @@ Just like the service you can also directly run the installation of the plugins 
 -InstallFrameworkPlugins 1 -PluginsUrl 'https://github.com/Icinga/icinga-powershell-plugins/archive/master.zip'
 ```
 
-Just like the service binary, you can specify a different path to the `.zip` file of the plugins. This can either be a web ressource or a local/network share path.
+Just like the service binary, you can specify a different path to the `.zip` file of the plugins. This can either be a web resource or a local/network share path.
 
 ## Install Icinga PowerShell Components
 
 Besides installing the Icinga PowerShell Plugins during the installation, you can also install them with a dedicated Cmdlet: `Install-IcingaFrameworkComponent`
 
-This Cmdlet is using a namespace to ensure that the location is handled and each ressource can be accessed properly. As with the above mentiond service binary and plugin repository, you can specify a custom location for the `.zip` file include the name of of the repository.
+This Cmdlet is using a namespace to ensure that the location is handled and each resource can be accessed properly. As with the above mentioned service binary and plugin repository, you can specify a custom location for the `.zip` file include the name of of the repository.
 
 For more details please have a look on the [Icinga Plugin Installation Guide](https://icinga.com/docs/windows/latest/plugins/doc/02-Installation/). This does also apply to every other Icinga Framework Component in the future.

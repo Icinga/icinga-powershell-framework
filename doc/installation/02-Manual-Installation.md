@@ -2,6 +2,8 @@
 
 To install the module manually we will at first fetch information on where we can actually install the module into. PowerShell provides some default directories, which can however also extended manually.
 
+Get the latest Version from [GitHub](https://github.com/Icinga/icinga-powershell-framework/releases/latest) or [PowerShell Gallery](https://www.powershellgallery.com/packages/icinga-powershell-framework).
+
 ## Getting Started
 
 To do this, we can run the following command within PowerShell
@@ -32,7 +34,7 @@ If you receive an output stating that the module is installed, you are fine to c
 
 In order to be able to run the module on certain Windows Hosts, it might be required to either update the execution policies and/or unblock the module script files.
 
-The prefered way is to simply unblock the script files, allowing them to be executed on the system. This can be done by running a PowerShell instance as **Administrator** and enter the following command (we assume the module is installed at `C:\Program Files\WindowsPowershell\Modules\icinga-powershell-framework`. If not, please modify the command with the correct location)
+The preferred way is to simply unblock the script files, allowing them to be executed on the system. This can be done by running a PowerShell instance as **Administrator** and enter the following command (we assume the module is installed at `C:\Program Files\WindowsPowershell\Modules\icinga-powershell-framework`. If not, please modify the command with the correct location)
 
 ```powershell
 Get-ChildItem -Path 'C:\Program Files\WindowsPowershell\Modules\icinga-powershell-framework' -Recurse | Unblock-File
