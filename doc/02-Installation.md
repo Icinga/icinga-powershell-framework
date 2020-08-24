@@ -1,7 +1,9 @@
 Installing the Icinga PowerShell Framework
 ===
 
-Installing the Icinga PowerShell Framework is managed by different ways, depending on the user environment including available possibitilies
+Installing the Icinga PowerShell Framework is managed by different ways, depending on the user environment including available possibilities.
+
+Get the latest Version from [GitHub](https://github.com/Icinga/icinga-powershell-framework/releases/latest) or [PowerShell Gallery](https://www.powershellgallery.com/packages/icinga-powershell-framework).
 
 Instructions
 ---
@@ -19,11 +21,11 @@ Once the Icinga PowerShell Framework is installed you can try if the installatio
 Use-Icinga
 ```
 
-This command will initialise the entire Icinga PowerShell Framework and load all available Cmdlets.
+This command will initialize the entire Icinga PowerShell Framework and load all available Cmdlets.
 
 *Note:* Starting with Icinga PowerShell Framework `1.2.0` you can simply use `icinga` to open a Icinga PowerShell Framework shell.
 
-Whenever you intend to use specific Cmdlets of the framework for Icinga Plugins, Testing or configuration you will require to run this command for each new PowerShell instance to initialise the framework.
+Whenever you intend to use specific Cmdlets of the framework for Icinga Plugins, Testing or configuration you will require to run this command for each new PowerShell instance to initialize the framework.
 
 Icinga Agent installation wizard
 ---
