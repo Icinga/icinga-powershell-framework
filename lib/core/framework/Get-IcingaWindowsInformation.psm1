@@ -30,10 +30,14 @@ function Get-IcingaWindowsInformation()
             $ErrorMessage = $_.Exception.Message;
             $ErrorCode    = $_.Exception.StatusCode;
 
+            if ([string]::IsNullOrEmpty($Namespace)) {
+                $Namespace = 'root/cimv2';
+            }
+
             switch ($ErrorCode) {
                 # Permission error
                 2 {
-                    Exit-IcingaThrowException -ExceptionType 'Permission' -ExceptionThrown $IcingaExceptions.Permission.CimInstance -CustomMessage $ClassName -Force;
+                    Exit-IcingaThrowException -ExceptionType 'Permission' -ExceptionThrown $IcingaExceptions.Permission.CimInstance -CustomMessage ([string]::Format('Class: "{0}", Namespace: "{1}"', $ClassName, $Namespace)) -Force;
                 };
                 # InvalidClass
                 5 {
@@ -55,10 +59,14 @@ function Get-IcingaWindowsInformation()
             $ErrorMessage = $_.Exception.Message;
             $ErrorCode    = ($_.Exception.HResult -band 0xFFFF);
 
+            if ([string]::IsNullOrEmpty($Namespace)) {
+                $Namespace = 'root/cimv2';
+            }
+
             switch ($ErrorName) {
                 # Permission error
                 'InvalidOperation' {
-                    Exit-IcingaThrowException -ExceptionType 'Permission' -ExceptionThrown $IcingaExceptions.Permission.WMIObject -CustomMessage $ClassName -Force;
+                    Exit-IcingaThrowException -ExceptionType 'Permission' -ExceptionThrown $IcingaExceptions.Permission.WMIObject -CustomMessage ([string]::Format('Class: "{0}", Namespace: "{1}"', $ClassName, $Namespace)) -Force;
                 };
                 # Invalid Class
                 'InvalidType' {
