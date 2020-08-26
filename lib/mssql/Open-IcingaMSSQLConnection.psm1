@@ -98,6 +98,11 @@ function Open-IcingaMSSQLConnection()
             -ExceptionType 'Connection' `
             -ExceptionThrown $IcingaExceptions.Connection.MSSQLConnectionError;
 
+        Exit-IcingaThrowException `
+            -InputString $_.Exception.Message `
+            -StringPattern 'error: 25' `
+            -ExceptionType 'Connection' `
+            -ExceptionThrown $IcingaExceptions.Connection.MSSQLConnectionError;
         # Last resort
         Exit-IcingaThrowException `
             -InputString $_.Exception.Message `
