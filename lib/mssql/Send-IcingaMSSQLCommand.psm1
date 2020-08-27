@@ -17,7 +17,8 @@
 .LINK
    https://github.com/Icinga/icinga-powershell-framework
 #>
-function Send-IcingaMSSQLCommand {
+function Send-IcingaMSSQLCommand()
+{
     param (
         [System.Data.SqlClient.SqlCommand]$SqlCommand = $null
     );

@@ -13,10 +13,11 @@
 .LINK
    https://github.com/Icinga/icinga-powershell-framework
 #>
-function Close-IcingaMSSQLConnection() {
+function Close-IcingaMSSQLConnection()
+{
     param (
         [System.Data.SqlClient.SqlConnection]$SqlConnection = $null
-    )
+    );
 
     if ($null -eq $SqlConnection) {
         return;
@@ -28,5 +29,5 @@ function Close-IcingaMSSQLConnection() {
 
     $SqlConnection.Close();
     $SqlConnection.Dispose();
-    $SqlConnection = $null
+    $SqlConnection = $null;
 }

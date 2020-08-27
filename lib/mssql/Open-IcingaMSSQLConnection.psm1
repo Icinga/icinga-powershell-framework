@@ -54,32 +54,30 @@ function Open-IcingaMSSQLConnection()
                 -Force;
         }
 
-        $Password.MakeReadOnly()
+        $Password.MakeReadOnly();
         $SqlCredential = New-Object System.Data.SqlClient.SqlCredential($Username, $Password);
     }
 
     try {
-
-        $SqlConnection                  = New-Object System.Data.SqlClient.SqlConnection
-        $SqlConnection.ConnectionString = "Server=$Address,$Port;"
+        $SqlConnection                  = New-Object System.Data.SqlClient.SqlConnection;
+        $SqlConnection.ConnectionString = "Server=$Address,$Port;";
 
         if ($null -ne $SqlDatabase) {
-            $SqlConnection.ConnectionString += "Database=$SqlDatabase;"
+            $SqlConnection.ConnectionString += "Database=$SqlDatabase;";
         }
 
         if ($IntegratedSecurity -eq $TRUE) {
-            $SqlConnection.ConnectionString += "Integrated Security=True;"
+            $SqlConnection.ConnectionString += "Integrated Security=True;";
         }
 
-        $SqlConnection.Credential = $SqlCredential
+        $SqlConnection.Credential = $SqlCredential;
 
         Write-IcingaDebugMessage `
             -Message 'Open client connection for endpoint {0}' `
             -Objects $SqlConnection;
 
-        $SqlConnection.Open()
-    }
-    catch {
+        $SqlConnection.Open();
+    } catch {
         Exit-IcingaThrowException `
             -InputString $_.Exception.Message `
             -StringPattern $Username `
@@ -110,5 +108,5 @@ function Open-IcingaMSSQLConnection()
             -Force;
     }
 
-    return $SqlConnection
+    return $SqlConnection;
 }

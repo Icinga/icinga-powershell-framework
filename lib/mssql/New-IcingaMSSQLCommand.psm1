@@ -20,7 +20,8 @@
 .LINK
    https://github.com/Icinga/icinga-powershell-framework
 #>
-function New-IcingaMSSQLCommand {
+function New-IcingaMSSQLCommand()
+{
     param (
         [System.Data.SqlClient.SqlConnection]$SqlConnection = $null,
         [string]$SqlQuery                                   = $null
