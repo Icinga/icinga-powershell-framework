@@ -1,6 +1,6 @@
 @{
     RootModule        = 'icinga-powershell-framework.psm1'
-    ModuleVersion     = '1.2.0'
+    ModuleVersion     = '1.3.0'
     GUID              = 'fcd7a805-a41b-49f9-afee-9d17a2b76d42'
     Author            = 'Lord Hepipud'
     CompanyName       = 'Icinga GmbH'
@@ -30,7 +30,7 @@
             ProjectUri   = 'https://github.com/Icinga/icinga-powershell-framework'
             ReleaseNotes = 'https://github.com/Icinga/icinga-powershell-framework/releases'
         };
-        Version = 'v1.2.0';
+        Version = 'v1.3.0';
     }
     HelpInfoURI       = 'https://github.com/Icinga/icinga-powershell-framework'
 }
