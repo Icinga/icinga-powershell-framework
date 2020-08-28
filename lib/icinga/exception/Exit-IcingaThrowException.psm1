@@ -5,7 +5,7 @@ function Exit-IcingaThrowException()
         [string]$StringPattern,
         [string]$CustomMessage,
         [string]$ExceptionThrown,
-        [ValidateSet('Permission', 'Input', 'Configuration', 'Unhandled', 'Custom')]
+        [ValidateSet('Permission', 'Input', 'Configuration', 'Connection', 'Unhandled', 'Custom')]
         [string]$ExceptionType    = 'Unhandled',
         [switch]$Force
     );
@@ -35,6 +35,10 @@ function Exit-IcingaThrowException()
         'Configuration' {
             $ExceptionTypeString = 'Invalid Configuration';
             $ExceptionMessageLib = $IcingaExceptions.Configuration;
+        };
+        'Connection' {
+            $ExceptionTypeString = 'Connection error';
+            $ExceptionMessageLib = $IcingaExceptions.Connection;
         };
         'Unhandled' {
             $ExceptionTypeString = 'Unhandled';
