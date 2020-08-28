@@ -282,11 +282,14 @@ function Invoke-IcingaCommand()
     }
 
     powershell.exe -NoExit -Command {
-        $Script        = $args[0];
-        $RootPath      = $args[1];
+        $Script   = $args[0];
+        $RootPath = $args[1];
+        $Version  = $args[2];
 
         # Load our Icinga Framework
         Use-Icinga;
+
+        $Host.UI.RawUI.WindowTitle = ([string]::Format('Icinga for Windows {0}', $Version));
 
         # Set the location to the Icinga Framework module folder
         Set-Location $RootPath;
@@ -304,7 +307,7 @@ function Invoke-IcingaCommand()
             return "> "
         }
 
-    } -Args $ScriptBlock, $PSScriptRoot;
+    } -Args $ScriptBlock, $PSScriptRoot, $IcingaFrameworkData.PrivateData.Version;
 }
 
 Set-Alias icinga Invoke-IcingaCommand -Description "Execute Icinga Framework commands in a new PowerShell instance for testing or quick access to data";

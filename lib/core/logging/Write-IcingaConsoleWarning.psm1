@@ -29,6 +29,6 @@ function Write-IcingaConsoleWarning()
     Write-IcingaConsoleOutput `
         -Message $Message `
         -Objects $Objects `
-        -ForeColor 'Yellow' `
+        -ForeColor 'DarkYellow' `
         -Severity 'Warning';
 }
