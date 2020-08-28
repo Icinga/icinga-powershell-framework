@@ -68,7 +68,7 @@ function Open-IcingaMSSQLConnection()
         $SqlConnection                  = New-Object System.Data.SqlClient.SqlConnection;
         $SqlConnection.ConnectionString = "Server=$Address,$Port;";
 
-        if ($null -ne $SqlDatabase) {
+        if ([string]::IsNullOrEmpty($SqlDatabase) -eq $FALSE) {
             $SqlConnection.ConnectionString += "Database=$SqlDatabase;";
         }
 
