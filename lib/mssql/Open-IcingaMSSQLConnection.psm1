@@ -11,18 +11,20 @@
 .EXAMPLE
    PS>Open-IcingaMSSQLConnection -Username Exampleuser -Password (ConvertTo-IcingaSecureString 'examplePassword') -Address 123.125.123.2;
 .PARAMETER Username
-   The username who connects to the database.
+    The username for connecting to the MSSQL database
 .PARAMETER Password
-   The password of the user who connects to the database.
+    The password for connecting to the MSSQL database as secure string
 .PARAMETER Address
-   The target hosts IP or FQDN to build up a connection (default: localhost)
-.PARAMETER IntegratedSecurity
-   Use the local account credentials to connect to the database.
-   This option makes -Username and -Password obsolete.
+    The IP address or FQDN to the MSSQL server to connect to (default: localhost)
 .PARAMETER Port
-   The target port of the database (default: 1433).
+    The port of the MSSQL server/instance to connect to with the provided credentials (default: 1433)
 .PARAMETER SqlDatabase
-   The target database which will be connected.
+    The name of a specific database to connect to. Leave empty to connect "globaly"
+.PARAMETER IntegratedSecurity
+    Allows this plugin to use the credentials of the current PowerShell session inherited by
+    the user the PowerShell is running with. If this is set and the user the PowerShell is
+    running with can access to the MSSQL database you will not require to provide username
+    and password
 .OUTPUTS
    System.Data.SqlClient.SqlConnection
 .LINK
