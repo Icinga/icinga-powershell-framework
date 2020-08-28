@@ -25,6 +25,9 @@
     the user the PowerShell is running with. If this is set and the user the PowerShell is
     running with can access to the MSSQL database you will not require to provide username
     and password
+.PARAMETER TestConnection
+    Set this if you want to return $null on connection errors during MSSQL.open() instead of
+    exception messages.
 .OUTPUTS
    System.Data.SqlClient.SqlConnection
 .LINK
@@ -38,7 +41,8 @@ function Open-IcingaMSSQLConnection()
         [string]$Address            = "localhost",
         [int]$Port                  = 1433,
         [string]$SqlDatabase,
-        [switch]$IntegratedSecurity = $FALSE
+        [switch]$IntegratedSecurity = $FALSE,
+        [switch]$TestConnection     = $FALSE
     );
 
     if ($IntegratedSecurity -eq $FALSE) {
@@ -80,6 +84,11 @@ function Open-IcingaMSSQLConnection()
 
         $SqlConnection.Open();
     } catch {
+
+        if ($TestConnection) {
+            return $null;
+        }
+
         Exit-IcingaThrowException `
             -InputString $_.Exception.Message `
             -StringPattern $Username `
