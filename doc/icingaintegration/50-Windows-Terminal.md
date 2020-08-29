@@ -63,7 +63,7 @@ As we are using the the custom theme `Icinga-Default` we will have to add this a
 }
 ```
 
-Last but not least we can setup our logo to appear on the top-right corner and as terminal icon. You can get the logo [here](..\images\03_windows_terminal\icingawhite.png).
+Last but not least we can setup our logo to appear on the top-right corner and as terminal icon. You can get the logo [here](https://icinga.com/docs/windows/latest/doc/images/03_windows_terminal/icingawhite.png).
 
 To install it, copy it directly into the following path:
 
@@ -73,4 +73,4 @@ To install it, copy it directly into the following path:
 
 Now restart your Windows Terminal and enjoy the new look and the Icinga Shell integration!
 
-![Windows Terminal](..\images\03_windows_terminal\icinga_shell.png)
+![Windows Terminal](https://icinga.com/docs/windows/latest/doc/images/03_windows_terminal/icinga_shell.png)
