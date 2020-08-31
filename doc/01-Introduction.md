@@ -67,16 +67,16 @@ Below you will find a list of currently available modules published by the Icing
 
 | Icinga PowerShell Kickstart | Icinga PowerShell Framework | Icinga PowerShell Plugins |
 | --- | --- | --- |
-| [![Kickstart](images\02_icons\kickstart.png)](https://icinga.com/docs/windows/latest/kickstart/doc/01-Introduction/) | [![Frame](images\02_icons\framework.png)](https://icinga.com/docs/windows/latest/doc/02-Installation/) | [![Frame](images\02_icons\plugins.png)](https://icinga.com/docs/windows/latest/plugins/doc/01-Introduction/) |
+| [![Kickstart](images/02_icons/kickstart.png)](https://icinga.com/docs/windows/latest/kickstart/doc/01-Introduction/) | [![Frame](images/02_icons/framework.png)](https://icinga.com/docs/windows/latest/doc/02-Installation/) | [![Frame](images/02_icons/plugins.png)](https://icinga.com/docs/windows/latest/plugins/doc/01-Introduction/) |
 
 ### Extensions
 
 | Icinga PowerShell REST-Api | Icinga PowerShell Inventory |
 | --- | --- |
-| [![Rest-API](images\02_icons\restapi.png)](https://icinga.com/docs/windows/latest/restapi/doc/01-Introduction/) | [![Inventory](images\02_icons\inventory.png)](https://icinga.com/docs/windows/latest/inventory/doc/01-Introduction/) |
+| [![Rest-API](images/02_icons/restapi.png)](https://icinga.com/docs/windows/latest/restapi/doc/01-Introduction/) | [![Inventory](images/02_icons/inventory.png)](https://icinga.com/docs/windows/latest/inventory/doc/01-Introduction/) |
 
 ### Additional Plugins
 
 | Icinga PowerShell Hyper-V (soon)| Icinga PowerShell MSSQL (soon) |
 | --- | --- |
-| ![Hyper-V](images\02_icons\hyperv.png) | ![Inventory](images\02_icons\mssql.png) |
+| ![Hyper-V](images/02_icons/hyperv.png) | ![Inventory](images/02_icons/mssql.png) |
