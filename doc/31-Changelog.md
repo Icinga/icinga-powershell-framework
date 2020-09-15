@@ -11,6 +11,10 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/10?closed=1)
 
+### Bugfixes
+
+* [#127](https://github.com/Icinga/icinga-powershell-framework/issues/127) Fixes wrong error message on failed MSSQL connection due to database not reachable by using `-IntegratedSecurity`
+
 ## 1.2.0 (2020-08-28)
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/7?closed=1)
