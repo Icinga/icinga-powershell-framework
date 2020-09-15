@@ -89,11 +89,13 @@ function Open-IcingaMSSQLConnection()
             return $null;
         }
 
-        Exit-IcingaThrowException `
-            -InputString $_.Exception.Message `
-            -StringPattern $Username `
-            -ExceptionType 'Input' `
-            -ExceptionThrown $IcingaExceptions.Inputs.MSSQLCredentialHandling;
+        if ([string]::IsNullOrEmpty($Username) -eq $FALSE) {
+            Exit-IcingaThrowException `
+                -InputString $_.Exception.Message `
+                -StringPattern $Username `
+                -ExceptionType 'Input' `
+                -ExceptionThrown $IcingaExceptions.Inputs.MSSQLCredentialHandling;
+        }
 
         Exit-IcingaThrowException `
             -InputString $_.Exception.Message `
