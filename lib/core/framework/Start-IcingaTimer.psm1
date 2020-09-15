@@ -32,7 +32,7 @@ function Start-IcingaTimer()
     }
 
     # Load the library first
-    [System.Reflection.Assembly]::LoadWithPartialName("System.Diagnostics");
+    [System.Reflection.Assembly]::LoadWithPartialName("System.Diagnostics") | Out-Null;
     $TimerObject = New-Object System.Diagnostics.Stopwatch;
     $TimerObject.Start();
 
