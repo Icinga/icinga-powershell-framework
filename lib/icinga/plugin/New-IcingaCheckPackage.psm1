@@ -8,33 +8,35 @@ function New-IcingaCheckPackage()
         [switch]$OperatorAnd,
         [switch]$OperatorOr,
         [switch]$OperatorNone,
-        [int]$OperatorMin      = -1,
-        [int]$OperatorMax      = -1,
-        [array]$Checks         = @(),
-        [int]$Verbose          = 0,
-        [switch]$Hidden        = $FALSE
+        [int]$OperatorMin           = -1,
+        [int]$OperatorMax           = -1,
+        [array]$Checks              = @(),
+        [int]$Verbose               = 0,
+        [switch]$IgnoreEmptyPackage = $FALSE,
+        [switch]$Hidden             = $FALSE
     );
 
     $Check = New-Object -TypeName PSObject;
-    $Check | Add-Member -MemberType NoteProperty -Name 'name'           -Value $Name;
-    $Check | Add-Member -MemberType NoteProperty -Name 'exitcode'       -Value -1;
-    $Check | Add-Member -MemberType NoteProperty -Name 'verbose'        -Value $Verbose;
-    $Check | Add-Member -MemberType NoteProperty -Name 'hidden'         -Value $Hidden;
-    $Check | Add-Member -MemberType NoteProperty -Name 'checks'         -Value $Checks;
-    $Check | Add-Member -MemberType NoteProperty -Name 'opand'          -Value $OperatorAnd;
-    $Check | Add-Member -MemberType NoteProperty -Name 'opor'           -Value $OperatorOr;
-    $Check | Add-Member -MemberType NoteProperty -Name 'opnone'         -Value $OperatorNone;
-    $Check | Add-Member -MemberType NoteProperty -Name 'opmin'          -Value $OperatorMin;
-    $Check | Add-Member -MemberType NoteProperty -Name 'opmax'          -Value $OperatorMax;
-    $Check | Add-Member -MemberType NoteProperty -Name 'spacing'        -Value 0;
-    $Check | Add-Member -MemberType NoteProperty -Name 'compiled'       -Value $FALSE;
-    $Check | Add-Member -MemberType NoteProperty -Name 'perfdata'       -Value $FALSE;
-    $Check | Add-Member -MemberType NoteProperty -Name 'checkcommand'   -Value '';
-    $Check | Add-Member -MemberType NoteProperty -Name 'headermsg'      -Value '';
-    $Check | Add-Member -MemberType NoteProperty -Name 'checkpackage'   -Value $TRUE;
-    $Check | Add-Member -MemberType NoteProperty -Name 'warningchecks'  -Value @();
-    $Check | Add-Member -MemberType NoteProperty -Name 'criticalchecks' -Value @();
-    $Check | Add-Member -MemberType NoteProperty -Name 'unknownchecks'  -Value @();
+    $Check | Add-Member -MemberType NoteProperty -Name 'name'               -Value $Name;
+    $Check | Add-Member -MemberType NoteProperty -Name 'exitcode'           -Value -1;
+    $Check | Add-Member -MemberType NoteProperty -Name 'verbose'            -Value $Verbose;
+    $Check | Add-Member -MemberType NoteProperty -Name 'hidden'             -Value $Hidden;
+    $Check | Add-Member -MemberType NoteProperty -Name 'ignoreemptypackage' -Value $IgnoreEmptyPackage;
+    $Check | Add-Member -MemberType NoteProperty -Name 'checks'             -Value $Checks;
+    $Check | Add-Member -MemberType NoteProperty -Name 'opand'              -Value $OperatorAnd;
+    $Check | Add-Member -MemberType NoteProperty -Name 'opor'               -Value $OperatorOr;
+    $Check | Add-Member -MemberType NoteProperty -Name 'opnone'             -Value $OperatorNone;
+    $Check | Add-Member -MemberType NoteProperty -Name 'opmin'              -Value $OperatorMin;
+    $Check | Add-Member -MemberType NoteProperty -Name 'opmax'              -Value $OperatorMax;
+    $Check | Add-Member -MemberType NoteProperty -Name 'spacing'            -Value 0;
+    $Check | Add-Member -MemberType NoteProperty -Name 'compiled'           -Value $FALSE;
+    $Check | Add-Member -MemberType NoteProperty -Name 'perfdata'           -Value $FALSE;
+    $Check | Add-Member -MemberType NoteProperty -Name 'checkcommand'       -Value '';
+    $Check | Add-Member -MemberType NoteProperty -Name 'headermsg'          -Value '';
+    $Check | Add-Member -MemberType NoteProperty -Name 'checkpackage'       -Value $TRUE;
+    $Check | Add-Member -MemberType NoteProperty -Name 'warningchecks'      -Value @();
+    $Check | Add-Member -MemberType NoteProperty -Name 'criticalchecks'     -Value @();
+    $Check | Add-Member -MemberType NoteProperty -Name 'unknownchecks'      -Value @();
 
     $Check | Add-Member -MemberType ScriptMethod -Name 'HasChecks' -Value {
         if ($this.checks -ne 0) {
@@ -154,7 +156,11 @@ function New-IcingaCheckPackage()
                 }
             }
         } else {
-            $this.exitcode = $IcingaEnums.IcingaExitCode.Unknown;
+            if ($this.ignoreemptypackage) {
+                $this.exitcode = $IcingaEnums.IcingaExitCode.Ok;
+            } else {
+                $this.exitcode = $IcingaEnums.IcingaExitCode.Unknown;
+            }
         }
 
         if ([int]$this.exitcode -eq -1) {

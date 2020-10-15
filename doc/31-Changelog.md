@@ -11,6 +11,10 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/10?closed=1)
 
+### Enhancements
+
+* [#136](https://github.com/Icinga/icinga-powershell-framework/pull/136) Adds support to ignore empty check packages and return `Ok` instead of `Unknown` if `-IgnoreEmptyPackage` is set on `New-IcingaCheckPackage`
+
 ### Bugfixes
 
 * [#127](https://github.com/Icinga/icinga-powershell-framework/issues/127) Fixes wrong error message on failed MSSQL connection due to database not reachable by using `-IntegratedSecurity`

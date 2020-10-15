@@ -10,25 +10,24 @@ The `IcingaCheckPackage` is the first step to take to write more advanced checks
 
 It will be used like in this example:
 
-
 ```powershell
 $IcingaPackage = New-IcingaCheckPackage -Name 'My Package' -OperatorAnd;
 ```
 
 ## Arguments
 
-| Argument     | Input  | Mandatory | Description |
-| ---          | ---    | ---       | ---         |
-| Name         | String    |  *        | The unique name of each package within a plugin. Will be displayed in the check output.  |
-| OperatorAnd  | Switch    |           | Every added check/package requires to return Ok for this package to be Ok |
-| OperatorOr   | Switch    |           | One added check/package requires to return Ok for this package to be Ok |
-| OperatorNone | Switch    |           | None of added check/package has to return Ok for this package to be Ok |
-| OperatorMin  | Int       |           | Minimum of `n` added checks/packages requires to return Ok for this package to be Ok |
-| OperatorMax  | Int       |           | Maximum of `n` added checks/packages requires to return Ok for this package to be Ok |
-| Checks       | Array     |           | Array of checks to be added to the check package |
-| Verbose      | int       |           | Defines the level of output detail from 0 lowest to 3 highest detail |
-| Hidden       | Switch    |           | If set, the check package doesn't generate output |
-
+| Argument           | Input     | Mandatory | Description |
+| ---                | ---       | ---       | ---         |
+| Name               | String    |  *        | The unique name of each package within a plugin. Will be displayed in the check output.  |
+| OperatorAnd        | Switch    |           | Every added check/package requires to return Ok for this package to be Ok |
+| OperatorOr         | Switch    |           | One added check/package requires to return Ok for this package to be Ok |
+| OperatorNone       | Switch    |           | None of added check/package has to return Ok for this package to be Ok |
+| OperatorMin        | Int       |           | Minimum of `n` added checks/packages requires to return Ok for this package to be Ok |
+| OperatorMax        | Int       |           | Maximum of `n` added checks/packages requires to return Ok for this package to be Ok |
+| Checks             | Array     |           | Array of checks to be added to the check package |
+| Verbose            | int       |           | Defines the level of output detail from 0 lowest to 3 highest detail |
+| IgnoreEmptyPackage | Switch    |           | By default a check package will return `Unknown` in case no checks are assigned. Setting this argument will ignore this and return `Ok` instead
+| Hidden             | Switch    |           | If set, the check package doesn't generate output |
 
 ### Examples
 
@@ -47,4 +46,3 @@ $IcingaPackage = New-IcingaCheckPackage -Name 'My Package' -OperatorAnd;
 $IcingaPackage.AddCheck($IcingaCheck1);
 $IcingaPackage.AddCheck($IcingaCheck2);
 ```
-
