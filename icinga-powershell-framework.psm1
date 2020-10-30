@@ -278,6 +278,7 @@ function Invoke-IcingaCommand()
         Write-Output '******************************************************';
         Write-Output ([string]::Format('** Icinga PowerShell Framework {0}', $IcingaFrameworkData.PrivateData.Version));
         Write-Output ([string]::Format('** Copyright {0}', $IcingaFrameworkData.Copyright));
+        Write-Output ([string]::Format('** User environment {0}\{1}', $env:USERDOMAIN, $env:USERNAME));
         Write-Output '******************************************************';
     }
 
@@ -308,6 +309,25 @@ function Invoke-IcingaCommand()
         }
 
     } -Args $ScriptBlock, $PSScriptRoot, $IcingaFrameworkData.PrivateData.Version;
+}
+
+function Start-IcingaShellAsUser()
+{
+    param (
+        [string]$User = ''
+    );
+
+    Start-Process `
+        -WorkingDirectory $PSHOME `
+        -FilePath 'powershell.exe' `
+        -Verb RunAs `
+        -ArgumentList (
+            [string]::Format(
+                "-Command `"Start-Process -FilePath `"powershell.exe`" -WorkingDirectory `"{0}`" -Credential (Get-Credential -UserName '{1}' -Message 'Please enter your credentials to open an Icinga Shell with') -ArgumentList icinga`"",
+                $PSHOME,
+                $User
+            )
+        );
 }
 
 Set-Alias icinga Invoke-IcingaCommand -Description "Execute Icinga Framework commands in a new PowerShell instance for testing or quick access to data";

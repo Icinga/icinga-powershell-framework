@@ -15,7 +15,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 * [#136](https://github.com/Icinga/icinga-powershell-framework/pull/136) Adds support to ignore empty check packages and return `Ok` instead of `Unknown` if `-IgnoreEmptyPackage` is set on `New-IcingaCheckPackage`
 * [#137](https://github.com/Icinga/icinga-powershell-framework/issues/137) Adds Cmdlet to compare a DateTime object with the current DateTime and return the offset as Integer in seconds
-
+* [#139](https://github.com/Icinga/icinga-powershell-framework/pull/139) Add Cmdlet `Start-IcingaShellAsUser` to open an Icinga Shell as different user for testing
 
 ### Bugfixes
 
