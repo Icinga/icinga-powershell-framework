@@ -18,7 +18,8 @@
         'Get-IcingaCacheDir',
         'Get-IcingaPowerShellConfigDir',
         'Get-IcingaFrameworkRootPath',
-        'Get-IcingaPowerShellModuleFile'
+        'Get-IcingaPowerShellModuleFile',
+        'Start-IcingaShellAsUser'
     )
     CmdletsToExport   = @()
     VariablesToExport = '*'
