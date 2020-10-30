@@ -33,7 +33,7 @@ function Convert-Bytes()
                 }
             }
         }
-        return @{'value' = $FinalValue; 'pastunit' = $CurrentUnit; 'endunit' = $Unit };
+        return @{'value' = ([decimal]$FinalValue); 'pastunit' = $CurrentUnit; 'endunit' = $Unit };
     }
 
     Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.ConversionUnitMissing -Force;
