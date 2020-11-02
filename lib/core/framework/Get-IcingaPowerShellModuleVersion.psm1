@@ -25,7 +25,7 @@ function Get-IcingaPowerShellModuleVersion()
         $ModuleName
     );
 
-    $ModuleDetails = Get-Module -Name $ModuleName;
+    $ModuleDetails = Get-Module -ListAvailable $ModuleName;
 
     if ($null -eq $ModuleDetails) {
         return $null;
