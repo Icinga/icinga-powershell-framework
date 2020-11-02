@@ -23,6 +23,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#128](https://github.com/Icinga/icinga-powershell-framework/issues/128) Fixes unhandled output from loading `System.Reflection.Assembly` which can cause weird side effects for plugin outputs
 * [#130](https://github.com/Icinga/icinga-powershell-framework/issues/130) Fix crash while running services as background task to collect metrics over time by missing Performance Counter cache initialisation
 * [#138](https://github.com/Icinga/icinga-powershell-framework/issues/138) Fixes possible value overflow on `Convert-Bytes` while converting from anything larger than MB to Bytes
+* [#140](https://github.com/Icinga/icinga-powershell-framework/issues/140) Fixes version fetching for not loaded modules during upgrades/plugin calls with `Get-IcingaPowerShellModuleVersion`
 
 ## 1.2.0 (2020-08-28)
 
