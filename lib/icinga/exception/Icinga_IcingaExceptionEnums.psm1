@@ -13,12 +13,13 @@
 };
 
 [hashtable]$Inputs = @{
-    PerformanceCounter    = 'A plugin failed to fetch Performance Counter information. Please ensure the counter is written properly and available on your system.';
-    EventLogLogName       = 'Failed to fetch EventLog information. Please specify a valid LogName.';
-    EventLog              = 'Failed to fetch EventLog information. Please check your inputs for EntryTypes and other categories and try again.';
-    ConversionUnitMissing = 'Unable to parse input value. You have to add an unit to your input value. Example: "10GB". Allowed units are: "B, KB, MB, GB, TB, PB, KiB, MiB, GiB, TiB, PiB".';
-    CimClassNameUnknown   = 'The provided class name you try to fetch with Get-CimInstance is not known on this system.';
-    WmiObjectClassUnknown = 'The provided class name you try to fetch with Get-WmiObject is not known on this system.';
+    PerformanceCounter      = 'A plugin failed to fetch Performance Counter information. Please ensure the counter is written properly and available on your system.';
+    EventLogLogName         = 'Failed to fetch EventLog information. Please specify a valid LogName.';
+    EventLog                = 'Failed to fetch EventLog information. Please check your inputs for EntryTypes and other categories and try again.';
+    ConversionUnitMissing   = 'Unable to parse input value. You have to add an unit to your input value. Example: "10GB". Allowed units are: "B, KB, MB, GB, TB, PB, KiB, MiB, GiB, TiB, PiB".';
+    MultipleUnitUsage       = 'Failed to convert your Icinga threshold units as you were trying to convert values with a different type of unit category. This feature only supports the conversion of one unit category. For example you can not convert 20MB:10d in the same call, as size and time units are not compatible.';
+    CimClassNameUnknown     = 'The provided class name you try to fetch with Get-CimInstance is not known on this system.';
+    WmiObjectClassUnknown   = 'The provided class name you try to fetch with Get-WmiObject is not known on this system.';
     MSSQLCredentialHandling = 'The connection to MSSQL was not possbible because your login credential was not correct.';
     MSSQLCommandMissing     = 'Failed to build a SQL query'
 };
@@ -41,7 +42,7 @@
  # to make it available within the entire module.
  #
  # Example usage:
- # $IcingaExceptionEnums.IcingaExecptionHandlers.PerformanceCounter
+ # $IcingaException.Inputs.PerformanceCounter
  #>
 [hashtable]$IcingaExceptions = @{
     Permission    = $Permission;
