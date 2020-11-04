@@ -22,6 +22,10 @@ function Use-Icinga()
         Use-IcingaPlugins;
     }
 
+    if ((Test-Path (Get-IcingaFrameworkCodeCacheFile)) -eq $FALSE -And (Get-IcingaFrameworkCodeCache)) {
+        Write-IcingaFrameworkCodeCache;
+    }
+
     # This function will allow us to load this entire module including possible
     # actions, making it available within our shell environment
     # First load our custom modules
@@ -78,6 +82,20 @@ function Use-Icinga()
     }
 }
 
+function Get-IcingaFrameworkCodeCacheFile()
+{
+    return (Join-Path -Path (Get-IcingaCacheDir) -ChildPath 'framework_cache.psm1');
+}
+
+function Write-IcingaFrameworkCodeCache()
+{
+    if (Get-IcingaFrameworkCodeCache) {
+        Import-IcingaLib '\' -Init -CompileCache;
+    } else {
+        Write-IcingaConsoleNotice 'The experimental code caching feature is currently not enabled. You can enable it with "Enable-IcingaFrameworkCodeCache"';
+    }
+}
+
 function Import-IcingaLib()
 {
     param(
@@ -87,14 +105,26 @@ function Import-IcingaLib()
         [Switch]$ForceReload,
         [switch]$Init,
         [switch]$Custom,
-        [switch]$WriteManifests
+        [switch]$WriteManifests,
+        [switch]$CompileCache
     );
 
+    
     # This is just to only allow a global loading of the module. Import-IcingaLib is ignored on every other
     # location. It is just there to give a basic idea within commands, of which functions are used
     if ($Init -eq $FALSE) {
         return;
     }
+    
+    $CacheFile = Get-IcingaFrameworkCodeCacheFile;
+
+    if ($Custom -eq $FALSE -And $CompileCache -eq $FALSE -And (Test-Path $CacheFile) -And (Get-IcingaFrameworkCodeCache)) {
+        Import-Module $CacheFile -Global;
+        return;
+    }
+
+    [array]$ImportModules = @();
+    [array]$RemoveModules = @();
 
     if ($Custom) {
         [string]$directory  = Join-Path -Path $PSScriptRoot -ChildPath 'custom\';
@@ -116,11 +146,11 @@ function Import-IcingaLib()
 
                 if ($ListOfLoadedModules -like "*$moduleName*") {
                     if ($ForceReload) {
-                        Remove-Module -Name $moduleName
-                        Import-Module ([string]::Format('{0}', $modulePath)) -Global;
+                        $RemoveModules += $moduleName;
                     }
+                    $ImportModules += $modulePath;
                 } else {
-                    Import-Module ([string]::Format('{0}', $modulePath)) -Global;
+                    $ImportModules += $modulePath;
                     if ($WriteManifests) {
                         Publish-IcingaModuleManifest -Module $moduleName;
                     }
@@ -132,13 +162,33 @@ function Import-IcingaLib()
 
         if ($ForceReload) {
             if ($ListOfLoadedModules -Like "*$moduleName*") {
-                Remove-Module -Name $moduleName;
+                $RemoveModules += $moduleName;
             }
         }
 
-        Import-Module ([string]::Format('{0}.psm1', $module)) -Global;
+        $ImportModules += ([string]::Format('{0}.psm1', $module));
         if ($WriteManifests) {
             Publish-IcingaModuleManifest -Module $moduleName;
+        }
+    }
+
+    if ($RemoveModules.Count -ne 0) {
+        Remove-Module $RemoveModules;
+    }
+
+    if ($ImportModules.Count -ne 0) {
+
+        if ($CompileCache) {
+            $CacheContent = '';
+            foreach ($module in $ImportModules) {
+                $Content      = Get-Content $module -Raw;
+                $CacheContent += $Content + "`r`n";
+            }
+
+            $CacheContent += $Content + "Export-ModuleMember -Function @( '*' )";
+            Set-Content -Path $CacheFile -Value $CacheContent;
+        } else {
+            Import-Module $ImportModules -Global;
         }
     }
 }
@@ -279,6 +329,9 @@ function Invoke-IcingaCommand()
         Write-Output ([string]::Format('** Icinga PowerShell Framework {0}', $IcingaFrameworkData.PrivateData.Version));
         Write-Output ([string]::Format('** Copyright {0}', $IcingaFrameworkData.Copyright));
         Write-Output ([string]::Format('** User environment {0}\{1}', $env:USERDOMAIN, $env:USERNAME));
+        if (Get-IcingaFrameworkCodeCache) {
+            Write-Output ([string]::Format('** Warning: Icinga Framework Code Caching is enabled'));
+        }
         Write-Output '******************************************************';
     }
 
