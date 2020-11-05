@@ -34,7 +34,7 @@
         };
         PSPlaceOpenBrace           = @{
             Enable             = $true
-            OnSameLine         = $true
+            OnSameLine         = $false
             NewLineAfter       = $true
             IgnoreOneLineBlock = $true
         };
@@ -52,7 +52,7 @@
         };
         PSUseConsistentWhitespace  = @{
             Enable         = $true
-            CheckOpenBrace = $true
+            CheckOpenBrace = $false
             CheckOpenParen = $true
             CheckOperator  = $false
             CheckSeparator = $true
