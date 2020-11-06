@@ -16,6 +16,7 @@ Please take a look at the following content to get to know the possibilities of 
 * [Icinga Integration](doc/05-Icinga-Integration.md)
 * [Framework Usage Examples](doc/06-Framework-Usage.md)
 * [Icinga PowerShell Framework as Service](doc/service/01-Install-Service.md)
+* [Knowledge Base](doc/10-Knowledge-Base.md)
 * [Changelog](doc/31-Changelog.md)
 
 Developer Guide
