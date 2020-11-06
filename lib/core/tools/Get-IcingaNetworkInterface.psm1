@@ -36,6 +36,13 @@ function Get-IcingaNetworkInterface()
         return $null;
     }
 
+    # Ensure that we can still process on older Windows system where
+    # Get-NetRoute ist not available
+    if ((Test-IcingaFunction 'Get-NetRoute') -eq $FALSE) {
+        Write-IcingaConsoleWarning 'Your Windows system does not support "Get-NetRoute". A fallback solution is used to fetch the IP of the first Network Interface routing through 0.0.0.0'
+        return (Get-IcingaNetworkRoute).Interface;
+    }
+
     try {
         [array]$IP = ([System.Net.Dns]::GetHostAddresses($IP)).IPAddressToString;
     } catch {
@@ -150,14 +157,21 @@ function Get-IcingaNetworkInterface()
         }
     }
 
-    $InternalCount = 0;
-    $UseInterface  = '';
+    $InternalCount        = 0;
+    [array]$UseInterface  = @();
     foreach ($interface in $ExternalInterfaces.Keys) {
         $currentCount = $ExternalInterfaces[$interface].count;
         if ($currentCount -gt $InternalCount) {
             $InternalCount = $currentCount;
-            $UseInterface = $interface;
+            $UseInterface += $interface;
         }
     }
-    return $UseInterface;
+
+    # In case we found multiple interfaces, fallback to our
+    # 'route print' function and return this interface instead
+    if ($UseInterface.Count -ne 1) {
+        return (Get-IcingaNetworkRoute).Interface;
+    }
+
+    return $UseInterface[0];
 }
