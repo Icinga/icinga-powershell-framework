@@ -561,7 +561,7 @@ function Start-IcingaAgentInstallWizard()
             Install-IcingaAgentBaseFeatures;
             $CertsInstalled = Install-IcingaAgentCertificates -Hostname $Hostname -Endpoint $CAEndpoint -Port $CAPort -CACert $CAFile -Ticket $Ticket;
             Write-IcingaAgentApiConfig -Port $CAPort;
-            if ($EmptyCA -eq $TRUE -Or $CertsInstalled -eq $FALSE) {
+            if ($EmptyCA -eq $TRUE -And $CertsInstalled -eq $FALSE) {
                 Disable-IcingaAgentFeature 'api';
                 Write-IcingaConsoleWarning `
                     -Message '{0}{1}{2}{3}{4}' `

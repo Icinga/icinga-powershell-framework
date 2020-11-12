@@ -22,6 +22,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 ### Bugfixes
 
 * [#059](https://github.com/Icinga/icinga-powershell-framework/issues/059), [#060](https://github.com/Icinga/icinga-powershell-framework/pull/060) Fixes interface handling for multiple interfaces and returns only the main interface by fallback to routing table and adds support for Windows 2008 R2
+* [#114](https://github.com/Icinga/icinga-powershell-framework/issues/114)[#146](https://github.com/Icinga/icinga-powershell-framework/pull/146) Fixes Icinga Agent API being wrongly disabled after successful certificate configuration and installation
 * [#127](https://github.com/Icinga/icinga-powershell-framework/issues/127) Fixes wrong error message on failed MSSQL connection due to database not reachable by using `-IntegratedSecurity`
 * [#128](https://github.com/Icinga/icinga-powershell-framework/issues/128) Fixes unhandled output from loading `System.Reflection.Assembly` which can cause weird side effects for plugin outputs
 * [#130](https://github.com/Icinga/icinga-powershell-framework/issues/130) Fix crash while running services as background task to collect metrics over time by missing Performance Counter cache initialisation
