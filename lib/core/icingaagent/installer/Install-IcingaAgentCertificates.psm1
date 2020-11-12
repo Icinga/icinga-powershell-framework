@@ -82,6 +82,9 @@ function Install-IcingaAgentCertificates()
             Write-IcingaConsoleError 'Failed to generate host certificate';
             return $FALSE;
         }
+
+        # Once we generated new host certificates, we always require to sign them if possible
+        $Force = $TRUE;
     }
 
     if ([string]::IsNullOrEmpty($Endpoint) -And [string]::IsNullOrEmpty($CACert)) {
@@ -226,8 +229,9 @@ function Test-IcingaAgentCertificates()
         return $FALSE;
     }
 
-    [string]$hostCRT = [string]::Format('{0}.crt', $Hostname);
-    [string]$hostKEY = [string]::Format('{0}.key', $Hostname);
+    [string]$hostCRT       = [string]::Format('{0}.crt', $Hostname);
+    [string]$hostKEY       = [string]::Format('{0}.key', $Hostname);
+    [bool]$CertNameInvalid = $FALSE;
 
     $certificates = Get-ChildItem -Path $CertDirectory;
     # Now loop each file and match their name with our hostname
@@ -236,9 +240,16 @@ function Test-IcingaAgentCertificates()
             $file = $cert.Name.Replace('.key', '').Replace('.crt', '');
             if (-Not ($file -clike $Hostname)) {
                 Write-IcingaConsoleWarning ([string]::Format('Certificate file {0} is not matching the hostname {1}. Certificate generation is required.', $cert.Name, $Hostname));
-                return $FALSE;
+                $CertNameInvalid = $TRUE;
+                break;
             }
         }
+    }
+
+    if ($CertNameInvalid) {
+        Remove-Item -Path (Join-Path -Path $CertDirectory -ChildPath $hostCRT) -Force;
+        Remove-Item -Path (Join-Path -Path $CertDirectory -ChildPath $hostKEY) -Force;
+        return $FALSE;
     }
 
     Write-IcingaConsoleNotice 'Icinga host certificates are present and valid. No generation required';
