@@ -4,9 +4,10 @@ function Exit-IcingaThrowException()
         [string]$InputString,
         [string]$StringPattern,
         [string]$CustomMessage,
-        [string]$ExceptionThrown,
+        $ExceptionThrown,
         [ValidateSet('Permission', 'Input', 'Configuration', 'Connection', 'Unhandled', 'Custom')]
         [string]$ExceptionType    = 'Unhandled',
+        [string]$KnowledgeBaseId,
         [switch]$Force
     );
 
@@ -49,6 +50,12 @@ function Exit-IcingaThrowException()
     }
 
     [string]$ExceptionName = '';
+    [string]$ExceptionIWKB = $KnowledgeBaseId;
+
+    if ($ExceptionThrown -is [hashtable]) {
+        $ExceptionIWKB   = $ExceptionThrown.IWKB;
+        $ExceptionThrown = $ExceptionThrown.Message;
+    }
 
     if ($null -ne $ExceptionMessageLib) {
         foreach ($definedError in $ExceptionMessageLib.Keys) {
@@ -67,15 +74,24 @@ function Exit-IcingaThrowException()
         );
     }
 
-    $OutputMessage = '{0}: Icinga {5} Error was thrown: {3}: {4}{1}{1}{2}';
+    if ([string]::IsNullOrEmpty($ExceptionIWKB) -eq $FALSE) {
+        $ExceptionIWKB = [string]::Format(
+            '{0}{0}Further details can be found on the Icinga for Windows Knowledge base: https://icinga.com/docs/windows/latest/doc/knowledgebase/{1}',
+            (New-IcingaNewLine), 
+            $ExceptionIWKB
+        );
+    }
+
+    $OutputMessage = '{0}: Icinga {6} Error was thrown: {4}: {5}{2}{2}{3}{1}';
     if ([string]::IsNullOrEmpty($CustomMessage) -eq $TRUE) {
-        $OutputMessage = '{0}: Icinga {5} Error was thrown: {3}{1}{1}{2}{4}';
+        $OutputMessage = '{0}: Icinga {6} Error was thrown: {4}{2}{2}{3}{5}{1}';
     }
 
     $OutputMessage = [string]::Format(
         $OutputMessage,
         $IcingaEnums.IcingaExitCodeText.($IcingaEnums.IcingaExitCode.Unknown),
-        "`r`n",
+        $ExceptionIWKB,
+        (New-IcingaNewLine),
         $ExceptionThrown,
         $ExceptionName,
         $CustomMessage,
