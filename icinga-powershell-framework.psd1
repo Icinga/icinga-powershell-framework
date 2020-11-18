@@ -7,10 +7,21 @@
     Copyright         = '(c) 2020 Icinga GmbH | MIT'
     Description       = 'Icinga for Windows module which allows to entirely monitor the Windows Host system.'
     PowerShellVersion = '4.0'
+    NestedModules     = @(
+        '.\lib\core\framework\Get-IcingaFrameworkCodeCache.psm1',
+        '.\lib\config\Get-IcingaPowerShellConfig.psm1',
+        '.\lib\config\Read-IcingaPowerShellConfig.psm1',
+        '.\lib\config\Test-IcingaPowerShellConfigItem.psm1',
+        '.\lib\core\logging\Write-IcingaConsoleOutput.psm1',
+        '.\lib\core\logging\Write-IcingaConsoleNotice.psm1',
+        '.\lib\core\logging\Write-IcingaConsoleWarning.psm1'
+    )
     FunctionsToExport = @(
         'Use-Icinga',
         'Invoke-IcingaCommand',
         'Import-IcingaLib',
+        'Get-IcingaFrameworkCodeCacheFile',
+        'Write-IcingaFrameworkCodeCache',
         'Publish-IcingaModuleManifest',
         'Publish-IcingaEventlogDocumentation',
         'Get-IcingaPluginDir',
@@ -19,9 +30,16 @@
         'Get-IcingaPowerShellConfigDir',
         'Get-IcingaFrameworkRootPath',
         'Get-IcingaPowerShellModuleFile',
-        'Start-IcingaShellAsUser'
+        'Start-IcingaShellAsUser',
+        'Get-IcingaPowerShellConfig',
+        'Get-IcingaFrameworkCodeCache',
+        'Read-IcingaPowerShellConfig',
+        'Test-IcingaPowerShellConfigItem',
+        'Write-IcingaConsoleOutput',
+        'Write-IcingaConsoleNotice',
+        'Write-IcingaConsoleWarning'
     )
-    CmdletsToExport   = @()
+    CmdletsToExport   = @('*')
     VariablesToExport = '*'
     AliasesToExport   = @( 'icinga' )
     PrivateData       = @{

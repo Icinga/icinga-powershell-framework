@@ -25,13 +25,13 @@ function Read-IcingaPowerShellConfig()
     }
 
     if (-Not (Test-Path $ConfigFile)) {
-        return (New-Object -TypeName PSOBject);
+        return (New-Object -TypeName PSObject);
     }
 
     [string]$Content = Get-Content -Path $ConfigFile;
 
     if ([string]::IsNullOrEmpty($Content)) {
-        return (New-Object -TypeName PSOBject);
+        return (New-Object -TypeName PSObject);
     }
 
     return (ConvertFrom-Json -InputObject $Content);
