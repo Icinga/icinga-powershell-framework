@@ -165,7 +165,7 @@ function Get-IcingaCheckCommandConfig()
                         'value' = @{
                             'type' = 'Function';
                             'body' = [string]::Format(
-                                'var arr = macro("{0}");{1}if (len(arr) == 0) {2}{1}return "$null";{1}{3}{1}return arr.join(",");',
+                                'var arr = macro("{0}");{1}if (len(arr) == 0) {2}{1}return "@()";{1}{3}{1}return arr.join(",");',
                                 $IcingaCustomVariable,
                                 "`r`n",
                                 '{',
@@ -259,10 +259,16 @@ function Get-IcingaCheckCommandConfig()
                 );
 
                 if ($IsDataList) {
+                    [string]$DataListDataType = 'string';
+
+                    if ($parameter.type.name -eq 'Array') {
+                        $DataListDataType = 'array';
+                    }
+
                     $Basket.Datafield[[string]$FieldID].Add(
                         'settings', @{
                             'datalist'  = $DataListName;
-                            'data_type' = 'string';
+                            'data_type' = $DataListDataType;
                             'behavior'  = 'strict';
                         }
                     );

@@ -19,16 +19,20 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#141](https://github.com/Icinga/icinga-powershell-framework/pull/141) Adds Cmdlet `Convert-IcingaPluginThresholds` as generic approach to convert Icinga Thresholds with units to the lowest unit of this type.
 * [#134](https://github.com/Icinga/icinga-powershell-framework/pull/134) Adds Cmdlet `Test-IcingaWindowsInformation` to check if a WMI class exist and if we can fetch data from it. In addition we add support for binary value comparison with the new Cmdlet `Test-IcingaBinaryOperator`
 * [#142](https://github.com/Icinga/icinga-powershell-framework/pull/142) **Experimental:** Adds feature to cache the Framework code into a single file to speed up the entire loading process, mitigating the impact on performance on systems with few CPU cores. You enable disables this feature by using `Enable-IcingaFrameworkCodeCache` and `Disable-IcingaFrameworkCodeCache`. Updating the cache is done with `Write-IcingaFrameworkCodeCache`
+* [#149](https://github.com/Icinga/icinga-powershell-framework/pull/149) Adds support to add Wmi permissions for a specific user and namespace with `Add-IcingaWmiPermissions`. In addition you can remove users from Wmi namespaces by using `Remove-IcingaWmiPermissions`
 
 ### Bugfixes
 
 * [#059](https://github.com/Icinga/icinga-powershell-framework/issues/059), [#060](https://github.com/Icinga/icinga-powershell-framework/pull/060) Fixes interface handling for multiple interfaces and returns only the main interface by fallback to routing table and adds support for Windows 2008 R2
+* [#114](https://github.com/Icinga/icinga-powershell-framework/issues/114)[#146](https://github.com/Icinga/icinga-powershell-framework/pull/146) Fixes Icinga Agent API being wrongly disabled after successful certificate configuration and installation
 * [#127](https://github.com/Icinga/icinga-powershell-framework/issues/127) Fixes wrong error message on failed MSSQL connection due to database not reachable by using `-IntegratedSecurity`
 * [#128](https://github.com/Icinga/icinga-powershell-framework/issues/128) Fixes unhandled output from loading `System.Reflection.Assembly` which can cause weird side effects for plugin outputs
 * [#130](https://github.com/Icinga/icinga-powershell-framework/issues/130) Fix crash while running services as background task to collect metrics over time by missing Performance Counter cache initialisation
+* [#133](https://github.com/Icinga/icinga-powershell-framework/issues/133), [#147](https://github.com/Icinga/icinga-powershell-framework/pull/147) Fixes an issue while changing the hostname between upper/lower case which might cause unwanted exceptions on one hand but also required manual signing of requests on the CA master as the signing process was not completed
 * [#138](https://github.com/Icinga/icinga-powershell-framework/issues/138) Fixes possible value overflow on `Convert-Bytes` while converting from anything larger than MB to Bytes
 * [#140](https://github.com/Icinga/icinga-powershell-framework/issues/140) Fixes version fetching for not loaded modules during upgrades/plugin calls with `Get-IcingaPowerShellModuleVersion`
 * [#143](https://github.com/Icinga/icinga-powershell-framework/issues/143) Fixes the annoying hint from the analyzer to check space before open brace
+* [#152](https://github.com/Icinga/icinga-powershell-framework/issues/152) Fixes incorrect rendering for empty arrays which used `$null` incorrectly instead of `@()` and fixed ValidateSet which now also supports arrays as data type
 
 ## 1.2.0 (2020-08-28)
 
