@@ -1,3 +1,34 @@
+<#
+.SYNOPSIS
+    Allows to query Wmi information by either using Wmi directly or Cim. This provides a save handling
+    to call Wmi classes, as we are catching possible errors including missing permissions for better
+    and improved error output during plugin execution.
+.DESCRIPTION
+    Allows to query Wmi information by either using Wmi directly or Cim. This provides a save handling
+    to call Wmi classes, as we are catching possible errors including missing permissions for better
+    and improved error output during plugin execution.
+.PARAMETER ClassName
+    The Wmi class to fetch information from
+.PARAMETER Filter
+    Allows to filter only for specific Wmi information. The syntax is identical to Get-WmiObject and Get-CimInstance
+.PARAMETER Namespace
+    The Wmi namespace to lookup additional information. The syntax is identical to Get-WmiObject and Get-CimInstance
+.PARAMETER ForceWMI
+    Forces the usage of `Get-WmiObject` instead of `Get-CimInstance`
+.EXAMPLE
+    PS>Get-IcingaWindowsInformation -ClassName Win32_Service;
+.EXAMPLE
+    PS>Get-IcingaWindowsInformation -ClassName Win32_Service -ForceWMI;
+.EXAMPLE
+    PS>Get-IcingaWindowsInformation -ClassName MSFT_NetAdapter -NameSpace 'root\StandardCimv2';
+.EXAMPLE
+    PS>Get-IcingaWindowsInformation Win32_LogicalDisk -Filter 'DriveType = 3';
+.INPUTS
+    System.String
+.OUTPUTS
+    System.Boolean
+#>
+
 function Get-IcingaWindowsInformation()
 {
     param (
