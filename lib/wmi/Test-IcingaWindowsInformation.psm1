@@ -1,10 +1,10 @@
 <#
 .SYNOPSIS
-    Tests if a specific WMI class including the Namespace can be accessed and returns status codes for possible errors/exceptions taht might occure.
-    Returns binary operator values for easier comparison. In case no errors occured it will return $TestIcingaWindowsInfoEnums.TestIcingaWindowsInfo.Ok
+    Tests if a specific WMI class including the Namespace can be accessed and returns status codes for possible errors/exceptions that might occur.
+    Returns binary operator values for easier comparison. In case no errors occurred it will return $TestIcingaWindowsInfoEnums.TestIcingaWindowsInfo.Ok
 .DESCRIPTION
-    Tests if a specific WMI class including the Namespace can be accessed and returns status codes for possible errors/exceptions taht might occure.
-    Returns binary operator values for easier comparison. In case no errors occured it will return $TestIcingaWindowsInfoEnums.TestIcingaWindowsInfo.Ok
+    Tests if a specific WMI class including the Namespace can be accessed and returns status codes for possible errors/exceptions that might occur.
+    Returns binary operator values for easier comparison. In case no errors occurred it will return $TestIcingaWindowsInfoEnums.TestIcingaWindowsInfo.Ok
 .ROLE
     ### WMI Permissions
 
