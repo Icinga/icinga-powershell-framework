@@ -314,7 +314,8 @@ function Invoke-IcingaCommand()
     [CmdletBinding()]
     param (
         $ScriptBlock,
-        [switch]$SkipHeader = $FALSE
+        [switch]$SkipHeader = $FALSE,
+        [array]$ArgumentList = @()
     );
 
     Import-LocalizedData `
@@ -336,9 +337,10 @@ function Invoke-IcingaCommand()
     }
 
     powershell.exe -NoExit -Command {
-        $Script   = $args[0];
-        $RootPath = $args[1];
-        $Version  = $args[2];
+        $Script          = $args[0];
+        $RootPath        = $args[1];
+        $Version         = $args[2];
+        $IcingaShellArgs = $args[3];
 
         # Load our Icinga Framework
         Use-Icinga;
@@ -361,7 +363,7 @@ function Invoke-IcingaCommand()
             return "> "
         }
 
-    } -Args $ScriptBlock, $PSScriptRoot, $IcingaFrameworkData.PrivateData.Version;
+    } -Args $ScriptBlock, $PSScriptRoot, $IcingaFrameworkData.PrivateData.Version, $ArgumentList;
 }
 
 function Start-IcingaShellAsUser()
