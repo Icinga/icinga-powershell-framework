@@ -20,6 +20,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#134](https://github.com/Icinga/icinga-powershell-framework/pull/134) Adds Cmdlet `Test-IcingaWindowsInformation` to check if a WMI class exist and if we can fetch data from it. In addition we add support for binary value comparison with the new Cmdlet `Test-IcingaBinaryOperator`
 * [#142](https://github.com/Icinga/icinga-powershell-framework/pull/142) **Experimental:** Adds feature to cache the Framework code into a single file to speed up the entire loading process, mitigating the impact on performance on systems with few CPU cores. You enable disables this feature by using `Enable-IcingaFrameworkCodeCache` and `Disable-IcingaFrameworkCodeCache`. Updating the cache is done with `Write-IcingaFrameworkCodeCache`
 * [#149](https://github.com/Icinga/icinga-powershell-framework/pull/149) Adds support to add Wmi permissions for a specific user and namespace with `Add-IcingaWmiPermissions`. In addition you can remove users from Wmi namespaces by using `Remove-IcingaWmiPermissions`
+* [#155](https://github.com/Icinga/icinga-powershell-framework/pull/155) Adds support to write all objects collected by `Get-IcingaWindowsInformation` into the Windows EventLog in case the debug output for the Icinga PowerShell Framework is enabled.
 
 ### Bugfixes
 
