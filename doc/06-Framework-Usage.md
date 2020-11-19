@@ -5,6 +5,7 @@ The Icinga PowerShell Framework ships with a bunch of Cmdlets for monitoring, me
 ## Framework Management
 
 * [Automated Framework and Component deployment](frameworkusage/01-Automated-Framework-and-Component-Deployment.md)
+* [Enable Proxy Server](frameworkusage/02-Enable-Proxy-Server.md)
 
 ## Icinga Agent Management
 

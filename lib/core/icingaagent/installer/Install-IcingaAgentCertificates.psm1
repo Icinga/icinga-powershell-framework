@@ -272,7 +272,7 @@ function Copy-IcingaAgentCACertificate()
         Set-IcingaTLSVersion;
         # It could also be a web ressource
         try {
-            $response   = Invoke-WebRequest $CAPath -UseBasicParsing;
+            $response   = Invoke-IcingaWebRequest $CAPath -UseBasicParsing;
             [int]$Index = $response.RawContent.IndexOf("`r`n`r`n") + 4;
 
             [string]$CAContent = $response.RawContent.SubString(
