@@ -140,6 +140,11 @@ function Get-IcingaCheckCommandConfig()
 
             $IcingaCustomVariable = [string]::Format('${0}_{1}_{2}$', $PluginNameSpace, (Get-Culture).TextInfo.ToTitleCase($parameter.type.name), $parameter.Name);
 
+            if ($IcingaCustomVariable.Length -gt 66) {
+                Write-IcingaConsoleError 'The argument "{0}" for the plugin "{1}" is too long. The maximum size of generated custom variables is 64 digits. Current argument size: "{2}", Name: "{3}"' -Objects $parameter.Name, $check, ($IcingaCustomVariable.Length - 2), $IcingaCustomVariable.Replace('$', '');
+                return;
+            }
+
             # Todo: Should we improve this? Actually the handling would be identical, we just need to assign
             #       the proper field for this
             if ($IcingaCustomVariable -like '*_Int32_Verbose$' -Or $IcingaCustomVariable -like '*_Int_Verbose$' -Or $IcingaCustomVariable -like '*_Object_Verbose$') {
