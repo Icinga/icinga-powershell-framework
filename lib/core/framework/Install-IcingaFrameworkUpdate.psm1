@@ -92,7 +92,9 @@ function Install-IcingaFrameworkUpdate()
     Remove-ItemSecure -Path $Archive.Directory -Recurse -Force | Out-Null;
 
     Write-IcingaConsoleNotice 'Updating Framework cache file';
-    Write-IcingaFrameworkCodeCache;
+    if (Test-IcingaFunction 'Write-IcingaFrameworkCodeCache') {
+        Write-IcingaFrameworkCodeCache;
+    }
 
     Write-IcingaConsoleNotice 'Framework update has been completed. Please start a new PowerShell instance now to complete the update';
 

@@ -36,6 +36,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#140](https://github.com/Icinga/icinga-powershell-framework/issues/140) Fixes version fetching for not loaded modules during upgrades/plugin calls with `Get-IcingaPowerShellModuleVersion`
 * [#143](https://github.com/Icinga/icinga-powershell-framework/issues/143) Fixes the annoying hint from the analyzer to check space before open brace
 * [#152](https://github.com/Icinga/icinga-powershell-framework/issues/152) Fixes incorrect rendering for empty arrays which used `$null` incorrectly instead of `@()` and fixed ValidateSet which now also supports arrays as data type
+* [#159](https://github.com/Icinga/icinga-powershell-framework/pull/159) Fixes crash during update of the Icinga Framework, caused by the newly introduced experimental feature for code caching
 
 ## 1.2.0 (2020-08-28)
 
