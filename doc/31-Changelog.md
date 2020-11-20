@@ -23,6 +23,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#142](https://github.com/Icinga/icinga-powershell-framework/pull/142) **Experimental:** Adds feature to cache the Framework code into a single file to speed up the entire loading process, mitigating the impact on performance on systems with few CPU cores. You enable disables this feature by using `Enable-IcingaFrameworkCodeCache` and `Disable-IcingaFrameworkCodeCache`. Updating the cache is done with `Write-IcingaFrameworkCodeCache`
 * [#149](https://github.com/Icinga/icinga-powershell-framework/pull/149) Adds support to add Wmi permissions for a specific user and namespace with `Add-IcingaWmiPermissions`. In addition you can remove users from Wmi namespaces by using `Remove-IcingaWmiPermissions`
 * [#155](https://github.com/Icinga/icinga-powershell-framework/pull/155) Adds support to write all objects collected by `Get-IcingaWindowsInformation` into the Windows EventLog in case the debug output for the Icinga PowerShell Framework is enabled.
+* [#162](https://github.com/Icinga/icinga-powershell-framework/pull/162) Adds feature to test the length of plugin custom variables during config generation and throws error in case the total length is bigger than 64 digits, as imports into the Icinga Director by using baskets is not possible otherwise
 
 ### Bugfixes
 
