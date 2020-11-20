@@ -16,7 +16,8 @@ Configuring Check-Commands
 
 To get started, there are two ways to configure check command objects:
 
-* [Automated configuration](icingaintegration/01-Director-Baskets.md) with Baskets
+* [Automated Icinga Director configuration](icingaintegration/01-Director-Baskets.md) with Baskets
+* [Automated Icinga 2 configuration](icingaintegration/04-Icinga-Config.md) with plain Icinga config
 * [Manual configuration](icingaintegration/02-Manual-Integration.md) of check commands
 * [Using PowerShell Arrays in Icinga](icingaintegration/03-PowerShell-Arrays.md)
 * [Windows Terminal Integration](icingaintegration/50-Windows-Terminal.md)

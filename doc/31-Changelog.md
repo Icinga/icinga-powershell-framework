@@ -24,6 +24,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#149](https://github.com/Icinga/icinga-powershell-framework/pull/149) Adds support to add Wmi permissions for a specific user and namespace with `Add-IcingaWmiPermissions`. In addition you can remove users from Wmi namespaces by using `Remove-IcingaWmiPermissions`
 * [#155](https://github.com/Icinga/icinga-powershell-framework/pull/155) Adds support to write all objects collected by `Get-IcingaWindowsInformation` into the Windows EventLog in case the debug output for the Icinga PowerShell Framework is enabled.
 * [#162](https://github.com/Icinga/icinga-powershell-framework/pull/162) Adds feature to test the length of plugin custom variables during config generation and throws error in case the total length is bigger than 64 digits, as imports into the Icinga Director by using baskets is not possible otherwise
+* [#163](https://github.com/Icinga/icinga-powershell-framework/pull/163) Adds native support for writing Icinga 2 configuration for plugins and allows to easy publish new configurations for modules with the new Cmdlet `Publish-IcingaPluginConfiguration`
 
 ### Bugfixes
 
