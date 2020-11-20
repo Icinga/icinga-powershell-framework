@@ -72,7 +72,7 @@ function Get-IcingaPowerShellModuleArchive()
             } else {
                 $WebResponse = Invoke-IcingaWebRequest -Uri 'https://github.com/{0}/{1}/releases/latest' -Objects $GitHubUser, $Repository -UseBasicParsing;
 
-                if ($WebResponse.HasErrors -eq $FALSE) {
+                if ($null -eq $WebResponse.HasErrors -Or $WebResponse.HasErrors -eq $FALSE) {
                     $LatestRelease = $WebResponse.BaseResponse.ResponseUri.AbsoluteUri;
                     $DownloadUrl   = $LatestRelease.Replace('/releases/tag/', '/archive/');
                     $Tag           = $DownloadUrl.Split('/')[-1];
