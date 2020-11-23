@@ -16,7 +16,7 @@ To install the Icinga Shell as native shell in your Windows Terminal dropdown, s
 
     "guid": "{fcd7a805-a41b-49f9-afee-9d17a2b76d42}",
     "name": "Icinga",
-    "commandline" : "powershell.exe -noe -c \"&{ icinga }\"",
+    "commandline" : "powershell.exe -noe -c \"&{ icinga; exit }\"",
     "hidden": false,
     "icon" : "ms-appdata:///roaming/icingawhite.png",
 
