@@ -19,37 +19,72 @@ function Get-IcingaAgentMSIPackage()
     $ProgressPreference = "SilentlyContinue";
     $Architecture = Get-IcingaAgentArchitecture;
     $LastUpdate   = $null;
+    $Version      = $Version.ToLower();
 
     if ($Version -eq 'snapshot' -Or $Version -eq 'release') {
-        $Content      = (Invoke-IcingaWebRequest -Uri $Source -UseBasicParsing).RawContent.Split("`r`n");
-        $UsePackage   = $null;
+        if (Test-Path $Source) {
+            $Content = Get-ChildItem -Path $Source;
 
-        foreach ($line in $Content) {
-            if ($line -like '*.msi*' -And $line -like "*$Architecture.msi*") {
-                $MSIPackage = $line.SubString(
-                    $line.IndexOf('Icinga2-'),
-                    $line.IndexOf('.msi') - $line.IndexOf('Icinga2-')
-                );
-                $LastUpdate = $line.SubString(
-                    $line.IndexOf('indexcollastmod">') + 17,
-                    $line.Length - $line.IndexOf('indexcollastmod">') - 17
-                );
-                $LastUpdate = $LastUpdate.SubString(0, $LastUpdate.IndexOf(' '));
-                $LastUpdate = $LastUpdate.Replace('-', '');
-                $MSIPackage = [string]::Format('{0}.msi', $MSIPackage);
+            foreach ($entry in $Content) {
+                $PackageVersion = ($entry.Name.Split('-')[1]).Replace('v', '');
+
                 if ($Version -eq 'snapshot') {
-                    if ($line -like '*snapshot*') {
-                        $UsePackage = $MSIPackage;
+                    if ($PackageVersion -eq 'snapshot')  {
+                        $UseVersion = 'snapshot';
                         break;
                     }
-                } elseif ($Version -eq 'release') {
-                    if ($line -like '*snapshot*' -Or $line -like '*-rc*') {
-                        continue;
-                    }
-                    $UsePackage = $MSIPackage;
-                    break;
+                    continue;
+                }
+
+                if ($PackageVersion -eq 'snapshot') {
+                    continue;
+                }
+
+                if ($null -eq $UseVersion -Or [version]$PackageVersion -ge [version]$UseVersion) {
+                    $UseVersion = $PackageVersion;
                 }
             }
+        } else {
+            $Content    = (Invoke-IcingaWebRequest -Uri $Source -UseBasicParsing).RawContent.Split("`r`n");
+            $UsePackage = $null;
+            $UseVersion = $null;
+
+            foreach ($line in $Content) {
+                if ($line -like '*.msi*' -And $line -like "*$Architecture.msi*") {
+                    $MSIPackage = $line.SubString(
+                        $line.IndexOf('Icinga2-'),
+                        $line.IndexOf('.msi') - $line.IndexOf('Icinga2-')
+                    );
+                    $LastUpdate = $line.SubString(
+                        $line.IndexOf('indexcollastmod">') + 17,
+                        $line.Length - $line.IndexOf('indexcollastmod">') - 17
+                    );
+                    $LastUpdate     = $LastUpdate.SubString(0, $LastUpdate.IndexOf(' '));
+                    $LastUpdate     = $LastUpdate.Replace('-', '');
+                    $MSIPackage     = [string]::Format('{0}.msi', $MSIPackage);
+                    $PackageVersion = ($MSIPackage.Split('-')[1]).Replace('v', '');
+
+                    if ($Version -eq 'snapshot') {
+                        if ($PackageVersion -eq 'snapshot') {
+                            $UseVersion = 'snapshot';
+                            break;
+                        }
+                    } elseif ($Version -eq 'release') {
+                        if ($line -like '*snapshot*' -Or $line -like '*-rc*') {
+                            continue;
+                        }
+
+                        if ($null -eq $UseVersion -Or [version]$PackageVersion -ge [version]$UseVersion) {
+                            $UseVersion = $PackageVersion;
+                        }
+                    }
+                }
+            }
+        }
+        if ($Version -eq 'snapshot') {
+            $UsePackage = [string]::Format('Icinga2-{0}-{1}.msi', $UseVersion, $Architecture);
+        } else {
+            $UsePackage = [string]::Format('Icinga2-v{0}-{1}.msi', $UseVersion, $Architecture);
         }
     } else {
         $UsePackage = [string]::Format('Icinga2-v{0}-{1}.msi', $Version, $Architecture);
@@ -67,7 +102,7 @@ function Get-IcingaAgentMSIPackage()
 
     return @{
         'InstallerPath' = $DownloadPath;
-        'Version'       = ($UsePackage).Replace('Icinga2-v', '').Replace([string]::Format('-{0}.msi', $Architecture), '')
+        'Version'       = ($UsePackage).Replace('Icinga2-v', '').Replace('Icinga2-', '').Replace([string]::Format('-{0}.msi', $Architecture), '')
         'LastUpdate'    = $LastUpdate;
     }
 }
