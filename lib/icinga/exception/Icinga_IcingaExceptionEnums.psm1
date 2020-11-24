@@ -7,8 +7,14 @@
 [hashtable]$Permission = @{
     PerformanceCounter = 'A Plugin failed to fetch Performance Counter information. This may be caused when the used Service User is not permitted to access these information. To fix this, please add the User the Icinga Agent is running on into the "Performance Log Users" group and restart the service.';
     CacheFolder        = "A plugin failed to write new data into the configured cache directory. Please update the permissions of this folder to allow write access for the user the Icinga Service is running with or use another folder as cache directory.";
-    CimInstance        = 'The user you are running this command as does not have permission to access the requested Cim-Object. To fix this, please add the user the Agent is running with to the "Remote Management Users" groups and grant access to the WMI branch for the Class/Namespace mentioned above and add the permission "Remote enable". Further details can be found here: https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/cc771551(v=ws.11)';
-    WMIObject          = 'The user you are running this command as does not have permission to access the requested Wmi-Object. To fix this, please add the user the Agent is running with to the "Remote Management Users" groups and grant access to the WMI branch for the Class/Namespace mentioned above and add the permission "Remote enable". Further details can be found here: https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/cc771551(v=ws.11)';
+    CimInstance        = @{
+        'Message' = 'The user you are running this command as does not have permission to access the requested Cim-Object. To fix this, please add the user the Agent is running with to the "Remote Management Users" groups and grant access to the WMI branch for the Class/Namespace mentioned above and add the permission "Remote enable".';
+        'IWKB'    = 'IWKB000001';
+    }
+    WMIObject          = @{
+        'Message' = 'The user you are running this command as does not have permission to access the requested Wmi-Object. To fix this, please add the user the Agent is running with to the "Remote Management Users" groups and grant access to the WMI branch for the Class/Namespace mentioned above and add the permission "Remote enable".';
+        'IWKB'    = 'IWKB000001';
+    }
     WindowsUpdate      = 'The user you are running this command as does not have permission to access the Windows Update ComObject "Microsoft.Update.Session". In order to fetch currently installed and pending updates, please grant the user the required permissions for fetching this information.';
 };
 
@@ -20,7 +26,7 @@
     MultipleUnitUsage       = 'Failed to convert your Icinga threshold units as you were trying to convert values with a different type of unit category. This feature only supports the conversion of one unit category. For example you can not convert 20MB:10d in the same call, as size and time units are not compatible.';
     CimClassNameUnknown     = 'The provided class name you try to fetch with Get-CimInstance is not known on this system.';
     WmiObjectClassUnknown   = 'The provided class name you try to fetch with Get-WmiObject is not known on this system.';
-    MSSQLCredentialHandling = 'The connection to MSSQL was not possbible because your login credential was not correct.';
+    MSSQLCredentialHandling = 'The connection to MSSQL was not possible because your login credential was not correct.';
     MSSQLCommandMissing     = 'Failed to build a SQL query'
 };
 
