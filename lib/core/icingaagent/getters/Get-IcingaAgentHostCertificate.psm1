@@ -7,7 +7,7 @@ function Get-IcingaAgentHostCertificate()
     $CertPath              = $null;
 
     foreach ($certFile in $FolderContent) {
-        if ($certFile.Name.Contains($Hostname)) {
+        if ($certFile.Name -like ([string]::Format('{0}.crt', $Hostname))) {
             $CertPath = $certFile.FullName;
             break;
         }
