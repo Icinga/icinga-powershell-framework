@@ -42,6 +42,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#152](https://github.com/Icinga/icinga-powershell-framework/issues/152) Fixes incorrect rendering for empty arrays which used `$null` incorrectly instead of `@()` and fixed ValidateSet which now also supports arrays as data type
 * [#159](https://github.com/Icinga/icinga-powershell-framework/pull/159) Fixes crash during update of the Icinga Framework, caused by the newly introduced experimental feature for code caching
 * [#165](https://github.com/Icinga/icinga-powershell-framework/pull/165) Fixes fetching for Icinga Agent certificate for REST-Api daemon on upper/lower case hostname mismatch
+* [#166](https://github.com/Icinga/icinga-powershell-framework/pull/166) Fixes fetching of Icinga Agent MSI packages by correctly comparing versions to ensure we always use the latest version and fixes `release` usage for local/network drive sources
 
 ## 1.2.0 (2020-08-28)
 
