@@ -10,7 +10,7 @@
 
 .FUNCTIONALITY
    This module is intended to be used to export one or all PowerShell-Modules with the namespace 'Invoke-IcingaCheck'.
-   The JSON-Export, which will be egenerated through this module is structured like an Icinga-Director-JSON-Export, so it can be imported via the Icinga-Director the same way.
+   The JSON-Export, which will be generated through this module is structured like an Icinga-Director-JSON-Export, so it can be imported via the Icinga-Director the same way.
 
 .EXAMPLE
    PS>Get-IcingaCheckCommandConfig
@@ -47,7 +47,14 @@
 
 .PARAMETER CheckName
    Used to specify an array of commands which should be exported.
-   Seperated with ','
+   Separated with ','
+
+.PARAMETER FileName
+   Define a custom file name for the exported `.json`/`.conf` file
+
+.PARAMETER IcingaConfig
+   Will switch the configuration generator to write plain Icinga 2 `.conf`
+   files instead of Icinga Director Basket `.json` files
 
 .INPUTS
    System.Array
@@ -65,7 +72,9 @@ function Get-IcingaCheckCommandConfig()
 {
     param(
         [array]$CheckName,
-        [string]$OutDirectory
+        [string]$OutDirectory = '',
+        [string]$Filename,
+        [switch]$IcingaConfig
     );
 
     # Check whether all Checks will be exported or just the ones specified
@@ -161,7 +170,7 @@ function Get-IcingaCheckCommandConfig()
                     }
                 );
 
-                $Basket.Command[$Data.Name].vars.Add($parameter.Name, $FALSE);
+                $Basket.Command[$Data.Name].vars.Add($IcingaCustomVariable.Replace('$', ''), $FALSE);
 
             } elseif ($parameter.type.name -eq 'Array') {
                 # Conditional whether type of parameter is array
@@ -322,16 +331,27 @@ function Get-IcingaCheckCommandConfig()
         }
     }
 
-    # Build Filename with given Timestamp
-    $TimeStamp = (Get-Date -Format "MM-dd-yyyy-HH-mm-ffff");
-    $FileName = "PowerShell_CheckCommands_$TimeStamp.json";
+    [string]$FileType = '.json';
+    if ($IcingaConfig) {
+        $FileType = '.conf';
+    }
+
+    if ([string]::IsNullOrEmpty($Filename)) {
+        $TimeStamp = (Get-Date -Format "MM-dd-yyyy-HH-mm-ffff");
+        $FileName  = [string]::Format("PowerShell_CheckCommands_{0}{1}", $TimeStamp, $FileType);
+    } else {
+        if ($Filename.Contains($FileType) -eq $FALSE) {
+            $Filename = [string]::Format('{0}{1}', $Filename, $FileType);
+        }
+    }
 
     # Generate JSON Output from Hashtable
     $output = ConvertTo-Json -Depth 100 $Basket -Compress;
 
     # Determine whether json output via powershell or in file (based on param -OutDirectory)
     if ([string]::IsNullOrEmpty($OutDirectory) -eq $false) {
-        $OutDirectory = (Join-Path -Path $OutDirectory -ChildPath $FileName);
+        $ConfigDirectory = $OutDirectory;
+        $OutDirectory    = (Join-Path -Path $OutDirectory -ChildPath $FileName);
         if ((Test-Path($OutDirectory)) -eq $false) {
             New-Item -Path $OutDirectory -ItemType File -Force | Out-Null;
         }
@@ -340,7 +360,11 @@ function Get-IcingaCheckCommandConfig()
             throw 'Failed to create specified directory. Please try again or use a different target location.';
         }
 
-        Set-Content -Path $OutDirectory -Value $output;
+        if ($IcingaConfig) {
+            Write-IcingaPlainConfigurationFiles -Content $Basket -OutDirectory $ConfigDirectory -FileName $FileName;
+        } else {
+            Set-Content -Path $OutDirectory -Value $output;
+        }
 
         # Output-Text
         Write-IcingaConsoleNotice "The following commands have been exported:"
@@ -360,6 +384,137 @@ function Get-IcingaCheckCommandConfig()
     Write-IcingaConsoleNotice '############################################################';
 
     return $output;
+}
+
+function Write-IcingaPlainConfigurationFiles()
+{
+    param (
+        $Content,
+        $OutDirectory,
+        $FileName
+    );
+
+    $ConfigDirectory = $OutDirectory;
+    $OutDirectory    = (Join-Path -Path $OutDirectory -ChildPath $FileName);
+
+    $IcingaConfig = '';
+
+    foreach ($entry in $Content.Command.Keys) {
+        $CheckCommand = $Content.Command[$entry];
+
+        # Skip PowerShell base, this is written at the end in a separate file
+        if ($CheckCommand.object_name -eq 'PowerShell Base') {
+            continue;
+        }
+
+        # Create the CheckCommand object
+        $IcingaConfig += [string]::Format('object CheckCommand "{0}" {{{1}', $CheckCommand.object_name, (New-IcingaNewLine));
+
+        # Import all defined import templates
+        foreach ($import in $CheckCommand.imports) {
+            $IcingaConfig += [string]::Format('    import "{0}"{1}', $import, (New-IcingaNewLine));
+        }
+        $IcingaConfig += New-IcingaNewLine;
+
+        if ($CheckCommand.arguments.Count -ne 0) {
+            # Arguments for the configuration
+            $IcingaConfig += '    arguments += {'
+            $IcingaConfig += New-IcingaNewLine;
+
+            foreach ($argument in $CheckCommand.arguments.Keys) {
+                $CheckArgument = $CheckCommand.arguments[$argument];
+
+                # Each single argument, like "-Verbosity" = {
+                $IcingaConfig += [string]::Format('        "{0}" = {{{1}', $argument, (New-IcingaNewLine));
+
+                foreach ($argconfig in $CheckArgument.Keys) {
+                    $Value = '';
+
+                    # Order is numeric -> no "" required
+                    if ($argconfig -eq 'order') {
+                        $StringFormater = '            {0} = {1}{2}';
+                    } else {
+                        # All other entries should be handled as strings and contain ""
+                        $StringFormater ='            {0} = "{1}"{2}'
+                    }
+
+                    # In case it is a hashtable, this is most likely a DSL function
+                    # We have to render it differently to also match the intends
+                    if ($CheckArgument[$argconfig] -is [Hashtable]) {
+                        $Value = $CheckArgument[$argconfig].body;
+                        $DSLArray = $Value.Split("`r`n");
+                        $Value = '';
+                        foreach ($item in $DSLArray) {
+                            if ([string]::IsNullOrEmpty($item)) {
+                                continue;
+                            }
+                            $Value += [string]::Format('                {0}{1}', $item, (New-IcingaNewLine));
+                        }
+                        $Value = $Value.Substring(0, $Value.Length - 2);
+                        $StringFormater ='            {0} = {{{{{2}{1}{2}            }}}}{2}'
+                    } else {
+                        # All other values besides DSL
+                        $Value = $CheckArgument[$argconfig];
+                    }
+
+                    # Read description from our variables
+                    if ($argconfig -eq 'value') {
+                        foreach ($item in $Content.DataField.Keys) {
+                            $DataField = $Content.DataField[$item];
+
+                            if ($Value.Contains($DataField.varname)) {
+                                if ([string]::IsNullOrEmpty($DataField.description)) {
+                                    break;
+                                }
+                                $IcingaConfig += [string]::Format('            description = "{0}"{1}', $DataField.description.Replace("`r`n", ''), (New-IcingaNewLine));
+                                break;
+                            }
+                        }
+                    }
+
+                    # Write the argument to your CheckCommand
+                    $IcingaConfig += [string]::Format($StringFormater, $argconfig, $Value, (New-IcingaNewLine));
+                }
+
+                # Close this specific argument
+                $IcingaConfig += '        }'
+                $IcingaConfig += New-IcingaNewLine;
+            }
+
+            # Close all arguments content
+            $IcingaConfig += New-IcingaNewLine;
+            $IcingaConfig += '    }'
+        }
+
+        # In case we pre-define custom variables, we should add them here
+        if ($CheckCommand.vars.Count -ne 0) {
+            $IcingaConfig += New-IcingaNewLine;
+
+            foreach ($var in $CheckCommand.vars.Keys) {
+                $Value = $CheckCommand.vars[$var];
+                $IcingaConfig += [string]::Format('    vars.{0} = {1}{2}', $var, $Value, (New-IcingaNewLine));
+            }
+        }
+
+        # Close the CheckCommand object
+        $IcingaConfig += '}';
+        if ($Content.Command.Count -gt 2) {
+            $IcingaConfig += New-IcingaNewLine;
+            $IcingaConfig += New-IcingaNewLine;
+        }
+    }
+
+    # Write the PowerShell Base command to a separate file for Icinga 2 configuration
+    [string]$PowerShellBase  = [string]::Format('object CheckCommand "PowerShell Base" {{{0}', (New-IcingaNewLine));
+    $PowerShellBase         += [string]::Format('    import "plugin-check-command"{0}', (New-IcingaNewLine));
+    $PowerShellBase         += [string]::Format('    command = [{0}', (New-IcingaNewLine));
+    $PowerShellBase         += [string]::Format('        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"{0}', (New-IcingaNewLine));
+    $PowerShellBase         += [string]::Format('    ]{0}', (New-IcingaNewLine));
+    $PowerShellBase         += [string]::Format('    timeout = 3m{0}', (New-IcingaNewLine));
+    $PowerShellBase         += '}';
+
+    Set-Content -Path (Join-Path -Path $ConfigDirectory -ChildPath 'PowerShell_Base.conf') -Value $PowerShellBase;
+    Set-Content -Path $OutDirectory -Value $IcingaConfig;
 }
 
 function Add-PowerShellDataList()
