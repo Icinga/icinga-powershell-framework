@@ -70,11 +70,13 @@ function Get-IcingaPowerShellModuleArchive()
             if ($branch.ToLower() -eq 'snapshot') {
                 $DownloadUrl   = [string]::Format('https://github.com/{0}/{1}/archive/master.zip', $GitHubUser, $Repository);
             } else {
-                try {
-                    $LatestRelease = (Invoke-WebRequest -Uri ([string]::Format('https://github.com/{0}/{1}/releases/latest', $GitHubUser, $Repository)) -UseBasicParsing).BaseResponse.ResponseUri.AbsoluteUri;
+                $WebResponse = Invoke-IcingaWebRequest -Uri 'https://github.com/{0}/{1}/releases/latest' -Objects $GitHubUser, $Repository -UseBasicParsing;
+
+                if ($null -eq $WebResponse.HasErrors -Or $WebResponse.HasErrors -eq $FALSE) {
+                    $LatestRelease = $WebResponse.BaseResponse.ResponseUri.AbsoluteUri;
                     $DownloadUrl   = $LatestRelease.Replace('/releases/tag/', '/archive/');
                     $Tag           = $DownloadUrl.Split('/')[-1];
-                } catch {
+                } else {
                     Write-IcingaConsoleError -Message 'Failed to fetch latest release for "{0}" from GitHub. Either the module or the GitHub account do not exist' -Objects $ModuleName;
                 }
 
@@ -110,13 +112,11 @@ function Get-IcingaPowerShellModuleArchive()
         };
     }
 
-    try {
-        $DownloadDirectory   = New-IcingaTemporaryDirectory;
-        $DownloadDestination = (Join-Path -Path $DownloadDirectory -ChildPath ([string]::Format('{0}.zip', $Repository)));
-        Write-IcingaConsoleNotice ([string]::Format('Downloading "{0}" into "{1}"', $ModuleName, $DownloadDirectory));
+    $DownloadDirectory   = New-IcingaTemporaryDirectory;
+    $DownloadDestination = (Join-Path -Path $DownloadDirectory -ChildPath ([string]::Format('{0}.zip', $Repository)));
+    Write-IcingaConsoleNotice ([string]::Format('Downloading "{0}" into "{1}"', $ModuleName, $DownloadDirectory));
 
-        Invoke-WebRequest -UseBasicParsing -Uri $DownloadUrl -OutFile $DownloadDestination;
-    } catch {
+    if ((Invoke-IcingaWebRequest -UseBasicParsing -Uri $DownloadUrl -OutFile $DownloadDestination).HasErrors) {
         Write-IcingaConsoleError ([string]::Format('Failed to download "{0}" into "{1}". Starting cleanup process', $ModuleName, $DownloadDirectory));
         Start-Sleep -Seconds 2;
         Remove-Item -Path $DownloadDirectory -Recurse -Force;

@@ -6,7 +6,15 @@ Specific version upgrades are described below. Please note that version updates 
 
 ## Upgrading to v1.3.0 (pending)
 
-*No special steps required*
+### Breaking Changes
+
+#### Components
+
+* Please have a look on the changes made on the [Icinga PowerShell Plugins](https://icinga.com/docs/windows/latest/plugins/doc/30-Upgrading-Plugins/) for a smooth upgrade process
+
+#### Icinga PowerShell Kickstart
+
+* In order to be able to use the [Icinga PowerShell Kickstart Script](https://github.com/Icinga/icinga-powershell-kickstart) with v1.3.0 of the Icinga PowerShell Framework, you will have to upgrade the kickstart script to [v1.2.0](https://github.com/Icinga/icinga-powershell-kickstart/releases)
 
 ## Upgrading to v1.2.0 (2020-08-28)
 

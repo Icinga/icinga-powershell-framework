@@ -42,7 +42,7 @@ function Get-IcingaDirectorSelfServiceTicket()
 
     [string]$url = Join-WebPath -Path $DirectorUrl -ChildPath ([string]::Format('/self-service/ticket?key={0}', $ApiKey));
 
-    $response = Invoke-WebRequest -Uri $url -UseBasicParsing -Headers @{ 'accept' = 'application/json'; 'X-Director-Accept' = 'application/json' } -Method 'POST';
+    $response = Invoke-IcingaWebRequest -Uri $url -UseBasicParsing -Headers @{ 'accept' = 'application/json'; 'X-Director-Accept' = 'application/json' } -Method 'POST';
 
     if ($response.StatusCode -ne 200) {
         throw $response.Content;

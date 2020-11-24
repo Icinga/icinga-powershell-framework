@@ -13,6 +13,8 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 ### Enhancements
 
+* [#19](https://github.com/Icinga/icinga-powershell-framework/issues/19) Add support for proxy servers for web calls and re-arranges content from lib/web to lib/webserver and uses lib/web for new proxy/web calls
+* [#121](https://github.com/Icinga/icinga-powershell-framework/issues/121) Adds feature allowing sharing of local variables with Icinga Shell, by using `-ArgumentList`. They can then be accessed by using `$IcingaShellArgs` with the correct array index id, following the order of items added to `-ArgumentList`
 * [#136](https://github.com/Icinga/icinga-powershell-framework/pull/136) Adds support to ignore empty check packages and return `Ok` instead of `Unknown` if `-IgnoreEmptyPackage` is set on `New-IcingaCheckPackage`
 * [#137](https://github.com/Icinga/icinga-powershell-framework/issues/137) Adds Cmdlet to compare a DateTime object with the current DateTime and return the offset as Integer in seconds
 * [#139](https://github.com/Icinga/icinga-powershell-framework/pull/139) Add Cmdlet `Start-IcingaShellAsUser` to open an Icinga Shell as different user for testing
@@ -21,6 +23,9 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#142](https://github.com/Icinga/icinga-powershell-framework/pull/142) **Experimental:** Adds feature to cache the Framework code into a single file to speed up the entire loading process, mitigating the impact on performance on systems with few CPU cores. You enable disables this feature by using `Enable-IcingaFrameworkCodeCache` and `Disable-IcingaFrameworkCodeCache`. Updating the cache is done with `Write-IcingaFrameworkCodeCache`
 * [#149](https://github.com/Icinga/icinga-powershell-framework/pull/149) Adds support to add Wmi permissions for a specific user and namespace with `Add-IcingaWmiPermissions`. In addition you can remove users from Wmi namespaces by using `Remove-IcingaWmiPermissions`
 * [#153](https://github.com/Icinga/icinga-powershell-framework/pull/153) Adds support to add a knowledge base id to `Exit-IcingaThrowException` for easier referencing. This should mostly be used for custom messages, as we should track the main knowledge base id's inside the messages directly. Native messages should be split in a hashtable with a `Message` and `IWKB` key
+* [#155](https://github.com/Icinga/icinga-powershell-framework/pull/155) Adds support to write all objects collected by `Get-IcingaWindowsInformation` into the Windows EventLog in case the debug output for the Icinga PowerShell Framework is enabled.
+* [#162](https://github.com/Icinga/icinga-powershell-framework/pull/162) Adds feature to test the length of plugin custom variables during config generation and throws error in case the total length is bigger than 64 digits, as imports into the Icinga Director by using baskets is not possible otherwise
+* [#164](https://github.com/Icinga/icinga-powershell-framework/pull/164) Adds `exit` after calling `icinga` on Windows Terminal integration to ensure the shell will close in case the Icinga shell is closed
 
 ### Bugfixes
 
@@ -34,6 +39,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#140](https://github.com/Icinga/icinga-powershell-framework/issues/140) Fixes version fetching for not loaded modules during upgrades/plugin calls with `Get-IcingaPowerShellModuleVersion`
 * [#143](https://github.com/Icinga/icinga-powershell-framework/issues/143) Fixes the annoying hint from the analyzer to check space before open brace
 * [#152](https://github.com/Icinga/icinga-powershell-framework/issues/152) Fixes incorrect rendering for empty arrays which used `$null` incorrectly instead of `@()` and fixed ValidateSet which now also supports arrays as data type
+* [#159](https://github.com/Icinga/icinga-powershell-framework/pull/159) Fixes crash during update of the Icinga Framework, caused by the newly introduced experimental feature for code caching
 
 ## 1.2.0 (2020-08-28)
 

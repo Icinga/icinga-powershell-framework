@@ -36,7 +36,7 @@ function Get-IcingaFrameworkServiceBinary()
 
     if ([string]::IsNullOrEmpty($FrameworkServiceUrl)) {
         if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you provide a custom source of the service binary?' -Default 'n').result -eq 1) {
-            $LatestRelease       = (Invoke-WebRequest -Uri 'https://github.com/Icinga/icinga-powershell-service/releases/latest' -UseBasicParsing).BaseResponse.ResponseUri.AbsoluteUri;
+            $LatestRelease       = (Invoke-IcingaWebRequest -Uri 'https://github.com/Icinga/icinga-powershell-service/releases/latest' -UseBasicParsing).BaseResponse.ResponseUri.AbsoluteUri;
             $FrameworkServiceUrl = $LatestRelease.Replace('/tag/', '/download/');
             $Tag                 = $FrameworkServiceUrl.Split('/')[-1];
             $FrameworkServiceUrl = [string]::Format('{0}/icinga-service-{1}.zip', $FrameworkServiceUrl, $Tag);
@@ -64,9 +64,7 @@ function Get-IcingaFrameworkServiceBinary()
     $UpdateBin     = Join-Path -Path $ServiceDirectory -ChildPath 'icinga-service.exe.update';
     $ServiceBin    = Join-Path -Path $ServiceDirectory -ChildPath 'icinga-service.exe';
 
-    try {
-        Invoke-WebRequest -Uri $FrameworkServiceUrl -UseBasicParsing -OutFile $ZipArchive;
-    } catch {
+    if ((Invoke-IcingaWebRequest -Uri $FrameworkServiceUrl -UseBasicParsing -OutFile $ZipArchive).HasErrors) {
         Write-IcingaConsoleError -Message 'Failed to download the Icinga Service Binary from "{0}". Please try again.' -Objects $FrameworkServiceUrl;
         return Get-IcingaFrameworkServiceBinary;
     }

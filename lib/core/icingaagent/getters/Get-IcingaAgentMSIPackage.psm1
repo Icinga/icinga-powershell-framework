@@ -21,7 +21,7 @@ function Get-IcingaAgentMSIPackage()
     $LastUpdate   = $null;
 
     if ($Version -eq 'snapshot' -Or $Version -eq 'release') {
-        $Content      = (Invoke-WebRequest -Uri $Source -UseBasicParsing).RawContent.Split("`r`n");
+        $Content      = (Invoke-IcingaWebRequest -Uri $Source -UseBasicParsing).RawContent.Split("`r`n");
         $UsePackage   = $null;
 
         foreach ($line in $Content) {
@@ -62,7 +62,7 @@ function Get-IcingaAgentMSIPackage()
     if ($SkipDownload -eq $FALSE) {
         $DownloadPath = Join-Path $Env:TEMP -ChildPath $UsePackage;
         Write-IcingaConsoleNotice ([string]::Format('Downloading Icinga 2 Agent installer "{0}" into temp directory "{1}"', $UsePackage, $DownloadPath));
-        Invoke-WebRequest -Uri (Join-WebPath -Path $Source -ChildPath $UsePackage) -OutFile $DownloadPath;
+        Invoke-IcingaWebRequest -Uri (Join-WebPath -Path $Source -ChildPath $UsePackage) -OutFile $DownloadPath;
     }
 
     return @{
