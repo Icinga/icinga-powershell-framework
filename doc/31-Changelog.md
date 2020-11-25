@@ -27,6 +27,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#162](https://github.com/Icinga/icinga-powershell-framework/pull/162) Adds feature to test the length of plugin custom variables during config generation and throws error in case the total length is bigger than 64 digits, as imports into the Icinga Director by using baskets is not possible otherwise
 * [#163](https://github.com/Icinga/icinga-powershell-framework/pull/163) Adds native support for writing Icinga 2 configuration for plugins and allows to easy publish new configurations for modules with the new Cmdlet `Publish-IcingaPluginConfiguration`
 * [#164](https://github.com/Icinga/icinga-powershell-framework/pull/164) Adds `exit` after calling `icinga` on Windows Terminal integration to ensure the shell will close in case the Icinga shell is closed
+* [#168](https://github.com/Icinga/icinga-powershell-framework/pull/168) Adds support for new Icinga Director SelfService config arguments which will now ensure the wizard will run without asking questions by using the Icinga Director configuration (requires Icinga Director 1.8 or later)
 
 ### Bugfixes
 

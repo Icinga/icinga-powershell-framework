@@ -9,22 +9,28 @@ function Convert-IcingaDirectorSelfServiceArguments()
     }
 
     [hashtable]$DirectorArguments = @{
-        PackageSource       = $JsonInput.download_url;
-        AgentVersion        = $JsonInput.agent_version;
-        CAPort              = $JsonInput.agent_listen_port;
-        AllowVersionChanges = $JsonInput.allow_updates;
-        GlobalZones         = $JsonInput.global_zones;
-        ParentZone          = $JsonInput.parent_zone;
-        #CAEndpoint          = $JsonInput.ca_server;
-        Endpoints           = $JsonInput.parent_endpoints;
-        AddFirewallRule     = $JsonInput.agent_add_firewall_rule;
-        AcceptConnections   = $JsonInput.agent_add_firewall_rule;
-        ServiceUser         = $JsonInput.icinga_service_user;
-        IcingaMaster        = $JsonInput.IcingaMaster;
-        UpdateAgent         = $TRUE;
-        AddDirectorGlobal   = $FALSE;
-        AddGlobalTemplates  = $FALSE;
-        RunInstaller        = $TRUE;
+        PackageSource           = $JsonInput.download_url;
+        AgentVersion            = $JsonInput.agent_version;
+        CAPort                  = $JsonInput.agent_listen_port;
+        AllowVersionChanges     = $JsonInput.allow_updates;
+        GlobalZones             = $JsonInput.global_zones;
+        ParentZone              = $JsonInput.parent_zone;
+        #CAEndpoint             = $JsonInput.ca_server;
+        Endpoints               = $JsonInput.parent_endpoints;
+        AddFirewallRule         = $JsonInput.agent_add_firewall_rule;
+        AcceptConnections       = $JsonInput.agent_add_firewall_rule;
+        ServiceUser             = $JsonInput.icinga_service_user;
+        IcingaMaster            = $JsonInput.IcingaMaster;
+        InstallFrameworkService = $JsonInput.install_framework_service;
+        ServiceDirectory        = $JsonInput.framework_service_directory;
+        FrameworkServiceUrl     = $JsonInput.framework_service_url;
+        InstallFrameworkPlugins = $JsonInput.install_framework_plugins;
+        PluginsUrl              = $JsonInput.framework_plugins_url;
+        ConvertEndpointIPConfig = $JsonInput.resolve_parent_host;
+        UpdateAgent             = $TRUE;
+        AddDirectorGlobal       = $FALSE;
+        AddGlobalTemplates      = $FALSE;
+        RunInstaller            = $TRUE;
     };
 
     # Use NetworkService as default if nothing was transmitted by Director
