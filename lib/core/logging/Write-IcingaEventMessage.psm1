@@ -51,6 +51,25 @@ function Write-IcingaEventMessage()
         return;
     }
 
+    [int]$MaxEventLogMessageSize = 30000;
+
+    if ($EventLogMessage.Length -ge $MaxEventLogMessageSize) {
+        while ($EventLogMessage.Length -ge $MaxEventLogMessageSize) {
+            $CutMessage = $EventLogMessage.Substring(0, $MaxEventLogMessageSize);
+            Write-EventLog -LogName Application `
+                -Source 'Icinga for Windows' `
+                -EntryType $EntryType `
+                -EventId $EventId `
+                -Message $CutMessage;
+
+            $EventLogMessage = $EventLogMessage.Substring($MaxEventLogMessageSize, $EventLogMessage.Length - $MaxEventLogMessageSize);
+        }
+    }
+
+    if ([string]::IsNullOrEmpty($EventLogMessage)) {
+        return;
+    }
+
     Write-EventLog -LogName Application `
         -Source 'Icinga for Windows' `
         -EntryType $EntryType `
