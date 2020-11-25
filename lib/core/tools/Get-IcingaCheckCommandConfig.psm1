@@ -466,7 +466,11 @@ function Write-IcingaPlainConfigurationFiles()
                                 if ([string]::IsNullOrEmpty($DataField.description)) {
                                     break;
                                 }
-                                $IcingaConfig += [string]::Format('            description = "{0}"{1}', $DataField.description.Replace("`r`n", ''), (New-IcingaNewLine));
+                                $Description = $DataField.description.Replace("`r`n", ' ');
+                                $Description = $Description.Replace("`n", ' ');
+                                $Description = $Description.Replace("`r", ' ');
+                                $Description = $Description.Replace('"', "'");
+                                $IcingaConfig += [string]::Format('            description = "{0}"{1}', $Description, (New-IcingaNewLine));
                                 break;
                             }
                         }
@@ -481,6 +485,8 @@ function Write-IcingaPlainConfigurationFiles()
                 $IcingaConfig += New-IcingaNewLine;
             }
 
+            $IcingaConfig = $IcingaConfig.Substring(0, $IcingaConfig.Length - 2);
+
             # Close all arguments content
             $IcingaConfig += New-IcingaNewLine;
             $IcingaConfig += '    }'
@@ -494,6 +500,8 @@ function Write-IcingaPlainConfigurationFiles()
                 $Value = $CheckCommand.vars[$var];
                 $IcingaConfig += [string]::Format('    vars.{0} = {1}{2}', $var, $Value, (New-IcingaNewLine));
             }
+        } else {
+            $IcingaConfig += New-IcingaNewLine;
         }
 
         # Close the CheckCommand object
