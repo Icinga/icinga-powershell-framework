@@ -52,11 +52,6 @@ function Exit-IcingaThrowException()
     [string]$ExceptionName = '';
     [string]$ExceptionIWKB = $KnowledgeBaseId;
 
-    if ($ExceptionThrown -is [hashtable]) {
-        $ExceptionIWKB   = $ExceptionThrown.IWKB;
-        $ExceptionThrown = $ExceptionThrown.Message;
-    }
-
     if ($null -ne $ExceptionMessageLib) {
         foreach ($definedError in $ExceptionMessageLib.Keys) {
             if ($ExceptionMessageLib.$definedError -eq $ExceptionThrown) {
@@ -72,6 +67,11 @@ function Exit-IcingaThrowException()
             "`r`n",
             $InputString
         );
+    }
+
+    if ($ExceptionThrown -is [hashtable]) {
+        $ExceptionIWKB   = $ExceptionThrown.IWKB;
+        $ExceptionThrown = $ExceptionThrown.Message;
     }
 
     if ([string]::IsNullOrEmpty($ExceptionIWKB) -eq $FALSE) {
