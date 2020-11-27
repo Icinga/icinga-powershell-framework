@@ -15,7 +15,10 @@
         'Message' = 'The user you are running this command as does not have permission to access the requested Wmi-Object. To fix this, please add the user the Agent is running with to the "Remote Management Users" groups and grant access to the WMI branch for the Class/Namespace mentioned above and add the permission "Remote enable".';
         'IWKB'    = 'IWKB000001';
     }
-    WindowsUpdate      = 'The user you are running this command as does not have permission to access the Windows Update ComObject "Microsoft.Update.Session". In order to fetch currently installed and pending updates, please grant the user the required permissions for fetching this information.';
+    WindowsUpdate      = @{
+        'Message' = 'The user you are running this command as does not have permission to access the Windows Update ComObject "Microsoft.Update.Session".';
+        'IWKB'    = 'IWKB000006';
+    }
 };
 
 [hashtable]$Inputs = @{
