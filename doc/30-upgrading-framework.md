@@ -4,6 +4,10 @@ Upgrading Icinga PowerShell Framework is usually quite straightforward.
 
 Specific version upgrades are described below. Please note that version updates are incremental.
 
+## Upgrading to v1.4.0 (pending)
+
+*No special steps required*
+
 ## Upgrading to v1.3.0 (2020-12-01)
 
 ### Breaking Changes
