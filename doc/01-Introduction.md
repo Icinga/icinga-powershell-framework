@@ -77,6 +77,6 @@ Below you will find a list of currently available modules published by the Icing
 
 ### Additional Plugins
 
-| Icinga PowerShell Hyper-V (soon)| Icinga PowerShell MSSQL (soon) |
+| Icinga PowerShell Hyper-V (soon)| Icinga PowerShell MSSQL |
 | --- | --- |
-| ![Hyper-V](images/02_icons/hyperv.png) | ![Inventory](images/02_icons/mssql.png) |
+| ![Hyper-V](images/02_icons/hyperv.png) | [![Inventory](images/02_icons/mssql.png)](https://icinga.com/docs/windows/latest/mssql/doc/01-Introduction/) |
