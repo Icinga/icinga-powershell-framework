@@ -39,13 +39,6 @@ function Get-IcingaWmiSecurityData()
     $UserSID  = Get-IcingaUserSID -User $User;
     $WmiAcl   = $WmiSecurityData.Descriptor;
 
-    $WmiAccount = Get-IcingaWindowsInformation -ClassName Win32_Account -Filter ([string]::Format("Domain='{0}' and Name='{1}'", $UserData.Domain, $UserData.User));
-
-    if ($null -eq $WmiAccount) {
-        Write-IcingaConsoleError 'The specified user could not be found on the system: "{0}\{1}"' -Objects $UserData.Domain, $UserData.User;
-        return $null;
-    }
-
     if ([string]::IsNullOrEmpty($UserSID)) {
         Write-IcingaConsoleError 'Unable to load the SID for user "{0}"' -Objects $User;
         return $null;

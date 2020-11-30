@@ -45,6 +45,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#165](https://github.com/Icinga/icinga-powershell-framework/pull/165) Fixes fetching for Icinga Agent certificate for REST-Api daemon on upper/lower case hostname mismatch
 * [#166](https://github.com/Icinga/icinga-powershell-framework/pull/166) Fixes fetching of Icinga Agent MSI packages by correctly comparing versions to ensure we always use the latest version and fixes `release` usage for local/network drive sources
 * [#167](https://github.com/Icinga/icinga-powershell-framework/pull/167) Fixes error while writing EventLog entries with too large message size
+* [#177](https://github.com/Icinga/icinga-powershell-framework/pull/177) Fixes Wmi permissions to allow domain accounts while not being locally known on the system
 
 ## 1.2.0 (2020-08-28)
 
