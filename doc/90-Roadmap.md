@@ -22,7 +22,7 @@ Below is a schedule of milestones for new releases and components. The dates are
 | 2020-06-26 | [1.1.2-framework] in Icinga for Windows | |
 | 2020-08-31 | [1.2.0-framework] in Icinga for Windows<br>[1.2.0-plugins] in Icinga PowerShell Plugins | [Icinga for Windows 1.2.0 Release](https://icinga.com/2020/08/31/releasing-icinga-for-windows-v1-2-0/) |
 | 2020-10-13 | [1.0.0-mssql] in Icinga PowerShell MSSQL | [Icinga PowerShell MSSQL v1.0.0 Release](https://icinga.com/2020/10/13/icinga-for-windows-mssql-plugin-release-v1-0-0/)
-| 2020-12-01 | [1.3.0-framework] in Icinga for Windows<br>[1.3.0-plugins] in Icinga PowerShell Plugins<br>[1.2.0-kickstart] in Icinga PowerShell Kickstart | tbd |
+| 2020-12-01 | [1.3.0-framework] in Icinga for Windows<br>[1.3.0-plugins] in Icinga PowerShell Plugins<br>[1.2.0-kickstart] in Icinga PowerShell Kickstart | [Icinga for Windows v1.3.0 – Yet another release!](https://icinga.com/blog/2020/12/01/icinga-for-windows-v1-3-0-yet-another-release/) |
 | 2021-01-12 | [1.0.0-hyperv] in Icinga PowerShell Hyper-V<br>[1.0.0-cluster] in Icinga PowerShell Cluster | tbd |
 | 2021-03-02 | [1.4.0-framework] in Icinga for Windows | tbd |
 
