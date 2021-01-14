@@ -15,6 +15,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 ### Bugfixes
 
+* [#186](https://github.com/Icinga/icinga-powershell-framework/issues/186) Fixes path handling for custom local/web path sources for service binary installation
 * [#188](https://github.com/Icinga/icinga-powershell-framework/pull/188) Removes hardcoded zones `director-global` and `global-zones` which were always set regardless of user specification. This fix will ensure the user has the option to add or not add these zones
 * [#189](https://github.com/Icinga/icinga-powershell-framework/pull/189) Fixes wrong documented user group for accessing Performance Counter objects which should be `Performance Monitor Users`
 
@@ -26,11 +27,11 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 * [#19](https://github.com/Icinga/icinga-powershell-framework/issues/19) Add support for proxy servers for web calls and re-arranges content from lib/web to lib/webserver and uses lib/web for new proxy/web calls
 * [#121](https://github.com/Icinga/icinga-powershell-framework/issues/121) Adds feature allowing sharing of local variables with Icinga Shell, by using `-ArgumentList`. They can then be accessed by using `$IcingaShellArgs` with the correct array index id, following the order of items added to `-ArgumentList`
+* [#134](https://github.com/Icinga/icinga-powershell-framework/pull/134) Adds Cmdlet `Test-IcingaWindowsInformation` to check if a WMI class exist and if we can fetch data from it. In addition we add support for binary value comparison with the new Cmdlet `Test-IcingaBinaryOperator`
 * [#136](https://github.com/Icinga/icinga-powershell-framework/pull/136) Adds support to ignore empty check packages and return `Ok` instead of `Unknown` if `-IgnoreEmptyPackage` is set on `New-IcingaCheckPackage`
 * [#137](https://github.com/Icinga/icinga-powershell-framework/issues/137) Adds Cmdlet to compare a DateTime object with the current DateTime and return the offset as Integer in seconds
 * [#139](https://github.com/Icinga/icinga-powershell-framework/pull/139) Add Cmdlet `Start-IcingaShellAsUser` to open an Icinga Shell as different user for testing
 * [#141](https://github.com/Icinga/icinga-powershell-framework/pull/141) Adds Cmdlet `Convert-IcingaPluginThresholds` as generic approach to convert Icinga Thresholds with units to the lowest unit of this type.
-* [#134](https://github.com/Icinga/icinga-powershell-framework/pull/134) Adds Cmdlet `Test-IcingaWindowsInformation` to check if a WMI class exist and if we can fetch data from it. In addition we add support for binary value comparison with the new Cmdlet `Test-IcingaBinaryOperator`
 * [#142](https://github.com/Icinga/icinga-powershell-framework/pull/142) **Experimental:** Adds feature to cache the Framework code into a single file to speed up the entire loading process, mitigating the impact on performance on systems with few CPU cores. You enable disables this feature by using `Enable-IcingaFrameworkCodeCache` and `Disable-IcingaFrameworkCodeCache`. Updating the cache is done with `Write-IcingaFrameworkCodeCache`
 * [#149](https://github.com/Icinga/icinga-powershell-framework/pull/149) Adds support to add Wmi permissions for a specific user and namespace with `Add-IcingaWmiPermissions`. In addition you can remove users from Wmi namespaces by using `Remove-IcingaWmiPermissions`
 * [#153](https://github.com/Icinga/icinga-powershell-framework/pull/153) Adds support to add a knowledge base id to `Exit-IcingaThrowException` for easier referencing. This should mostly be used for custom messages, as we should track the main knowledge base id's inside the messages directly. Native messages should be split in a hashtable with a `Message` and `IWKB` key
