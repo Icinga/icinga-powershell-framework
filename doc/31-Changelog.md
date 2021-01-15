@@ -7,6 +7,16 @@ documentation before upgrading to a new release.
 
 Released closed milestones can be found on [GitHub](https://github.com/Icinga/icinga-powershell-framework/milestones?state=closed).
 
+## 1.3.1 (2021-02-04)
+
+[Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/12?closed=1)
+
+### Enhancements
+
+### Bugfixes
+
+* [#188](https://github.com/Icinga/icinga-powershell-framework/pull/188) Removes hardcoded zones `director-global` and `global-zones` which were always set regardless of user specification. This fix will ensure the user has the option to add or not add these zones
+
 ## 1.3.0 (2020-12-01)
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/10?closed=1)
