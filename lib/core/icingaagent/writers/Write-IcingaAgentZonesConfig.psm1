@@ -58,13 +58,6 @@ function Write-IcingaAgentZonesConfig()
     $ZonesConf = [string]::Format('{0}    endpoints = [ "{1}" ];{2}', $ZonesConf, $Hostname, "`r`n");
     $ZonesConf = [string]::Format('{0}{1}{2}{2}', $ZonesConf, '}', "`r`n");
 
-    if ($GlobalZones.Contains('director-global') -eq $FALSE) {
-        $GlobalZones += 'director-global';
-    }
-    if ($GlobalZones.Contains('global-templates') -eq $FALSE) {
-        $GlobalZones += 'global-templates';
-    }
-
     foreach ($zone in $GlobalZones) {
         $ZonesConf = [string]::Format('{0}object Zone "{1}" {2}{3}', $ZonesConf, $zone, '{', "`r`n");
         $ZonesConf = [string]::Format('{0}    global = true;{1}', $ZonesConf, "`r`n");
