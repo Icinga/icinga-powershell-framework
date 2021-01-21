@@ -26,6 +26,8 @@ function Get-IcingaServices()
         [array]$DependingServices = $null;
         $ServiceExitCode          = 0;
         [string]$ServiceUser      = '';
+        [int]$StartModeId         = 5;
+        [string]$StartMode        = 'Unknown';
 
         if ($Exclude -contains $service.ServiceName) {
             continue;
@@ -35,6 +37,10 @@ function Get-IcingaServices()
             if ($wmiService.Name -eq $service.ServiceName) {
                 $ServiceUser     = $wmiService.StartName;
                 $ServiceExitCode = $wmiService.ExitCode;
+                if ([string]::IsNullOrEmpty($wmiService.StartMode) -eq $FALSE) {
+                    $StartModeId = ([int]$IcingaEnums.ServiceWmiStartupType[$wmiService.StartMode]);
+                    $StartMode   = $IcingaEnums.ServiceStartupTypeName[$StartModeId];
+                }
                 break;
             }
         }
@@ -80,8 +86,8 @@ function Get-IcingaServices()
                     };
                     'ServiceHandle'       = $service.ServiceHandle;
                     'StartType'           = @{
-                        'raw'   = [int]$service.StartType;
-                        'value' = $service.StartType;
+                        'raw'   = $StartModeId;
+                        'value' = $StartMode;
                     };
                     'ServiceUser'         = $ServiceUser;
                     'ExitCode'            = $ServiceExitCode;

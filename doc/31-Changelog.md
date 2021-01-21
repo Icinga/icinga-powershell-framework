@@ -18,6 +18,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#186](https://github.com/Icinga/icinga-powershell-framework/issues/186) Fixes path handling for custom local/web path sources for service binary installation
 * [#188](https://github.com/Icinga/icinga-powershell-framework/pull/188) Removes hardcoded zones `director-global` and `global-zones` which were always set regardless of user specification. This fix will ensure the user has the option to add or not add these zones
 * [#189](https://github.com/Icinga/icinga-powershell-framework/pull/189) Fixes wrong documented user group for accessing Performance Counter objects which should be `Performance Monitor Users`
+* [#192](https://github.com/Icinga/icinga-powershell-framework/pull/192) Fixes code base for `Invoke-IcingaCheckService` by preferring to fetch the startup type of services by using WMI instead of `Get-Services`, as the result of `Get-Services` might be empty in some cases
 * [#195](https://github.com/Icinga/icinga-powershell-framework/pull/195) Fix Agent installer crash on package lookup with different files in directory
 * [#197](https://github.com/Icinga/icinga-powershell-framework/pull/197) Fixes progress bar appearance on check outputs for certain plugins, by disabling the entire PowerShell progress bar during the usage of Icinga for Windows
 
