@@ -13,6 +13,8 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 ### Enhancements
 
+* [#193](https://github.com/Icinga/icinga-powershell-framework/pull/193) Adds optional support for adding milliseconds to `Get-IcingaUnixTime` with the `-Milliseconds` argument for more detailed time comparison
+
 ### Bugfixes
 
 * [#188](https://github.com/Icinga/icinga-powershell-framework/pull/188) Removes hardcoded zones `director-global` and `global-zones` which were always set regardless of user specification. This fix will ensure the user has the option to add or not add these zones
