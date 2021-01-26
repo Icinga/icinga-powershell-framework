@@ -26,7 +26,16 @@ function Get-IcingaAgentMSIPackage()
             $Content = Get-ChildItem -Path $Source;
 
             foreach ($entry in $Content) {
-                $PackageVersion = ($entry.Name.Split('-')[1]).Replace('v', '');
+                # Only check for MSI packages
+                if ($entry.Extension.ToLower() -ne '.msi') {
+                    continue;
+                }
+
+                $PackageVersion = '';
+
+                if ($entry.Name.ToLower().Contains('-')) {
+                    $PackageVersion = ($entry.Name.Split('-')[1]).Replace('v', '');
+                }
 
                 if ($Version -eq 'snapshot') {
                     if ($PackageVersion -eq 'snapshot')  {
@@ -40,8 +49,12 @@ function Get-IcingaAgentMSIPackage()
                     continue;
                 }
 
-                if ($null -eq $UseVersion -Or [version]$PackageVersion -ge [version]$UseVersion) {
-                    $UseVersion = $PackageVersion;
+                try {
+                    if ($null -eq $UseVersion -Or [version]$PackageVersion -ge [version]$UseVersion) {
+                        $UseVersion = $PackageVersion;
+                    }
+                } catch {
+                    # Nothing to catch specifically   
                 }
             }
         } else {
