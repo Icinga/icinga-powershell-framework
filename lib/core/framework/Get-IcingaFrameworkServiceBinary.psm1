@@ -59,7 +59,12 @@ function Get-IcingaFrameworkServiceBinary()
     }
 
     $TmpDirectory  = New-IcingaTemporaryDirectory;
-    $ZipArchive    = Join-Path -Path $TmpDirectory -ChildPath ($FrameworkServiceUrl.Split('/')[-1]);
+    if (Test-Path $FrameworkServiceUrl) {
+        $ZipArchive = Join-Path -Path $TmpDirectory -ChildPath ($FrameworkServiceUrl.Replace('/', '\').Split('\')[-1]);
+    } else {
+        $ZipArchive = Join-Path -Path $TmpDirectory -ChildPath ($FrameworkServiceUrl.Split('/')[-1]);
+    }
+
     $TmpServiceBin = Join-Path -Path $TmpDirectory -ChildPath 'icinga-service.exe';
     $UpdateBin     = Join-Path -Path $ServiceDirectory -ChildPath 'icinga-service.exe.update';
     $ServiceBin    = Join-Path -Path $ServiceDirectory -ChildPath 'icinga-service.exe';
