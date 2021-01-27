@@ -61,6 +61,7 @@ function Use-Icinga()
         }
     }
     New-IcingaPerformanceCounterCache;
+    Disable-IcingaProgressPreference;
 
     # Enable DebugMode in case it is enabled in our config
     if (Get-IcingaFrameworkDebugMode) {
