@@ -20,6 +20,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#189](https://github.com/Icinga/icinga-powershell-framework/pull/189) Fixes wrong documented user group for accessing Performance Counter objects which should be `Performance Monitor Users`
 * [#192](https://github.com/Icinga/icinga-powershell-framework/pull/192) Fixes code base for `Invoke-IcingaCheckService` by preferring to fetch the startup type of services by using WMI instead of `Get-Services`, as the result of `Get-Services` might be empty in some cases
 * [#195](https://github.com/Icinga/icinga-powershell-framework/pull/195) Fix Agent installer crash on package lookup with different files in directory
+* [#196](https://github.com/Icinga/icinga-powershell-framework/pull/196) Fix Icinga 2 .conf file generator to no longer generate invalid plain configuration files
 * [#197](https://github.com/Icinga/icinga-powershell-framework/pull/197) Fixes progress bar appearance on check outputs for certain plugins, by disabling the entire PowerShell progress bar during the usage of Icinga for Windows
 
 ## 1.3.0 (2020-12-01)
