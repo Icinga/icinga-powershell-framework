@@ -38,6 +38,28 @@
     'c'  = 'counter';
 };
 
+<##################################################################################################
+################# Service Enums ##################################################################
+##################################################################################################>
+
+[hashtable]$ServiceStartupTypeName = @{
+    0 = 'Boot';
+    1 = 'System';
+    2 = 'Automatic';
+    3 = 'Manual';
+    4 = 'Disabled';
+    5 = 'Unknown'; # Custom
+}
+
+[hashtable]$ServiceWmiStartupType = @{
+    'Boot'     = 0;
+    'System'   = 1;
+    'Auto'     = 2;
+    'Manual'   = 3;
+    'Disabled' = 4;
+    'Unknown'  = 5; # Custom
+}
+
 <#
  # Once we defined a new enum hashtable above, simply add it to this list
  # to make it available within the entire module.
@@ -50,6 +72,9 @@
     IcingaExitCodeText     = $IcingaExitCodeText;
     IcingaExitCodeColor    = $IcingaExitCodeColor;
     IcingaMeasurementUnits = $IcingaMeasurementUnits;
+     #services
+    ServiceStartupTypeName = $ServiceStartupTypeName;
+    ServiceWmiStartupType  = $ServiceWmiStartupType;
 }
 
 Export-ModuleMember -Variable @( 'IcingaEnums' );
