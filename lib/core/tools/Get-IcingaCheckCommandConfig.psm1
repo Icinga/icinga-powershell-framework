@@ -430,6 +430,10 @@ function Write-IcingaPlainConfigurationFiles()
                 foreach ($argconfig in $CheckArgument.Keys) {
                     $Value = '';
 
+                    if ($argconfig -eq 'set_if_format') {
+                        continue;
+                    }
+
                     # Order is numeric -> no "" required
                     if ($argconfig -eq 'order') {
                         $StringFormater = '            {0} = {1}{2}';
@@ -467,6 +471,7 @@ function Write-IcingaPlainConfigurationFiles()
                                     break;
                                 }
                                 $Description = $DataField.description.Replace("`r`n", ' ');
+                                $Description = $Description.Replace("\", '\\');
                                 $Description = $Description.Replace("`n", ' ');
                                 $Description = $Description.Replace("`r", ' ');
                                 $Description = $Description.Replace('"', "'");
@@ -497,8 +502,8 @@ function Write-IcingaPlainConfigurationFiles()
             $IcingaConfig += New-IcingaNewLine;
 
             foreach ($var in $CheckCommand.vars.Keys) {
-                $Value = $CheckCommand.vars[$var];
-                $IcingaConfig += [string]::Format('    vars.{0} = {1}{2}', $var, $Value, (New-IcingaNewLine));
+                [string]$Value = $CheckCommand.vars[$var];
+                $IcingaConfig += [string]::Format('    vars.{0} = {1}{2}', $var, $Value.ToLower(), (New-IcingaNewLine));
             }
         } else {
             $IcingaConfig += New-IcingaNewLine;
