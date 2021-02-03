@@ -15,6 +15,10 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 * [#193](https://github.com/Icinga/icinga-powershell-framework/pull/193) Adds optional support for adding milliseconds to `Get-IcingaUnixTime` with the `-Milliseconds` argument for more detailed time comparison
 
+## 1.3.1 (2021-02-04)
+
+[Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/12?closed=1)
+
 ### Bugfixes
 
 * [#186](https://github.com/Icinga/icinga-powershell-framework/issues/186) Fixes path handling for custom local/web path sources for service binary installation
