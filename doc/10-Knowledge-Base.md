@@ -14,3 +14,4 @@ For this reason you will find a list of Icinga knowledge base entries below. Ent
 | [IWKB000004](knowledgebase/IWKB000004.md) | Use-Icinga : The 'Use-Icinga' command was found in the module 'icinga-powershell-framework', but the module could not be loaded. For more information, run 'Import-Module icinga-powershell-framework' |
 | [IWKB000005](knowledgebase/IWKB000005.md) | powershell.exe : Failed to start service 'Icinga PowerShell Service (icingapowershell)'. |
 | [IWKB000006](knowledgebase/IWKB000006.md) | The user you are running this command as does not have permission to access the Windows Update ComObject "Microsoft.Update.Session". |
+| [IWKB000007](knowledgebase/IWKB000007.md) | Icinga Director Self-Service API fails with errors. [Error]: The remote host for address "..." could not be resolved [Error]: Failed to connect to your Icinga Director at "...". Please try again. |
