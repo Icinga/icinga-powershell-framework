@@ -93,7 +93,7 @@ function Write-IcingaFrameworkCodeCache()
     if (Get-IcingaFrameworkCodeCache) {
         Import-IcingaLib '\' -Init -CompileCache;
     } else {
-        Write-IcingaConsoleNotice 'The experimental code caching feature is currently not enabled. You can enable it with "Enable-IcingaFrameworkCodeCache"';
+        Write-IcingaConsoleNotice 'The code caching feature is currently not enabled. You can enable it with "Enable-IcingaFrameworkCodeCache"';
     }
 }
 
@@ -332,7 +332,7 @@ function Invoke-IcingaCommand()
         Write-Output ([string]::Format('** Copyright {0}', $IcingaFrameworkData.Copyright));
         Write-Output ([string]::Format('** User environment {0}\{1}', $env:USERDOMAIN, $env:USERNAME));
         if (Get-IcingaFrameworkCodeCache) {
-            Write-Output ([string]::Format('** Warning: Icinga Framework Code Caching is enabled'));
+            Write-Output ([string]::Format('** Note: Icinga Framework Code Caching is enabled'));
         }
         Write-Output '******************************************************';
     }

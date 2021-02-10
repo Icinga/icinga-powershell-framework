@@ -1,12 +1,12 @@
 <#
 .SYNOPSIS
-   Fetches the current enable/disable state of the experimental feature
+   Fetches the current enable/disable state of the feature
    for caching the Icinga PowerShell Framework code
 .DESCRIPTION
-   Fetches the current enable/disable state of the experimental feature
+   Fetches the current enable/disable state of the feature
    for caching the Icinga PowerShell Framework code
 .FUNCTIONALITY
-   Experimental: Get the current code caching configuration of the
+   Get the current code caching configuration of the
    Icinga PowerShell Framework
 .EXAMPLE
    PS>Get-IcingaFrameworkCodeCache;
@@ -18,7 +18,7 @@
 
 function Get-IcingaFrameworkCodeCache()
 {
-    $CodeCaching = Get-IcingaPowerShellConfig -Path 'Framework.Experimental.CodeCaching';
+    $CodeCaching = Get-IcingaPowerShellConfig -Path 'Framework.CodeCaching';
 
     if ($null -eq $CodeCaching) {
         return $FALSE;
