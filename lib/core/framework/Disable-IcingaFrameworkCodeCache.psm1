@@ -1,12 +1,12 @@
 <#
 .SYNOPSIS
-   Disables the experimental feature to cache all functions into a single file,
+   Disables the feature to cache all functions into a single file,
    allowing quicker loading times of the Icinga PowerShell Framework
 .DESCRIPTION
-   Disables the experimental feature to cache all functions into a single file,
+   Disables the feature to cache all functions into a single file,
    allowing quicker loading times of the Icinga PowerShell Framework
 .FUNCTIONALITY
-   Experimental: Disables the Icinga for Windows code caching
+   Disables the Icinga for Windows code caching
 .EXAMPLE
    PS>Disable-IcingaFrameworkCodeCache;
 .LINK
@@ -15,5 +15,5 @@
 
 function Disable-IcingaFrameworkCodeCache()
 {
-    Set-IcingaPowerShellConfig -Path 'Framework.Experimental.CodeCaching' -Value $FALSE;
+    Set-IcingaPowerShellConfig -Path 'Framework.CodeCaching' -Value $FALSE;
 }
