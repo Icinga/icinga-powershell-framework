@@ -7,6 +7,7 @@ The Icinga PowerShell Framework ships with a bunch of Cmdlets for monitoring, me
 * [Automated Framework and Component deployment](frameworkusage/01-Automated-Framework-and-Component-Deployment.md)
 * [Enable Proxy Server](frameworkusage/02-Enable-Proxy-Server.md)
 * [Install Wizard Guide](frameworkusage/03-Install-Wizard-Guide.md)
+* [Disable Certificate Validation](frameworkusage/04-Disable-Certificate-Validation.md)
 
 ## Icinga Agent Management
 
