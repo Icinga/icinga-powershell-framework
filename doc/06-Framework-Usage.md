@@ -17,3 +17,4 @@ The Icinga PowerShell Framework ships with a bunch of Cmdlets for monitoring, me
 * [Run Icinga Agent as other Service User](frameworkusage/33-Run-Icinga-Agent-As-Other-Service-User.md)
 * [Install/Update Icinga Agent](frameworkusage/35-Install-Update-Icinga-Agent.md)
 * [Uninstall Icinga Agent](frameworkusage/34-Uninstall-Icinga-Agent.md)
+* [Flush Icinga Agent API Directory](frameworkusage/36-Flush-Icinga-Agent-API-Directory.md)

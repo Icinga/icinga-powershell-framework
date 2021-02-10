@@ -14,6 +14,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 ### Enhancements
 
 * [#193](https://github.com/Icinga/icinga-powershell-framework/pull/193) Adds optional support for adding milliseconds to `Get-IcingaUnixTime` with the `-Milliseconds` argument for more detailed time comparison
+* [#198](https://github.com/Icinga/icinga-powershell-framework/pull/198) Adds support to flush the content of the Icinga Agent API directory with a single Cmdlet `Clear-IcingaAgentApiDirectory`
 
 ## 1.3.1 (2021-02-04)
 
