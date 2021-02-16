@@ -53,11 +53,14 @@
  # Example usage:
  # $IcingaException.Inputs.PerformanceCounter
  #>
-[hashtable]$IcingaExceptions = @{
-    Permission    = $Permission;
-    Inputs        = $Inputs;
-    Configuration = $Configuration;
-    Connection    = $Connection;
+
+if ($null -eq $IcingaExceptions) {
+    [hashtable]$IcingaExceptions = @{
+        Permission    = $Permission;
+        Inputs        = $Inputs;
+        Configuration = $Configuration;
+        Connection    = $Connection;
+    }
 }
 
 Export-ModuleMember -Variable @( 'IcingaExceptions' );
