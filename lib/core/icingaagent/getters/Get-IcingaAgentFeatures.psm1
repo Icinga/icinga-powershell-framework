@@ -3,6 +3,13 @@ function Get-IcingaAgentFeatures()
     $Binary       = Get-IcingaAgentBinary;
     $ConfigResult = Start-IcingaProcess -Executable $Binary -Arguments 'feature list';
 
+    if ($ConfigResult.ExitCode -ne 0) {
+        return @{
+            'Enabled'  = @();
+            'Disabled' = @();
+        }
+    }
+
     $DisabledFeatures = (
         $ConfigResult.Message.SubString(
             0,

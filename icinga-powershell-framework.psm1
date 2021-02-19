@@ -326,33 +326,38 @@ function Invoke-IcingaCommand()
     [CmdletBinding()]
     param (
         $ScriptBlock,
-        [switch]$SkipHeader = $FALSE,
+        [switch]$SkipHeader  = $FALSE,
+        [switch]$Manage      = $FALSE,
         [array]$ArgumentList = @()
     );
 
     Import-LocalizedData `
-        -BaseDirectory $PSScriptRoot `
+        -BaseDirectory (Join-Path -Path (Get-IcingaFrameworkRootPath) -ChildPath 'icinga-powershell-framework') `
         -FileName 'icinga-powershell-framework.psd1' `
         -BindingVariable IcingaFrameworkData;
 
     # Print a header informing our user that loaded the Icinga Framework with a specific
     # version. We can also skip the header by using $SKipHeader
-    if ([string]::IsNullOrEmpty($ScriptBlock) -And $SkipHeader -eq $FALSE) {
-        Write-Output '******************************************************';
-        Write-Output ([string]::Format('** Icinga PowerShell Framework {0}', $IcingaFrameworkData.PrivateData.Version));
-        Write-Output ([string]::Format('** Copyright {0}', $IcingaFrameworkData.Copyright));
-        Write-Output ([string]::Format('** User environment {0}\{1}', $env:USERDOMAIN, $env:USERNAME));
+    if ([string]::IsNullOrEmpty($ScriptBlock) -And $SkipHeader -eq $FALSE -And $Manage -eq $FALSE) {
+        [array]$Headers = @(
+            'Icinga for Windows $FrameworkVersion',
+            'Copyright $Copyright',
+            'User environment $UserDomain\$Username'
+        );
+
         if (Get-IcingaFrameworkCodeCache) {
-            Write-Output ([string]::Format('** Note: Icinga Framework Code Caching is enabled'));
+            $Headers += [string]::Format('Note: Icinga Framework Code Caching is enabled');
         }
-        Write-Output '******************************************************';
+
+        Write-IcingaConsoleHeader -HeaderLines $Headers;
     }
 
     powershell.exe -NoExit -Command {
         $Script          = $args[0];
         $RootPath        = $args[1];
         $Version         = $args[2];
-        $IcingaShellArgs = $args[3];
+        $Manage          = $args[3];
+        $IcingaShellArgs = $args[4];
 
         # Load our Icinga Framework
         Use-Icinga;
@@ -361,6 +366,11 @@ function Invoke-IcingaCommand()
 
         # Set the location to the Icinga Framework module folder
         Set-Location $RootPath;
+
+        if ($Manage) {
+            Install-Icinga;
+            exit $LASTEXITCODE;
+        }
 
         # If we added a block to execute, do it right here and exit the shell
         # with the last exit code of the command
@@ -375,7 +385,7 @@ function Invoke-IcingaCommand()
             return "> "
         }
 
-    } -Args $ScriptBlock, $PSScriptRoot, $IcingaFrameworkData.PrivateData.Version, $ArgumentList;
+    } -Args $ScriptBlock, $PSScriptRoot, $IcingaFrameworkData.PrivateData.Version, ([bool]$Manage), $ArgumentList;
 }
 
 function Start-IcingaShellAsUser()

@@ -28,14 +28,15 @@ function Get-IcingaFrameworkServiceBinary()
 {
     param(
         [string]$FrameworkServiceUrl,
-        [string]$ServiceDirectory
+        [string]$ServiceDirectory,
+        [switch]$Release             = $FALSE
     );
 
     Set-IcingaTLSVersion;
     $ProgressPreference = "SilentlyContinue";
 
-    if ([string]::IsNullOrEmpty($FrameworkServiceUrl)) {
-        if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you provide a custom source of the service binary?' -Default 'n').result -eq 1) {
+    if ([string]::IsNullOrEmpty($FrameworkServiceUrl) -Or $Release) {
+        if ($Release -Or (Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you provide a custom source of the service binary?' -Default 'n').result -eq 1) {
             $LatestRelease       = (Invoke-IcingaWebRequest -Uri 'https://github.com/Icinga/icinga-powershell-service/releases/latest' -UseBasicParsing).BaseResponse.ResponseUri.AbsoluteUri;
             $FrameworkServiceUrl = $LatestRelease.Replace('/tag/', '/download/');
             $Tag                 = $FrameworkServiceUrl.Split('/')[-1];

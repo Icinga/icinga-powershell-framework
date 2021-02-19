@@ -16,4 +16,9 @@
 function Disable-IcingaFrameworkCodeCache()
 {
     Set-IcingaPowerShellConfig -Path 'Framework.CodeCaching' -Value $FALSE;
+
+    # Remove the cache file in case it exists and the feature is disabled
+    if (Test-Path -Path (Get-IcingaFrameworkCodeCacheFile)) {
+        Remove-ItemSecure -Path (Get-IcingaFrameworkCodeCacheFile) -Force | Out-Null;
+    }
 }

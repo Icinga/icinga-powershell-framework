@@ -4,7 +4,7 @@
     GUID              = 'fcd7a805-a41b-49f9-afee-9d17a2b76d42'
     Author            = 'Lord Hepipud'
     CompanyName       = 'Icinga GmbH'
-    Copyright         = '(c) 2020 Icinga GmbH | MIT'
+    Copyright         = '(c) 2021 Icinga GmbH | MIT'
     Description       = 'Icinga for Windows module which allows to entirely monitor the Windows Host system.'
     PowerShellVersion = '4.0'
     NestedModules     = @(
@@ -27,7 +27,9 @@
         '.\lib\web\Disable-IcingaProgressPreference.psm1',
         '.\lib\core\tools\New-IcingaNewLine.psm1',
         '.\lib\core\logging\Write-IcingaConsolePlain.psm1',
-        '.\lib\core\tools\Test-IcingaFunction.psm1'
+        '.\lib\core\tools\Test-IcingaFunction.psm1',
+        '.\lib\core\tools\Write-IcingaConsoleHeader.psm1',
+        '.\lib\core\framework\Test-IcingaFrameworkConsoleOutput.psm1'
     )
     FunctionsToExport = @(
         'Use-Icinga',
@@ -63,7 +65,9 @@
         'Disable-IcingaProgressPreference',
         'New-IcingaNewLine',
         'Write-IcingaConsolePlain',
-        'Test-IcingaFunction'
+        'Test-IcingaFunction',
+        'Write-IcingaConsoleHeader',
+        'Test-IcingaFrameworkConsoleOutput'
     )
     CmdletsToExport   = @('*')
     VariablesToExport = '*'
