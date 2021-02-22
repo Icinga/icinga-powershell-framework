@@ -28,7 +28,7 @@ function Read-IcingaPowerShellConfig()
         return (New-Object -TypeName PSObject);
     }
 
-    [string]$Content = Get-Content -Path $ConfigFile;
+    [string]$Content = Read-IcingaFileContent -File $ConfigFile;
 
     if ([string]::IsNullOrEmpty($Content)) {
         return (New-Object -TypeName PSObject);
