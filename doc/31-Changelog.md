@@ -17,6 +17,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#193](https://github.com/Icinga/icinga-powershell-framework/pull/193) Adds optional support for adding milliseconds to `Get-IcingaUnixTime` with the `-Milliseconds` argument for more detailed time comparison
 * [#198](https://github.com/Icinga/icinga-powershell-framework/pull/198) Adds support to flush the content of the Icinga Agent API directory with a single Cmdlet `Clear-IcingaAgentApiDirectory`
 * [#203](https://github.com/Icinga/icinga-powershell-framework/pull/203) Removes experimental state of the Icinga PowerShell Framework code caching and adds docs on how to use the feature
+* [#205](https://github.com/Icinga/icinga-powershell-framework/pull/205) Ensure Icinga for Windows configuration file is opened as read-only for every single task besides actually modifying configuration content
 
 ## 1.3.1 (2021-02-04)
 

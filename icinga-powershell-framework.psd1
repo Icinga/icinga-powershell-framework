@@ -14,7 +14,8 @@
         '.\lib\config\Test-IcingaPowerShellConfigItem.psm1',
         '.\lib\core\logging\Write-IcingaConsoleOutput.psm1',
         '.\lib\core\logging\Write-IcingaConsoleNotice.psm1',
-        '.\lib\core\logging\Write-IcingaConsoleWarning.psm1'
+        '.\lib\core\logging\Write-IcingaConsoleWarning.psm1',
+        '.\lib\core\tools\Read-IcingaFileContent.psm1'
     )
     FunctionsToExport = @(
         'Use-Icinga',
@@ -37,7 +38,8 @@
         'Test-IcingaPowerShellConfigItem',
         'Write-IcingaConsoleOutput',
         'Write-IcingaConsoleNotice',
-        'Write-IcingaConsoleWarning'
+        'Write-IcingaConsoleWarning',
+        'Read-IcingaFileContent'
     )
     CmdletsToExport   = @('*')
     VariablesToExport = '*'
