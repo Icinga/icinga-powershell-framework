@@ -1,8 +1,12 @@
 function New-IcingaCheckSchedulerEnvironment()
 {
+    # Legacy code
     $IcingaDaemonData.IcingaThreadContent.Add('Scheduler', @{ });
-    if ($IcingaDaemonData.IcingaThreadContent['Scheduler'].ContainsKey('PluginCache') -eq $FALSE) {
-        $IcingaDaemonData.IcingaThreadContent['Scheduler'].Add('PluginCache', @());
-        $IcingaDaemonData.IcingaThreadContent['Scheduler'].Add('PluginPerfData', @());
+
+    if ($null -eq $global:Icinga) {
+        $global:Icinga = @{};
     }
+
+    $global:Icinga.Add('CheckResults', @());
+    $global:Icinga.Add('PerfData', @());
 }

@@ -101,6 +101,9 @@ function Start-IcingaServiceCheckTask()
                 try {
                     & $CheckCommand @Arguments | Out-Null;
 
+                    Get-IcingaCheckSchedulerPerfData | Out-Null;
+                    Get-IcingaCheckSchedulerPluginOutput | Out-Null;
+
                     $UnixTime = Get-IcingaUnixTime;
 
                     foreach ($result in $IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler[$CheckCommand]['results'].Keys) {

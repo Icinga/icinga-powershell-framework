@@ -45,9 +45,8 @@ function Get-IcingaPluginPerfDataContent()
                     $cachedresult = (New-IcingaPerformanceDataEntry -PerfDataObject $data -Label $SearchEntry -Value $checkresult.Value);
 
                     if ($AsObject) {
-                        if ($global:IcingaDaemonData.IcingaThreadContent.ContainsKey('Scheduler')) {
-                            $global:IcingaDaemonData.IcingaThreadContent['Scheduler']['PluginPerfData'] += $cachedresult;
-                        }
+                        # New behavior with local thread separated results
+                        $global:Icinga.PerfData += $cachedresult;
                     }
                     $PerfDataOutput += $cachedresult;
                 }
@@ -56,9 +55,8 @@ function Get-IcingaPluginPerfDataContent()
             $compiledPerfData = (New-IcingaPerformanceDataEntry $data);
 
             if ($AsObject) {
-                if ($global:IcingaDaemonData.IcingaThreadContent.ContainsKey('Scheduler')) {
-                    $global:IcingaDaemonData.IcingaThreadContent['Scheduler']['PluginPerfData'] += $compiledPerfData;
-                }
+                # New behavior with local thread separated results
+                $global:Icinga.PerfData += $compiledPerfData;
             }
             $PerfDataOutput += $compiledPerfData;
         }
