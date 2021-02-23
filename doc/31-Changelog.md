@@ -18,6 +18,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#198](https://github.com/Icinga/icinga-powershell-framework/pull/198) Adds support to flush the content of the Icinga Agent API directory with a single Cmdlet `Clear-IcingaAgentApiDirectory`
 * [#203](https://github.com/Icinga/icinga-powershell-framework/pull/203) Removes experimental state of the Icinga PowerShell Framework code caching and adds docs on how to use the feature
 * [#205](https://github.com/Icinga/icinga-powershell-framework/pull/205) Ensure Icinga for Windows configuration file is opened as read-only for every single task besides actually modifying configuration content
+* [#207](https://github.com/Icinga/icinga-powershell-framework/pull/207) Adds new Argument `-LabelName` to `New-IcingaCheck`, allowing the developer to provide custom label names for checks and override the default based on the check name.
 
 ### Bugfixes
 

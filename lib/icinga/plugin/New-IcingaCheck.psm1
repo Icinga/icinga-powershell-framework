@@ -11,6 +11,7 @@ function New-IcingaCheck()
         [string]$Maximum    = '',
         $ObjectExists       = -1,
         $Translation        = $null,
+        [string]$LabelName  = $null,
         [switch]$NoPerfData
     );
 
@@ -38,6 +39,7 @@ function New-IcingaCheck()
     $Check | Add-Member -MemberType NoteProperty -Name 'maximum'        -Value $Maximum;
     $Check | Add-Member -MemberType NoteProperty -Name 'objectexists'   -Value $ObjectExists;
     $Check | Add-Member -MemberType NoteProperty -Name 'translation'    -Value $Translation;
+    $Check | Add-Member -MemberType NoteProperty -Name 'labelname'      -Value $LabelName;
     $Check | Add-Member -MemberType NoteProperty -Name 'checks'         -Value $null;
     $Check | Add-Member -MemberType NoteProperty -Name 'completed'      -Value $FALSE;
     $Check | Add-Member -MemberType NoteProperty -Name 'checkcommand'   -Value '';
@@ -802,6 +804,10 @@ function New-IcingaCheck()
         $value             = ConvertTo-Integer -Value $this.value -NullAsEmpty;
         $warning           = ConvertTo-Integer -Value $this.warning -NullAsEmpty;
         $critical          = ConvertTo-Integer -Value $this.critical -NullAsEmpty;
+
+        if ([string]::IsNullOrEmpty($this.labelname) -eq $FALSE) {
+            $LabelName = $this.labelname;
+        }
 
         $perfdata = @{
             'label'    = $LabelName;
