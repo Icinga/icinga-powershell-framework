@@ -31,13 +31,14 @@ For performance metrics you can provide a `Unit` to ensure your graphing is disp
 | Maximum      | String    |           | The maximum value which is displayed on your graphs |
 | ObjectExists | Bool      |           | If you are using values coming from objects, like Services, you can use this argument to determin if the object itself exist or not. In case it doesn't, you will receive a proper output on the check result |
 | Translation  | Hashtable |           | In case you want to map values to certain descriptions, you can place a hashtable at this argument which will then map the value to the description on the check result. For example this would apply to service running states |
+| LabelName    | String    |           | Allows to override the default label name generated based on the `-Name` argument to a custom name. Please ensure to remove any special characters manually, as the name set here is the exact name for the label |
 | NoPerfData   | Switch    |           | Disables Performance Data output for this check object |
 
 ## Units
 
 | Unit | Name         | Description                                     |
 | ---  | ---          | ---                                             |
-| %    | Percentage   | The input value is a percentual value           |
+| %    | Percentage   | The input value is a percentage value           |
 | s    | Seconds      | The input is indicated as time seconds          |
 | ms   | Milliseconds | The input is indicated as time in milliseconds  |
 | us   | Microseconds | The input is indicated as time in microseconds  |
