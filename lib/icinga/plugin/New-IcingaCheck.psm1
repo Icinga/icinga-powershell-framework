@@ -49,22 +49,19 @@ function New-IcingaCheck()
             return;
         }
 
-        if ($global:IcingaDaemonData.ContainsKey('BackgroundDaemon') -eq $FALSE) {
+        if ($null -eq $global:Icinga -Or $global:Icinga.ContainsKey('CheckData') -eq $FALSE) {
             return;
         }
 
-        if ($global:IcingaDaemonData.BackgroundDaemon.ContainsKey('ServiceCheckScheduler') -eq $FALSE) {
-            return;
-        }
-
-        if ($global:IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler.ContainsKey($this.checkcommand)) {
-            if ($global:IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler[$this.checkcommand]['results'].ContainsKey($this.name) -eq $FALSE) {
-                $global:IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler[$this.checkcommand]['results'].Add(
+        if ($global:Icinga.CheckData.ContainsKey($this.checkcommand)) {
+            if ($global:Icinga.CheckData[$this.checkcommand]['results'].ContainsKey($this.name) -eq $FALSE) {
+                $global:Icinga.CheckData[$this.checkcommand]['results'].Add(
                     $this.name,
-                    [hashtable]::Synchronized(@{})
+                    @{ }
                 );
             }
-            $global:IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler[$this.checkcommand]['results'][$this.name].Add(
+
+            $global:Icinga.CheckData[$this.checkcommand]['results'][$this.name].Add(
                 (Get-IcingaUnixTime),
                 $this.value
             );

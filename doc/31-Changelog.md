@@ -19,6 +19,10 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#203](https://github.com/Icinga/icinga-powershell-framework/pull/203) Removes experimental state of the Icinga PowerShell Framework code caching and adds docs on how to use the feature
 * [#205](https://github.com/Icinga/icinga-powershell-framework/pull/205) Ensure Icinga for Windows configuration file is opened as read-only for every single task besides actually modifying configuration content
 
+### Bugfixes
+
+* [#206](https://github.com/Icinga/icinga-powershell-framework/pull/206) Fixes background service check daemon for collecting metrics over time which will no longer share data between configured checks which might cause higher CPU load and a possible memory leak
+
 ## 1.3.1 (2021-02-04)
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/12?closed=1)

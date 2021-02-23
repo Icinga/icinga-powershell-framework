@@ -27,7 +27,7 @@
 
 function Set-IcingaCacheData()
 {
-    param(
+    param (
         [string]$Space,
         [string]$CacheStore,
         [string]$KeyName,
@@ -35,7 +35,7 @@ function Set-IcingaCacheData()
     );
 
     $CacheFile = Join-Path -Path (Join-Path -Path (Join-Path -Path (Get-IcingaCacheDir) -ChildPath $Space) -ChildPath $CacheStore) -ChildPath ([string]::Format('{0}.json', $KeyName));
-    $cacheData = @{};
+    $cacheData = @{ };
 
     if ((Test-Path $CacheFile)) {
         $cacheData = Get-IcingaCacheData -Space $Space -CacheStore $CacheStore;
