@@ -23,6 +23,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 ### Bugfixes
 
 * [#206](https://github.com/Icinga/icinga-powershell-framework/pull/206) Fixes background service check daemon for collecting metrics over time which will no longer share data between configured checks which might cause higher CPU load and a possible memory leak
+* [#208](https://github.com/Icinga/icinga-powershell-framework/pull/208) Fixes `Convert-IcingaPluginThresholds` which sometimes did not return proper numeric usable values for our internal functions, causing issues on plugin calls. In addition the function now also supports the handling for % units.
 
 ## 1.3.1 (2021-02-04)
 

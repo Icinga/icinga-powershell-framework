@@ -90,7 +90,7 @@ function Convert-IcingaPluginThresholds()
     $Threshold = $Threshold.Replace(',', '.');
 
     [array]$Content    = @();
-    
+
     if ($Threshold.Contains(':')) {
         $Content = $Threshold.Split(':');
     } else {
@@ -128,6 +128,10 @@ function Convert-IcingaPluginThresholds()
             }
             $Value         = (ConvertTo-Seconds -Value $ThresholdValue);
             $RetValue.Unit = $WorkUnit;
+        } elseif (($ThresholdValue -Match "(^[\d\.]*) ?(%)")) {
+            $WorkUnit      = '%';
+            $Value         = ([string]$ThresholdValue).Replace(' ', '').Replace('%', '');
+            $RetValue.Unit = $WorkUnit;
         } else {
             $Value = $ThresholdValue;
         }
@@ -145,11 +149,13 @@ function Convert-IcingaPluginThresholds()
 
     if ([string]::IsNullOrEmpty($Value) -eq $FALSE -And $Value.Contains(':') -eq $FALSE) {
         if ((Test-Numeric $Value)) {
-            $RetValue.Value = [convert]::ToDecimal($Value);
+            $RetValue.Value = $Value;
             return $RetValue;
         }
     }
 
+    # Always ensure we are using correct digits
+    $Value = ([string]$Value).Replace(',', '.');
     $RetValue.Value = $Value;
 
     return $RetValue;
