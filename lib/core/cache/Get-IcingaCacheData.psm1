@@ -34,13 +34,13 @@ function Get-IcingaCacheData()
 
     $CacheFile       = Join-Path -Path (Join-Path -Path (Join-Path -Path (Get-IcingaCacheDir) -ChildPath $Space) -ChildPath $CacheStore) -ChildPath ([string]::Format('{0}.json', $KeyName));
     [string]$Content = '';
-    $cacheData       = @{};
+    $cacheData       = @{ };
 
     if ((Test-Path $CacheFile) -eq $FALSE) {
         return $null;
     }
 
-    $Content = Get-Content -Path $CacheFile;
+    $Content = Read-IcingaFileContent -File $CacheFile;
 
     if ([string]::IsNullOrEmpty($Content)) {
         return $null;

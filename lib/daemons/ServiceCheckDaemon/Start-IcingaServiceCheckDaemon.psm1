@@ -5,7 +5,6 @@ function Start-IcingaServiceCheckDaemon()
 
         Use-Icinga -LibOnly -Daemon;
 
-        $IcingaDaemonData.BackgroundDaemon.Add('ServiceCheckScheduler', [hashtable]::Synchronized(@{}));
         $IcingaDaemonData.IcingaThreadPool.Add('ServiceCheckPool', (New-IcingaThreadPool -MaxInstances (Get-IcingaConfigTreeCount -Path 'BackgroundDaemon.RegisteredServices')));
 
         while ($TRUE) {
@@ -45,10 +44,15 @@ function Start-IcingaServiceCheckTask()
         Use-Icinga -LibOnly -Daemon;
         $PassedTime   = 0;
         $SortedResult = $null;
-        $OldData      = @{};
-        $PerfCache    = @{};
-        $AverageCalc  = @{};
+        $OldData      = @{ };
+        $PerfCache    = @{ };
+        $AverageCalc  = @{ };
         [int]$MaxTime = 0;
+
+        # Initialise some global variables we use to actually store check result data from
+        # plugins properly. This is doable from each thread instance as this part isn't
+        # shared between daemons
+        New-IcingaCheckSchedulerEnvironment;
 
         foreach ($index in $TimeIndexes) {
             # Only allow numeric index values
@@ -73,22 +77,22 @@ function Start-IcingaServiceCheckTask()
 
         [int]$MaxTimeInSeconds = $MaxTime * 60;
 
-        if (-Not ($IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler.ContainsKey($CheckCommand))) {
-            $IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler.Add($CheckCommand, [hashtable]::Synchronized(@{}));
-            $IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler[$CheckCommand].Add('results', [hashtable]::Synchronized(@{}));
-            $IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler[$CheckCommand].Add('average', [hashtable]::Synchronized(@{}));
+        if (-Not ($global:Icinga.CheckData.ContainsKey($CheckCommand))) {
+            $global:Icinga.CheckData.Add($CheckCommand, @{ });
+            $global:Icinga.CheckData[$CheckCommand].Add('results', @{ });
+            $global:Icinga.CheckData[$CheckCommand].Add('average', @{ });
         }
 
         $LoadedCacheData = Get-IcingaCacheData -Space 'sc_daemon' -CacheStore 'checkresult_store' -KeyName $CheckCommand;
 
         if ($null -ne $LoadedCacheData) {
             foreach ($entry in $LoadedCacheData.PSObject.Properties) {
-                $IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler[$CheckCommand]['results'].Add(
+                $global:Icinga.CheckData[$CheckCommand]['results'].Add(
                     $entry.name,
-                    [hashtable]::Synchronized(@{})
+                    @{ }
                 );
                 foreach ($item in $entry.Value.PSObject.Properties) {
-                    $IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler[$CheckCommand]['results'][$entry.name].Add(
+                    $global:Icinga.CheckData[$CheckCommand]['results'][$entry.name].Add(
                         $item.Name,
                         $item.Value
                     );
@@ -106,11 +110,11 @@ function Start-IcingaServiceCheckTask()
 
                     $UnixTime = Get-IcingaUnixTime;
 
-                    foreach ($result in $IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler[$CheckCommand]['results'].Keys) {
+                    foreach ($result in $global:Icinga.CheckData[$CheckCommand]['results'].Keys) {
                         [string]$HashIndex = $result;
-                        $SortedResult = $IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler[$CheckCommand]['results'][$HashIndex].GetEnumerator() | Sort-Object name -Descending;
-                        Add-IcingaHashtableItem -Hashtable $OldData -Key $HashIndex -Value @{} | Out-Null;
-                        Add-IcingaHashtableItem -Hashtable $PerfCache -Key $HashIndex -Value @{} | Out-Null;
+                        $SortedResult = $global:Icinga.CheckData[$CheckCommand]['results'][$HashIndex].GetEnumerator() | Sort-Object name -Descending;
+                        Add-IcingaHashtableItem -Hashtable $OldData -Key $HashIndex -Value @{ } | Out-Null;
+                        Add-IcingaHashtableItem -Hashtable $PerfCache -Key $HashIndex -Value @{ } | Out-Null;
 
                         foreach ($timeEntry in $SortedResult) {
                             foreach ($calc in $AverageCalc.Keys) {
@@ -133,7 +137,7 @@ function Start-IcingaServiceCheckTask()
                             );
 
                             Add-IcingaHashtableItem `
-                                -Hashtable $IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler[$CheckCommand]['average'] `
+                                -Hashtable $global:Icinga.CheckData[$CheckCommand]['average'] `
                                 -Key $MetricName -Value $AverageValue -Override | Out-Null;
 
                             $AverageCalc[$calc].Sum   = 0;
@@ -144,11 +148,11 @@ function Start-IcingaServiceCheckTask()
                     # Flush data we no longer require in our cache to free memory
                     foreach ($entry in $OldData.Keys) {
                         foreach ($key in $OldData[$entry].Keys) {
-                            Remove-IcingaHashtableItem -Hashtable $IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler[$CheckCommand]['results'][$entry] -Key $key.Name
+                            Remove-IcingaHashtableItem -Hashtable $global:Icinga.CheckData[$CheckCommand]['results'][$entry] -Key $key.Name;
                         }
                     }
 
-                    Set-IcingaCacheData -Space 'sc_daemon' -CacheStore 'checkresult' -KeyName $CheckCommand -Value $IcingaDaemonData.BackgroundDaemon.ServiceCheckScheduler[$CheckCommand]['average'];
+                    Set-IcingaCacheData -Space 'sc_daemon' -CacheStore 'checkresult' -KeyName $CheckCommand -Value $global:Icinga.CheckData[$CheckCommand]['average'];
                     # Write collected metrics to disk in case we reload the daemon. We will load them back into the module after reload then
                     Set-IcingaCacheData -Space 'sc_daemon' -CacheStore 'checkresult_store' -KeyName $CheckCommand -Value $PerfCache;
                 } catch {
