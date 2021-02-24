@@ -8,7 +8,7 @@
 .FUNCTIONALITY
     Uninstalls a specific module within the icinga-powershell-* namespace
     inside your PowerShell module folder
-.PARAMETER Component
+.PARAMETER Name
     The component you want to uninstall, like 'plugins' or 'mssql'
 .INPUTS
    System.String
@@ -21,11 +21,11 @@
 function Uninstall-IcingaFrameworkComponent()
 {
     param (
-        [string]$Component
+        [string]$Name = ''
     );
 
     $ModuleBase         = Get-IcingaFrameworkRootPath;
-    $UninstallComponent = [string]::Format('icinga-powershell-{0}', $Component);
+    $UninstallComponent = [string]::Format('icinga-powershell-{0}', $Name);
     $UninstallPath      = Join-Path -Path $ModuleBase -ChildPath $UninstallComponent;
 
     if ((Test-Path $UninstallPath) -eq $FALSE) {

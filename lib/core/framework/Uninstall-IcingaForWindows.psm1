@@ -55,7 +55,7 @@ function Uninstall-IcingaForWindows()
     foreach ($module in $ModuleList.Name) {
         [string]$ModuleName = $module.Replace('icinga-powershell-', '');
 
-        if ((Uninstall-IcingaFrameworkComponent -Component $ModuleName)) {
+        if ((Uninstall-IcingaFrameworkComponent -Name $ModuleName)) {
             continue;
         }
 
