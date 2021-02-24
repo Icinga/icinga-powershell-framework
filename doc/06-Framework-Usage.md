@@ -19,3 +19,7 @@ The Icinga PowerShell Framework ships with a bunch of Cmdlets for monitoring, me
 * [Install/Update Icinga Agent](frameworkusage/35-Install-Update-Icinga-Agent.md)
 * [Uninstall Icinga Agent](frameworkusage/34-Uninstall-Icinga-Agent.md)
 * [Flush Icinga Agent API Directory](frameworkusage/36-Flush-Icinga-Agent-API-Directory.md)
+
+## Experimental
+
+* [Forward checks to internal API](experimental/01-Forward-checks-to-internal-API.md)
