@@ -1,5 +1,9 @@
 function Enable-IcingaUntrustedCertificateValidation()
 {
+    param (
+        [switch]$SuppressMessages = $FALSE
+    );
+
     try {
         # There is no other way as to use C# for this specific
         # case to configure the certificate validation check
@@ -16,8 +20,12 @@ function Enable-IcingaUntrustedCertificateValidation()
 
         [System.Net.ServicePointManager]::CertificatePolicy = New-Object IcingaUntrustedCertificateValidation;
 
-        Write-IcingaConsoleNotice 'Successfully enabled untrusted certificate validation for this shell instance';
+        if ($SuppressMessages -eq $FALSE) {
+            Write-IcingaConsoleNotice 'Successfully enabled untrusted certificate validation for this shell instance';
+        }
     } catch {
-        Write-IcingaConsoleError -Message 'Failed to enable untrusted certificate policy: {0}' -Objects $_.Exception.Message;
+        if ($SuppressMessages -eq $FALSE) {
+            Write-IcingaConsoleError -Message 'Failed to enable untrusted certificate policy: {0}' -Objects $_.Exception.Message;
+        }
     }
 }

@@ -67,14 +67,16 @@
  # Example usage:
  # $IcingaEnums.IcingaExitCode.Ok
  #>
-[hashtable]$IcingaEnums = @{
-    IcingaExitCode         = $IcingaExitCode;
-    IcingaExitCodeText     = $IcingaExitCodeText;
-    IcingaExitCodeColor    = $IcingaExitCodeColor;
-    IcingaMeasurementUnits = $IcingaMeasurementUnits;
-     #services
-    ServiceStartupTypeName = $ServiceStartupTypeName;
-    ServiceWmiStartupType  = $ServiceWmiStartupType;
+ if ($null -eq $IcingaEnums) {
+    [hashtable]$IcingaEnums = @{
+        IcingaExitCode         = $IcingaExitCode;
+        IcingaExitCodeText     = $IcingaExitCodeText;
+        IcingaExitCodeColor    = $IcingaExitCodeColor;
+        IcingaMeasurementUnits = $IcingaMeasurementUnits;
+        #services
+        ServiceStartupTypeName = $ServiceStartupTypeName;
+        ServiceWmiStartupType  = $ServiceWmiStartupType;
+    }
 }
 
 Export-ModuleMember -Variable @( 'IcingaEnums' );

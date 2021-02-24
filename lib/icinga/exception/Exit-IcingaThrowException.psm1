@@ -77,7 +77,7 @@ function Exit-IcingaThrowException()
     if ([string]::IsNullOrEmpty($ExceptionIWKB) -eq $FALSE) {
         $ExceptionIWKB = [string]::Format(
             '{0}{0}Further details can be found on the Icinga for Windows Knowledge base: https://icinga.com/docs/windows/latest/doc/knowledgebase/{1}',
-            (New-IcingaNewLine), 
+            (New-IcingaNewLine),
             $ExceptionIWKB
         );
     }
@@ -98,7 +98,7 @@ function Exit-IcingaThrowException()
         $ExceptionTypeString
     );
 
-    if ($global:IcingaDaemonData.FrameworkRunningAsDaemon -eq $FALSE) {
+    if ($null -eq $global:IcingaDaemonData -Or $global:IcingaDaemonData.FrameworkRunningAsDaemon -eq $FALSE) {
         Write-IcingaConsolePlain $OutputMessage;
         exit $IcingaEnums.IcingaExitCode.Unknown;
     }

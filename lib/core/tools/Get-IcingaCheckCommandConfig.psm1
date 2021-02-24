@@ -123,7 +123,7 @@ function Get-IcingaCheckCommandConfig()
                 'arguments'   = @{
                     # Set the Command handling for every check command
                     '-C' = @{
-                        'value' = [string]::Format('try {{ Use-Icinga; }} catch {{ Write-Output {1}The Icinga PowerShell Framework is either not installed on the system or not configured properly. Please check https://icinga.com/docs/windows for further details{1}; exit 3; }}; Exit-IcingaPluginNotInstalled {1}{0}{1}; exit {0}', $Data.Name, "'");
+                        'value' = [string]::Format('try {{ Use-Icinga -Minimal; }} catch {{ Write-Output {1}The Icinga PowerShell Framework is either not installed on the system or not configured properly. Please check https://icinga.com/docs/windows for further details{1}; exit 3; }}; Exit-IcingaExecutePlugin -Command {1}{0}{1} ', $Data.Name, "'");
                         'order' = '0';
                     }
                 }
@@ -373,7 +373,7 @@ function Get-IcingaCheckCommandConfig()
             Write-IcingaConsoleNotice "- '$check'";
         }
         Write-IcingaConsoleNotice "JSON export created in '${OutDirectory}'"
-        Write-IcingaConsoleWarning 'By using this generated check command configuration you will require the Icinga PowerShell Framework 1.2.0 or later to be installed on ALL monitored machines!';
+        Write-IcingaConsoleWarning 'By using this generated check command configuration you will require the Icinga PowerShell Framework 1.4.0 or later to be installed on ALL monitored machines!';
         return;
     }
 
@@ -381,7 +381,7 @@ function Get-IcingaCheckCommandConfig()
     foreach ($check in $CheckName) {
         Write-IcingaConsoleNotice "- '$check'"
     }
-    Write-IcingaConsoleWarning 'By using this generated check command configuration you will require the Icinga PowerShell Framework 1.2.0 or later to be installed on ALL monitored machines!';
+    Write-IcingaConsoleWarning 'By using this generated check command configuration you will require the Icinga PowerShell Framework 1.4.0 or later to be installed on ALL monitored machines!';
     Write-IcingaConsoleNotice '############################################################';
 
     return $output;

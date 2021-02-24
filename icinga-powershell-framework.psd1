@@ -15,7 +15,19 @@
         '.\lib\core\logging\Write-IcingaConsoleOutput.psm1',
         '.\lib\core\logging\Write-IcingaConsoleNotice.psm1',
         '.\lib\core\logging\Write-IcingaConsoleWarning.psm1',
-        '.\lib\core\tools\Read-IcingaFileContent.psm1'
+        '.\lib\core\tools\Read-IcingaFileContent.psm1',
+        '.\lib\core\framework\Invoke-IcingaInternalServiceCall.psm1',
+        '.\lib\core\framework\Get-IcingaFrameworkApiChecks.psm1',
+        '.\lib\daemon\Get-IcingaBackgroundDaemons.psm1',
+        '.\lib\webserver\Enable-IcingaUntrustedCertificateValidation.psm1',
+        '.\lib\core\logging\Write-IcingaEventMessage.psm1',
+        '.\lib\icinga\plugin\Exit-IcingaExecutePlugin.psm1',
+        '.\lib\icinga\exception\Exit-IcingaPluginNotInstalled.psm1',
+        '.\lib\icinga\exception\Exit-IcingaThrowException.psm1',
+        '.\lib\web\Disable-IcingaProgressPreference.psm1',
+        '.\lib\core\tools\New-IcingaNewLine.psm1',
+        '.\lib\core\logging\Write-IcingaConsolePlain.psm1',
+        '.\lib\core\tools\Test-IcingaFunction.psm1'
     )
     FunctionsToExport = @(
         'Use-Icinga',
@@ -39,7 +51,19 @@
         'Write-IcingaConsoleOutput',
         'Write-IcingaConsoleNotice',
         'Write-IcingaConsoleWarning',
-        'Read-IcingaFileContent'
+        'Read-IcingaFileContent',
+        'Invoke-IcingaInternalServiceCall',
+        'Get-IcingaFrameworkApiChecks',
+        'Get-IcingaBackgroundDaemons',
+        'Enable-IcingaUntrustedCertificateValidation',
+        'Write-IcingaEventMessage',
+        'Exit-IcingaExecutePlugin',
+        'Exit-IcingaPluginNotInstalled',
+        'Exit-IcingaThrowException',
+        'Disable-IcingaProgressPreference',
+        'New-IcingaNewLine',
+        'Write-IcingaConsolePlain',
+        'Test-IcingaFunction'
     )
     CmdletsToExport   = @('*')
     VariablesToExport = '*'

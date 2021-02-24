@@ -13,8 +13,20 @@ function Use-Icinga()
     param(
         [switch]$LibOnly   = $FALSE,
         [switch]$Daemon    = $FALSE,
-        [switch]$DebugMode = $FALSE
+        [switch]$DebugMode = $FALSE,
+        [switch]$Minimal   = $FALSE
     );
+
+    Disable-IcingaProgressPreference;
+
+    if ($Minimal) {
+        # If we load the minimal Framework files, we have to ensure our enums are loaded
+        Import-Module ([string]::Format('{0}\lib\icinga\exception\Icinga_IcingaExceptionEnums.psm1', $PSScriptRoot)) -Global;
+        Import-Module ([string]::Format('{0}\lib\icinga\enums\Icinga_IcingaEnums.psm1', $PSScriptRoot)) -Global;
+        Import-Module ([string]::Format('{0}\lib\core\logging\Icinga_EventLog_Enums.psm1', $PSScriptRoot)) -Global;
+
+        return;
+    }
 
     # Ensure we autoload the Icinga Plugin collection, provided by the external
     # module 'icinga-powershell-plugins'
@@ -61,7 +73,6 @@ function Use-Icinga()
         }
     }
     New-IcingaPerformanceCounterCache;
-    Disable-IcingaProgressPreference;
 
     # Enable DebugMode in case it is enabled in our config
     if (Get-IcingaFrameworkDebugMode) {
