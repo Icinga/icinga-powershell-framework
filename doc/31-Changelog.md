@@ -20,6 +20,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#205](https://github.com/Icinga/icinga-powershell-framework/pull/205) Ensure Icinga for Windows configuration file is opened as read-only for every single task besides actually modifying configuration content
 * [#207](https://github.com/Icinga/icinga-powershell-framework/pull/207) Adds new Argument `-LabelName` to `New-IcingaCheck`, allowing the developer to provide custom label names for checks and override the default based on the check name.
 * [#210](https://github.com/Icinga/icinga-powershell-framework/pull/210) Updates the Icinga DSL for building PowerShell arrays to ensure all string values are properly escaped with `'`. In case the user already wrapped commands with `'` by himself, this will not have an effect as we only add single quotes for escaping if they are not present already
+* [#211](https://github.com/Icinga/icinga-powershell-framework/pull/211) Adds feature to uninstall single components for Icinga for Windows or to uninstall everything and start entirely from new
 
 ### Bugfixes
 
