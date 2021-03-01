@@ -4,9 +4,9 @@ Upgrading Icinga PowerShell Framework is usually quite straightforward.
 
 Specific version upgrades are described below. Please note that version updates are incremental.
 
-## Upgrading to v1.4.0 (pending)
+## Upgrading to v1.4.0 (2021-03-02)
 
-*No special steps required*
+The pre-compiled configurations for each module and the result of `Get-IcingaCheckCommandConfig` have been changed. In order to use the new CheckCommand definitions for Icinga 2 you will **require** to update your entire environment to Icinga for Windows v1.4.0 **before** using the new configuration files!
 
 ## Upgrading to v1.3.0 (2020-12-01)
 

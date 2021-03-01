@@ -11,6 +11,10 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/11?closed=1)
 
+### Breaking Changes
+
+There are changes made to the pre-compiled configuration files and `Get-IcingaCheckCommandConfig.` Please have a look on the [upgrading](30-upgrading-framework.md) before applying the new configuration files.
+
 ### Enhancements
 
 * [#180](https://github.com/Icinga/icinga-powershell-framework/pull/180) Ensure check data are separated from each thread and not accessible from one thread to another to prevent conflicting results
