@@ -53,10 +53,16 @@ function Register-IcingaDirectorSelfServiceHost()
     $ProgressPreference = "SilentlyContinue";
     $DirectorConfigJson = $null;
 
-    if ([string]::IsNullOrEmpty($Endpoint) -eq $FALSE) {
-        $Interface          = Get-IcingaNetworkInterface $Endpoint;
-        $DirectorConfigJson = [string]::Format('{0} "address":"{2}" {1}', '{', '}', $Interface);
+    if ([string]::IsNullOrEmpty($Endpoint)) {
+        if ($DirectorUrl.Contains('https://') -Or $DirectorUrl.Contains('http://')) {
+            $Endpoint = $DirectorUrl.Split('/')[2];
+        } else {
+            $Endpoint = $DirectorUrl.Split('/')[0];
+        }
     }
+
+    $Interface          = Get-IcingaNetworkInterface $Endpoint;
+    $DirectorConfigJson = [string]::Format('{0} "address":"{2}" {1}', '{', '}', $Interface);
 
     $EndpointUrl = Join-WebPath -Path $DirectorUrl -ChildPath ([string]::Format('/self-service/register-host?name={0}&key={1}', $Hostname, $ApiKey));
 

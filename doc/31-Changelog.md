@@ -21,6 +21,14 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#207](https://github.com/Icinga/icinga-powershell-framework/pull/207) Adds new Argument `-LabelName` to `New-IcingaCheck`, allowing the developer to provide custom label names for checks and override the default based on the check name.
 * [#210](https://github.com/Icinga/icinga-powershell-framework/pull/210) Updates the Icinga DSL for building PowerShell arrays to ensure all string values are properly escaped with `'`. In case the user already wrapped commands with `'` by himself, this will not have an effect as we only add single quotes for escaping if they are not present already
 * [#211](https://github.com/Icinga/icinga-powershell-framework/pull/211) Adds feature to uninstall single components for Icinga for Windows or to uninstall everything and start entirely from new
+* [#213](https://github.com/Icinga/icinga-powershell-framework/pull/213) Added support to fetch network interface for `Register-IcingaDirectorSelfServiceHost` directly from provided director url
+* [#213](https://github.com/Icinga/icinga-powershell-framework/pull/213) Added support for Icinga Framework Code Cache file being deleted once the feature is disabled
+* [#213](https://github.com/Icinga/icinga-powershell-framework/pull/213) Added support to suppress any console output for the current PowerShell session by using `Disable-IcingaFrameworkConsoleOutput` and to enable it again by using `Enable-IcingaFrameworkConsoleOutput`
+* [#213](https://github.com/Icinga/icinga-powershell-framework/pull/213) Added support for `-Release` argument for `Get-IcingaFrameworkServiceBinary` suppressing questions and using GitHub as source directly if set
+* [#213](https://github.com/Icinga/icinga-powershell-framework/pull/213) Added support to color console output by using `Write-IcingaConsolePlain` with the new argument `-ForeColor`
+* [#213](https://github.com/Icinga/icinga-powershell-framework/pull/213) Added new feature to write Icinga for Windows console headers more easily, better structured and formatted with `Write-IcingaConsoleHeader` by adding line content as array elements
+* [#213](https://github.com/Icinga/icinga-powershell-framework/pull/213) Fixed possible crash on `Get-IcingaAgentFeatures` if PowerShell is not running as administrator and therefor the command `icinga2 feature list` can not be processed
+* [#213](https://github.com/Icinga/icinga-powershell-framework/pull/213) Fixed `ConvertTo-IcingaSecureString` to return `$null` for empty strings instead of throwing an exception
 
 ### Bugfixes
 
@@ -30,6 +38,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 ### Experimental
 
 * [#204](https://github.com/Icinga/icinga-powershell-framework/pull/204) Adds experimental feature to forward checks executed by the Icinga Agent to an internal REST-Api, to reduce the performance impact on systems with lower resources available
+* [#213](https://github.com/Icinga/icinga-powershell-framework/pull/213) Adds new experimental feature `Management Console` for better and easier management for Icinga for Windows and improved automation and deployed.
 
 ## 1.3.1 (2021-02-04)
 

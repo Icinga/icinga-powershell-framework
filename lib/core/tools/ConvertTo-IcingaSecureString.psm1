@@ -4,9 +4,13 @@
  #>
 function ConvertTo-IcingaSecureString()
 {
-    param(
+    param (
         [string]$String
     );
+
+    if ([string]::IsNullOrEmpty($String)) {
+        return $null;
+    }
 
     return (ConvertTo-SecureString -AsPlainText $string -Force);
 }

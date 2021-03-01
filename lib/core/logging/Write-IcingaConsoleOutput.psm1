@@ -31,10 +31,14 @@ function Write-IcingaConsoleOutput()
     param (
         [string]$Message,
         [array]$Objects,
-        [ValidateSet('Black', 'DarkBlue', 'DarkGreen', 'DarkCyan', 'DarkRed', 'DarkMagenta', 'DarkYellow', 'Gray', 'DarkGray', 'Blue', 'Green', 'Cyan', 'Red', 'Magenta', 'Yellow', 'White')]
-        [string]$ForeColor = 'White',
+        [ValidateSet('Default', 'Black', 'DarkBlue', 'DarkGreen', 'DarkCyan', 'DarkRed', 'DarkMagenta', 'DarkYellow', 'Gray', 'DarkGray', 'Blue', 'Green', 'Cyan', 'Red', 'Magenta', 'Yellow', 'White')]
+        [string]$ForeColor = 'Default',
         [string]$Severity  = 'Notice'
     );
+
+    if ((Test-IcingaFrameworkConsoleOutput) -eq $FALSE) {
+        return;
+    }
 
     $OutputMessage = $Message;
     [int]$Index    = 0;
@@ -52,7 +56,14 @@ function Write-IcingaConsoleOutput()
         Write-Host '[' -NoNewline;
         Write-Host $Severity -NoNewline -ForegroundColor $ForeColor;
         Write-Host ']: ' -NoNewline;
+        Write-Host $OutputMessage;
+
+        return;
     }
 
-    Write-Host $OutputMessage;
+    if ($ForeColor -eq 'Default') {
+        Write-Host $OutputMessage;
+    } else {
+        Write-Host $OutputMessage -ForegroundColor $ForeColor;
+    }
 }
