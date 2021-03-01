@@ -4,8 +4,6 @@ function Exit-IcingaExecutePlugin()
         [string]$Command = ''
     );
 
-    Exit-IcingaPluginNotInstalled -Command $Command;
-
     Invoke-IcingaInternalServiceCall -Command $Command -Arguments $args;
 
     try {
@@ -13,6 +11,8 @@ function Exit-IcingaExecutePlugin()
         if ($null -eq $global:IcingaDaemonData) {
             Use-Icinga;
         }
+
+        Exit-IcingaPluginNotInstalled -Command $Command;
 
         exit (& $Command @args);
     } catch {
