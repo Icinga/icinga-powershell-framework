@@ -41,7 +41,7 @@ function Set-IcingaCacheData()
         $cacheData = Get-IcingaCacheData -Space $Space -CacheStore $CacheStore;
     } else {
         try {
-            New-Item -Path $CacheFile -Force | Out-Null;
+            New-Item -ItemType File -Path $CacheFile -Force | Out-Null;
         } catch {
             Exit-IcingaThrowException -InputString $_.Exception -CustomMessage (Get-IcingaCacheDir) -StringPattern 'NewItemUnauthorizedAccessError' -ExceptionType 'Permission' -ExceptionThrown $IcingaExceptions.Permission.CacheFolder;
             Exit-IcingaThrowException -CustomMessage $_.Exception -ExceptionType 'Unhandled' -Force;
