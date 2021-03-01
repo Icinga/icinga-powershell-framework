@@ -27,13 +27,13 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#213](https://github.com/Icinga/icinga-powershell-framework/pull/213) Added support for `-Release` argument for `Get-IcingaFrameworkServiceBinary` suppressing questions and using GitHub as source directly if set
 * [#213](https://github.com/Icinga/icinga-powershell-framework/pull/213) Added support to color console output by using `Write-IcingaConsolePlain` with the new argument `-ForeColor`
 * [#213](https://github.com/Icinga/icinga-powershell-framework/pull/213) Added new feature to write Icinga for Windows console headers more easily, better structured and formatted with `Write-IcingaConsoleHeader` by adding line content as array elements
-* [#213](https://github.com/Icinga/icinga-powershell-framework/pull/213) Fixed possible crash on `Get-IcingaAgentFeatures` if PowerShell is not running as administrator and therefor the command `icinga2 feature list` can not be processed
-* [#213](https://github.com/Icinga/icinga-powershell-framework/pull/213) Fixed `ConvertTo-IcingaSecureString` to return `$null` for empty strings instead of throwing an exception
 
 ### Bugfixes
 
 * [#206](https://github.com/Icinga/icinga-powershell-framework/pull/206) Fixes background service check daemon for collecting metrics over time which will no longer share data between configured checks which might cause higher CPU load and a possible memory leak
 * [#208](https://github.com/Icinga/icinga-powershell-framework/pull/208) Fixes `Convert-IcingaPluginThresholds` which sometimes did not return proper numeric usable values for our internal functions, causing issues on plugin calls. In addition the function now also supports the handling for % units.
+* [#213](https://github.com/Icinga/icinga-powershell-framework/pull/213) Fixed possible crash on `Get-IcingaAgentFeatures` if PowerShell is not running as administrator and therefor the command `icinga2 feature list` can not be processed
+* [#213](https://github.com/Icinga/icinga-powershell-framework/pull/213) Fixed `ConvertTo-IcingaSecureString` to return `$null` for empty strings instead of throwing an exception
 
 ### Experimental
 
