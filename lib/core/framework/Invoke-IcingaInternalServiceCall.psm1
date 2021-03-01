@@ -53,8 +53,6 @@ function Invoke-IcingaInternalServiceCall()
     Enable-IcingaUntrustedCertificateValidation -SuppressMessages;
 
     [hashtable]$CommandArguments = @{ };
-    [hashtable]$DebugArguments   = @{ };
-    [hashtable]$ConvertedArgs    = @{ };
     [int]$ArgumentIndex          = 0;
 
     # Resolve our array arguments provided by $args and build proper check arguments
@@ -81,7 +79,7 @@ function Invoke-IcingaInternalServiceCall()
 
         $Argument = $Argument.Replace('-', '');
 
-        $ConvertedArgs.Add($Argument, $ArgumentValue);
+        $CommandArguments.Add($Argument, $ArgumentValue);
         $ArgumentIndex += 1;
     }
 
@@ -92,7 +90,7 @@ function Invoke-IcingaInternalServiceCall()
         # Something went wrong -> fallback to local execution
         $ExMsg = $_.Exception.message;
         # Fallback to execute plugin locally
-        Write-IcingaEventMessage -Namespace 'Framework' -EventId 1553 -Objects $ExMsg, $Command, $DebugArguments;
+        Write-IcingaEventMessage -Namespace 'Framework' -EventId 1553 -Objects $ExMsg, $Command, $CommandArguments;
         return;
     }
 
@@ -102,12 +100,12 @@ function Invoke-IcingaInternalServiceCall()
 
     # In case we didn't receive a check result, fallback to local execution
     if ([string]::IsNullOrEmpty($IcingaResult.$Command.checkresult)) {
-        Write-IcingaEventMessage -Namespace 'Framework' -EventId 1553 -Objects 'The check result for the executed command was empty', $Command, $DebugArguments;
+        Write-IcingaEventMessage -Namespace 'Framework' -EventId 1553 -Objects 'The check result for the executed command was empty', $Command, $CommandArguments;
         return;
     }
 
     if ([string]::IsNullOrEmpty($IcingaResult.$Command.exitcode)) {
-        Write-IcingaEventMessage -Namespace 'Framework' -EventId 1553 -Objects 'The check result for the executed command was empty', $Command, $DebugArguments;
+        Write-IcingaEventMessage -Namespace 'Framework' -EventId 1553 -Objects 'The check result for the executed command was empty', $Command, $CommandArguments;
         return;
     }
 
