@@ -34,6 +34,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#208](https://github.com/Icinga/icinga-powershell-framework/pull/208) Fixes `Convert-IcingaPluginThresholds` which sometimes did not return proper numeric usable values for our internal functions, causing issues on plugin calls. In addition the function now also supports the handling for % units.
 * [#213](https://github.com/Icinga/icinga-powershell-framework/pull/213) Fixed possible crash on `Get-IcingaAgentFeatures` if PowerShell is not running as administrator and therefor the command `icinga2 feature list` can not be processed
 * [#213](https://github.com/Icinga/icinga-powershell-framework/pull/213) Fixed `ConvertTo-IcingaSecureString` to return `$null` for empty strings instead of throwing an exception
+* [#214](https://github.com/Icinga/icinga-powershell-framework/pull/214) Fixes wrong `[Unknown] PluginNotInstalled` exception because of new plugin configuration and wrong checking against APi result in case feature is enabled
 
 ### Experimental
 

@@ -101,12 +101,17 @@ function Invoke-IcingaInternalServiceCall()
     $IcingaCR     = '';
 
     # In case we didn't receive a check result, fallback to local execution
-    if ($null -eq $IcingaResult.$Command.checkresult) {
+    if ([string]::IsNullOrEmpty($IcingaResult.$Command.checkresult)) {
         Write-IcingaEventMessage -Namespace 'Framework' -EventId 1553 -Objects 'The check result for the executed command was empty', $Command, $DebugArguments;
         return;
     }
 
-    $IcingaCR     = ($IcingaResult.$Command.checkresult.Replace("`r`n", "`n"));
+    if ([string]::IsNullOrEmpty($IcingaResult.$Command.exitcode)) {
+        Write-IcingaEventMessage -Namespace 'Framework' -EventId 1553 -Objects 'The check result for the executed command was empty', $Command, $DebugArguments;
+        return;
+    }
+
+    $IcingaCR = ($IcingaResult.$Command.checkresult.Replace("`r`n", "`n"));
 
     if ($IcingaResult.$Command.perfdata.Count -ne 0) {
         $IcingaCR += ' | ';
