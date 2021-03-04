@@ -13,7 +13,6 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 ### Bugfixes
 
-<<<<<<< HEAD
 ## 1.4.1 (2021-03-10)
 
 ### Bugfixes
@@ -21,8 +20,6 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#222](https://github.com/Icinga/icinga-powershell-framework/pull/222) Fixes an issue with [Secure.String] arguments for PowerShell plugins, caused by `ConvertTo-IcingaSecureString` Cmdlet not being pre-loaded
 * [#224](https://github.com/Icinga/icinga-powershell-framework/issues/224) Fixes "memory leak" on background daemon for registered service checks, by clearing the error stack and manually calling the PowerShell garbage collector to force freeing of memory
 
-=======
->>>>>>> 708729b (Updates version to v1.5.0)
 ## 1.4.0 (2021-03-02)
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/11?closed=1)
