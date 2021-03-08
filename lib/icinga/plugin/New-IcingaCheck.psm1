@@ -63,8 +63,16 @@ function New-IcingaCheck()
                 );
             }
 
+            # Fix possible error for identical time stamps due to internal exceptions
+            # and check execution within the same time slot because of this
+            [string]$TimeIndex = Get-IcingaUnixTime;
+
+            if ($global:Icinga.CheckData[$this.checkcommand]['results'][$this.name].ContainsKey($TimeIndex)) {
+                return;
+            }
+
             $global:Icinga.CheckData[$this.checkcommand]['results'][$this.name].Add(
-                (Get-IcingaUnixTime),
+                $TimeIndex,
                 $this.value
             );
         }
