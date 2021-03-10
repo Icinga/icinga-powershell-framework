@@ -9,11 +9,15 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 ## 1.5.0 (pending)
 
+[Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/13?closed=1)
+
 ### Enhancements
 
 ### Bugfixes
 
 ## 1.4.1 (2021-03-10)
+
+[Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/14?closed=1)
 
 ### Bugfixes
 
