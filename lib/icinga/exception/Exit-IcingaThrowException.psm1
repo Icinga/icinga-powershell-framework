@@ -7,6 +7,7 @@ function Exit-IcingaThrowException()
         $ExceptionThrown,
         [ValidateSet('Permission', 'Input', 'Configuration', 'Connection', 'Unhandled', 'Custom')]
         [string]$ExceptionType    = 'Unhandled',
+        [hashtable]$ExceptionList = @{ },
         [string]$KnowledgeBaseId,
         [switch]$Force
     );
@@ -21,25 +22,29 @@ function Exit-IcingaThrowException()
         }
     }
 
+    if ($null -eq $ExceptionList -Or $ExceptionList.Count -eq 0) {
+        $ExceptionList = $IcingaExceptions;
+    }
+
     $ExceptionMessageLib = $null;
     $ExceptionTypeString = '';
 
     switch ($ExceptionType) {
         'Permission' {
             $ExceptionTypeString = 'Permission';
-            $ExceptionMessageLib = $IcingaExceptions.Permission;
+            $ExceptionMessageLib = $ExceptionList.Permission;
         };
         'Input' {
             $ExceptionTypeString = 'Invalid Input';
-            $ExceptionMessageLib = $IcingaExceptions.Inputs;
+            $ExceptionMessageLib = $ExceptionList.Inputs;
         };
         'Configuration' {
             $ExceptionTypeString = 'Invalid Configuration';
-            $ExceptionMessageLib = $IcingaExceptions.Configuration;
+            $ExceptionMessageLib = $ExceptionList.Configuration;
         };
         'Connection' {
             $ExceptionTypeString = 'Connection error';
-            $ExceptionMessageLib = $IcingaExceptions.Connection;
+            $ExceptionMessageLib = $ExceptionList.Connection;
         };
         'Unhandled' {
             $ExceptionTypeString = 'Unhandled';

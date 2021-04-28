@@ -13,6 +13,8 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 ### Enhancements
 
+* [#234](https://github.com/Icinga/icinga-powershell-framework/pull/234) Adds support to allow custom exception lists for Icinga Exceptions, making it easier for different modules to ship their own exception messages
+
 ### Bugfixes
 
 ## 1.4.1 (2021-03-10)
