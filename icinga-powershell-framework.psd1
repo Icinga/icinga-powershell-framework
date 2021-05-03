@@ -31,7 +31,9 @@
         '.\lib\core\tools\Test-IcingaFunction.psm1',
         '.\lib\core\tools\Write-IcingaConsoleHeader.psm1',
         '.\lib\core\framework\Test-IcingaFrameworkConsoleOutput.psm1',
-        '.\lib\core\tools\ConvertTo-IcingaSecureString.psm1'
+        '.\lib\core\tools\ConvertTo-IcingaSecureString.psm1',
+        '.\lib\core\tools\ConvertTo-JsonUTF8Bytes.psm1',
+        '.\lib\core\tools\ConvertFrom-JsonUTF8.psm1'
     )
     FunctionsToExport = @(
         'Use-Icinga',
@@ -71,7 +73,9 @@
         'Test-IcingaFunction',
         'Write-IcingaConsoleHeader',
         'Test-IcingaFrameworkConsoleOutput',
-        'ConvertTo-IcingaSecureString'
+        'ConvertTo-IcingaSecureString',
+        'ConvertTo-JsonUTF8Bytes',
+        'ConvertFrom-JsonUTF8'
     )
     CmdletsToExport   = @('*')
     VariablesToExport = '*'
