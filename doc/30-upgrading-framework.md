@@ -4,6 +4,14 @@ Upgrading Icinga PowerShell Framework is usually quite straightforward.
 
 Specific version upgrades are described below. Please note that version updates are incremental.
 
+## Upgrading to v1.5.0 (pending)
+
+### `SecureString` and Icinga Director Baskets
+
+We have updated the configuration baskets generator to set arguments defined as `SecureString` (for passwords) to `hidden` within the Icinga Director. This will prevent users from simply gaining access to a password while having access to the Director.
+
+Please update manually all your CustomFields under `Icinga Director` -> `Define Data Fields` -> Search for `*_Securestring_*` -> Field `Visibility` to `Hidden` before importing new configuration baskets. Otherwise you will have two data fields stored within your Icinga Director and have to enter all passwords again for your service checks.
+
 ## Upgrading to v1.4.0 (2021-03-02)
 
 The pre-compiled configurations for each module and the result of `Get-IcingaCheckCommandConfig` have been changed. In order to use the new CheckCommand definitions for Icinga 2 you will **require** to update your entire environment to Icinga for Windows v1.4.0 **before** using the new configuration files!
