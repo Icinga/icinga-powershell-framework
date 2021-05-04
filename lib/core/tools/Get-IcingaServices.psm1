@@ -11,14 +11,14 @@ function Get-IcingaServices()
     if ($Service.Count -eq 0) {
         $ServiceWmiInfo = Get-IcingaWindowsInformation Win32_Service;
     } else {
-        $ServiceWmiInfo = Get-IcingaWindowsInformation Win32_Service | Where-Object { $Service -Contains $_.Name } | Select-Object StartName, Name;
+        $ServiceWmiInfo = Get-IcingaWindowsInformation Win32_Service | Where-Object { $Service -Contains $_.Name } | Select-Object StartName, Name, ExitCode, StartMode;
     }
 
     if ($null -eq $ServiceInformation) {
         return $null;
     }
 
-    [hashtable]$ServiceData = @{};
+    [hashtable]$ServiceData = @{ };
 
     foreach ($service in $ServiceInformation) {
 
