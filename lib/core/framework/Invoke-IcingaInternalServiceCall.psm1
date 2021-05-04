@@ -50,6 +50,7 @@ function Invoke-IcingaInternalServiceCall()
         $Timeout = $Daemon['Timeout'];
     }
 
+    Set-IcingaTLSVersion;
     Enable-IcingaUntrustedCertificateValidation -SuppressMessages;
 
     [hashtable]$CommandArguments = @{ };
