@@ -288,9 +288,15 @@ function Get-IcingaCheckCommandConfig()
                         }
                     );
                 } else {
+                    $CustomVarVisibility = 'visible';
+
+                    if ($parameter.type.name -eq 'SecureString') {
+                        $CustomVarVisibility = 'hidden';
+                    }
+
                     $Basket.Datafield[[string]$FieldID].Add(
                         'settings', @{
-                            'visbility' = 'visible';
+                            'visibility' = $CustomVarVisibility;
                         }
                     );
                 }
