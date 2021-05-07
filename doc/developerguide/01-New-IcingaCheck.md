@@ -24,11 +24,12 @@ For performance metrics you can provide a `Unit` to ensure your graphing is disp
 
 | Argument     | Input  | Mandatory | Description |
 | ---          | ---    | ---       | ---         |
-| Name         | String    |  *        | The unique name of each check within a plugin. Will be display in the check output.  |
+| Name         | String    | *         | The unique name of each check within a plugin. Will be display in the check output.  |
 | Value        | Object    | *         | The value all comparison is done with. In general this should be a `Numeric` or `String` value |
 | Unit         | Units     |           | Specify the unit for a value to display graph properly |
 | Minimum      | String    |           | The minimum value which is displayed on your graphs |
 | Maximum      | String    |           | The maximum value which is displayed on your graphs |
+| BaseValue    | Object    |           | Sets a base value for the check which allows to use dynamic `%` usage on thresholds. The base value will calculate the `%` value from the current value, allowing generic `%` monitoring |
 | ObjectExists | Bool      |           | If you are using values coming from objects, like Services, you can use this argument to determin if the object itself exist or not. In case it doesn't, you will receive a proper output on the check result |
 | Translation  | Hashtable |           | In case you want to map values to certain descriptions, you can place a hashtable at this argument which will then map the value to the description on the check result. For example this would apply to service running states |
 | LabelName    | String    |           | Allows to override the default label name generated based on the `-Name` argument to a custom name. Please ensure to remove any special characters manually, as the name set here is the exact name for the label |
