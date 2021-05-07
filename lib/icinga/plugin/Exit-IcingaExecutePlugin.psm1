@@ -16,8 +16,10 @@ function Exit-IcingaExecutePlugin()
 
         exit (& $Command @args);
     } catch {
-        $ExMsg = $_.Exception.Message;
-        Write-IcingaConsolePlain '[UNKNOWN]: {0}{1}{1}CheckCommand: {2}{1}Arguments: {3}' -Objects $ExMsg, (New-IcingaNewLine), $Command, $args;
+        $ExMsg      = $_.Exception.Message;
+        $StackTrace = $_.ScriptStackTrace;
+
+        Write-IcingaConsolePlain '[UNKNOWN] Icinga Exception: {0}{1}{1}CheckCommand: {2}{1}Arguments: {3}{1}{1}StackTrace:{1}{4}' -Objects $ExMsg, (New-IcingaNewLine), $Command, $args, $StackTrace;
         exit 3;
     }
 }
