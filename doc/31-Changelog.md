@@ -21,6 +21,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 ### Bugfixes
 
+* [#232](https://github.com/Icinga/icinga-powershell-framework/pull/232) Fixes wrong encoding while using REST-Api checks experimental feature, and now forces UTF8
 * [#240](https://github.com/Icinga/icinga-powershell-framework/pull/240) While filtering for certain services with `Get-IcingaServices`, there were some attributes missing from the collection. These are now added resulting in always correct output data.
 
 ## 1.4.1 (2021-03-10)

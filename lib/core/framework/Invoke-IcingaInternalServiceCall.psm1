@@ -86,7 +86,7 @@ function Invoke-IcingaInternalServiceCall()
 
     # Now queue the check inside our REST-Api
     try {
-        $ApiResult = Invoke-WebRequest -Method POST -UseBasicParsing -Uri ([string]::Format('https://localhost:{0}/v1/checker?command={1}', $RestApiPort, $Command)) -Body ($CommandArguments | ConvertTo-Json -Depth 100) -ContentType 'application/json' -TimeoutSec $Timeout;
+        $ApiResult = Invoke-WebRequest -Method POST -UseBasicParsing -Uri ([string]::Format('https://localhost:{0}/v1/checker?command={1}', $RestApiPort, $Command)) -Body (ConvertTo-JsonUTF8Bytes -InputObject $CommandArguments -Depth 100 -Compress) -ContentType 'application/json' -TimeoutSec $Timeout;
     } catch {
         # Something went wrong -> fallback to local execution
         $ExMsg = $_.Exception.message;
@@ -96,7 +96,7 @@ function Invoke-IcingaInternalServiceCall()
     }
 
     # Resolve our result from the API
-    $IcingaResult = ConvertFrom-Json -InputObject $ApiResult;
+    $IcingaResult = ConvertFrom-JsonUTF8 -InputObject $ApiResult.Content;
     $IcingaCR     = '';
 
     # In case we didn't receive a check result, fallback to local execution
