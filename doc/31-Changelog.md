@@ -13,6 +13,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 ### Enhancements
 
+* [#228](https://github.com/Icinga/icinga-powershell-framework/issues/228) Adds feature to suppress any kind of console output except for plugin output and performance data
 * [#229](https://github.com/Icinga/icinga-powershell-framework/pull/229) CustomFields defined as `SecureString` are now set to `hidden` within the Icinga Director configuration basket - please read the [upgrading docs](30-upgrading-framework.md) carefully
 * [#234](https://github.com/Icinga/icinga-powershell-framework/pull/234) Adds support to allow custom exception lists for Icinga Exceptions, making it easier for different modules to ship their own exception messages
 * [#235](https://github.com/Icinga/icinga-powershell-framework/pull/235) Adds new Cmdlet `Show-IcingaEventLogAnalysis` to get a better overview on how many log entries are present within the EventLog based on hour, minute and day average/maximum for allowing a more dynamic configuration for `Invoke-IcingaCheckEventLog`
