@@ -19,6 +19,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#235](https://github.com/Icinga/icinga-powershell-framework/pull/235) Adds new Cmdlet `Show-IcingaEventLogAnalysis` to get a better overview on how many log entries are present within the EventLog based on hour, minute and day average/maximum for allowing a more dynamic configuration for `Invoke-IcingaCheckEventLog`
 * [#241](https://github.com/Icinga/icinga-powershell-framework/pull/241) Ensures we use TLS 1.1 and 1.2 for REST-Api calls, as used certificates in general are created with these
 * [#243](https://github.com/Icinga/icinga-powershell-framework/pull/243) Adds stacktrace output for exceptions in case plugin execution fails
+* [#248](https://github.com/Icinga/icinga-powershell-framework/pull/248) Improves `Test-IcingaPerformanceCounterCategory` by creating an object for the Performance Counter category provided and checking if it is a valid object instead of relying on the registry which might not contain all categories in the correct language.
 
 ### Bugfixes
 
