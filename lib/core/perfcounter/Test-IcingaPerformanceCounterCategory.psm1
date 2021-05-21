@@ -28,9 +28,17 @@ function Test-IcingaPerformanceCounterCategory()
         [string]$Category
     );
 
-    $Counters = Show-IcingaPerformanceCounterCategories -Filter $Category;
+    if ([string]::IsNullOrEmpty($Category)) {
+        return $FALSE;
+    }
 
-    if ($Counters.Count -eq 0) {
+    try {
+        $Counter = New-Object System.Diagnostics.PerformanceCounterCategory($Category);
+
+        if ($null -eq $Counter -Or [string]::IsNullOrEmpty($Counter.CategoryType)) {
+            return $FALSE;
+        }
+    } catch {
         return $FALSE;
     }
 
