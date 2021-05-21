@@ -12,11 +12,11 @@
 [hashtable]$TestIcingaWindowsInfoText = @{
     1   = 'Everything is fine.';
     2   = 'No class specified to check';
-    4   = 'Unable to query data from your Windows Cluster. You are either missing permissions or your cluster is not running properly';
+    4   = 'Unable to query data using the given WMI-Class. You are either missing permissions or the service is not running properly';
     8   = 'The specified WMI Class could not be found in the specified NameSpace.';
     16  = 'No namespace with the specified name could be found on this system.';
     32  = 'Windows unhandled exception is thrown. Please enable frame DebugMode for information.';
-    64  = 'The Cluster Service is Stopped or you are not authorized to access the Cluster Service';
+    64  = 'Either the service has been stopped or you are not authorized to access the service.';
     128 = 'The Cmdlet Get-CimClass is not available on your system.';
 }
 
