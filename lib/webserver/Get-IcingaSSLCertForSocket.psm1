@@ -10,8 +10,7 @@ function Get-IcingaSSLCertForSocket()
     # to get a proper certificate
     if ([string]::IsNullOrEmpty($CertFile) -eq $FALSE) {
         if ((Test-Path $CertFile)) {
-            $FileType = Get-Item -Path $CertFile;
-            if ($FileType -eq '.pfx') {
+            if ([IO.Path]::GetExtension($CertFile) -eq '.pfx') {
                 return (New-Object Security.Cryptography.X509Certificates.X509Certificate2 $CertFile);
             } else {
                 return ConvertTo-IcingaX509Certificate -CertFile $CertFile;
