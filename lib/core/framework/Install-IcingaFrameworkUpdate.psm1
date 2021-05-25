@@ -53,10 +53,16 @@ function Install-IcingaFrameworkUpdate()
     Write-IcingaConsoleNotice ([string]::Format('Using content of folder "{0}" for updates', $ModuleContent));
 
     $ServiceStatus = (Get-Service 'icingapowershell' -ErrorAction SilentlyContinue).Status;
+    $AgentStatus   = (Get-Service 'icinga2' -ErrorAction SilentlyContinue).Status;
 
     if ($ServiceStatus -eq 'Running') {
         Write-IcingaConsoleNotice 'Stopping Icinga PowerShell service';
         Stop-IcingaService 'icingapowershell';
+        Start-Sleep -Seconds 1;
+    }
+    if ($AgentStatus -eq 'Running') {
+        Write-IcingaConsoleNotice 'Stopping Icinga Agent service';
+        Stop-IcingaService 'icinga2';
         Start-Sleep -Seconds 1;
     }
 
@@ -103,5 +109,9 @@ function Install-IcingaFrameworkUpdate()
     if ($ServiceStatus -eq 'Running') {
         Write-IcingaConsoleNotice 'Starting Icinga PowerShell service';
         Start-IcingaService 'icingapowershell';
+    }
+    if ($AgentStatus -eq 'Running') {
+        Write-IcingaConsoleNotice 'Starting Icinga Agent service';
+        Start-IcingaService 'icinga2';
     }
 }
