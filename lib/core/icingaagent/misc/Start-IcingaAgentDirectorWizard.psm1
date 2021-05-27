@@ -5,10 +5,10 @@ function Start-IcingaAgentDirectorWizard()
         [string]$SelfServiceAPIKey = $null,
         $OverrideDirectorVars      = $null,
         [bool]$RunInstaller        = $FALSE,
-        [switch]$ForceTemplateKey
+        [switch]$ForceTemplateKey  = $FALSE
     );
 
-    [hashtable]$DirectorOverrideArgs        = @{}
+    [hashtable]$DirectorOverrideArgs        = @{ }
     if ([string]::IsNullOrEmpty($DirectorUrl)) {
         $DirectorUrl = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please specify the Url pointing to your Icinga Director (Example: "https://example.com/icingaweb2/director")' -Default 'v').answer;
     }
@@ -54,15 +54,28 @@ function Start-IcingaAgentDirectorWizard()
         }
     }
 
-    try {
-        $Arguments = Get-IcingaDirectorSelfServiceConfig -DirectorUrl $DirectorUrl -ApiKey $SelfServiceAPIKey;
-    } catch {
-        Write-IcingaConsoleError ([string]::Format('Failed to connect to your Icinga Director at "{0}". Please try again', $DirectorUrl));
+    if ([string]::IsNullOrEmpty($LocalAPIKey) -eq $FALSE -And $LocalAPIKey -ne $TemplateKey -And $ForceTemplateKey -eq $FALSE) {
+        try {
+            $Arguments = Get-IcingaDirectorSelfServiceConfig -DirectorUrl $DirectorUrl -ApiKey $LocalAPIKey;
+        } catch {
+            Write-IcingaConsoleError 'Your local stored host key is no longer valid. Using provided template key';
 
-        return Start-IcingaAgentDirectorWizard `
-            -SelfServiceAPIKey ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Please re-enter your SelfService API Key for the Host-Template in case the key is no longer assigned to your host' -Default 'v' -DefaultInput $SelfServiceAPIKey).answer) `
-            -OverrideDirectorVars $OverrideDirectorVars `
-            -ForceTemplateKey;
+            return Start-IcingaAgentDirectorWizard `
+                -DirectorUrl $DirectorUrl `
+                -SelfServiceAPIKey $TemplateKey `
+                -OverrideDirectorVars $OverrideDirectorVars `
+                -ForceTemplateKey;
+        }
+    } else {
+        try {
+            $Arguments = Get-IcingaDirectorSelfServiceConfig -DirectorUrl $DirectorUrl -ApiKey $SelfServiceAPIKey;
+        } catch {
+            Write-IcingaConsoleError ([string]::Format('Failed to connect to your Icinga Director at "{0}". Please try again', $DirectorUrl));
+
+            return Start-IcingaAgentDirectorWizard `
+                -SelfServiceAPIKey ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Please re-enter your SelfService API Key for the Host-Template in case the key is no longer assigned to your host' -Default 'v' -DefaultInput $SelfServiceAPIKey).answer) `
+                -OverrideDirectorVars $OverrideDirectorVars;
+        }
     }
 
     $Arguments = Convert-IcingaDirectorSelfServiceArguments -JsonInput $Arguments;
