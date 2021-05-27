@@ -9,7 +9,8 @@ function Show-IcingaEventLogAnalysis()
     Start-IcingaTimer 'EventLog Analyser';
 
     try {
-        $BasicLogData = Get-WinEvent -ListLog $LogName -ErrorAction Stop;
+        [array]$BasicLogArray = Get-WinEvent -ListLog $LogName -ErrorAction Stop;
+        $BasicLogData         = $BasicLogArray[0];
     } catch {
         Write-IcingaConsoleError 'Failed to fetch data for EventLog "{0}". Probably this log does not exist.' -Objects $LogName;
         return;
@@ -40,12 +41,20 @@ function Show-IcingaEventLogAnalysis()
         };
     };
 
-    $LogData = Get-WinEvent -LogName $LogName;
+    $LogData             = Get-WinEvent -LogName $LogName;
+    [string]$NewestEntry = $null;
+    [string]$OldestEntry = $null;
 
     foreach ($entry in $LogData) {
         [string]$DayOfLogging = $entry.TimeCreated.ToString('yyyy\/MM\/dd');
         [string]$HourOfLogging = $entry.TimeCreated.ToString('yyyy\/MM\/dd-HH');
         [string]$MinuteOfLogging = $entry.TimeCreated.ToString('yyyy\/MM\/dd-HH-mm');
+
+        $OldestEntry = $entry.TimeCreated.ToString('yyyy-MM-dd HH:mm:ss');
+
+        if ([string]::IsNullOrEmpty($NewestEntry)) {
+            $NewestEntry = $OldestEntry;
+        }
 
         if ($LogAnalysis.Day.Entries.ContainsKey($DayOfLogging) -eq $FALSE) {
             $LogAnalysis.Day.Entries.Add($DayOfLogging, 0);
@@ -89,5 +98,7 @@ function Show-IcingaEventLogAnalysis()
     Write-IcingaConsoleNotice 'Maximum Logs per Day: {0}' -Objects $LogAnalysis.Day.Maximum;
     Write-IcingaConsoleNotice 'Maximum Logs per Hour: {0}' -Objects $LogAnalysis.Hour.Maximum;
     Write-IcingaConsoleNotice 'Maximum Logs per Minute: {0}' -Objects $LogAnalysis.Minute.Maximum;
+    Write-IcingaConsoleNotice 'Newest entry timestamp: {0}' -Objects $NewestEntry;
+    Write-IcingaConsoleNotice 'Oldest entry timestamp: {0}' -Objects $OldestEntry;
     Write-IcingaConsoleNotice 'Analysing Time: {0}s' -Objects ([math]::Round((Get-IcingaTimer 'EventLog Analyser').Elapsed.TotalSeconds, 2));
 }
