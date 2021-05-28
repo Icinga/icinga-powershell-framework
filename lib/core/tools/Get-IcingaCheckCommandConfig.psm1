@@ -77,24 +77,28 @@ function Get-IcingaCheckCommandConfig()
         [switch]$IcingaConfig
     );
 
+    [array]$BlacklistedArguments = @(
+        'ThresholdInterval'
+    );
+
     # Check whether all Checks will be exported or just the ones specified
     if ([string]::IsNullOrEmpty($CheckName) -eq $true) {
         $CheckName = (Get-Command Invoke-IcingaCheck*).Name
     }
 
     [int]$FieldID = 2; # Starts at '2', because '0' and '1' are reserved for 'Verbose' and 'NoPerfData'
-    [hashtable]$Basket = @{};
+    [hashtable]$Basket = @{ };
 
     # Define basic hashtable structure by adding fields: "Datafield", "DataList", "Command"
-    $Basket.Add('Datafield', @{});
-    $Basket.Add('DataList', @{});
-    $Basket.Add('Command', @{});
+    $Basket.Add('Datafield', @{ });
+    $Basket.Add('DataList', @{ });
+    $Basket.Add('Command', @{ });
 
     # At first generate a base Check-Command we can use as import source for all other commands
     $Basket.Command.Add(
         'PowerShell Base',
         @{
-            'arguments'       = @{};
+            'arguments'       = @{ };
             'command'         = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe';
             'disabled'        = $FALSE;
             'fields'          = @();
@@ -104,10 +108,19 @@ function Get-IcingaCheckCommandConfig()
             'object_name'     = 'PowerShell Base';
             'object_type'     = 'object';
             'timeout'         = '180';
-            'vars'            = @{};
+            'vars'            = @{ };
             'zone'            = $NULL;
         }
     );
+
+    $ThresholdIntervalArg = New-Object -TypeName PSObject;
+    $ThresholdIntervalArg | Add-Member -MemberType NoteProperty -Name 'type'             -Value (New-Object -TypeName PSObject);
+    $ThresholdIntervalArg | Add-Member -MemberType NoteProperty -Name 'Description'      -Value (New-Object -TypeName PSObject);
+    $ThresholdIntervalArg | Add-Member -MemberType NoteProperty -Name 'position'         -Value 99;
+    $ThresholdIntervalArg | Add-Member -MemberType NoteProperty -Name 'Name'             -Value 'ThresholdInterval';
+    $ThresholdIntervalArg | Add-Member -MemberType NoteProperty -Name 'required'         -Value $FALSE;
+    $ThresholdIntervalArg.type | Add-Member -MemberType NoteProperty -Name 'name'        -Value 'String';
+    $ThresholdIntervalArg.Description | Add-Member -MemberType NoteProperty -Name 'Text' -Value 'Change the value your defined threshold checks against from the current value to a collected time threshold of the Icinga for Windows daemon, as described here: https://icinga.com/docs/icinga-for-windows/latest/doc/service/10-Register-Service-Checks/ An example for this argument would be 1m or 15m which will use the average of 1m or 15m for monitoring.';
 
     # Loop through ${CheckName}, to get information on every command specified/all commands.
     foreach ($check in $CheckName) {
@@ -115,7 +128,27 @@ function Get-IcingaCheckCommandConfig()
         # Get necessary syntax-information and more through cmdlet "Get-Help"
         $Data            = (Get-Help $check);
         $ParameterList   = (Get-Command -Name $check).Parameters;
+        $CheckParamList  = @( $ThresholdIntervalArg );
         $PluginNameSpace = $Data.Name.Replace('Invoke-', '');
+
+        foreach ($entry in $Data.parameters.parameter) {
+            foreach ($BlackListArg in $BlacklistedArguments) {
+                if ($BlackListArg.ToLower() -eq $entry.Name.ToLower()) {
+                    Write-IcingaConsoleError -Message 'The argument "{0}" for check command "{1}" is not allowed, as this is reserved as Framework constant argument and can not be used.' -Objects $BlackListArg, $check;
+                    return;
+                }
+            }
+            $CheckParamList += (Convert-IcingaCheckArgumentToPSObject -Parameter $entry);
+        }
+
+        foreach ($arg in $ParameterList.Keys) {
+            foreach ($entry in $CheckParamList) {
+                if ($entry.Name -eq $arg) {
+                    $entry.Attributes.ValidValues = $ParameterList[$arg].Attributes.ValidValues;
+                    break;
+                }
+            }
+        }
 
         # Add command Structure
         $Basket.Command.Add(
@@ -123,7 +156,7 @@ function Get-IcingaCheckCommandConfig()
                 'arguments'   = @{
                     # Set the Command handling for every check command
                     '-C' = @{
-                        'value' = [string]::Format('try {{ Use-Icinga -Minimal; }} catch {{ Write-Output {1}The Icinga PowerShell Framework is either not installed on the system or not configured properly. Please check https://icinga.com/docs/windows for further details{1}; exit 3; }}; Exit-IcingaExecutePlugin -Command {1}{0}{1} ', $Data.Name, "'");
+                        'value' = [string]::Format('try {{ Use-Icinga -Minimal; }} catch {{ Write-Output {1}The Icinga PowerShell Framework is either not installed on the system or not configured properly. Please check https://icinga.com/docs/windows for further details{1}; Write-Output "Error: $$($$_.Exception.Message)Components:`r`n$$( Get-Module -ListAvailable "icinga-powershell-*" )`r`nModule-Path:`r`n$$($$Env:PSModulePath)"; exit 3; }}; Exit-IcingaExecutePlugin -Command {1}{0}{1} ', $Data.Name, "'");
                         'order' = '0';
                     }
                 }
@@ -136,7 +169,7 @@ function Get-IcingaCheckCommandConfig()
         );
 
         # Loop through parameters of a given command
-        foreach ($parameter in $Data.parameters.parameter) {
+        foreach ($parameter in $CheckParamList) {
 
             $IsDataList      = $FALSE;
 
@@ -243,9 +276,9 @@ function Get-IcingaCheckCommandConfig()
 
             $DataListName = [string]::Format('{0} {1}', $PluginNameSpace, $parameter.Name);
 
-            if ($null -ne $ParameterList[$parameter.Name].Attributes.ValidValues) {
+            if ($null -ne $parameter.Attributes.ValidValues) {
                 $IcingaDataType = 'Datalist';
-                Add-PowerShellDataList -Name $DataListName -Basket $Basket -Arguments $ParameterList[$parameter.Name].Attributes.ValidValues;
+                Add-PowerShellDataList -Name $DataListName -Basket $Basket -Arguments $parameter.Attributes.ValidValues;
                 $IsDataList = $TRUE;
             } elseif ($parameter.type.name -eq 'SwitchParameter') {
                 $IcingaDataType = 'Boolean';
@@ -315,8 +348,13 @@ function Get-IcingaCheckCommandConfig()
 
         $Data            = (Get-Help $check)
         $PluginNameSpace = $Data.Name.Replace('Invoke-', '');
+        $CheckParamList  = @( $ThresholdIntervalArg );
 
-        foreach ($parameter in $Data.parameters.parameter) {
+        foreach ($entry in $Data.parameters.parameter) {
+            $CheckParamList += (Convert-IcingaCheckArgumentToPSObject -Parameter $entry);;
+        }
+
+        foreach ($parameter in $CheckParamList) {
             $IcingaCustomVariable = [string]::Format('{0}_{1}_{2}', $PluginNameSpace, (Get-Culture).TextInfo.ToTitleCase($parameter.type.name), $parameter.Name);
 
             # Todo: Should we improve this? Actually the handling would be identical, we just need to assign

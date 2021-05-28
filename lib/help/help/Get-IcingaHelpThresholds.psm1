@@ -10,8 +10,9 @@ function Get-IcingaHelpThresholds()
 
     if ([string]::IsNullOrEmpty($Value) -eq $FALSE) {
         $ExampleCheck = New-IcingaCheck -Name 'Example' -Value $Value;
-        $ExampleCheck.WarnOutOfRange($Warning).CritOutOfRange($Critical).Compile($TRUE) | Out-Null;
-        return;
+        $ExampleCheck.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
+
+        return (New-IcingaCheckResult -Check $ExampleCheck -Compile);
     }
 
     Write-IcingaConsolePlain

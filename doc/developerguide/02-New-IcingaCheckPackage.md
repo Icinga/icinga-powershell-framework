@@ -27,6 +27,7 @@ $IcingaPackage = New-IcingaCheckPackage -Name 'My Package' -OperatorAnd;
 | Checks             | Array     |           | Array of checks to be added to the check package |
 | Verbose            | int       |           | Defines the level of output detail from 0 lowest to 3 highest detail |
 | IgnoreEmptyPackage | Switch    |           | By default a check package will return `Unknown` in case no checks are assigned. Setting this argument will ignore this and return `Ok` instead
+| AddSummaryHeader   | Switch    |           | Adds a summary on how many checks are Unknown, Critical, Warning and Ok on the output of the package
 | Hidden             | Switch    |           | If set, the check package doesn't generate output |
 
 ### Examples
