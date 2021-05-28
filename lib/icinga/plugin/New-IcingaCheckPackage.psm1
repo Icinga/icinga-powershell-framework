@@ -179,6 +179,10 @@ function New-IcingaCheckPackage()
 
             $check.Compile();
 
+            if ($check.__IsHidden()) {
+                continue;
+            }
+
             if ($WorstState -lt $check.__GetCheckState()) {
                 $WorstState = $check.__GetCheckState();
             }
