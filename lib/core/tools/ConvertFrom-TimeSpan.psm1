@@ -12,7 +12,7 @@ function ConvertFrom-TimeSpan()
         return (
             [string]::Format(
                 '{0}d',
-                $TimeSpan.TotalDays
+                ([math]::Round($TimeSpan.TotalDays, 2))
             )
         );
     }
@@ -20,7 +20,7 @@ function ConvertFrom-TimeSpan()
         return (
             [string]::Format(
                 '{0}h',
-                $TimeSpan.TotalHours
+                ([math]::Round($TimeSpan.TotalHours, 2))
             )
         );
     }
@@ -28,7 +28,7 @@ function ConvertFrom-TimeSpan()
         return (
             [string]::Format(
                 '{0}m',
-                $TimeSpan.TotalMinutes
+                ([math]::Round($TimeSpan.TotalMinutes, 2))
             )
         );
     }
@@ -36,7 +36,7 @@ function ConvertFrom-TimeSpan()
         return (
             [string]::Format(
                 '{0}s',
-                $TimeSpan.TotalSeconds
+                ([math]::Round($TimeSpan.TotalSeconds, 2))
             )
         );
     }
