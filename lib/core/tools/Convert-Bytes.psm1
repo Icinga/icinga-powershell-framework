@@ -5,6 +5,9 @@ function Convert-Bytes()
         [string]$Unit
     );
 
+    # Ensure we always use proper formatting of values
+    $Value = $Value.Replace(',', '.');
+
     If (($Value -Match "(^[\d\.]*) ?(B|KB|MB|GB|TB|PT|KiB|MiB|GiB|TiB|PiB)") -eq $FALSE) {
         $Value = [string]::Format('{0}B', $Value);
     }

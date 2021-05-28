@@ -13,17 +13,23 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 ### Enhancements
 
+* [#228](https://github.com/Icinga/icinga-powershell-framework/issues/228) Adds feature to suppress any kind of console output except for plugin output and performance data
 * [#229](https://github.com/Icinga/icinga-powershell-framework/pull/229) CustomFields defined as `SecureString` are now set to `hidden` within the Icinga Director configuration basket - please read the [upgrading docs](30-upgrading-framework.md) carefully
 * [#234](https://github.com/Icinga/icinga-powershell-framework/pull/234) Adds support to allow custom exception lists for Icinga Exceptions, making it easier for different modules to ship their own exception messages
 * [#235](https://github.com/Icinga/icinga-powershell-framework/pull/235) Adds new Cmdlet `Show-IcingaEventLogAnalysis` to get a better overview on how many log entries are present within the EventLog based on hour, minute and day average/maximum for allowing a more dynamic configuration for `Invoke-IcingaCheckEventLog`
+* [#236](https://github.com/Icinga/icinga-powershell-framework/pull/236) Adds feature which stops the Icinga Agent before upgrading the Icinga PowerShell Framework and starting it again afterwards (in case it was running), to resolve some possible file lock issues
 * [#241](https://github.com/Icinga/icinga-powershell-framework/pull/241) Ensures we use TLS 1.1 and 1.2 for REST-Api calls, as used certificates in general are created with these
 * [#243](https://github.com/Icinga/icinga-powershell-framework/pull/243) Adds stacktrace output for exceptions in case plugin execution fails
+* [#248](https://github.com/Icinga/icinga-powershell-framework/pull/248) Improves `Test-IcingaPerformanceCounterCategory` by creating an object for the Performance Counter category provided and checking if it is a valid object instead of relying on the registry which might not contain all categories in the correct language.
 * [#249](https://github.com/Icinga/icinga-powershell-framework/pull/249) Improves internal exception handler to get rid if misplaced `:` and adds all fields properly
+* [#250](https://github.com/Icinga/icinga-powershell-framework/pull/250) Improve error handling on plugin execution by informing the user if the plugin is simply not installed or the entire module was not loaded because of errors or missing dependencies
 
 ### Bugfixes
 
+* [#231](https://github.com/Icinga/icinga-powershell-framework/issues/231) Fixes error while using Icinga Director Self-Service API, in case the host or host API key was deleted inside the Icinga Director and the installation wizard was called with the correct template key, while the old host key was still present inside the Icinga for Windows configuration
 * [#232](https://github.com/Icinga/icinga-powershell-framework/pull/232) Fixes wrong encoding while using REST-Api checks experimental feature, and now forces UTF8
 * [#240](https://github.com/Icinga/icinga-powershell-framework/pull/240) While filtering for certain services with `Get-IcingaServices`, there were some attributes missing from the collection. These are now added resulting in always correct output data.
+* [#245](https://github.com/Icinga/icinga-powershell-framework/pull/245) Fixes loading of `.pfx` certificates by properly checking the file type
 
 ## 1.4.1 (2021-03-10)
 

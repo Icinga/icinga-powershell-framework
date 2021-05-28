@@ -3,21 +3,32 @@ function New-IcingaPerformanceDataEntry()
     param (
         $PerfDataObject,
         $Label          = $null,
-        $Value          = $null
+        $Value          = $null,
+        $Warning        = $null,
+        $Critical       = $null
     );
 
     if ($null -eq $PerfDataObject) {
         return '';
     }
 
-    [string]$LabelName = $PerfDataObject.label;
-    [string]$PerfValue = $PerfDataObject.value;
+    [string]$LabelName     = $PerfDataObject.label;
+    [string]$PerfValue     = $PerfDataObject.value;
+    [string]$WarningValue  = $PerfDataObject.warning;
+    [string]$CriticalValue = $PerfDataObject.critical;
 
     if ([string]::IsNullOrEmpty($Label) -eq $FALSE) {
         $LabelName = $Label;
     }
     if ([string]::IsNullOrEmpty($Value) -eq $FALSE) {
         $PerfValue = $Value;
+    }
+
+    # Override our warning/critical values only if the label does not match.
+    # Eg. Core_1 not matching Core_1_5 - this is only required for time span checks
+    if ([string]::IsNullOrEmpty($Label) -eq $FALSE -And $Label -ne $PerfDataObject.label) {
+        $WarningValue  = $Warning;
+        $CriticalValue = $Critical;
     }
 
     $minimum = '';
@@ -36,8 +47,8 @@ function New-IcingaPerformanceDataEntry()
             $LabelName.ToLower(),
             (Format-IcingaPerfDataValue $PerfValue),
             $PerfDataObject.unit,
-            (Format-IcingaPerfDataValue $PerfDataObject.warning),
-            (Format-IcingaPerfDataValue $PerfDataObject.critical),
+            (Format-IcingaPerfDataValue $WarningValue),
+            (Format-IcingaPerfDataValue $CriticalValue),
             (Format-IcingaPerfDataValue $minimum),
             (Format-IcingaPerfDataValue $maximum)
         )

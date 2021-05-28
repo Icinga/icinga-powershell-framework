@@ -10,7 +10,7 @@
 
 function Use-Icinga()
 {
-    param(
+    param (
         [switch]$LibOnly   = $FALSE,
         [switch]$Daemon    = $FALSE,
         [switch]$DebugMode = $FALSE,
@@ -20,6 +20,14 @@ function Use-Icinga()
     Disable-IcingaProgressPreference;
 
     if ($Minimal) {
+        if ($null -eq $global:Icinga) {
+            $global:Icinga = @{ };
+        }
+
+        if ($global:Icinga.ContainsKey('Minimal') -eq $FALSE) {
+            $global:Icinga.Add('Minimal', $TRUE);
+        }
+
         # If we load the minimal Framework files, we have to ensure our enums are loaded
         Import-Module ([string]::Format('{0}\lib\icinga\exception\Icinga_IcingaExceptionEnums.psm1', $PSScriptRoot)) -Global;
         Import-Module ([string]::Format('{0}\lib\icinga\enums\Icinga_IcingaEnums.psm1', $PSScriptRoot)) -Global;

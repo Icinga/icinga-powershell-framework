@@ -1,38 +1,38 @@
-Import-IcingaLib icinga\enums;
-
-function New-IcingaCheckresult()
+function New-IcingaCheckResult()
 {
-    param(
+    param (
         $Check,
-        [bool]$NoPerfData,
-        [switch]$Compile
+        [bool]$NoPerfData = $FALSE,
+        [switch]$Compile  = $FALSE
     );
 
-    $CheckResult = New-Object -TypeName PSObject;
-    $CheckResult | Add-Member -MemberType NoteProperty -Name 'check'      -Value $Check;
-    $CheckResult | Add-Member -MemberType NoteProperty -Name 'noperfdata' -Value $NoPerfData;
+    $IcingaCheckResult = New-Object -TypeName PSObject;
+    $IcingaCheckResult | Add-Member -MemberType NoteProperty -Name 'Check'      -Value $Check;
+    $IcingaCheckResult | Add-Member -MemberType NoteProperty -Name 'NoPerfData' -Value $NoPerfData;
 
-    $CheckResult | Add-Member -MemberType ScriptMethod -Name 'Compile' -Value {
-        if ($null -eq $this.check) {
+    $IcingaCheckResult | Add-Member -MemberType ScriptMethod -Name 'Compile' -Value {
+        if ($null -eq $this.Check) {
             return $IcingaEnums.IcingaExitCode.Unknown;
         }
 
-        $CheckCommand = (Get-PSCallStack)[2].Command;
-
         # Compile the check / package if not already done
-        $this.check.AssignCheckCommand($CheckCommand);
-        $this.check.Compile($TRUE) | Out-Null;
+        $this.Check.Compile();
 
-        if ([int]$this.check.exitcode -ne [int]$IcingaEnums.IcingaExitCode.Unknown -And -Not $this.noperfdata) {
-            Write-IcingaPluginPerfData -PerformanceData ($this.check.GetPerfData()) -CheckCommand $CheckCommand;
+        Write-IcingaPluginOutput -Output ($this.Check.__GetCheckOutput());
+
+        if ($this.NoPerfData -eq $FALSE) {
+            Write-IcingaPluginPerfData -IcingaCheck $this.Check;
         }
 
-        return $this.check.exitcode;
+        # Ensure we reset our internal cache once the plugin was executed
+        $Global:Icinga.ThresholdCache[$this.Check.__GetCheckCommand()] = $null;
+
+        return $this.Check.__GetCheckState();
     }
 
     if ($Compile) {
-        return $CheckResult.Compile();
+        return $IcingaCheckResult.Compile();
     }
 
-    return $CheckResult;
+    return $IcingaCheckResult;
 }

@@ -1,9 +1,15 @@
 function Write-IcingaPluginPerfData()
 {
-    param(
-        $PerformanceData,
-        $CheckCommand
+    param (
+        $IcingaCheck = $null
     );
+
+    if ($null -eq $IcingaCheck) {
+        return;
+    }
+
+    $PerformanceData = $IcingaCheck.__GetPerformanceData();
+    $CheckCommand    = $IcingaCheck.__GetCheckCommand();
 
     if ($PerformanceData.package -eq $FALSE) {
         $PerformanceData = @{
@@ -13,13 +19,13 @@ function Write-IcingaPluginPerfData()
         $PerformanceData = $PerformanceData.perfdata;
     }
 
-    $CheckResultCache = Get-IcingaCacheData -Space 'sc_daemon' -CacheStore 'checkresult' -KeyName $CheckCommand;
+    $CheckResultCache = $Global:Icinga.ThresholdCache[$CheckCommand];
 
     if ($global:IcingaDaemonData.FrameworkRunningAsDaemon -eq $FALSE) {
-        [string]$PerfDataOutput = (Get-IcingaPluginPerfDataContent -PerfData $PerformanceData -CheckResultCache $CheckResultCache);
+        [string]$PerfDataOutput = (Get-IcingaPluginPerfDataContent -PerfData $PerformanceData -CheckResultCache $CheckResultCache -IcingaCheck $IcingaCheck);
         Write-IcingaConsolePlain ([string]::Format('| {0}', $PerfDataOutput));
     } else {
-        [void](Get-IcingaPluginPerfDataContent -PerfData $PerformanceData -CheckResultCache $CheckResultCache -AsObject $TRUE);
+        [void](Get-IcingaPluginPerfDataContent -PerfData $PerformanceData -CheckResultCache $CheckResultCache -AsObject $TRUE -IcingaCheck $IcingaCheck);
     }
 }
 
@@ -28,7 +34,8 @@ function Get-IcingaPluginPerfDataContent()
     param(
         $PerfData,
         $CheckResultCache,
-        [bool]$AsObject = $FALSE
+        [bool]$AsObject = $FALSE,
+        $IcingaCheck    = $null
     );
 
     [string]$PerfDataOutput = '';
@@ -36,13 +43,16 @@ function Get-IcingaPluginPerfDataContent()
     foreach ($package in $PerfData.Keys) {
         $data = $PerfData[$package];
         if ($data.package) {
-            $PerfDataOutput += (Get-IcingaPluginPerfDataContent -PerfData $data.perfdata -CheckResultCache $CheckResultCache -AsObject $AsObject);
+            $PerfDataOutput += (Get-IcingaPluginPerfDataContent -PerfData $data.perfdata -CheckResultCache $CheckResultCache -AsObject $AsObject -IcingaCheck $IcingaCheck);
         } else {
             foreach ($checkresult in $CheckResultCache.PSobject.Properties) {
+
                 $SearchPattern = [string]::Format('{0}_', $data.label);
                 $SearchEntry   = $checkresult.Name;
                 if ($SearchEntry -like "$SearchPattern*") {
-                    $cachedresult = (New-IcingaPerformanceDataEntry -PerfDataObject $data -Label $SearchEntry -Value $checkresult.Value);
+                    $TimeSpan  = $IcingaCheck.__GetTimeSpanThreshold($SearchEntry, $data.label);
+
+                    $cachedresult = (New-IcingaPerformanceDataEntry -PerfDataObject $data -Label $SearchEntry -Value $checkresult.Value -Warning $TimeSpan.Warning -Critical $TimeSpan.Critical);
 
                     if ($AsObject) {
                         # New behavior with local thread separated results
