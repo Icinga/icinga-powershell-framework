@@ -133,7 +133,28 @@ function Convert-IcingaPluginThresholds()
             $Value         = ([string]$ThresholdValue).Replace(' ', '').Replace('%', '');
             $RetValue.Unit = $WorkUnit;
         } else {
-            $Value = $ThresholdValue;
+            # Load all other units/values genericly
+            [string]$StrNumeric = '';
+            [bool]$FirstChar    = $TRUE;
+            foreach ($entry in ([string]($ThresholdValue)).ToCharArray()) {
+                if (Test-Numeric $entry) {
+                    $StrNumeric += $entry;
+                    $FirstChar   = $FALSE;
+                } else {
+                    if ([string]::IsNullOrEmpty($RetValue.Unit) -And $FirstChar -eq $FALSE) {
+                        $RetValue.Unit = $entry;
+                    } else {
+                        $StrNumeric    = '';
+                        $RetValue.Unit = '';
+                        break;
+                    }
+                }
+            }
+            if ([string]::IsNullOrEmpty($StrNumeric)) {
+                $Value = $ThresholdValue;
+            } else {
+                $Value = [decimal]$StrNumeric;
+            }
         }
 
         if ($HasTilde) {
