@@ -21,6 +21,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#241](https://github.com/Icinga/icinga-powershell-framework/pull/241) Ensures we use TLS 1.1 and 1.2 for REST-Api calls, as used certificates in general are created with these
 * [#243](https://github.com/Icinga/icinga-powershell-framework/pull/243) Adds stacktrace output for exceptions in case plugin execution fails
 * [#248](https://github.com/Icinga/icinga-powershell-framework/pull/248) Improves `Test-IcingaPerformanceCounterCategory` by creating an object for the Performance Counter category provided and checking if it is a valid object instead of relying on the registry which might not contain all categories in the correct language.
+* [#249](https://github.com/Icinga/icinga-powershell-framework/pull/249) Improves internal exception handler to get rid if misplaced `:` and adds all fields properly
 * [#250](https://github.com/Icinga/icinga-powershell-framework/pull/250) Improve error handling on plugin execution by informing the user if the plugin is simply not installed or the entire module was not loaded because of errors or missing dependencies
 
 ### Bugfixes

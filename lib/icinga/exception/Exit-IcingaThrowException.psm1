@@ -64,8 +64,12 @@ function Exit-IcingaThrowException()
                 break;
             }
         }
-    } else {
+    }
+    if ($null -eq $ExceptionMessageLib -Or [string]::IsNullOrEmpty($ExceptionName)) {
         $ExceptionName   = [string]::Format('{0} Exception', $ExceptionTypeString);
+        if ([string]::IsNullOrEmpty($InputString)) {
+            $InputString = $ExceptionThrown;
+        }
         $ExceptionThrown = [string]::Format(
             '{0} exception occured:{1}{2}',
             $ExceptionTypeString,
