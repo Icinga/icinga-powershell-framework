@@ -113,6 +113,11 @@ function Compare-IcingaPluginThresholds()
     $TempValue                        = (Convert-IcingaPluginThresholds -Threshold ([string]::Format('{0}{1}', $InputValue, $Unit)));
     $InputValue                       = $TempValue.Value;
     $TmpUnit                          = $TempValue.Unit;
+
+    if (Test-Numeric $InputValue) {
+        [decimal]$InputValue = [decimal]$InputValue;
+    }
+
     $IcingaThresholds.RawValue        = $InputValue;
     $TempValue                        = (Convert-IcingaPluginThresholds -Threshold ([string]::Format('{0}{1}', $BaseValue, $Unit)));
     $BaseValue                        = $TempValue.Value;
