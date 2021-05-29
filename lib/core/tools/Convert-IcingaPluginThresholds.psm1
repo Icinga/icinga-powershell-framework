@@ -170,7 +170,7 @@ function Convert-IcingaPluginThresholds()
 
     if ([string]::IsNullOrEmpty($Value) -eq $FALSE -And $Value.Contains(':') -eq $FALSE) {
         if ((Test-Numeric $Value)) {
-            $RetValue.Value = $Value;
+            $RetValue.Value = [decimal]$Value;
             return $RetValue;
         }
     }
