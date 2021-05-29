@@ -255,9 +255,11 @@ function Compare-IcingaPluginThresholds()
 
             if ((Test-Numeric ($rangeMin.Replace('@', '').Replace('~', '')))) {
                 $IcingaThresholds.MinRangeValue = [decimal]($rangeMin.Replace('@', '').Replace('~', ''));
+                [decimal]$rangeMin = [decimal]$rangeMin;
             }
             if ((Test-Numeric $rangeMax)) {
                 $IcingaThresholds.MaxRangeValue = [decimal]$rangeMax;
+                [decimal]$rangeMax = [decimal]$rangeMax;
             }
 
             if ($IsNegating -eq $FALSE -And (Test-Numeric $rangeMin) -And (Test-Numeric $rangeMax)) {
