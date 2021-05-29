@@ -80,6 +80,12 @@ function New-IcingaCheck()
         )
     }
 
+    $IcingaCheck | Add-Member -MemberType ScriptMethod -Force -Name '__CreateDefaultThresholdObject' -Value {
+        [hashtable]$ThresholdArguments = $this.__GetBaseThresholdArguments();
+        $ThresholdObject = Compare-IcingaPluginThresholds @ThresholdArguments;
+        $this.__SetCheckState($ThresholdObject, $IcingaEnums.IcingaExitCode.Ok);
+    }
+
     # Override shared function
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Force -Name '__SetCheckOutput' -Value {
         param ($PluginOutput);
@@ -88,15 +94,13 @@ function New-IcingaCheck()
             return;
         }
 
+        if ($null -eq $this.__ThresholdObject) {
+            $this.__CreateDefaultThresholdObject();
+        }
+
         $PluginThresholds = '';
         $TimeSpan         = '';
-
-        if ($null -ne $this.__ThresholdObject) {
-            $PluginThresholds = $this.__ThresholdObject.FullMessage;
-        } elseif ($null -ne $this.Value) {
-            # In case we simply added a value to a check and not did anything with it, output the raw value properly formatted like anything else
-            $PluginThresholds = (ConvertTo-IcingaPluginOutputTranslation -Translation $this.Translation -Value (Convert-IcingaPluginValueToString -Unit $this.Unit -Value $this.Value));
-        }
+        $PluginThresholds = $this.__ThresholdObject.FullMessage;
 
         if ([string]::IsNullOrEmpty($PluginOutput) -eq $FALSE) {
             $PluginThresholds = $PluginOutput;
