@@ -105,39 +105,39 @@ function New-IcingaCheckPackage()
         if ($this.__GetIndention() -eq 0) {
             if ($this.__UnknownChecks.Count -ne 0) {
                 $UnknownChecks = [string]::Format(' [UNKNOWN] {0}', ([string]::Join(', ', $this.__UnknownChecks)));
-                $HasContent = $TRUE;
                 $CheckSummary.Append(
                     [string]::Format(' {0} Unknown', $this.__UnknownChecks.Count)
                 ) | Out-Null;
             }
             if ($this.__CriticalChecks.Count -ne 0) {
                 $CriticalChecks = [string]::Format(' [CRITICAL] {0}', ([string]::Join(', ', $this.__CriticalChecks)));
-                $HasContent = $TRUE;
                 $CheckSummary.Append(
                     [string]::Format(' {0} Critical', $this.__CriticalChecks.Count)
                 ) | Out-Null;
             }
             if ($this.__WarningChecks.Count -ne 0) {
                 $WarningChecks = [string]::Format(' [WARNING] {0}', ([string]::Join(', ', $this.__WarningChecks)));
-                $HasContent = $TRUE;
                 $CheckSummary.Append(
                     [string]::Format(' {0} Warning', $this.__WarningChecks.Count)
                 ) | Out-Null;
             }
         }
-        if ([string]::IsNullOrEmpty($this.__ErrorMessage) -eq $FALSE) {
-            $HasContent = $TRUE;
-        }
+
         if ($this.__OkChecks.Count -ne 0) {
             $CheckSummary.Append(
                 [string]::Format(' {0} Ok', $this.__OkChecks.Count)
             ) | Out-Null;
-            $HasContent = $TRUE;
         }
 
         if ($this.AddSummaryHeader -eq $FALSE) {
             $CheckSummary.Clear() | Out-Null;
             $CheckSummary.Append('') | Out-Null;
+        } elseif ($CheckSummary.Length -ne 0) {
+            $HasContent = $TRUE;
+        }
+
+        if ([string]::IsNullOrEmpty($this.__ErrorMessage) -eq $FALSE) {
+            $HasContent = $TRUE;
         }
 
         $this.__CheckOutput = [string]::Format(
