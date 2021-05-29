@@ -148,9 +148,8 @@ function Compare-IcingaPluginThresholds()
             $IcingaThresholds.InRange = $FALSE;
             $IcingaThresholds.Message = 'is matching threshold';
             $IcingaThresholds.Range   = [string]::Format(
-                '{0}{1}',
-                (ConvertTo-IcingaPluginOutputTranslation -Translation $Translation -Value $ThresholdValue),
-                $IcingaThresholds.Unit
+                '{0}',
+                (ConvertTo-IcingaPluginOutputTranslation -Translation $Translation -Value (Convert-IcingaPluginValueToString -Unit $IcingaThresholds.Unit -Value $ThresholdValue -OriginalUnit $IcingaThresholds.OriginalUnit))
             );
         }
     } elseif ($NotMatches) {
@@ -159,9 +158,8 @@ function Compare-IcingaPluginThresholds()
             $IcingaThresholds.InRange = $FALSE;
             $IcingaThresholds.Message = 'is not matching threshold';
             $IcingaThresholds.Range   = [string]::Format(
-                '{0}{1}',
-                (ConvertTo-IcingaPluginOutputTranslation -Translation $Translation -Value $ThresholdValue),
-                $IcingaThresholds.Unit
+                '{0}',
+                (ConvertTo-IcingaPluginOutputTranslation -Translation $Translation -Value (Convert-IcingaPluginValueToString -Unit $IcingaThresholds.Unit -Value $ThresholdValue -OriginalUnit $IcingaThresholds.OriginalUnit))
             );
         }
     } elseif ($IsBetween) {

@@ -26,16 +26,24 @@
 };
 
 [hashtable]$IcingaMeasurementUnits = @{
-    's'  = 'seconds';
-    'ms' = 'milliseconds';
-    'us' = 'microseconds';
-    '%'  = 'percent';
-    'B'  = 'bytes';
-    'KB' = 'Kilobytes';
-    'MB' = 'Megabytes';
-    'GB' = 'Gigabytes';
-    'TB' = 'Terabytes';
-    'c'  = 'counter';
+    's'    = 'seconds';
+    'ms'   = 'milliseconds';
+    'us'   = 'microseconds';
+    '%'    = 'percent';
+    'B'    = 'bytes';
+    'KB'   = 'Kilobytes';
+    'MB'   = 'Megabytes';
+    'GB'   = 'Gigabytes';
+    'TB'   = 'Terabytes';
+    'c'    = 'counter';
+    'Kbit' = 'Kilobit';
+    'Mbit' = 'Megabit';
+    'Gbit' = 'Gigabit';
+    'Tbit' = 'Terabit';
+    'Pbit' = 'Petabit';
+    'Ebit' = 'Exabit';
+    'Zbit' = 'Zettabit';
+    'Ybit' = 'Yottabit';
 };
 
 <##################################################################################################
