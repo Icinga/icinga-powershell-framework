@@ -112,9 +112,8 @@ function New-IcingaCheckBaseObject()
         );
     }
 
+    # Shared function
     $IcingaCheckBaseObject | Add-Member -MemberType ScriptMethod -Name 'Compile' -Value {
-        $this.__ValidateThresholdInput();
-        $this.__SetCheckOutput();
     }
 
     $IcingaCheckBaseObject | Add-Member -MemberType ScriptMethod -Name '__SetVerbosity' -Value {
