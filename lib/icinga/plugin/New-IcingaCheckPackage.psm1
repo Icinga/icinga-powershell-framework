@@ -67,7 +67,7 @@ function New-IcingaCheckPackage()
             $check.__SetCheckOutput();
             $check.__SetVerbosity($this.__GetVerbosity());
             $check.__SetParent($this);
-            $this.__Checks += $check;
+            [array]$this.__Checks += $check;
         }
     }
 
@@ -172,7 +172,7 @@ function New-IcingaCheckPackage()
             return;
         }
 
-        $this.__Checks = $this.__Checks | Sort-Object -Property Name;
+        [array]$this.__Checks = ($this.__Checks | Sort-Object -Property Name);
 
         # Loop all checks to understand the content of result
         foreach ($check in $this.__Checks) {
