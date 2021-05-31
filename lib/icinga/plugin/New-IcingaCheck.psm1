@@ -114,10 +114,17 @@ function New-IcingaCheck()
             );
         }
 
+        [bool]$AddColon = $TRUE;
+
+        if ([string]::IsNullOrEmpty($this.Name) -eq $FALSE -And $this.Name[$this.Name.Length - 1] -eq ':') {
+            $AddColon = $FALSE;
+        }
+
         $this.__CheckOutput = [string]::Format(
-            '{0} {1}: {2}{3}',
+            '{0} {1}{2} {3}{4}',
             $IcingaEnums.IcingaExitCodeText[$this.__CheckState],
             $this.Name,
+            (&{ if ($AddColon) { return ':'; } else { return ''; } }),
             $PluginThresholds,
             $TimeSpan
         );
