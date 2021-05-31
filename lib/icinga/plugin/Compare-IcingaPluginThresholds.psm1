@@ -402,7 +402,7 @@ function Compare-IcingaPluginThresholds()
 
     if ($UseDynamicPercentage -And $Unit -ne '%') {
         $IcingaThresholds.IcingaThreshold = $IcingaThresholds.PercentValue;
-        $PluginCurrentValue       = [string]::Format('{0}% ({1})', ([math]::Round($IcingaThresholds.Value, 2)), (Convert-IcingaPluginValueToString -Unit $Unit -Value $IcingaThresholds.RawValue -OriginalUnit $IcingaThresholds.OriginalUnit));
+        $PluginCurrentValue       = [string]::Format('{0}% ({1})', ([string]([math]::Round($IcingaThresholds.Value, 2))).Replace(',', '.'), (Convert-IcingaPluginValueToString -Unit $Unit -Value $IcingaThresholds.RawValue -OriginalUnit $IcingaThresholds.OriginalUnit));
         $PluginThresholdValue     = $IcingaThresholds.RawThreshold;
     }
 
@@ -411,11 +411,11 @@ function Compare-IcingaPluginThresholds()
 
     if ([string]::IsNullOrEmpty($IcingaThresholds.Message) -eq $FALSE) {
         $PluginOutputMessage.Append(' ') | Out-Null;
-        $PluginOutputMessage.Append($IcingaThresholds.Message) | Out-Null;
+        $PluginOutputMessage.Append($IcingaThresholds.Message.Replace(',', '.')) | Out-Null;
 
         if ([string]::IsNullOrEmpty($PluginThresholdValue) -eq $FALSE) {
             $PluginOutputMessage.Append(' ') | Out-Null;
-            $PluginOutputMessage.Append($PluginThresholdValue) | Out-Null;
+            $PluginOutputMessage.Append(([string]$PluginThresholdValue).Replace(',', '.')) | Out-Null;
         }
     }
 
