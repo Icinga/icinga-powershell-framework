@@ -45,7 +45,7 @@ function Publish-IcingaPluginConfiguration()
     }
 
     if ([string]::IsNullOrEmpty($ComponentPath)) {
-        $ComponentPath = Join-Path -Path (Get-IcingaFrameworkRootPath) -ChildPath ([string]::Format('icinga-powershell-{0}', $ComponentName));
+        $ComponentPath = Join-Path -Path (Get-IcingaForWindowsRootPath) -ChildPath ([string]::Format('icinga-powershell-{0}', $ComponentName));
     }
 
     if ((Test-Path $ComponentPath) -eq $FALSE) {

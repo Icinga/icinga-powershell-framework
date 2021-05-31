@@ -48,6 +48,7 @@
         'Get-IcingaCacheDir',
         'Get-IcingaPowerShellConfigDir',
         'Get-IcingaFrameworkRootPath',
+        'Get-IcingaForWindowsRootPath',
         'Get-IcingaPowerShellModuleFile',
         'Start-IcingaShellAsUser',
         'Get-IcingaPowerShellConfig',

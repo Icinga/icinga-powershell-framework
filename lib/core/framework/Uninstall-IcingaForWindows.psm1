@@ -40,8 +40,8 @@ function Uninstall-IcingaForWindows()
 
     $CurrentLocation = Get-Location;
 
-    if ($CurrentLocation -eq (Join-Path -Path (Get-IcingaFrameworkRootPath) -ChildPath 'icinga-powershell-framework')) {
-        Set-Location -Path (Get-IcingaFrameworkRootPath);
+    if ($CurrentLocation -eq (Get-IcingaFrameworkRootPath)) {
+        Set-Location -Path (Get-IcingaForWindowsRootPath);
     }
 
     Write-IcingaConsoleNotice 'Uninstalling Icinga for Windows from this host';
