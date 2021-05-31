@@ -136,10 +136,14 @@ function Convert-IcingaPluginThresholds()
             # Load all other units/values genericly
             [string]$StrNumeric = '';
             [bool]$FirstChar    = $TRUE;
+            [bool]$Delimiter    = $FALSE;
             foreach ($entry in ([string]($ThresholdValue)).ToCharArray()) {
-                if (Test-Numeric $entry) {
+                if ((Test-Numeric $entry) -Or ($entry -eq '.' -And $Delimiter -eq $FALSE)) {
                     $StrNumeric += $entry;
                     $FirstChar   = $FALSE;
+                    if ($entry -eq '.') {
+                        $Delimiter = $TRUE;
+                    }
                 } else {
                     if ([string]::IsNullOrEmpty($RetValue.Unit) -And $FirstChar -eq $FALSE) {
                         $RetValue.Unit = $entry;

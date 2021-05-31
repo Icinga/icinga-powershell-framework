@@ -31,6 +31,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#232](https://github.com/Icinga/icinga-powershell-framework/pull/232) Fixes wrong encoding while using REST-Api checks experimental feature, and now forces UTF8
 * [#240](https://github.com/Icinga/icinga-powershell-framework/pull/240) While filtering for certain services with `Get-IcingaServices`, there were some attributes missing from the collection. These are now added resulting in always correct output data.
 * [#245](https://github.com/Icinga/icinga-powershell-framework/pull/245) Fixes loading of `.pfx` certificates by properly checking the file type
+* [#265](https://github.com/Icinga/icinga-powershell-framework/pull/265) Fixes `Test-Numeric` to now accept negative numeric values and als fixes errors, causing `.` to be allowed multiple times. `ConvertFrom-TimeSpan` now properly prints on negative values if the time provided is positive or negative and also prints microseconds as `us` in case the value is loer than `1ms`
 
 ## 1.4.1 (2021-03-10)
 

@@ -13,5 +13,5 @@
 .NOTES
 #>
 function Test-Numeric ($number) {
-    return $number -Match "^[\d\.]+$";
+    return $number -Match "^-?[0-9]\d*(\.\d+)?$";
 }
