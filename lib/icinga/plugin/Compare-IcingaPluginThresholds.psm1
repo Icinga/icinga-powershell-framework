@@ -63,6 +63,8 @@ function Compare-IcingaPluginThresholds()
                 $TimeInterval,
                 $MinuteInterval
             );
+
+            return $IcingaThresholds;
         }
     } <#else {
         # The symbol splitting our threshold from the time index value
@@ -130,12 +132,14 @@ function Compare-IcingaPluginThresholds()
     }
 
     # Calculate % value from base value of set
-    if ($null -ne $BaseValue -And $IcingaThresholds.Unit -eq '%') {
+    if ([string]::IsNullOrEmpty($BaseValue) -eq $FALSE -And $BaseValue -ne 0 -And $IcingaThresholds.Unit -eq '%') {
         $InputValue           = $InputValue / $BaseValue * 100;
         $UseDynamicPercentage = $TRUE;
-    } elseif ($null -eq $BaseValue -And $IcingaThresholds.Unit -eq '%') {
+    } elseif (([string]::IsNullOrEmpty($BaseValue) -eq $TRUE -Or $BaseValue -eq 0) -And $IcingaThresholds.Unit -eq '%') {
         $IcingaThresholds.HasError = $TRUE;
         $IcingaThresholds.ErrorMessage = 'This argument does not support the % unit';
+
+        return $IcingaThresholds;
     }
 
     # Always override our InputValue, case we might have change it
@@ -386,6 +390,8 @@ function Compare-IcingaPluginThresholds()
                         $Threshold
                     );
                     $IcingaThresholds.HasError = $TRUE;
+
+                    return $IcingaThresholds;
                 }
             }
         }

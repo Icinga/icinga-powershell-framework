@@ -33,6 +33,14 @@ function New-IcingaCheck()
     $IcingaCheck | Add-Member -MemberType NoteProperty -Name '__ThresholdObject' -Value $null;
     $IcingaCheck | Add-Member -MemberType NoteProperty -Name '__TimeInterval'    -Value $null;
 
+    $IcingaCheck | Add-Member -MemberType ScriptMethod -Force -Name 'Compile' -Value {
+        $this.__ValidateThresholdInput();
+        if ($null -eq $this.__ThresholdObject) {
+            $this.__CreateDefaultThresholdObject();
+        }
+        $this.__SetCheckOutput();
+    }
+
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Force -Name '__SetInternalTimeInterval' -Value {
         $CallStack           = Get-PSCallStack;
         [bool]$FoundInterval = $FALSE;
@@ -82,8 +90,8 @@ function New-IcingaCheck()
 
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Force -Name '__CreateDefaultThresholdObject' -Value {
         [hashtable]$ThresholdArguments = $this.__GetBaseThresholdArguments();
-        $ThresholdObject = Compare-IcingaPluginThresholds @ThresholdArguments;
-        $this.__SetCheckState($ThresholdObject, $IcingaEnums.IcingaExitCode.Ok);
+        $this.__ThresholdObject = Compare-IcingaPluginThresholds @ThresholdArguments;
+        $this.__SetCheckState($this.__ThresholdObject, $IcingaEnums.IcingaExitCode.Ok);
     }
 
     # Override shared function
@@ -92,10 +100,6 @@ function New-IcingaCheck()
 
         if ($this.__InLockState()) {
             return;
-        }
-
-        if ($null -eq $this.__ThresholdObject) {
-            $this.__CreateDefaultThresholdObject();
         }
 
         $PluginThresholds = '';
