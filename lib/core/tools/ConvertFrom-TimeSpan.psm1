@@ -16,6 +16,10 @@ function ConvertFrom-TimeSpan()
         $Sign    = '-';
     }
 
+    if ((Test-Numeric $Seconds) -eq $FALSE) {
+        return $Seconds;
+    }
+
     $TimeSpan = [TimeSpan]::FromSeconds($Seconds);
 
     if ($TimeSpan.TotalDays -ge 1.0) {
