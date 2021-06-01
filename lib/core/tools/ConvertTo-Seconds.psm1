@@ -71,7 +71,7 @@ function ConvertTo-Seconds()
         $result = ($ValueSplitted / [math]::Pow(10, 3));
     } else {
         if ($UnitPart.Length -gt 1) {
-            Throw $errorMsg;
+            return $Value;
         }
 
         switch ([int][char]$UnitPart) {

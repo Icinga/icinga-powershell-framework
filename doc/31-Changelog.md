@@ -33,6 +33,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#245](https://github.com/Icinga/icinga-powershell-framework/pull/245) Fixes loading of `.pfx` certificates by properly checking the file type
 * [#265](https://github.com/Icinga/icinga-powershell-framework/pull/265) Fixes `Test-Numeric` to now accept negative numeric values and als fixes errors, causing `.` to be allowed multiple times. `ConvertFrom-TimeSpan` now properly prints on negative values if the time provided is positive or negative and also prints microseconds as `us` in case the value is loer than `1ms`
 * [#269](https://github.com/Icinga/icinga-powershell-framework/pull/269) Fixes unhandled exception on `Set-IcingaCacheData`, as the `-ErrorAction Stop` argument was not set and therefor the function never halted on errors
+* [#272](https://github.com/Icinga/icinga-powershell-framework/pull/272) Fixes invalid unit conversion, in case first char of a string is matching time metrics
 
 ## 1.4.1 (2021-03-10)
 
