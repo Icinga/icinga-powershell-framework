@@ -9,6 +9,8 @@ The Icinga PowerShell Framework ships with a bunch of Cmdlets for monitoring, me
 * [Install Wizard Guide](frameworkusage/03-Install-Wizard-Guide.md)
 * [Disable Certificate Validation](frameworkusage/04-Disable-Certificate-Validation.md)
 * [Enable Framework Code Caching](frameworkusage/05-Enable-Framework-Code-Caching.md)
+* [Update Framework and Components](frameworkusage/06-Update-Framework-And-Components.md)
+* [Analyse EventLog](frameworkusage/07-Analyse-EventLog.md)
 
 ## Icinga Agent Management
 
@@ -23,3 +25,4 @@ The Icinga PowerShell Framework ships with a bunch of Cmdlets for monitoring, me
 ## Experimental
 
 * [Forward checks to internal API](experimental/01-Forward-checks-to-internal-API.md)
+* [Management Console](experimental/02-Management-Console.md)
