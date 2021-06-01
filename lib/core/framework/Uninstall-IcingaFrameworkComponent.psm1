@@ -24,7 +24,7 @@ function Uninstall-IcingaFrameworkComponent()
         [string]$Name = ''
     );
 
-    $ModuleBase         = Get-IcingaFrameworkRootPath;
+    $ModuleBase         = Get-IcingaForWindowsRootPath;
     $UninstallComponent = [string]::Format('icinga-powershell-{0}', $Name);
     $UninstallPath      = Join-Path -Path $ModuleBase -ChildPath $UninstallComponent;
 

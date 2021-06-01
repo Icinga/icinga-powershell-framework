@@ -24,7 +24,7 @@ function Show-IcingaForWindowsManagementConsoleRegisterBackgroundDaemons()
 
         $ModuleInfo = $null;
 
-        Import-LocalizedData -BaseDirectory (Join-Path -Path (Get-IcingaFrameworkRootPath) -ChildPath $module.Name) -FileName ([string]::Format('{0}.psd1', $module.Name)) -BindingVariable ModuleInfo -ErrorAction SilentlyContinue;
+        Import-LocalizedData -BaseDirectory (Join-Path -Path (Get-IcingaForWindowsRootPath) -ChildPath $module.Name) -FileName ([string]::Format('{0}.psd1', $module.Name)) -BindingVariable ModuleInfo -ErrorAction SilentlyContinue;
 
         if ($null -eq $ModuleInfo -Or $null -eq $ModuleInfo.PrivateData -Or $null -eq $ModuleInfo.PrivateData.Type -Or ([string]::IsNullOrEmpty($ModuleInfo.PrivateData.Type)) -Or $ModuleInfo.PrivateData.Type -ne 'daemon' -Or $null -eq $ModuleInfo.PrivateData.Function -Or ([string]::IsNullOrEmpty($ModuleInfo.PrivateData.Function))) {
             continue;

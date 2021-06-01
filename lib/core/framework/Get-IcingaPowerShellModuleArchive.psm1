@@ -91,7 +91,7 @@ function Get-IcingaPowerShellModuleArchive()
                         'Version'     = $Tag;
                         'Directory'   = '';
                         'Archive'     = '';
-                        'ModuleRoot'  = (Get-IcingaFrameworkRootPath);
+                        'ModuleRoot'  = (Get-IcingaForWindowsRootPath);
                         'Installed'   = $FALSE;
                     };
                 }
@@ -107,7 +107,7 @@ function Get-IcingaPowerShellModuleArchive()
             'Version'     = $Tag;
             'Directory'   = '';
             'Archive'     = '';
-            'ModuleRoot'  = (Get-IcingaFrameworkRootPath);
+            'ModuleRoot'  = (Get-IcingaForWindowsRootPath);
             'Installed'   = $FALSE;
         };
     }
@@ -131,7 +131,7 @@ function Get-IcingaPowerShellModuleArchive()
         'Version'     = $Tag;
         'Directory'   = $DownloadDirectory;
         'Archive'     = $DownloadDestination;
-        'ModuleRoot'  = (Get-IcingaFrameworkRootPath);
+        'ModuleRoot'  = (Get-IcingaForWindowsRootPath);
         'Installed'   = $TRUE;
     };
 }

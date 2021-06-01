@@ -10,7 +10,7 @@ function Write-IcingaConsoleHeader()
     [array]$TableHeader    = @();
 
     Import-LocalizedData `
-        -BaseDirectory (Join-Path -Path (Get-IcingaFrameworkRootPath) -ChildPath 'icinga-powershell-framework') `
+        -BaseDirectory (Get-IcingaFrameworkRootPath) `
         -FileName 'icinga-powershell-framework.psd1' `
         -BindingVariable IcingaFrameworkData;
 

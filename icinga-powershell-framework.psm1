@@ -319,8 +319,16 @@ function Get-IcingaPowerShellConfigDir()
 function Get-IcingaFrameworkRootPath()
 {
     [string]$Path = $PSScriptRoot;
-    [int]$Index   = $Path.LastIndexOf('\') + 1;
+
+    return $PSScriptRoot;
+}
+
+function Get-IcingaForWindowsRootPath()
+{
+    [string]$Path = $PSScriptRoot;
+    [int]$Index   = $Path.LastIndexOf('icinga-powershell-framework');
     $Path         = $Path.Substring(0, $Index);
+
     return $Path;
 }
 
@@ -340,7 +348,7 @@ function Invoke-IcingaCommand()
     );
 
     Import-LocalizedData `
-        -BaseDirectory (Join-Path -Path (Get-IcingaFrameworkRootPath) -ChildPath 'icinga-powershell-framework') `
+        -BaseDirectory (Get-IcingaFrameworkRootPath) `
         -FileName 'icinga-powershell-framework.psd1' `
         -BindingVariable IcingaFrameworkData;
 
