@@ -4,7 +4,7 @@ Upgrading Icinga PowerShell Framework is usually quite straightforward.
 
 Specific version upgrades are described below. Please note that version updates are incremental.
 
-## Upgrading to v1.5.0 (pending)
+## Upgrading to v1.5.0 (2021-06-02)
 
 ### `SecureString` and Icinga Director Baskets
 
