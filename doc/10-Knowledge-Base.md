@@ -15,3 +15,4 @@ For this reason you will find a list of Icinga knowledge base entries below. Ent
 | [IWKB000005](knowledgebase/IWKB000005.md) | powershell.exe : Failed to start service 'Icinga PowerShell Service (icingapowershell)'. |
 | [IWKB000006](knowledgebase/IWKB000006.md) | The user you are running this command as does not have permission to access the Windows Update ComObject "Microsoft.Update.Session". |
 | [IWKB000007](knowledgebase/IWKB000007.md) | Icinga Director Self-Service API fails with errors. [Error]: The remote host for address "..." could not be resolved [Error]: Failed to connect to your Icinga Director at "...". Please try again. |
+| [IWKB000008](knowledgebase/IWKB000008.md) | The EventLog contains many `Perflib`, `PerfNet` and `PerfProc` errors/warnings with EventId `1008`, `2002` and `2004` |
