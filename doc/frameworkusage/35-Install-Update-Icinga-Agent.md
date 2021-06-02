@@ -13,7 +13,7 @@ The Icinga PowerShell Framework ships with a simple Cmdlet to install/update the
 To simply install the latest version of the Icinga Agent, you can run the following command:
 
 ```powershell
-Install-IcingaAgent -Version 'latest'
+Install-IcingaAgent -Version 'release'
 ```
 
 This will lookup the default installation source `https://packages.icinga.com/windows/`, fetch the latest version, download and install it.
@@ -33,7 +33,7 @@ This will download Icinga Agent `2.11.6` from `https://packages.icinga.com/windo
 Similar to the above examples, you can also update or downgrade the Icinga Agent with this command. All argument handling as before applies. However, to tell the command to perform an upgrade or downgrade, you will have to set the argument `-AllowUpdates` in addition (which also applies to downgrades):
 
 ```powershell
-Install-IcingaAgent -Version 'latest' -AllowUpdates 1
+Install-IcingaAgent -Version 'release' -AllowUpdates 1
 ```
 
 ## Customizing the Installer
@@ -50,5 +50,5 @@ Of course, you can also modify the `Install-IcingaAgent` command with different 
 For example we can distribute Icinga Agents over a local network share for better update management.
 
 ```powershell
-Install-IcingaAgent -Version 'latest' -AllowUpdates 1 -Source '\\example.com\icinga\icingaagent\'
+Install-IcingaAgent -Version 'release' -AllowUpdates 1 -Source '\\example.com\icinga\icingaagent\'
 ```
