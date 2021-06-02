@@ -4,7 +4,7 @@ Icinga for Windows ships with a bunch of Cmdlets, allowing users to manage the e
 
 ## Updating Icinga PowerShell Framework
 
-To update the Framework it is not required to run the [installation process](..\02-Installation.md) again. The Framework ships with a native command for this and is recommended to use, as this allows you to keep your current configuration and cache files. The command is `Install-IcingaFrameworkUpdate`.
+To update the Framework it is not required to run the [installation process](../02-Installation.md) again. The Framework ships with a native command for this and is recommended to use, as this allows you to keep your current configuration and cache files. The command is `Install-IcingaFrameworkUpdate`.
 
 ### Interactive Update
 
