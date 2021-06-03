@@ -18,6 +18,17 @@ function Compare-IcingaPluginThresholds()
         [string]$TimeInterval   = $null
     );
 
+    # Fix possible numeric value comparison issues
+    $TestInput = Test-IcingaDecimal $InputValue;
+    $BaseInput = Test-IcingaDecimal $BaseValue;
+
+    if ($TestInput.Decimal) {
+        [decimal]$InputValue = [decimal]$TestInput.Value;
+    }
+    if ($BaseInput.Decimal) {
+        [decimal]$BaseValue = [decimal]$BaseInput.Value;
+    }
+
     $IcingaThresholds = New-Object -TypeName PSObject;
     $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'Value'           -Value $InputValue;
     $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'BaseValue'       -Value $BaseValue;
@@ -115,9 +126,10 @@ function Compare-IcingaPluginThresholds()
     $TempValue                        = (Convert-IcingaPluginThresholds -Threshold ([string]::Format('{0}{1}', $InputValue, $Unit)));
     $InputValue                       = $TempValue.Value;
     $TmpUnit                          = $TempValue.Unit;
+    $TestInput                        = Test-IcingaDecimal $InputValue;
 
-    if (Test-Numeric $InputValue) {
-        [decimal]$InputValue = [decimal]$InputValue;
+    if ($TestInput.Decimal) {
+        [decimal]$InputValue = [decimal]$TestInput.Value;
     }
 
     $IcingaThresholds.RawValue        = $InputValue;
