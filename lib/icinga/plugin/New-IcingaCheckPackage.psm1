@@ -98,7 +98,7 @@ function New-IcingaCheckPackage()
         $UnknownChecks    = '';
         $CriticalChecks   = '';
         $WarningChecks    = '';
-        $CheckSummary     = [System.Text.StringBuilder]::New();
+        $CheckSummary     = New-Object -TypeName 'System.Text.StringBuilder';
         [bool]$HasContent = $FALSE;
 
         # Only apply this to the top parent package

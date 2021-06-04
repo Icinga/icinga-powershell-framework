@@ -7,6 +7,17 @@ documentation before upgrading to a new release.
 
 Released closed milestones can be found on [GitHub](https://github.com/Icinga/icinga-powershell-framework/milestones?state=closed).
 
+## 1.6.0 (pending)
+
+[Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/15?closed=1)
+
+## 1.5.1 (pending)
+
+[Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/17?closed=1)
+### Bugfixes
+
+* [#282](https://github.com/Icinga/icinga-powershell-framework/issues/282) Fixes issue on `System.Text.StringBuilder` which fails to initialize properly on some older Windows systems
+
 ## 1.5.0 (2021-06-02)
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/13?closed=1)
