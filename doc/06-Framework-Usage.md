@@ -1,6 +1,6 @@
 # Framework Usage
 
-The Icinga PowerShell Framework ships with a bunch of Cmdlets for monitoring, meassurement, analysis and Icinga Agent management. Below we have listed a collection of content to explain the general usage of certain Cmdlets and components.
+The Icinga PowerShell Framework ships with a bunch of Cmdlets for monitoring, measurement, analysis and Icinga Agent management. Below we have listed a collection of content to explain the general usage of certain Cmdlets and components.
 
 ## Framework Management
 

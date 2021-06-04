@@ -79,4 +79,4 @@ object CheckCommand "Invoke-IcingaCheckCPU" {
 
 This will call the PowerShell, execute the provided initialisation function `Use-Icinga` and afterwards execute the Check-Plugin with the provided arguments.
 
-Unlike other PowerShell integrations, it will automaticly exit with the proper exit code - no special handling is required here.
+Unlike other PowerShell integrations, it will automatically exit with the proper exit code - no special handling is required here.
