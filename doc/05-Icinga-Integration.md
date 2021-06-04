@@ -14,7 +14,7 @@ before you can execute framework related Cmdlets and functions. Otherwise you mi
 Configuring Check-Commands
 ---
 
-To get started, there are three ways to configure check command objects:
+Before you can add Services to Hosts you need to define CheckCommands.  These definitions are not provided with Icinga for Windows, but there are two automatic ways to generate these check command objects, and you can also do it manually:
 
 * [Automated Icinga Director configuration](icingaintegration/01-Director-Baskets.md) with Baskets
 * [Automated Icinga 2 configuration](icingaintegration/04-Icinga-Config.md) with plain Icinga config
