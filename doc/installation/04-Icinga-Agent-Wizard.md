@@ -30,6 +30,8 @@ Depending on how you configure the system, there might different questions occur
 Once you completed the wizard you are asked if the configuration is correct and if you want to execute the configuration. In any way, you are always printed the configuration command with your configured settings. 
 This command can be executed on `any` Windows machine which has the Icinga PowerShell Framework installed. It contains the entire configuration for the system. Of course you can modify the values to match certain network zones or requirements.
 
+You can find the Self Service API Key in the Agent tab of a Host Template in Icinga Director.  You can find the Ticket number in the Agent tab of a Host.
+
 ## Configuration Command Examples
 
 Below you will find some examples for different kind of configuration commands which can be executed to configure the Icinga Agent and to install plugins.
