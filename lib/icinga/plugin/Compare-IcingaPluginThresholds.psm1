@@ -397,7 +397,7 @@ function Compare-IcingaPluginThresholds()
         }
     }
 
-    $PluginOutputMessage = [System.Text.StringBuilder]::New();
+    $PluginOutputMessage = New-Object -TypeName 'System.Text.StringBuilder';
 
     [string]$PluginCurrentValue = [string]::Format(
         '{0}',
