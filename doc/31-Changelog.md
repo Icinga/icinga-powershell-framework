@@ -15,6 +15,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 * [#276](https://github.com/Icinga/icinga-powershell-framework/pull/276) Fixes check value conversion to decimal, which sometimes did not resolve values properly and caused conversion issues
 * [#282](https://github.com/Icinga/icinga-powershell-framework/issues/282) Fixes issue on `System.Text.StringBuilder` which fails to initialize properly on some older Windows systems
+* [#284](https://github.com/Icinga/icinga-powershell-framework/issues/284) Fixes exception while creating default threshold objects
 * [#285](https://github.com/Icinga/icinga-powershell-framework/issues/285) Fixes plain Icinga 2 conf generation for commands, which was caused by a new exception output for additional output
 
 ## 1.5.0 (2021-06-02)
