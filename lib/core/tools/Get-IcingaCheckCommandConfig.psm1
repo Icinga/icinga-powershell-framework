@@ -156,7 +156,7 @@ function Get-IcingaCheckCommandConfig()
                 'arguments'   = @{
                     # Set the Command handling for every check command
                     '-C' = @{
-                        'value' = [string]::Format('try {{ Use-Icinga -Minimal; }} catch {{ Write-Output {1}The Icinga PowerShell Framework is either not installed on the system or not configured properly. Please check https://icinga.com/docs/windows for further details{1}; Write-Output "Error: $$($$_.Exception.Message)Components:`r`n$$( Get-Module -ListAvailable "icinga-powershell-*" )`r`nModule-Path:`r`n$$($$Env:PSModulePath)"; exit 3; }}; Exit-IcingaExecutePlugin -Command {1}{0}{1} ', $Data.Name, "'");
+                        'value' = [string]::Format('try {{ Use-Icinga -Minimal; }} catch {{ Write-Output {1}The Icinga PowerShell Framework is either not installed on the system or not configured properly. Please check https://icinga.com/docs/windows for further details{1}; Write-Output {1}Error:{1} $$($$_.Exception.Message)Components:`r`n$$( Get-Module -ListAvailable {1}icinga-powershell-*{1} )`r`n{1}Module-Path:{1}`r`n$$($$Env:PSModulePath); exit 3; }}; Exit-IcingaExecutePlugin -Command {1}{0}{1} ', $Data.Name, "'");
                         'order' = '0';
                     }
                 }
