@@ -52,7 +52,7 @@ function ConvertTo-Seconds()
         }
     }
 
-    if (-Not $hasUnit) {
+    if (-Not $hasUnit -Or (Test-Numeric $NumberPart) -eq $FALSE) {
         return $Value;
     }
 
