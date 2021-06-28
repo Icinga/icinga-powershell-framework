@@ -54,10 +54,11 @@ function Read-IcingaRESTMessage()
     }
 
     # Header
-    $Request.Add( 'Header', @{} );
-    $SplitString = $RestMessage.split("`r`n");
+    $Request.Add( 'Header', @{ } );
+    $SplitString = $RestMessage.Split("`r`n");
+
     foreach ( $SingleString in $SplitString ) {
-        if ( ([string]::IsNullOrEmpty($SingleString) -eq $FALSE) -And ($SingleString -match '^{.+' -eq $FALSE) ) {
+        if ( ([string]::IsNullOrEmpty($SingleString) -eq $FALSE) -And ($SingleString -match '^{.+' -eq $FALSE) -And $SingleString.Contains(':') -eq $TRUE ) {
             $SingleSplitString = $SingleString.Split(':', 2);
             $Request.Header.Add( $SingleSplitString[0], $SingleSplitString[1].Trim());
         }
@@ -69,7 +70,10 @@ function Read-IcingaRESTMessage()
 
     # Body
     $RestMessage -match '(\{(.*\n)*}|\{.*\})' | Out-Null;
-    $Request.Add('Body', $Matches[1]);
+
+    if ($null -ne $Matches) {
+        $Request.Add('Body', $Matches[1]);
+    }
 
     # We received a content length, but couldnt load the body. Some clients will send the body as separate message
     # Lets try to read the body content
