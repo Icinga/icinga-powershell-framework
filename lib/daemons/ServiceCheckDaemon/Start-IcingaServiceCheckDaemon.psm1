@@ -39,7 +39,19 @@ function Start-IcingaServiceCheckDaemon()
                     continue;
                 }
 
-                Start-IcingaServiceCheckTask -CheckId $service -CheckCommand $RegisteredServices[$service].CheckCommand -Arguments $RegisteredServices[$service].Arguments -Interval $RegisteredServices[$service].Interval -TimeIndexes $RegisteredServices[$service].TimeIndexes;
+                [hashtable]$ServiceArgs = @{ };
+
+                if ($null -ne $RegisteredServices[$service].Arguments) {
+                    foreach ($property in $RegisteredServices[$service].Arguments.PSObject.Properties) {
+                        if ($ServiceArgs.ContainsKey($property.Name)) {
+                            continue;
+                        }
+
+                        $ServiceArgs.Add($property.Name, $property.Value)
+                    }
+                }
+
+                Start-IcingaServiceCheckTask -CheckId $service -CheckCommand $RegisteredServices[$service].CheckCommand -Arguments $ServiceArgs -Interval $RegisteredServices[$service].Interval -TimeIndexes $RegisteredServices[$service].TimeIndexes;
             }
             Start-Sleep -Seconds 1;
         }
