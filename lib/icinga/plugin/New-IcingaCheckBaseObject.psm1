@@ -25,6 +25,10 @@ function New-IcingaCheckBaseObject()
             }
         }
 
+        if ([string]::IsNullOrEmpty($this.__CheckCommand)) {
+            return;
+        }
+
         if ($null -eq $Global:Icinga) {
             $Global:Icinga = @{ };
         }
@@ -33,14 +37,15 @@ function New-IcingaCheckBaseObject()
             $Global:Icinga.Add('ThresholdCache', @{ });
         }
 
-        if ($Global:Icinga.ThresholdCache.ContainsKey($this.__CheckCommand)) {
+        if ($Global:Icinga.ThresholdCache.ContainsKey($this.__CheckCommand) -eq $FALSE) {
+            $Global:Icinga.ThresholdCache.Add($this.__CheckCommand, $null);
+        }
+
+        if ($null -ne $Global:Icinga.ThresholdCache[$this.__CheckCommand]) {
             return;
         }
 
-        $Global:Icinga.ThresholdCache.Add(
-            $this.__CheckCommand,
-            (Get-IcingaCacheData -Space 'sc_daemon' -CacheStore 'checkresult' -KeyName $this.__CheckCommand)
-        );
+        $Global:Icinga.ThresholdCache[$this.__CheckCommand] = (Get-IcingaCacheData -Space 'sc_daemon' -CacheStore 'checkresult' -KeyName $this.__CheckCommand);
     }
 
     $IcingaCheckBaseObject | Add-Member -MemberType ScriptMethod -Name '__SetParent' -Value {
