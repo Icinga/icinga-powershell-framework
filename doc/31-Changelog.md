@@ -19,6 +19,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#285](https://github.com/Icinga/icinga-powershell-framework/issues/285) Fixes plain Icinga 2 conf generation for commands, which was caused by a new exception output for additional output
 * [#293](https://github.com/Icinga/icinga-powershell-framework/pull/293) Fixes crash on REST-Api for NULL values while parsing the REST message
 * [#295](https://github.com/Icinga/icinga-powershell-framework/issues/295) Fixes background service check daemon not working with arguments for plugins
+* [#297](https://github.com/Icinga/icinga-powershell-framework/pull/297) Fixes null exception error which can occur in certain edge cases, caused by testing `New-IcingaCheck` directly without function wrapper
 
 ## 1.5.0 (2021-06-02)
 
