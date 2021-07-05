@@ -387,7 +387,7 @@ function New-IcingaCheck()
             '-BaseValue'      = $this.BaseValue;
             '-Unit'           = $this.Unit;
             '-CheckName'      = $this.__GetName();
-            '-ThresholdCache' = $Global:Icinga.ThresholdCache[$this.__CheckCommand];
+            '-ThresholdCache' = (Get-IcingaThresholdCache -CheckCommand $this.__CheckCommand);
             '-Translation'    = $this.Translation;
             '-TimeInterval'   = $this.__TimeInterval;
         };
