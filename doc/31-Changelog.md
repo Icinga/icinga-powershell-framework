@@ -7,6 +7,14 @@ documentation before upgrading to a new release.
 
 Released closed milestones can be found on [GitHub](https://github.com/Icinga/icinga-powershell-framework/milestones?state=closed).
 
+## 1.5.2 (2021-07-09)
+
+### Security Fixes
+
+* [#298](https://github.com/Icinga/icinga-powershell-framework/issues/298) Fixes possible security vulnerability on Icinga for Windows service registration, by not quoting the service path on registration
+
+You can read more on this on the [Knowledge Base Entry](https://icinga.com/docs/icinga-for-windows/latest/doc/knowledgebase/IWKB000009/) with further details, on how to apply the fix and test if you are affected.
+
 ## 1.5.1 (2021-07-07)
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/17?closed=1)
@@ -49,6 +57,14 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#265](https://github.com/Icinga/icinga-powershell-framework/pull/265) Fixes `Test-Numeric` to now accept negative numeric values and als fixes errors, causing `.` to be allowed multiple times. `ConvertFrom-TimeSpan` now properly prints on negative values if the time provided is positive or negative and also prints microseconds as `us` in case the value is loer than `1ms`
 * [#269](https://github.com/Icinga/icinga-powershell-framework/pull/269) Fixes unhandled exception on `Set-IcingaCacheData`, as the `-ErrorAction Stop` argument was not set and therefor the function never halted on errors
 * [#272](https://github.com/Icinga/icinga-powershell-framework/pull/272) Fixes invalid unit conversion, in case first char of a string is matching time metrics
+
+## 1.4.2 (2021-07-09)
+
+### Security Fixes
+
+* [#298](https://github.com/Icinga/icinga-powershell-framework/issues/298) Fixes possible security vulnerability on Icinga for Windows service registration, by not quoting the service path on registration
+
+You can read more on this on the [Knowledge Base Entry](https://icinga.com/docs/icinga-for-windows/latest/doc/knowledgebase/IWKB000009/) with further details, on how to apply the fix and test if you are affected.
 
 ## 1.4.1 (2021-03-10)
 
@@ -97,6 +113,14 @@ There are changes made to the pre-compiled configuration files and `Get-IcingaCh
 
 * [#204](https://github.com/Icinga/icinga-powershell-framework/pull/204) Adds experimental feature to forward checks executed by the Icinga Agent to an internal REST-Api, to reduce the performance impact on systems with lower resources available
 * [#213](https://github.com/Icinga/icinga-powershell-framework/pull/213) Adds new experimental feature `Management Console` for better and easier management for Icinga for Windows and improved automation and deployed.
+
+## 1.3.2 (2021-07-09)
+
+### Security Fixes
+
+* [#298](https://github.com/Icinga/icinga-powershell-framework/issues/298) Fixes possible security vulnerability on Icinga for Windows service registration, by not quoting the service path on registration
+
+You can read more on this on the [Knowledge Base Entry](https://icinga.com/docs/icinga-for-windows/latest/doc/knowledgebase/IWKB000009/) with further details, on how to apply the fix and test if you are affected.
 
 ## 1.3.1 (2021-02-04)
 

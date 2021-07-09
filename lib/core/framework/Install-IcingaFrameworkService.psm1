@@ -61,7 +61,7 @@ function Install-IcingaFrameworkService()
     }
 
     $Path = [string]::Format(
-        '{0} \"{1}\"',
+        '\"{0}\" \"{1}\"',
         $Path,
         (Get-IcingaPowerShellModuleFile)
     );
