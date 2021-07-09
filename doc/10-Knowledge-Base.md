@@ -16,3 +16,4 @@ For this reason you will find a list of Icinga knowledge base entries below. Ent
 | [IWKB000006](knowledgebase/IWKB000006.md) | The user you are running this command as does not have permission to access the Windows Update ComObject "Microsoft.Update.Session". |
 | [IWKB000007](knowledgebase/IWKB000007.md) | Icinga Director Self-Service API fails with errors. [Error]: The remote host for address "..." could not be resolved [Error]: Failed to connect to your Icinga Director at "...". Please try again. |
 | [IWKB000008](knowledgebase/IWKB000008.md) | The EventLog contains many `Perflib`, `PerfNet` and `PerfProc` errors/warnings with EventId `1008`, `2002` and `2004` |
+| [IWKB000009](knowledgebase/IWKB000009.md) | The remote Windows host has at least one service installed that uses an unquoted service path, which contains at least one whitespace. A local attacker can gain elevated privileges by inserting an executable file in the path of the affected service |
