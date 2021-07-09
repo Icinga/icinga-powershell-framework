@@ -7,6 +7,14 @@ documentation before upgrading to a new release.
 
 Released closed milestones can be found on [GitHub](https://github.com/Icinga/icinga-powershell-framework/milestones?state=closed).
 
+## 1.3.2 (2021-07-09)
+
+### Security Fixes
+
+* [#298](https://github.com/Icinga/icinga-powershell-framework/issues/298) Fixes possible security vulnerability on Icinga for Windows service registration, by not quoting the service path on registration
+
+You can read more on this on the [Knowledge Base Entry](https://icinga.com/docs/icinga-for-windows/latest/doc/knowledgebase/IWKB000009/) with further details, on how to apply the fix and test if you are affected.
+
 ## 1.3.1 (2021-02-04)
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/12?closed=1)
