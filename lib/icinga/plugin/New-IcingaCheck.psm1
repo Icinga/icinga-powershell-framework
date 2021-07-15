@@ -267,6 +267,23 @@ function New-IcingaCheck()
         }
     }
 
+    $IcingaCheck | Add-Member -MemberType ScriptMethod -Name '__SetCurrentExecutionTime' -Value {
+        if ($null -eq $global:Icinga) {
+            $global:Icinga = @{ };
+        }
+
+        if ($global:Icinga.ContainsKey('CurrentDate') -eq $FALSE) {
+            $global:Icinga.Add('CurrentDate', (Get-Date));
+            return;
+        }
+
+        if ($null -ne $global:Icinga.CurrentDate) {
+            return;
+        }
+
+        $global:Icinga.CurrentDate = (Get-Date).ToUniversalTime();
+    }
+
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Name '__AddCheckDataToCache' -Value {
 
         # We only require this in case we are running as daemon
@@ -396,6 +413,19 @@ function New-IcingaCheck()
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Name 'WarnOutOfRange' -Value {
         param ($Threshold);
 
+        if ($null -ne $Threshold -And $Threshold.GetType().BaseType.Name.ToLower() -eq 'array') {
+            foreach ($entry in $Threshold) {
+                $this.WarnOutOfRange($entry) | Out-Null;
+
+                # Break on first value causing a warning
+                if ($ThresholdObject.InRange -eq $FALSE) {
+                    break;
+                }
+            }
+
+            return $this;
+        }
+
         [hashtable]$ThresholdArguments = $this.__GetBaseThresholdArguments();
         $ThresholdArguments.Add('-Threshold', $Threshold);
 
@@ -407,8 +437,49 @@ function New-IcingaCheck()
         return $this;
     }
 
+    $IcingaCheck | Add-Member -MemberType ScriptMethod -Name 'WarnDateTime' -Value {
+        param ($Threshold);
+
+        if ($null -ne $Threshold -And $Threshold.GetType().BaseType.Name.ToLower() -eq 'array') {
+            foreach ($entry in $Threshold) {
+                $this.WarnDateTime($entry) | Out-Null;
+
+                # Break on first value causing a warning
+                if ($ThresholdObject.InRange -eq $FALSE) {
+                    break;
+                }
+            }
+
+            return $this;
+        }
+
+        [hashtable]$ThresholdArguments = $this.__GetBaseThresholdArguments();
+        $ThresholdArguments.Add('-Threshold', $Threshold);
+        $ThresholdArguments.Add('-DateTime', $TRUE);
+
+        $ThresholdObject = Compare-IcingaPluginThresholds @ThresholdArguments;
+
+        $this.__WarningValue = $ThresholdObject;
+        $this.__SetCheckState($ThresholdObject, $IcingaEnums.IcingaExitCode.Warning);
+
+        return $this;
+    }
+
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Name 'WarnIfLike' -Value {
         param ($Threshold);
+
+        if ($null -ne $Threshold -And $Threshold.GetType().BaseType.Name.ToLower() -eq 'array') {
+            foreach ($entry in $Threshold) {
+                $this.WarnIfLike($entry) | Out-Null;
+
+                # Break on first value causing a warning
+                if ($ThresholdObject.InRange -eq $FALSE) {
+                    break;
+                }
+            }
+
+            return $this;
+        }
 
         [hashtable]$ThresholdArguments = $this.__GetBaseThresholdArguments();
         $ThresholdArguments.Add('-Threshold', $Threshold);
@@ -424,6 +495,19 @@ function New-IcingaCheck()
 
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Name 'WarnIfNotLike' -Value {
         param ($Threshold);
+
+        if ($null -ne $Threshold -And $Threshold.GetType().BaseType.Name.ToLower() -eq 'array') {
+            foreach ($entry in $Threshold) {
+                $this.WarnIfNotLike($entry) | Out-Null;
+
+                # Break on first value causing a warning
+                if ($ThresholdObject.InRange -eq $FALSE) {
+                    break;
+                }
+            }
+
+            return $this;
+        }
 
         [hashtable]$ThresholdArguments = $this.__GetBaseThresholdArguments();
         $ThresholdArguments.Add('-Threshold', $Threshold);
@@ -452,6 +536,19 @@ function New-IcingaCheck()
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Name 'CritOutOfRange' -Value {
         param ($Threshold);
 
+        if ($null -ne $Threshold -And $Threshold.GetType().BaseType.Name.ToLower() -eq 'array') {
+            foreach ($entry in $Threshold) {
+                $this.CritOutOfRange($entry) | Out-Null;
+
+                # Break on first value causing a warning
+                if ($ThresholdObject.InRange -eq $FALSE) {
+                    break;
+                }
+            }
+
+            return $this;
+        }
+
         [hashtable]$ThresholdArguments = $this.__GetBaseThresholdArguments();
         $ThresholdArguments.Add('-Threshold', $Threshold);
 
@@ -463,8 +560,49 @@ function New-IcingaCheck()
         return $this;
     }
 
+    $IcingaCheck | Add-Member -MemberType ScriptMethod -Name 'CritDateTime' -Value {
+        param ($Threshold);
+
+        if ($null -ne $Threshold -And $Threshold.GetType().BaseType.Name.ToLower() -eq 'array') {
+            foreach ($entry in $Threshold) {
+                $this.CritDateTime($entry) | Out-Null;
+
+                # Break on first value causing a warning
+                if ($ThresholdObject.InRange -eq $FALSE) {
+                    break;
+                }
+            }
+
+            return $this;
+        }
+
+        [hashtable]$ThresholdArguments = $this.__GetBaseThresholdArguments();
+        $ThresholdArguments.Add('-Threshold', $Threshold);
+        $ThresholdArguments.Add('-DateTime', $TRUE);
+
+        $ThresholdObject = Compare-IcingaPluginThresholds @ThresholdArguments;
+
+        $this.__CriticalValue = $ThresholdObject;
+        $this.__SetCheckState($ThresholdObject, $IcingaEnums.IcingaExitCode.Critical);
+
+        return $this;
+    }
+
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Name 'CritIfLike' -Value {
         param ($Threshold);
+
+        if ($null -ne $Threshold -And $Threshold.GetType().BaseType.Name.ToLower() -eq 'array') {
+            foreach ($entry in $Threshold) {
+                $this.CritIfLike($entry) | Out-Null;
+
+                # Break on first value causing a warning
+                if ($ThresholdObject.InRange -eq $FALSE) {
+                    break;
+                }
+            }
+
+            return $this;
+        }
 
         [hashtable]$ThresholdArguments = $this.__GetBaseThresholdArguments();
         $ThresholdArguments.Add('-Threshold', $Threshold);
@@ -480,6 +618,19 @@ function New-IcingaCheck()
 
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Name 'CritIfNotLike' -Value {
         param ($Threshold);
+
+        if ($null -ne $Threshold -And $Threshold.GetType().BaseType.Name.ToLower() -eq 'array') {
+            foreach ($entry in $Threshold) {
+                $this.CritIfNotLike($entry) | Out-Null;
+
+                # Break on first value causing a warning
+                if ($ThresholdObject.InRange -eq $FALSE) {
+                    break;
+                }
+            }
+
+            return $this;
+        }
 
         [hashtable]$ThresholdArguments = $this.__GetBaseThresholdArguments();
         $ThresholdArguments.Add('-Threshold', $Threshold);
@@ -524,6 +675,19 @@ function New-IcingaCheck()
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Name 'WarnIfLowerThan' -Value {
         param ($Value);
 
+        if ($null -ne $Value -And $Value.GetType().BaseType.Name.ToLower() -eq 'array') {
+            foreach ($entry in $Value) {
+                $this.WarnIfLowerThan($entry) | Out-Null;
+
+                # Break on first value causing a warning
+                if ($ThresholdObject.InRange -eq $FALSE) {
+                    break;
+                }
+            }
+
+            return $this;
+        }
+
         [string]$Threshold = [string]::Format('{0}:', $Value);
 
         return $this.WarnOutOfRange($Threshold);
@@ -531,6 +695,19 @@ function New-IcingaCheck()
 
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Name 'CritIfLowerThan' -Value {
         param ($Value);
+
+        if ($null -ne $Value -And $Value.GetType().BaseType.Name.ToLower() -eq 'array') {
+            foreach ($entry in $Value) {
+                $this.CritIfLowerThan($entry) | Out-Null;
+
+                # Break on first value causing a warning
+                if ($ThresholdObject.InRange -eq $FALSE) {
+                    break;
+                }
+            }
+
+            return $this;
+        }
 
         [string]$Threshold = [string]::Format('{0}:', $Value);
 
@@ -540,6 +717,19 @@ function New-IcingaCheck()
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Name 'WarnIfGreaterThan' -Value {
         param ($Value);
 
+        if ($null -ne $Value -And $Value.GetType().BaseType.Name.ToLower() -eq 'array') {
+            foreach ($entry in $Value) {
+                $this.WarnIfGreaterThan($entry) | Out-Null;
+
+                # Break on first value causing a warning
+                if ($ThresholdObject.InRange -eq $FALSE) {
+                    break;
+                }
+            }
+
+            return $this;
+        }
+
         [string]$Threshold = [string]::Format('~:{0}', $Value);
 
         return $this.WarnOutOfRange($Threshold);
@@ -547,6 +737,19 @@ function New-IcingaCheck()
 
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Name 'CritIfGreaterThan' -Value {
         param ($Value);
+
+        if ($null -ne $Value -And $Value.GetType().BaseType.Name.ToLower() -eq 'array') {
+            foreach ($entry in $Value) {
+                $this.CritIfGreaterThan($entry) | Out-Null;
+
+                # Break on first value causing a warning
+                if ($ThresholdObject.InRange -eq $FALSE) {
+                    break;
+                }
+            }
+
+            return $this;
+        }
 
         [string]$Threshold = [string]::Format('~:{0}', $Value);
 
@@ -588,6 +791,19 @@ function New-IcingaCheck()
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Name 'WarnIfLowerEqualThan' -Value {
         param ($Threshold);
 
+        if ($null -ne $Threshold -And $Threshold.GetType().BaseType.Name.ToLower() -eq 'array') {
+            foreach ($entry in $Threshold) {
+                $this.WarnIfLowerEqualThan($entry) | Out-Null;
+
+                # Break on first value causing a warning
+                if ($ThresholdObject.InRange -eq $FALSE) {
+                    break;
+                }
+            }
+
+            return $this;
+        }
+
         [hashtable]$ThresholdArguments = $this.__GetBaseThresholdArguments();
         $ThresholdArguments.Add('-Threshold', $Threshold);
         $ThresholdArguments.Add('-IsLowerEqual', $TRUE);
@@ -602,6 +818,19 @@ function New-IcingaCheck()
 
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Name 'CritIfLowerEqualThan' -Value {
         param ($Threshold);
+
+        if ($null -ne $Threshold -And $Threshold.GetType().BaseType.Name.ToLower() -eq 'array') {
+            foreach ($entry in $Threshold) {
+                $this.CritIfLowerEqualThan($entry) | Out-Null;
+
+                # Break on first value causing a warning
+                if ($ThresholdObject.InRange -eq $FALSE) {
+                    break;
+                }
+            }
+
+            return $this;
+        }
 
         [hashtable]$ThresholdArguments = $this.__GetBaseThresholdArguments();
         $ThresholdArguments.Add('-Threshold', $Threshold);
@@ -618,6 +847,19 @@ function New-IcingaCheck()
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Name 'WarnIfGreaterEqualThan' -Value {
         param ($Threshold);
 
+        if ($null -ne $Threshold -And $Threshold.GetType().BaseType.Name.ToLower() -eq 'array') {
+            foreach ($entry in $Threshold) {
+                $this.WarnIfGreaterEqualThan($entry) | Out-Null;
+
+                # Break on first value causing a warning
+                if ($ThresholdObject.InRange -eq $FALSE) {
+                    break;
+                }
+            }
+
+            return $this;
+        }
+
         [hashtable]$ThresholdArguments = $this.__GetBaseThresholdArguments();
         $ThresholdArguments.Add('-Threshold', $Threshold);
         $ThresholdArguments.Add('-IsGreaterEqual', $TRUE);
@@ -632,6 +874,19 @@ function New-IcingaCheck()
 
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Name 'CritIfGreaterEqualThan' -Value {
         param ($Threshold);
+
+        if ($null -ne $Threshold -And $Threshold.GetType().BaseType.Name.ToLower() -eq 'array') {
+            foreach ($entry in $Threshold) {
+                $this.CritIfGreaterEqualThan($entry) | Out-Null;
+
+                # Break on first value causing a warning
+                if ($ThresholdObject.InRange -eq $FALSE) {
+                    break;
+                }
+            }
+
+            return $this;
+        }
 
         [hashtable]$ThresholdArguments = $this.__GetBaseThresholdArguments();
         $ThresholdArguments.Add('-Threshold', $Threshold);
@@ -686,6 +941,7 @@ function New-IcingaCheck()
 
     $IcingaCheck.__ValidateObject();
     $IcingaCheck.__ValidateUnit();
+    $IcingaCheck.__SetCurrentExecutionTime();
     $IcingaCheck.__AddCheckDataToCache();
     $IcingaCheck.__SetInternalTimeInterval();
     $IcingaCheck.__ConvertMinMax();
