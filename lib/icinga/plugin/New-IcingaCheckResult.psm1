@@ -27,7 +27,11 @@ function New-IcingaCheckResult()
         # Ensure we reset our internal cache once the plugin was executed
         $Global:Icinga.ThresholdCache[$this.Check.__GetCheckCommand()] = $null;
 
-        return $this.Check.__GetCheckState();
+        $ExitCode = $this.Check.__GetCheckState();
+
+        Set-IcingaInternalPluginExitCode -ExitCode $ExitCode;
+
+        return $ExitCode;
     }
 
     if ($Compile) {
