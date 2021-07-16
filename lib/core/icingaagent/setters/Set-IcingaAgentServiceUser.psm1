@@ -1,6 +1,6 @@
 function Set-IcingaAgentServiceUser()
 {
-    param(
+    param (
         [string]$User,
         [securestring]$Password,
         [string]$Service        = 'icinga2',

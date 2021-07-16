@@ -724,7 +724,7 @@ function Start-IcingaAgentInstallWizard()
             Set-IcingaAgentNodeName -Hostname $Hostname;
             Set-IcingaAgentServiceUser -User $ServiceUser -Password $ServicePass -SetPermission | Out-Null;
             if ($InstallFrameworkService) {
-                Install-IcingaFrameworkService -Path $ServiceBin -User $ServiceUser -Password $ServicePass | Out-Null;
+                Install-IcingaForWindowsService -Path $ServiceBin -User $ServiceUser -Password $ServicePass | Out-Null;
             }
             Register-IcingaBackgroundDaemon -Command 'Start-IcingaServiceCheckDaemon';
             Install-IcingaAgentBaseFeatures;

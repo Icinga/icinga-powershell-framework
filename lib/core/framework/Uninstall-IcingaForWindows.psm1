@@ -48,7 +48,7 @@ function Uninstall-IcingaForWindows()
     Write-IcingaConsoleNotice 'Uninstalling Icinga Agent';
     Uninstall-IcingaAgent -RemoveDataFolder | Out-Null;
     Write-IcingaConsoleNotice 'Uninstalling Icinga for Windows service';
-    Uninstall-IcingaFrameworkService | Out-Null;
+    Uninstall-IcingaForWindowsService | Out-Null;
 
     $HasErrors = $FALSE;
 

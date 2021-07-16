@@ -11,7 +11,7 @@ function Get-IcingaServices()
     if ($Service.Count -eq 0) {
         $ServiceWmiInfo = Get-IcingaWindowsInformation Win32_Service;
     } else {
-        $ServiceWmiInfo = Get-IcingaWindowsInformation Win32_Service | Where-Object { $Service -Contains $_.Name } | Select-Object StartName, Name, ExitCode, StartMode;
+        $ServiceWmiInfo = Get-IcingaWindowsInformation Win32_Service | Where-Object { $Service -Contains $_.Name } | Select-Object StartName, Name, ExitCode, StartMode, PathName;
     }
 
     if ($null -eq $ServiceInformation) {
@@ -26,6 +26,7 @@ function Get-IcingaServices()
         [array]$DependingServices = $null;
         $ServiceExitCode          = 0;
         [string]$ServiceUser      = '';
+        [string]$ServicePath      = '';
         [int]$StartModeId         = 5;
         [string]$StartMode        = 'Unknown';
 
@@ -36,6 +37,7 @@ function Get-IcingaServices()
         foreach ($wmiService in $ServiceWmiInfo) {
             if ($wmiService.Name -eq $service.ServiceName) {
                 $ServiceUser     = $wmiService.StartName;
+                $ServicePath     = $wmiService.PathName;
                 $ServiceExitCode = $wmiService.ExitCode;
                 if ([string]::IsNullOrEmpty($wmiService.StartMode) -eq $FALSE) {
                     $StartModeId = ([int]$IcingaEnums.ServiceWmiStartupType[$wmiService.StartMode]);
@@ -90,6 +92,7 @@ function Get-IcingaServices()
                         'value' = $StartMode;
                     };
                     'ServiceUser'         = $ServiceUser;
+                    'ServicePath'         = $ServicePath;
                     'ExitCode'            = $ServiceExitCode;
                 }
             }

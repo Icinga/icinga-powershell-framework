@@ -15,12 +15,14 @@ function Add-IcingaForWindowsInstallationAdvancedEntries()
     Show-IcingaForWindowsInstallerMenuSelectGlobalZones -Automated -Advanced;
     Show-IcingaForWindowsInstallationMenuEnterCustomGlobalZones -Automated -Advanced;
     Show-IcingaForWindowsInstallationMenuEnterIcingaAgentVersion -Automated -Advanced;
-    Show-IcingaForWindowsInstallerMenuSelectIcingaAgentSource -Automated -Advanced;
+    Show-IcingaForWindowsInstallerMenuSelectInstallIcingaAgent -Automated -Advanced;
     Show-IcingaForWindowsInstallationMenuEnterIcingaAgentDirectory -Automated -Advanced;
     Show-IcingaForWindowsInstallationMenuEnterIcingaAgentUser -Automated -Advanced;
-    Show-IcingaForWindowsInstallerMenuSelectIcingaPluginsSource -Automated -Advanced;
-    Show-IcingaForWindowsInstallerMenuSelectWindowsServiceSource -Automated -Advanced;
+    Show-IcingaForWindowsInstallerMenuSelectInstallIcingaPlugins -Automated -Advanced;
+    Show-IcingaForWindowsInstallerMenuSelectInstallIcingaForWindowsService -Automated -Advanced;
     Show-IcingaForWindowsInstallationMenuEnterWindowsServiceDirectory -Automated -Advanced;
+    Show-IcingaForWindowsInstallationMenuStableRepository -Automated -Advanced;
+    Show-IcingaForWindowsInstallerMenuSelectInstallJEAProfile -Automated -Advanced;
 
     Enable-IcingaFrameworkConsoleOutput;
 
