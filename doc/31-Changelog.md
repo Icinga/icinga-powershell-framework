@@ -11,6 +11,8 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/15?closed=1)
 
+* [#305](https://github.com/Icinga/icinga-powershell-framework/pull/305) Adds a new Cmdlet to test if functions with `Add-Type` are already present inside the current scope of the shell
+
 ## 1.5.2 (2021-07-09)
 
 ### Security Fixes
