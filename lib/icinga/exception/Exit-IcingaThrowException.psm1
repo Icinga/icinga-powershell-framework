@@ -107,6 +107,9 @@ function Exit-IcingaThrowException()
         $ExceptionTypeString
     );
 
+    Set-IcingaInternalPluginExitCode -ExitCode $IcingaEnums.IcingaExitCode.Unknown;
+    Set-IcingaInternalPluginException -PluginException $OutputMessage;
+
     if ($null -eq $global:IcingaDaemonData -Or $global:IcingaDaemonData.FrameworkRunningAsDaemon -eq $FALSE) {
         Write-IcingaConsolePlain $OutputMessage;
         exit $IcingaEnums.IcingaExitCode.Unknown;
