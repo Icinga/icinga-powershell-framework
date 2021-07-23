@@ -11,6 +11,9 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/15?closed=1)
 
+## Enhancements
+
+* [#301](https://github.com/Icinga/icinga-powershell-framework/pull/301) Improves error handling to no longer print passwords in case `String` is used for `SecureString` arguments
 * [#305](https://github.com/Icinga/icinga-powershell-framework/pull/305) Adds a new Cmdlet to test if functions with `Add-Type` are already present inside the current scope of the shell
 * [#306](https://github.com/Icinga/icinga-powershell-framework/pull/306) Adds new Cmdlet `Exit-IcingaThrowCritical` to throw critical exit with a custom message, either by force or by using string filtering and adds storing of plugin exit codes internally
 
