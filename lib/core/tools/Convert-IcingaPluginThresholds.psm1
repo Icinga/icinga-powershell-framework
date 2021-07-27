@@ -103,6 +103,7 @@ function Convert-IcingaPluginThresholds()
 
         [bool]$HasTilde = $FALSE;
         [bool]$HasAt    = $FALSE;
+        [bool]$Negate   = $FALSE;
         $Value          = '';
         $WorkUnit       = '';
 
@@ -112,6 +113,11 @@ function Convert-IcingaPluginThresholds()
         } elseif ($ThresholdValue.Contains('@')) {
             $HasAt = $TRUE;
             $ThresholdValue = $ThresholdValue.Replace('@', '');
+        }
+
+        if ($ThresholdValue[0] -eq '-' -And $ThresholdValue.Length -ge 1) {
+            $Negate         = $TRUE;
+            $ThresholdValue = $ThresholdValue.Substring(1, $ThresholdValue.Length - 1);
         }
 
         If (($ThresholdValue -Match "(^[\d\.]*) ?(B|KB|MB|GB|TB|PT|KiB|MiB|GiB|TiB|PiB)")) {
@@ -133,7 +139,7 @@ function Convert-IcingaPluginThresholds()
             $Value         = ([string]$ThresholdValue).Replace(' ', '').Replace('%', '');
             $RetValue.Unit = $WorkUnit;
         } else {
-            # Load all other units/values genericly
+            # Load all other units/values generically
             [string]$StrNumeric = '';
             [bool]$FirstChar    = $TRUE;
             [bool]$Delimiter    = $FALSE;
@@ -159,6 +165,12 @@ function Convert-IcingaPluginThresholds()
             } else {
                 $Value = [decimal]$StrNumeric;
             }
+        }
+
+        if ((Test-Numeric $Value) -And $Negate) {
+            $Value = $Value * -1;
+        } elseif ($Negate) {
+            $Value = [string]::Format('-{0}', $Value);
         }
 
         if ($HasTilde) {
