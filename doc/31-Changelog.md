@@ -11,7 +11,11 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/15?closed=1)
 
-## Enhancements
+### Bugfixes
+
+* [#311](https://github.com/Icinga/icinga-powershell-framework/issues/311) Fixes an issue with negative inputs on some scenarios which will cause an exception for checks instead of continuing executing them properly
+
+### Enhancements
 
 * [#301](https://github.com/Icinga/icinga-powershell-framework/pull/301) Improves error handling to no longer print passwords in case `String` is used for `SecureString` arguments
 * [#305](https://github.com/Icinga/icinga-powershell-framework/pull/305) Adds a new Cmdlet to test if functions with `Add-Type` are already present inside the current scope of the shell
