@@ -1,15 +1,23 @@
 function New-IcingaTCPSocket()
 {
-    param(
-        [int]$Port     = 0,
-        [switch]$Start = $FALSE
+    param (
+        [string]$Address = '',
+        [int]$Port       = 0,
+        [switch]$Start   = $FALSE
     );
 
     if ($Port -eq 0) {
         throw 'Please specify a valid port to open a TCP socket for';
     }
 
-    $TCPSocket = [System.Net.Sockets.TcpListener]$Port;
+    # Listen on localhost by default
+    $ListenAddress = New-Object System.Net.IPEndPoint([IPAddress]::Loopback, $Port);
+
+    if ([string]::IsNullOrEmpty($Address) -eq $FALSE) {
+        $ListenAddress = New-Object System.Net.IPEndPoint([IPAddress]::Parse($Address), $Port);
+    }
+
+    $TCPSocket = New-Object 'System.Net.Sockets.TcpListener' $ListenAddress;
 
     Write-IcingaDebugMessage -Message (
         [string]::Format(
