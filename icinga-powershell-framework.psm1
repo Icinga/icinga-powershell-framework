@@ -18,8 +18,7 @@ function Use-Icinga()
     );
 
     if ($null -ne $Global:Icinga -And $Global:Icinga.ContainsKey('RebuildCache') -And $Global:Icinga.RebuildCache) {
-        Remove-Module 'icinga-powershell-framework';
-        Import-Module (Get-IcingaFrameworkCodeCacheFile) -Global -Force;
+        Import-Module 'icinga-powershell-framework' -Global -Force;
     }
 
     Disable-IcingaProgressPreference;
@@ -137,7 +136,7 @@ function Import-IcingaLib()
     $CacheFile = Get-IcingaFrameworkCodeCacheFile;
 
     if ($Custom -eq $FALSE -And $CompileCache -eq $FALSE -And (Test-Path $CacheFile)) {
-        Import-Module $CacheFile -Global;
+        Import-Module 'icinga-powershell-framework' -Global -Force;
         return;
     }
 

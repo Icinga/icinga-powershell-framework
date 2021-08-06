@@ -7,52 +7,9 @@
     Copyright         = '(c) 2021 Icinga GmbH | MIT'
     Description       = 'Icinga for Windows module which allows to entirely monitor the Windows Host system.'
     PowerShellVersion = '4.0'
-    NestedModules     = @(
-        '.\cache\framework_cache.psm1'
-    )
-    FunctionsToExport = @(
-        'Use-Icinga',
-        'Invoke-IcingaCommand',
-        'Import-IcingaLib',
-        'Get-IcingaFrameworkCodeCacheFile',
-        'Write-IcingaFrameworkCodeCache',
-        'Publish-IcingaModuleManifest',
-        'Publish-IcingaEventlogDocumentation',
-        'Get-IcingaPluginDir',
-        'Get-IcingaCustomPluginDir',
-        'Get-IcingaCacheDir',
-        'Get-IcingaPowerShellConfigDir',
-        'Get-IcingaFrameworkRootPath',
-        'Get-IcingaForWindowsRootPath',
-        'Get-IcingaPowerShellModuleFile',
-        'Start-IcingaShellAsUser',
-        'Get-IcingaPowerShellConfig',
-        'Read-IcingaPowerShellConfig',
-        'Test-IcingaPowerShellConfigItem',
-        'Write-IcingaConsoleOutput',
-        'Write-IcingaConsoleNotice',
-        'Write-IcingaConsoleWarning',
-        'Read-IcingaFileContent',
-        'Invoke-IcingaInternalServiceCall',
-        'Get-IcingaFrameworkApiChecks',
-        'Get-IcingaBackgroundDaemons',
-        'Enable-IcingaUntrustedCertificateValidation',
-        'Write-IcingaEventMessage',
-        'Exit-IcingaExecutePlugin',
-        'Exit-IcingaPluginNotInstalled',
-        'Exit-IcingaThrowException',
-        'Set-IcingaTLSVersion',
-        'Disable-IcingaProgressPreference',
-        'New-IcingaNewLine',
-        'Write-IcingaConsolePlain',
-        'Test-IcingaFunction',
-        'Write-IcingaConsoleHeader',
-        'Test-IcingaFrameworkConsoleOutput',
-        'ConvertTo-IcingaSecureString',
-        'ConvertTo-JsonUTF8Bytes',
-        'ConvertFrom-JsonUTF8'
-    )
-    CmdletsToExport   = @('*')
+    NestedModules     = @( '.\cache\framework_cache.psm1' )
+    FunctionsToExport = @( '*' )
+    CmdletsToExport   = @( '*' )
     VariablesToExport = '*'
     AliasesToExport   = @( 'icinga' )
     PrivateData       = @{
