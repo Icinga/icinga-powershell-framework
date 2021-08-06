@@ -18,12 +18,6 @@ function Show-IcingaForWindowsMenuManageIcingaAgent()
                 'Disabled' = ($null -eq $IcingaService -Or (-Not $AdminShell));
             },
             @{
-                'Caption'  = 'Reconfigure Installation';
-                'Command'  = 'Invoke-IcingaForWindowsManagementConsoleReconfigureAgent';
-                'Help'     = 'Load the current applied configuration for your Icinga Agent and modify the values';
-                'Disabled' = ($null -eq (Get-IcingaPowerShellConfig -Path 'Framework.Config.Live'));
-            },
-            @{
                 'Caption'  = 'Read Icinga Agent Log File';
                 'Command'  = 'Show-IcingaForWindowsMenuManageIcingaAgent';
                 'Help'     = 'Allows to read the Icinga Agent log file in case the "mainlog" feature of the Icinga Agent is enabled';
