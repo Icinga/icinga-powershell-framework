@@ -43,9 +43,6 @@ function Start-IcingaForWindowsInstallation()
     $IcingaEndpoints       = Get-IcingaForWindowsInstallerValuesFromStep -InstallerStep 'Show-IcingaForWindowsInstallerMenuEnterIcingaParentNodes';
     $IcingaPort            = Get-IcingaForWindowsInstallerValuesFromStep -InstallerStep 'Show-IcingaForWindowsInstallationMenuEnterIcingaPort';
 
-    # Icinga for Windows PowerShell Framework
-    $CodeCacheType         = Get-IcingaForWindowsInstallerStepSelection -InstallerStep 'Show-IcingaForWindowsManagementConsoleEnableCodeCache';
-
     $Hostname              = '';
     $GlobalZones           = @();
     $IcingaParentAddresses = @();
@@ -224,21 +221,7 @@ function Start-IcingaForWindowsInstallation()
         }
     }
 
-    switch ($CodeCacheType) {
-        '0' {
-            # Enable Code Cache
-            Enable-IcingaFrameworkCodeCache;
-            Write-IcingaConsoleNotice 'Writing Icinga Framework Code Cache file';
-            Write-IcingaFrameworkCodeCache;
-            break;
-        };
-        '1' {
-            # Disable Code Cache
-            Disable-IcingaFrameworkCodeCache;
-            break;
-        }
-    }
-
+    Write-IcingaFrameworkCodeCache;
     Test-IcingaAgent;
 
     if ($InstallAgent) {

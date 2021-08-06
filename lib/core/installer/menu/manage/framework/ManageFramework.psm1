@@ -1,7 +1,6 @@
 function Show-IcingaForWindowsManagementConsoleManageFramework()
 {
     $FrameworkDebug     = Get-IcingaFrameworkDebugMode;
-    $FrameworkCodeCache = Get-IcingaFrameworkCodeCache;
     $IcingaService      = Get-Service 'icingapowershell' -ErrorAction SilentlyContinue;
     $AdminShell         = $global:Icinga.InstallWizard.AdminShell;
     $ServiceStatus      = $null;
@@ -30,21 +29,10 @@ function Show-IcingaForWindowsManagementConsoleManageFramework()
                 }
             },
             @{
-                'Caption'  = ([string]::Format('Framework Code Cache: {0}', (& { if ($FrameworkCodeCache) { 'Enabled' } else { 'Disabled' } } )));
-                'Command'  = 'Show-IcingaForWindowsManagementConsoleManageFramework';
-                'Help'     = 'Disable or enable the Icinga PowerShell Framework Code cache feature. The code cache is written automatically once it is enabled';
-                'Disabled' = $FALSE;
-                'Action'   = @{
-                    'Command'   = 'Invoke-IcingaForWindowsMangementConsoleToogleFrameworkCodeCache';
-                    'Arguments' = @{ };
-                }
-            },
-            @{
-                'Caption'  = 'Update Framework Code Cache';
-                'Command'  = 'Show-IcingaForWindowsManagementConsoleManageFramework';
-                'Help'     = 'Updates the Icinga PowerShell Framework Code Cache';
-                'Disabled' = (-Not ($FrameworkCodeCache));
-                'Action'   = @{
+                'Caption' = 'Update Framework Code Cache';
+                'Command' = 'Show-IcingaForWindowsManagementConsoleManageFramework';
+                'Help'    = 'Updates the Icinga PowerShell Framework Code Cache';
+                'Action'  = @{
                     'Command'   = 'Write-IcingaFrameworkCodeCache';
                     'Arguments' = @{ };
                 }
