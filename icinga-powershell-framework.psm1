@@ -46,8 +46,6 @@ function Use-Icinga()
         Use-IcingaPlugins;
     }
 
-    Write-IcingaFrameworkCodeCache;
-
     # This function will allow us to load this entire module including possible
     # actions, making it available within our shell environment
     # First load our custom modules
@@ -135,7 +133,7 @@ function Import-IcingaLib()
 
     $CacheFile = Get-IcingaFrameworkCodeCacheFile;
 
-    if ($Custom -eq $FALSE -And $CompileCache -eq $FALSE -And (Test-Path $CacheFile)) {
+    if ($CompileCache -eq $FALSE) {
         Import-Module 'icinga-powershell-framework' -Global -Force;
         return;
     }
