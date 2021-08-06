@@ -14,6 +14,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 ### Bugfixes
 
 * [#311](https://github.com/Icinga/icinga-powershell-framework/issues/311) Fixes an issue with negative inputs on some scenarios which will cause an exception for checks instead of continuing executing them properly
+* [#317](https://github.com/Icinga/icinga-powershell-framework/pull/317) Fixes certain file names being too long, causing errors on deploying branches
 
 ### Enhancements
 
