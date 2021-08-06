@@ -47,11 +47,13 @@ function Install-IcingaForWindowsService()
 
         if ($ServiceStatus -eq 'Running') {
             Write-IcingaConsoleNotice 'Stopping Icinga PowerShell service';
-            Stop-IcingaService 'icingapowershell';
+            Stop-IcingaWindowsService;
             Start-Sleep -Seconds 1;
         }
 
-        Remove-ItemSecure -Path $Path -Force | Out-Null;
+        if (Test-Path $Path) {
+            Remove-ItemSecure -Path $Path -Force | Out-Null;
+        }
         Copy-ItemSecure -Path $UpdateFile -Destination $Path -Force | Out-Null;
         Remove-ItemSecure -Path $UpdateFile -Force | Out-Null;
     }
@@ -73,7 +75,11 @@ function Install-IcingaForWindowsService()
             throw ([string]::Format('Failed to install Icinga PowerShell Service: {0}{1}', $ServiceCreation.Message, $ServiceCreation.Error));
         }
     } else {
-        Write-IcingaConsoleWarning 'The Icinga PowerShell Service is already installed';
+        $ServiceUpdate = Start-IcingaProcess -Executable 'sc.exe' -Arguments ([string]::Format('config icingapowershell binPath= "{0}"', $Path));
+
+        if ($ServiceUpdate.ExitCode -ne 0) {
+            throw ([string]::Format('Failed to update config for Icinga PowerShell Service: {0}{1}', $ServiceUpdate.Message, $ServiceUpdate.Error));
+        }
     }
 
     # This is just a hotfix to ensure we setup the service properly before assigning it to
@@ -81,9 +87,9 @@ function Install-IcingaForWindowsService()
     # will not start without this workaround.
     # Todo: Figure out the reason and fix it properly
     Set-IcingaAgentServiceUser -User 'LocalSystem' -Service 'icingapowershell' | Out-Null;
-    Restart-IcingaService 'icingapowershell';
+    Restart-IcingaWindowsService;
     Start-Sleep -Seconds 1;
-    Stop-IcingaService 'icingapowershell';
+    Stop-IcingaWindowsService;
 
     if ($ServiceStatus -eq 'Running') {
         Write-IcingaConsoleNotice 'Starting Icinga PowerShell service';

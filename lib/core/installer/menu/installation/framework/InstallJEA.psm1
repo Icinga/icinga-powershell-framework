@@ -8,8 +8,8 @@ function Show-IcingaForWindowsInstallerMenuSelectInstallJEAProfile()
         [switch]$Advanced      = $FALSE
     );
 
-    if ($PSVersionTable.PSVersion -lt '5.0.0.0') {
-        return;
+    if ($PSVersionTable.PSVersion -lt (New-IcingaVersionObject -Version 5, 0)) {
+        Add-IcingaForWindowsInstallerDisabledEntry -Name 'IfW-InstallJEAProfile' -Reason ([string]::Format('PowerShell version "{0}" is lower than 5.0', $PSVersionTable.PSVersion.ToString(2)));
     }
 
     Show-IcingaForWindowsInstallerMenu `
@@ -21,9 +21,9 @@ function Show-IcingaForWindowsInstallerMenuSelectInstallJEAProfile()
                 'Help'    = 'Installs the Icinga for Windows JEA profile for the specified service user';
             },
             @{
-                'Caption' = 'Install JEA Profile with managed user "IcingaForWindows"';
+                'Caption' = 'Install JEA Profile with managed user "icinga"';
                 'Command' = 'Show-IcingaForWindowsInstallerConfigurationSummary';
-                'Help'    = 'Installs the Icinga for Windows JEA profile with a newly created, managed user "IcingaForWindows". This will override your service and service password configuration';
+                'Help'    = 'Installs the Icinga for Windows JEA profile with a newly created, managed user "icinga". This will override your service and service password configuration';
             },
             @{
                 'Caption' = 'Do not install JEA Profile';

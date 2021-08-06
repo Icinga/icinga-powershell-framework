@@ -25,7 +25,7 @@ function Exit-IcingaThrowCritical()
     Set-IcingaInternalPluginExitCode -ExitCode $IcingaEnums.IcingaExitCode.Critical;
     Set-IcingaInternalPluginException -PluginException $OutputMessage;
 
-    if ($null -eq $global:IcingaDaemonData -Or $global:IcingaDaemonData.FrameworkRunningAsDaemon -eq $FALSE) {
+    if ($null -eq $global:IcingaDaemonData -Or ($global:IcingaDaemonData.FrameworkRunningAsDaemon -eq $FALSE -And $global:IcingaDaemonData.JEAContext -eq $FALSE)) {
         Write-IcingaConsolePlain $OutputMessage;
         exit $IcingaEnums.IcingaExitCode.Critical;
     }

@@ -86,7 +86,7 @@ function Get-IcingaCheckCommandConfig()
         $CheckName = (Get-Command Invoke-IcingaCheck*).Name
     }
 
-    [int]$FieldID = 2; # Starts at '2', because '0' and '1' are reserved for 'Verbose' and 'NoPerfData'
+    [int]$FieldID = 4; # Starts at '4', because 0-3 are reserved for 'Verbose', 'NoPerfData', ExecutionPolicy and a placeholder
     [hashtable]$Basket = @{ };
 
     # Define basic hashtable structure by adding fields: "Datafield", "DataList", "Command"
@@ -98,18 +98,61 @@ function Get-IcingaCheckCommandConfig()
     $Basket.Command.Add(
         'PowerShell Base',
         @{
-            'arguments'       = @{ };
+            'arguments'       = @{
+                '-NoProfile'       = @{
+                    'order'  = '-3';
+                    'set_if' = $TRUE;
+                };
+                '-NoLogo'          = @{
+                    'order'  = '-2';
+                    'set_if' = $TRUE;
+                };
+                '-ExecutionPolicy' = @{
+                    'order' = '-1';
+                    'value' = '$IcingaPowerShellBase_String_ExecutionPolicy$';
+                };
+            };
             'command'         = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe';
             'disabled'        = $FALSE;
-            'fields'          = @();
+            'fields'          = @(
+                @{
+                    'datafield_id' = 2;
+                    'is_required'  = 'n';
+                    'var_filter'   = $NULL;
+                };
+            );
             'imports'         = @();
             'is_string'       = $NULL;
             'methods_execute' = 'PluginCheck';
             'object_name'     = 'PowerShell Base';
             'object_type'     = 'object';
             'timeout'         = '180';
-            'vars'            = @{ };
+            'vars'            = @{
+                'IcingaPowerShellBase_String_ExecutionPolicy' = 'ByPass';
+            };
             'zone'            = $NULL;
+        }
+    );
+
+
+    Add-PowerShellDataList -Name 'PowerShell ExecutionPolicies' -Basket $Basket -Arguments @( 'AllSigned', 'Bypass', 'Default', 'RemoteSigned', 'Restricted', 'Undefined', 'Unrestricted' );
+
+    $Basket.Datafield.Add(
+        '2', @{
+            'varname'     = 'IcingaPowerShellBase_String_ExecutionPolicy';
+            'caption'     = 'PowerShell Execution Policy';
+            'description' = 'Defines with which Execution Policy the PowerShell is started';
+            'datatype'    = 'Icinga\Module\Director\DataType\DataTypeDatalist';
+            'format'      = $NULL;
+            'originalId'  = '2';
+        }
+    );
+
+    $Basket.Datafield['2'].Add(
+        'settings', @{
+            'datalist'  = 'PowerShell ExecutionPolicies';
+            'data_type' = 'string';
+            'behavior'  = 'strict';
         }
     );
 
@@ -158,13 +201,13 @@ function Get-IcingaCheckCommandConfig()
                     '-C' = @{
                         'value' = [string]::Format('try {{ Use-Icinga -Minimal; }} catch {{ Write-Output {1}The Icinga PowerShell Framework is either not installed on the system or not configured properly. Please check https://icinga.com/docs/windows for further details{1}; Write-Output {1}Error:{1} $$($$_.Exception.Message)Components:`r`n$$( Get-Module -ListAvailable {1}icinga-powershell-*{1} )`r`n{1}Module-Path:{1}`r`n$$($$Env:PSModulePath); exit 3; }}; Exit-IcingaExecutePlugin -Command {1}{0}{1} ', $Data.Name, "'");
                         'order' = '0';
-                    }
+                    };
                 }
                 'fields'      = @();
                 'imports'     = @( 'PowerShell Base' );
                 'object_name' = $Data.Name;
                 'object_type' = 'object';
-                'vars'        = @{};
+                'vars'        = @{ };
             }
         );
 
@@ -351,7 +394,7 @@ function Get-IcingaCheckCommandConfig()
         $CheckParamList  = @( $ThresholdIntervalArg );
 
         foreach ($entry in $Data.parameters.parameter) {
-            $CheckParamList += (Convert-IcingaCheckArgumentToPSObject -Parameter $entry);;
+            $CheckParamList += (Convert-IcingaCheckArgumentToPSObject -Parameter $entry);
         }
 
         foreach ($parameter in $CheckParamList) {
@@ -569,6 +612,21 @@ function Write-IcingaPlainConfigurationFiles()
     $PowerShellBase         += [string]::Format('        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"{0}', (New-IcingaNewLine));
     $PowerShellBase         += [string]::Format('    ]{0}', (New-IcingaNewLine));
     $PowerShellBase         += [string]::Format('    timeout = 3m{0}', (New-IcingaNewLine));
+    $PowerShellBase         += [string]::Format('    arguments += {{{0}', (New-IcingaNewLine));
+    $PowerShellBase         += [string]::Format('        "-ExecutionPolicy" = {{{0}', (New-IcingaNewLine));
+    $PowerShellBase         += [string]::Format('            order = -1{0}', (New-IcingaNewLine));
+    $PowerShellBase         += [string]::Format('            value = "$IcingaPowerShellBase_String_ExecutionPolicy$"{0}', (New-IcingaNewLine));
+    $PowerShellBase         += [string]::Format('        }}{0}', (New-IcingaNewLine));
+    $PowerShellBase         += [string]::Format('        "-NoLogo" = {{{0}', (New-IcingaNewLine));
+    $PowerShellBase         += [string]::Format('            order = -2{0}', (New-IcingaNewLine));
+    $PowerShellBase         += [string]::Format('            set_if = "1"{0}', (New-IcingaNewLine));
+    $PowerShellBase         += [string]::Format('        }}{0}', (New-IcingaNewLine));
+    $PowerShellBase         += [string]::Format('        "-NoProfile" = {{{0}', (New-IcingaNewLine));
+    $PowerShellBase         += [string]::Format('            order = -3{0}', (New-IcingaNewLine));
+    $PowerShellBase         += [string]::Format('            set_if = "1"{0}', (New-IcingaNewLine));
+    $PowerShellBase         += [string]::Format('        }}{0}', (New-IcingaNewLine));
+    $PowerShellBase         += [string]::Format('    }}{0}', (New-IcingaNewLine));
+    $PowerShellBase         += [string]::Format('    vars.IcingaPowerShellBase_String_ExecutionPolicy = "ByPass"{0}', (New-IcingaNewLine));
     $PowerShellBase         += '}';
 
     Write-IcingaFileSecure -File (Join-Path -Path $ConfigDirectory -ChildPath 'PowerShell_Base.conf') -Value $PowerShellBase;

@@ -433,7 +433,7 @@ Register-IcingaBackgroundDaemon -Command 'Start-IcingaAgentServiceTest';
 Once registered, you will have to restart the PowerShell service itselfs to apply the changes
 
 ```powershell
-Restart-IcingaService 'icingapowershell';
+Restart-IcingaWindowsService;
 ```
 
 Thats it! Now the daemon is loaded with every start, checking for the Agent state and restart it if it is not running.

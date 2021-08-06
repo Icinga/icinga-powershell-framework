@@ -8,8 +8,6 @@ function Show-IcingaForWindowsManagementConsoleInstallationDirectorRegisterHost(
         [switch]$Advanced      = $FALSE
     );
 
-    $Advanced = $TRUE;
-
     Show-IcingaForWindowsInstallerMenu `
         -Header 'Do you want to register the host right now inside the Icinga Director? This will show missing configurations.' `
         -Entries @(
@@ -21,7 +19,7 @@ function Show-IcingaForWindowsManagementConsoleInstallationDirectorRegisterHost(
             @{
                 'Caption' = 'Register host inside Icinga Director';
                 'Command' = 'Show-IcingaForWindowsInstallerConfigurationSummary';
-                'Help'    = 'You can select this option to register the host within the Icinga Director right now, unlocking more advanced configurations for this host like "Parent Zone", "Parent Nodes" and "Parent Node Addresses"';
+                'Help'    = 'You can select this option to register the host within the Icinga Director right now, unlocking more advanced configurations for this host like "Parent Zone", "Parent Nodes" and "Parent Node Addresses". Please note that the installation process will fail if you continue the installer, if you do not register it.';
                 'Action'  = @{
                     'Command'   = 'Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate';
                     'Arguments' = @{

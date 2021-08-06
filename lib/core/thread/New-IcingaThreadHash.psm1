@@ -1,7 +1,7 @@
 function New-IcingaThreadHash()
 {
     param(
-        [ScriptBlock]$ShellScript,
+        [string]$ShellScript,
         [array]$Arguments
     );
 

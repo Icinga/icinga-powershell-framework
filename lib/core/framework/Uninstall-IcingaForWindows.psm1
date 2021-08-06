@@ -11,6 +11,9 @@
     Uninstalls every PowerShell module within the icinga-powershell-* namespace
     including the Icinga Agent with all components (like certificates) as well as
     the Icinga for Windows service and the Icinga PowerShell Framework.
+.PARAMETER IcingaUser
+    In case the Icinga Security profile was installed with a defined user any other than
+    "icinga", you require to specify the user to remove it entirely
 .PARAMETER Force
     Suppress the question if you are sure to uninstall everything
 .INPUTS
@@ -24,6 +27,7 @@
 function Uninstall-IcingaForWindows()
 {
     param (
+        $IcingaUser    = 'icinga',
         [switch]$Force = $FALSE
     );
 
@@ -45,6 +49,8 @@ function Uninstall-IcingaForWindows()
     }
 
     Write-IcingaConsoleNotice 'Uninstalling Icinga for Windows from this host';
+    Write-IcingaConsoleNotice 'Uninstalling Icinga Security configuration if applied';
+    Uninstall-IcingaSecurity -IcingaUser $IcingaUser;
     Write-IcingaConsoleNotice 'Uninstalling Icinga Agent';
     Uninstall-IcingaAgent -RemoveDataFolder | Out-Null;
     Write-IcingaConsoleNotice 'Uninstalling Icinga for Windows service';

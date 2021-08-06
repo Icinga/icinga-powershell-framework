@@ -57,7 +57,7 @@ function Install-IcingaFrameworkUpdate()
 
     if ($ServiceStatus -eq 'Running') {
         Write-IcingaConsoleNotice 'Stopping Icinga PowerShell service';
-        Stop-IcingaService 'icingapowershell';
+        Stop-IcingaWindowsService;
         Start-Sleep -Seconds 1;
     }
     if ($AgentStatus -eq 'Running') {
@@ -78,12 +78,11 @@ function Install-IcingaFrameworkUpdate()
     Write-IcingaConsoleNotice 'Removing files from framework';
 
     foreach ($ModuleFile in $Files) {
-        Remove-ItemSecure -Path $ModuleFile -Force | Out-Null;
+        Remove-ItemSecure -Path $ModuleFile.FullName -Force | Out-Null;
     }
 
     Remove-ItemSecure -Path (Join-Path $ModuleDirectory -ChildPath 'doc') -Recurse -Force | Out-Null;
     Remove-ItemSecure -Path (Join-Path $ModuleDirectory -ChildPath 'lib') -Recurse -Force | Out-Null;
-    Remove-ItemSecure -Path (Join-Path $ModuleDirectory -ChildPath 'manifests') -Recurse -Force | Out-Null;
 
     Write-IcingaConsoleNotice 'Copying new files to framework';
     Copy-ItemSecure -Path (Join-Path $ModuleContent -ChildPath 'doc') -Destination $ModuleDirectory -Recurse -Force | Out-Null;
@@ -100,6 +99,12 @@ function Install-IcingaFrameworkUpdate()
     Write-IcingaConsoleNotice 'Updating Framework cache file';
     if (Test-IcingaFunction 'Write-IcingaFrameworkCodeCache') {
         Write-IcingaFrameworkCodeCache;
+    }
+
+    if ([string]::IsNullOrEmpty((Get-IcingaJEAContext)) -eq $FALSE) {
+        Remove-IcingaFrameworkDependencyFile;
+        Write-IcingaConsoleNotice 'Updating Icinga JEA profile';
+        Invoke-IcingaCommand { Install-IcingaJEAProfile };
     }
 
     Write-IcingaConsoleNotice 'Framework update has been completed. Please start a new PowerShell instance now to complete the update';

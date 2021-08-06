@@ -13,3 +13,6 @@ $Global:Icinga = @{
 };
 
 Write-IcingaFrameworkCodeCache;
+
+Import-Module icinga-powershell-framework -Global -Force;
+Import-Module icinga-powershell-framework -Force;

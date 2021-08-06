@@ -376,11 +376,12 @@ function Show-IcingaForWindowsInstallerMenu()
         };
     }
 
-    $DisabledMenu  = $FALSE;
-    $NextMenu      = $null;
-    $NextArguments = @{ };
-    $ActionCmd     = $null;
-    $ActionArgs    = $null;
+    [bool]$DisabledMenu     = $FALSE;
+    [string]$DisabledReason = '';
+    $NextMenu               = $null;
+    $NextArguments          = @{ };
+    $ActionCmd              = $null;
+    $ActionArgs             = $null;
 
     if ([string]::IsNullOrEmpty($Result) -eq $FALSE) {
         if ($Result -eq 'c') {
@@ -390,6 +391,9 @@ function Show-IcingaForWindowsInstallerMenu()
                 $NextMenu = $Entries[0].Command;
                 if ($null -ne $Entries[0].Disabled) {
                     $DisabledMenu = $Entries[0].Disabled;
+                    if ($null -ne $Entries[0].DisabledReason) {
+                        $DisabledReason = $Entries[0].DisabledReason;
+                    }
                 }
             }
             $ActionCmd  = $Entries[0].Action.Command;
@@ -398,6 +402,9 @@ function Show-IcingaForWindowsInstallerMenu()
             $NextMenu = $Entries[$Result].Command;
             if ($null -ne $Entries[$Result].Disabled) {
                 $DisabledMenu = $Entries[$Result].Disabled;
+                if ($null -ne $Entries[0].DisabledReason) {
+                    $DisabledReason = $Entries[0].DisabledReason;
+                }
             }
             if ($Entries[$Result].ContainsKey('Arguments')) {
                 $NextArguments = $Entries[$Result].Arguments;
@@ -408,7 +415,10 @@ function Show-IcingaForWindowsInstallerMenu()
     }
 
     if ($DisabledMenu) {
-        $global:Icinga.InstallWizard.LastNotice = [string]::Format('This menu is not enabled: {0}', $Result);
+        if ([string]::IsNullOrEmpty($DisabledReason) -eq $FALSE) {
+            $DisabledReason = [string]::Format(' => Reason: {0}', $DisabledReason);
+        }
+        $global:Icinga.InstallWizard.LastNotice = [string]::Format('This menu is not enabled: {0}{1}', $Result, $DisabledReason);
 
         return;
     }

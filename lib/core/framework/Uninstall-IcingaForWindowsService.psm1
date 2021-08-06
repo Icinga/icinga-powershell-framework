@@ -24,7 +24,7 @@ function Uninstall-IcingaForWindowsService()
 
     $ServiceData = Get-IcingaForWindowsServiceData;
 
-    Stop-IcingaService 'icingapowershell';
+    Stop-IcingaWindowsService;
     Start-Sleep -Seconds 1;
 
     $ServiceCreation = Start-IcingaProcess -Executable 'sc.exe' -Arguments 'delete icingapowershell';

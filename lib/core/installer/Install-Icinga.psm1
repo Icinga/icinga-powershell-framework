@@ -21,6 +21,7 @@ function Install-Icinga()
                 'DirectorRegisteredHost' = $FALSE;
                 'LastParent'             = [System.Collections.ArrayList]@();
                 'LastValues'             = @();
+                'DisabledEntries'        = @{ };
                 'Config'                 = @{ };
                 'ConfigSwap'             = @{ };
                 'ParentConfig'           = $null;

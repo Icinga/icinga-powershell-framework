@@ -2,8 +2,14 @@ log/*
 agent/*
 config/*
 cache/*
+
 .vscode/
 *.log
+
+# JEA
+RoleCapabilities/IcingaForWindows.psrc
+IcingaForWindows.pssc
+IcingaForWindowsTest.pssc
 
 !cache/README.md
 !cache/framework_cache.psm1

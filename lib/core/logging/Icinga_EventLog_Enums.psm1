@@ -14,6 +14,12 @@ if ($null -eq $IcingaEventLogEnums -Or $IcingaEventLogEnums.ContainsKey('Framewo
                 'Details'   = 'The Framework or is components can issue generic debug message in case the debug log is enabled. Please ensure to disable it, if not used. You can do so with the command "Disable-IcingaFrameworkDebugMode"';
                 'EventId'   = 1000;
             };
+            1001 = @{
+                'EntryType' = 'Warning';
+                'Message'   = 'Icinga for Windows deprecation warning';
+                'Details'   = 'Icinga for Windows or one of its components executed a function or method, which is flagged as deprecated. Please modify your code or contact the responsible developer to update the component to no longer user this deprecated function or method.';
+                'EventId'   = 1001;
+            };
             1100 = @{
                 'EntryType' = 'Error';
                 'Message'   = 'Corrupt Icinga for Windows configuration';
@@ -32,6 +38,12 @@ if ($null -eq $IcingaEventLogEnums -Or $IcingaEventLogEnums.ContainsKey('Framewo
                 'Details'   = 'Icinga for Windows could not read the specified file after several attempts, because another process is locking the file. Icinga for Windows terminated itself to prevent damage to this file.';
                 'EventId'   = 1102;
             };
+            1400 = @{
+                'EntryType' = 'Error';
+                'Message'   = 'Icinga for Windows background daemon not found';
+                'Details'   = 'Icinga for Windows could not find the Function or Cmdlet for the specified background daemon. The daemon was not loaded.';
+                'EventId'   = 1400;
+            };
             1500 = @{
                 'EntryType' = 'Error';
                 'Message'   = 'Failed to securely establish a communication between this server and the client';
@@ -43,6 +55,30 @@ if ($null -eq $IcingaEventLogEnums -Or $IcingaEventLogEnums.ContainsKey('Framewo
                 'Message'   = 'Client connection was interrupted because of invalid SSL stream';
                 'Details'   = 'A client connection was terminated by the Framework because no secure SSL handshake could be established. This issue in general is followed by EventId 1500.';
                 'EventId'   = 1501;
+            };
+            1502 = @{
+                'EntryType' = 'Error';
+                'Message'   = 'Unable to create PowerShell RunSpace in JEA context';
+                'Details'   = 'A PowerShell RunSpace for background threads could not be created, as the required Icinga for Windows session configuration file could not be found. Use "Install-IcingaJEAProfile" to resolve this problem.';
+                'EventId'   = 1502;
+            };
+            1503 = @{
+                'EntryType' = 'Error';
+                'Message'   = 'Unable to start Icinga for Windows service';
+                'Details'   = 'Unable to start Icinga for Windows service, as the JEA session created by the service is still active. Run "Restart-IcingaWindowsService" to restart the Icinga for Windows service, while running in JEA context to prevent this issue.';
+                'EventId'   = 1503;
+            };
+            1504 = @{
+                'EntryType' = 'Error';
+                'Message'   = 'Icinga for Windows JEA context vanished';
+                'Details'   = 'The Icinga for Windows JEA session is no longer available. It might have either crashed or get terminated by user actions, like restarting the WinRM service.';
+                'EventId'   = 1504;
+            };
+            1505 = @{
+                'EntryType' = 'Warning';
+                'Message'   = 'Icinga for Windows JEA context not available';
+                'Details'   = 'The Icinga for Windows JEA session is no longer available and is attempted to be restarted on the system. This could have either happenend due to a crash or a user action, like restarting the WinRM service.';
+                'EventId'   = 1505;
             };
             1550 = @{
                 'EntryType' = 'Error';
@@ -79,6 +115,12 @@ if ($null -eq $IcingaEventLogEnums -Or $IcingaEventLogEnums.ContainsKey('Framewo
                 'Message'   = 'Failed to authenticate user with given credentials';
                 'Details'   = 'A web client trying to authenticate failed as the provided user credentials could not be verified.';
                 'EventId'   = 1561;
+            };
+            1600 = @{
+                'EntryType' = 'Error';
+                'Message'   = 'Exception on function calls in JEA context';
+                'Details'   = 'An exception occurred while executing Icinga for Windows code inside a JEA context.';
+                'EventId'   = 1600;
             };
         }
     };

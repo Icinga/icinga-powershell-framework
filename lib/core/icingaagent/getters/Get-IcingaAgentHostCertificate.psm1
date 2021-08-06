@@ -1,5 +1,13 @@
 function Get-IcingaAgentHostCertificate()
 {
+    if (-Not (Test-Path -Path (Join-Path -Path $Env:ProgramData -ChildPath 'icinga2\var\lib\icinga2\certs\'))) {
+        return @{
+            'CertFile'   = '';
+            'Subject'    = '';
+            'Thumbprint' = '';
+        };
+    }
+
     # Default for Icinga 2.8.0 and above
     [string]$CertDirectory = (Join-Path -Path $Env:ProgramData -ChildPath 'icinga2\var\lib\icinga2\certs\*');
     $FolderContent         = Get-ChildItem -Path $CertDirectory -Filter '*.crt' -Exclude 'ca.crt';

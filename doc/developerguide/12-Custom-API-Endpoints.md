@@ -229,7 +229,7 @@ If our module is providing different endpoints, you will have to create multiple
 As everything is now ready, we can restart our Icinga PowerShell Framework service by using
 
 ```powershell
-Restart-IcingaService 'icingapowershell';
+Restart-IcingaWindowsService;
 ```
 
 and access our API endpoint by browsing to our API location (in our example we assume you use `5668` as default port):

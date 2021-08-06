@@ -21,10 +21,10 @@
 
 function Test-IcingaPowerShellConfigItem()
 {
-    param(
+    param (
         $ConfigObject,
         $ConfigKey
     );
 
-    return ([bool]($ConfigObject.PSobject.Properties.Name -eq $ConfigKey) -eq $TRUE);
+    return ([bool]($ConfigObject.PSObject.Properties.Name -eq $ConfigKey) -eq $TRUE);
 }

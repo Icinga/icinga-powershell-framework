@@ -1,24 +1,38 @@
 function Set-IcingaAcl()
 {
     param(
-        [string]$Directory
+        [string]$Directory,
+        [string]$IcingaUser = (Get-IcingaServiceUser),
+        [switch]$Remove     = $FALSE
     );
 
     if (-Not (Test-Path $Directory)) {
-        throw 'Failed to set Acl for directory. Directory does not exist';
+        Write-IcingaConsoleWarning 'Unable to set ACL for directory "{0}". Directory does not exist' -Objects $Directory;
         return;
     }
 
     $DirectoryAcl        = (Get-Item -Path $Directory).GetAccessControl('Access');
     $DirectoryAccessRule = New-Object System.Security.AccessControl.FileSystemAccessRule(
-        (Get-IcingaServiceUser),
+        $IcingaUser,
         'Modify',
         'ContainerInherit,ObjectInherit',
         'None',
         'Allow'
     );
 
-    $DirectoryAcl.SetAccessRule($DirectoryAccessRule);
+    if ($Remove -eq $FALSE) {
+        $DirectoryAcl.SetAccessRule($DirectoryAccessRule);
+    } else {
+        foreach ($entry in $DirectoryAcl.Access) {
+            if (([string]($entry.IdentityReference)).ToLower() -like [string]::Format('*\{0}', $IcingaUser.ToLower())) {
+                $DirectoryAcl.RemoveAccessRuleSpecific($entry);
+            }
+        }
+    }
+
     Set-Acl -Path $Directory -AclObject $DirectoryAcl;
-    Test-IcingaAcl -Directory $Directory -WriteOutput | Out-Null;
+
+    if ($Remove -eq $FALSE) {
+        Test-IcingaAcl -Directory $Directory -WriteOutput | Out-Null;
+    }
 }

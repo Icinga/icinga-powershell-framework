@@ -110,6 +110,11 @@ function Install-IcingaFrameworkComponent()
     # include the plugins
     Use-Icinga;
 
+    if ([string]::IsNullOrEmpty((Get-IcingaJEAContext)) -eq $FALSE) {
+        Write-IcingaConsoleNotice 'Updating Icinga JEA profile';
+        Invoke-IcingaCommand { Install-IcingaJEAProfile };
+    }
+
     # Unload the module if it was loaded before
     Remove-Module $PluginDirectory -Force -ErrorAction SilentlyContinue;
     # Now import the module

@@ -36,7 +36,7 @@ function Test-IcingaZipBinaryChecksum()
     [string]$MD5Checksum = Get-Content $MD5Path;
     $MD5Checksum         = ($MD5Checksum.Split(' ')[0]).ToLower();
 
-    $FileHash = ((Get-FileHash $Path -Algorithm MD5).Hash).ToLower();
+    $FileHash = ((Get-IcingaFileHash $Path -Algorithm MD5).Hash).ToLower();
 
     if ($MD5Checksum -ne $FileHash) {
         return $FALSE;

@@ -1,0 +1,44 @@
+
+@{
+    # ID used to uniquely identify this document
+    GUID                = '5d3b7a27-b88e-43b8-9d45-103ab701ff9c'
+    # Author of this document
+    Author              = 'Lord Hepipud'
+    # Description of the functionality provided by these settings
+    Description         = 'Icinga for Windows JEA Profile'
+    # Company associated with this document
+    CompanyName         = 'Icinga GmbH'
+    # Copyright statement for this document
+    Copyright           = '(c) 2021 Icinga GmbH | MIT'
+    # Modules to import when applied to a session
+    ModulesToImport     = ''
+    # Cmdlets to make visible when applied to a session
+    VisibleCmdlets      = ''
+    # Functions to make visible when applied to a session
+    VisibleFunctions    = ''
+    # Aliases to be defined when applied to a session
+    AliasDefinitions    = @(
+        @{
+            Name  = 'Select-Object';
+            Value = 'Microsoft.PowerShell.Utility\Select-Object'
+        },
+        @{
+            Name  = 'Add-Member';
+            Value = 'Microsoft.PowerShell.Utility\Add-Member'
+        },
+        @{
+            Name  = 'New-Object';
+            Value = 'Microsoft.PowerShell.Utility\New-Object'
+        }
+    )
+    VariableDefinitions = @(
+        @{
+            'Name'  = 'WarningPreference'
+            'Value' = 'SilentlyContinue'
+        },
+        @{
+            'Name'  = 'ProgressPreference'
+            'Value' = 'SilentlyContinue'
+        }
+    )
+}

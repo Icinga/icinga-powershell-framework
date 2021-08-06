@@ -61,7 +61,7 @@ function Start-IcingaForWindowsInstallation()
     $PluginPackageSnapshot = $FALSE;
 
     if ([string]::IsNullOrEmpty($IcingaStableRepo) -eq $FALSE) {
-        Add-IcingaRepository -Name 'Icinga Stable' -RemotePath $IcingaStableRepo;
+        Add-IcingaRepository -Name 'Icinga Stable' -RemotePath $IcingaStableRepo -Force;
     }
 
     foreach ($endpoint in $IcingaEndpoints) {
@@ -222,7 +222,7 @@ function Start-IcingaForWindowsInstallation()
     }
 
     if ($InstallService) {
-        Restart-IcingaService 'icingapowershell';
+        Restart-IcingaWindowsService;
     }
 
     switch ($InstallJEAProfile) {
