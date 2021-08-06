@@ -43,7 +43,6 @@ Which version of the "Icinga Framework" do you want to install? (release/snapsho
 [Notice]: Unblocking Icinga PowerShell Files
 [Notice]: Cleaning temporary content
 [Notice]: Updating Framework cache file
-[Notice]: The code caching feature is currently not enabled. You can enable it with "Enable-IcingaFrameworkCodeCache"
 [Notice]: Framework update has been completed. Please start a new PowerShell instance now to complete the update
 [Passed]: Icinga Agent service is installed
 [Passed]: The specified user "NT Authority\NetworkService" is allowed to run as service

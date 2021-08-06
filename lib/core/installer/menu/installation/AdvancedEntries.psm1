@@ -21,7 +21,6 @@ function Add-IcingaForWindowsInstallationAdvancedEntries()
     Show-IcingaForWindowsInstallerMenuSelectIcingaPluginsSource -Automated -Advanced;
     Show-IcingaForWindowsInstallerMenuSelectWindowsServiceSource -Automated -Advanced;
     Show-IcingaForWindowsInstallationMenuEnterWindowsServiceDirectory -Automated -Advanced;
-    Show-IcingaForWindowsManagementConsoleEnableCodeCache -Automated -Advanced;
 
     Enable-IcingaFrameworkConsoleOutput;
 

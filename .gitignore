@@ -6,3 +6,4 @@ cache/*
 *.log
 
 !cache/README.md
+!cache/framework_cache.psm1

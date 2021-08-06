@@ -17,6 +17,11 @@ function Use-Icinga()
         [switch]$Minimal   = $FALSE
     );
 
+    if ($null -ne $Global:Icinga -And $Global:Icinga.ContainsKey('RebuildCache') -And $Global:Icinga.RebuildCache) {
+        Remove-Module 'icinga-powershell-framework';
+        Import-Module (Get-IcingaFrameworkCodeCacheFile) -Global -Force;
+    }
+
     Disable-IcingaProgressPreference;
 
     if ($Minimal) {
@@ -42,9 +47,7 @@ function Use-Icinga()
         Use-IcingaPlugins;
     }
 
-    if ((Test-Path (Get-IcingaFrameworkCodeCacheFile)) -eq $FALSE -And (Get-IcingaFrameworkCodeCache)) {
-        Write-IcingaFrameworkCodeCache;
-    }
+    Write-IcingaFrameworkCodeCache;
 
     # This function will allow us to load this entire module including possible
     # actions, making it available within our shell environment
@@ -109,11 +112,7 @@ function Get-IcingaFrameworkCodeCacheFile()
 
 function Write-IcingaFrameworkCodeCache()
 {
-    if (Get-IcingaFrameworkCodeCache) {
-        Import-IcingaLib '\' -Init -CompileCache;
-    } else {
-        Write-IcingaConsoleNotice 'The code caching feature is currently not enabled. You can enable it with "Enable-IcingaFrameworkCodeCache"';
-    }
+    Import-IcingaLib '\' -Init -CompileCache;
 }
 
 function Import-IcingaLib()
@@ -129,16 +128,15 @@ function Import-IcingaLib()
         [switch]$CompileCache
     );
 
-    
     # This is just to only allow a global loading of the module. Import-IcingaLib is ignored on every other
     # location. It is just there to give a basic idea within commands, of which functions are used
     if ($Init -eq $FALSE) {
         return;
     }
-    
+
     $CacheFile = Get-IcingaFrameworkCodeCacheFile;
 
-    if ($Custom -eq $FALSE -And $CompileCache -eq $FALSE -And (Test-Path $CacheFile) -And (Get-IcingaFrameworkCodeCache)) {
+    if ($Custom -eq $FALSE -And $CompileCache -eq $FALSE -And (Test-Path $CacheFile)) {
         Import-Module $CacheFile -Global;
         return;
     }
@@ -361,8 +359,8 @@ function Invoke-IcingaCommand()
             'User environment $UserDomain\$Username'
         );
 
-        if (Get-IcingaFrameworkCodeCache) {
-            $Headers += [string]::Format('Note: Icinga Framework Code Caching is enabled');
+        if ($null -eq (Get-Command -Name 'Write-IcingaConsoleHeader' -ErrorAction SilentlyContinue)) {
+            Use-Icinga;
         }
 
         Write-IcingaConsoleHeader -HeaderLines $Headers;

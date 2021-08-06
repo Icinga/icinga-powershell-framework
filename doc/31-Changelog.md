@@ -23,6 +23,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#306](https://github.com/Icinga/icinga-powershell-framework/pull/306) Adds new Cmdlet `Exit-IcingaThrowCritical` to throw critical exit with a custom message, either by force or by using string filtering and adds storing of plugin exit codes internally
 * [#314](https://github.com/Icinga/icinga-powershell-framework/pull/314) Adds support to configure on which address TCP sockets are created on, defaults to `loopback` interface
 * [#316](https://github.com/Icinga/icinga-powershell-framework/pull/316) The reconfigure menu was previously present inside the Icinga Agent sub-menu and is now moved to the main installation menu for the Management Console
+* [#318](https://github.com/Icinga/icinga-powershell-framework/pull/318) We always enforce the Icinga Framework Code caching now and ship a plain file to build the cache on first loading
 
 ## 1.5.2 (2021-07-09)
 
