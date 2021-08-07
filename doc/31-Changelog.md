@@ -25,6 +25,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#316](https://github.com/Icinga/icinga-powershell-framework/pull/316) The reconfigure menu was previously present inside the Icinga Agent sub-menu and is now moved to the main installation menu for the Management Console
 * [#318](https://github.com/Icinga/icinga-powershell-framework/pull/318) We always enforce the Icinga Framework Code caching now and ship a plain file to build the cache on first loading
 * [#322](https://github.com/Icinga/icinga-powershell-framework/pull/322) Remove legacy import feature from Framework and replace it with a dummy function, as no longer required by Icinga for Windows
+* [#323](https://github.com/Icinga/icinga-powershell-framework/pull/323) Adds `-RebuildCache` switch to `icinga` command alias and `Invoke-IcingaCommand`, for quicker cache re-creation for developers
 
 ## 1.5.2 (2021-07-09)
 
