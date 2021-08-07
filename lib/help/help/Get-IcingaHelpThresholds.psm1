@@ -1,5 +1,3 @@
-Import-IcingaLib icinga\plugin;
-
 function Get-IcingaHelpThresholds()
 {
     param (

@@ -1,5 +1,3 @@
-Import-IcingaLib core\tools;
-
 <#
 .SYNOPSIS
    Converts unit to seconds.

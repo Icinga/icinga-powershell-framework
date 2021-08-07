@@ -7,8 +7,7 @@ function New-IcingaCheckCommand()
             'Critical',
             '[switch]NoPerfData',
             '[int]Verbose'
-        ),
-        [array]$ImportLib    = @()
+        )
     );
 
     if ([string]::IsNullOrEmpty($Name) -eq $TRUE) {
@@ -48,12 +47,6 @@ function New-IcingaCheckCommand()
     }
 
     New-Item -Path $ModuleFolder -ItemType Directory | Out-Null;
-
-    Add-Content -Path $ScriptFile -Value 'Import-IcingaLib icinga\plugin;';
-
-    foreach ($Library in $ImportLib) {
-        Add-Content -Path $ScriptFile -Value "Import-IcingaLib $Library;";
-    }
 
     Add-Content -Path $ScriptFile -Value '';
     Add-Content -Path $ScriptFile -Value "function $CommandName()";

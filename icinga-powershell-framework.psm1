@@ -32,11 +32,6 @@ function Use-Icinga()
             $global:Icinga.Add('Minimal', $TRUE);
         }
 
-        # If we load the minimal Framework files, we have to ensure our enums are loaded
-        Import-Module ([string]::Format('{0}\lib\icinga\exception\Icinga_IcingaExceptionEnums.psm1', $PSScriptRoot)) -Global;
-        Import-Module ([string]::Format('{0}\lib\icinga\enums\Icinga_IcingaEnums.psm1', $PSScriptRoot)) -Global;
-        Import-Module ([string]::Format('{0}\lib\core\logging\Icinga_EventLog_Enums.psm1', $PSScriptRoot)) -Global;
-
         return;
     }
 
@@ -45,12 +40,6 @@ function Use-Icinga()
     if (Get-Command 'Use-IcingaPlugins' -ErrorAction SilentlyContinue) {
         Use-IcingaPlugins;
     }
-
-    # This function will allow us to load this entire module including possible
-    # actions, making it available within our shell environment
-    # First load our custom modules
-    Import-IcingaLib '\' -Init -Custom;
-    Import-IcingaLib '\' -Init;
 
     if ($LibOnly -eq $FALSE) {
         $global:IcingaThreads       = [hashtable]::Synchronized(@{});
@@ -107,150 +96,27 @@ function Get-IcingaFrameworkCodeCacheFile()
     return (Join-Path -Path (Get-IcingaCacheDir) -ChildPath 'framework_cache.psm1');
 }
 
-function Write-IcingaFrameworkCodeCache()
-{
-    Import-IcingaLib '\' -Init -CompileCache;
-}
-
 function Import-IcingaLib()
 {
-    param(
-        [String]$Lib,
-        # The Force Reload will remove the module in case it's loaded and reload it to track
-        # possible development changes without having to create new PowerShell environments
-        [Switch]$ForceReload,
-        [switch]$Init,
-        [switch]$Custom,
-        [switch]$WriteManifests,
-        [switch]$CompileCache
-    );
-
-    # This is just to only allow a global loading of the module. Import-IcingaLib is ignored on every other
-    # location. It is just there to give a basic idea within commands, of which functions are used
-    if ($Init -eq $FALSE) {
-        return;
-    }
-
-    $CacheFile = Get-IcingaFrameworkCodeCacheFile;
-
-    if ($CompileCache -eq $FALSE) {
-        Import-Module 'icinga-powershell-framework' -Global -Force;
-        return;
-    }
-
-    [array]$ImportModules = @();
-    [array]$RemoveModules = @();
-
-    if ($Custom) {
-        [string]$directory  = Join-Path -Path $PSScriptRoot -ChildPath 'custom\';
-    } else {
-        [string]$directory  = Join-Path -Path $PSScriptRoot -ChildPath 'lib\';
-    }
-    [string]$module     = Join-Path -Path $directory -ChildPath $Lib;
-    [string]$moduleName = '';
-
-    $ListOfLoadedModules = Get-Module | Select-Object Name;
-
-    # Load modules from directory
-    if ((Test-Path $module -PathType Container)) {
-
-        Get-ChildItem -Path $module -Recurse -Filter *.psm1 |
-            ForEach-Object {
-                [string]$modulePath = $_.FullName;
-                $moduleName = $_.Name.Replace('.psm1', '');
-
-                if ($ListOfLoadedModules -like "*$moduleName*") {
-                    if ($ForceReload) {
-                        $RemoveModules += $moduleName;
-                    }
-                    $ImportModules += $modulePath;
-                } else {
-                    $ImportModules += $modulePath;
-                    if ($WriteManifests) {
-                        Publish-IcingaModuleManifest -Module $moduleName;
-                    }
-                }
-            }
-    } else {
-        $module = $module.Replace('.psm1', ''); # Cut possible .psm1 ending
-        $moduleName = $module.Split('\')[-1]; # Get the last element
-
-        if ($ForceReload) {
-            if ($ListOfLoadedModules -Like "*$moduleName*") {
-                $RemoveModules += $moduleName;
-            }
-        }
-
-        $ImportModules += ([string]::Format('{0}.psm1', $module));
-        if ($WriteManifests) {
-            Publish-IcingaModuleManifest -Module $moduleName;
-        }
-    }
-
-    if ($RemoveModules.Count -ne 0) {
-        Remove-Module $RemoveModules;
-    }
-
-    if ($ImportModules.Count -ne 0) {
-
-        if ($CompileCache) {
-            $CacheContent = '';
-            foreach ($module in $ImportModules) {
-                $Content      = Get-Content $module -Raw;
-                $CacheContent += $Content + "`r`n";
-            }
-
-            $CacheContent += $Content + "Export-ModuleMember -Function @( '*' )";
-            Set-Content -Path $CacheFile -Value $CacheContent;
-        } else {
-            Import-Module $ImportModules -Global;
-        }
-    }
+    # Do nothing, just leave it here as compatibility layer until we
+    # cleaned every other repository
 }
 
-function Publish-IcingaModuleManifest()
+function Write-IcingaFrameworkCodeCache()
 {
-    param(
-        [string]$Module
-    );
+    [string]$CacheFile    = Get-IcingaFrameworkCodeCacheFile;
+    [string]$directory    = Join-Path -Path $PSScriptRoot -ChildPath 'lib\';
+    [string]$CacheContent = '';
 
-    [string]$ManifestDir = Join-Path -Path $PSScriptRoot -ChildPath 'manifests';
-    [string]$ModuleFile  = [string]::Format('{0}.psd1', $Module);
-    [string]$PSDFile     = Join-Path -Path $ManifestDir -ChildPath $ModuleFile;
-
-    if (Test-Path $PSDFile) {
-        return;
-    }
-
-    New-ModuleManifest -Path $PSDFile -ModuleVersion 1.0 -Author $env:USERNAME -CompanyName 'Icinga GmbH' -Copyright '(c) 2019 Icinga GmbH. All rights reserved.' -PowerShellVersion 4.0;
-    $Content    = Get-Content $PSDFile;
-    $NewContent = @();
-
-    foreach ($line in $Content) {
-        if ([string]::IsNullOrEmpty($line)) {
-            continue;
+    # Load modules from directory
+    Get-ChildItem -Path $directory -Recurse -Filter '*.psm1' |
+        ForEach-Object {
+            $CacheContent += (Get-Content -Path $_.FullName -Raw);
+            $CacheContent += "`r`n";
         }
 
-        if ($line[0] -eq '#') {
-            continue;
-        }
-
-        if ($line.Contains('#')) {
-            $line = $line.Substring(0, $line.IndexOf('#'));
-        }
-
-        $tmpLine = $line;
-        while ($tmpLine.Contains(' ')) {
-            $tmpLine = $tmpLine.Replace(' ', '');
-        }
-        if ([string]::IsNullOrEmpty($tmpLine)) {
-            continue;
-        }
-
-        $NewContent += $line;
-    }
-
-    Set-Content -Path $PSDFile -Value $NewContent;
+    $CacheContent += "Export-ModuleMember -Function @( '*' )";
+    Set-Content -Path $CacheFile -Value $CacheContent;
 }
 
 function Publish-IcingaEventlogDocumentation()
