@@ -203,9 +203,10 @@ function Invoke-IcingaCommand()
     [CmdletBinding()]
     param (
         $ScriptBlock,
-        [switch]$SkipHeader  = $FALSE,
-        [switch]$Manage      = $FALSE,
-        [array]$ArgumentList = @()
+        [switch]$SkipHeader   = $FALSE,
+        [switch]$Manage       = $FALSE,
+        [switch]$RebuildCache = $FALSE,
+        [array]$ArgumentList  = @()
     );
 
     Import-LocalizedData `
@@ -227,6 +228,10 @@ function Invoke-IcingaCommand()
         }
 
         Write-IcingaConsoleHeader -HeaderLines $Headers;
+    }
+
+    if ($RebuildCache) {
+        Write-IcingaFrameworkCodeCache;
     }
 
     powershell.exe -NoExit -Command {
