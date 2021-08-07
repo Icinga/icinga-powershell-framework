@@ -1,5 +1,3 @@
-Import-IcingaLib core\tools;
-
 function ConvertFrom-TimeSpan()
 {
     param (
