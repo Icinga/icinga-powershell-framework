@@ -21,18 +21,17 @@ function Start-IcingaForWindowsInstallation()
 
     # Icinga Agent
     $AgentVersion          = Get-IcingaForWindowsInstallerValuesFromStep -InstallerStep 'Show-IcingaForWindowsInstallationMenuEnterIcingaAgentVersion';
-    $AgentPackageType      = Get-IcingaForWindowsInstallerStepSelection -InstallerStep 'Show-IcingaForWindowsInstallerMenuSelectIcingaAgentSource';
+    $InstallIcingaAgent    = Get-IcingaForWindowsInstallerStepSelection -InstallerStep 'Show-IcingaForWindowsInstallerMenuSelectInstallIcingaAgent';
     $AgentInstallDir       = Get-IcingaForWindowsInstallerValuesFromStep -InstallerStep 'Show-IcingaForWindowsInstallationMenuEnterIcingaAgentDirectory';
     $ServiceUser           = Get-IcingaForWindowsInstallerValuesFromStep -InstallerStep 'Show-IcingaForWindowsInstallationMenuEnterIcingaAgentUser';
     $ServicePassword       = Get-IcingaForWindowsInstallerValuesFromStep -InstallerStep 'Show-IcingaForWindowsInstallationMenuEnterIcingaAgentServicePassword';
 
     # Icinga for Windows Service
-    $WindowsServiceType    = Get-IcingaForWindowsInstallerStepSelection -InstallerStep 'Show-IcingaForWindowsInstallerMenuSelectWindowsServiceSource';
+    $InstallPSService      = Get-IcingaForWindowsInstallerStepSelection -InstallerStep 'Show-IcingaForWindowsInstallerMenuSelectInstallIcingaForWindowsService';
     $WindowsServiceDir     = Get-IcingaForWindowsInstallerValuesFromStep -InstallerStep 'Show-IcingaForWindowsInstallationMenuEnterWindowsServiceDirectory';
 
     # Icinga for Windows Plugins
-    $WindowsPluginsType    = Get-IcingaForWindowsInstallerStepSelection -InstallerStep 'Show-IcingaForWindowsInstallerMenuSelectIcingaPluginsSource';
-    $WindowsPluginsPackage = Get-IcingaForWindowsInstallerValuesFromStep -InstallerStep 'Show-IcingaForWindowsInstallerMenuEnterPluginsPackageSource';
+    $InstallPluginChoice   = Get-IcingaForWindowsInstallerStepSelection -InstallerStep 'Show-IcingaForWindowsInstallerMenuSelectInstallIcingaPlugins';
 
     # Global Zones
     $GlobalZonesType       = Get-IcingaForWindowsInstallerStepSelection -InstallerStep 'Show-IcingaForWindowsInstallerMenuSelectGlobalZones';
@@ -43,10 +42,15 @@ function Start-IcingaForWindowsInstallation()
     $IcingaEndpoints       = Get-IcingaForWindowsInstallerValuesFromStep -InstallerStep 'Show-IcingaForWindowsInstallerMenuEnterIcingaParentNodes';
     $IcingaPort            = Get-IcingaForWindowsInstallerValuesFromStep -InstallerStep 'Show-IcingaForWindowsInstallationMenuEnterIcingaPort';
 
+    # Repository
+    $IcingaStableRepo      = Get-IcingaForWindowsInstallerValuesFromStep -InstallerStep 'Show-IcingaForWindowsInstallationMenuStableRepository';
+
+    # JEA Profile
+    $InstallJEAProfile     = Get-IcingaForWindowsInstallerStepSelection -InstallerStep 'Show-IcingaForWindowsInstallerMenuSelectInstallJEAProfile';
+
     $Hostname              = '';
     $GlobalZones           = @();
     $IcingaParentAddresses = @();
-    $AgentPackageSource    = ''
     $ServicePackageSource  = ''
     $ServiceSourceGitHub   = $FALSE;
     $InstallAgent          = $TRUE;
@@ -54,6 +58,10 @@ function Start-IcingaForWindowsInstallation()
     $InstallPlugins        = $TRUE;
     $PluginPackageRelease  = $FALSE;
     $PluginPackageSnapshot = $FALSE;
+
+    if ([string]::IsNullOrEmpty($IcingaStableRepo) -eq $FALSE) {
+        Add-IcingaRepository -Name 'Icinga Stable' -RemotePath $IcingaStableRepo;
+    }
 
     foreach ($endpoint in $IcingaEndpoints) {
         $EndpointAddress = Get-IcingaForWindowsInstallerValuesFromStep -InstallerStep 'Show-IcingaForWindowsInstallerMenuEnterIcingaParentAddresses' -Parent $endpoint;
@@ -114,58 +122,39 @@ function Start-IcingaForWindowsInstallation()
         }
     }
 
-    switch ($AgentPackageType) {
+    switch ($InstallIcingaAgent) {
         '0' {
             # Install Icinga Agent from packages.icinga.com
-            $AgentPackageSource = ' https://packages.icinga.com/windows';
+            $InstallAgent = $TRUE;
             break;
         };
         '1' {
-            # Install Icinga Agent from custom source
-            $AgentPackageSource = (Get-IcingaForWindowsInstallerValuesFromStep -InstallerStep 'Show-IcingaForWindowsInstallerMenuEnterIcingaAgentPackageSource');
-            break;
-        };
-        '2' {
             # Do not install Icinga Agent
             $InstallAgent = $FALSE;
             break;
         }
     }
 
-    switch ($WindowsServiceType) {
+    switch ($InstallPSService) {
         '0' {
-            #GitHub
-            $ServiceSourceGitHub = $TRUE;
+            # Install Icinga for Windows Service
+            $InstallService = $TRUE;
             break;
         };
         '1' {
-            # Custom location
-            $ServicePackageSource = (Get-IcingaForWindowsInstallerValuesFromStep -InstallerStep 'Show-IcingaForWindowsInstallerMenuEnterWindowsServicePackageSource');
-            break;
-        };
-        '2' {
             # Do not install Icinga for Windows service
             $InstallService = $FALSE;
             break;
         }
     }
 
-    switch ($WindowsPluginsType) {
+    switch ($InstallPluginChoice) {
         '0' {
-            # Download Release from GitHub
+            # Download stable release
             $PluginPackageRelease = $TRUE;
             break;
         };
         '1' {
-            # Download Snapshot (master) from GitHub
-            $PluginPackageSnapshot = $TRUE;
-            break;
-        };
-        '2' {
-            # Use custom package source
-            break;
-        };
-        '3' {
             # Do not install plugins
             $InstallPlugins = $FALSE;
             break;
@@ -173,7 +162,8 @@ function Start-IcingaForWindowsInstallation()
     }
 
     if ($InstallAgent) {
-        Install-IcingaAgent -Version $AgentVersion -Source $AgentPackageSource -InstallDir $AgentInstallDir -AllowUpdates $TRUE | Out-Null;
+        Set-IcingaPowerShellConfig -Path 'Framework.Icinga.AgentLocation' -Value $AgentInstallDir;
+        Install-IcingaComponent -Name 'agent' -Version $AgentVersion -Confirm -Release;
         Reset-IcingaAgentConfigFile;
         Move-IcingaAgentDefaultConfig;
         Set-IcingaAgentNodeName -Hostname $Hostname;
@@ -198,14 +188,16 @@ function Start-IcingaForWindowsInstallation()
     Write-IcingaAgentZonesConfig -Endpoints $IcingaEndpoints -EndpointConnections $IcingaParentAddresses -ParentZone $IcingaZone -GlobalZones $GlobalZones -Hostname $Hostname;
 
     if ($InstallService) {
-        $ServiceData = Get-IcingaFrameworkServiceBinary -FrameworkServiceUrl $ServicePackageSource -Release:$ServiceSourceGitHub -ServiceDirectory $WindowsServiceDir;
+        Set-IcingaPowerShellConfig -Path 'Framework.Icinga.IcingaForWindowsService' -Value $WindowsServiceDir;
+        Set-IcingaPowerShellConfig -Path 'Framework.Icinga.ServiceUser' -User $ServiceUser;
+        Set-IcingaInternalPowerShellServicePassword -Password (ConvertTo-IcingaSecureString $ServicePassword);
 
-        Install-IcingaFrameworkService -Path $ServiceData.ServiceBin -User $ServiceUser -Password (ConvertTo-IcingaSecureString $ServicePassword) | Out-Null;
+        Install-IcingaComponent -Name 'service' -Release -Confirm;
         Register-IcingaBackgroundDaemon -Command 'Start-IcingaServiceCheckDaemon';
     }
 
     if ($InstallPlugins) {
-        Install-IcingaFrameworkComponent -Name 'plugins' -Release:$PluginPackageRelease -Snapshot:$PluginPackageSnapshot -Url $WindowsPluginsPackage | Out-Null;
+        Install-IcingaComponent -Name 'plugins' -Release:$PluginPackageRelease -Snapshot:$PluginPackageSnapshot -Confirm;
     }
 
     switch ($FirewallType) {
@@ -230,6 +222,20 @@ function Start-IcingaForWindowsInstallation()
 
     if ($InstallService) {
         Restart-IcingaService 'icingapowershell';
+    }
+
+    switch ($InstallJEAProfile) {
+        '0' {
+            Install-IcingaJEAProfile;
+            break;
+        };
+        '1' {
+            Install-IcingaSecurity;
+            break;
+        };
+        '2' {
+            # Do not install JEA profile
+        }
     }
 
     # Update configuration and clear swap

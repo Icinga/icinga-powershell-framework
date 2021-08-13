@@ -155,15 +155,14 @@ function Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate()
 
     if ($DirectorConfig.install_framework_service -eq 0) {
         # Do not install
-        $InstallServiceSelection = 2;
+        $InstallServiceSelection = 1;
     } else {
-        # TODO: This is currently not supported. We use the "default" config for installing from GitHub by now
         $InstallServiceSelection = 0;
     }
 
     if ($DirectorConfig.install_framework_plugins -eq 0) {
         # Do not install
-        $InstallPluginsSelection = 3;
+        $InstallPluginsSelection = 1;
     } else {
         # TODO: This is currently not supported. We use the "default" config for installing from GitHub by now
         $InstallPluginsSelection = 0;
@@ -174,8 +173,8 @@ function Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate()
     Add-IcingaForWindowsInstallationAdvancedEntries;
     Disable-IcingaFrameworkConsoleOutput;
 
-    Show-IcingaForWindowsInstallerMenuSelectIcingaPluginsSource -DefaultInput $InstallPluginsSelection -Value @() -Automated;
-    Show-IcingaForWindowsInstallerMenuSelectWindowsServiceSource -DefaultInput $InstallServiceSelection -Value @() -Automated;
+    Show-IcingaForWindowsInstallerMenuSelectInstallIcingaPlugins -DefaultInput $InstallPluginsSelection -Value @() -Automated;
+    Show-IcingaForWindowsInstallerMenuSelectInstallIcingaForWindowsService -DefaultInput $InstallServiceSelection -Value @() -Automated;
     Show-IcingaForWindowsInstallerMenuSelectOpenWindowsFirewall -DefaultInput $WindowsFirewallSelection -Value @() -Automated;
 
     if ($Register) {

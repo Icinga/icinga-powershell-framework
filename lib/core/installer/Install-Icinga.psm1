@@ -103,10 +103,14 @@ function Install-Icinga()
                         'Help'    = 'Allows you to install Icinga for Windows with all required components and options.'
                     },
                     @{
-                        'Caption'  = 'Update environment';
-                        'Command'  = '';
-                        'Help'     = 'Allows you to modify your current Icinga for Windows installation.';
-                        'Disabled' = $TRUE;
+                        'Caption' = 'Install Components';
+                        'Command' = 'Show-IcingaForWindowsMenuInstallComponents';
+                        'Help'    = 'Allows you to install new components for Icinga for Windows from your repositories.';
+                    },
+                    @{
+                        'Caption' = 'Update environment';
+                        'Command' = 'Show-IcingaForWindowsMenuUpdateComponents';
+                        'Help'    = 'Allows you to modify your current Icinga for Windows installation.';
                     },
                     @{
                         'Caption' = 'Manage environment';

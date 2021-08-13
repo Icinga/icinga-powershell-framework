@@ -7,9 +7,9 @@
 .FUNCTIONALITY
     Installs the Icinga PowerShell Services as a Windows service
 .EXAMPLE
-    PS>Install-IcingaFrameworkService -Path C:\Program Files\icinga-service\icinga-service.exe;
+    PS>Install-IcingaForWindowsService -Path C:\Program Files\icinga-service\icinga-service.exe;
 .EXAMPLE
-    PS>Install-IcingaFrameworkService -Path C:\Program Files\icinga-service\icinga-service.exe -User 'NT Authority\NetworkService';
+    PS>Install-IcingaForWindowsService -Path C:\Program Files\icinga-service\icinga-service.exe -User 'NT Authority\NetworkService';
 .PARAMETER Path
     The location on where the service binary executable is found
 .PARAMETER User
@@ -24,7 +24,7 @@
    https://github.com/Icinga/icinga-powershell-framework
 #>
 
-function Install-IcingaFrameworkService()
+function Install-IcingaForWindowsService()
 {
     param(
         $Path,
@@ -93,3 +93,5 @@ function Install-IcingaFrameworkService()
 
     return (Set-IcingaAgentServiceUser -User $User -Password $Password -Service 'icingapowershell');
 }
+
+Set-Alias -Name 'Install-IcingaFrameworkService' -Value 'Install-IcingaForWindowsService';

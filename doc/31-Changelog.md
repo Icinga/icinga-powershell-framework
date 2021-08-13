@@ -22,6 +22,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#303](https://github.com/Icinga/icinga-powershell-framework/pull/303) Adds support to parse arrays to Icinga Check thresholds functions like `WarnOutOfRange` and adds two new functions `WarnDateTime` and `CritDateTime`, for easier comparing of time stamps.
 * [#305](https://github.com/Icinga/icinga-powershell-framework/pull/305) Adds a new Cmdlet to test if functions with `Add-Type` are already present inside the current scope of the shell
 * [#306](https://github.com/Icinga/icinga-powershell-framework/pull/306) Adds new Cmdlet `Exit-IcingaThrowCritical` to throw critical exit with a custom message, either by force or by using string filtering and adds storing of plugin exit codes internally
+* [#310](https://github.com/Icinga/icinga-powershell-framework/pull/310) Adds repository management to install components very easily from one or multiple defined source locations
 * [#314](https://github.com/Icinga/icinga-powershell-framework/pull/314) Adds support to configure on which address TCP sockets are created on, defaults to `loopback` interface
 * [#316](https://github.com/Icinga/icinga-powershell-framework/pull/316) The reconfigure menu was previously present inside the Icinga Agent sub-menu and is now moved to the main installation menu for the Management Console
 * [#318](https://github.com/Icinga/icinga-powershell-framework/pull/318) We always enforce the Icinga Framework Code caching now and ship a plain file to build the cache on first loading

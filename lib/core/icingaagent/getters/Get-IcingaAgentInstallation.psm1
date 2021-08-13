@@ -18,6 +18,13 @@ function Get-IcingaAgentInstallation()
         }
     }
 
+    $IcingaService = Get-IcingaServices -Service 'icinga2';
+    $ServiceUser   = 'NT AUTHORITY\NetworkService';
+
+    if ($null -ne $IcingaService) {
+        $ServiceUser = $IcingaService.icinga2.configuration.ServiceUser;
+    }
+
     if ($null -eq $IcingaData) {
         return @{
             'Installed'    = $FALSE;
@@ -26,6 +33,7 @@ function Get-IcingaAgentInstallation()
             'Architecture' = $architecture;
             'Uninstaller'  = '';
             'InstallDate'  = '';
+            'User'         = $ServiceUser;
         };
     }
 
@@ -36,5 +44,6 @@ function Get-IcingaAgentInstallation()
         'Architecture' = $architecture;
         'Uninstaller'  = $IcingaData.UninstallString.Replace("MsiExec.exe ", "");
         'InstallDate'  = $IcingaData.InstallDate;
+        'User'         = $ServiceUser;
     };
 }
