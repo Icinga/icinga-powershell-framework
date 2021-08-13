@@ -7,7 +7,7 @@ documentation before upgrading to a new release.
 
 Released closed milestones can be found on [GitHub](https://github.com/Icinga/icinga-powershell-framework/milestones?state=closed).
 
-## 1.6.0 (pending)
+## 1.6.0 (2021-09-07)
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/15?closed=1)
 
@@ -19,6 +19,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 ### Enhancements
 
 * [#301](https://github.com/Icinga/icinga-powershell-framework/pull/301) Improves error handling to no longer print passwords in case `String` is used for `SecureString` arguments
+* [#303](https://github.com/Icinga/icinga-powershell-framework/pull/303) Adds support to parse arrays to Icinga Check thresholds functions like `WarnOutOfRange` and adds two new functions `WarnDateTime` and `CritDateTime`, for easier comparing of time stamps.
 * [#305](https://github.com/Icinga/icinga-powershell-framework/pull/305) Adds a new Cmdlet to test if functions with `Add-Type` are already present inside the current scope of the shell
 * [#306](https://github.com/Icinga/icinga-powershell-framework/pull/306) Adds new Cmdlet `Exit-IcingaThrowCritical` to throw critical exit with a custom message, either by force or by using string filtering and adds storing of plugin exit codes internally
 * [#314](https://github.com/Icinga/icinga-powershell-framework/pull/314) Adds support to configure on which address TCP sockets are created on, defaults to `loopback` interface

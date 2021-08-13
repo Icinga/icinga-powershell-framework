@@ -92,6 +92,20 @@ function Convert-IcingaPluginThresholds()
     [array]$Content    = @();
 
     if ($Threshold.Contains(':')) {
+        # If we have more than one ':' inside our string, lets check if this is a date time value
+        # In case it is convert it properly to a FileTime we can work with later on
+        if ([Regex]::Matches($Threshold, ":").Count -gt 1) {
+            try {
+                $DateTimeValue  = [DateTime]::ParseExact($Threshold, 'yyyy\/MM\/dd HH:mm:ss', $null);
+                $RetValue.Value = $DateTimeValue.ToFileTime();
+                $RetValue.Unit  = 's';
+            } catch {
+                $RetValue.Value = $Threshold;
+            }
+
+            return $RetValue;
+        }
+
         $Content = $Threshold.Split(':');
     } else {
         $Content += $Threshold;

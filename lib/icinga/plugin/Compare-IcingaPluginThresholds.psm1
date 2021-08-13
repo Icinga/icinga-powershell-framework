@@ -6,6 +6,7 @@ function Compare-IcingaPluginThresholds()
         $BaseValue              = $null,
         [switch]$Matches        = $FALSE,
         [switch]$NotMatches     = $FALSE,
+        [switch]$DateTime       = $FALSE,
         [string]$Unit           = '',
         $ThresholdCache         = $null,
         [string]$CheckName      = '',
@@ -177,6 +178,47 @@ function Compare-IcingaPluginThresholds()
                 '{0}',
                 (ConvertTo-IcingaPluginOutputTranslation -Translation $Translation -Value (Convert-IcingaPluginValueToString -Unit $IcingaThresholds.Unit -Value $ThresholdValue -OriginalUnit $IcingaThresholds.OriginalUnit))
             );
+        }
+    } elseif ($DateTime) {
+        # Checks if the InputValue Is Inside our time value
+
+        try {
+            $DateTimeValue          = 0;
+            [decimal]$TimeThreshold = 0;
+            $CurrentDate            = $global:Icinga.CurrentDate;
+            $IcingaThresholds.Unit  = '';
+
+            if ([string]::IsNullOrEmpty($InputValue) -eq $FALSE) {
+                $DateTimeValue          = [DateTime]::FromFileTime($InputValue);
+                $IcingaThresholds.Value = $DateTimeValue.ToString('yyyy\/MM\/dd HH:mm:ss');
+            }
+
+            if ([string]::IsNullOrEmpty($ThresholdValue) -eq $FALSE) {
+                $TimeThreshold                    = (ConvertTo-Seconds -Value $Threshold);
+                $CurrentDate                      = $CurrentDate.AddSeconds($TimeThreshold);
+                $IcingaThresholds.IcingaThreshold = $CurrentDate.ToFileTimeUtc();
+            }
+
+            if ([string]::IsNullOrEmpty($ThresholdValue) -eq $FALSE -And ($DateTimeValue -eq 0 -Or $DateTimeValue -lt $CurrentDate)) {
+                $IcingaThresholds.InRange = $FALSE;
+                $IcingaThresholds.Message = 'is lower than';
+                $IcingaThresholds.Range   = [string]::Format(
+                    '{0} ({1}{2})',
+                    ((Get-Date).ToString('yyyy\/MM\/dd HH:mm:ss')),
+                    ( $( if ($TimeThreshold -ge 0) { '+'; } else { ''; } )),
+                    $Threshold
+                );
+            }
+        } catch {
+            $IcingaThresholds.ErrorMessage = [string]::Format(
+                'Invalid date time specified. Your InputValue "{0}" seems not be a valid date time or your provided Threshold "{1}" cannot be converted to seconds. Exception: {2}',
+                $InputValue,
+                $ThresholdValue,
+                $_.Exception.Message
+            );
+            $IcingaThresholds.HasError = $TRUE;
+
+            return $IcingaThresholds;
         }
     } elseif ($IsBetween) {
         if ($InputValue -gt $Minium -And $InputValue -lt $Maximum) {
