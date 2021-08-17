@@ -16,6 +16,7 @@ The best way to demonstrate on how to add new repositories, you can use the defa
 | ---        |---     | ---                                                                             |
 | Name       | String | The unique name of the repository. This name can only exist once on your system |
 | RemotePath | String | The path pointing to the location on where the repository is located at. It can either point to the root directory of the folder containing the `ifw.repo.json` or directly to this file. Accepts web, local or network share path. |
+| Force      | Switch | Will remove an existing repository with the same name and override it with the new configuration |
 
 ### Icinga for Windows Stable
 
