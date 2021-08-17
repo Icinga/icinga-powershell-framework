@@ -18,6 +18,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#326](https://github.com/Icinga/icinga-powershell-framework/pull/326) Fixes import for module files, by using the full path to the module now instead of the name only, as files could be placed inside a folder which is not listed inside the `$ENV:PSModulePath`
 * [#327](https://github.com/Icinga/icinga-powershell-framework/pull/327) Fixes possible exception on first import run for certain systems
 * [#328](https://github.com/Icinga/icinga-powershell-framework/pull/328) Fixes installer while using installation files or the installation command, which did not overwrite default values with custom values
+* [#330](https://github.com/Icinga/icinga-powershell-framework/pull/330) Fixes `Remove-ItemSecure` which was not using all args and might fail on empty path entries
 
 ### Enhancements
 
