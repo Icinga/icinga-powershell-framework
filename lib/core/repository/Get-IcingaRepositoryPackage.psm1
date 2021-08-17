@@ -18,6 +18,7 @@ function Get-IcingaRepositoryPackage()
     $SourceRepo             = $null;
     $RepoName               = $null;
     [bool]$HasRepo          = $FALSE;
+    [bool]$Isx86            = [bool]([IntPtr]::Size -eq 4);
 
     foreach ($entry in $Repositories) {
         $RepoContent        = Read-IcingaRepositoryFile -Name $entry.Name;
@@ -42,6 +43,10 @@ function Get-IcingaRepositoryPackage()
             }
 
             if ($Release -And $package.Snapshot -eq $TRUE) {
+                continue;
+            }
+
+            if ($package.Architecture -ne 'Multi' -And $package.Architecture -eq 'x86' -And $Isx86 -eq $FALSE) {
                 continue;
             }
 
