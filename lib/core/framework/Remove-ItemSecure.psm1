@@ -31,27 +31,21 @@ function Remove-ItemSecure()
 {
     param(
         [string]$Path,
-        [switch]$Recurse,
-        [switch]$Force
+        [switch]$Recurse = $FALSE,
+        [switch]$Force   = $FALSE
     )
 
-    if ((Test-Path $Path) -eq $FALSE) {
+    if ([string]::IsNullOrEmpty($Path) -Or (Test-Path $Path) -eq $FALSE) {
+        Write-IcingaConsoleError 'The provided path "{0}" does not exist' -Objects $Path;
         return $FALSE;
     }
 
     try {
-        if ($Recurse -And $Force) {
-            Remove-Item -Path $Path -Recurse -Force;
-        } elseif ($Recurse -And -Not $Force) {
-            Remove-Item -Path $Path -Recurse;
-        } elseif (-Not $Recurse -And $Force) {
-            Remove-Item -Path $Path -Force;
-        } else {
-            Remove-Item -Path $Path;
-        }
+        Remove-Item -Path $Path -Recurse:$Recurse -Force:$Force -ErrorAction Stop;
         return $TRUE;
     } catch {
-        Write-IcingaConsoleError ([string]::Format('Failed to remove items from path "{0}": {1}', $Path, $_.Exception));
+        $ExMsg = $_.Exception;
+        Write-IcingaConsoleError 'Failed to remove items from path "{0}". Recurse is "{1}", Force is "{2}": "{3}"' -Objects $Path, $Recurse, $Force, $ExMsg;
     }
     return $FALSE;
 }
