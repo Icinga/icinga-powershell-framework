@@ -5,7 +5,7 @@ function Convert-IcingaDirectorSelfServiceArguments()
     );
 
     if ($null -eq $JsonInput) {
-        return @{};
+        return @{ };
     }
 
     [hashtable]$DirectorArguments = @{
@@ -15,7 +15,7 @@ function Convert-IcingaDirectorSelfServiceArguments()
         AllowVersionChanges     = $JsonInput.allow_updates;
         GlobalZones             = $JsonInput.global_zones;
         ParentZone              = $JsonInput.parent_zone;
-        #CAEndpoint             = $JsonInput.ca_server;
+        CAEndpoint              = $JsonInput.IcingaMaster;
         Endpoints               = $JsonInput.parent_endpoints;
         AddFirewallRule         = $JsonInput.agent_add_firewall_rule;
         AcceptConnections       = $JsonInput.agent_add_firewall_rule;
@@ -61,8 +61,8 @@ function Convert-IcingaDirectorSelfServiceArguments()
     }
 
     $NetworkDefault = '';
-    foreach ($Endpoint in $JsonInput.parent_endpoints) {
-        $NetworkDefault += [string]::Format('[{0}]:{1},', $Endpoint, $JsonInput.agent_listen_port);
+    foreach ($Endpoint in $JsonInput.endpoints_config) {
+        $NetworkDefault += [string]::Format('[{0}]:{1},', ($Endpoint.Split(';')[0]), $JsonInput.agent_listen_port);
     }
     if ([string]::IsNullOrEmpty($NetworkDefault) -eq $FALSE) {
         $NetworkDefault = $NetworkDefault.Substring(0, $NetworkDefault.Length - 1).Split(',');
@@ -71,9 +71,6 @@ function Convert-IcingaDirectorSelfServiceArguments()
         );
 
         $EndpointConnections = $NetworkDefault;
-        $DirectorArguments.Add(
-            'CAEndpoint', (Get-IPConfigFromString $EndpointConnections[0]).address
-        );
     }
 
     return $DirectorArguments;
