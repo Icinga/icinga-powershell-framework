@@ -13,7 +13,7 @@ function Show-IcingaForWindowsInstallationMenuStableRepository()
         -Entries @(
             @{
                 'Command' = 'Show-IcingaForWindowsInstallerConfigurationSummary';
-                'Help'    = 'This is the stable repository from where all packages of Icinga for Windows are downloaded and intstalled from. Defaults to "https://packages.icinga.com/IcingaForWindows/stable"';
+                'Help'    = 'This is the stable repository from where all packages of Icinga for Windows are downloaded and installed from. Defaults to "https://packages.icinga.com/IcingaForWindows/stable"';
             }
         ) `
         -DefaultIndex $DefaultInput `
