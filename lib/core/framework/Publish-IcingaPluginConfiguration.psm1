@@ -58,7 +58,7 @@ function Publish-IcingaPluginConfiguration()
     } catch {
         [string]$Message = $_.Exception.Message;
         Write-IcingaConsoleError 'Failed to import the module on path "{0}". Please verify that this is a valid PowerShell module root folder. Exception: {1}{2}' -Objects $ComponentPath, (New-IcingaNewLine), $Message;
-        return;  
+        return;
     }
 
     $CheckCommands = Get-Command -ListImported -Name 'Invoke-IcingaCheck*' -ErrorAction SilentlyContinue;

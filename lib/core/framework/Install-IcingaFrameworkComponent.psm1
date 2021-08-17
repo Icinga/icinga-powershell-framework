@@ -111,9 +111,9 @@ function Install-IcingaFrameworkComponent()
     Use-Icinga;
 
     # Unload the module if it was loaded before
-    Remove-Module $RepositoryName -Force -ErrorAction SilentlyContinue;
+    Remove-Module $PluginDirectory -Force -ErrorAction SilentlyContinue;
     # Now import the module
-    Import-Module $RepositoryName;
+    Import-Module $PluginDirectory;
 
     Write-IcingaConsoleNotice ([string]::Format('Icinga {0} update has been completed. Please start a new PowerShell to apply it', $ComponentName));
 
