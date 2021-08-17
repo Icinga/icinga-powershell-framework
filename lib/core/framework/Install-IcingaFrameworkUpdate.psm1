@@ -104,6 +104,7 @@ function Install-IcingaFrameworkUpdate()
 
     Write-IcingaConsoleNotice 'Framework update has been completed. Please start a new PowerShell instance now to complete the update';
 
+    Test-IcingaForWindowsService -ResolveProblems | Out-Null;
     Test-IcingaAgent;
 
     if ($ServiceStatus -eq 'Running') {
