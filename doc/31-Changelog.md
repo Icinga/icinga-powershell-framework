@@ -19,7 +19,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#327](https://github.com/Icinga/icinga-powershell-framework/pull/327) Fixes possible exception on first import run for certain systems
 * [#328](https://github.com/Icinga/icinga-powershell-framework/pull/328) Fixes installer while using installation files or the installation command, which did not overwrite default values with custom values
 * [#330](https://github.com/Icinga/icinga-powershell-framework/pull/330) Fixes `Remove-ItemSecure` which was not using all args and might fail on empty path entries
-* [#331](https://github.com/Icinga/icinga-powershell-framework/pull/331) Fixes Icinga Director Self-Service installation over Icinga Management Console
+* [#332](https://github.com/Icinga/icinga-powershell-framework/pull/332) Fixes Icinga Director Self-Service ticket handling, which was not working within the Icinga Management Console
 
 ### Enhancements
 

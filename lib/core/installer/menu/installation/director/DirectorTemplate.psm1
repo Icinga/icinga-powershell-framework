@@ -83,6 +83,7 @@ function Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate()
     $IcingaParentAddresses    = New-Object PSCustomObject;
     $ParentZone               = '';
     $MasterAddress            = '';
+    $Ticket                   = '';
 
     if ($DirectorUrl.ToLower().Contains('https://') -Or $DirectorUrl.ToLower().Contains('http://')) {
         $MasterAddress = $DirectorUrl.Split('/')[2];
@@ -115,6 +116,8 @@ function Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate()
         if ($null -ne $DirectorConfig.parent_zone) {
             $ParentZone = $DirectorConfig.parent_zone;
         }
+
+        $Ticket = Get-IcingaDirectorSelfServiceTicket -DirectorUrl $DirectorUrl -ApiKey $SelfServiceKey;
     }
 
     if ($DirectorConfig.fetch_agent_fqdn) {
@@ -187,6 +190,9 @@ function Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate()
     }
 
     Show-IcingaForWindowsInstallationMenuEnterIcingaCAServer -Automated -Value $MasterAddress;
+
+    Show-IcingaForWindowsInstallerMenuSelectCertificate -Automated -DefaultInput '1';
+    Show-IcingaForWindowsInstallerMenuEnterIcingaTicket -Automated -Value $Ticket;
 
     Show-IcingaForWindowsManagementConsoleInstallationDirectorRegisterHost -Automated;
 
