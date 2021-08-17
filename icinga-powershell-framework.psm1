@@ -18,6 +18,10 @@ function Use-Icinga()
     );
 
     if ($null -ne $Global:Icinga -And $Global:Icinga.ContainsKey('RebuildCache') -And $Global:Icinga.RebuildCache) {
+        # On some systems, this call will re-build the cache
+        Import-Module (Join-Path -Path (Get-IcingaForWindowsRootPath) -ChildPath 'icinga-powershell-framework') -Global -Force;
+        # The second run would then actually import the new module. Only happens on some systems, but with this we fix
+        # possible exceptions
         Import-Module (Join-Path -Path (Get-IcingaForWindowsRootPath) -ChildPath 'icinga-powershell-framework') -Global -Force;
     }
 

@@ -16,6 +16,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#311](https://github.com/Icinga/icinga-powershell-framework/issues/311) Fixes an issue with negative inputs on some scenarios which will cause an exception for checks instead of continuing executing them properly
 * [#317](https://github.com/Icinga/icinga-powershell-framework/pull/317) Fixes certain file names being too long, causing errors on deploying branches
 * [#326](https://github.com/Icinga/icinga-powershell-framework/pull/326) Fixes import for module files, by using the full path to the module now instead of the name only, as files could be placed inside a folder which is not listed inside the `$ENV:PSModulePath`
+* [#327](https://github.com/Icinga/icinga-powershell-framework/pull/327) Fixes possible exception on first import run for certain systems
 
 ### Enhancements
 
