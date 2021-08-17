@@ -108,7 +108,7 @@ function New-IcingaCheckCommand()
     Import-Module $ScriptFile -Global;
 
     if ([string]::IsNullOrEmpty($DefaultEditor) -eq $FALSE -And ($null -eq (Get-Command $DefaultEditor -ErrorAction SilentlyContinue)) -And ((Test-Path $DefaultEditor) -eq $FALSE)) {
-        Write-IcingaConsoleWarning 'No default editor for .psm1 files found. Specify a default editor to automaticly open the newly generated check plugin.';
+        Write-IcingaConsoleWarning 'No default editor for .psm1 files found. Specify a default editor to automatically open the newly generated check plugin.';
         return;
     }
 

@@ -196,7 +196,7 @@ function Install-IcingaComponent()
                 }
             }
 
-            Import-Module -Name $PackageName -Force;
+            Import-Module -Name $ComponentFolder -Force;
             Write-IcingaConsoleNotice 'Installation of component "{0}" with version "{1}" was successful. Open a new PowerShell to apply the changes' -Objects $Name.ToLower(), $ManifestFile.ModuleVersion;
         } else {
             <#

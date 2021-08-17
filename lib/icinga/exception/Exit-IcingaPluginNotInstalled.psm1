@@ -31,7 +31,7 @@ function Exit-IcingaPluginNotInstalled()
         ForEach-Object {
             foreach ($cmd in $_.ExportedCommands.Values) {
                 if ($Command.ToLower() -eq $cmd.Name.ToLower()) {
-                    return $cmd.Source;
+                    return $cmd.Path;
                 }
             }
         }

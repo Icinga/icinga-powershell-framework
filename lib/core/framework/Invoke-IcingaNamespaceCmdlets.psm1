@@ -14,10 +14,10 @@ function Invoke-IcingaNamespaceCmdlets()
 
     foreach ($Cmdlet in $CommandList) {
         try {
-            $CmmandName = $Cmdlet.Name;
+            $CommandName = $Cmdlet.Name;
             Import-Module $Cmdlet.Module.Path -WarningAction SilentlyContinue -ErrorAction Stop;
 
-            $Content = (& $CmmandName);
+            $Content = (& $CommandName);
             Add-IcingaHashtableItem `
                 -Hashtable $CommandConfig `
                 -Key $Cmdlet.Name `
