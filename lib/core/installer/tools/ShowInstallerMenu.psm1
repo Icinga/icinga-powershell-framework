@@ -64,7 +64,7 @@ function Show-IcingaForWindowsInstallerMenu()
         $SelectionForCurrentMenu = $null;
     }
 
-    if ($StoredValues.Count -eq 0 -And $DefaultValues.Count -ne 0) {
+    if (($StoredValues.Count -eq 0 -And $DefaultValues.Count -ne 0) -Or $Automated) {
         $StoredValues = $DefaultValues;
     }
 
