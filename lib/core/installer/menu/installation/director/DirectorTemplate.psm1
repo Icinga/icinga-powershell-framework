@@ -6,6 +6,7 @@ function Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate()
 
     $DirectorUrl    = Get-IcingaForWindowsInstallerValuesFromStep -InstallerStep 'Show-IcingaForWindowsManagementConsoleInstallationEnterDirectorUrl';
     $SelfServiceKey = Get-IcingaForWindowsInstallerValuesFromStep -InstallerStep 'Show-IcingaForWindowsManagementConsoleInstallationEnterDirectorSelfServiceKey';
+    $UsedEnteredKey = $SelfServiceKey;
 
     # Once we run this menu, we require to reset everything to have a proper state
     if ($Register -eq $FALSE) {
@@ -46,6 +47,7 @@ function Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate()
 
         try {
             $SelfServiceKey = Register-IcingaDirectorSelfServiceHost -DirectorUrl $DirectorUrl -ApiKey $SelfServiceKey -Hostname $Hostname;
+            $UsedEnteredKey = $SelfServiceKey;
         } catch {
             Write-IcingaConsoleNotice 'Host seems already to be registered within Icinga Director. Trying local Api key if present'
             $SelfServiceKey = Get-IcingaPowerShellConfig -Path 'IcingaDirector.SelfService.ApiKey';
@@ -54,7 +56,7 @@ function Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate()
                 Write-IcingaConsoleNotice 'No local Api key was found and using your provided template key failed. Please ensure the host is not already registered and drop the set Self-Service key within the Icinga Director for this host.'
             }
         }
-        Add-IcingaForWindowsInstallerConfigEntry -Selection 'c' -Values $SelfServiceKey -OverwriteValues -OverwriteMenu 'Show-IcingaForWindowsManagementConsoleInstallationEnterDirectorSelfServiceKey';
+        Add-IcingaForWindowsInstallerConfigEntry -Selection 'c' -Values $UsedEnteredKey -OverwriteValues -OverwriteMenu 'Show-IcingaForWindowsManagementConsoleInstallationEnterDirectorSelfServiceKey';
     }
 
     try {
@@ -183,6 +185,8 @@ function Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate()
         Show-IcingaForWindowsInstallerMenuEnterIcingaParentAddresses -Value $IcingaParentAddresses -Automated;
         Show-IcingaForWindowsInstallerMenuEnterIcingaParentZone -Value $ParentZone -Automated;
     }
+
+    Show-IcingaForWindowsInstallationMenuEnterIcingaCAServer -Automated -Value $MasterAddress;
 
     Show-IcingaForWindowsManagementConsoleInstallationDirectorRegisterHost -Automated;
 

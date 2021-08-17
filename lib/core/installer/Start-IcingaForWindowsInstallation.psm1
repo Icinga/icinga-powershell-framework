@@ -41,6 +41,7 @@ function Start-IcingaForWindowsInstallation()
     $IcingaZone            = Get-IcingaForWindowsInstallerValuesFromStep -InstallerStep 'Show-IcingaForWindowsInstallerMenuEnterIcingaParentZone';
     $IcingaEndpoints       = Get-IcingaForWindowsInstallerValuesFromStep -InstallerStep 'Show-IcingaForWindowsInstallerMenuEnterIcingaParentNodes';
     $IcingaPort            = Get-IcingaForWindowsInstallerValuesFromStep -InstallerStep 'Show-IcingaForWindowsInstallationMenuEnterIcingaPort';
+    $IcingaCAServer        = Get-IcingaForWindowsInstallerValuesFromStep -InstallerStep 'Show-IcingaForWindowsInstallationMenuEnterIcingaCAServer';
 
     # Repository
     $IcingaStableRepo      = Get-IcingaForWindowsInstallerValuesFromStep -InstallerStep 'Show-IcingaForWindowsInstallationMenuStableRepository';
@@ -172,7 +173,7 @@ function Start-IcingaForWindowsInstallation()
         Write-IcingaAgentApiConfig -Port $IcingaPort;
     }
 
-    if ((Install-IcingaAgentCertificates -Hostname $Hostname -Endpoint $IcingaParentAddresses[0] -Port $IcingaPort -CACert $CertificateCAFile -Ticket $CertificateTicket) -eq $FALSE) {
+    if ((Install-IcingaAgentCertificates -Hostname $Hostname -Endpoint $IcingaCAServer -Port $IcingaPort -CACert $CertificateCAFile -Ticket $CertificateTicket) -eq $FALSE) {
         Disable-IcingaAgentFeature 'api';
         Write-IcingaConsoleWarning `
             -Message '{0}{1}{2}{3}{4}' `
