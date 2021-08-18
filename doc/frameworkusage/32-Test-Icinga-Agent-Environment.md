@@ -17,9 +17,9 @@ Once executed you will receive a status of tests which are performed:
 ```text
 [Passed]: Icinga Agent service is installed
 [Passed]: The specified user "NT AUTHORITY\NetworkService" is allowed to run as service
-[Passed]: Directory "C:\ProgramData\icinga2\etc" is accessible and writeable by the Icinga Service User "NT AUTHORITY\NetworkService"
-[Passed]: Directory "C:\ProgramData\icinga2\var" is accessible and writeable by the Icinga Service User "NT AUTHORITY\NetworkService"
-[Passed]: Directory "C:\Program Files\WindowsPowerShell\Modules\icinga-powershell-framework\cache" is accessible and writeable by the Icinga Service User "NT AUTHORITY\NetworkService"
+[Passed]: Directory "C:\ProgramData\icinga2\etc" is accessible and writable by the Icinga Service User "NT AUTHORITY\NetworkService"
+[Passed]: Directory "C:\ProgramData\icinga2\var" is accessible and writable by the Icinga Service User "NT AUTHORITY\NetworkService"
+[Passed]: Directory "C:\Program Files\WindowsPowerShell\Modules\icinga-powershell-framework\cache" is accessible and writable by the Icinga Service User "NT AUTHORITY\NetworkService"
 [Passed]: Icinga Agent configuration is valid
 [Passed]: Icinga Agent debug log is disabled
 ```
@@ -29,9 +29,9 @@ In order to make the Icinga Agent and the Icinga PowerShell Framework work prope
 ```text
 [Passed]: Icinga Agent service is installed
 [Passed]: The specified user "NT AUTHORITY\NetworkService" is allowed to run as service
-[Passed]: Directory "C:\ProgramData\icinga2\etc" is accessible and writeable by the Icinga Service User "NT AUTHORITY\NetworkService"
-[Passed]: Directory "C:\ProgramData\icinga2\var" is accessible and writeable by the Icinga Service User "NT AUTHORITY\NetworkService"
-[Passed]: Directory "C:\Program Files\WindowsPowerShell\Modules\icinga-powershell-framework\cache" is accessible and writeable by the Icinga Service User "NT AUTHORITY\NetworkService"
+[Passed]: Directory "C:\ProgramData\icinga2\etc" is accessible and writable by the Icinga Service User "NT AUTHORITY\NetworkService"
+[Passed]: Directory "C:\ProgramData\icinga2\var" is accessible and writable by the Icinga Service User "NT AUTHORITY\NetworkService"
+[Passed]: Directory "C:\Program Files\WindowsPowerShell\Modules\icinga-powershell-framework\cache" is accessible and writable by the Icinga Service User "NT AUTHORITY\NetworkService"
 [Passed]: Icinga Agent configuration is valid
 [Warning]: The debug log of the Icinga Agent is enabled. Please keep in mind to disable it once testing is done, as a huge amount of data is generated
 ```
@@ -43,10 +43,10 @@ In addition for testing, the Icinga PowerShell Framework will suggest methods to
 ```text
 [Passed]: Icinga Agent service is installed
 [Passed]: The specified user "NT AUTHORITY\NetworkService" is allowed to run as service
-[Passed]: Directory "C:\ProgramData\icinga2\etc" is accessible and writeable by the Icinga Service User "NT AUTHORITY\NetworkService"
+[Passed]: Directory "C:\ProgramData\icinga2\etc" is accessible and writable by the Icinga Service User "NT AUTHORITY\NetworkService"
 [Failed]: Directory "C:\ProgramData\icinga2\var" is not accessible by the Icinga Service User "NT AUTHORITY\NetworkService"
 \_ Please run the following command to fix this issue: Set-IcingaAcl -Directory 'C:\ProgramData\icinga2\var'
-[Passed]: Directory "C:\Program Files\WindowsPowerShell\Modules\icinga-powershell-framework\cache" is accessible and writeable by the Icinga Service User "NT AUTHORITY\NetworkService"
+[Passed]: Directory "C:\Program Files\WindowsPowerShell\Modules\icinga-powershell-framework\cache" is accessible and writable by the Icinga Service User "NT AUTHORITY\NetworkService"
 [Passed]: Icinga Agent configuration is valid
 [Passed]: Icinga Agent debug log is disabled
 ```
@@ -58,7 +58,7 @@ Set-IcingaAcl -Directory 'C:\ProgramData\icinga2\var';
 ```
 
 ```text
-[Passed]: Directory "C:\ProgramData\icinga2\var" is accessible and writeable by the Icinga Service User "NT AUTHORITY\NetworkService"
+[Passed]: Directory "C:\ProgramData\icinga2\var" is accessible and writable by the Icinga Service User "NT AUTHORITY\NetworkService"
 ```
 
 Now if we run the test again, the issue is resolved:
@@ -66,9 +66,9 @@ Now if we run the test again, the issue is resolved:
 ```text
 [Passed]: Icinga Agent service is installed
 [Passed]: The specified user "NT AUTHORITY\NetworkService" is allowed to run as service
-[Passed]: Directory "C:\ProgramData\icinga2\etc" is accessible and writeable by the Icinga Service User "NT AUTHORITY\NetworkService"
-[Passed]: Directory "C:\ProgramData\icinga2\var" is accessible and writeable by the Icinga Service User "NT AUTHORITY\NetworkService"
-[Passed]: Directory "C:\Program Files\WindowsPowerShell\Modules\icinga-powershell-framework\cache" is accessible and writeable by the Icinga Service User "NT AUTHORITY\NetworkService"
+[Passed]: Directory "C:\ProgramData\icinga2\etc" is accessible and writable by the Icinga Service User "NT AUTHORITY\NetworkService"
+[Passed]: Directory "C:\ProgramData\icinga2\var" is accessible and writable by the Icinga Service User "NT AUTHORITY\NetworkService"
+[Passed]: Directory "C:\Program Files\WindowsPowerShell\Modules\icinga-powershell-framework\cache" is accessible and writable by the Icinga Service User "NT AUTHORITY\NetworkService"
 [Passed]: Icinga Agent configuration is valid
 [Passed]: Icinga Agent debug log is disabled
 ```
@@ -84,9 +84,9 @@ Test-IcingaAgent;`
 ```text
 [Passed]: Icinga Agent service is installed
 [Passed]: The specified user "NT AUTHORITY\NetworkService" is allowed to run as service
-[Passed]: Directory "C:\ProgramData\icinga2\etc" is accessible and writeable by the Icinga Service User "NT AUTHORITY\NetworkService"
-[Passed]: Directory "C:\ProgramData\icinga2\var" is accessible and writeable by the Icinga Service User "NT AUTHORITY\NetworkService"
-[Passed]: Directory "C:\Program Files\WindowsPowerShell\Modules\icinga-powershell-framework\cache" is accessible and writeable by the Icinga Service User "NT AUTHORITY\NetworkService"
+[Passed]: Directory "C:\ProgramData\icinga2\etc" is accessible and writable by the Icinga Service User "NT AUTHORITY\NetworkService"
+[Passed]: Directory "C:\ProgramData\icinga2\var" is accessible and writable by the Icinga Service User "NT AUTHORITY\NetworkService"
+[Passed]: Directory "C:\Program Files\WindowsPowerShell\Modules\icinga-powershell-framework\cache" is accessible and writable by the Icinga Service User "NT AUTHORITY\NetworkService"
 [Failed]: Icinga Agent configuration contains errors. Run this command for getting a detailed error report: "Test-IcingaAgentConfig -WriteStackTrace | Out-Null"
 [Passed]: Icinga Agent debug log is disabled
 ```

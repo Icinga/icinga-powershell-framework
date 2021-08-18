@@ -9,7 +9,22 @@ function Get-IcingaRepositoryPackage()
 
     if ([string]::IsNullOrEmpty($Name)) {
         Write-IcingaConsoleError 'You have to provide a component name';
-        return;
+
+        return @{
+            'HasPackage' = $FALSE;
+            'Package'    = $null;
+            'Source'     = $null;
+            'Repository' = $null;
+        };
+    }
+
+    if ($Name.ToLower() -eq 'kickstart') {
+        return @{
+            'HasPackage' = $FALSE;
+            'Package'    = $null;
+            'Source'     = $null;
+            'Repository' = $null;
+        };
     }
 
     $Repositories           = Get-IcingaRepositories -ExcludeDisabled;

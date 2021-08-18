@@ -1,8 +1,7 @@
 function Show-IcingaForWindowsManagementConsoleInstallationConfigString()
 {
     [string]$ConfigurationString = [string]::Format(
-        "{0}Install-Icinga -InstallCommand '{1}'{0}",
-        (New-IcingaNewLine),
+        "Install-Icinga -InstallCommand '{0}'",
         (Get-IcingaForWindowsManagementConsoleConfigurationString -Compress)
     );
 
@@ -23,5 +22,6 @@ function Show-IcingaForWindowsManagementConsoleInstallationConfigString()
         -ConfigLimit 1 `
         -DefaultIndex 'c' `
         -ReadOnly `
+        -PlainTextOutput `
         -Hidden;
 }

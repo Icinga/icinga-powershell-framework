@@ -25,12 +25,14 @@ function Write-IcingaConsolePlain()
         [string]$Message,
         [array]$Objects,
         [ValidateSet('Default', 'Black', 'DarkBlue', 'DarkGreen', 'DarkCyan', 'DarkRed', 'DarkMagenta', 'DarkYellow', 'Gray', 'DarkGray', 'Blue', 'Green', 'Cyan', 'Red', 'Magenta', 'Yellow', 'White')]
-        [string]$ForeColor = 'Default'
+        [string]$ForeColor = 'Default',
+        [switch]$NoNewLine = $FALSE
     );
 
     Write-IcingaConsoleOutput `
         -Message $Message `
         -Objects $Objects `
         -ForeColor $ForeColor `
-        -Severity $null;
+        -Severity $null `
+        -NoNewLine:$NoNewLine;
 }

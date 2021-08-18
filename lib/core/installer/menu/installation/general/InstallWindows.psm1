@@ -28,7 +28,7 @@ function Show-IcingaForWindowsInstallerMenuInstallWindows()
                 'Disabled' = ([bool]($null -eq (Get-IcingaPowerShellConfig -Path 'Framework.Config.Swap')));
             },
             @{
-                'Caption'  = 'Reconfigure Environment';
+                'Caption'  = 'Reconfigure environment';
                 'Command'  = 'Invoke-IcingaForWindowsManagementConsoleReconfigureAgent';
                 'Help'     = 'Load the current configuration of Icinga for Windows to modify it.';
                 'Disabled' = ([bool]($null -eq (Get-IcingaPowerShellConfig -Path 'Framework.Config.Live')));

@@ -33,9 +33,9 @@ Set-IcingaAgentServiceUser -User 'NT AUTHORITY\SYSTEM' -SetPermission;
 
 ```text
 [Notice]: The Icinga Service User already has permission to run as service
-[Passed]: Directory "C:\ProgramData\icinga2\etc" is accessible and writeable by the Icinga Service User "NT AUTHORITY\SYSTEM"
-[Passed]: Directory "C:\ProgramData\icinga2\var" is accessible and writeable by the Icinga Service User "NT AUTHORITY\SYSTEM"
-[Passed]: Directory "C:\Program Files\WindowsPowerShell\Modules\icinga-powershell-framework\cache" is accessible and writeable by the Icinga Service User "NT AUTHORITY\SYSTEM"
+[Passed]: Directory "C:\ProgramData\icinga2\etc" is accessible and writable by the Icinga Service User "NT AUTHORITY\SYSTEM"
+[Passed]: Directory "C:\ProgramData\icinga2\var" is accessible and writable by the Icinga Service User "NT AUTHORITY\SYSTEM"
+[Passed]: Directory "C:\Program Files\WindowsPowerShell\Modules\icinga-powershell-framework\cache" is accessible and writable by the Icinga Service User "NT AUTHORITY\SYSTEM"
 [Notice]: Service User successfully updated
 ```
 
@@ -64,7 +64,7 @@ If we how ever run our Cmdlet `Test-IcingaAgent` (which is described [here](32-T
 
 ```text
 [Failed]: The specified user "icinga" is not allowed to run as service
-[Passed]: Directory "C:\ProgramData\icinga2\etc" is accessible and writeable by the Icinga Service User "icinga"
+[Passed]: Directory "C:\ProgramData\icinga2\etc" is accessible and writable by the Icinga Service User "icinga"
 [Failed]: Directory "C:\ProgramData\icinga2\var" is not accessible by the Icinga Service User "icinga"
 \_ Please run the following command to fix this issue: Set-IcingaAcl -Directory 'C:\ProgramData\icinga2\var'
 ```
@@ -78,9 +78,9 @@ Set-IcingaAgentServiceUser -User $cred.UserName -Password $cred.Password -SetPer
 
 ```text
 [Passed]: The specified user "icinga" is allowed to run as service
-[Passed]: Directory "C:\ProgramData\icinga2\etc" is accessible and writeable by the Icinga Service User "icinga"
-[Passed]: Directory "C:\ProgramData\icinga2\var" is accessible and writeable by the Icinga Service User "icinga"
-[Passed]: Directory "C:\Program Files\WindowsPowerShell\Modules\icinga-powershell-framework\cache" is accessible and writeable by the Icinga Service User "icinga"
+[Passed]: Directory "C:\ProgramData\icinga2\etc" is accessible and writable by the Icinga Service User "icinga"
+[Passed]: Directory "C:\ProgramData\icinga2\var" is accessible and writable by the Icinga Service User "icinga"
+[Passed]: Directory "C:\Program Files\WindowsPowerShell\Modules\icinga-powershell-framework\cache" is accessible and writable by the Icinga Service User "icinga"
 [Notice]: Service User successfully updated
 ```
 

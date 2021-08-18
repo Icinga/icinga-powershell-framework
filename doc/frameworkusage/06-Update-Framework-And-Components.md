@@ -46,9 +46,9 @@ Which version of the "Icinga Framework" do you want to install? (release/snapsho
 [Notice]: Framework update has been completed. Please start a new PowerShell instance now to complete the update
 [Passed]: Icinga Agent service is installed
 [Passed]: The specified user "NT Authority\NetworkService" is allowed to run as service
-[Passed]: Directory "C:\ProgramData\icinga2\etc" is accessible and writeable by the Icinga Service User "NT Authority\NetworkService"
-[Passed]: Directory "C:\ProgramData\icinga2\var" is accessible and writeable by the Icinga Service User "NT Authority\NetworkService"
-[Passed]: Directory "C:\Program Files\WindowsPowerShell\Modules\icinga-powershell-framework\cache" is accessible and writeable by the Icinga Service User "NT Authority\NetworkService"
+[Passed]: Directory "C:\ProgramData\icinga2\etc" is accessible and writable by the Icinga Service User "NT Authority\NetworkService"
+[Passed]: Directory "C:\ProgramData\icinga2\var" is accessible and writable by the Icinga Service User "NT Authority\NetworkService"
+[Passed]: Directory "C:\Program Files\WindowsPowerShell\Modules\icinga-powershell-framework\cache" is accessible and writable by the Icinga Service User "NT Authority\NetworkService"
 [Passed]: Icinga Agent configuration is valid
 [Passed]: Icinga Agent debug log is disabled
 [Notice]: Starting Icinga Agent service
