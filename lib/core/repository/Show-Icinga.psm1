@@ -1,17 +1,39 @@
 function Show-Icinga()
 {
+    param (
+        [switch]$SkipHeader = $FALSE
+    );
+
     $IcingaInstallation      = Get-IcingaInstallation -Release;
     [array]$Output           = @( 'Icinga for Windows environment' );
+    [array]$VersionList      = @();
     [int]$MaxComponentLength = Get-IcingaMaxTextLength -TextArray $IcingaInstallation.Keys;
-    [int]$MaxVersionLength   = Get-IcingaMaxTextLength -TextArray $IcingaInstallation.Values.CurrentVersion;
+
+    foreach ($entry in $IcingaInstallation.Keys) {
+        $LockVersion = Get-IcingaComponentLock -Name $entry;
+
+        if ($null -eq $LockVersion) {
+            $VersionList += [string]$IcingaInstallation[$entry].CurrentVersion;
+            continue;
+        }
+
+        $VersionList += ([string]::Format('{0}*', $IcingaInstallation[$entry].CurrentVersion));
+    }
+
+    [int]$MaxVersionLength   = Get-IcingaMaxTextLength -TextArray $VersionList;
     [string]$ComponentHeader = Add-IcingaWhiteSpaceToString -Text 'Component' -Length $MaxComponentLength;
     [string]$ComponentLine   = Add-IcingaWhiteSpaceToString -Text '---' -Length $MaxComponentLength;
     $Output                 += '-----------';
     $Output                 += '';
+
+    if ($SkipHeader) {
+        [array]$Output = @();
+    }
+
     $Output                 += 'Installed components on this system';
     $Output                 += '';
     $Output                 += [string]::Format('{0}   {1}   Available', $ComponentHeader, ((Add-IcingaWhiteSpaceToString -Text 'Version' -Length $MaxVersionLength)));
-    $Output                 += [string]::Format('{0}   {1}    ---', $ComponentLine, ((Add-IcingaWhiteSpaceToString -Text '---' -Length $MaxVersionLength)));
+    $Output                 += [string]::Format('{0}   {1}   ---', $ComponentLine, ((Add-IcingaWhiteSpaceToString -Text '---' -Length $MaxVersionLength)));
 
     foreach ($component in $IcingaInstallation.Keys) {
         $Data           = $IcingaInstallation[$component];
@@ -27,7 +49,7 @@ function Show-Icinga()
         }
 
         [string]$ComponentName = Add-IcingaWhiteSpaceToString -Text $component -Length $MaxComponentLength;
-        $Output               += [string]::Format('{0}   {1}    {2}', $ComponentName, (Add-IcingaWhiteSpaceToString -Text $CurrentVersion -Length $MaxVersionLength), $LatestVersion);
+        $Output               += [string]::Format('{0}   {1}   {2}', $ComponentName, (Add-IcingaWhiteSpaceToString -Text $CurrentVersion -Length $MaxVersionLength), $LatestVersion);
     }
 
     $Output                 += '';

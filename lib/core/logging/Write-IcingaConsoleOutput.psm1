@@ -33,7 +33,8 @@ function Write-IcingaConsoleOutput()
         [array]$Objects,
         [ValidateSet('Default', 'Black', 'DarkBlue', 'DarkGreen', 'DarkCyan', 'DarkRed', 'DarkMagenta', 'DarkYellow', 'Gray', 'DarkGray', 'Blue', 'Green', 'Cyan', 'Red', 'Magenta', 'Yellow', 'White')]
         [string]$ForeColor = 'Default',
-        [string]$Severity  = 'Notice'
+        [string]$Severity  = 'Notice',
+        [switch]$NoNewLine = $FALSE
     );
 
     if ((Test-IcingaFrameworkConsoleOutput) -eq $FALSE) {
@@ -67,8 +68,8 @@ function Write-IcingaConsoleOutput()
     }
 
     if ($ForeColor -eq 'Default') {
-        Write-Host $OutputMessage;
+        Write-Host $OutputMessage -NoNewline:$NoNewLine;
     } else {
-        Write-Host $OutputMessage -ForegroundColor $ForeColor;
+        Write-Host $OutputMessage -ForegroundColor $ForeColor -NoNewline:$NoNewLine;
     }
 }

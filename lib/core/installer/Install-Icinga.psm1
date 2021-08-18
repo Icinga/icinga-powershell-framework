@@ -103,14 +103,22 @@ function Install-Icinga()
                         'Help'    = 'Allows you to install Icinga for Windows with all required components and options.'
                     },
                     @{
-                        'Caption' = 'Install Components';
-                        'Command' = 'Show-IcingaForWindowsMenuInstallComponents';
-                        'Help'    = 'Allows you to install new components for Icinga for Windows from your repositories.';
+                        'Caption'  = 'Install components';
+                        'Command'  = 'Show-IcingaForWindowsMenuInstallComponents';
+                        'Help'     = 'Allows you to install new components for Icinga for Windows from your repositories.';
+                        'Disabled' = (-Not ($global:Icinga.InstallWizard.AdminShell));
                     },
                     @{
-                        'Caption' = 'Update environment';
-                        'Command' = 'Show-IcingaForWindowsMenuUpdateComponents';
-                        'Help'    = 'Allows you to modify your current Icinga for Windows installation.';
+                        'Caption'  = 'Update components';
+                        'Command'  = 'Show-IcingaForWindowsMenuUpdateComponents';
+                        'Help'     = 'Allows you to modify your current Icinga for Windows installation.';
+                        'Disabled' = (-Not ($global:Icinga.InstallWizard.AdminShell));
+                    },
+                    @{
+                        'Caption'  = 'Remove components';
+                        'Command'  = 'Show-IcingaForWindowsMenuRemoveComponents';
+                        'Help'     = 'Allows you to modify your current Icinga for Windows installation.';
+                        'Disabled' = (-Not ($global:Icinga.InstallWizard.AdminShell));
                     },
                     @{
                         'Caption' = 'Manage environment';
@@ -118,10 +126,9 @@ function Install-Icinga()
                         'Help'    = 'Allows you to modify your current Icinga for Windows installation.';
                     },
                     @{
-                        'Caption'  = 'Remove components';
-                        'Command'  = 'Show-IcingaForWindowsMenuRemoveComponents';
-                        'Help'     = 'Allows you to modify your current Icinga for Windows installation.';
-                        'Disabled' = (-Not ($global:Icinga.InstallWizard.AdminShell));
+                        'Caption' = 'List environment';
+                        'Command' = 'Show-IcingaForWindowsMenuListEnvironment';
+                        'Help'    = 'Shows you an overview of your current Icinga for Windows installation, including installed components and system informations.';
                     }
                 ) `
                 -DefaultIndex 0;

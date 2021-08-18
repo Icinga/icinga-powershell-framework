@@ -15,9 +15,10 @@ function Show-IcingaForWindowsInstallerMenu()
         [string]$ContinueFunction    = $null,
         [switch]$ConfigElement       = $FALSE,
         [switch]$HiddenConfigElement = $FALSE,
-        [switch]$ReadOnly       = $FALSE,
+        [switch]$ReadOnly            = $FALSE,
         [switch]$Automated           = $FALSE,
-        [switch]$Advanced            = $FALSE
+        [switch]$Advanced            = $FALSE,
+        [switch]$PlainTextOutput     = $FALSE
     );
 
     if ((Test-IcingaForWindowsInstallationHeaderPrint) -eq $FALSE -And (Get-IcingaFrameworkDebugMode) -eq $FALSE) {
@@ -83,19 +84,18 @@ function Show-IcingaForWindowsInstallerMenu()
         );
 
         if ($global:Icinga.InstallWizard.AdminShell -eq $FALSE) {
-            $ConsoleHeaderLines += '[Warning]: Run this shell as Administrator to unlock all features'
+            $ConsoleHeaderLines += '[Warning]: Run this shell with administrative privileges to unlock all features'
         }
 
-        $ConsoleHeaderLines += @(
-            'This is an experimental feature and might contain bugs',
-            'Please provide us with feedback, issues and input at',
-            'https://github.com/Icinga/icinga-powershell-framework/issues'
-        )
+        if ($PSVersionTable.PSVersion -lt '5.0.0.0') {
+            $ConsoleHeaderLines += ([string]::Format('[Warning]: Update to PowerShell version >=5.0 from currently {0} to unlock all features (like JEA)', $PSVersionTable.PSVersion.ToString(2)));
+        }
 
         Write-IcingaConsoleHeader -HeaderLines $ConsoleHeaderLines;
 
         Write-IcingaConsolePlain '';
         Write-IcingaConsolePlain $Header;
+
         Write-IcingaConsolePlain '';
     }
 
@@ -144,10 +144,14 @@ function Show-IcingaForWindowsInstallerMenu()
     }
 
     if ($StoredValues.Count -ne 0) {
-        if ($PasswordInput -eq $FALSE) {
-            Write-IcingaConsolePlain ([string]::Format(' {0}', (ConvertFrom-IcingaArrayToString -Array $StoredValues -AddQuotes))) -ForeColor Cyan;
+        if ($PlainTextOutput) {
+            Write-IcingaConsolePlain (ConvertFrom-IcingaArrayToString -Array $StoredValues) -ForeColor Cyan;
         } else {
-            Write-IcingaConsolePlain ([string]::Format(' {0}', (ConvertFrom-IcingaArrayToString -Array $StoredValues -AddQuotes -SecureContent))) -ForeColor Cyan;
+            if ($PasswordInput -eq $FALSE) {
+                Write-IcingaConsolePlain ([string]::Format(' {0}', (ConvertFrom-IcingaArrayToString -Array $StoredValues -AddQuotes))) -ForeColor Cyan;
+            } else {
+                Write-IcingaConsolePlain ([string]::Format(' {0}', (ConvertFrom-IcingaArrayToString -Array $StoredValues -AddQuotes -SecureContent))) -ForeColor Cyan;
+            }
         }
     }
 
@@ -163,7 +167,11 @@ function Show-IcingaForWindowsInstallerMenu()
     Write-IcingaConsolePlain '';
 
     if ($global:Icinga.InstallWizard.DisplayAdvanced) {
-        $MenuNavigation = [string]::Format('{0} [a] Advanced', $MenuNavigation)
+        if ($global:Icinga.InstallWizard.ShowAdvanced -eq $FALSE) {
+            $MenuNavigation = [string]::Format('{0} [a] Advanced', $MenuNavigation)
+        } else {
+            $MenuNavigation = [string]::Format('{0} [a] Hide Advanced', $MenuNavigation)
+        }
     }
 
     $MenuNavigation = [string]::Format('{0} [c] Continue', $MenuNavigation)
@@ -172,7 +180,11 @@ function Show-IcingaForWindowsInstallerMenu()
         $MenuNavigation = [string]::Format('{0} [d] Delete', $MenuNavigation)
     }
 
-    $MenuNavigation = [string]::Format('{0} [h] Help [m] Main', $MenuNavigation)
+    if ($global:Icinga.InstallWizard.ShowHelp -eq $FALSE) {
+        $MenuNavigation = [string]::Format('{0} [h] Help [m] Main', $MenuNavigation)
+    } else {
+        $MenuNavigation = [string]::Format('{0} [h] Hide Help [m] Main', $MenuNavigation)
+    }
 
     if ([string]::IsNullOrEmpty($LastParent) -eq $FALSE -Or $global:Icinga.InstallWizard.LastParent.Count -gt 1) {
         $MenuNavigation = [string]::Format('{0} [p] Previous', $MenuNavigation)

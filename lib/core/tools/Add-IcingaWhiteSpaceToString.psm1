@@ -7,7 +7,7 @@ function Add-IcingaWhiteSpaceToString()
 
     [int]$LengthOffset = $Length - $Text.Length;
 
-    while ($LengthOffset -gt 0) {
+    while ($LengthOffset -ge 0) {
         $Text += ' ';
         $LengthOffset -= 1;
     }

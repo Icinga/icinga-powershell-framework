@@ -8,6 +8,7 @@ function Write-IcingaConsoleHeader()
     [int]$MaxHeaderLength  = 0;
     [int]$TableHeaderCount = 0;
     [array]$TableHeader    = @();
+    [array]$SeverityData   = @();
 
     Import-LocalizedData `
         -BaseDirectory (Get-IcingaFrameworkRootPath) `
@@ -24,6 +25,10 @@ function Write-IcingaConsoleHeader()
     }
 
     foreach ($line in $ParsedHeaders) {
+        if ($line.Contains('[Notice]') -Or $line.Contains('[Warning]') -Or $line.Contains('Error')) {
+            continue
+        }
+
         if ($MaxHeaderLength -lt $line.Length) {
             $MaxHeaderLength = $line.Length
         }
@@ -61,8 +66,34 @@ function Write-IcingaConsoleHeader()
                 }
             }
         }
-        Write-IcingaConsolePlain -Message '**{1} {0} {2}**' -Objects $line, ([string]::Join('', $LeftSpacing)), ([string]::Join('', $RightSpacing));
+
+        if ($line.Contains('[Notice]') -Or $line.Contains('[Warning]') -Or $line.Contains('Error')) {
+            $SeverityData += $line;
+            continue;
+        }
+
+        $HeaderMessage = [string]::Format('**{1} {0} {2}**', $line, ([string]::Join('', $LeftSpacing)), ([string]::Join('', $RightSpacing)));
+
+        Write-IcingaConsolePlain -Message $HeaderMessage;
     }
 
     Write-IcingaConsolePlain ([string]::Join('', $TableHeader));
+
+    if ($SeverityData.Count -ne 0) {
+        Write-IcingaConsolePlain -Message '';
+
+        foreach ($entry in $SeverityData) {
+            if (Write-IcingaConsoleTextColorSplit -Pattern '[Warning]' -Message $entry -ForeColor 'DarkYellow') {
+                continue;
+            }
+
+            if (Write-IcingaConsoleTextColorSplit -Pattern '[Error]' -Message $entry -ForeColor 'Red') {
+                continue;
+            }
+
+            if (Write-IcingaConsoleTextColorSplit -Pattern '[Notice]' -Message $entry -ForeColor 'Green') {
+                continue;
+            }
+        }
+    }
 }

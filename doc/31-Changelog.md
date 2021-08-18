@@ -20,7 +20,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#328](https://github.com/Icinga/icinga-powershell-framework/pull/328) Fixes installer while using installation files or the installation command, which did not overwrite default values with custom values
 * [#330](https://github.com/Icinga/icinga-powershell-framework/pull/330) Fixes `Remove-ItemSecure` which was not using all args and might fail on empty path entries
 * [#332](https://github.com/Icinga/icinga-powershell-framework/pull/332) Fixes Icinga Director Self-Service ticket handling, which was not working within the Icinga Management Console
-* [#335](https://github.com/Icinga/icinga-powershell-framework/pull/335) Fixex Icinga Director Self-Service Zones and CA config for legacy installation wizard
+* [#335](https://github.com/Icinga/icinga-powershell-framework/pull/335) Fixes Icinga Director Self-Service Zones and CA config for legacy installation wizard
 
 ### Enhancements
 
@@ -35,6 +35,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#322](https://github.com/Icinga/icinga-powershell-framework/pull/322) Remove legacy import feature from Framework and replace it with a dummy function, as no longer required by Icinga for Windows
 * [#323](https://github.com/Icinga/icinga-powershell-framework/pull/323) Adds `-RebuildCache` switch to `icinga` command alias and `Invoke-IcingaCommand`, for quicker cache re-creation for developers
 * [#333](https://github.com/Icinga/icinga-powershell-framework/pull/333) Adds Cmdlet `Test-IcingaForWindowsService` to test the Icinga for Windows service configuration
+* [#338](https://github.com/Icinga/icinga-powershell-framework/pull/338) Improves various styles, outputs and view for the Icinga for Windows Management Console and fixes some spelling mistakes
 
 ## 1.5.2 (2021-07-09)
 

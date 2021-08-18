@@ -38,9 +38,9 @@ function Test-IcingaAcl()
         [string]$messageFormat = 'Directory "{0}" {1} by the Icinga Service User "{2}"';
         if ($UserFound) {
             if ($HasAccess) {
-                Write-IcingaTestOutput -Severity 'Passed' -Message ([string]::Format($messageFormat, $Directory, 'is accessible and writeable', $ServiceUser));
+                Write-IcingaTestOutput -Severity 'Passed' -Message ([string]::Format($messageFormat, $Directory, 'is accessible and writable', $ServiceUser));
             } else {
-                Write-IcingaTestOutput -Severity 'Failed' -Message ([string]::Format($messageFormat, $Directory, 'is accessible but NOT writeable', $ServiceUser));
+                Write-IcingaTestOutput -Severity 'Failed' -Message ([string]::Format($messageFormat, $Directory, 'is accessible but NOT writable', $ServiceUser));
                 Write-IcingaConsolePlain "\_ Please run the following command to fix this issue: Set-IcingaAcl -Directory '$Directory'";
             }
         } else {

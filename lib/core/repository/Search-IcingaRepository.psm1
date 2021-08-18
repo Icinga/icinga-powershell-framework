@@ -43,7 +43,7 @@ function Search-IcingaRepository()
 
         foreach ($repoEntry in $RepoContent.Packages.PSObject.Properties.Name) {
 
-            if ($repoEntry -NotLike $Name) {
+            if ($repoEntry -NotLike $Name -Or $Name.ToLower() -eq 'kickstart') {
                 continue;
             }
 

@@ -29,4 +29,4 @@ function Show-IcingaForWindowsInstallerMenuSelectInstallIcingaForWindowsService(
         -Advanced:$Advanced;
 }
 
-Set-Alias -Name 'IfW-InstallPowerShellService' -Value 'Show-IcingaForWindowsInstallerMenuSelectInstallIcingaForWindowsService';
+Set-Alias -Name 'IfW-InstallService' -Value 'Show-IcingaForWindowsInstallerMenuSelectInstallIcingaForWindowsService';
