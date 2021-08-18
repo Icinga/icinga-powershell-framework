@@ -162,35 +162,35 @@ function Show-IcingaForWindowsInstallerMenu()
         }
     }
 
-    $MenuNavigation = '[x] Exit';
-
     Write-IcingaConsolePlain '';
+    Write-IcingaConsolePlain '[x] Exit' -NoNewLine;
 
     if ($global:Icinga.InstallWizard.DisplayAdvanced) {
         if ($global:Icinga.InstallWizard.ShowAdvanced -eq $FALSE) {
-            $MenuNavigation = [string]::Format('{0} [a] Advanced', $MenuNavigation)
+            Write-IcingaConsolePlain ' [a] Advanced' -NoNewLine;
         } else {
-            $MenuNavigation = [string]::Format('{0} [a] Hide Advanced', $MenuNavigation)
+            Write-IcingaConsolePlain ' [a] Hide Advanced' -NoNewLine -ForeColor Green;
         }
     }
 
-    $MenuNavigation = [string]::Format('{0} [c] Continue', $MenuNavigation)
+    Write-IcingaConsolePlain ' [c] Continue' -NoNewLine;
 
     if ($AddConfig -And $ReadOnly -eq $FALSE) {
-        $MenuNavigation = [string]::Format('{0} [d] Delete', $MenuNavigation)
+        Write-IcingaConsolePlain ' [d] Delete' -NoNewLine;
     }
 
     if ($global:Icinga.InstallWizard.ShowHelp -eq $FALSE) {
-        $MenuNavigation = [string]::Format('{0} [h] Help [m] Main', $MenuNavigation)
+        Write-IcingaConsolePlain ' [h] Help [m] Main' -NoNewLine;
     } else {
-        $MenuNavigation = [string]::Format('{0} [h] Hide Help [m] Main', $MenuNavigation)
+        Write-IcingaConsolePlain ' [h] Hide Help' -NoNewLine -ForeColor Green;
+        Write-IcingaConsolePlain ' [m] Main' -NoNewLine;
     }
 
     if ([string]::IsNullOrEmpty($LastParent) -eq $FALSE -Or $global:Icinga.InstallWizard.LastParent.Count -gt 1) {
-        $MenuNavigation = [string]::Format('{0} [p] Previous', $MenuNavigation)
+        Write-IcingaConsolePlain ' [p] Previous';
+    } else {
+        Write-IcingaConsolePlain '';
     }
-
-    Write-IcingaConsolePlain $MenuNavigation;
 
     $Prompt      = 'Input';
     $CountPrompt = ([string]::Format('({0}/{1})', $StoredValues.Count, $ConfigLimit));
