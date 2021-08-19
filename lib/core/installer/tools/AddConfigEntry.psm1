@@ -8,7 +8,8 @@ function Add-IcingaForWindowsInstallerConfigEntry()
         [switch]$OverwriteValues = $FALSE,
         [string]$OverwriteMenu   = '',
         [string]$OverwriteParent = '',
-        [switch]$Advanced        = $FALSE
+        [switch]$Advanced        = $FALSE,
+        [switch]$NoConfigSwap    = $FALSE
     );
 
     if ([string]::IsNullOrEmpty($OverwriteMenu) -eq $FALSE) {
@@ -55,5 +56,7 @@ function Add-IcingaForWindowsInstallerConfigEntry()
         $global:Icinga.InstallWizard.Config[$Step].Modified  = $TRUE;
     }
 
-    Write-IcingaforWindowsManagementConsoleConfigSwap -Config $global:Icinga.InstallWizard.Config;
+    if ($NoConfigSwap -eq $FALSE) {
+        Write-IcingaforWindowsManagementConsoleConfigSwap -Config $global:Icinga.InstallWizard.Config;
+    }
 }
