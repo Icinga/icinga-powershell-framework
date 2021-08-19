@@ -8,8 +8,9 @@ function Show-IcingaForWindowsInstallerConfigurationSummary()
         [switch]$Advanced      = $FALSE
     );
 
-    [array]$Entries    = @();
-    [int]$CurrentIndex = 0
+    [array]$Entries      = @();
+    [int]$CurrentIndex   = 0
+    [int]$MaxEntryLength = (Get-IcingaMaxTextLength -TextArray $global:Icinga.InstallWizard.Config.Keys) - 4;
 
     Enable-IcingaForWindowsInstallationHeaderPrint;
 
@@ -59,15 +60,16 @@ function Show-IcingaForWindowsInstallerConfigurationSummary()
             }
 
             $PrintName = $PrintName.Replace('IfW-', '');
+            $PrintName = Add-IcingaWhiteSpaceToString -Text $PrintName -Length $MaxEntryLength;
 
             if (Test-Numeric ($ConfigEntry.Selection)) {
                 Set-IcingaForWindowsInstallationHeaderSelection -Selection $ConfigEntry.Selection;
 
                 &$RealCommand;
 
-                $Caption = ([string]::Format('{0}: {1}', $PrintName, $global:Icinga.InstallWizard.HeaderPreview));
+                $Caption = ([string]::Format('{0}=> {1}', $PrintName, $global:Icinga.InstallWizard.HeaderPreview));
             } else {
-                $Caption = ([string]::Format('{0}: {1}', $PrintName, $EntryValue));
+                $Caption = ([string]::Format('{0}=> {1}', $PrintName, $EntryValue));
             }
 
             $Entries += @{

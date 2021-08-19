@@ -102,7 +102,12 @@ function Show-IcingaForWindowsInstallerMenu()
 
     foreach ($entry in $Entries) {
         if ([string]::IsNullOrEmpty($entry.Caption) -eq $FALSE) {
-            $Header    = ([string]::Format('[{0}] {1}', $EntryIndex, $entry.Caption));
+            [string]$CaptionIndention = '';
+            if ($Entries.Count -ge 10 -And $EntryIndex -lt 10) {
+                $CaptionIndention = ' ';
+            }
+
+            $Header    = ([string]::Format('{0}[{1}] {2}', $CaptionIndention, $EntryIndex, $entry.Caption));
             $FontColor = 'Default';
 
             if ((Test-IcingaForWindowsInstallationHeaderPrint) -eq $FALSE) {
@@ -122,6 +127,10 @@ function Show-IcingaForWindowsInstallerMenu()
                 }
 
                 Write-IcingaConsolePlain $Header -ForeColor $FontColor;
+
+                if ($global:Icinga.InstallWizard.ShowCommand) {
+                    Write-IcingaManagementConsoleCommand -Entry $entry -Values $StoredValues;
+                }
 
                 if ($global:Icinga.InstallWizard.ShowHelp -And ([string]::IsNullOrEmpty($entry.Help)) -eq $FALSE) {
                     Write-IcingaConsolePlain '';
@@ -157,6 +166,10 @@ function Show-IcingaForWindowsInstallerMenu()
     }
 
     if ($AddConfig) {
+        if ($global:Icinga.InstallWizard.ShowCommand) {
+            Write-IcingaManagementConsoleCommand -Entry $Entries[0] -Values $StoredValues;
+        }
+
         if ($global:Icinga.InstallWizard.ShowHelp -And ([string]::IsNullOrEmpty($Entries[0].Help)) -eq $FALSE) {
             Write-IcingaConsolePlain '';
             Write-IcingaConsolePlain $entry.Help -ForeColor Magenta;
@@ -181,11 +194,18 @@ function Show-IcingaForWindowsInstallerMenu()
     }
 
     if ($global:Icinga.InstallWizard.ShowHelp -eq $FALSE) {
-        Write-IcingaConsolePlain ' [h] Help [m] Main' -NoNewLine;
+        Write-IcingaConsolePlain ' [h] Help' -NoNewLine;
     } else {
         Write-IcingaConsolePlain ' [h] Hide Help' -NoNewLine -ForeColor Green;
-        Write-IcingaConsolePlain ' [m] Main' -NoNewLine;
     }
+
+    if ($global:Icinga.InstallWizard.ShowCommand -eq $FALSE) {
+        Write-IcingaConsolePlain ' [l] Commands' -NoNewLine;
+    } else {
+        Write-IcingaConsolePlain ' [l] Hide Commands' -NoNewLine -ForeColor Green;
+    }
+
+    Write-IcingaConsolePlain ' [m] Main' -NoNewLine;
 
     if ([string]::IsNullOrEmpty($LastParent) -eq $FALSE -Or $global:Icinga.InstallWizard.LastParent.Count -gt 1) {
         Write-IcingaConsolePlain ' [p] Previous';
@@ -266,13 +286,15 @@ function Show-IcingaForWindowsInstallerMenu()
         };
         'h' {
             $global:Icinga.InstallWizard.ShowHelp = (-Not ($global:Icinga.InstallWizard.ShowHelp));
-
             return;
         };
+        'l' {
+            $global:Icinga.InstallWizard.ShowCommand = (-Not ($global:Icinga.InstallWizard.ShowCommand));
+            return;
+        }
         'm' {
             $global:Icinga.InstallWizard.NextCommand   = $null;
             $global:Icinga.InstallWizard.NextArguments = $null;
-
             return;
         }
         'p' {
@@ -281,7 +303,6 @@ function Show-IcingaForWindowsInstallerMenu()
 
                 $global:Icinga.InstallWizard.NextCommand   = $LastParent;
                 $global:Icinga.InstallWizard.NextArguments = $null;
-
                 return;
             }
 
@@ -289,7 +310,6 @@ function Show-IcingaForWindowsInstallerMenu()
             if ($global:Icinga.InstallWizard.LastParent.Count -eq 0) {
                 $global:Icinga.InstallWizard.NextCommand   = $null;
                 $global:Icinga.InstallWizard.NextArguments = $null;
-
                 return;
             }
 
@@ -419,7 +439,8 @@ function Show-IcingaForWindowsInstallerMenu()
     }
 
     # Reset Help View
-    $global:Icinga.InstallWizard.ShowHelp = $FALSE;
+    $global:Icinga.InstallWizard.ShowHelp    = $FALSE;
+    $global:Icinga.InstallWizard.ShowCommand = $FALSE;
 
     if ($NextMenu -eq 'break') {
         return;
@@ -436,6 +457,21 @@ function Show-IcingaForWindowsInstallerMenu()
     if ([string]::IsNullOrEmpty($ActionCmd) -eq $FALSE) {
         if ($null -eq $ActionArgs -Or $ActionArgs.Count -eq 0) {
             $ActionArgs = @{ };
+        } else {
+            while ($TRUE) {
+                [bool]$ModifiedAllArgs = $TRUE;
+                foreach ($entry in $ActionArgs.Keys) {
+                    if ($ActionArgs[$entry].GetType().Name -ne 'Boolean' -And $ActionArgs[$entry] -eq '$DefaultValues$') {
+                        $ActionArgs[$entry] = $StoredValues;
+                        $ModifiedAllArgs    = $FALSE;
+                        break;
+                    }
+                }
+
+                if ($ModifiedAllArgs) {
+                    break;
+                }
+            }
         }
 
         & $ActionCmd @ActionArgs | Out-Null;

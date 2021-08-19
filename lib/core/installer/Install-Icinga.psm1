@@ -31,6 +31,7 @@ function Install-Icinga()
                 'DisplayAdvanced'        = $FALSE;
                 'ShowAdvanced'           = $FALSE;
                 'ShowHelp'               = $FALSE;
+                'ShowCommand'            = $FALSE;
                 'DeleteValues'           = $FALSE;
                 'HeaderPrint'            = $FALSE;
                 'JumpToSummary'          = $FALSE;

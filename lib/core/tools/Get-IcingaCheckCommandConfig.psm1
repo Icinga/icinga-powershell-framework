@@ -27,7 +27,7 @@
 
 .EXAMPLE
    Get-IcingaCheckCommandConfig -OutDirectory 'C:\Users\icinga\config-exports'
-   The following commands have been exported:
+   The following commands were exported:
    - 'Invoke-IcingaCheckBiosSerial'
    - 'Invoke-IcingaCheckCPU'
    - 'Invoke-IcingaCheckProcessCount'
@@ -40,7 +40,7 @@
 
 .EXAMPLE
    Get-IcingaCheckCommandConfig Invoke-IcingaCheckBiosSerial, Invoke-IcingaCheckCPU -OutDirectory 'C:\Users\icinga\config-exports'
-   The following commands have been exported:
+   The following commands were exported:
    - 'Invoke-IcingaCheckBiosSerial'
    - 'Invoke-IcingaCheckCPU'
    JSON export created in 'C:\Users\icinga\config-exports\PowerShell_CheckCommands_09-13-2019-10-58-5342.json'
@@ -412,7 +412,7 @@ function Get-IcingaCheckCommandConfig()
         }
 
         # Output-Text
-        Write-IcingaConsoleNotice "The following commands have been exported:"
+        Write-IcingaConsoleNotice "The following commands were exported:"
         foreach ($check in $CheckName) {
             Write-IcingaConsoleNotice "- '$check'";
         }
