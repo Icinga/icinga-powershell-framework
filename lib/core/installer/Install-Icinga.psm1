@@ -12,27 +12,29 @@ function Install-Icinga()
     if ($global:Icinga.ContainsKey('InstallWizard') -eq $FALSE) {
         $global:Icinga.Add(
             'InstallWizard', @{
-                'AdminShell'      = (Test-AdministrativeShell);
-                'LastInput'       = '';
-                'LastNotice'      = '';
-                'LastError'       = '';
-                'HeaderPreview'   = '';
-                'LastParent'      = [System.Collections.ArrayList]@();
-                'LastValues'      = @();
-                'Config'          = @{ };
-                'ConfigSwap'      = @{ };
-                'ParentConfig'    = $null;
-                'Menu'            = 'Install-Icinga';
-                'NextCommand'     = '';
-                'NextArguments'   = $null;
-                'HeaderSelection' = $null;
-                'DisplayAdvanced' = $FALSE;
-                'ShowAdvanced'    = $FALSE;
-                'ShowHelp'        = $FALSE;
-                'DeleteValues'    = $FALSE;
-                'HeaderPrint'     = $FALSE;
-                'JumpToSummary'   = $FALSE;
-                'Closing'         = $FALSE;
+                'AdminShell'             = (Test-AdministrativeShell);
+                'LastInput'              = '';
+                'LastNotice'             = '';
+                'LastError'              = '';
+                'HeaderPreview'          = '';
+                'DirectorSelfService'    = $FALSE;
+                'DirectorRegisteredHost' = $FALSE;
+                'LastParent'             = [System.Collections.ArrayList]@();
+                'LastValues'             = @();
+                'Config'                 = @{ };
+                'ConfigSwap'             = @{ };
+                'ParentConfig'           = $null;
+                'Menu'                   = 'Install-Icinga';
+                'NextCommand'            = '';
+                'NextArguments'          = $null;
+                'HeaderSelection'        = $null;
+                'DisplayAdvanced'        = $FALSE;
+                'ShowAdvanced'           = $FALSE;
+                'ShowHelp'               = $FALSE;
+                'DeleteValues'           = $FALSE;
+                'HeaderPrint'            = $FALSE;
+                'JumpToSummary'          = $FALSE;
+                'Closing'                = $FALSE;
             }
         );
     }

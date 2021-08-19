@@ -8,6 +8,8 @@ function Show-IcingaForWindowsManagementConsoleInstallationEnterDirectorUrl()
         [switch]$Advanced      = $FALSE
     );
 
+    $Global:Icinga.InstallWizard.DirectorSelfService = $TRUE;
+
     Show-IcingaForWindowsInstallerMenu `
         -Header 'Please enter the URL pointing to your Icinga Director module:' `
         -Entries @(

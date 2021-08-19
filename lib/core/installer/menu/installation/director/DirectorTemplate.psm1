@@ -15,6 +15,7 @@ function Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate()
         Add-IcingaForWindowsInstallerConfigEntry -Selection 'c' -Values $DirectorUrl -OverwriteValues -OverwriteMenu 'Show-IcingaForWindowsManagementConsoleInstallationEnterDirectorUrl';
         Add-IcingaForWindowsInstallerConfigEntry -Selection 'c' -Values $SelfServiceKey -OverwriteValues -OverwriteMenu 'Show-IcingaForWindowsManagementConsoleInstallationEnterDirectorSelfServiceKey';
     } else {
+        $Global:Icinga.InstallWizard.DirectorRegisteredHost = $TRUE;
         $HostnameType = Get-IcingaForWindowsInstallerStepSelection -InstallerStep 'Show-IcingaForWindowsInstallerMenuSelectHostname';
         $Hostname     = '';
 
@@ -76,7 +77,7 @@ function Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate()
     $ServiceUserName          = $DirectorConfig.icinga_service_user;
     $AgentPackageSelection    = 1; #Always use custom source
     $AgentPackageSource       = $DirectorConfig.download_url;
-    $AgentVersion             = $DirectorConfig.release;
+    $AgentVersion             = $DirectorConfig.agent_version;
     $IcingaPort               = $DirectorConfig.agent_listen_port;
     $GlobalZones              = @();
     $IcingaParents            = @();
@@ -174,6 +175,13 @@ function Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate()
     }
 
     Disable-IcingaFrameworkConsoleOutput;
+
+    $HostRegisterSetting = (Get-IcingaForWindowsInstallerStepSelection -InstallerStep 'Show-IcingaForWindowsInstallerMenuSelectHostname');
+
+    if ($null -ne $HostRegisterSetting -And $HostnameSelection -ne $HostRegisterSetting) {
+        $HostnameSelection = $HostRegisterSetting;
+    }
+
     Show-IcingaForWindowsInstallerMenuSelectHostname -DefaultInput $HostnameSelection -Automated;
     Add-IcingaForWindowsInstallationAdvancedEntries;
     Disable-IcingaFrameworkConsoleOutput;
@@ -193,6 +201,8 @@ function Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate()
 
     Show-IcingaForWindowsInstallerMenuSelectCertificate -Automated -DefaultInput '1';
     Show-IcingaForWindowsInstallerMenuEnterIcingaTicket -Automated -Value $Ticket;
+
+    Show-IcingaForWindowsInstallationMenuEnterIcingaAgentVersion -Automated -Value $AgentVersion;
 
     Show-IcingaForWindowsManagementConsoleInstallationDirectorRegisterHost -Automated;
 
