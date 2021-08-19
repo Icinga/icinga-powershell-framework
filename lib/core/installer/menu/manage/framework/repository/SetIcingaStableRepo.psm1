@@ -23,6 +23,14 @@ function Show-IcingaForWindowsManagementConsoleSetIcingaStableRepositories()
             @{
                 'Command' = 'Show-IcingaForWindowsManagementConsoleManageIcingaRepositories';
                 'Help'    = 'Sets the current repository for Icinga for Windows as "Icinga Stable"';
+                'Action'  = @{
+                    'Command'   = 'Add-IcingaRepository';
+                    'Arguments' = @{
+                        '-Name'       = 'Icinga Stable';
+                        '-RemotePath' = '$DefaultValues$';
+                        '-Force'      = $TRUE;
+                    }
+                }
             }
         ) `
         -DefaultIndex $DefaultInput `
@@ -35,12 +43,4 @@ function Show-IcingaForWindowsManagementConsoleSetIcingaStableRepositories()
         -HiddenConfigElement `
         -Advanced `
         -NoConfigSwap;
-
-    if (Test-IcingaForWindowsManagementConsoleContinue) {
-        $UserInput = Get-IcingaForWindowsInstallerValuesFromStep -InstallerStep 'Show-IcingaForWindowsManagementConsoleSetIcingaStableRepositories';
-
-        Add-IcingaRepository -Name 'Icinga Stable' -RemotePath $UserInput -Force;
-
-        $global:Icinga.InstallWizard.LastNotice = ([string]::Format('Updated repository "Icinga Stable" with URL "{0}"', $UserInput));
-    }
 }

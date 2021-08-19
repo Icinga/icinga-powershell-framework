@@ -23,6 +23,14 @@ function Show-IcingaForWindowsManagementConsoleSetIcingaSnapshotRepositories()
             @{
                 'Command' = 'Show-IcingaForWindowsManagementConsoleManageIcingaRepositories';
                 'Help'    = 'Sets the current repository for Icinga for Windows as "Icinga Snapshot"';
+                'Action'  = @{
+                    'Command'   = 'Add-IcingaRepository';
+                    'Arguments' = @{
+                        '-Name'       = 'Icinga Snapshot';
+                        '-RemotePath' = '$DefaultValues$';
+                        '-Force'      = $TRUE;
+                    }
+                }
             }
         ) `
         -DefaultIndex $DefaultInput `
@@ -35,12 +43,4 @@ function Show-IcingaForWindowsManagementConsoleSetIcingaSnapshotRepositories()
         -HiddenConfigElement `
         -Advanced `
         -NoConfigSwap;
-
-    if (Test-IcingaForWindowsManagementConsoleContinue) {
-        $UserInput = Get-IcingaForWindowsInstallerValuesFromStep -InstallerStep 'Show-IcingaForWindowsManagementConsoleSetIcingaSnapshotRepositories';
-
-        Add-IcingaRepository -Name 'Icinga Snapshot' -RemotePath $UserInput -Force;
-
-        $global:Icinga.InstallWizard.LastNotice = ([string]::Format('Updated repository "Icinga Snapshot" with URL "{0}"', $UserInput));
-    }
 }

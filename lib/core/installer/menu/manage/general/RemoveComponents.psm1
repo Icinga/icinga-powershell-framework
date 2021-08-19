@@ -2,7 +2,7 @@ function Show-IcingaForWindowsMenuRemoveComponents()
 {
 
     [array]$UninstallFeatures   = @();
-    $AgentInstalled             = Get-Service -Name 'icinga2' -ErrorAction SilentlyContinue;
+    $AgentInstalled             = (Get-IcingaAgentInstallation).Installed;
     $PowerShellServiceInstalled = Get-Service -Name 'icingapowershell' -ErrorAction SilentlyContinue;
     $IcingaWindowsServiceData   = Get-IcingaForWindowsServiceData;
     $ModuleList                 = Get-Module 'icinga-powershell-*' -ListAvailable;
@@ -11,7 +11,7 @@ function Show-IcingaForWindowsMenuRemoveComponents()
         'Caption'  = 'Uninstall Icinga Agent';
         'Command'  = 'Show-IcingaForWindowsMenuRemoveComponents';
         'Help'     = 'Will remove the Icinga Agent from this system. Please note that this option will leave content inside "ProgramData", like certificates, alone'
-        'Disabled' = ($null -eq $AgentInstalled);
+        'Disabled' = (-Not $AgentInstalled);
         'Action'   = @{
             'Command'   = 'Show-IcingaWindowsManagementConsoleYesNoDialog';
             'Arguments' = @{

@@ -107,7 +107,7 @@ function Add-IcingaWmiPermissions()
         return $FALSE;
     }
 
-    Write-IcingaConsoleNotice 'Wmi permissions for Namespace "{0}" and user "{1}" have been set successfully' -Objects $Namespace, $User;
+    Write-IcingaConsoleNotice 'Wmi permissions for Namespace "{0}" and user "{1}" was set successfully' -Objects $Namespace, $User;
 
     return $TRUE;
 }
