@@ -18,7 +18,8 @@ function Show-IcingaForWindowsInstallerMenu()
         [switch]$ReadOnly            = $FALSE,
         [switch]$Automated           = $FALSE,
         [switch]$Advanced            = $FALSE,
-        [switch]$PlainTextOutput     = $FALSE
+        [switch]$PlainTextOutput     = $FALSE,
+        [switch]$NoConfigSwap        = $FALSE
     );
 
     if ((Test-IcingaForWindowsInstallationHeaderPrint) -eq $FALSE -And (Get-IcingaFrameworkDebugMode) -eq $FALSE) {
@@ -413,7 +414,8 @@ function Show-IcingaForWindowsInstallerMenu()
             -Values $StoredValues `
             -Hidden:$HiddenConfigElement `
             -PasswordInput:$PasswordInput `
-            -Advanced:$Advanced;
+            -Advanced:$Advanced `
+            -NoConfigSwap:$NoConfigSwap;
     }
 
     # Reset Help View

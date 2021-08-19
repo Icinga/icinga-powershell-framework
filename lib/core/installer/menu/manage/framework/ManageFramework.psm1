@@ -19,6 +19,11 @@ function Show-IcingaForWindowsManagementConsoleManageFramework()
                 'Disabled' = ($null -eq (Get-Service 'icingapowershell' -ErrorAction SilentlyContinue));
             },
             @{
+                'Caption' = 'Manage Icinga Repositories';
+                'Command' = 'Show-IcingaForWindowsManagementConsoleManageIcingaRepositories';
+                'Help'    = 'Allows you to manage Icinga for Windows repositories';
+            },
+            @{
                 'Caption'  = ([string]::Format('Framework Debug Mode: {0}', (& { if ($FrameworkDebug) { 'Enabled' } else { 'Disabled' } } )));
                 'Command'  = 'Show-IcingaForWindowsManagementConsoleManageFramework';
                 'Help'     = 'Disable or enable the Icinga PowerShell Framework debug mode';
