@@ -1,5 +1,10 @@
 function Show-IcingaForWindowsInstallerMenuFinishInstaller()
 {
+
+    if ($global:Icinga.InstallWizard.DirectorSelfService -eq $TRUE -And $global:Icinga.InstallWizard.DirectorRegisteredHost -eq $FALSE) {
+        $global:Icinga.InstallWizard.LastNotice = 'To install this host while using "Icinga Director Self-Service API", you need to register the host in the previous step first.';
+    }
+
     Show-IcingaForWindowsInstallerMenu `
         -Header 'How you do want to proceed:' `
         -Entries @(
@@ -7,7 +12,7 @@ function Show-IcingaForWindowsInstallerMenuFinishInstaller()
                 'Caption'  = 'Start installation';
                 'Command'  = 'Start-IcingaForWindowsInstallation';
                 'Help'     = 'Apply the just configured configuration and install components as selected';
-                'Disabled' = (-Not ($global:Icinga.InstallWizard.AdminShell));
+                'Disabled' = (-Not ($global:Icinga.InstallWizard.AdminShell) -Or ($global:Icinga.InstallWizard.DirectorSelfService -eq $TRUE -And $global:Icinga.InstallWizard.DirectorRegisteredHost -eq $FALSE));
                 'Action'   = @{
                     'Command' = 'Clear-IcingaForWindowsManagementConsolePaginationCache';
                 }

@@ -8,6 +8,8 @@ function Show-IcingaForWindowsInstallerMenuSelectConnection()
         [switch]$Advanced      = $FALSE
     );
 
+    $Global:Icinga.InstallWizard.DirectorSelfService = $FALSE;
+
     Show-IcingaForWindowsInstallerMenu `
         -Header 'How do you want to configure your local Icinga Agent?' `
         -Entries @(
