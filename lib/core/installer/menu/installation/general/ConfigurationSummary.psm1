@@ -65,7 +65,13 @@ function Show-IcingaForWindowsInstallerConfigurationSummary()
             if (Test-Numeric ($ConfigEntry.Selection)) {
                 Set-IcingaForWindowsInstallationHeaderSelection -Selection $ConfigEntry.Selection;
 
-                &$RealCommand;
+                try {
+                    &$RealCommand;
+                } catch {
+                    $ErrMsg = [string]::Format('Failed to apply configuration item "{0}". This could happen in case elements were removed or renamed between Framework versions: {1}', $RealCommand, $_.Exception.Message);
+                    $global:Icinga.InstallWizard.LastError += $ErrMsg;
+                    continue;
+                }
 
                 $Caption = ([string]::Format('{0}=> {1}', $PrintName, $global:Icinga.InstallWizard.HeaderPreview));
             } else {
@@ -84,6 +90,8 @@ function Show-IcingaForWindowsInstallerConfigurationSummary()
 
         $CurrentIndex += 1;
     }
+
+    Write-Host 'Finished'
 
     Disable-IcingaForWindowsInstallationHeaderPrint;
     Enable-IcingaForWindowsInstallationJumpToSummary;
