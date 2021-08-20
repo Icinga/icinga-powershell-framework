@@ -1,13 +1,14 @@
 function Sync-IcingaRepository()
 {
     param (
-        [string]$Name       = $null,
-        [string]$Path       = $null,
-        [string]$RemotePath = $null,
-        [string]$Source     = $null,
-        [switch]$UseSCP     = $FALSE,
-        [switch]$Force      = $FALSE,
-        [switch]$ForceTrust = $FALSE
+        [string]$Name         = $null,
+        [string]$Path         = $null,
+        [string]$RemotePath   = $null,
+        [string]$Source       = $null,
+        [switch]$UseSCP       = $FALSE,
+        [switch]$Force        = $FALSE,
+        [switch]$ForceTrust   = $FALSE,
+        [switch]$SkipSCPMkdir = $FALSE
     );
 
     if ([string]::IsNullOrEmpty($Name)) {
@@ -205,14 +206,17 @@ function Sync-IcingaRepository()
             return;
         }
     } else { # Linux target
-        Write-IcingaConsoleNotice 'Creating directory over SSH for host and user "{0}" and path "{1}"' -Objects $SSHAuth, $Path;
 
-        $Result = Start-IcingaProcess -Executable 'ssh' -Arguments ([string]::Format('{0} mkdir -p "{1}"', $SSHAuth, $Path));
-        if ($Result.ExitCode -ne 0) {
-            # TODO: Add link to setup docs
-            Write-IcingaConsoleError 'SSH Error on directory creation: {0}' -Objects $Result.Error;
-            $Success = Remove-Item -Path $TmpDir -Recurse -Force;
-            return;
+        if ($SkipSCPMkdir -eq $FALSE) {
+            Write-IcingaConsoleNotice 'Creating directory over SSH for host and user "{0}" and path "{1}"' -Objects $SSHAuth, $Path;
+
+            $Result = Start-IcingaProcess -Executable 'ssh' -Arguments ([string]::Format('{0} mkdir -p "{1}"', $SSHAuth, $Path));
+            if ($Result.ExitCode -ne 0) {
+                # TODO: Add link to setup docs
+                Write-IcingaConsoleError 'SSH Error on directory creation: {0}' -Objects $Result.Error;
+                $Success = Remove-Item -Path $TmpDir -Recurse -Force;
+                return;
+            }
         }
 
         Write-IcingaConsoleNotice 'Removing old repository files from "{0}"' -Objects $Path;
