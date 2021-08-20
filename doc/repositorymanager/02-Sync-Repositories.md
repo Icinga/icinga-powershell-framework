@@ -26,7 +26,7 @@ You can use the sync command to clone an existing public repository for example 
 Sync-IcingaRepository `
     -Name 'Icinga Stable Local' `
     -Path 'C:\icinga\icinga_stable' `
-    -Source 'http://packages.icinga.com/IcingaForWindows/stable';
+    -Source 'https://packages.icinga.com/IcingaForWindows/stable/ifw.repo.json';
 ```
 
 This will sync all files from the public Icinga repository into `C:\icinga\icinga_stable`. As `RemotePath` is not set, it will default to `C:\icinga\icinga_stable` and all files will be fetched from this location.
@@ -38,7 +38,7 @@ Sync-IcingaRepository `
     -Name 'Icinga Stable Local' `
     -Path 'C:\icinga\icinga_stable' `
     -RemotePath '\\myhost.example.com\icingastable' `
-    -Source 'http://packages.icinga.com/IcingaForWindows/stable';
+    -Source 'https://packages.icinga.com/IcingaForWindows/stable/ifw.repo.json';
 ```
 
 We can for example use file sharing, to make certain folders available in our network. This example will download all files into `C:\icinga\icinga_stable`, but tell Icinga for Windows to use your shared network drive `\\myhost.example.com\icingastable` to fetch them from.
@@ -60,13 +60,13 @@ Sync-IcingaRepository `
     -Name 'Icinga Stable Internal Web' `
     -Path 'icinga@icingarepo.example.com:/var/www/icingastable/' `
     -RemotePath 'https://icingarepo.example.com/icingastable' `
-    -Source 'http://packages.icinga.com/IcingaForWindows/stable' `
+    -Source 'https://packages.icinga.com/IcingaForWindows/stable/ifw.repo.json' `
     -UseSCP;
 ```
 
 In this example we will sync all files to a Linux machine at `/var/www/icingastable/`. If we are running a local Apache or Nginx, we can create a web resource for this path and make it available in our network. We have to use `-UseSCP`, to tell Icinga for Windows to copy them to the Linux machine over `scp`. Please note that both, `scp` and `ssh` have to be installed  on the system.
 
-On different machines, you can then use 
+On different machines, you can then use
 
 ```powershell
 Add-IcingaRepository `
@@ -86,7 +86,7 @@ Clone the repository to a local path:
 Sync-IcingaRepository `
     -Name 'Icinga Stable Local' `
     -Path 'C:\icinga\icinga_stable' `
-    -Source 'http://packages.icinga.com/IcingaForWindows/stable';
+    -Source 'https://packages.icinga.com/IcingaForWindows/stable/ifw.repo.json';
 ```
 
 Clone this repository to our internal web space:
