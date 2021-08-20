@@ -31,7 +31,7 @@ function New-IcingaTCPClientRESTMessage()
         );
     }
 
-    $ResponseMeessage = -Join(
+    $ResponseMessage = -Join(
         [string]::Format(
             'HTTP/1.1 {0} {1}{2}',
             $HTTPResponse,
@@ -53,8 +53,10 @@ function New-IcingaTCPClientRESTMessage()
         $HTMLContent
     );
 
+    Write-IcingaDebugMessage -Message 'Sending message to client' -Objects $ResponseMessage;
+
     # Encode our message before sending it
-    $UTF8Message = [System.Text.Encoding]::UTF8.GetBytes($ResponseMeessage);
+    $UTF8Message = [System.Text.Encoding]::UTF8.GetBytes($ResponseMessage);
 
     return @{
         'message' = $UTF8Message;
