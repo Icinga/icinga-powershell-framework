@@ -75,7 +75,7 @@
  # Example usage:
  # $IcingaEnums.IcingaExitCode.Ok
  #>
- if ($null -eq $IcingaEnums) {
+if ($null -eq $IcingaEnums) {
     [hashtable]$IcingaEnums = @{
         IcingaExitCode         = $IcingaExitCode;
         IcingaExitCodeText     = $IcingaExitCodeText;
