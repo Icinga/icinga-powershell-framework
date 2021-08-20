@@ -199,7 +199,7 @@ function Get-IcingaForWindowsRootPath()
 
 function Get-IcingaPowerShellModuleFile()
 {
-    return (Join-Path -Path $PSScriptRoot -ChildPath 'icinga-powershell-framework.psm1');
+    return (Join-Path -Path $PSScriptRoot -ChildPath 'icinga-powershell-framework.psd1');
 }
 
 function Invoke-IcingaCommand()
