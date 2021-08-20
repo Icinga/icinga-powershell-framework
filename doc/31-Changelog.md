@@ -22,6 +22,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#332](https://github.com/Icinga/icinga-powershell-framework/pull/332) Fixes Icinga Director Self-Service ticket handling, which was not working within the Icinga Management Console
 * [#335](https://github.com/Icinga/icinga-powershell-framework/pull/335) Fixes Icinga Director Self-Service Zones and CA config for legacy installation wizard
 * [#343](https://github.com/Icinga/icinga-powershell-framework/pull/343) Fixes freeze within Icinga Management Console, in case commands which previously existed were removed/renamed or the user applied an invalid configuration with unknown commands as install file or install command
+* [#345](https://github.com/Icinga/icinga-powershell-framework/pull/345) Fixes Framework environment variables like `$IcingaEnums` not working with v1.6.0
 
 ### Enhancements
 
