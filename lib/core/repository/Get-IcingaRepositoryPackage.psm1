@@ -65,7 +65,19 @@ function Get-IcingaRepositoryPackage()
                 continue;
             }
 
-            if ([string]::IsNullOrEmpty($Version) -And ($null -eq $LatestVersion -Or $LatestVersion -lt $package.Version)) {
+            if ($Snapshot -And [string]::IsNullOrEmpty($Version) -eq $FALSE -And (Test-Numeric $package.Version.Replace('.', '')) -eq $FALSE -And (Test-Numeric $Version) -eq $FALSE -And $package.Version -eq $Version) {
+                $InstallPackage = $package;
+                $HasRepo        = $TRUE;
+                $SourceRepo     = $RepoContent;
+                $RepoName       = $entry.Name;
+                break;
+            }
+
+            if ((Test-Numeric $package.Version.Replace('.', '')) -eq $FALSE -Or ((Test-Numeric $Version.Replace('.', '')) -eq $FALSE -And [string]::IsNullOrEmpty($Version) -eq $FALSE) ) {
+                continue;
+            }
+
+            if (([string]::IsNullOrEmpty($Version) -And ($null -eq $LatestVersion -Or $LatestVersion -lt $package.Version))) {
                 [Version]$LatestVersion = [Version]$package.Version;
                 $InstallPackage         = $package;
                 $HasRepo                = $TRUE;
