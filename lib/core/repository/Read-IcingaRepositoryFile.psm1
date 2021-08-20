@@ -1,7 +1,8 @@
 function Read-IcingaRepositoryFile()
 {
     param (
-        [string]$Name = $null
+        [string]$Name         = $null,
+        [switch]$TryAlternate = $FALSE
     );
 
     if ([string]::IsNullOrEmpty($Name)) {
@@ -27,31 +28,32 @@ function Read-IcingaRepositoryFile()
         $WebContent = Get-Content -Path (Join-Path -Path $RepoPath -ChildPath 'ifw.repo.json') -Raw;
     } else {
         try {
-            $WebContent = Invoke-WebRequest -UseBasicParsing -Uri $Repository.RemotePath;
-            $RepoPath   = $Repository.RemotePath;
-        } catch {
-            # Nothing to do
-        }
+            $RepoPath = $Repository.RemotePath;
 
-        if ($null -eq $WebContent) {
-            try {
-                $WebContent = Invoke-WebRequest -UseBasicParsing -Uri (Join-WebPath -Path $Repository.RemotePath -ChildPath 'ifw.repo.json');
-            } catch {
-                Write-IcingaConsoleError 'Failed to read repository file from "{0}" or "{0}/ifw.repo.json". Exception: {1}' -Objects $Repository.RemotePath, $_.Exception.Message;
+            if ($TryAlternate) {
+                $RepoPath = (Join-WebPath -Path $Repository.RemotePath -ChildPath 'ifw.repo.json');
+            }
+
+            $WebContent = Invoke-WebRequest -UseBasicParsing -Uri $RepoPath;
+
+            if ($null -ne $WebContent) {
+                if ($WebContent.RawContent.Contains('application/octet-stream')) {
+                    $Content = [System.Text.Encoding]::UTF8.GetString($WebContent.Content)
+                } else {
+                    $Content = $WebContent.Content;
+                }
+            } else {
+                if ($TryAlternate -eq $FALSE) {
+                    return (Read-IcingaRepositoryFile -Name $Name -TryAlternate);
+                }
+            }
+        } catch {
+            if ($TryAlternate -eq $FALSE) {
+                return (Read-IcingaRepositoryFile -Name $Name -TryAlternate);
+            } else {
+                Write-IcingaConsoleError 'Unable to resolve repository URL "{0}" for repository "{1}": {2}' -Objects $Repository.RemotePath, $Name, $_.Exception.Message;
                 return $null;
             }
-            $RepoPath   = $Repository.RemotePath;
-        }
-
-        if ($null -eq $WebContent) {
-            Write-IcingaConsoleError 'Unable to fetch data for repository "{0}" from any configured location' -Objects $Name;
-            return $null;
-        }
-
-        if ($WebContent.RawContent.Contains('application/octet-stream')) {
-            $Content = [System.Text.Encoding]::UTF8.GetString($WebContent.Content)
-        } else {
-            $Content = $WebContent.Content;
         }
     }
 
@@ -60,7 +62,13 @@ function Read-IcingaRepositoryFile()
         return $null;
     }
 
-    $RepositoryObject = ConvertFrom-Json -InputObject $Content;
+    try {
+        $RepositoryObject = ConvertFrom-Json -InputObject $Content -ErrorAction Stop;
+    } catch {
+        if ($TryAlternate -eq $FALSE) {
+            return (Read-IcingaRepositoryFile -Name $Name -TryAlternate);
+        }
+    }
 
     return $RepositoryObject;
 }
