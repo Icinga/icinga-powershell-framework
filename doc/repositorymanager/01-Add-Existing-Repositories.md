@@ -20,22 +20,22 @@ The best way to demonstrate on how to add new repositories, you can use the defa
 
 ### Icinga for Windows Stable
 
-The URL pointing to the stable releases is `http://packages.icinga.com/IcingaForWindows/stable`.
+The URL pointing to the stable releases is `https://packages.icinga.com/IcingaForWindows/stable/ifw.repo.json`.
 
 ```powershell
 Add-IcingaRepository `
     -Name 'Icinga Stable' `
-    -RemotePath 'http://packages.icinga.com/IcingaForWindows/stable';
+    -RemotePath 'https://packages.icinga.com/IcingaForWindows/stable/ifw.repo.json';
 ```
 
 ### Icinga for Windows Snapshot
 
-The URL pointing to the snapshot releases is `http://packages.icinga.com/IcingaForWindows/snapshot`.
+The URL pointing to the snapshot releases is `https://packages.icinga.com/IcingaForWindows/snapshot/ifw.repo.json`.
 
 ```powershell
 Add-IcingaRepository `
     -Name 'Icinga Snapshot' `
-    -RemotePath 'http://packages.icinga.com/IcingaForWindows/snapshot';
+    -RemotePath 'https://packages.icinga.com/IcingaForWindows/snapshot/ifw.repo.json';
 ```
 
 ## Using Repositories
