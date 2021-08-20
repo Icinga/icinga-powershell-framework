@@ -6,15 +6,16 @@ Like with [adding existing repositories](01-Add-Existing-Repositories.md), each 
 
 ## Available Arguments
 
-| Argument   | Type   | Description                                                                     |
-| ---        |---     | ---                                                                             |
-| Name       | String | The unique name of the repository. This name can only exist once on your system |
-| Path       | String | The location on where the files from the remote repository will be synced to. This can either be a local path, a network share or a Linux path, including user and hostname like `icinga@example.com:/vaw/www/icingarepo/`
-| RemotePath | String | The path pointing to the location Icinga for Windows tries to lookup all your files. You can either replicate the `Path` variable for network shares for example, or use a web url which is made available based on `Path` to fetch and download files from. If left empty, it will default to the `Path` variable content |
-| Source     | String | The source from where the repository will be synced from. This can either be pointing directly to the `ifw.repo.json` or the root directory, as long as the file is fetch able from this point. A source can be a web, local or network share |
-| UseSCP     | Switch | If you set `Path` to a Linux path as mentioned in the first example, you will have to enable this switch to use SCP to copy files from the source to the Linux system. Requires `scp` and `ssh` being installed on the system |
-| Force      | Switch | This will force the creation of the repository, even if the name of the repository is already assigned. Should be used with caution |
-| ForceTrust | Switch | By default repositories are validated with a hash, based on all files present inside the repository. If a repository is not providing a hash, it will be disabled after the sync for security reasons. In case the hash does not match with all files synced afterwards, the repository files will be deleted and the sync aborted. You can use this flag to ignore both states and always add the repository, regardless if the hash matches or the hash is not given |
+| Argument     | Type   | Description                                                                     |
+| ---          |---     | ---                                                                             |
+| Name         | String | The unique name of the repository. This name can only exist once on your system |
+| Path         | String | The location on where the files from the remote repository will be synced to. This can either be a local path, a network share or a Linux path, including user and hostname like `icinga@example.com:/vaw/www/icingarepo/`
+| RemotePath   | String | The path pointing to the location Icinga for Windows tries to lookup all your files. You can either replicate the `Path` variable for network shares for example, or use a web url which is made available based on `Path` to fetch and download files from. If left empty, it will default to the `Path` variable content |
+| Source       | String | The source from where the repository will be synced from. This can either be pointing directly to the `ifw.repo.json` or the root directory, as long as the file is fetch able from this point. A source can be a web, local or network share |
+| UseSCP       | Switch | If you set `Path` to a Linux path as mentioned in the first example, you will have to enable this switch to use SCP to copy files from the source to the Linux system. Requires `scp` and `ssh` being installed on the system |
+| SkipSCPMkdir | Switch | Allows you to skip the `mkdir` operation while using `-UseSCP` and relies on the folder already existing |
+| Force        | Switch | This will force the creation of the repository, even if the name of the repository is already assigned. Should be used with caution |
+| ForceTrust   | Switch | By default repositories are validated with a hash, based on all files present inside the repository. If a repository is not providing a hash, it will be disabled after the sync for security reasons. In case the hash does not match with all files synced afterwards, the repository files will be deleted and the sync aborted. You can use this flag to ignore both states and always add the repository, regardless if the hash matches or the hash is not given |
 
 ## Sync Public Repository
 
