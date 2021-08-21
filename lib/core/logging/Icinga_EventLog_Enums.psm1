@@ -14,6 +14,24 @@ if ($null -eq $IcingaEventLogEnums -Or $IcingaEventLogEnums.ContainsKey('Framewo
                 'Details'   = 'The Framework or is components can issue generic debug message in case the debug log is enabled. Please ensure to disable it, if not used. You can do so with the command "Disable-IcingaFrameworkDebugMode"';
                 'EventId'   = 1000;
             };
+            1100 = @{
+                'EntryType' = 'Error';
+                'Message'   = 'Corrupt Icinga for Windows configuration';
+                'Details'   = 'Your Icinga for Windows configuration file was corrupt and could not be read successfully. A new configuration file was created and the old one renamed for review, to keep your settings available.';
+                'EventId'   = 1100;
+            };
+            1101 = @{
+                'EntryType' = 'Warning';
+                'Message'   = 'Unable to update Icinga for Windows file';
+                'Details'   = 'Icinga for Windows could not update the specified file after several attempts, because another process is locking it. Modifications made on the file have not been persisted.';
+                'EventId'   = 1101;
+            };
+            1102 = @{
+                'EntryType' = 'Warning';
+                'Message'   = 'Unable to read Icinga for Windows content file';
+                'Details'   = 'Icinga for Windows could not read the specified file after several attempts, because another process is locking the file. Icinga for Windows terminated itself to prevent damage to this file.';
+                'EventId'   = 1102;
+            };
             1500 = @{
                 'EntryType' = 'Error';
                 'Message'   = 'Failed to securely establish a communication between this server and the client';

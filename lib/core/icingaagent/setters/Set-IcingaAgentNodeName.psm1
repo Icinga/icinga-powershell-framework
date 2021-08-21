@@ -29,7 +29,7 @@ function Set-IcingaAgentNodeName()
         $ConfigContent = $NewConfigContent;
     }
 
-    Set-Content -Path $ConstantsConf -Value $ConfigContent;
+    Write-IcingaFileSecure -File $ConstantsConf -Value $ConfigContent;
 
     Write-IcingaConsoleNotice ([string]::Format('Your hostname was successfully changed to "{0}"', $Hostname));
 }

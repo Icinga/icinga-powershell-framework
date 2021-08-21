@@ -194,7 +194,7 @@ function Sync-IcingaRepository()
     $JsonRepo.Info.RemoteSource = $RemotePath;
     $JsonRepo.Info.Updated      = ((Get-Date).ToUniversalTime().ToString('yyyy\/MM\/dd HH:mm:ss'));
 
-    Set-Content -Path $RepoFile -Value (ConvertTo-Json -InputObject $JsonRepo -Depth 100);
+    Write-IcingaFileSecure -File $RepoFile -Value (ConvertTo-Json -InputObject $JsonRepo -Depth 100);
 
     if ($UseSCP -eq $FALSE) { # Windows target
         $Success = Remove-Item -Path $RemovePath -Recurse -Force;

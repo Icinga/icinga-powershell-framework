@@ -24,7 +24,7 @@ function Set-IcingaAgentServicePermission()
         $NewSystemContent += $line;
     }
 
-    Set-Content -Path "$SystemPermissions.inf" -Value $NewSystemContent;
+    Write-IcingaFileSecure -File "$SystemPermissions.inf" -Value $NewSystemContent;
 
     $SystemOutput = Start-IcingaProcess -Executable 'secedit.exe' -Arguments ([string]::Format('/import /cfg "{0}.inf" /db "{0}.sdb"', $SystemPermissions));
 

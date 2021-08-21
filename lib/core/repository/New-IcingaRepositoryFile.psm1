@@ -85,7 +85,7 @@ function New-IcingaRepositoryFile()
         $IcingaRepository.Info.RepoHash = Get-IcingaRepositoryHash -Path $Path;
     }
 
-    Set-Content -Path $RepoPath -Value (ConvertTo-Json -InputObject $IcingaRepository -Depth 100);
+    Write-IcingaFileSecure -File $RepoPath -Value (ConvertTo-Json -InputObject $IcingaRepository -Depth 100);
 
     return $IcingaRepository;
 }

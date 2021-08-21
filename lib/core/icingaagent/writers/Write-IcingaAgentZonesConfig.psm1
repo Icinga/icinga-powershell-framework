@@ -66,6 +66,6 @@ function Write-IcingaAgentZonesConfig()
 
     $ZonesConf = $ZonesConf.Substring(0, $ZonesConf.Length - 4);
 
-    Set-Content -Path (Join-Path -Path (Get-IcingaAgentConfigDirectory) -ChildPath 'zones.conf') -Value $ZonesConf;
+    Write-IcingaFileSecure -File (Join-Path -Path (Get-IcingaAgentConfigDirectory) -ChildPath 'zones.conf') -Value $ZonesConf;
     Write-IcingaConsoleNotice 'Icinga Agent zones.conf has been written successfully';
 }

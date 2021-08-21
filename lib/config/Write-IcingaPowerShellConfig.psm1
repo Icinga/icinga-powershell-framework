@@ -17,7 +17,7 @@
 
 function Write-IcingaPowerShellConfig()
 {
-    param(
+    param (
         $Config
     );
 
@@ -25,16 +25,10 @@ function Write-IcingaPowerShellConfig()
     $ConfigFile = Join-Path -Path $ConfigDir -ChildPath 'config.json';
 
     if (-Not (Test-Path $ConfigDir)) {
-        New-Item -Path $ConfigDir -ItemType Directory | Out-Null;
+        New-Item -Path $ConfigDir -ItemType Directory -ErrorAction SilentlyContinue | Out-Null;
     }
 
     $Content = ConvertTo-Json -InputObject $Config -Depth 100;
 
-    Set-Content -Path $ConfigFile -Value $Content;
-
-    if ($global:IcingaDaemonData.FrameworkRunningAsDaemon) {
-        if ($global:IcingaDaemonData.ContainsKey('Config')) {
-            $global:IcingaDaemonData.Config = $Config;
-        }
-    }
+    Write-IcingaFileSecure -File $ConfigFile -Value $Content;
 }

@@ -279,7 +279,7 @@ function Copy-IcingaAgentCACertificate()
                 $Index,
                 $response.RawContent.Length - $Index
             );
-            Set-Content -Path (Join-Path $Desination -ChildPath 'ca.crt') -Value $CAContent;
+            Write-IcingaFileSecure -File (Join-Path $Desination -ChildPath 'ca.crt') -Value $CAContent;
             Write-IcingaConsoleNotice ([string]::Format('Downloaded ca.crt from "{0}" to "{1}', $CAPath, $Desination))
         } catch {
             Write-IcingaConsoleError 'Failed to load any provided ca.crt ressource';

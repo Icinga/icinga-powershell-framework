@@ -41,7 +41,7 @@ function Install-Icinga()
     }
 
     if ([string]::IsNullOrEmpty($InstallFile) -eq $FALSE) {
-        $InstallCommand = Read-IcingaFileContent -File $InstallFile;
+        $InstallCommand = Read-IcingaFileSecure -File $InstallFile -ExitOnReadError;
     }
 
     # Use our install command to configure everything
