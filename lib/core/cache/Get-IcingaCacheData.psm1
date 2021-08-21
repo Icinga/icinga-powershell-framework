@@ -40,7 +40,7 @@ function Get-IcingaCacheData()
         return $null;
     }
 
-    $Content = Read-IcingaFileContent -File $CacheFile;
+    $Content = Read-IcingaFileSecure -File $CacheFile;
 
     if ([string]::IsNullOrEmpty($Content)) {
         return $null;

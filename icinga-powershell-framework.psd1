@@ -11,9 +11,9 @@
     FunctionsToExport = @( '*' )
     CmdletsToExport   = @( '*' )
     VariablesToExport = '*'
-    AliasesToExport   = @( 'icinga' )
+    AliasesToExport   = @( '*' )
     PrivateData       = @{
-        PSData  = @{
+        PSData   = @{
             Tags         = @( 'icinga', 'icinga2', 'IcingaPowerShellFramework', 'IcingaPowerShell', 'IcingaforWindows', 'IcingaWindows')
             LicenseUri   = 'https://github.com/Icinga/icinga-powershell-framework/blob/master/LICENSE'
             ProjectUri   = 'https://github.com/Icinga/icinga-powershell-framework'

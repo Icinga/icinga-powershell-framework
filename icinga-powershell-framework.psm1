@@ -119,7 +119,7 @@ function Write-IcingaFrameworkCodeCache()
             $CacheContent += "`r`n";
         }
 
-    $CacheContent += "Export-ModuleMember -Function @( '*' )";
+    $CacheContent += "Export-ModuleMember -Function @( '*' ) -Alias @( '*' ) -Variable @( '*' )";
     Set-Content -Path $CacheFile -Value $CacheContent;
 }
 
@@ -157,7 +157,7 @@ function Publish-IcingaEventlogDocumentation()
     if ([string]::IsNullOrEmpty($OutFile)) {
         Write-Output $DocContent;
     } else {
-        Set-Content -Path $OutFile -Value $DocContent;
+        Write-IcingaFileSecure -File $OutFile -Value $DocContent;
     }
 }
 

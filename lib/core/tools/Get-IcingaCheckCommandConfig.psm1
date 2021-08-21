@@ -408,7 +408,7 @@ function Get-IcingaCheckCommandConfig()
         if ($IcingaConfig) {
             Write-IcingaPlainConfigurationFiles -Content $Basket -OutDirectory $ConfigDirectory -FileName $FileName;
         } else {
-            Set-Content -Path $OutDirectory -Value $output;
+            Write-IcingaFileSecure -File $OutDirectory -Value $output;
         }
 
         # Output-Text
@@ -571,8 +571,8 @@ function Write-IcingaPlainConfigurationFiles()
     $PowerShellBase         += [string]::Format('    timeout = 3m{0}', (New-IcingaNewLine));
     $PowerShellBase         += '}';
 
-    Set-Content -Path (Join-Path -Path $ConfigDirectory -ChildPath 'PowerShell_Base.conf') -Value $PowerShellBase;
-    Set-Content -Path $OutDirectory -Value $IcingaConfig;
+    Write-IcingaFileSecure -File (Join-Path -Path $ConfigDirectory -ChildPath 'PowerShell_Base.conf') -Value $PowerShellBase;
+    Write-IcingaFileSecure -File $OutDirectory -Value $IcingaConfig;
 }
 
 function Add-PowerShellDataList()

@@ -10,5 +10,5 @@ function Write-IcingaAgentObjectList()
 
     $ObjectList = Get-IcingaAgentObjectList;
 
-    Set-Content -Path $Path -Value $ObjectList;
+    Write-IcingaFileSecure -File $Path -Value $ObjectList;
 }

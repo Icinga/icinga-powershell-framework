@@ -35,6 +35,6 @@ function Find-IcingaAgentObjects()
     if ([string]::IsNullOrEmpty($OutFile)) {
         Write-Output $Result;
     } else {
-        Set-Content -Path $OutFile -Value $Result;
+        Write-IcingaFileSecure -File $OutFile -Value $Result;
     }
 }

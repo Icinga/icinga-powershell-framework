@@ -8,7 +8,7 @@ function Export-IcingaForWindowsManagementConsoleInstallationAnswerFile()
     }
 
     if (Test-Path ($FilePath)) {
-        Set-Content -Path (Join-Path -Path $FilePath -ChildPath 'IfW_answer.json') -Value (Get-IcingaForWindowsManagementConsoleConfigurationString);
+        Write-IcingaFileSecure -File (Join-Path -Path $FilePath -ChildPath 'IfW_answer.json') -Value (Get-IcingaForWindowsManagementConsoleConfigurationString);
         $global:Icinga.InstallWizard.NextCommand = 'Install-Icinga';
         $global:Icinga.InstallWizard.LastNotice  = ([string]::Format('Answer file "IfW_answer.json" successfully exported into "{0}"', $FilePath));
         Clear-IcingaForWindowsManagementConsolePaginationCache;
