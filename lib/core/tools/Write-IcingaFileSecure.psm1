@@ -5,6 +5,19 @@ function Write-IcingaFileSecure()
         $Value
     );
 
+    if ([string]::IsNullOrEmpty($File)) {
+        return;
+    }
+
+    if ((Test-Path $File) -eq $FALSE) {
+        try {
+            New-Item -ItemType File -Path $File -ErrorAction Stop | Out-Null;
+        } catch {
+            Exit-IcingaThrowException -InputString $_.Exception -CustomMessage $File -StringPattern 'System.UnauthorizedAccessException' -ExceptionType 'Permission' -ExceptionThrown $IcingaExceptions.Permission.CacheFolder;
+            Exit-IcingaThrowException -CustomMessage $_.Exception -ExceptionType 'Unhandled' -Force;
+        }
+    }
+
     [int]$WaitTicks    = 0;
     [bool]$FileUpdated = $FALSE;
 
