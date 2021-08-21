@@ -9,6 +9,18 @@ function Write-IcingaFileSecure()
         return;
     }
 
+    if ($null -eq $Value) {
+        $Value = '';
+    } elseif ($Value.GetType().Name.ToLower() -eq 'hashtable') {
+        $Value = ConvertTo-Json -InputObject $Value -Depth 100;
+    } elseif (([string]($Value.GetType().BaseType)).ToLower() -eq 'array') {
+        $Value = $Value | Out-String;
+    } elseif ($Value.GetType().Name.ToLower() -eq 'pscustomobject') {
+        $Value = ConvertTo-Json -InputObject $Value -Depth 100;
+    } else {
+        $Value = $Value | Out-String;
+    }
+
     if ((Test-Path $File) -eq $FALSE) {
         try {
             New-Item -ItemType File -Path $File -ErrorAction Stop | Out-Null;
