@@ -42,6 +42,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#342](https://github.com/Icinga/icinga-powershell-framework/pull/342) Adds feature to print commands being executed by the Icinga Management Console with `l` and improves summary visualisation for better readability
 * [#346](https://github.com/Icinga/icinga-powershell-framework/pull/346) Adds support for version names for snapshots
 * [#348](https://github.com/Icinga/icinga-powershell-framework/pull/348) Improves debug output on TCP handling by separating several network messages into multiple messages and by logging the send message to the client
+* [#354](https://github.com/Icinga/icinga-powershell-framework/pull/354) Adds extended Repository management to Icinga Management Console
 
 ## 1.5.2 (2021-07-09)
 

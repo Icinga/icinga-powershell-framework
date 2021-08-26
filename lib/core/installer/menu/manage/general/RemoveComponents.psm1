@@ -1,6 +1,5 @@
 function Show-IcingaForWindowsMenuRemoveComponents()
 {
-
     [array]$UninstallFeatures   = @();
     $AgentInstalled             = (Get-IcingaAgentInstallation).Installed;
     $PowerShellServiceInstalled = Get-Service -Name 'icingapowershell' -ErrorAction SilentlyContinue;
