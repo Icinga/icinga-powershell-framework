@@ -138,7 +138,7 @@ function Install-IcingaComponent()
             }
 
             if ($ManifestFile.ModuleVersion -eq $InstallVersion -And $Force -eq $FALSE) {
-                Write-IcingaConsoleError ([string]::Format('The package "{0}" with version "{1}" is already installed. Use "-Force" to re-install the component', $Name.ToLower(), $ManifestFile.ModuleVersion));
+                Write-IcingaConsoleWarning ([string]::Format('The package "{0}" with version "{1}" is already installed. Use "-Force" to re-install the component', $Name.ToLower(), $ManifestFile.ModuleVersion));
                 Start-Sleep -Seconds 2;
                 Remove-Item -Path $DownloadDirectory -Recurse -Force;
                 return;
@@ -146,12 +146,13 @@ function Install-IcingaComponent()
 
             # These update steps only apply for the framework
             if ($Name.ToLower() -eq 'framework') {
+                Remove-IcingaFrameworkDependencyFile;
                 $ServiceStatus = (Get-Service 'icingapowershell' -ErrorAction SilentlyContinue).Status;
                 $AgentStatus   = (Get-Service 'icinga2' -ErrorAction SilentlyContinue).Status;
 
                 if ($ServiceStatus -eq 'Running') {
                     Write-IcingaConsoleNotice 'Stopping Icinga for Windows service';
-                    Stop-IcingaService 'icingapowershell';
+                    Stop-IcingaWindowsService;
                     Start-Sleep -Seconds 1;
                 }
                 if ($AgentStatus -eq 'Running') {
@@ -168,7 +169,7 @@ function Install-IcingaComponent()
             $ComponentFileContent = Get-ChildItem -Path $ComponentFolder;
 
             foreach ($entry in $ComponentFileContent) {
-                if (($entry.Name -eq 'cache' -Or $entry.Name -eq 'config') -And $Name.ToLower() -eq 'framework') {
+                if (($entry.Name -eq 'cache' -Or $entry.Name -eq 'config' -Or $entry.Name -eq 'certificate') -And $Name.ToLower() -eq 'framework') {
                     continue;
                 }
 
@@ -197,6 +198,12 @@ function Install-IcingaComponent()
             }
 
             Import-Module -Name $ComponentFolder -Force;
+
+            # This will ensure that Framework functions will always win over third party functions, overwriting functionality
+            # of the Framework, which might cause problems during installation otherwise
+            Import-Module (Join-Path -Path (Get-IcingaForWindowsRootPath) -ChildPath 'icinga-powershell-framework') -Force;
+            Import-Module (Join-Path -Path (Get-IcingaForWindowsRootPath) -ChildPath 'icinga-powershell-framework') -Global -Force;
+
             Write-IcingaConsoleNotice 'Installation of component "{0}" with version "{1}" was successful. Open a new PowerShell to apply the changes' -Objects $Name.ToLower(), $ManifestFile.ModuleVersion;
         } else {
             <#
@@ -212,6 +219,7 @@ function Install-IcingaComponent()
                 $ServiceData      = Get-IcingaForWindowsServiceData;
                 $ServiceDirectory = $ServiceData.Directory;
                 $ServiceUser      = $ServiceData.User;
+                [int]$Success     = -1;
 
                 if ([string]::IsNullOrEmpty($ConfigDirectory) -eq $FALSE) {
                     $ServiceDirectory = $ConfigDirectory;
@@ -219,6 +227,8 @@ function Install-IcingaComponent()
 
                 if ([string]::IsNullOrEmpty($ConfigUser) -eq $FALSE) {
                     $ServiceUser = $ConfigUser;
+                } else {
+                    Set-IcingaPowerShellConfig -Path 'Framework.Icinga.ServiceUser' -Value $ServiceUser;
                 }
 
                 foreach ($binary in $FolderContent) {
@@ -241,11 +251,8 @@ function Install-IcingaComponent()
                         $NewService       = Read-IcingaServicePackage -File $binary.FullName;
 
                         if ($InstalledService.ProductVersion -eq $NewService.ProductVersion -And $null -ne $InstalledService -And $null -ne $NewService -And $Force -eq $FALSE) {
-                            Write-IcingaConsoleError ([string]::Format('The package "service" with version "{0}" is already installed. Use "-Force" to re-install the component', $InstalledService.ProductVersion));
-                            Start-Sleep -Seconds 2;
-                            Remove-Item -Path $DownloadDirectory -Recurse -Force;
-
-                            return;
+                            $Success = 0;
+                            break;
                         }
                     }
 
@@ -254,11 +261,22 @@ function Install-IcingaComponent()
                     Copy-ItemSecure -Path $binary.FullName -Destination $UpdateBin -Force;
 
                     [void](Install-IcingaForWindowsService -Path $ServiceBin -User $ServiceUser -Password (Get-IcingaInternalPowerShellServicePassword));
+                    Update-IcingaServiceUser;
                     Set-IcingaInternalPowerShellServicePassword -Password $null;
-                    Start-Sleep -Seconds 2;
+                    $Success = 1;
+                    break;
+                }
+
+                if ($Success -eq 0) {
+                    Write-IcingaConsoleWarning ([string]::Format('The package "service" with version "{0}" is already installed. Use "-Force" to re-install the component', $InstalledService.ProductVersion));
                     Remove-Item -Path $DownloadDirectory -Recurse -Force;
 
-                    Write-IcingaConsoleNotice 'Installation of component "service" was successful'
+                    return;
+                }
+
+                if ($Success -eq 1) {
+                    Remove-Item -Path $DownloadDirectory -Recurse -Force;
+                    Write-IcingaConsoleNotice 'Installation of component "service" was successful';
 
                     return;
                 }
@@ -269,7 +287,7 @@ function Install-IcingaComponent()
                 return;
             } else {
                 Write-IcingaConsoleError 'There was no manifest file found inside the package';
-                Remove-Item -Path $DownloadDirectory -Recurse -Force;
+                Remove-ItemSecure -Path $DownloadDirectory -Recurse -Force;
                 return;
             }
         }
@@ -295,6 +313,8 @@ function Install-IcingaComponent()
 
         if ([string]::IsNullOrEmpty($ConfigUser) -eq $FALSE) {
             $ServiceUser = $ConfigUser;
+        } else {
+            Set-IcingaPowerShellConfig -Path 'Framework.Icinga.ServiceUser' -Value $ServiceUser;
         }
 
         [string]$InstallFolderMsg = $InstallTarget;
@@ -313,7 +333,7 @@ function Install-IcingaComponent()
         $MSIData = & powershell.exe -Command { Use-Icinga; return Read-IcingaMSIMetadata -File $args[0] } -Args $DownloadDestination;
 
         if ($InstalledVersion.Full -eq $MSIData.ProductVersion -And $Force -eq $FALSE) {
-            Write-IcingaConsoleError 'The package "agent" with version "{0}" is already installed. Use "-Force" to re-install the component' -Objects $InstalledVersion.Full;
+            Write-IcingaConsoleWarning 'The package "agent" with version "{0}" is already installed. Use "-Force" to re-install the component' -Objects $InstalledVersion.Full;
             Remove-Item -Path $DownloadDirectory -Recurse -Force;
 
             return;
@@ -343,6 +363,7 @@ function Install-IcingaComponent()
         }
 
         Set-IcingaAgentServiceUser -User $ServiceUser -SetPermission;
+        Update-IcingaServiceUser;
 
         Write-IcingaConsoleNotice 'Installation of component "agent" with version "{0}" was successful.' -Objects $MSIData.ProductVersion;
     } else {

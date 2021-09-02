@@ -1,9 +1,11 @@
 function New-IcingaThreadInstance()
 {
-    param(
+    param (
         [string]$Name,
         $ThreadPool,
         [ScriptBlock]$ScriptBlock,
+        [string]$Command,
+        [hashtable]$CmdParameters,
         [array]$Arguments,
         [Switch]$Start
     );
@@ -21,17 +23,53 @@ function New-IcingaThreadInstance()
         )
     );
 
-    $Shell = [PowerShell]::Create();
-    $Shell.RunspacePool = $ThreadPool;
-    [void]$Shell.AddScript($ScriptBlock);
-    foreach ($argument in $Arguments) {
-        [void]$Shell.AddArgument($argument);
+    $Shell              = [PowerShell]::Create();
+    $Shell.RunSpacePool = $ThreadPool;
+    [string]$CodeHash   = '';
+
+    if ([string]::IsNullOrEmpty($Command) -eq $FALSE) {
+
+        [void]$Shell.AddCommand('Use-Icinga');
+        [void]$Shell.AddParameter('-LibOnly', $TRUE);
+        [void]$Shell.AddParameter('-Daemon', $TRUE);
+
+        [void]$Shell.AddCommand($Command);
+
+        $CodeHash = $Command;
+
+        foreach ($cmd in $CmdParameters.Keys) {
+            $Value = $CmdParameters[$cmd];
+
+            Write-IcingaDebugMessage -Message 'Adding new argument to thread command' -Objects $cmd, $value, $Command;
+
+            [void]$Shell.AddParameter($cmd, $value);
+
+            $Arguments += $cmd;
+            $Arguments += $value;
+        }
+    }
+
+    if ($null -ne $ScriptBlock) {
+        Write-IcingaDeprecated -Function 'New-IcingaThreadInstance' -Argument 'ScriptBlock';
+        $CodeHash = $ScriptBlock;
+
+        [void]$Shell.AddScript($ScriptBlock);
+        foreach ($argument in $Arguments) {
+            [void]$Shell.AddArgument($argument);
+        }
     }
 
     $Thread = New-Object PSObject;
     Add-Member -InputObject $Thread -MemberType NoteProperty -Name Shell -Value $Shell;
+
     if ($Start) {
-        Add-Member -InputObject $Thread -MemberType NoteProperty -Name Handle -Value ($Shell.BeginInvoke());
+        Write-IcingaDebugMessage -Message 'Starting shell instance' -Objects $Command, $Shell, $Thread;
+        try {
+            $ShellData = $Shell.BeginInvoke();
+        } catch {
+            Write-IcingaDebugMessage -Message 'Failed to start Icinga thread instance' -Objects $Command, $_.Exception.Message;
+        }
+        Add-Member -InputObject $Thread -MemberType NoteProperty -Name Handle -Value ($ShellData);
         Add-Member -InputObject $Thread -MemberType NoteProperty -Name Started -Value $TRUE;
     } else {
         Add-Member -InputObject $Thread -MemberType NoteProperty -Name Handle -Value $null;
@@ -42,7 +80,7 @@ function New-IcingaThreadInstance()
         $global:IcingaDaemonData.IcingaThreads.Add($Name, $Thread);
     } else {
         $global:IcingaDaemonData.IcingaThreads.Add(
-            (New-IcingaThreadHash -ShellScript $ScriptBlock -Arguments $Arguments),
+            (New-IcingaThreadHash -ShellScript $CodeHash -Arguments $Arguments),
             $Thread
         );
     }

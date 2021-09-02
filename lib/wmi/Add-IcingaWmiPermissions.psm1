@@ -100,7 +100,7 @@ function Add-IcingaWmiPermissions()
     $WmiSecurity.WmiArguments.Name = 'SetSecurityDescriptor';
     $WmiSecurity.WmiArguments.Add('ArgumentList', $WmiSecurity.WmiAcl.PSObject.immediateBaseObject);
     $WmiArguments = $WmiSecurity.WmiArguments;
- 
+
     $WmiSecurityData = Invoke-WmiMethod @WmiArguments;
     if ($WmiSecurityData.ReturnValue -ne 0) {
         Write-IcingaConsoleError 'Failed to set Wmi security descriptor information with error {0}' -Objects $WmiSecurityData.ReturnValue;

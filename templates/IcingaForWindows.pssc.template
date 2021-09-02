@@ -1,0 +1,27 @@
+@{
+    # Version number of the schema used for this document
+    SchemaVersion         = '2.0.0.0'
+    # ID used to uniquely identify this document
+    GUID                  = '8f47856d-9c17-403e-95fd-743bd15e5095'
+    # Author of this document
+    Author                = 'Lord Hepipud'
+    # Description of the functionality provided by these settings
+    Description           = 'Icinga for Windows JEA Profile'
+    # Company associated with this document
+    CompanyName           = 'Icinga GmbH'
+    # Define the language the PowerShell JEA session will be started with
+    LanguageMode          = '$POWERSHELLLANGUAGEMODE$'
+    # Session type defaults to apply for this session configuration. Can be 'RestrictedRemoteServer' (recommended), 'Empty', or 'Default'
+    SessionType           = 'RestrictedRemoteServer'
+    # Directory to place session transcripts for this session configuration
+    # TranscriptDirectory = 'C:\Transcripts\'
+    # Whether to run this session configuration as the machine's (virtual) administrator account
+    RunAsVirtualAccount   = $TRUE
+    # Scripts to run when applied to a session
+    # User roles (security groups), and the role capabilities that should be applied to them when applied to a session
+    RoleDefinitions       = @{
+        '$ICINGAFORWINDOWSJEAUSER$' = @{
+            'RoleCapabilities' = 'IcingaForWindows'
+        }
+    }
+}

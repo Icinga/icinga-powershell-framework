@@ -2,15 +2,16 @@ function Test-IcingaAcl()
 {
     param(
         [string]$Directory,
-        [switch]$WriteOutput
+        [switch]$WriteOutput,
+        [string]$ServiceUser = (Get-IcingaServiceUser)
     );
 
     if ([string]::IsNullOrEmpty($Directory) -Or -Not (Test-Path $Directory)) {
-        throw 'The specified directory was not found';
+        Write-IcingaConsoleWarning 'The specified directory "{0}" was not found' -Objects $Directory;
+        return $FALSE;
     }
 
     $FolderACL      = Get-Acl $Directory;
-    $ServiceUser    = Get-IcingaServiceUser;
     $UserFound      = $FALSE;
     $HasAccess      = $FALSE;
     $ServiceUserSID = Get-IcingaUserSID $ServiceUser;

@@ -54,7 +54,7 @@ To modify any REST-Api arguments, please follow the [REST-Api installation guide
 Last but not least restart the Icinga for Windows service:
 
 ```powershell
-Restart-Service icingapowershell;
+Restart-IcingaWindowsService;
 ```
 
 ## Whitelist Check Commands
@@ -112,9 +112,9 @@ Install-IcingaFrameworkComponent -Name restapi -Release;
 Install-IcingaFrameworkComponent -Name apichecks -Release;
 
 Register-IcingaBackgroundDaemon -Command 'Start-IcingaWindowsRESTApi';
-Restart-Service icingapowershell;
-
 Add-IcingaRESTApiCommand -Command 'Invoke-IcingaCheck*' -Endpoint 'apichecks';
+
+Restart-IcingaWindowsService;
 
 Enable-IcingaFrameworkApiChecks;
 ```

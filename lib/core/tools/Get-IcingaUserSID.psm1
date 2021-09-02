@@ -4,6 +4,10 @@ function Get-IcingaUserSID()
         [string]$User
     );
 
+    if ([string]::IsNullOrEmpty($User)) {
+        return $null;
+    }
+
     if ($User -eq 'LocalSystem') {
         $User = 'NT Authority\SYSTEM';
     }
@@ -14,7 +18,14 @@ function Get-IcingaUserSID()
         $NTUser       = New-Object System.Security.Principal.NTAccount($UserData.Domain, $UserData.User);
         $SecurityData = $NTUser.Translate([System.Security.Principal.SecurityIdentifier]);
     } catch {
-        throw $_.Exception;
+        try {
+            # Try again but this time with our domain
+            $UserData.Domain = (Get-IcingaWindowsInformation -ClassName Win32_ComputerSystem).Domain;
+            $NTUser          = New-Object System.Security.Principal.NTAccount($UserData.Domain, $UserData.User);
+            $SecurityData    = $NTUser.Translate([System.Security.Principal.SecurityIdentifier]);
+        } catch {
+            throw $_.Exception;
+        }
     }
 
     if ($null -eq $SecurityData) {

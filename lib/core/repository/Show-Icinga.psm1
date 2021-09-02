@@ -58,6 +58,23 @@ function Show-Icinga()
     $IcingaForWindowsService = Get-IcingaForWindowsServiceData;
     $IcingaAgentService      = Get-IcingaAgentInstallation;
     $WindowsInformation      = Get-IcingaWindowsInformation Win32_OperatingSystem | Select-Object Version, BuildNumber, Caption;
+    $DefinedServiceUser      = Get-IcingaPowerShellConfig -Path 'Framework.Icinga.ServiceUser';
+    $JEAContext              = Get-IcingaJEAContext;
+    $JEASessionFile          = Get-IcingaJEASessionFile;
+    $IcingaForWindowsCert    = Get-IcingaForWindowsCertificate;
+
+    if ([string]::IsNullOrEmpty($DefinedServiceUser)) {
+        $DefinedServiceUser = '';
+    }
+    if ([string]::IsNullOrEmpty($JEAContext)) {
+        $JEAContext = '';
+    }
+    if ([string]::IsNullOrEmpty($JEASessionFile)) {
+        $JEASessionFile = '';
+    }
+    if ($null -eq $IcingaForWindowsCert -Or [string]::IsNullOrEmpty($IcingaForWindowsCert)) {
+        $IcingaForWindowsCert = 'Not installed';
+    }
 
     $Output += '';
     $Output += 'Environment configuration';
@@ -67,9 +84,17 @@ function Show-Icinga()
     $Output += ([string]::Format('Icinga for Windows Service User => {0}', $IcingaForWindowsService.User));
     $Output += ([string]::Format('Icinga Agent Path               => {0}', $IcingaAgentService.RootDir));
     $Output += ([string]::Format('Icinga Agent User               => {0}', $IcingaAgentService.User));
+    $Output += ([string]::Format('Defined Default User            => {0}', $DefinedServiceUser));
+    $Output += ([string]::Format('Icinga Managed User             => {0}', (Test-IcingaManagedUser -IcingaUser (Get-IcingaPowerShellConfig -Path 'Framework.Icinga.ServiceUser'))));
     $Output += ([string]::Format('PowerShell Version              => {0}', $PSVersionTable.PSVersion.ToString()));
     $Output += ([string]::Format('Operating System                => {0}', $WindowsInformation.Caption));
     $Output += ([string]::Format('Operating System Version        => {0}', $WindowsInformation.Version));
+    $Output += ([string]::Format('JEA Context                     => {0}', $JEAContext));
+    $Output += ([string]::Format('JEA Session File                => {0}', $JEASessionFile));
+    $Output += '';
+    $Output += 'Icinga for Windows Certificate';
+    $Output += '';
+    $Output += $IcingaForWindowsCert;
 
     $Output += '';
     $Output += (Show-IcingaRepository);

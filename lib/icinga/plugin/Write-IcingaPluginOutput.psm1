@@ -4,7 +4,7 @@ function Write-IcingaPluginOutput()
         $Output
     );
 
-    if ($global:IcingaDaemonData.FrameworkRunningAsDaemon -eq $FALSE) {
+    if ($global:IcingaDaemonData.FrameworkRunningAsDaemon -eq $FALSE -And $global:IcingaDaemonData.JEAContext -eq $FALSE) {
         if ($null -ne $global:Icinga -And $global:Icinga.Minimal) {
             Clear-Host;
         }

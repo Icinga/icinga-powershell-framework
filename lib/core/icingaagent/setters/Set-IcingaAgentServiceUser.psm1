@@ -1,4 +1,4 @@
-function Set-IcingaAgentServiceUser()
+function Set-IcingaServiceUser()
 {
     param (
         [string]$User,
@@ -10,6 +10,10 @@ function Set-IcingaAgentServiceUser()
     if ([string]::IsNullOrEmpty($User)) {
         throw 'Please specify a username to modify the service user';
         return $FALSE;
+    }
+
+    if ($null -eq (Get-Service $Service -ErrorAction SilentlyContinue)) {
+        return;
     }
 
     if ($User.Contains('\') -eq $FALSE) {
@@ -29,13 +33,16 @@ function Set-IcingaAgentServiceUser()
     if ($Output.ExitCode -eq 0) {
 
         if ($SetPermission) {
+            Set-IcingaAgentServicePermission | Out-Null;
             Set-IcingaUserPermissions;
         }
 
-        Write-IcingaConsoleNotice 'Service User successfully updated'
+        Write-IcingaConsoleNotice 'Service User "{0}" for service "{1}" successfully updated' -Objects $User, $Service;
         return $TRUE;
     } else {
         Write-IcingaConsoleError ([string]::Format('Failed to update the service user: {0}', $Output.Message));
         return $FALSE;
     }
 }
+
+Set-Alias -Name 'Set-IcingaAgentServiceUser' -Value 'Set-IcingaServiceUser';

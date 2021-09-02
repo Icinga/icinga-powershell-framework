@@ -21,7 +21,7 @@ function Write-IcingaPluginPerfData()
 
     $CheckResultCache = $Global:Icinga.ThresholdCache[$CheckCommand];
 
-    if ($global:IcingaDaemonData.FrameworkRunningAsDaemon -eq $FALSE) {
+    if ($global:IcingaDaemonData.FrameworkRunningAsDaemon -eq $FALSE -And $global:IcingaDaemonData.JEAContext -eq $FALSE) {
         [string]$PerfDataOutput = (Get-IcingaPluginPerfDataContent -PerfData $PerformanceData -CheckResultCache $CheckResultCache -IcingaCheck $IcingaCheck);
         Write-IcingaConsolePlain ([string]::Format('| {0}', $PerfDataOutput));
     } else {

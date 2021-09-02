@@ -78,11 +78,21 @@ function Show-IcingaForWindowsInstallerConfigurationSummary()
                 $Caption = ([string]::Format('{0}=> {1}', $PrintName, $EntryValue));
             }
 
+            [bool]$EntryDisabled         = $FALSE;
+            [string]$EntryDisabledReason = Get-IcingaForWindowsInstallerDisabledEntry -Name $RealCommand;
+
+            if ([string]::IsNullOrEmpty($EntryDisabledReason) -eq $FALSE) {
+                $EntryDisabled = $TRUE;
+                $Caption       = ([string]::Format('{0}=> Disabled: {1}', $PrintName, $EntryDisabledReason));
+            }
+
             $Entries += @{
-                'Caption'   = $Caption;
-                'Command'   = $entry;
-                'Arguments' = @{ '-JumpToSummary' = $TRUE };
-                'Help'      = ''
+                'Caption'        = $Caption;
+                'Command'        = $entry;
+                'Arguments'      = @{ '-JumpToSummary' = $TRUE };
+                'Help'           = '';
+                'Disabled'       = $EntryDisabled;
+                'DisabledReason' = $EntryDisabledReason
             }
 
             $global:Icinga.InstallWizard.HeaderPreview = '';
@@ -90,8 +100,6 @@ function Show-IcingaForWindowsInstallerConfigurationSummary()
 
         $CurrentIndex += 1;
     }
-
-    Write-Host 'Finished'
 
     Disable-IcingaForWindowsInstallationHeaderPrint;
     Enable-IcingaForWindowsInstallationJumpToSummary;

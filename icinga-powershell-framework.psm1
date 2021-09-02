@@ -35,8 +35,6 @@ function Use-Icinga()
         if ($global:Icinga.ContainsKey('Minimal') -eq $FALSE) {
             $global:Icinga.Add('Minimal', $TRUE);
         }
-
-        return;
     }
 
     # Ensure we autoload the Icinga Plugin collection, provided by the external
@@ -46,10 +44,10 @@ function Use-Icinga()
     }
 
     if ($LibOnly -eq $FALSE) {
-        $global:IcingaThreads       = [hashtable]::Synchronized(@{});
-        $global:IcingaThreadContent = [hashtable]::Synchronized(@{});
-        $global:IcingaThreadPool    = [hashtable]::Synchronized(@{});
-        $global:IcingaTimers        = [hashtable]::Synchronized(@{});
+        $global:IcingaThreads       = [hashtable]::Synchronized(@{ });
+        $global:IcingaThreadContent = [hashtable]::Synchronized(@{ });
+        $global:IcingaThreadPool    = [hashtable]::Synchronized(@{ });
+        $global:IcingaTimers        = [hashtable]::Synchronized(@{ });
         $global:IcingaDaemonData    = [hashtable]::Synchronized(
             @{
                 'IcingaThreads'            = $global:IcingaThreads;
@@ -57,6 +55,7 @@ function Use-Icinga()
                 'IcingaThreadPool'         = $global:IcingaThreadPool;
                 'IcingaTimers'             = $global:IcingaTimers;
                 'FrameworkRunningAsDaemon' = $Daemon;
+                'JEAContext'               = $FALSE;
                 'DebugMode'                = $DebugMode;
             }
         );
@@ -64,10 +63,13 @@ function Use-Icinga()
         # This will fix the debug mode in case we are only using Libs
         # without any other variable content and daemon handling
         if ($null -eq $global:IcingaDaemonData) {
-            $global:IcingaDaemonData = [hashtable]::Synchronized(@{});
+            $global:IcingaDaemonData = [hashtable]::Synchronized(@{ });
         }
         if ($global:IcingaDaemonData.ContainsKey('DebugMode') -eq $FALSE) {
             $global:IcingaDaemonData.DebugMode = $DebugMode;
+        }
+        if ($global:IcingaDaemonData.ContainsKey('JEAContext') -eq $FALSE) {
+            $global:IcingaDaemonData.JEAContext = $FALSE;
         }
         if ($global:IcingaDaemonData.ContainsKey('FrameworkRunningAsDaemon') -eq $FALSE) {
             $global:IcingaDaemonData.FrameworkRunningAsDaemon = $Daemon;
@@ -121,6 +123,8 @@ function Write-IcingaFrameworkCodeCache()
 
     $CacheContent += "Export-ModuleMember -Function @( '*' ) -Alias @( '*' ) -Variable @( '*' )";
     Set-Content -Path $CacheFile -Value $CacheContent;
+
+    Remove-IcingaFrameworkDependencyFile;
 }
 
 function Publish-IcingaEventlogDocumentation()

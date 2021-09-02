@@ -17,7 +17,7 @@ Register-IcingaServiceCheck -CheckCommand 'Invoke-IcingaCheckCPU' -Interval 30 -
 Once you registered a service check, you will have to restart the PowerShell service
 
 ```powershell
-Restart-IcingaService 'icingapowershell';
+Restart-IcingaWindowsService;
 ```
 
 As collected metrics are written to disk as well, a restart will not flush previous data but load it again. A quick service restart will not cause missing data points.
@@ -66,7 +66,7 @@ Register-IcingaServiceCheck -CheckCommand 'Invoke-IcingaCheckCPU' -Interval 60 -
 Once you modified a service check, you will have to restart the PowerShell service
 
 ```powershell
-Restart-IcingaService 'icingapowershell';
+Restart-IcingaWindowsService;
 ```
 
 Unregister Service Checks
@@ -81,5 +81,5 @@ Unregister-IcingaServiceCheck -ServiceId 527521986464102122481142022477689145963
 Once you removed a service check, you will have to restart the PowerShell service
 
 ```powershell
-Restart-IcingaService 'icingapowershell';
+Restart-IcingaWindowsService;
 ```

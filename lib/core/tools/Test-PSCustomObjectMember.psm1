@@ -9,5 +9,5 @@ function Test-PSCustomObjectMember()
         return $FALSE;
     }
 
-    return ([bool]($PSObject.PSobject.Properties.Name -eq $Name));
+    return ([bool]($PSObject.PSObject.Properties.Name -eq $Name));
 }

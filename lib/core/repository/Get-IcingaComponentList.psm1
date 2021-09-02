@@ -16,7 +16,7 @@ function Get-IcingaComponentList()
     $SearchList | Add-Member -MemberType NoteProperty -Name 'Components' -Value @{ };
 
     foreach ($entry in $Repositories) {
-        $RepoContent        = Read-IcingaRepositoryFile -Name $entry.Name;
+        $RepoContent = Read-IcingaRepositoryFile -Name $entry.Name;
 
         if ($null -eq $RepoContent) {
             continue;
@@ -27,6 +27,10 @@ function Get-IcingaComponentList()
         }
 
         foreach ($repoEntry in $RepoContent.Packages.PSObject.Properties.Name) {
+
+            if ($repoEntry.ToLower() -eq 'kickstart') {
+                continue;
+            }
 
             $RepoData = New-Object -TypeName PSObject;
             $RepoData | Add-Member -MemberType NoteProperty -Name 'Name'          -Value $entry.Name;
@@ -45,11 +49,15 @@ function Get-IcingaComponentList()
                     continue;
                 }
 
+                if ($Snapshot -eq $FALSE -And (Test-Numeric $package.Version.Replace('.', '')) -eq $FALSE) {
+                    continue;
+                }
+
                 if ($SearchList.Components.ContainsKey($repoEntry) -eq $FALSE) {
                     $SearchList.Components.Add($repoEntry, $package.Version);
                 }
 
-                if ([version]($SearchList.Components[$repoEntry]) -lt [version]$package.Version) {
+                if ((Test-Numeric $package.Version.Replace('.', '')) -And [version]($SearchList.Components[$repoEntry]) -lt [version]$package.Version) {
                     $SearchList.Components[$repoEntry] = $package.Version;
                 }
 

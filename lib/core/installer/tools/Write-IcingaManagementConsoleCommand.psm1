@@ -12,7 +12,7 @@ function Write-IcingaManagementConsoleCommand()
     if ($Entry.Action -And ($Entry.Action.ContainsKey('Command') -Or ($Entry.Action.ContainsKey('Arguments') -And $Entry.Action.Arguments.ContainsKey('-Command')))) {
         $PrintArguments = '';
         $PrintCommand   = ''
-        if ($Entry.Action.Arguments.ContainsKey('-CmdArguments')) {
+        if ($null -ne $Entry.Action.Arguments -And $Entry.Action.Arguments.ContainsKey('-CmdArguments')) {
             $PrintCommand = $Entry.Action.Arguments['-Command'];
             foreach ($cmdArg in $Entry.Action.Arguments['-CmdArguments'].Keys) {
                 $PrintValue        = $Entry.Action.Arguments['-CmdArguments'][$cmdArg];
@@ -34,23 +34,25 @@ function Write-IcingaManagementConsoleCommand()
             }
         } else {
             $PrintCommand = $Entry.Action.Command;
-            foreach ($cmdArg in $Entry.Action.Arguments.Keys) {
-                $PrintValue        = $Entry.Action.Arguments[$cmdArg];
-                [string]$StringArg = ([string]$cmdArg).Replace('-', '');
-                if ($PrintValue.GetType().Name -eq 'Boolean') {
-                    if ((Get-Command $PrintCommand).Parameters.$StringArg.ParameterType.Name -eq 'SwitchParameter') {
-                        $PrintValue = '';
-                    } else {
-                        if ($PrintValue) {
-                            $PrintValue = '$TRUE';
+            if ($null -ne $Entry.Action.Arguments) {
+                foreach ($cmdArg in $Entry.Action.Arguments.Keys) {
+                    $PrintValue        = $Entry.Action.Arguments[$cmdArg];
+                    [string]$StringArg = ([string]$cmdArg).Replace('-', '');
+                    if ($PrintValue.GetType().Name -eq 'Boolean') {
+                        if ((Get-Command $PrintCommand).Parameters.$StringArg.ParameterType.Name -eq 'SwitchParameter') {
+                            $PrintValue = '';
                         } else {
-                            $PrintValue = '$FALSE';
+                            if ($PrintValue) {
+                                $PrintValue = '$TRUE';
+                            } else {
+                                $PrintValue = '$FALSE';
+                            }
                         }
+                    } elseif ($PrintValue.GetType().Name -eq 'String' -And $PrintValue.Contains(' ')) {
+                        $PrintValue = (ConvertFrom-IcingaArrayToString -Array $PrintValue -AddQuotes);
                     }
-                } elseif ($PrintValue.GetType().Name -eq 'String' -And $PrintValue.Contains(' ')) {
-                    $PrintValue = (ConvertFrom-IcingaArrayToString -Array $PrintValue -AddQuotes);
+                    $PrintArguments += ([string]::Format('{0} {1} ', $cmdArg, $PrintValue));
                 }
-                $PrintArguments += ([string]::Format('{0} {1} ', $cmdArg, $PrintValue));
             }
         }
 
@@ -60,7 +62,11 @@ function Write-IcingaManagementConsoleCommand()
             $PrintArguments = $PrintArguments.SubString(0, $PrintArguments.Length - 1);
         }
 
-        Write-IcingaConsolePlain ([string]::Format('PS> {0} {1};', $PrintCommand, $PrintArguments)) -ForeColor Magenta;
+        if ([string]::IsNullOrEmpty($PrintArguments) -eq $FALSE) {
+            $PrintArguments = [string]::Format(' {0}', $PrintArguments);
+        }
+
+        Write-IcingaConsolePlain ([string]::Format('PS> {0}{1};', $PrintCommand, $PrintArguments)) -ForeColor Magenta;
         Write-IcingaConsolePlain '';
     }
 }

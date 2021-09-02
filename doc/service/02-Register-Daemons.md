@@ -17,7 +17,7 @@ The `Start-IcingaServiceCheckDaemon` is a directly integrated PowerShell functio
 Once you made changes, please remember to restart the PowerShell Service
 
 ```powershell
-Restart-IcingaService 'icingapowershell';
+Restart-IcingaWindowsService;
 ```
 
 List Enabled Daemons
@@ -49,7 +49,7 @@ Unregister-IcingaBackgroundDaemon -BackgroundDaemon 'Start-IcingaServiceCheckDae
 Once you restart the PowerShell service the pending changes are applied
 
 ```powershell
-Restart-IcingaService 'icingapowershell';
+Restart-IcingaWindowsService;
 ```
 
 Write Custom Daemons

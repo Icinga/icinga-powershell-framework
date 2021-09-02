@@ -10,7 +10,7 @@
     NestedModules     = @( '.\cache\framework_cache.psm1' )
     FunctionsToExport = @( '*' )
     CmdletsToExport   = @( '*' )
-    VariablesToExport = '*'
+    VariablesToExport = @( '*' )
     AliasesToExport   = @( '*' )
     PrivateData       = @{
         PSData   = @{
