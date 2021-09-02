@@ -5,68 +5,59 @@ function Write-IcingaManagementConsoleCommand()
         $Values = @()
     );
 
-    if ($null -eq $Entry) {
-        return;
+    if ($null -eq $Entry -Or $Entry.ContainsKey('Action') -eq $FALSE) {
+        return '';
     }
 
-    if ($Entry.Action -And ($Entry.Action.ContainsKey('Command') -Or ($Entry.Action.ContainsKey('Arguments') -And $Entry.Action.Arguments.ContainsKey('-Command')))) {
-        $PrintArguments = '';
-        $PrintCommand   = ''
-        if ($null -ne $Entry.Action.Arguments -And $Entry.Action.Arguments.ContainsKey('-CmdArguments')) {
-            $PrintCommand = $Entry.Action.Arguments['-Command'];
-            foreach ($cmdArg in $Entry.Action.Arguments['-CmdArguments'].Keys) {
-                $PrintValue        = $Entry.Action.Arguments['-CmdArguments'][$cmdArg];
-                [string]$StringArg = ([string]$cmdArg).Replace('-', '');
-                if ($PrintValue.GetType().Name -eq 'Boolean') {
-                    if ((Get-Command $PrintCommand).Parameters.$StringArg.ParameterType.Name -eq 'SwitchParameter') {
-                        $PrintValue = '';
-                    } else {
-                        if ($PrintValue) {
-                            $PrintValue = '$TRUE';
-                        } else {
-                            $PrintValue = '$FALSE';
-                        }
-                    }
-                } elseif ($PrintValue.GetType().Name -eq 'String' -And $PrintValue.Contains(' ')) {
-                    $PrintValue = (ConvertFrom-IcingaArrayToString -Array $PrintValue -AddQuotes);
+    [string]$PrintArguments = '';
+    [string]$PrintCommand   = '';
+    [hashtable]$DefinedArgs = @{ };
+
+    if ($entry.Action.ContainsKey('Arguments') -And $entry.Action.Arguments.ContainsKey('-Command')) {
+        $PrintCommand = $Entry.Action.Arguments['-Command'];
+        if ($Entry.Action.Arguments.ContainsKey('-CmdArguments')) {
+            $DefinedArgs = $Entry.Action.Arguments['-CmdArguments'];
+        }
+    } elseif ($entry.Action.ContainsKey('Command')) {
+        $PrintCommand = $entry.Action.Command;
+        if ($Entry.Action.ContainsKey('Arguments')) {
+            $DefinedArgs = $Entry.Action.Arguments;
+        }
+    }
+
+    foreach ($cmdArg in $DefinedArgs.Keys) {
+        $PrintValue        = $DefinedArgs[$cmdArg];
+        [string]$StringArg = ([string]$cmdArg).Replace('-', '');
+        if ($PrintValue.GetType().Name -eq 'Boolean') {
+            if ((Get-Command $PrintCommand).Parameters.$StringArg.ParameterType.Name -eq 'SwitchParameter') {
+                $PrintValue = '';
+            } else {
+                if ($PrintValue) {
+                    $PrintValue = '$TRUE';
+                } else {
+                    $PrintValue = '$FALSE';
                 }
-                $PrintArguments += ([string]::Format('{0} {1} ', $cmdArg, $PrintValue));
             }
+        } elseif ($PrintValue.GetType().Name -eq 'String') {
+            $PrintValue = (ConvertFrom-IcingaArrayToString -Array $PrintValue -AddQuotes -UseSingleQuotes);
+        }
+        if ([string]::IsNullOrEmpty($PrintValue)) {
+            $PrintArguments += ([string]::Format('{0} ', $cmdArg));
         } else {
-            $PrintCommand = $Entry.Action.Command;
-            if ($null -ne $Entry.Action.Arguments) {
-                foreach ($cmdArg in $Entry.Action.Arguments.Keys) {
-                    $PrintValue        = $Entry.Action.Arguments[$cmdArg];
-                    [string]$StringArg = ([string]$cmdArg).Replace('-', '');
-                    if ($PrintValue.GetType().Name -eq 'Boolean') {
-                        if ((Get-Command $PrintCommand).Parameters.$StringArg.ParameterType.Name -eq 'SwitchParameter') {
-                            $PrintValue = '';
-                        } else {
-                            if ($PrintValue) {
-                                $PrintValue = '$TRUE';
-                            } else {
-                                $PrintValue = '$FALSE';
-                            }
-                        }
-                    } elseif ($PrintValue.GetType().Name -eq 'String' -And $PrintValue.Contains(' ')) {
-                        $PrintValue = (ConvertFrom-IcingaArrayToString -Array $PrintValue -AddQuotes);
-                    }
-                    $PrintArguments += ([string]::Format('{0} {1} ', $cmdArg, $PrintValue));
-                }
-            }
+            $PrintArguments += ([string]::Format('{0} {1} ', $cmdArg, $PrintValue));
         }
-
-        $PrintArguments = $PrintArguments.Replace('$DefaultValues$', ((ConvertFrom-IcingaArrayToString -Array $Values -AddQuotes)));
-
-        while ($PrintArguments[-1] -eq ' ') {
-            $PrintArguments = $PrintArguments.SubString(0, $PrintArguments.Length - 1);
-        }
-
-        if ([string]::IsNullOrEmpty($PrintArguments) -eq $FALSE) {
-            $PrintArguments = [string]::Format(' {0}', $PrintArguments);
-        }
-
-        Write-IcingaConsolePlain ([string]::Format('PS> {0}{1};', $PrintCommand, $PrintArguments)) -ForeColor Magenta;
-        Write-IcingaConsolePlain '';
     }
+
+    $PrintArguments = $PrintArguments.Replace('$DefaultValues$', ((ConvertFrom-IcingaArrayToString -Array $Values -AddQuotes)));
+
+    while ($PrintArguments[-1] -eq ' ') {
+        $PrintArguments = $PrintArguments.SubString(0, $PrintArguments.Length - 1);
+    }
+
+    if ([string]::IsNullOrEmpty($PrintArguments) -eq $FALSE) {
+        $PrintArguments = [string]::Format(' {0}', $PrintArguments);
+    }
+
+    Write-IcingaConsolePlain ([string]::Format('PS> {0}{1};', $PrintCommand, $PrintArguments)) -ForeColor Magenta;
+    Write-IcingaConsolePlain '';
 }
