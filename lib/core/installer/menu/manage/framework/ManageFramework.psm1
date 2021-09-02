@@ -86,8 +86,7 @@ function Show-IcingaForWindowsManagementConsoleManageFramework()
                 'Disabled'       = ($null -eq $IcingaService -Or $ServiceStatus -ne 'Running' -Or (-Not $AdminShell));
                 'DisabledReason' = 'The service is either not installed, already stopped or you are not inside an administrative shell';
                 'Action'         = @{
-                    'Command'   = 'Stop-Service';
-                    'Arguments' = @{ '-Name' = 'icingapowershell'; };
+                    'Command' = 'Stop-IcingaWindowsService';
                 }
             },
             @{
@@ -97,8 +96,7 @@ function Show-IcingaForWindowsManagementConsoleManageFramework()
                 'Disabled'       = ($null -eq $IcingaService -Or (-Not $AdminShell));
                 'DisabledReason' = 'The service is either not installed or you are not inside an administrative shell';
                 'Action'         = @{
-                    'Command'   = 'Restart-Service';
-                    'Arguments' = @{ '-Name' = 'icingapowershell'; };
+                    'Command' = 'Restart-IcingaWindowsService';
                 }
             }
         );

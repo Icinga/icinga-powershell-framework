@@ -1,13 +1,18 @@
 function ConvertFrom-IcingaArrayToString()
 {
     param (
-        [array]$Array          = @(),
-        [switch]$AddQuotes     = $FALSE,
-        [switch]$SecureContent = $FALSE
+        [array]$Array            = @(),
+        [switch]$AddQuotes       = $FALSE,
+        [switch]$UseSingleQuotes = $FALSE,
+        [switch]$SecureContent   = $FALSE
     );
 
     if ($null -eq $Array -Or $Array.Count -eq 0) {
         if ($AddQuotes) {
+            if ($UseSingleQuotes) {
+                return "''";
+            }
+
             return '""';
         }
 
@@ -21,7 +26,11 @@ function ConvertFrom-IcingaArrayToString()
             if ($SecureContent) {
                 $entry = '***';
             }
-            $NewArray += ([string]::Format('"{0}"', $entry));
+            if ($UseSingleQuotes) {
+                $NewArray += ([string]::Format("'{0}'", $entry));
+            } else {
+                $NewArray += ([string]::Format('"{0}"', $entry));
+            }
         }
     } else {
         if ($SecureContent) {
