@@ -45,7 +45,11 @@ function Get-IcingaComponentList()
                 $ComponentData | Add-Member -MemberType NoteProperty -Name 'Location' -Value $package.Location;
                 $ComponentData | Add-Member -MemberType NoteProperty -Name 'Snapshot' -Value $package.Snapshot;
 
-                if ($Snapshot -And $package.Snapshot -eq $FALSE) {
+                if ($package.Snapshot -And $Snapshot -eq $FALSE) {
+                    continue;
+                }
+
+                if ($package.Snapshot -eq $FALSE -And $Snapshot) {
                     continue;
                 }
 
