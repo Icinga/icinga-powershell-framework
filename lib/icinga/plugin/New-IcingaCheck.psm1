@@ -206,7 +206,7 @@ function New-IcingaCheck()
                 $this.Maximum = $this.__ThresholdObject.BaseValue;
             }
 
-            if ($this.Value -gt $this.Maximum -And [string]::IsNullOrEmpty($this.Maximum) -eq $FALSE) {
+            if ([string]::IsNullOrEmpty($this.Maximum) -eq $FALSE -And (Test-Numeric $this.Maximum) -And (Test-Numeric $this.Value) -And $this.Value -gt $this.Maximum) {
                 $this.Maximum = $this.__ThresholdObject.RawValue;
             }
         }
