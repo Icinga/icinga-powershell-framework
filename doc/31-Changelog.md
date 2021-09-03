@@ -13,6 +13,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 ### Bugfixes
 
+* [#300](https://github.com/Icinga/icinga-powershell-framework/issues/300) Fixes an issue on `Boolean` to empty `String` conversion for possible maximum values on check plugins on Windows 2012 R2
 * [#311](https://github.com/Icinga/icinga-powershell-framework/issues/311) Fixes an issue with negative inputs on some scenarios which will cause an exception for checks instead of continuing executing them properly
 * [#317](https://github.com/Icinga/icinga-powershell-framework/pull/317) Fixes certain file names being too long, causing errors on deploying branches
 * [#326](https://github.com/Icinga/icinga-powershell-framework/pull/326) Fixes import for module files, by using the full path to the module now instead of the name only, as files could be placed inside a folder which is not listed inside the `$ENV:PSModulePath`
