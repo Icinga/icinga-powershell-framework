@@ -19,7 +19,11 @@ function Write-IcingaPluginPerfData()
         $PerformanceData = $PerformanceData.perfdata;
     }
 
-    $CheckResultCache = $Global:Icinga.ThresholdCache[$CheckCommand];
+    if ([string]::IsNullOrEmpty($CheckCommand) -eq $FALSE -And $Global:Icinga.ThresholdCache.ContainsKey($CheckCommand)) {
+        $CheckResultCache = $Global:Icinga.ThresholdCache[$CheckCommand];
+    } else {
+        $CheckResultCache = New-Object PSCustomObject;
+    }
 
     if ($global:IcingaDaemonData.FrameworkRunningAsDaemon -eq $FALSE -And $global:IcingaDaemonData.JEAContext -eq $FALSE) {
         [string]$PerfDataOutput = (Get-IcingaPluginPerfDataContent -PerfData $PerformanceData -CheckResultCache $CheckResultCache -IcingaCheck $IcingaCheck);

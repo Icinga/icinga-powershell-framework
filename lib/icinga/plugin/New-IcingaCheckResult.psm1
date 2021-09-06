@@ -25,9 +25,12 @@ function New-IcingaCheckResult()
         }
 
         # Ensure we reset our internal cache once the plugin was executed
-        $Global:Icinga.ThresholdCache[$this.Check.__GetCheckCommand()] = $null;
+        $CheckCommand = $this.Check.__GetCheckCommand();
+        if ([string]::IsNullOrEmpty($CheckCommand) -eq $FALSE -And $Global:Icinga.ThresholdCache.ContainsKey($CheckCommand)) {
+            $Global:Icinga.ThresholdCache[$CheckCommand] = $null;
+        }
         # Reset the current execution date
-        $Global:Icinga.CurrentDate                                     = $null;
+        $Global:Icinga.CurrentDate = $null;
 
         $ExitCode = $this.Check.__GetCheckState();
 
