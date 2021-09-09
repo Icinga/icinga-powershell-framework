@@ -46,10 +46,20 @@ function Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate()
             };
         }
 
+        [bool]$RegisterFailed = $FALSE;
+
         try {
             $SelfServiceKey = Register-IcingaDirectorSelfServiceHost -DirectorUrl $DirectorUrl -ApiKey $SelfServiceKey -Hostname $Hostname;
-            $UsedEnteredKey = $SelfServiceKey;
+            if ([string]::IsNullOrEmpty($SelfServiceKey) -eq $FALSE) {
+                $UsedEnteredKey = $SelfServiceKey;
+            } else {
+                $RegisterFailed = $TRUE;
+            }
         } catch {
+            $RegisterFailed = $TRUE;
+        }
+
+        if ($RegisterFailed) {
             Write-IcingaConsoleNotice 'Host seems already to be registered within Icinga Director. Trying local Api key if present'
             $SelfServiceKey = Get-IcingaPowerShellConfig -Path 'IcingaDirector.SelfService.ApiKey';
 
@@ -57,6 +67,7 @@ function Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate()
                 Write-IcingaConsoleNotice 'No local Api key was found and using your provided template key failed. Please ensure the host is not already registered and drop the set Self-Service key within the Icinga Director for this host.'
             }
         }
+
         Add-IcingaForWindowsInstallerConfigEntry -Selection 'c' -Values $UsedEnteredKey -OverwriteValues -OverwriteMenu 'Show-IcingaForWindowsManagementConsoleInstallationEnterDirectorSelfServiceKey';
     }
 
@@ -64,9 +75,14 @@ function Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate()
         $DirectorConfig = Get-IcingaDirectorSelfServiceConfig -DirectorUrl $DirectorUrl -ApiKey $SelfServiceKey;
     } catch {
         Set-IcingaForWindowsManagementConsoleMenu 'Show-IcingaForWindowsInstallerConfigurationSummary';
-        $global:Icinga.InstallWizard.LastError = 'Failed to fetch host configuration with the given Director Url and Self-Service key. Please ensure the template key is correct and in case a previous host key was used, that it matches the one configured within the Icinga Director. In case this form was loaded previously with a key, it might be that the host key is no longer valid and requires to be dropped. In addition please ensure that this host can connect to the Icinga Director and the SSL certificate is trusted. Otherwise run "Enable-IcingaUntrustedCertificateValidation" before starting the management console. Otherwise modify the "DirectorSelfServiceKey" configuration element above with the correct key and try again.';
+        $global:Icinga.InstallWizard.LastError            = 'Failed to fetch host configuration with the given Director Url and Self-Service key. Please ensure the template key is correct and in case a previous host key was used, that it matches the one configured within the Icinga Director. In case this form was loaded previously with a key, it might be that the host key is no longer valid and requires to be dropped. In addition please ensure that this host can connect to the Icinga Director and the SSL certificate is trusted. Otherwise run "Enable-IcingaUntrustedCertificateValidation" before starting the management console. Otherwise modify the "DirectorSelfServiceKey" configuration element above with the correct key and try again.';
+        $global:Icinga.InstallWizard.DirectorError        = $global:Icinga.InstallWizard.LastError;
+        $global:Icinga.InstallWizard.DirectorInstallError = $TRUE;
         return;
     }
+
+    $global:Icinga.InstallWizard.DirectorInstallError = $FALSE;
+    $global:Icinga.InstallWizard.DirectorError        = '';
 
     # No we need to identify which host selection is matching our config
     $HostnameSelection        = 1;

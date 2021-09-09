@@ -16,9 +16,11 @@ function Install-Icinga()
                 'LastInput'              = '';
                 'LastNotice'             = '';
                 'LastError'              = '';
+                'DirectorError'          = '';
                 'HeaderPreview'          = '';
                 'DirectorSelfService'    = $FALSE;
                 'DirectorRegisteredHost' = $FALSE;
+                'DirectorInstallError'   = $FALSE;
                 'LastParent'             = [System.Collections.ArrayList]@();
                 'LastValues'             = @();
                 'DisabledEntries'        = @{ };
@@ -61,6 +63,7 @@ function Install-Icinga()
         # In case we use the director, we require to first fetch all basic values from the Self-Service API then
         # require to register the host to fet the remaining content
         if ($IcingaConfiguration.ContainsKey('IfW-DirectorSelfServiceKey') -And $IcingaConfiguration.ContainsKey('IfW-DirectorUrl')) {
+            Enable-IcingaFrameworkConsoleOutput;
             Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate;
             Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate -Register;
             Disable-IcingaFrameworkConsoleOutput;
