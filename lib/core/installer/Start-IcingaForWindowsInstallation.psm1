@@ -165,28 +165,35 @@ function Start-IcingaForWindowsInstallation()
     if ($InstallAgent) {
         Set-IcingaPowerShellConfig -Path 'Framework.Icinga.AgentLocation' -Value $AgentInstallDir;
         Install-IcingaComponent -Name 'agent' -Version $AgentVersion -Confirm -Release;
-        Reset-IcingaAgentConfigFile;
-        Move-IcingaAgentDefaultConfig;
-        Set-IcingaAgentNodeName -Hostname $Hostname;
-        Set-IcingaAgentServiceUser -User $ServiceUser -Password (ConvertTo-IcingaSecureString $ServicePassword) -SetPermission | Out-Null;
-        Install-IcingaAgentBaseFeatures;
-        Write-IcingaAgentApiConfig -Port $IcingaPort;
+
+        # Only continue this, if our installation was successful
+        if ((Get-IcingaAgentInstallation).Installed) {
+            Reset-IcingaAgentConfigFile;
+            Move-IcingaAgentDefaultConfig;
+            Set-IcingaAgentNodeName -Hostname $Hostname;
+            Set-IcingaAgentServiceUser -User $ServiceUser -Password (ConvertTo-IcingaSecureString $ServicePassword) -SetPermission | Out-Null;
+            Install-IcingaAgentBaseFeatures;
+            Write-IcingaAgentApiConfig -Port $IcingaPort;
+        }
     }
 
-    if ((Install-IcingaAgentCertificates -Hostname $Hostname -Endpoint $IcingaCAServer -Port $IcingaPort -CACert $CertificateCAFile -Ticket $CertificateTicket) -eq $FALSE) {
-        Disable-IcingaAgentFeature 'api';
-        Write-IcingaConsoleWarning `
-            -Message '{0}{1}{2}{3}{4}' `
-            -Objects (
-                'Your Icinga Agent API feature has been disabled. Please provide either your ca.crt ',
-                'or connect to a parent node for certificate requests. You can run "Install-IcingaAgentCertificates" ',
-                'with your configuration to properly create the host certificate and a valid certificate request. ',
-                'After this you can enable the API feature by using "Enable-IcingaAgentFeature api" and restart the ',
-                'Icinga Agent service "Restart-IcingaService icinga2"'
-            );
-    }
+    # Only continue this, if our installation was successful
+    if ((Get-IcingaAgentInstallation).Installed) {
+        if ((Install-IcingaAgentCertificates -Hostname $Hostname -Endpoint $IcingaCAServer -Port $IcingaPort -CACert $CertificateCAFile -Ticket $CertificateTicket) -eq $FALSE) {
+            Disable-IcingaAgentFeature 'api';
+            Write-IcingaConsoleWarning `
+                -Message '{0}{1}{2}{3}{4}' `
+                -Objects (
+                    'Your Icinga Agent API feature has been disabled. Please provide either your ca.crt ',
+                    'or connect to a parent node for certificate requests. You can run "Install-IcingaAgentCertificates" ',
+                    'with your configuration to properly create the host certificate and a valid certificate request. ',
+                    'After this you can enable the API feature by using "Enable-IcingaAgentFeature api" and restart the ',
+                    'Icinga Agent service "Restart-IcingaService icinga2"'
+                );
+        }
 
-    Write-IcingaAgentZonesConfig -Endpoints $IcingaEndpoints -EndpointConnections $IcingaParentAddresses -ParentZone $IcingaZone -GlobalZones $GlobalZones -Hostname $Hostname;
+        Write-IcingaAgentZonesConfig -Endpoints $IcingaEndpoints -EndpointConnections $IcingaParentAddresses -ParentZone $IcingaZone -GlobalZones $GlobalZones -Hostname $Hostname;
+    }
 
     if ($InstallService) {
         Set-IcingaPowerShellConfig -Path 'Framework.Icinga.IcingaForWindowsService' -Value $WindowsServiceDir;
