@@ -77,6 +77,12 @@ function Invoke-IcingaWebRequest()
         $Index++;
     }
 
+    # If our URI is a local path or a file share path, always ensure to use the correct Windows directory
+    # handling with '\' instead of '/'
+    if ([string]::IsNullOrEmpty($Uri) -eq $FALSE -And (Test-Path $Uri)) {
+        $Uri = $Uri.Replace('/', '\');
+    }
+
     $WebArguments = @{
         'Uri'    = $Uri;
         'Method' = $Method;

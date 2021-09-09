@@ -31,7 +31,7 @@ function Search-IcingaRepository()
     $SearchList | Add-Member -MemberType NoteProperty -Name 'Repos' -Value @();
 
     foreach ($entry in $Repositories) {
-        $RepoContent        = Read-IcingaRepositoryFile -Name $entry.Name;
+        $RepoContent = Read-IcingaRepositoryFile -Name $entry.Name;
 
         if ($null -eq $RepoContent) {
             continue;
