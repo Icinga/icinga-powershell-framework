@@ -14,6 +14,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 ### Bugfixes
 
 * [#361](https://github.com/Icinga/icinga-powershell-framework/issues/361) Fixes IMC freeze on Icinga Director Self-Service installation, in case no Agent installation set on Self-Service API config
+* [#362](https://github.com/Icinga/icinga-powershell-framework/issues/362) Fixes repository component installation from file share locations
 
 ## 1.6.0 (2021-09-07)
 

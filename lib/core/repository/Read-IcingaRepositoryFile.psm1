@@ -24,8 +24,8 @@ function Read-IcingaRepositoryFile()
         $RepoPath = $Repository.LocalPath;
         $Content  = Get-Content -Path (Join-Path -Path $RepoPath -ChildPath 'ifw.repo.json') -Raw;
     } elseif ([string]::IsNullOrEmpty($Repository.RemotePath) -eq $FALSE -And (Test-Path -Path $Repository.RemotePath)) {
-        $RepoPath   = $Repository.RemotePath;
-        $WebContent = Get-Content -Path (Join-Path -Path $RepoPath -ChildPath 'ifw.repo.json') -Raw;
+        $RepoPath = $Repository.RemotePath;
+        $Content  = Get-Content -Path (Join-Path -Path $RepoPath -ChildPath 'ifw.repo.json') -Raw;
     } else {
         try {
             $RepoPath = $Repository.RemotePath;
