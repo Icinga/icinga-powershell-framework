@@ -7,6 +7,14 @@ documentation before upgrading to a new release.
 
 Released closed milestones can be found on [GitHub](https://github.com/Icinga/icinga-powershell-framework/milestones?state=closed).
 
+## 1.6.1 (2021-09-15)
+
+[Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/21?closed=1)
+
+### Bugfixes
+
+* [#361](https://github.com/Icinga/icinga-powershell-framework/issues/361) Fixes IMC freeze on Icinga Director Self-Service installation, in case no Agent installation set on Self-Service API config
+
 ## 1.6.0 (2021-09-07)
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/15?closed=1)
