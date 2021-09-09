@@ -24,12 +24,12 @@ function Get-IcingaUserSID()
             $NTUser          = New-Object System.Security.Principal.NTAccount($UserData.Domain, $UserData.User);
             $SecurityData    = $NTUser.Translate([System.Security.Principal.SecurityIdentifier]);
         } catch {
-            throw $_.Exception;
+            return $null;
         }
     }
 
     if ($null -eq $SecurityData) {
-        throw 'Failed to fetch user information from system';
+        return $null;
     }
 
     return $SecurityData.Value;
