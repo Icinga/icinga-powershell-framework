@@ -14,7 +14,12 @@ function New-IcingaWindowsUser()
     }
 
     $UserMetadata = Get-IcingaWindowsUserMetadata;
-    $UserConfig   = Get-IcingaWindowsInformation -Class 'Win32_UserAccount' | Where-Object { $_.Name -eq $IcingaUser };
+    $UserConfig   = $null;
+
+    $SID = Get-IcingaUserSID -User $IcingaUser;
+    if ([string]::IsNullOrEmpty($SID) -eq $FALSE) {
+        $UserConfig = Get-IcingaWindowsInformation -Class 'Win32_UserAccount' -Filter ([string]::Format("SID = '{0}'", $SID));
+    }
 
     if ($null -ne $UserConfig) {
 
@@ -32,6 +37,8 @@ function New-IcingaWindowsUser()
             }
 
             Write-IcingaConsoleNotice 'User updated successfully.';
+        } else {
+            Write-IcingaConsoleWarning 'User "{0}" is not managed by Icinga for Windows. No changes were made.' -Objects $IcingaUser;
         }
 
         return @{
@@ -61,7 +68,8 @@ function New-IcingaWindowsUser()
     $LocalUserGroup.Add("WinNT://$Env:COMPUTERNAME/$IcingaUser,user")
     #>
 
-    $UserConfig = Get-IcingaWindowsInformation -Class 'Win32_UserAccount' | Where-Object { $_.Name -eq $IcingaUser };
+    $SID        = Get-IcingaUserSID -User $IcingaUser;
+    $UserConfig = Get-IcingaWindowsInformation -Class 'Win32_UserAccount' -Filter ([string]::Format("SID = '{0}'", $SID));
 
     Write-IcingaConsoleNotice 'User was successfully created.';
 

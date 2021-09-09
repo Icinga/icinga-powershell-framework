@@ -11,7 +11,7 @@ function Update-IcingaServiceUser()
     }
 
     $SID          = Get-IcingaUserSID -User $IcingaUser;
-    $UserConfig   = Get-IcingaWindowsInformation -Class 'Win32_UserAccount' | Where-Object { $_.SID -eq $SID };
+    $UserConfig   = Get-IcingaWindowsInformation -Class 'Win32_UserAccount' -Filter ([string]::Format("SID = '{0}'", $SID));
     $User         = New-IcingaWindowsUser -IcingaUser $UserConfig.Name;
 
     Set-IcingaServiceUser -User $IcingaUser -Password $Global:Icinga.ServiceUserPassword -Service 'icinga2' | Out-Null;

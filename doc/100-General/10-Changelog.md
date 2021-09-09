@@ -17,6 +17,10 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#362](https://github.com/Icinga/icinga-powershell-framework/issues/362) Fixes repository component installation from file share locations
 * [#363](https://github.com/Icinga/icinga-powershell-framework/issues/363) Fixes unneeded continue for JEA process lookup, in case no JEA pid is present
 
+### Enhancements
+
+* [#364](https://github.com/Icinga/icinga-powershell-framework/pull/364) Fixes a long lookup for the user table on environments with a large Active Directory
+
 ## 1.6.0 (2021-09-07)
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/15?closed=1)
