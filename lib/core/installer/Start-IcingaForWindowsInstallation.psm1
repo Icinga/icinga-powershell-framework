@@ -4,11 +4,17 @@ function Start-IcingaForWindowsInstallation()
         [switch]$Automated
     );
 
-    if ((Get-IcingaFrameworkDebugMode) -eq $FALSE) {
+    if ($global:Icinga.InstallWizard.DirectorInstallError -eq $FALSE -And (Get-IcingaFrameworkDebugMode) -eq $FALSE) {
         Clear-Host;
     }
 
     Write-IcingaConsoleNotice 'Starting Icinga for Windows installation';
+
+    if ($global:Icinga.InstallWizard.DirectorInstallError) {
+        Write-IcingaConsoleError 'Failed to start Icinga for Windows installation, caused by an error while communicating with Icinga Director: {0}' -Objects $global:Icinga.InstallWizard.DirectorError;
+        throw $global:Icinga.InstallWizard.DirectorError;
+        return;
+    }
 
     $ConnectionType        = Get-IcingaForWindowsInstallerStepSelection -InstallerStep 'Show-IcingaForWindowsInstallerMenuSelectConnection';
     $HostnameType          = Get-IcingaForWindowsInstallerStepSelection -InstallerStep 'Show-IcingaForWindowsInstallerMenuSelectHostname';
