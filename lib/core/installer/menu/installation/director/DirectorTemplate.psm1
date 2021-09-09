@@ -69,15 +69,15 @@ function Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate()
     }
 
     # No we need to identify which host selection is matching our config
-    $HostnameSelection        = -1;
-    $InstallPluginsSelection  = -1;
-    $InstallServiceSelection  = -1;
+    $HostnameSelection        = 1;
+    $InstallPluginsSelection  = 0;
+    $InstallServiceSelection  = 0;
     $WindowsFirewallSelection = 1;
+    $AgentVersion             = 'release';
+    $InstallIcingaAgent       = 0;
 
     $ServiceUserName          = $DirectorConfig.icinga_service_user;
     $AgentPackageSelection    = 1; #Always use custom source
-    $AgentPackageSource       = $DirectorConfig.download_url;
-    $AgentVersion             = $DirectorConfig.agent_version;
     $IcingaPort               = $DirectorConfig.agent_listen_port;
     $GlobalZones              = @();
     $IcingaParents            = @();
@@ -85,6 +85,12 @@ function Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate()
     $ParentZone               = '';
     $MasterAddress            = '';
     $Ticket                   = '';
+
+    if (Test-IcingaPowerShellConfigItem -ConfigObject $DirectorConfig -ConfigKey 'agent_version') {
+        $AgentVersion = $DirectorConfig.agent_version;
+    } else {
+        $InstallIcingaAgent = 1;
+    }
 
     if ($DirectorUrl.ToLower().Contains('https://') -Or $DirectorUrl.ToLower().Contains('http://')) {
         $MasterAddress = $DirectorUrl.Split('/')[2];
@@ -163,6 +169,7 @@ function Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate()
         # Do not install
         $InstallServiceSelection = 1;
     } else {
+        # Install the service from our repository
         $InstallServiceSelection = 0;
     }
 
@@ -170,7 +177,7 @@ function Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate()
         # Do not install
         $InstallPluginsSelection = 1;
     } else {
-        # TODO: This is currently not supported. We use the "default" config for installing from GitHub by now
+        # Install the plugins from our repository
         $InstallPluginsSelection = 0;
     }
 
@@ -202,6 +209,7 @@ function Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate()
     Show-IcingaForWindowsInstallerMenuSelectCertificate -Automated -DefaultInput '1';
     Show-IcingaForWindowsInstallerMenuEnterIcingaTicket -Automated -Value $Ticket;
 
+    Show-IcingaForWindowsInstallerMenuSelectInstallIcingaAgent -Automated -DefaultInput $InstallIcingaAgent;
     Show-IcingaForWindowsInstallationMenuEnterIcingaAgentVersion -Automated -Value $AgentVersion;
 
     Show-IcingaForWindowsManagementConsoleInstallationDirectorRegisterHost -Automated;
