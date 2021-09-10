@@ -66,10 +66,31 @@ function Register-IcingaDirectorSelfServiceHost()
 
     $EndpointUrl = Join-WebPath -Path $DirectorUrl -ChildPath ([string]::Format('/self-service/register-host?name={0}&key={1}', $Hostname, $ApiKey));
 
-    $response = Invoke-IcingaWebRequest -Uri $EndpointUrl -UseBasicParsing -Headers @{ 'accept' = 'application/json'; 'X-Director-Accept' = 'application/json' } -Method 'POST' -Body $DirectorConfigJson;
+    $response = Invoke-IcingaWebRequest -Uri $EndpointUrl -UseBasicParsing -Headers @{ 'accept' = 'application/json'; 'X-Director-Accept' = 'application/json' } -Method 'POST' -Body $DirectorConfigJson -NoErrorMessage;
 
     if ($response.StatusCode -ne 200) {
-        throw $response.Content;
+        $ErrorMessage = '';
+        switch ($response.StatusCode) {
+            400 {
+                Write-IcingaConsoleWarning 'Failed to register host inside Icinga Director. The host is probably already registered.'
+                return $null;
+            };
+            404 {
+                $ErrorMessage = 'Failed to register host with the given API key "{0}" inside Icinga Director. Please ensure the template key you are using is correct and the template is set as "Icinga2 Agent" object. Non-Agent templates will not work over the Self-Service API.';
+                break;
+            };
+            901 {
+                $ErrorMessage = 'Failed to register host over Self-Service API inside Icinga Director because of SSL/TLS error. Please ensure the certificate is valid and use "Enable-IcingaUntrustedCertificateValidation" for self-signed certificates or install the certificate on this machine.';
+                break;
+            }
+            Default {
+                $ErrorMessage = ([string]::Format('Failed to register host inside Icinga Director because of unhandled exception: {0}', $response.StatusCode));
+                break;
+            };
+        }
+
+        Write-IcingaConsoleError $ErrorMessage -Objects $ApiKey;
+        throw $ErrorMessage;
     }
 
     $JsonContent = ConvertFrom-Json -InputObject $response.Content;

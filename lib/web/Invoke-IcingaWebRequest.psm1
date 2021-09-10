@@ -46,6 +46,8 @@
 .PARAMETER Objects
     Use placeholders within the `-Uri` argument, like {0} and replace them with array elements of this argument.
     The index entry of {0} has to match the order of this argument.
+.PARAMETER NoErrorMessage
+    Will not print any error message caused by invalid requests or errors
 .INPUTS
    System.String
 .OUTPUTS
@@ -64,7 +66,8 @@ function Invoke-IcingaWebRequest()
         [string]$Method          = 'Get',
         [string]$OutFile,
         [switch]$UseBasicParsing,
-        [array]$Objects          = @()
+        [array]$Objects          = @(),
+        [switch]$NoErrorMessage  = $FALSE
     );
 
     [int]$Index = 0;
@@ -109,27 +112,42 @@ function Invoke-IcingaWebRequest()
     Set-IcingaTLSVersion;
     Disable-IcingaProgressPreference;
 
+    $ErrorStatus = 900;
+
     try {
-        $Response = Invoke-WebRequest -UseBasicParsing:$UseBasicParsing @WebArguments -ErrorAction Stop;
+        $Response = Invoke-WebRequest -UseBasicParsing:$UseBasicParsing @WebArguments;
     } catch {
         [string]$ErrorId = ([string]$_.FullyQualifiedErrorId).Split(',')[0];
         [string]$Message = $_.Exception.Message;
 
+        if ([string]::IsNullOrEmpty($_.Exception.Response.StatusCode.Value__) -eq $FALSE) {
+            $ErrorStatus = $_.Exception.Response.StatusCode.Value__;
+        }
+
+        if ($_.Exception.ToString().Contains('TlsStream')) {
+            $ErrorId = 'System.Net.TlsStream.Exception';
+        }
+
         switch ($ErrorId) {
             'System.UriFormatException' {
-                Write-IcingaConsoleError 'The provided Url "{0}" is not a valid format' -Objects $Uri;
+                Write-IcingaConsoleError 'The provided Url "{0}" is not a valid format. Response: "{1}"' -Objects $Uri, $Message -DropMessage:$NoErrorMessage;
                 break;
             };
             'WebCmdletWebResponseException' {
-                Write-IcingaConsoleError 'The remote host for address "{0}" could not be resolved' -Objects $Uri;
+                Write-IcingaConsoleError 'The remote host "{0}" send an exception response "{1}": "{2}"' -Objects $Uri, $ErrorStatus, $Message -DropMessage:$NoErrorMessage;
                 break;
             };
             'System.InvalidOperationException' {
-                Write-IcingaConsoleError 'Failed to query host "{0}". Possible this is caused by an invalid Proxy Server configuration: "{1}".' -Objects $Uri, $ProxyServer;
+                Write-IcingaConsoleError 'Failed to query host "{0}". Possible this is caused by an invalid Proxy Server configuration: "{1}". Response: "{2}"' -Objects $Uri, $ProxyServer, $Message -DropMessage:$NoErrorMessage;
                 break;
             };
+            'System.Net.TlsStream.Exception' {
+                Write-IcingaConsoleError 'Failed to establish secure SSL/TLS connection to "{0}". Please ensure the certificate is valid and trusted and use "Set-IcingaTLSVersion" on older Windows machines. If you are using self-signed certificates, install them locally or use "Enable-IcingaUntrustedCertitifacateValidation". Error Message: "{1}"' -Objects $Uri, $Message -DropMessage:$NoErrorMessage;
+                $ErrorStatus = 901;
+                break;
+            }
             Default {
-                Write-IcingaConsoleError 'Unhandled exception for Url "{0}" with error id "{1}":{2}{2}{3}' -Objects $Uri, $ErrorId, (New-IcingaNewLine), $Message;
+                Write-IcingaConsoleError 'Unhandled exception for Url "{0}" with error id "{1}":{2}{2}{3}{2}Response: "{4}"' -Objects $Uri, $ErrorId, (New-IcingaNewLine), $Message -DropMessage:$NoErrorMessage;
                 break;
             };
         }
@@ -142,7 +160,7 @@ function Invoke-IcingaWebRequest()
                     'AbsoluteUri' = $Uri;
                 };
             };
-            'StatusCode'   = 900;
+            'StatusCode'   = $ErrorStatus;
         };
     }
 

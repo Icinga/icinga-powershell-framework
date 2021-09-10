@@ -22,7 +22,7 @@ function Show-IcingaForWindowsInstallerMenu()
         [switch]$NoConfigSwap        = $FALSE
     );
 
-    if ((Test-IcingaForWindowsInstallationHeaderPrint) -eq $FALSE -And (Get-IcingaFrameworkDebugMode) -eq $FALSE) {
+    if ($global:Icinga.InstallWizard.DirectorInstallError -eq $FALSE -And (Test-IcingaForWindowsInstallationHeaderPrint) -eq $FALSE -And (Get-IcingaFrameworkDebugMode) -eq $FALSE) {
         Clear-Host;
     }
 

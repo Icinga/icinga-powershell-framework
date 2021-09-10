@@ -23,12 +23,14 @@ function Write-IcingaConsoleWarning()
 {
     param (
         [string]$Message,
-        [array]$Objects
+        [array]$Objects,
+        [switch]$DropMessage = $FALSE
     );
 
     Write-IcingaConsoleOutput `
         -Message $Message `
         -Objects $Objects `
         -ForeColor 'DarkYellow' `
-        -Severity 'Warning';
+        -Severity 'Warning' `
+        -DropMessage:$DropMessage;
 }

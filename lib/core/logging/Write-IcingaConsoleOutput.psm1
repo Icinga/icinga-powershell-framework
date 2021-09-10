@@ -20,6 +20,11 @@
    The color the severity name will be displayed in
 .PARAMETER Severity
    The severity being displayed before the actual message. Leave empty to skip.
+.PARAMETER NoNewLine
+   Will ensure that no new line is added at the end of the message, allowing to
+   write different messages with different function calls without line breaks
+.PARAMETER DropMessage
+   Will not write the message to the console and simply drop it
 .INPUTS
    System.String
 .LINK
@@ -32,10 +37,15 @@ function Write-IcingaConsoleOutput()
         [string]$Message,
         [array]$Objects,
         [ValidateSet('Default', 'Black', 'DarkBlue', 'DarkGreen', 'DarkCyan', 'DarkRed', 'DarkMagenta', 'DarkYellow', 'Gray', 'DarkGray', 'Blue', 'Green', 'Cyan', 'Red', 'Magenta', 'Yellow', 'White')]
-        [string]$ForeColor = 'Default',
-        [string]$Severity  = 'Notice',
-        [switch]$NoNewLine = $FALSE
+        [string]$ForeColor   = 'Default',
+        [string]$Severity    = 'Notice',
+        [switch]$NoNewLine   = $FALSE,
+        [switch]$DropMessage = $FALSE
     );
+
+    if ($DropMessage) {
+        return;
+    }
 
     if ((Test-IcingaFrameworkConsoleOutput) -eq $FALSE) {
         return;

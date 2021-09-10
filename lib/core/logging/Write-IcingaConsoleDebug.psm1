@@ -23,7 +23,8 @@ function Write-IcingaConsoleDebug()
 {
     param (
         [string]$Message,
-        [array]$Objects
+        [array]$Objects,
+        [switch]$DropMessage = $FALSE
     );
 
     if ((Get-IcingaFrameworkDebugMode) -eq $FALSE) {
@@ -34,5 +35,6 @@ function Write-IcingaConsoleDebug()
         -Message $Message `
         -Objects $Objects `
         -ForeColor 'Blue' `
-        -Severity 'Debug';
+        -Severity 'Debug' `
+        -DropMessage:$DropMessage;
 }

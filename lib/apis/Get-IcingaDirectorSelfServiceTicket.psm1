@@ -42,10 +42,31 @@ function Get-IcingaDirectorSelfServiceTicket()
 
     [string]$url = Join-WebPath -Path $DirectorUrl -ChildPath ([string]::Format('/self-service/ticket?key={0}', $ApiKey));
 
-    $response = Invoke-IcingaWebRequest -Uri $url -UseBasicParsing -Headers @{ 'accept' = 'application/json'; 'X-Director-Accept' = 'application/json' } -Method 'POST';
+    $response = Invoke-IcingaWebRequest -Uri $url -UseBasicParsing -Headers @{ 'accept' = 'application/json'; 'X-Director-Accept' = 'application/json' } -Method 'POST' -NoErrorMessage;
 
     if ($response.StatusCode -ne 200) {
-        throw $response.Content;
+        $ErrorMessage = '';
+        switch ($response.StatusCode) {
+            404 {
+                $ErrorMessage = 'Failed to fetch certificate ticket for this host over Self-Service API. Please check that your Icinga Director Url "{1}" is valid and the provided API key "{0}" belongs to a Icinga host object.';
+                break;
+            };
+            500 {
+                $ErrorMessage = 'Failed to fetch certificate ticket for this host over Self-Service API. Please check that your Icinga CA is running, you have configured a Ticketsalt and that your Icinga Director has enough permissions to communicate with the Icinga 2 API for generating tickets.';
+                break;
+            };
+            901 {
+                $ErrorMessage = 'Failed to fetch certificate ticket for this host over Self-Service API because of SSL/TLS error. Please ensure the certificate is valid and use "Enable-IcingaUntrustedCertificateValidation" for self-signed certificates or install the certificate on this machine.';
+                break;
+            }
+            Default {
+                $ErrorMessage = ([string]::Format('Failed to fetch certificate ticket from Icinga Director because of unhandled exception: {0}', $response.StatusCode));
+                break;
+            };
+        }
+
+        Write-IcingaConsoleError $ErrorMessage -Objects $ApiKey, $DirectorUrl;
+        throw $ErrorMessage;
     }
 
     $JsonContent = ConvertFrom-Json -InputObject $response.Content;
