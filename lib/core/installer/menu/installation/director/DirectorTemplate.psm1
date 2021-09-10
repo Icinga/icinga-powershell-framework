@@ -101,6 +101,11 @@ function Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate()
     $ParentZone               = '';
     $MasterAddress            = '';
     $Ticket                   = '';
+    $DirectorHostRegister     = (Get-IcingaForWindowsInstallerStepSelection -InstallerStep 'Show-IcingaForWindowsManagementConsoleInstallationDirectorRegisterHost');
+
+    if ($null -eq $DirectorHostRegister) {
+        $DirectorHostRegister = 0;
+    }
 
     if (Test-IcingaPowerShellConfigItem -ConfigObject $DirectorConfig -ConfigKey 'agent_version') {
         $AgentVersion = $DirectorConfig.agent_version;
@@ -227,8 +232,7 @@ function Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate()
 
     Show-IcingaForWindowsInstallerMenuSelectInstallIcingaAgent -Automated -DefaultInput $InstallIcingaAgent;
     Show-IcingaForWindowsInstallationMenuEnterIcingaAgentVersion -Automated -Value $AgentVersion;
-
-    Show-IcingaForWindowsManagementConsoleInstallationDirectorRegisterHost -Automated;
+    Show-IcingaForWindowsManagementConsoleInstallationDirectorRegisterHost -DefaultInput $DirectorHostRegister -Automated;
 
     Enable-IcingaFrameworkConsoleOutput;
     Reset-IcingaForWindowsManagementConsoleInstallationDirectorConfigModifyState;
