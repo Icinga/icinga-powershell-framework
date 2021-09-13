@@ -19,6 +19,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#365](https://github.com/Icinga/icinga-powershell-framework/issues/365) Fixes Icinga environment corruption on Icinga Agent installation failure
 * [#366](https://github.com/Icinga/icinga-powershell-framework/issues/366) Fixes error handling with Icinga Director over IMC, by printing more detailed and user-friendly error messages
 * [#367](https://github.com/Icinga/icinga-powershell-framework/issues/367) Fixes Icinga Director register state not being saved on overview after registration of Host inside Self-Service API
+* [#368](https://github.com/Icinga/icinga-powershell-framework/issues/368) Fixes repository lookup on local path for ifw.repo.json, in the json file was added to the file path during repository add
 
 ### Enhancements
 
