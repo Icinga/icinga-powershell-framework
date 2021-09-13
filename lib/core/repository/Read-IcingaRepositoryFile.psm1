@@ -22,10 +22,23 @@ function Read-IcingaRepositoryFile()
 
     if ([string]::IsNullOrEmpty($Repository.LocalPath) -eq $FALSE -And (Test-Path -Path $Repository.LocalPath)) {
         $RepoPath = $Repository.LocalPath;
-        $Content  = Get-Content -Path (Join-Path -Path $RepoPath -ChildPath 'ifw.repo.json') -Raw;
     } elseif ([string]::IsNullOrEmpty($Repository.RemotePath) -eq $FALSE -And (Test-Path -Path $Repository.RemotePath)) {
         $RepoPath = $Repository.RemotePath;
-        $Content  = Get-Content -Path (Join-Path -Path $RepoPath -ChildPath 'ifw.repo.json') -Raw;
+    }
+
+    if ([string]::IsNullOrEmpty($RepoPath) -eq $FALSE -And (Test-Path -Path $RepoPath)) {
+        if ([IO.Path]::GetExtension($RepoPath).ToLower() -ne '.json' -And $TryAlternate -eq $FALSE) {
+            return (Read-IcingaRepositoryFile -Name $Name -TryAlternate);
+        } elseif ([IO.Path]::GetExtension($RepoPath).ToLower() -ne '.json' -And $TryAlternat) {
+            Write-IcingaConsoleError 'Unable to read repository file from "{0}" for repository "{1}". No "ifw.repo.json" was found at defined location' -Objects $RepoPath, $Name;
+            return $null;
+        }
+
+        if ($TryAlternate) {
+            $RepoPath = Join-Path $RepoPath -ChildPath 'ifw.repo.json';
+        }
+
+        $Content  = Get-Content -Path $RepoPath -Raw;
     } else {
         try {
             $RepoPath = $Repository.RemotePath;
