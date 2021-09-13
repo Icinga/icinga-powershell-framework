@@ -107,7 +107,7 @@ function Show-IcingaForWindowsInstallerConfigurationSummary()
     $global:Icinga.InstallWizard.DisplayAdvanced = $TRUE;
 
     Show-IcingaForWindowsInstallerMenu `
-        -Header 'Please validate your configuration. Installation starts on continue:' `
+        -Header 'Please validate your configuration. Installation or answer file/command export are available on next step:' `
         -Entries $Entries `
         -DefaultIndex 'c' `
         -ContinueFunction 'Show-IcingaForWindowsInstallerMenuFinishInstaller' `
