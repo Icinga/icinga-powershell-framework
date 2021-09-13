@@ -9,8 +9,19 @@ function Show-IcingaForWindowsInstallerConfigurationSummary()
     );
 
     [array]$Entries      = @();
-    [int]$CurrentIndex   = 0
-    [int]$MaxEntryLength = (Get-IcingaMaxTextLength -TextArray $global:Icinga.InstallWizard.Config.Keys) - 4;
+    [int]$CurrentIndex   = 0;
+    [array]$KeyValues    = @();
+
+    foreach ($entry in $global:Icinga.InstallWizard.Config.Keys) {
+        if ($entry.Contains(':')) {
+            $KeySplit   = $entry.Split(':');
+            $KeyValues += [string]::Format('{0} for "{1}"', ($KeySplit[0]), ($KeySplit[1]));
+        } else {
+            $KeyValues += $entry;
+        }
+    }
+
+    [int]$MaxEntryLength = (Get-IcingaMaxTextLength -TextArray $KeyValues) - 4;
 
     Enable-IcingaForWindowsInstallationHeaderPrint;
 
