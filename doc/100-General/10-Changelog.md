@@ -25,6 +25,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 ### Enhancements
 
 * [#364](https://github.com/Icinga/icinga-powershell-framework/pull/364) Fixes a long lookup for the user table on environments with a large Active Directory
+* [#370](https://github.com/Icinga/icinga-powershell-framework/issues/370) Fixes misleading IMC summary header, implying installation will start immediately on continue
 
 ## 1.6.0 (2021-09-07)
 
