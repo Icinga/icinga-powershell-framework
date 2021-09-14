@@ -9,6 +9,8 @@ function Enable-IcingaRepository()
         return;
     }
 
+    $Name = $Name.Replace('.', '-');
+
     $CurrentRepositories = Get-IcingaPowerShellConfig -Path ([string]::Format('Framework.Repository.Repositories.{0}', $Name));
 
     if ($null -eq $CurrentRepositories) {

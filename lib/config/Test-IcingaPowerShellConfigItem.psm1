@@ -26,5 +26,15 @@ function Test-IcingaPowerShellConfigItem()
         $ConfigKey
     );
 
-    return ([bool]($ConfigObject.PSObject.Properties.Name -eq $ConfigKey) -eq $TRUE);
+    if ($null -eq $ConfigObject -Or [string]::IsNullOrEmpty($ConfigKey)) {
+        return $FALSE;
+    }
+
+    foreach ($entry in $ConfigObject.PSObject.Properties) {
+        if ($entry.Name.ToLower() -eq $ConfigKey.ToLower()) {
+            return $TRUE;
+        }
+    }
+
+    return $FALSE;
 }

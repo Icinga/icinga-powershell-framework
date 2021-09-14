@@ -9,6 +9,8 @@ function Remove-IcingaRepository()
         return;
     }
 
+    $Name = $Name.Replace('.', '-');
+
     $CurrentRepositories = Get-IcingaPowerShellConfig -Path 'Framework.Repository.Repositories';
 
     if ((Test-IcingaPowerShellConfigItem -ConfigObject $CurrentRepositories -ConfigKey $Name) -eq $FALSE) {
