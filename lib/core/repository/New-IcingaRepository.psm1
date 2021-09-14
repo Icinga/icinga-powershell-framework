@@ -12,6 +12,8 @@ function New-IcingaRepository()
         return;
     }
 
+    $Name = $Name.Replace('.', '-');
+
     if ([string]::IsNullOrEmpty($Path) -Or (Test-Path $Path) -eq $FALSE) {
         Write-IcingaConsoleError 'The provided path "{0}" does not exist' -Objects $Path;
         return;

@@ -11,6 +11,8 @@ function Add-IcingaRepository()
         return;
     }
 
+    $Name = $Name.Replace('.', '-');
+
     if ([string]::IsNullOrEmpty($RemotePath)) {
         Write-IcingaConsoleError 'You have to provide a remote path for the repository';
         return;

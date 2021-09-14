@@ -10,6 +10,8 @@ function Read-IcingaRepositoryFile()
         return $null;
     }
 
+    $Name = $Name.Replace('.', '-');
+
     $Repository = Get-IcingaPowerShellConfig -Path ([string]::Format('Framework.Repository.Repositories.{0}', $Name));
 
     if ($null -eq $Repository) {
