@@ -16,6 +16,8 @@ function Sync-IcingaRepository()
         return;
     }
 
+    $Name = $Name.Replace('.', '-');
+
     if ($UseSCP -And $null -eq (Get-Command 'scp' -ErrorAction SilentlyContinue) -And $null -eq (Get-Command 'ssh' -ErrorAction SilentlyContinue)) {
         Write-IcingaConsoleWarning 'You cannot use SCP on this system, as SCP and/or SSH seem not to be installed';
         return;

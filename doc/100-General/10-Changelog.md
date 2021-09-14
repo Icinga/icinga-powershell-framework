@@ -22,6 +22,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#368](https://github.com/Icinga/icinga-powershell-framework/issues/368) Fixes repository lookup on local path for ifw.repo.json, in the json file was added to the file path during repository add
 * [#369](https://github.com/Icinga/icinga-powershell-framework/issues/369) Fixes experimental feature warning for API-Check Forwarder feature, which is fully supported since v1.6.0 and replaces it with proper information and link to docs
 * [#371](https://github.com/Icinga/icinga-powershell-framework/issues/371) Fixes wrong indention on Icinga parent host address at IMC configuration summary overview
+* [#373](https://github.com/Icinga/icinga-powershell-framework/issues/373) Fixes repository names with dots (`.`) by replacing them with `-`, as otherwise the config parser will fail finding the config object
 
 ### Enhancements
 

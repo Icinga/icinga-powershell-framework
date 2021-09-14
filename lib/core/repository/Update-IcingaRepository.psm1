@@ -18,6 +18,9 @@ function Update-IcingaRepository()
     }
 
     if ([string]::IsNullOrEmpty($Name) -eq $FALSE) {
+
+        $Name = $Name.Replace('.', '-');
+
         if ((Test-IcingaPowerShellConfigItem -ConfigObject $CurrentRepositories -ConfigKey $Name) -eq $FALSE -And $CreateNew -eq $FALSE) {
             Write-IcingaConsoleError 'A repository with the given name "{0}" does not exist. Use "New-IcingaRepository" or "Sync-IcingaForWindowsRepository" to create a new one.' -Objects $Name;
             return;
