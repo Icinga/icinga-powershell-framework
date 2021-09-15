@@ -7,6 +7,14 @@ documentation before upgrading to a new release.
 
 Released closed milestones can be found on [GitHub](https://github.com/Icinga/icinga-powershell-framework/milestones?state=closed).
 
+## 1.7.0 (2021-11-09)
+
+[Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/16?closed=1)
+
+### Bugfixes
+
+* [#375](https://github.com/Icinga/icinga-powershell-framework/pull/375) Fixes exception on last message printed during `Uninstall-IcingaForWindows`, because the prior used function is no longer present at this point
+
 ## 1.6.1 (2021-09-15)
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/21?closed=1)

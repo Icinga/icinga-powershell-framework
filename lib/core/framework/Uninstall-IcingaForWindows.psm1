@@ -71,8 +71,8 @@ function Uninstall-IcingaForWindows()
     Remove-Module 'icinga-powershell-framework' -Force -ErrorAction SilentlyContinue;
 
     if ($HasErrors) {
-        Write-IcingaConsoleWarning 'Not all components could be removed. Please ensure no other PowerShell/Application is currently open and accessing Icinga for Windows files';
+        Write-Host 'Not all components could be removed. Please ensure no other PowerShell/Application is currently open and accessing Icinga for Windows files';
     } else {
-        Write-IcingaConsoleNotice 'Icinga for Windows was removed from this host.';
+        Write-Host 'Icinga for Windows was removed from this host.';
     }
 }
