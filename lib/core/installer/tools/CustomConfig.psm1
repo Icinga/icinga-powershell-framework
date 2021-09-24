@@ -8,7 +8,7 @@ function Invoke-IcingaForWindowsManagementConsoleCustomConfig()
         $cmdConfig = $IcingaConfiguration[$cmd];
 
         if ($cmd.Contains(':')) {
-            continue; # skip for now, as more complicated
+            continue;
         }
 
         $cmdArguments = @{
@@ -22,6 +22,14 @@ function Invoke-IcingaForWindowsManagementConsoleCustomConfig()
             $cmdArguments.Add('DefaultInput', $cmdConfig.Selection)
         }
 
-        &$cmd @cmdArguments;
+        try {
+            &$cmd @cmdArguments;
+        } catch {
+            Enable-IcingaFrameworkConsoleOutput;
+            Write-IcingaConsoleError 'Failed to apply installation configuration of command "{0}" and argument list{1}because of the following error: "{2}"' -Objects $cmd, ($cmdArguments | Out-String), $_.Exception.Message;
+            return $FALSE;
+        }
     }
+
+    return $TRUE;
 }
