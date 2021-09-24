@@ -50,15 +50,25 @@ function Install-Icinga()
     # Use our install command to configure everything
     if ([string]::IsNullOrEmpty($InstallCommand) -eq $FALSE) {
 
-        Disable-IcingaFrameworkConsoleOutput;
+        try {
+            $JsonInstallCmd = ConvertFrom-Json -InputObject $InstallCommand -ErrorAction Stop;
+        } catch {
+            Write-IcingaConsoleError 'Failed to deserialize the provided JSON from file or command: {0}' -Objects $_.Exception.Message;
+            return;
+        }
 
         # Add our "old" swap internally
-        $OldConfigSwap = Get-IcingaPowerShellConfig -Path 'Framework.Config.Swap';
+        $OldConfigSwap  = Get-IcingaPowerShellConfig -Path 'Framework.Config.Swap';
+        Disable-IcingaFrameworkConsoleOutput;
 
-        [hashtable]$IcingaConfiguration = Convert-IcingaForwindowsManagementConsoleJSONConfig -Config (ConvertFrom-Json -InputObject $InstallCommand);
+        [hashtable]$IcingaConfiguration = Convert-IcingaForwindowsManagementConsoleJSONConfig -Config $JsonInstallCmd;
 
         # First run our configuration values
-        Invoke-IcingaForWindowsManagementConsoleCustomConfig -IcingaConfiguration $IcingaConfiguration;
+        $Success = Invoke-IcingaForWindowsManagementConsoleCustomConfig -IcingaConfiguration $IcingaConfiguration;
+
+        if ($Success -eq $FALSE) {
+            return;
+        }
 
         # In case we use the director, we require to first fetch all basic values from the Self-Service API then
         # require to register the host to fet the remaining content
@@ -74,7 +84,11 @@ function Install-Icinga()
 
         # Now apply our configuration again to ensure the defaults are overwritten again
         # Suite a mess, but we can improve this later
-        Invoke-IcingaForWindowsManagementConsoleCustomConfig -IcingaConfiguration $IcingaConfiguration;
+        $Success = Invoke-IcingaForWindowsManagementConsoleCustomConfig -IcingaConfiguration $IcingaConfiguration;
+
+        if ($Success -eq $FALSE) {
+            return;
+        }
 
         Enable-IcingaFrameworkConsoleOutput;
 
