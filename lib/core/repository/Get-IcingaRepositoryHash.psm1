@@ -9,11 +9,21 @@ function Get-IcingaRepositoryHash()
         return;
     }
 
-    $RepositoryFolder  = Get-ChildItem -Path $Path -Recurse;
-    [array]$FileHashes = @();
+    $RepositoryFolder = Get-ChildItem -Path $Path -Recurse;
+    $FileHashes       = New-Object -TypeName 'System.Text.StringBuilder';
 
     foreach ($entry in $RepositoryFolder) {
-        $FileHashes += (Get-FileHash -Path $entry.FullName -Algorithm SHA256).Hash;
+        $FileHash = (Get-FileHash -Path $entry.FullName -Algorithm SHA256).Hash;
+
+        if ([string]::IsNullOrEmpty($FileHash)) {
+            continue;
+        }
+
+        if ($FileHashes.Length -ne 0) {
+            $FileHashes.Append('+') | Out-Null;
+        }
+
+        $FileHashes.Append($FileHash) | Out-Null;
     }
 
     $HashAlgorithm = [System.Security.Cryptography.HashAlgorithm]::Create('SHA256');

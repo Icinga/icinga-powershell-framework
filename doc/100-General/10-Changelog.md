@@ -15,6 +15,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 * [#375](https://github.com/Icinga/icinga-powershell-framework/pull/375) Fixes exception on last message printed during `Uninstall-IcingaForWindows`, because the prior used function is no longer present at this point
 * [#376](https://github.com/Icinga/icinga-powershell-framework/pull/376) Fixes IMC error handling on invalid JSON for installation command/file
+* [#381](https://github.com/Icinga/icinga-powershell-framework/issues/381) Fixes Repository Hash generator for new repositories, which always returned the same hash regardless of the files inside
 
 ## 1.6.1 (2021-09-15)
 
