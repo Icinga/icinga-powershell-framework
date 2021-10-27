@@ -17,6 +17,10 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#376](https://github.com/Icinga/icinga-powershell-framework/pull/376) Fixes IMC error handling on invalid JSON for installation command/file
 * [#381](https://github.com/Icinga/icinga-powershell-framework/issues/381) Fixes Repository Hash generator for new repositories, which always returned the same hash regardless of the files inside
 
+### Enhancements
+
+* [#383](https://github.com/Icinga/icinga-powershell-framework/pull/383) Moves the components REST-Api [icinga-powershell-restapi](https://icinga.com/docs/icinga-for-windows/latest/restapi/doc/01-Introduction/) and API-Checks [icinga-powershell-apichecks](https://icinga.com/docs/icinga-for-windows/latest/apichecks/doc/01-Introduction/) directly into the Framework
+
 ## 1.6.1 (2021-09-15)
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/21?closed=1)

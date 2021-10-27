@@ -4,6 +4,19 @@ Upgrading Icinga PowerShell Framework is usually quite straightforward.
 
 Specific version upgrades are described below. Please note that version updates are incremental.
 
+## Upgrading to v1.7.0 (2021-11-09)
+
+### REST-Api and Api-Checks
+
+With Icinga for Windows v1.7.0, the previously separate available components REST-Api [icinga-powershell-restapi](https://icinga.com/docs/icinga-for-windows/latest/restapi/doc/01-Introduction/) and API-Checks [icinga-powershell-apichecks](https://icinga.com/docs/icinga-for-windows/latest/apichecks/doc/01-Introduction/) are now directly baked into the Icinga PowerShell Framework. You will no longer require to install these components in addition.
+
+**Upgrading**: If you previously installed these components, you should remove them from the system before actively using Icinga for Windows v1.7.0, as additional changes were made in this case.
+
+```powershell
+Uninstall-IcingaComponent -Name 'restapi';
+Uninstall-IcingaComponent -Name 'apichecks';
+```
+
 ## Upgrading to v1.5.0 (2021-06-02)
 
 ### `SecureString` and Icinga Director Baskets
