@@ -31,10 +31,12 @@ We officially support Windows machines running the following operating systems:
 * Windows 8
 * Windows 8.1
 * Windows 10
+* Windows 11
 * Windows Server 2012
 * Windows Server 2012 R2
 * Windows Server 2016
 * Windows Server 2019
+* Windows Server 2022
 
 It may work on the following systems, but is currently untested, not supported and certain features may not work as expected:
 
