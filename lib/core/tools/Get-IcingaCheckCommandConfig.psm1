@@ -183,7 +183,7 @@ function Get-IcingaCheckCommandConfig()
                     return;
                 }
             }
-            $CheckParamList += (Convert-IcingaCheckArgumentToPSObject -Parameter $entry);
+            $CheckParamList += (Convert-IcingaCheckArgumentToPSObject -Parameter $entry -CheckCommand $check);
         }
 
         foreach ($arg in $ParameterList.Keys) {
@@ -397,7 +397,7 @@ function Get-IcingaCheckCommandConfig()
         $CheckParamList  = @( $ThresholdIntervalArg );
 
         foreach ($entry in $Data.parameters.parameter) {
-            $CheckParamList += (Convert-IcingaCheckArgumentToPSObject -Parameter $entry);
+            $CheckParamList += (Convert-IcingaCheckArgumentToPSObject -Parameter $entry -CheckCommand $check);
         }
 
         foreach ($parameter in $CheckParamList) {
