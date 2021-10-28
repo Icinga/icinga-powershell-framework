@@ -17,6 +17,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#376](https://github.com/Icinga/icinga-powershell-framework/pull/376) Fixes IMC error handling on invalid JSON for installation command/file
 * [#377](https://github.com/Icinga/icinga-powershell-framework/issues/377) Fixes overhead for testing of modules being loaded, which returned invalid path values and wrong exceptions, which was unnecessary in first place
 * [#381](https://github.com/Icinga/icinga-powershell-framework/issues/381) Fixes Repository Hash generator for new repositories, which always returned the same hash regardless of the files inside
+* [#386](https://github.com/Icinga/icinga-powershell-framework/pull/386) Fixes check command config generator for Icinga Director baskets/Icinga 2 conf files, in case we are using a check command with an alias as reference to a new name of a check command
 
 ### Enhancements
 
