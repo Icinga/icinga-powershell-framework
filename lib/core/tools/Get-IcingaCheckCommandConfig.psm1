@@ -168,11 +168,13 @@ function Get-IcingaCheckCommandConfig()
     # Loop through ${CheckName}, to get information on every command specified/all commands.
     foreach ($check in $CheckName) {
 
+        [string]$check = [string]$check;
+
         # Get necessary syntax-information and more through cmdlet "Get-Help"
         $Data            = (Get-Help $check);
         $ParameterList   = (Get-Command -Name $check).Parameters;
         $CheckParamList  = @( $ThresholdIntervalArg );
-        $PluginNameSpace = $Data.Name.Replace('Invoke-', '');
+        $PluginNameSpace = $check.Replace('Invoke-', '');
 
         foreach ($entry in $Data.parameters.parameter) {
             foreach ($BlackListArg in $BlacklistedArguments) {
@@ -195,17 +197,17 @@ function Get-IcingaCheckCommandConfig()
 
         # Add command Structure
         $Basket.Command.Add(
-            $Data.Name, @{
+            $check, @{
                 'arguments'   = @{
                     # Set the Command handling for every check command
                     '-C' = @{
-                        'value' = [string]::Format('try {{ Use-Icinga -Minimal; }} catch {{ Write-Output {1}The Icinga PowerShell Framework is either not installed on the system or not configured properly. Please check https://icinga.com/docs/windows for further details{1}; Write-Output {1}Error:{1} $$($$_.Exception.Message)Components:`r`n$$( Get-Module -ListAvailable {1}icinga-powershell-*{1} )`r`n{1}Module-Path:{1}`r`n$$($$Env:PSModulePath); exit 3; }}; Exit-IcingaExecutePlugin -Command {1}{0}{1} ', $Data.Name, "'");
+                        'value' = [string]::Format('try {{ Use-Icinga -Minimal; }} catch {{ Write-Output {1}The Icinga PowerShell Framework is either not installed on the system or not configured properly. Please check https://icinga.com/docs/windows for further details{1}; Write-Output {1}Error:{1} $$($$_.Exception.Message)Components:`r`n$$( Get-Module -ListAvailable {1}icinga-powershell-*{1} )`r`n{1}Module-Path:{1}`r`n$$($$Env:PSModulePath); exit 3; }}; Exit-IcingaExecutePlugin -Command {1}{0}{1} ', $check, "'");
                         'order' = '0';
                     };
                 }
                 'fields'      = @();
                 'imports'     = @( 'PowerShell Base' );
-                'object_name' = $Data.Name;
+                'object_name' = $check;
                 'object_type' = 'object';
                 'vars'        = @{ };
             }
@@ -238,7 +240,7 @@ function Get-IcingaCheckCommandConfig()
 
             # Add arguments to a given command
             if ($parameter.type.name -eq 'SwitchParameter') {
-                $Basket.Command[$Data.Name].arguments.Add(
+                $Basket.Command[$check].arguments.Add(
                     [string]::Format('-{0}', $parameter.Name), @{
                         'set_if'        = $IcingaCustomVariable;
                         'set_if_format' = 'string';
@@ -246,11 +248,11 @@ function Get-IcingaCheckCommandConfig()
                     }
                 );
 
-                $Basket.Command[$Data.Name].vars.Add($IcingaCustomVariable.Replace('$', ''), $FALSE);
+                $Basket.Command[$check].vars.Add($IcingaCustomVariable.Replace('$', ''), $FALSE);
 
             } elseif ($parameter.type.name -eq 'Array') {
                 # Conditional whether type of parameter is array
-                $Basket.Command[$Data.Name].arguments.Add(
+                $Basket.Command[$check].arguments.Add(
                     [string]::Format('-{0}', $parameter.Name), @{
                         'value' = @{
                             'type' = 'Function';
@@ -268,7 +270,7 @@ function Get-IcingaCheckCommandConfig()
                 );
             } elseif ($parameter.type.name -eq 'SecureString') {
                 # Convert out input string as SecureString
-                $Basket.Command[$Data.Name].arguments.Add(
+                $Basket.Command[$check].arguments.Add(
                     [string]::Format('-{0}', $parameter.Name), @{
                         'value' = (
                             [string]::Format(
@@ -281,7 +283,7 @@ function Get-IcingaCheckCommandConfig()
                 );
             } else {
                 # Default to Object
-                $Basket.Command[$Data.Name].arguments.Add(
+                $Basket.Command[$check].arguments.Add(
                     [string]::Format('-{0}', $parameter.Name), @{
                         'value' = $IcingaCustomVariable;
                         'order' = $Order;
@@ -388,9 +390,10 @@ function Get-IcingaCheckCommandConfig()
 
     foreach ($check in $CheckName) {
         [int]$FieldNumeration = 0;
+        [string]$check        = [string]$check;
 
         $Data            = (Get-Help $check)
-        $PluginNameSpace = $Data.Name.Replace('Invoke-', '');
+        $PluginNameSpace = $check.Replace('Invoke-', '');
         $CheckParamList  = @( $ThresholdIntervalArg );
 
         foreach ($entry in $Data.parameters.parameter) {
@@ -409,7 +412,7 @@ function Get-IcingaCheckCommandConfig()
             foreach ($DataFieldID in $Basket.Datafield.Keys) {
                 [string]$varname = $Basket.Datafield[$DataFieldID].varname;
                 if ([string]$varname -eq [string]$IcingaCustomVariable) {
-                    $Basket.Command[$Data.Name].fields +=  @{
+                    $Basket.Command[$check].fields +=  @{
                         'datafield_id' = [int]$DataFieldID;
                         'is_required'  = $Required;
                         'var_filter'   = $NULL;
