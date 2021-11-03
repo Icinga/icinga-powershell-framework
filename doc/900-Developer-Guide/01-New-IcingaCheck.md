@@ -26,11 +26,12 @@ For performance metrics you can provide a `Unit` to ensure your graphing is disp
 | ---          | ---    | ---       | ---         |
 | Name         | String    | *         | The unique name of each check within a plugin. Will be display in the check output.  |
 | Value        | Object    | *         | The value all comparison is done with. In general this should be a `Numeric` or `String` value |
+| BaseValue    | Object    | *         | A value from which a dynamic percentage result is calculated from, by including the current value. Could for example be the maximum size of a partition |
 | Unit         | Units     |           | Specify the unit for a value to display graph properly |
 | Minimum      | String    |           | The minimum value which is displayed on your graphs |
 | Maximum      | String    |           | The maximum value which is displayed on your graphs |
 | BaseValue    | Object    |           | Sets a base value for the check which allows to use dynamic `%` usage on thresholds. The base value will calculate the `%` value from the current value, allowing generic `%` monitoring |
-| ObjectExists | Bool      |           | If you are using values coming from objects, like Services, you can use this argument to determin if the object itself exist or not. In case it doesn't, you will receive a proper output on the check result |
+| ObjectExists | Bool      |           | If you are using values coming from objects, like Services, you can use this argument to determine if the object itself exist or not. In case it doesn't, you will receive a proper output on the check result |
 | Translation  | Hashtable |           | In case you want to map values to certain descriptions, you can place a hashtable at this argument which will then map the value to the description on the check result. For example this would apply to service running states |
 | LabelName    | String    |           | Allows to override the default label name generated based on the `-Name` argument to a custom name. Please ensure to remove any special characters manually, as the name set here is the exact name for the label |
 | NoPerfData   | Switch    |           | Disables Performance Data output for this check object |
@@ -78,22 +79,22 @@ $IcingaCheck.WarnOutOfRange(10).CritOutOfRange(20) | Out-Null
 
 ### Functions
 
-For most parts it is recommended to use the `OutOfRange` functions for `warning` and `critical` checks as the user is able to dynamicly set the range with the arguments of the plugins. For string values the `Like` and `Match` functions should be used.
+For most parts it is recommended to use the `OutOfRange` functions for `warning` and `critical` checks as the user is able to dynamically set the range with the arguments of the plugins. For string values the `Like` and `Match` functions should be used.
 
 #### Recommended functions
 
 | Function        | Parameters         | Description                                     | Example |
 | ---             | ---                | ---                                             | ---     |
-| WarnOutOfRange | Warning | This will make use of the Icinga Threshhold handling, like `10`, `~:10`, `@10:20` and properly return the correct ok / warning state of the plugin | $IcingaCheck.WarnOutOfRange(10) | Out-Null |
-| CritOutOfRange | Critial | This will make use of the Icinga Threshhold handling, like `10`, `~:10`, `@10:20` and properly return the correct ok / critical state of the plugin | $IcingaCheck.CritOutOfRange(10) | Out-Null |
+| WarnOutOfRange | Warning | This will make use of the Icinga Threshold handling, like `10`, `~:10`, `@10:20` and properly return the correct ok / warning state of the plugin | $IcingaCheck.WarnOutOfRange(10) | Out-Null |
+| CritOutOfRange | Critical | This will make use of the Icinga Threshold handling, like `10`, `~:10`, `@10:20` and properly return the correct ok / critical state of the plugin | $IcingaCheck.CritOutOfRange(10) | Out-Null |
 | WarnIfLike | Warning | Will return warning in case the input is `like` the value | $IcingaCheck.WarnIfLike('\*running\*') |
 | WarnIfNotLike | Warning | Will return warning in case the input is `not like` the value | $IcingaCheck.WarnIfNotLike('\*running\*') |
 | WarnIfMatch | Warning | Will return warning in case the input is `matching` the value | $IcingaCheck.WarnIfMatch('running') |
 | WarnIfNotMatch | Warning | Will return warning in case the input is `not matching` the value | $IcingaCheck.WarnIfNotMatch('running') |
-| CritIfLike | Critial | Will return critical in case the input is `like` the value | $IcingaCheck.CritIfLike('\*running\*') |
-| CritIfNotLike | Critial | Will return critical in case the input is `not like` the value | $IcingaCheck.CritIfNotLike('\*running\*') |
-| CritIfMatch | Critial | Will return critical in case the input is `matching` the value | $IcingaCheck.CritIfMatch('running') |
-| CritIfNotMatch | Critial | Will return critical in case the input is `not matching` the value | $IcingaCheck.CritIfNotMatch('running') |
+| CritIfLike | Critical | Will return critical in case the input is `like` the value | $IcingaCheck.CritIfLike('\*running\*') |
+| CritIfNotLike | Critical | Will return critical in case the input is `not like` the value | $IcingaCheck.CritIfNotLike('\*running\*') |
+| CritIfMatch | Critical | Will return critical in case the input is `matching` the value | $IcingaCheck.CritIfMatch('running') |
+| CritIfNotMatch | Critical | Will return critical in case the input is `not matching` the value | $IcingaCheck.CritIfNotMatch('running') |
 
 #### All other functions
 
@@ -107,10 +108,10 @@ For most parts it is recommended to use the `OutOfRange` functions for `warning`
 | WarnIfGreaterEqualThan | Warning | Will return warning in case the input is `greater or equal` than the value | $IcingaCheck.WarnIfGreaterEqualThan(10) |
 | CritIfBetweenAndEqual | Min, Max | Will return critical in case the input is `between or equal` the `min` and `max` value | $IcingaCheck.CritIfBetweenAndEqual(10, 20) |
 | CritIfBetween | Min, Max | Will return critical in case the input is between the `min` and `max` value | $IcingaCheck.CritIfBetween(10, 20) |
-| CritIfLowerThan | Critial | Will return critical in case the input is `lower` than the value | $IcingaCheck.CritIfLowerThan(10) |
-| CritIfLowerEqualThan | Critial | Will return critical in case the input is `lower or equal` than the value | $IcingaCheck.CritIfLowerEqualThan(10) |
-| CritIfGreaterThan | Critial | Will return critical in case the input is `greater` than the value | $IcingaCheck.CritIfGreaterThan(10) |
-| CritIfGreaterEqualThan | Critial | Will return critical in case the input is `greater or equal` than the value | $IcingaCheck.CritIfGreaterEqualThan(10) |
+| CritIfLowerThan | Critical | Will return critical in case the input is `lower` than the value | $IcingaCheck.CritIfLowerThan(10) |
+| CritIfLowerEqualThan | Critical | Will return critical in case the input is `lower or equal` than the value | $IcingaCheck.CritIfLowerEqualThan(10) |
+| CritIfGreaterThan | Critical | Will return critical in case the input is `greater` than the value | $IcingaCheck.CritIfGreaterThan(10) |
+| CritIfGreaterEqualThan | Critical | Will return critical in case the input is `greater or equal` than the value | $IcingaCheck.CritIfGreaterEqualThan(10) |
 
 ### Examples
 

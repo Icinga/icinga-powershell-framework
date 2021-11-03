@@ -1,0 +1,35 @@
+@{
+    ModuleVersion     = '$MODULEVERSION$'
+    RootModule        = '$ROOTMODULE$'
+    GUID              = '$GUID$'
+    Author            = '$AUTHOR$'
+    CompanyName       = '$COMPANYNAME$'
+    Copyright         = '$COPYRIGHT$'
+    Description       = '$DESCRIPTION$'
+    PowerShellVersion = '4.0'
+    RequiredModules   = @(
+        $REQUIREDMODULES$
+    )
+    NestedModules     = @(
+        $NESTEDMODULES$
+    )
+    FunctionsToExport = @( '*' )
+    CmdletsToExport   = @( '*' )
+    VariablesToExport = @( '*' )
+    AliasesToExport   = @( '*' )
+    PrivateData       = @{
+        PSData   = @{
+            Tags         = @( $TAGS$ )
+            LicenseUri   = '$LICENSEURI$'
+            ProjectUri   = '$PROJECTURI$'
+            ReleaseNotes = ''
+
+        };
+        Version  = '$VMODULEVERSION$'
+        Name     = '$MODULENAME$';
+        Type     = '$COMPONENTTYPE$';
+        Function = '$DAEMONFUNCTION$';
+        Endpoint = '$APIENDPOINT$';
+    }
+    HelpInfoURI       = ''
+}

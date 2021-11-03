@@ -99,6 +99,11 @@ function Publish-IcingaPluginConfiguration()
         Get-IcingaCheckCommandConfig -CheckName $check -OutDirectory $IcingaConfigDir -FileName $check -IcingaConfig;
     }
 
+    if ($CheckList.Count -eq 0) {
+        Write-IcingaConsoleNotice 'The module "{0}" is not containing any plugins' -Objects $ComponentName;
+        return;
+    }
+
     Get-IcingaCheckCommandConfig -CheckName $CheckList -OutDirectory $BasketConfigDir -FileName ([string]::Format('{0}_Bundle', (Get-Culture).TextInfo.ToTitleCase($ComponentName)));
     Get-IcingaCheckCommandConfig -CheckName $CheckList -OutDirectory $IcingaConfigDir -FileName ([string]::Format('{0}_Bundle', (Get-Culture).TextInfo.ToTitleCase($ComponentName))) -IcingaConfig;
 }

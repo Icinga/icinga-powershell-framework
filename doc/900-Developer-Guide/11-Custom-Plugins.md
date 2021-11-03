@@ -24,6 +24,18 @@ Additional required files within the `provider` folder can be included by using 
 
 The best approach for creating a custom plugin is by creating an independent module which is installed in your PowerShell modules directly. This will ensure you are not overwriting your custom data with possible framework updates.
 
+### Developer Tools
+
+To get started easier, you can run this command to create the new module:
+
+```powershell
+New-IcingaForWindowsComponent -Name 'plugintutorial' -ComponentType 'plugins';
+```
+
+If you wish to create the module manually, please read on.
+
+### Manual Creation
+
 In this guide, we will assume the name of the module is `icinga-powershell-plugintutorial`.
 
 At first we will have to create a new module. Navigate to the PowerShell modules folder the Framework itself is installed to. In this tutorial we will assume the location is
