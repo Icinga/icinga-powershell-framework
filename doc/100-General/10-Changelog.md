@@ -19,6 +19,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#381](https://github.com/Icinga/icinga-powershell-framework/issues/381) Fixes Repository Hash generator for new repositories, which always returned the same hash regardless of the files inside
 * [#386](https://github.com/Icinga/icinga-powershell-framework/pull/386) Fixes check command config generator for Icinga Director baskets/Icinga 2 conf files, in case we are using a check command with an alias as reference to a new name of a check command
 * [#387](https://github.com/Icinga/icinga-powershell-framework/pull/387) Fixes config generator to use alias names for command arguments/parameters in case available instead of the real name
+* [#390](https://github.com/Icinga/icinga-powershell-framework/pull/390) Fixes threshold interval time conversion by using `-ThresholdInterval` with values that cause the used `TimeSpan` object to move from minutes to hours, like `60m` and `1h`
 
 ### Enhancements
 

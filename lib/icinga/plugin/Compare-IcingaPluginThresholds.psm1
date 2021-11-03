@@ -61,7 +61,7 @@ function Compare-IcingaPluginThresholds()
 
     if ([string]::IsNullOrEmpty($TimeInterval) -eq $FALSE -And $null -ne $ThresholdCache) {
         $TimeSeconds        = ConvertTo-Seconds $TimeInterval;
-        $MinuteInterval     = ([TimeSpan]::FromSeconds($TimeSeconds)).Minutes;
+        $MinuteInterval     = [math]::round(([TimeSpan]::FromSeconds($TimeSeconds)).TotalMinutes, 0);
         $CheckPerfDataLabel = [string]::Format('{0}_{1}', (Format-IcingaPerfDataLabel $CheckName), $MinuteInterval);
 
         if ($null -ne $ThresholdCache.$CheckPerfDataLabel) {
@@ -96,7 +96,7 @@ function Compare-IcingaPluginThresholds()
                 $Threshold      = $TmpValue.Substring(0, $LastIndex);
                 $TimeIndex      = $TmpValue.Substring($LastIndex + 1, $TmpValue.Length - $LastIndex - 1);
                 $TimeSeconds    = ConvertTo-Seconds $TimeIndex;
-                $MinuteInterval = ([TimeSpan]::FromSeconds($TimeSeconds)).Minutes;
+                $MinuteInterval = [math]::round(([TimeSpan]::FromSeconds($TimeSeconds)).TotalMinutes, 0);
 
                 $CheckPerfDataLabel = [string]::Format('{0}_{1}', (Format-IcingaPerfDataLabel $CheckName), $MinuteInterval);
 
