@@ -25,6 +25,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 * [#383](https://github.com/Icinga/icinga-powershell-framework/pull/383) Moves the components REST-Api [icinga-powershell-restapi](https://icinga.com/docs/icinga-for-windows/latest/restapi/doc/01-Introduction/) and API-Checks [icinga-powershell-apichecks](https://icinga.com/docs/icinga-for-windows/latest/apichecks/doc/01-Introduction/) directly into the Framework
 * [#392](https://github.com/Icinga/icinga-powershell-framework/pull/392) Adds support to read logs from Windows EventLog while using `Read-IcingaAgentLogFile`
+* [#393](https://github.com/Icinga/icinga-powershell-framework/pull/393) Adds generic reader function `Read-IcingaWindowsEventLog`, allowing to read any EventLog as stream on the console and adds in addition `Read-IcingaForWindowsLog` for reading Icinga for Windows specific logs
 
 ## 1.6.1 (2021-09-15)
 
