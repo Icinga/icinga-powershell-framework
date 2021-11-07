@@ -1,6 +1,6 @@
 # Developer Guide: Custom API-Endpoints
 
-Starting with Icinga [PowerShell Framework v1.1.0](https://icinga.com/docs/windows/latest) plenty of features and functionaliy have been added for shipping data by using a REST-API. This Developer Guide will describe on how to write custom API endpoints by using the [PowerShell Framework v1.1.0](https://icinga.com/docs/windows/latest) and the [Icinga PowerShell REST-Api](https://icinga.com/docs/windows/latest/restapi/doc/01-Introduction/). In this example we will write a custom endpoint to simply provide a file list for a specific folder.
+Starting with Icinga [PowerShell Framework v1.1.0](https://icinga.com/docs/windows/latest) plenty of features and functionality have been added for shipping data by using a REST-API. This Developer Guide will describe on how to write custom API endpoints by using the [PowerShell Framework v1.1.0](https://icinga.com/docs/windows/latest) and the [Icinga PowerShell REST-Api](https://icinga.com/docs/windows/latest/restapi/doc/01-Introduction/). In this example we will write a custom endpoint to simply provide a file list for a specific folder.
 
 ## File Structure
 
@@ -23,6 +23,18 @@ Additional required files within the `lib` folder can be included by using the `
 
 The best approach for creating a custom API endpoint is by creating an independent module which is installed in your PowerShell modules directly. This will ensure you are not overwriting your custom data with possible other module updates.
 
+### Developer Tools
+
+To get started easier, you can run this command to create the new module:
+
+```powershell
+New-IcingaForWindowsComponent -Name 'apitutorial' -ComponentType 'apiendpoint';
+```
+
+If you wish to create the module manually, please read on.
+
+### Manual Creation
+
 In this guide, we will assume the name of the module is `icinga-powershell-apitutorial`.
 
 At first we will have to create a new module. Navigate to the PowerShell modules folder the Framework itself is installed to. In this tutorial we will assume the location is
@@ -35,7 +47,7 @@ Now create a new folder with the name `icinga-powershell-apitutorial` and naviga
 
 As we require a `psm1` file which contains our code, we will create a new file with the name `icinga-powershell-apitutorial.psm1`. This will allow the PowerShell autoloader to load the module automatically.
 
-**Note:** It could be possible, depending on your [execution policies](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.security/set-executionpolicy?view=powershell-6), that your module is not loaded properly. If this is the case, you can try to unblock the file by opening a PowerShell and use the `Unblock-File` Cmdelet
+**Note:** It could be possible, depending on your [execution policies](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.security/set-executionpolicy?view=powershell-6), that your module is not loaded properly. If this is the case, you can try to unblock the file by opening a PowerShell and use the `Unblock-File` Cmdlet
 
 ```powershell
 Unblock-File -Path 'C:\Program Files\WindowsPowerShell\Modules\icinga-powershell-apitutorial\icinga-powershell-apitutorial.psm1'
@@ -45,7 +57,7 @@ Unblock-File -Path 'C:\Program Files\WindowsPowerShell\Modules\icinga-powershell
 
 Once the module files are created and unblocked, we can start testing if the autoloader is properly working and our module is detected.
 
-For this open the file `icinga-powershell-apitutorial.psm1` in your prefered editor and add the following code snippet
+For this open the file `icinga-powershell-apitutorial.psm1` in your preferred editor and add the following code snippet
 
 ```powershell
 function Test-MyIcingaAPITutorialCommand()
@@ -83,9 +95,9 @@ function Invoke-IcingaAPITutorialRESTCall()
 
 ### Basic API Architecture
 
-A developer using the REST-Api integration does not have to worry about anything regarding header fetchting, URL encoding or similar. All data is parsed by the  [Icinga PowerShell REST-Api](https://icinga.com/docs/windows/latest/restapi/doc/01-Introduction/) and invoked to our function.
+A developer using the REST-Api integration does not have to worry about anything regarding header fetching, URL encoding or similar. All data is parsed by the  [Icinga PowerShell REST-Api](https://icinga.com/docs/windows/latest/restapi/doc/01-Introduction/) and invoked to our function.
 
-Our API endpoint will be called by a namespace, refering to our actual function executing the code.
+Our API endpoint will be called by a namespace, referring to our actual function executing the code.
 
 ### Writing Our Base-Skeleton
 
@@ -96,16 +108,17 @@ function Invoke-IcingaAPITutorialRESTCall()
 {
     # Create our arguments the REST-Api daemon will use to parse the request
     param (
-        [Hashtable]$Request    = @{},
-        [Hashtable]$Connection = @{},
-        $IcingaGlobals
+        [Hashtable]$Request    = @{ },
+        [Hashtable]$Connection = @{ },
+        $IcingaGlobals,
+        [string]$ApiVersion    = $null
     );
 }
 ```
 
 #### Request Argument
 
-The request argument provides a hashtable with all parsed content of the request to later work with. The following elements are avaialble by default:
+The request argument provides a hashtable with all parsed content of the request to later work with. The following elements are available by default:
 
 ##### Method
 
@@ -113,7 +126,7 @@ The HTTP method being used for the request, like `GET`, `POST`, `DELETE` and so 
 
 ##### RequestPath
 
-The request path is split into two hastable entries: `FullPath` and `PathArray`. This tells you exactly which URL the user specified and allows you to build proper handling for different entry points of your endpoint.
+The request path is split into two hashtable entries: `FullPath` and `PathArray`. This tells you exactly which URL the user specified and allows you to build proper handling for different entry points of your endpoint.
 
 For the path array, on index 0 you will always find the `version` and on index 1 `your endpoint alias`. Following this, possible additional path extensions in your module will always start on index 2.
 
@@ -176,22 +189,23 @@ This argument is containing the connection details of the client including the T
 
 #### IcingaGlobals Argument
 
-This argument contains all global data and content of the REST-Api background dameon. This will then come in handy to share data between API endpoints and to access some global configuration data.
+This argument contains all global data and content of the REST-Api background daemon. This will then come in handy to share data between API endpoints and to access some global configuration data.
 
 ### Sending Data to the Client
 
-Now we are basically ready to process data. To do so, we will fetch the current folder content of our PowerShell module with `Get-ChildItem` and send this content to our client. For sending data to the client, we can use `Send-IcingaTCPClientMessage`. This Cmdlet will use a `Message` as `New-IcingaTCPClientRESTMessage` object which itself cotains the `HTTPResponse` and our `ContentBody`. In addition to `Send-IcingaTCPClientMessage` we also have to specify the `Stream` to write to. The stream object is part of our `Connection` argument.
+Now we are basically ready to process data. To do so, we will fetch the current folder content of our PowerShell module with `Get-ChildItem` and send this content to our client. For sending data to the client, we can use `Send-IcingaTCPClientMessage`. This Cmdlet will use a `Message` as `New-IcingaTCPClientRESTMessage` object which itself contains the `HTTPResponse` and our `ContentBody`. In addition to `Send-IcingaTCPClientMessage` we also have to specify the `Stream` to write to. The stream object is part of our `Connection` argument.
 
-All content will be send as JSON encoded, so please ensure you are using a datatype which is convertable by `ConvertTo-Json`.
+All content will be send as JSON encoded, so please ensure you are using a datatype which is convertible by `ConvertTo-Json`.
 
 ```powershell
 function Invoke-IcingaAPITutorialRESTCall()
 {
     # Create our arguments the REST-Api daemon will use to parse the request
     param (
-        [Hashtable]$Request    = @{},
-        [Hashtable]$Connection = @{},
-        $IcingaGlobals
+        [Hashtable]$Request    = @{ },
+        [Hashtable]$Connection = @{ },
+        $IcingaGlobals,
+        [string]$ApiVersion    = $null
     );
 
     # Fetch all file names within our module directory. We filter this to ensure we
@@ -212,7 +226,7 @@ function Invoke-IcingaAPITutorialRESTCall()
 
 Now as we have written a basic function to fetch folder content and to send it back to our client, we will have to `register` our Cmdlet to the endpoint. For this we will open our `icinga-powershell-apitutorial.psm1` and add a `namespace` function which has to follow this naming guideline: `Register-IcingaRESTAPIEndpoint{0}`
 
-Replace `{0}` with the name you have choosen for your `Invoke-Icinga{0}RESTCall`. Once the REST-Api Daemon is loaded, all functions within this namespace are executed. The function has to return a hashtable with an `Alias` refering to the URL part the user has to enter and a `Command` being executed for this alias.
+Replace `{0}` with the name you have chosen for your `Invoke-Icinga{0}RESTCall`. Once the REST-Api Daemon is loaded, all functions within this namespace are executed. The function has to return a hashtable with an `Alias` referring to the URL part the user has to enter and a `Command` being executed for this alias.
 
 ```powershell
 function Register-IcingaRESTAPIEndpointAPITutorial()
@@ -266,4 +280,4 @@ https://example.com:5668/v1/apitutorial
 
 ### Conclusion
 
-This is a basic tutorial on how to write custom API-Endpoints and make them available in your environment. Of course you can now start to filter requests depending on the URL the user added, used headers or other input like the body for example. All data send by the client is accessable to developers for writing their own extensions and modules.
+This is a basic tutorial on how to write custom API-Endpoints and make them available in your environment. Of course you can now start to filter requests depending on the URL the user added, used headers or other input like the body for example. All data send by the client is accessible to developers for writing their own extensions and modules.

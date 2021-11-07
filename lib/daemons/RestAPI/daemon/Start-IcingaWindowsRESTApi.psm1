@@ -56,10 +56,10 @@ function Start-IcingaWindowsRESTApi()
 
     $RootFolder = $PSScriptRoot;
 
-    $global:IcingaDaemonData.IcingaThreadContent.Add('RESTApi', ([hashtable]::Synchronized(@{})));
+    $global:IcingaDaemonData.IcingaThreadContent.Add('RESTApi', ([hashtable]::Synchronized(@{ })));
     $global:IcingaDaemonData.IcingaThreadPool.Add('IcingaRESTApi', (New-IcingaThreadPool -MaxInstances ($ThreadId + 3)));
-    $global:IcingaDaemonData.IcingaThreadContent.RESTApi.Add('ApiRequests', ([hashtable]::Synchronized(@{})));
-    $global:IcingaDaemonData.IcingaThreadContent.RESTApi.Add('ApiCallThreadAssignment', ([hashtable]::Synchronized(@{})));
+    $global:IcingaDaemonData.IcingaThreadContent.RESTApi.Add('ApiRequests', ([hashtable]::Synchronized(@{ })));
+    $global:IcingaDaemonData.IcingaThreadContent.RESTApi.Add('ApiCallThreadAssignment', ([hashtable]::Synchronized(@{ })));
     $global:IcingaDaemonData.IcingaThreadContent.RESTApi.Add('TotalThreads', $ConcurrentThreads);
     $global:IcingaDaemonData.IcingaThreadContent.RESTApi.Add('LastThreadId', 0);
 

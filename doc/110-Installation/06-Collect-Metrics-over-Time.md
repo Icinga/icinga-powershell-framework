@@ -18,7 +18,7 @@ At first, we need to register this daemon:
 
 ```powershell
 Register-IcingaBackgroundDaemon `
-    -BackgroundDaemon 'Start-IcingaServiceCheckDaemon';
+    -Command 'Start-IcingaServiceCheckDaemon';
 ```
 
 ## Manage Service Checks

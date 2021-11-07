@@ -54,7 +54,7 @@ Once a daemon is registered, you can also unregister them from Icinga for Window
 
 ```powershell
 Register-IcingaBackgroundDaemon `
-    -BackgroundDaemon 'Start-IcingaServiceCheckDaemon';
+    -Command 'Start-IcingaServiceCheckDaemon';
 ```
 
 ### Show Background Daemons
