@@ -20,6 +20,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#386](https://github.com/Icinga/icinga-powershell-framework/pull/386) Fixes check command config generator for Icinga Director baskets/Icinga 2 conf files, in case we are using a check command with an alias as reference to a new name of a check command
 * [#387](https://github.com/Icinga/icinga-powershell-framework/pull/387) Fixes config generator to use alias names for command arguments/parameters in case available instead of the real name
 * [#390](https://github.com/Icinga/icinga-powershell-framework/pull/390) Fixes threshold interval time conversion by using `-ThresholdInterval` with values that cause the used `TimeSpan` object to move from minutes to hours, like `60m` and `1h`
+* [#395](https://github.com/Icinga/icinga-powershell-framework/issues/395) Fixes `-ThresholdInterval` data type inside auto generated docs for plugins, which was of type `Object`, but should be of type `String`
 
 ### Enhancements
 
