@@ -7,6 +7,14 @@ documentation before upgrading to a new release.
 
 Released closed milestones can be found on [GitHub](https://github.com/Icinga/icinga-powershell-framework/milestones?state=closed).
 
+## 1.8.0 (2022-02-08)
+
+[Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/19?closed=1)
+
+### Bugfixes
+
+* [#398](https://github.com/Icinga/icinga-powershell-framework/pull/398) Fixes String.Builder object output, while creating new components by using `New-IcingaForWindowsComponent`
+
 ## 1.7.0 (2021-11-09)
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/16?closed=1)
