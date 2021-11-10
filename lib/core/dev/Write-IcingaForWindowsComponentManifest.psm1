@@ -50,17 +50,17 @@ function Write-IcingaForWindowsComponentManifest()
                 [int]$CurrentIndex = 0;
                 foreach ($module in $Value) {
                     $CurrentIndex += 1;
-                    $ContentString.Append('@{ ');
+                    $ContentString.Append('@{ ') | Out-Null;
 
                     foreach ($dependency in $module.Keys) {
                         $DependencyValue = $module[$dependency];
 
-                        $ContentString.Append([string]::Format("{0} = '{1}'; ", $dependency, $DependencyValue));
+                        $ContentString.Append([string]::Format("{0} = '{1}'; ", $dependency, $DependencyValue)) | Out-Null;
                     }
-                    $ContentString.Append('}');
+                    $ContentString.Append('}') | Out-Null;
 
                     if ($CurrentIndex -ne $Value.Count) {
-                        $ContentString.Append(",`r`n        ");
+                        $ContentString.Append(",`r`n        ") | Out-Null;
                     }
                 }
 
@@ -73,7 +73,7 @@ function Write-IcingaForWindowsComponentManifest()
         Write-IcingaFileSecure -File (Join-Path -Path $ModuleDir -ChildPath ([string]::Format('{0}.psd1', $ModuleName))) -Value $ManifestFileData;
     }
 
-    $ContentString.Clear();
+    $ContentString.Clear() | Out-Null;
 
     [array]$ManifestContent = Get-Content -Path (Join-Path -Path $ModuleDir -ChildPath ([string]::Format('{0}.psd1', $ModuleName)));
 
