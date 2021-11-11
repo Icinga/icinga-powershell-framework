@@ -11,9 +11,14 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/19?closed=1)
 
+## 1.7.1 (2021-11-11)
+
+[Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/22?closed=1)
+
 ### Bugfixes
 
 * [#398](https://github.com/Icinga/icinga-powershell-framework/pull/398) Fixes String.Builder object output, while creating new components by using `New-IcingaForWindowsComponent`
+* [#401](https://github.com/Icinga/icinga-powershell-framework/pull/401) Fixes the repository manager by now using Icinga WebRequests instead of Windows WebRequests, allowing the usage of the internal proxy feature
 
 ## 1.7.0 (2021-11-09)
 
