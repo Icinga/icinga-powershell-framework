@@ -49,7 +49,7 @@ function Read-IcingaRepositoryFile()
                 $RepoPath = (Join-WebPath -Path $Repository.RemotePath -ChildPath 'ifw.repo.json');
             }
 
-            $WebContent = Invoke-WebRequest -UseBasicParsing -Uri $RepoPath;
+            $WebContent = Invoke-IcingaWebRequest -UseBasicParsing -Uri $RepoPath;
 
             if ($null -ne $WebContent) {
                 if ($WebContent.RawContent.Contains('application/octet-stream')) {
