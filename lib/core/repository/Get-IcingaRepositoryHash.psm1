@@ -9,7 +9,7 @@ function Get-IcingaRepositoryHash()
         return;
     }
 
-    $RepositoryFolder = Get-ChildItem -Path $Path -Recurse;
+    $RepositoryFolder = Get-ChildItem -Path $Path -Recurse -Include '*.zip', '*.msi';
     $FileHashes       = New-Object -TypeName 'System.Text.StringBuilder';
 
     foreach ($entry in $RepositoryFolder) {

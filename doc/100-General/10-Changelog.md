@@ -14,6 +14,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 ### Bugfixes
 
 * [#398](https://github.com/Icinga/icinga-powershell-framework/pull/398) Fixes String.Builder object output, while creating new components by using `New-IcingaForWindowsComponent`
+* [#399](https://github.com/Icinga/icinga-powershell-framework/issues/399) Fixes repository file hash generator, which now only includes .zip and .msi files, which otherwise turned into invalid hashes because of the repository index file always changing based on the assigned hash
 * [#401](https://github.com/Icinga/icinga-powershell-framework/pull/401) Fixes the repository manager by now using Icinga WebRequests instead of Windows WebRequests, allowing the usage of the internal proxy feature
 
 ## 1.7.0 (2021-11-09)
