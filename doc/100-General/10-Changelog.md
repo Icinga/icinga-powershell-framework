@@ -11,6 +11,10 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/19?closed=1)
 
+### Bugfixes
+
+* [#403](https://github.com/Icinga/icinga-powershell-framework/pull/403) Fixes memory leak on newly EventLog reader for CLI event stream
+
 ## 1.7.1 (2021-11-11)
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/22?closed=1)
