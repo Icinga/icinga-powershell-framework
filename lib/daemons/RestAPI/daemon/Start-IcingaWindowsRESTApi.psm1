@@ -71,6 +71,7 @@ function Start-IcingaWindowsRESTApi()
         -Command 'New-IcingaForWindowsRESTApi' `
         -CmdParameters @{
             'IcingaDaemonData' = $global:IcingaDaemonData;
+            'Address'          = $Address;
             'Port'             = $Port;
             'RootFolder'       = $RootFolder;
             'CertFile'         = $CertFile;
