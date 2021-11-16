@@ -3,6 +3,7 @@ function New-IcingaForWindowsRESTApi()
     # Allow us to parse the framework global data to this thread
     param (
         $IcingaDaemonData,
+        [string]$Address  = '',
         $Port,
         $RootFolder,
         $CertFile,

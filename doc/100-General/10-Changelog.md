@@ -13,6 +13,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 ### Bugfixes
 
+* [#402](https://github.com/Icinga/icinga-powershell-framework/pull/402) Fixes missing address attribute for REST-Api daemon, making it unable to change the listening address
 * [#403](https://github.com/Icinga/icinga-powershell-framework/pull/403) Fixes memory leak on newly EventLog reader for CLI event stream
 
 ## 1.7.1 (2021-11-11)
