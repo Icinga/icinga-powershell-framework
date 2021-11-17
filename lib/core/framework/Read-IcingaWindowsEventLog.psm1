@@ -66,7 +66,7 @@ function Read-IcingaWindowsEventLog()
         }
 
         Start-Sleep -Seconds 1;
-        # Force PowerShell to call the garbage collector to free memory
-        [System.GC]::Collect();
+        # Force Icinga for Windows Garbage Collection
+        Optimize-IcingaForWindowsMemory -ClearErrorStack;
     }
 }

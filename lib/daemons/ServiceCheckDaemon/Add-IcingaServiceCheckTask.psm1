@@ -143,9 +143,6 @@ function Add-IcingaServiceCheckTask()
                 Write-IcingaConsoleError 'Failed to handle check result processing: {0}' -Objects $ErrMsg;
             }
 
-            # Cleanup the error stack and remove not required data
-            $Error.Clear();
-
             # Always ensure our check data is cleared regardless of possible
             # exceptions which might occur
             Get-IcingaCheckSchedulerPerfData | Out-Null;
@@ -158,7 +155,7 @@ function Add-IcingaServiceCheckTask()
 
         $PassedTime += 1;
         Start-Sleep -Seconds 1;
-        # Force PowerShell to call the garbage collector to free memory
-        [System.GC]::Collect();
+        # Force Icinga for Windows Garbage Collection
+        Optimize-IcingaForWindowsMemory -ClearErrorStack;
     }
 }
