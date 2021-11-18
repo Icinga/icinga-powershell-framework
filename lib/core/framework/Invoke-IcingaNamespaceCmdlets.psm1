@@ -15,15 +15,14 @@ function Invoke-IcingaNamespaceCmdlets()
     foreach ($Cmdlet in $CommandList) {
         try {
             $CommandName = $Cmdlet.Name;
-            Import-Module $Cmdlet.Module.Path -WarningAction SilentlyContinue -ErrorAction Stop;
+            $Content     = (& $CommandName);
 
-            $Content = (& $CommandName);
             Add-IcingaHashtableItem `
                 -Hashtable $CommandConfig `
                 -Key $Cmdlet.Name `
                 -Value $Content | Out-Null;
         } catch {
-            # TODO: Add event log logging on exceptions
+            Write-IcingaEventMessage -EventId 1103 -Namespace 'Framework' -Objects $CommandName, $_.Exception.Message;
         }
     }
 
