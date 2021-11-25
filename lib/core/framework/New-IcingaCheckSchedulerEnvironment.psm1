@@ -44,17 +44,5 @@ function New-IcingaCheckSchedulerEnvironment()
         $IcingaDaemonData.IcingaThreadContent.Add('Scheduler', @{ });
     }
 
-    if ($null -eq $global:Icinga) {
-        $global:Icinga = @{ };
-    }
-
-    if ($global:Icinga.ContainsKey('CheckResults') -eq $FALSE) {
-        $global:Icinga.Add('CheckResults', @());
-    }
-    if ($global:Icinga.ContainsKey('PerfData') -eq $FALSE) {
-        $global:Icinga.Add('PerfData', @());
-    }
-    if ($global:Icinga.ContainsKey('CheckData') -eq $FALSE) {
-        $global:Icinga.Add('CheckData', @{ });
-    }
+    New-IcingaEnvironmentVariable;
 }
