@@ -17,6 +17,10 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#403](https://github.com/Icinga/icinga-powershell-framework/pull/403) Fixes memory leak on newly EventLog reader for CLI event stream
 * [#407](https://github.com/Icinga/icinga-powershell-framework/pull/407) Removes unnecessary module import inside `Invoke-IcingaNamespaceCmdlets`
 
+### Enhancements
+
+* [#388](https://github.com/Icinga/icinga-powershell-framework/issues/388) Improves performance for testing if `Add-Type` functions have been added, by adding an internal test for newly introduced environment variables within a PowerShell session
+
 ## 1.7.1 (2021-11-11)
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/22?closed=1)
