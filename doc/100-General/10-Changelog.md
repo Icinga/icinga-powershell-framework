@@ -16,6 +16,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#402](https://github.com/Icinga/icinga-powershell-framework/pull/402) Fixes missing address attribute for REST-Api daemon, making it unable to change the listening address
 * [#403](https://github.com/Icinga/icinga-powershell-framework/pull/403) Fixes memory leak on newly EventLog reader for CLI event stream
 * [#407](https://github.com/Icinga/icinga-powershell-framework/pull/407) Removes unnecessary module import inside `Invoke-IcingaNamespaceCmdlets`
+* [#411](https://github.com/Icinga/icinga-powershell-framework/pull/411) Fixes Icinga Director error message output because of missing `[string]::Format()`
 
 ### Enhancements
 
