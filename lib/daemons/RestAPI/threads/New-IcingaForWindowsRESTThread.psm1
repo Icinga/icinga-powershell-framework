@@ -36,8 +36,8 @@ function New-IcingaForWindowsRESTThread()
 
             # Read the received message from the stream by using our smart functions
             [string]$RestMessage = Read-IcingaTCPStream -Client $Connection.Client -Stream $Connection.Stream;
-            # Now properly translate the entire rest message to a parseable hashtable
-            $RESTRequest         = Read-IcingaRestMessage -RestMessage $RestMessage -Connection $Connection;
+            # Now properly translate the entire rest message to a parsable hashtable
+            $RESTRequest         = Read-IcingaRESTMessage -RestMessage $RestMessage -Connection $Connection;
 
             if ($null -ne $RESTRequest) {
 
@@ -110,9 +110,7 @@ function New-IcingaForWindowsRESTThread()
             Close-IcingaTCPConnection -Client $Connection.Client;
         }
 
-        # Cleanup the error stack and remove not required data
-        $Error.Clear();
-        # Force PowerShell to call the garbage collector to free memory
-        [System.GC]::Collect();
+        # Force Icinga for Windows Garbage Collection
+        Optimize-IcingaForWindowsMemory -ClearErrorStack;
     }
 }

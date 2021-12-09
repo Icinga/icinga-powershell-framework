@@ -73,7 +73,7 @@ function New-IcingaForWindowsRESTApi()
         [bool]$Success = Add-IcingaHashtableItem -Hashtable $RestDaemon.RegisteredEndpoints `
                                                  -Key $entry.Alias `
                                                  -Value $entry.Command;
-        
+
         if ($Success -eq $FALSE) {
             Write-IcingaEventMessage `
                 -EventId 2100 `
@@ -89,7 +89,7 @@ function New-IcingaForWindowsRESTApi()
             [bool]$Success = Add-IcingaHashtableItem -Hashtable $RestDaemon.CommandAliases `
                                                      -Key $component `
                                                      -Value $entry[$component];
-        
+
             if ($Success -eq $FALSE) {
                 Write-IcingaEventMessage `
                     -EventId 2101 `
@@ -123,6 +123,10 @@ function New-IcingaForWindowsRESTApi()
     # being executed. This is required to ensure we will execute
     # the code frequently instead of only once
     while ($TRUE) {
+
+        # Force Icinga for Windows Garbage Collection
+        Optimize-IcingaForWindowsMemory -ClearErrorStack;
+
         $Connection = Open-IcingaTCPClientConnection `
             -Client (New-IcingaTCPClient -Socket $Socket) `
             -Certificate $Certificate;
@@ -156,10 +160,5 @@ function New-IcingaForWindowsRESTApi()
             $ExMsg = $_.Exception.Message;
             Write-IcingaEventMessage -Namespace 'RESTApi' -EvenId 2050 -Objects $ExMsg;
         }
-
-        # Cleanup the error stack and remove not required data
-        $Error.Clear();
-        # Force PowerShell to call the garbage collector to free memory
-        [System.GC]::Collect();
     }
 }
