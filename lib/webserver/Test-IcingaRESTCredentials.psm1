@@ -52,7 +52,7 @@ function Test-IcingaRESTCredentials()
         );
     } catch {
         # Regardless of the error, print the message and return false to prevent further execution
-        Write-IcingaEventMessage -EventId 1560 -Namespace 'Framework' -Objects $_.Exception;
+        Write-IcingaEventMessage -EventId 1560 -Namespace 'Framework' -ExceptionObject $_;
         return $FALSE;
     }
 
@@ -71,7 +71,7 @@ function Test-IcingaRESTCredentials()
 
         return $AuthResult;
     } catch {
-        Write-IcingaEventMessage -EventId 1561 -Namespace 'Framework' -Objects $_.Exception;
+        Write-IcingaEventMessage -EventId 1561 -Namespace 'Framework' -ExceptionObject $_;
     }
 
     return $FALSE;

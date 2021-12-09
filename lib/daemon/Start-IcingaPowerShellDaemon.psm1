@@ -5,8 +5,17 @@ function Start-IcingaPowerShellDaemon()
         [switch]$JEARestart   = $FALSE
     );
 
-    $global:IcingaDaemonData.FrameworkRunningAsDaemon = $TRUE;
+    Start-IcingaForWindowsDaemon -RunAsService:$RunAsService -JEARestart:$JEARestart;
+}
 
+function Start-IcingaForWindowsDaemon()
+{
+    param (
+        [switch]$RunAsService = $FALSE,
+        [switch]$JEARestart   = $FALSE
+    );
+
+    $Global:Icinga.Protected.RunAsDaemon                                  = $TRUE;
     [string]$MainServicePidFile                                           = (Join-Path -Path (Get-IcingaCacheDir) -ChildPath 'service.pid');
     [string]$JeaPidFile                                                   = (Join-Path -Path (Get-IcingaCacheDir) -ChildPath 'jea.pid');
     [string]$JeaProfile                                                   = Get-IcingaPowerShellConfig -Path 'Framework.JEAProfile';
@@ -23,13 +32,13 @@ function Start-IcingaPowerShellDaemon()
     if ([string]::IsNullOrEmpty($JeaProfile)) {
         Write-IcingaDebugMessage -Message 'Starting Icinga for Windows service without JEA context' -Objects $RunAsService, $JEARestart, $JeaProfile;
 
-        $global:IcingaDaemonData.FrameworkRunningAsDaemon = $TRUE;
-        $global:IcingaDaemonData.Add('BackgroundDaemon', [hashtable]::Synchronized(@{ }));
+        $Global:Icinga.Protected.RunAsDaemon = $TRUE;
         # Todo: Add config for active background tasks. Set it to 20 for the moment
-        $global:IcingaDaemonData.IcingaThreadPool.Add('BackgroundPool', (New-IcingaThreadPool -MaxInstances 20));
-        $global:IcingaDaemonData.Add('SSLCertificate', $Certificate);
+        Add-IcingaThreadPool -Name 'MainPool' -MaxInstances 20;
+        $Global:Icinga.Public.Add('SSLCertificate', $Certificate);
 
-        New-IcingaThreadInstance -Name "Icinga_PowerShell_Background_Daemon" -ThreadPool $IcingaDaemonData.IcingaThreadPool.BackgroundPool -Command 'Add-IcingaForWindowsDaemon' -CmdParameters @{ 'IcingaDaemonData' = $global:IcingaDaemonData } -Start;
+
+        New-IcingaThreadInstance -Name "Main" -ThreadPool (Get-IcingaThreadPool -Name 'MainPool') -Command 'Add-IcingaForWindowsDaemon' -Start;
     } else {
         Write-IcingaDebugMessage -Message 'Starting Icinga for Windows service inside JEA context' -Objects $RunAsService, $JEARestart, $JeaProfile;
         & powershell.exe -NoProfile -NoLogo -ConfigurationName $JeaProfile -Command {
@@ -38,24 +47,19 @@ function Start-IcingaPowerShellDaemon()
 
                 Write-IcingaFileSecure -File ($args[1]) -Value $PID;
 
-                $Global:IcingaDaemonData.JEAContext               = $TRUE;
-                $global:IcingaDaemonData.FrameworkRunningAsDaemon = $TRUE;
-                $global:IcingaDaemonData.Add('BackgroundDaemon', [hashtable]::Synchronized(@{ }));
+                $Global:Icinga.Protected.JEAContext  = $TRUE;
+                $Global:Icinga.Protected.RunAsDaemon = $TRUE;
                 # Todo: Add config for active background tasks. Set it to 20 for the moment
-                $global:IcingaDaemonData.IcingaThreadPool.Add('BackgroundPool', (New-IcingaThreadPool -MaxInstances 20));
-                $global:IcingaDaemonData.Add('SSLCertificate', ($args[0]));
+                Add-IcingaThreadPool -Name 'MainPool' -MaxInstances 20;
+                $Global:Icinga.Public.Add('SSLCertificate', $args[0]);
 
-                New-IcingaThreadInstance -Name "Icinga_PowerShell_Background_Daemon" -ThreadPool $IcingaDaemonData.IcingaThreadPool.BackgroundPool -Command 'Add-IcingaForWindowsDaemon' -CmdParameters @{ 'IcingaDaemonData' = $global:IcingaDaemonData } -Start;
+                New-IcingaThreadInstance -Name "Main" -ThreadPool (Get-IcingaThreadPool -Name 'MainPool') -Command 'Add-IcingaForWindowsDaemon' -Start;
 
                 while ($TRUE) {
                     Start-Sleep -Seconds 100;
                 }
             } catch {
-                $CallStack = @();
-                foreach ($entry in (Get-PSCallStack)) {
-                    $CallStack += [string]::Format('{0} => Line {1}', $entry.FunctionName, $entry.ScriptLineNumber);
-                }
-                Write-IcingaEventMessage -EventId 1600 -Namespace Framework -Objects $_.Exception.Message, $_.Exception.StackTrace, $CallStack;
+                Write-IcingaEventMessage -EventId 1600 -Namespace 'Framework' -ExceptionObject $_;
             }
         } -Args $Certificate, $JeaPidFile;
     }
@@ -80,7 +84,7 @@ function Start-IcingaPowerShellDaemon()
 
                     Write-IcingaFileSecure -File $JeaPidFile -Value '';
                     Write-IcingaEventMessage -EventId 1505 -Namespace Framework -Objects ([string]::Format('{0}/5', $JeaRestartCounter));
-                    Start-IcingaPowerShellDaemon -RunAsService:$RunAsService -JEARestart;
+                    Start-IcingaForWindowsDaemon -RunAsService:$RunAsService -JEARestart;
 
                     $JeaRestartCounter += 1;
                     $JeaPid = '';

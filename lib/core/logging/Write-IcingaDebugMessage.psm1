@@ -10,7 +10,7 @@ function Write-IcingaDebugMessage()
         return;
     }
 
-    if ($null -eq $global:IcingaDaemonData -Or $global:IcingaDaemonData.DebugMode -eq $FALSE) {
+    if ($Global:Icinga.Protected.DebugMode -eq $FALSE) {
         return;
     }
 

@@ -29,23 +29,20 @@ function New-IcingaCheckBaseObject()
             return;
         }
 
-        if ($null -eq $Global:Icinga) {
-            $Global:Icinga = @{ };
+        if ($Global:Icinga.Private.Scheduler.ThresholdCache.ContainsKey($this.__CheckCommand) -eq $FALSE) {
+            $Global:Icinga.Private.Scheduler.ThresholdCache.Add($this.__CheckCommand, $null);
         }
 
-        if ($Global:Icinga.ContainsKey('ThresholdCache') -eq $FALSE) {
-            $Global:Icinga.Add('ThresholdCache', @{ });
-        }
-
-        if ($Global:Icinga.ThresholdCache.ContainsKey($this.__CheckCommand) -eq $FALSE) {
-            $Global:Icinga.ThresholdCache.Add($this.__CheckCommand, $null);
-        }
-
-        if ($null -ne $Global:Icinga.ThresholdCache[$this.__CheckCommand]) {
+        if ($null -ne $Global:Icinga.Private.Scheduler.ThresholdCache[$this.__CheckCommand]) {
             return;
         }
 
-        $Global:Icinga.ThresholdCache[$this.__CheckCommand] = (Get-IcingaCacheData -Space 'sc_daemon' -CacheStore 'checkresult' -KeyName $this.__CheckCommand);
+        if ($Global:Icinga.Public.Daemons.ContainsKey('ServiceCheck') -And $Global:Icinga.Public.Daemons.ServiceCheck.PerformanceDataCache.ContainsKey($this.__CheckCommand) -And $Global:Icinga.Public.Daemons.ServiceCheck.PerformanceDataCache[$CheckCommand].Count -ne 0) {
+            $Global:Icinga.Private.Scheduler.ThresholdCache[$this.__CheckCommand] = $Global:Icinga.Public.Daemons.ServiceCheck.PerformanceDataCache[$CheckCommand];
+        } else {
+            # Fallback in case the service is not registered within the daemon or we are running a plugin from without the daemon environment
+            $Global:Icinga.Private.Scheduler.ThresholdCache[$this.__CheckCommand] = (Get-IcingaCacheData -Space 'sc_daemon' -CacheStore 'checkresult' -KeyName $this.__CheckCommand);
+        }
     }
 
     $IcingaCheckBaseObject | Add-Member -MemberType ScriptMethod -Name '__SetParent' -Value {

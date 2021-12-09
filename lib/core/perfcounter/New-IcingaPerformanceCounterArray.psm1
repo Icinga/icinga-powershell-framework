@@ -55,9 +55,8 @@ function New-IcingaPerformanceCounterArray()
     # TODO: Add a cache for our Performance Counters to only fetch them once
     #       for each session to speed up the loading. This cold be something like
     #       this:
-    # New-IcingaPerformanceCounterCache $CounterResult;
-    # Internally we could do something like this
-    # $global:Icinga_PerfCounterCache += $CounterResult;
+    #
+    # $Global:Icinga.Public.PerformanceCounter.Cache += $CounterResult;
 
     # Above we initialise ever single counter and we only require a sleep once
     # in case a new, yet unknown counter was added

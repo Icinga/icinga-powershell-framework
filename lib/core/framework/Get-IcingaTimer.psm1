@@ -25,7 +25,7 @@ function Get-IcingaTimer()
         [string]$Name = 'DefaultTimer'
     );
 
-    $TimerData = Get-IcingaHashtableItem -Key $Name -Hashtable $global:IcingaDaemonData.IcingaTimers;
+    $TimerData = Get-IcingaHashtableItem -Key $Name -Hashtable $Global:Icinga.Private.Timers;
 
     if ($null -eq $TimerData) {
         return $null;

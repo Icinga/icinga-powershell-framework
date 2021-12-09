@@ -11,27 +11,52 @@
 
 function New-IcingaEnvironmentVariable()
 {
-    if ($null -eq $global:Icinga) {
-        $global:Icinga = @{ };
+    if ($null -eq $Global:Icinga) {
+        $Global:Icinga = @{ };
     }
 
     # Session specific configuration for this shell
-    if ($global:Icinga.ContainsKey('Private') -eq $FALSE) {
-        $global:Icinga.Add('Private', @{ });
+    if ($Global:Icinga.ContainsKey('Private') -eq $FALSE) {
+        $Global:Icinga.Add('Private', @{ });
+
+        $Global:Icinga.Private.Add('Daemons', @{ });
+        $Global:Icinga.Private.Add('Timers', @{ });
+
+        $Global:Icinga.Private.Add(
+            'Scheduler',
+            @{
+                'CheckData'       = @{ };
+                'ThresholdCache'  = @{ };
+                'CheckResults'    = @();
+                'PerformanceData' = @();
+                'PluginException' = $null;
+                'ExitCode'        = $null;
+            }
+        );
     }
 
     # Shared configuration for all threads
-    if ($global:Icinga.ContainsKey('Public') -eq $FALSE) {
-        $global:Icinga.Add('Public', [hashtable]::Synchronized(@{ }));
+    if ($Global:Icinga.ContainsKey('Public') -eq $FALSE) {
+        $Global:Icinga.Add('Public', [hashtable]::Synchronized(@{ }));
+
+        $Global:Icinga.Public.Add('Daemons', @{ });
+        $Global:Icinga.Public.Add('Threads', @{ });
+        $Global:Icinga.Public.Add('ThreadPools', @{ });
+        $Global:Icinga.Public.Add(
+            'PerformanceCounter',
+            @{
+                'Cache' = @{ };
+            }
+        );
     }
 
-    if ($global:Icinga.ContainsKey('CheckResults') -eq $FALSE) {
-        $global:Icinga.Add('CheckResults', @());
-    }
-    if ($global:Icinga.ContainsKey('PerfData') -eq $FALSE) {
-        $global:Icinga.Add('PerfData', @());
-    }
-    if ($global:Icinga.ContainsKey('CheckData') -eq $FALSE) {
-        $global:Icinga.Add('CheckData', @{ });
+    # Session specific configuration which should never be modified by users!
+    if ($Global:Icinga.ContainsKey('Protected') -eq $FALSE) {
+        $Global:Icinga.Add('Protected', @{ });
+
+        $Global:Icinga.Protected.Add('DebugMode', $FALSE);
+        $Global:Icinga.Protected.Add('JEAContext', $FALSE);
+        $Global:Icinga.Protected.Add('RunAsDaemon', $FALSE);
+        $Global:Icinga.Protected.Add('Minimal', $FALSE);
     }
 }

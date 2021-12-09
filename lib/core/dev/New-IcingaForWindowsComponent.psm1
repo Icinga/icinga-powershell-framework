@@ -101,13 +101,10 @@ function New-IcingaForWindowsComponent()
             Add-Content -Path $InvokeFunctionFile -Value '{';
             Add-Content -Path $InvokeFunctionFile -Value '    # Do not modify the param section';
             Add-Content -Path $InvokeFunctionFile -Value '    param (';
-            Add-Content -Path $InvokeFunctionFile -Value '        [Hashtable]$Request    = @{ },';
-            Add-Content -Path $InvokeFunctionFile -Value '        [Hashtable]$Connection = @{ },';
-            Add-Content -Path $InvokeFunctionFile -Value '        $IcingaGlobals,';
+            Add-Content -Path $InvokeFunctionFile -Value '        [Hashtable]$Request    = @{},';
+            Add-Content -Path $InvokeFunctionFile -Value '        [Hashtable]$Connection = @{},';
             Add-Content -Path $InvokeFunctionFile -Value '        [string]$ApiVersion    = $null';
             Add-Content -Path $InvokeFunctionFile -Value '    );'
-            Add-Content -Path $InvokeFunctionFile -Value '';
-            Add-Content -Path $InvokeFunctionFile -Value '    $Global:IcingaDaemonData = $IcingaGlobals;';
             Add-Content -Path $InvokeFunctionFile -Value '';
             Add-Content -Path $InvokeFunctionFile -Value '    # This is the main function for your API endpoint.';
             Add-Content -Path $InvokeFunctionFile -Value '    # Also check the developer guide for further details: https://icinga.com/docs/icinga-for-windows/latest/doc/900-Developer-Guide/12-Custom-API-Endpoints/';
@@ -147,7 +144,12 @@ function New-IcingaForWindowsComponent()
                     "'"
                 )
             );
-            Add-Content -Path (Join-Path -Path $ModuleDir -ChildPath ([string]::Format('daemon\{0}.psm1', $DaemonFunction))) -Value '        -ThreadPool $IcingaDaemonData.IcingaThreadPool.BackgroundPool `';
+            Add-Content -Path (Join-Path -Path $ModuleDir -ChildPath ([string]::Format('daemon\{0}.psm1', $DaemonFunction))) -Value (
+                [string]::Format(
+                    '        -ThreadPool (Get-IcingaThreadPool -Name {0}MainPool{0}) `',
+                    "'"
+                )
+            );
             Add-Content -Path (Join-Path -Path $ModuleDir -ChildPath ([string]::Format('daemon\{0}.psm1', $DaemonFunction))) -Value (
                 [string]::Format(
                     '        -Command {0}{1}{0} `',
@@ -157,7 +159,7 @@ function New-IcingaForWindowsComponent()
             );
             Add-Content -Path (Join-Path -Path $ModuleDir -ChildPath ([string]::Format('daemon\{0}.psm1', $DaemonFunction))) -Value (
                 [string]::Format(
-                    '        -CmdParameters @{{ {0}IcingaDaemonData{0} =  $global:IcingaDaemonData }} `',
+                    '        -CmdParameters @{{ }} `',
                     "'"
                 )
             );
@@ -166,9 +168,6 @@ function New-IcingaForWindowsComponent()
 
             Set-Content -Path (Join-Path -Path $ModuleDir -ChildPath ([string]::Format('daemon\{0}.psm1', $DaemonEntry))) -Value ([string]::Format('function {0}()', $DaemonEntry));
             Add-Content -Path (Join-Path -Path $ModuleDir -ChildPath ([string]::Format('daemon\{0}.psm1', $DaemonEntry))) -Value '{';
-            Add-Content -Path (Join-Path -Path $ModuleDir -ChildPath ([string]::Format('daemon\{0}.psm1', $DaemonEntry))) -Value '    param (';
-            Add-Content -Path (Join-Path -Path $ModuleDir -ChildPath ([string]::Format('daemon\{0}.psm1', $DaemonEntry))) -Value '        $IcingaDaemonData';
-            Add-Content -Path (Join-Path -Path $ModuleDir -ChildPath ([string]::Format('daemon\{0}.psm1', $DaemonEntry))) -Value '    );';
             Add-Content -Path (Join-Path -Path $ModuleDir -ChildPath ([string]::Format('daemon\{0}.psm1', $DaemonEntry))) -Value '';
             Add-Content -Path (Join-Path -Path $ModuleDir -ChildPath ([string]::Format('daemon\{0}.psm1', $DaemonEntry))) -Value '    # This is your main daemon function. Add your code inside the WHILE() loop which is executed once the daemon is loaded.';
             Add-Content -Path (Join-Path -Path $ModuleDir -ChildPath ([string]::Format('daemon\{0}.psm1', $DaemonEntry))) -Value '    # Also check the developer guide for further details: https://icinga.com/docs/icinga-for-windows/latest/doc/900-Developer-Guide/10-Custom-Daemons/';

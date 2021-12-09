@@ -8,10 +8,10 @@ function Start-IcingaThread()
         return;
     }
 
-    if ($global:IcingaDaemonData.IcingaThreads.ContainsKey($Thread)) {
-        if ($global:IcingaDaemonData.IcingaThreads[$Thread].Started -eq $FALSE) {
-            $global:IcingaDaemonData.IcingaThreads[$Thread].Handle = $global:IcingaDaemonData.IcingaThreads[$Thread].Shell.BeginInvoke();
-            $global:IcingaDaemonData.IcingaThreads[$Thread].Started = $TRUE;
+    if ($Global:Icinga.Public.Threads.ContainsKey($Thread)) {
+        if ($Global:Icinga.Public.Threads[$Thread].Started -eq $FALSE) {
+            $Global:Icinga.Public.Threads[$Thread].Handle = $Global:Icinga.Public.Threads[$Thread].Shell.BeginInvoke();
+            $Global:Icinga.Public.Threads[$Thread].Started = $TRUE;
         }
     }
 }

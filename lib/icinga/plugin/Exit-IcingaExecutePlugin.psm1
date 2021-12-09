@@ -17,7 +17,7 @@ function Exit-IcingaExecutePlugin()
                 & powershell.exe -ConfigurationName $JEAProfile -NoLogo -NoProfile -Command {
                     Use-Icinga;
 
-                    $global:IcingaDaemonData.JEAContext = $TRUE;
+                    $Global:Icinga.Protected.JEAContext = $TRUE;
 
                     $Command   = $args[0];
                     $Arguments = $args[1];

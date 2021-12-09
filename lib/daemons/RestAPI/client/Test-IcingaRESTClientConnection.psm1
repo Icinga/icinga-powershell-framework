@@ -9,7 +9,7 @@ function Test-IcingaRESTClientConnection()
     if ($null -eq $Connection.Stream) {
         Add-IcingaRESTClientBlacklistCount `
             -Client $Connection.Client `
-            -ClientList $IcingaDaemonData.BackgroundDaemon.IcingaPowerShellRestApi.ClientBlacklist;
+            -ClientList $Global:Icinga.Public.Daemons.RESTApi.ClientBlacklist;
         Write-IcingaEventMessage -EventId 1501 -Namespace 'Framework' -Objects $Connection.Client.Client;
         Close-IcingaTCPConnection -Client $Connection.Client;
         $Connection = $null;

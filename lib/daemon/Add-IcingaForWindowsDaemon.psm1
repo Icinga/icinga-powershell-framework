@@ -1,12 +1,5 @@
 function Add-IcingaForWindowsDaemon()
 {
-    param (
-        $IcingaDaemonData
-    );
-
-    Use-Icinga -LibOnly -Daemon;
-    $Global:IcingaDaemonData = $IcingaDaemonData;
-
     try {
         $EnabledDaemons = Get-IcingaBackgroundDaemons;
 

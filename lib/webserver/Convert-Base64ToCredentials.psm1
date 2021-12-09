@@ -92,8 +92,8 @@ function Convert-Base64ToCredentials()
 
         $UserData = $null;
     } catch {
-        Write-IcingaEventMessage -EventId 1552 -Namespace 'Framework' -Objects $_.Exception;
-        return @{ };
+        Write-IcingaEventMessage -EventId 1552 -Namespace 'Framework' -ExceptionObject $_;
+        return @{};
     }
 
     return $Credentials;

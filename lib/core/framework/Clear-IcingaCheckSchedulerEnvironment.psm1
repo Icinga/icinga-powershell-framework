@@ -16,11 +16,18 @@
 
 function Clear-IcingaCheckSchedulerEnvironment()
 {
-    if ($null -eq $global:Icinga) {
-        return;
-    }
+    param (
+        [switch]$ClearCheckData = $FALSE
+    );
 
     Get-IcingaCheckSchedulerPluginOutput | Out-Null;
     Get-IcingaCheckSchedulerPerfData | Out-Null;
-    Clear-IcingaCheckSchedulerCheckData;
+
+    if ($ClearCheckData) {
+        Clear-IcingaCheckSchedulerCheckData;
+    }
+
+    $Global:Icinga.Private.Scheduler.PluginException = $null;
+    $Global:Icinga.Private.Scheduler.CheckResults    = $null;
+    $Global:Icinga.Private.Scheduler.ExitCode        = $null;
 }

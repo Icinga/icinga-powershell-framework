@@ -6,8 +6,6 @@ function Invoke-IcingaRESTAPIv1Calls()
     );
 
     [string]$ModuleToLoad = Get-IcingaRESTPathElement -Request $Request -Index 1;
-    # Map our Icinga globals to a shorter variable
-    $RestDaemon           = $IcingaDaemonData.BackgroundDaemon.IcingaPowerShellRestApi;
 
     if ([string]::IsNullOrEmpty($ModuleToLoad)) {
         Send-IcingaTCPClientMessage -Message (
@@ -15,14 +13,14 @@ function Invoke-IcingaRESTAPIv1Calls()
                 -HTTPResponse ($IcingaHTTPEnums.HTTPResponseType.Ok) `
                 -ContentBody @{
                     'Endpoints' = @(
-                        $RestDaemon.RegisteredEndpoints.Keys
+                        $Global:Icinga.Public.Daemons.RESTApi.RegisteredEndpoints.Keys
                     )
                 }
         ) -Stream $Connection.Stream;
         return;
     }
 
-    if ($RestDaemon.RegisteredEndpoints.ContainsKey($ModuleToLoad) -eq $FALSE) {
+    if ($Global:Icinga.Public.Daemons.RESTApi.RegisteredEndpoints.ContainsKey($ModuleToLoad) -eq $FALSE) {
         Send-IcingaTCPClientMessage -Message (
             New-IcingaTCPClientRESTMessage `
                 -HTTPResponse ($IcingaHTTPEnums.HTTPResponseType.'Not Found') `
@@ -31,7 +29,7 @@ function Invoke-IcingaRESTAPIv1Calls()
         return;
     }
 
-    [string]$Command = $RestDaemon.RegisteredEndpoints[$ModuleToLoad];
+    [string]$Command = $Global:Icinga.Public.Daemons.RESTApi.RegisteredEndpoints[$ModuleToLoad];
 
     Write-IcingaDebugMessage -Message 'Executing REST-Module' -Objects $Command;
 
@@ -47,7 +45,6 @@ function Invoke-IcingaRESTAPIv1Calls()
     [hashtable]$CommandArguments = @{
         '-Request'       = $Request;
         '-Connection'    = $Connection;
-        '-IcingaGlobals' = $IcingaDaemonData;
         '-ApiVersion'    = 'v1';
     };
 

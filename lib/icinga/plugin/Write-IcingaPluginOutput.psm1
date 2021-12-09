@@ -4,13 +4,13 @@ function Write-IcingaPluginOutput()
         $Output
     );
 
-    if ($global:IcingaDaemonData.FrameworkRunningAsDaemon -eq $FALSE -And $global:IcingaDaemonData.JEAContext -eq $FALSE) {
-        if ($null -ne $global:Icinga -And $global:Icinga.Minimal) {
+    if ($Global:Icinga.Protected.RunAsDaemon -eq $FALSE -And $Global:Icinga.Protected.JEAContext -eq $FALSE) {
+        if ($Global:Icinga.Protected.Minimal) {
             Clear-Host;
         }
         Write-IcingaConsolePlain $Output;
     } else {
         # New behavior with local thread separated results
-        $global:Icinga.CheckResults += $Output;
+        $global:Icinga.Private.Scheduler.CheckResults += $Output;
     }
 }

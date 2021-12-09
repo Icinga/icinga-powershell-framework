@@ -6,7 +6,7 @@ function Invoke-IcingaInternalServiceCall()
     );
 
     # If our Framework is running as daemon, never call our api
-    if ($global:IcingaDaemonData.FrameworkRunningAsDaemon) {
+    if ($Global:Icinga.Protected.RunAsDaemon) {
         return;
     }
 
@@ -83,10 +83,8 @@ function Invoke-IcingaInternalServiceCall()
     try {
         $ApiResult = Invoke-WebRequest -Method POST -UseBasicParsing -Uri ([string]::Format('https://localhost:{0}/v1/checker?command={1}', $RestApiPort, $Command)) -Body (ConvertTo-JsonUTF8Bytes -InputObject $CommandArguments -Depth 100 -Compress) -ContentType 'application/json' -TimeoutSec $Timeout;
     } catch {
-        # Something went wrong -> fallback to local execution
-        $ExMsg = $_.Exception.message;
         # Fallback to execute plugin locally
-        Write-IcingaEventMessage -Namespace 'Framework' -EventId 1553 -Objects $ExMsg, $Command, $CommandArguments;
+        Write-IcingaEventMessage -Namespace 'Framework' -EventId 1553 -ExceptionObject $_ -Objects $Command, $CommandArguments;
         return;
     }
 
