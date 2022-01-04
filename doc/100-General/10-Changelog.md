@@ -18,6 +18,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#403](https://github.com/Icinga/icinga-powershell-framework/pull/403) Fixes memory leak on newly EventLog reader for CLI event stream
 * [#407](https://github.com/Icinga/icinga-powershell-framework/pull/407) Removes unnecessary module import inside `Invoke-IcingaNamespaceCmdlets`
 * [#411](https://github.com/Icinga/icinga-powershell-framework/pull/411) Fixes Icinga Director error message output because of missing `[string]::Format()`
+* [#418](https://github.com/Icinga/icinga-powershell-framework/pull/418) Fixes crash on wrong variable usage introduced by [#411](https://github.com/Icinga/icinga-powershell-framework/pull/411)
 
 ### Enhancements
 
