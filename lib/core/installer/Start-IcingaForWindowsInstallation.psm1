@@ -22,6 +22,7 @@ function Start-IcingaForWindowsInstallation()
 
     # Certificate handler
     $CertificateType       = Get-IcingaForWindowsInstallerStepSelection -InstallerStep 'Show-IcingaForWindowsInstallerMenuSelectCertificate';
+    $CertificateForceGen   = Get-IcingaForWindowsInstallerStepSelection -InstallerStep 'Show-IcingaForWindowsInstallerMenuSelectForceCertificateGeneration';
     $CertificateTicket     = Get-IcingaForWindowsInstallerValuesFromStep -InstallerStep 'Show-IcingaForWindowsInstallerMenuEnterIcingaTicket';
     $CertificateCAFile     = Get-IcingaForWindowsInstallerValuesFromStep -InstallerStep 'Show-IcingaForWindowsInstallerMenuEnterIcingaCAFile';
 
@@ -65,6 +66,7 @@ function Start-IcingaForWindowsInstallation()
     $InstallPlugins        = $TRUE;
     $PluginPackageRelease  = $FALSE;
     $PluginPackageSnapshot = $FALSE;
+    $ForceCertificateGen   = $FALSE;
 
     if ([string]::IsNullOrEmpty($IcingaStableRepo) -eq $FALSE) {
         Add-IcingaRepository -Name 'Icinga Stable' -RemotePath $IcingaStableRepo -Force;
@@ -168,6 +170,10 @@ function Start-IcingaForWindowsInstallation()
         }
     }
 
+    if ($CertificateForceGen -eq 1) {
+        $ForceCertificateGen = $TRUE;
+    }
+
     if ($InstallAgent) {
         Set-IcingaPowerShellConfig -Path 'Framework.Icinga.AgentLocation' -Value $AgentInstallDir;
         Install-IcingaComponent -Name 'agent' -Version $AgentVersion -Confirm -Release;
@@ -185,7 +191,7 @@ function Start-IcingaForWindowsInstallation()
 
     # Only continue this, if our installation was successful
     if ((Get-IcingaAgentInstallation).Installed) {
-        if ((Install-IcingaAgentCertificates -Hostname $Hostname -Endpoint $IcingaCAServer -Port $IcingaPort -CACert $CertificateCAFile -Ticket $CertificateTicket) -eq $FALSE) {
+        if ((Install-IcingaAgentCertificates -Hostname $Hostname -Endpoint $IcingaCAServer -Port $IcingaPort -CACert $CertificateCAFile -Ticket $CertificateTicket -Force:$ForceCertificateGen) -eq $FALSE) {
             Disable-IcingaAgentFeature 'api';
             Write-IcingaConsoleWarning `
                 -Message '{0}{1}{2}{3}{4}' `
