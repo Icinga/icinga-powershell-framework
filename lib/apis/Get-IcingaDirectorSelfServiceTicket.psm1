@@ -48,7 +48,7 @@ function Get-IcingaDirectorSelfServiceTicket()
         $ErrorMessage = '';
         switch ($response.StatusCode) {
             404 {
-                $ErrorMessage = ([string]::Format('Failed to fetch certificate ticket for this host over Self-Service API. Please check that your Icinga Director Url "{1}" is valid and the provided API key "{0}" belongs to a Icinga host object.', $DirectorUrl, ApiKey));
+                $ErrorMessage = ([string]::Format('Failed to fetch certificate ticket for this host over Self-Service API. Please check that your Icinga Director Url "{1}" is valid and the provided API key "{0}" belongs to a Icinga host object.', $DirectorUrl, $ApiKey));
                 break;
             };
             500 {
