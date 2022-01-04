@@ -17,7 +17,7 @@ function Compare-IcingaVersions()
         $CurrentVersion = Get-IcingaAgentVersion;
     }
 
-    if ($requiredVersion.Mayor -gt $currentVersion.Mayor) {
+    if ($requiredVersion.Major -gt $currentVersion.Major) {
         return $FALSE;
     }
 
