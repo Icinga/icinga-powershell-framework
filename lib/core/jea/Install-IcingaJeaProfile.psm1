@@ -13,6 +13,13 @@ function Install-IcingaJEAProfile()
         return;
     }
 
+    # Max length for the user name
+    if ($IcingaUser.Length -gt 20) {
+        Write-IcingaConsoleError 'The specified user name "{0}" is too long. The maximum character limit is 20 digits.' -Objects $IcingaUser;
+
+        return;
+    }
+
     Write-IcingaConsoleNotice 'Writing Icinga for Windows environment information as JEA profile'
     Write-IcingaJEAProfile -RebuildFramework:$RebuildFramework -AllowScriptBlocks:$AllowScriptBlocks;
     Write-IcingaConsoleNotice 'Registering Icinga for Windows JEA profile'
