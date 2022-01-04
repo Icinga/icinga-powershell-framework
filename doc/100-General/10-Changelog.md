@@ -18,6 +18,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#402](https://github.com/Icinga/icinga-powershell-framework/pull/402) Fixes missing address attribute for REST-Api daemon, making it unable to change the listening address
 * [#403](https://github.com/Icinga/icinga-powershell-framework/pull/403) Fixes memory leak on newly EventLog reader for CLI event stream
 * [#407](https://github.com/Icinga/icinga-powershell-framework/pull/407) Removes unnecessary module import inside `Invoke-IcingaNamespaceCmdlets`
+* [#409](https://github.com/Icinga/icinga-powershell-framework/issues/409) Fixes URL builder for `Sync-IcingaRepository` which will now properly test the JSON file and try a secondary fallback by pointing to the `ifw.repo.json` in case a URL is returning the directory listing instead
 * [#411](https://github.com/Icinga/icinga-powershell-framework/pull/411) Fixes Icinga Director error message output because of missing `[string]::Format()`
 * [#412](https://github.com/Icinga/icinga-powershell-framework/issues/412) Fixes possible defective state of the Icinga Agent by using a custom service user for JEA profiles which is larger than 20 digits
 * [#418](https://github.com/Icinga/icinga-powershell-framework/pull/418) Fixes crash on wrong variable usage introduced by [#411](https://github.com/Icinga/icinga-powershell-framework/pull/411)

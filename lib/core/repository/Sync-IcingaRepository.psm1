@@ -96,12 +96,14 @@ function Sync-IcingaRepository()
         $Success = Copy-ItemSecure -Path $CopySource -Destination $TmpDir -Recurse -Force;
     } else { # Sync Source is web path
         $ProgressPreference = "SilentlyContinue";
-        try {
-            Invoke-IcingaWebRequest -UseBasicParsing -Uri $Source -OutFile $RepoFile;
-        } catch {
-            try {
-                Invoke-IcingaWebRequest -UseBasicParsing -Uri (Join-WebPath -Path $Source -ChildPath 'ifw.repo.json') -OutFile $RepoFile;
-            } catch {
+
+        $Result = Invoke-IcingaWebRequest -UseBasicParsing -Uri $Source -OutFile $RepoFile;
+
+        if ($Result.HasError -Or (Test-IcingaValidJSON -File $RepoFile) -eq $FALSE) {
+
+            $Result = Invoke-IcingaWebRequest -UseBasicParsing -Uri (Join-WebPath -Path $Source -ChildPath 'ifw.repo.json') -OutFile $RepoFile;
+
+            if ($Result.HasError -Or (Test-IcingaValidJSON -File $RepoFile) -eq $FALSE) {
                 Write-IcingaConsoleError 'Unable to download repository file from "{0}". Exception: "{1}"' -Objects $Source, $_.Exception.Message;
                 $Success = Remove-Item -Path $TmpDir -Recurse -Force;
                 return;
@@ -145,7 +147,7 @@ function Sync-IcingaRepository()
 
                 try {
                     Write-IcingaConsoleNotice 'Syncing repository component "{0}" as file "{1}" into temp directory' -Objects $component, $package.Location;
-                    Invoke-IcingaWebRequest -USeBasicParsing -Uri $DownloadLink -OutFile $TargetLocation;
+                    Invoke-IcingaWebRequest -USeBasicParsing -Uri $DownloadLink -OutFile $TargetLocation | Out-Null;
                 } catch {
                     Write-IcingaConsoleError 'Failed to download repository component "{0}". Exception: "{1}"' -Objects $DownloadLink, $_.Exception.Message;
                     continue;
