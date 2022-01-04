@@ -12,6 +12,7 @@ function Add-IcingaForWindowsInstallationAdvancedEntries()
     Show-IcingaForWindowsInstallationMenuEnterIcingaPort -Automated -Advanced;
     Show-IcingaForWindowsInstallerMenuSelectOpenWindowsFirewall -DefaultInput $OpenFirewall -Automated -Advanced;
     Show-IcingaForWindowsInstallerMenuSelectCertificate -Automated -Advanced;
+    Show-IcingaForWindowsInstallerMenuSelectForceCertificateGeneration -Automated -Advanced;
     Show-IcingaForWindowsInstallerMenuSelectGlobalZones -Automated -Advanced;
     Show-IcingaForWindowsInstallationMenuEnterCustomGlobalZones -Automated -Advanced;
     Show-IcingaForWindowsInstallationMenuEnterIcingaAgentVersion -Automated -Advanced;
