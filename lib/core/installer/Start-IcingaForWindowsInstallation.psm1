@@ -4,7 +4,7 @@ function Start-IcingaForWindowsInstallation()
         [switch]$Automated
     );
 
-    if ($global:Icinga.InstallWizard.DirectorInstallError -eq $FALSE -And (Get-IcingaFrameworkDebugMode) -eq $FALSE) {
+    if ($global:Icinga.InstallWizard.DirectorInstallError -eq $FALSE -And (Get-IcingaFrameworkDebugMode) -eq $FALSE -And $global:Icinga.InstallWizard.BlockClearHost -eq $FALSE) {
         Clear-Host;
     }
 
@@ -264,6 +264,14 @@ function Start-IcingaForWindowsInstallation()
         Start-Sleep -Seconds 5;
     }
 
-    $global:Icinga.InstallWizard.NextCommand   = 'Install-Icinga';
-    $global:Icinga.InstallWizard.NextArguments = @{ };
+    $global:Icinga.InstallWizard.NextCommand    = 'Install-Icinga';
+    $global:Icinga.InstallWizard.NextArguments  = @{ };
+
+    $BlockClearHost = Get-IcingaForWindowsInstallerStepSelection -InstallerStep 'Show-IcingaForWindowsInstallerMenuBlockClearHost';
+
+    if ($BlockClearHost -eq 0) {
+        $global:Icinga.InstallWizard.BlockClearHost = $FALSE;
+    } else {
+        $global:Icinga.InstallWizard.BlockClearHost = $TRUE;
+    }
 }

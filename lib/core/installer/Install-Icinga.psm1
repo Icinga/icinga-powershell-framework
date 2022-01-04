@@ -13,6 +13,7 @@ function Install-Icinga()
         $global:Icinga.Add(
             'InstallWizard', @{
                 'AdminShell'             = (Test-AdministrativeShell);
+                'BlockClearHost'         = $FALSE;
                 'LastInput'              = '';
                 'LastNotice'             = '';
                 'LastError'              = '';
