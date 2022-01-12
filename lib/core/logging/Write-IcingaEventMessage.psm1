@@ -3,7 +3,8 @@ function Write-IcingaEventMessage()
     param (
         [int]$EventId      = 0,
         [string]$Namespace = $null,
-        [array]$Objects    = @()
+        [array]$Objects    = @(),
+        $ExceptionObject   = $null
     );
 
     if ($EventId -eq 0 -Or [string]::IsNullOrEmpty($Namespace)) {
@@ -25,7 +26,7 @@ function Write-IcingaEventMessage()
 
     if ($Objects.Count -eq 0) {
         $ObjectDump = [string]::Format(
-            '{0}{0}No additional object details provided.',
+            '{0}No additional object details provided.',
             (New-IcingaNewLine)
         );
     }
@@ -39,12 +40,12 @@ function Write-IcingaEventMessage()
     }
 
     [string]$EventLogMessage = [string]::Format(
-        '{0}{1}{1}{2}{1}{1}Object dumps if available:{1}{3}',
+        '{0}{1}{1}{2}{3}{1}{1}Object details:{1}{4}',
         $Message,
         (New-IcingaNewLine),
         $Details,
+        (Get-IcingaExceptionString -ExceptionObject $ExceptionObject),
         $ObjectDump
-
     );
 
     if ($null -eq $EntryType -Or $null -eq $Message) {
