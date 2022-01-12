@@ -1,8 +1,9 @@
 function Write-IcingaDebugMessage()
 {
-    param(
+    param (
         [string]$Message,
-        [array]$Objects  = @()
+        [array]$Objects  = @(),
+        $ExceptionObject = $null
     );
 
     if ([string]::IsNullOrEmpty($Message)) {
@@ -16,5 +17,5 @@ function Write-IcingaDebugMessage()
     [array]$DebugContent = @($Message);
     $DebugContent += $Objects;
 
-    Write-IcingaEventMessage -EventId 1000 -Namespace 'Framework' -Objects $DebugContent;
+    Write-IcingaEventMessage -EventId 1000 -Namespace 'Framework' -ExceptionObject $ExceptionObject -Objects $DebugContent;
 }

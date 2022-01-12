@@ -27,6 +27,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 * [#388](https://github.com/Icinga/icinga-powershell-framework/issues/388) Improves performance for testing if `Add-Type` functions have been added, by adding an internal test for newly introduced environment variables within a PowerShell session
 * [#417](https://github.com/Icinga/icinga-powershell-framework/issues/417) Adds support to allow the force creation of Icinga Agent certificates, even when they are already present on the system over Icinga Management Console installation
+* [#426](https://github.com/Icinga/icinga-powershell-framework/pull/426) Adds a new feature to EventLog writer, allowing to parse an exception report to identity the exact root cause and location, on where the error occurred in first place.
 
 ## 1.7.1 (2021-11-11)
 
