@@ -1,11 +1,11 @@
 <#
 .SYNOPSIS
-   Register the current host wihtin the Icinga Director by using the
+   Register the current host within the Icinga Director by using the
    Self-Service API and return the host key
 .DESCRIPTION
    This function will register the current host within the Icinga Director in case
    it is not already registered and returns the host key for storing it on disk
-   to allow the host to fetch detailed configurations like zones and endppoints
+   to allow the host to fetch detailed configurations like zones and endpoints
 .FUNCTIONALITY
    Register a host within the Icinga Director by using the Self-Service API
 .EXAMPLE

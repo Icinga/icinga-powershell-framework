@@ -8,7 +8,7 @@ The Icinga PowerShell Framework is shipping wish a bunch of Cmdlets to manage th
 
 There are many reasons to run the Icinga Agent as a different user than the `NT AUTHORITY\NetworkService` user. One could be additional permissions required, another could be to run the Icinga Agent as own independent user which is entirely managed by your Active Directory or locally available.
 
-For easier integration the Icinga PowerShell Framework is providing the Cmdlet `Set-IcingaAgentServiceUser`.
+For easier integration the Icinga PowerShell Framework is providing the Cmdlet `Set-IcingaServiceUser`.
 
 This Cmdlet ships with 4 arguments which not all of them are mandatory:
 
@@ -21,14 +21,14 @@ This Cmdlet ships with 4 arguments which not all of them are mandatory:
 
 ## Changing the Service User
 
-Now as we are aware on how our Cmdlet `Set-IcingaAgentServiceUser` is working, we can use it to modify our service user.
+Now as we are aware on how our Cmdlet `Set-IcingaServiceUser` is working, we can use it to modify our service user.
 
 ### Example 1: Change Service User to LocalSystem
 
 Our first example will simply change the service user from `NT AUTHORITY\NetworkService` to `NT AUTHORITY\SYSTEM`:
 
 ```powershell
-Set-IcingaAgentServiceUser -User 'NT AUTHORITY\SYSTEM' -SetPermission;
+Set-IcingaServiceUser -User 'NT AUTHORITY\SYSTEM' -SetPermission;
 ```
 
 ```text
@@ -51,7 +51,7 @@ To make things easier and we only require it locally and have not many machines 
 
 ```powershell
 $cred = Get-Credential -Message 'User credentials for icinga2 service:';
-Set-IcingaAgentServiceUser -User $cred.UserName -Password $cred.Password;
+Set-IcingaServiceUser -User $cred.UserName -Password $cred.Password;
 ```
 
 In case we leave the `-SetPermission` argument aside, we simply get the update notification:
@@ -73,7 +73,7 @@ To simply resolve this, we can run the command from above again but this time wi
 
 ```powershell
 $cred = Get-Credential -Message 'User credentials for icinga2 service:';
-Set-IcingaAgentServiceUser -User $cred.UserName -Password $cred.Password -SetPermission;
+Set-IcingaServiceUser -User $cred.UserName -Password $cred.Password -SetPermission;
 ```
 
 ```text

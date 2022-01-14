@@ -17,7 +17,7 @@ function Test-IcingaAgent()
     Test-IcingaAcl "$Env:ProgramData\icinga2\var" -WriteOutput | Out-Null;
     Test-IcingaAcl (Get-IcingaCacheDir) -WriteOutput | Out-Null;
     Test-IcingaAcl (Get-IcingaPowerShellConfigDir) -WriteOutput | Out-Null;
-    Test-IcingaAcl -Directory (Join-Path -Path (Get-IcingaFrameworkRootPath) -ChildPath 'certificate') -WriteOutput | Out-Null;;
+    Test-IcingaAcl -Directory (Join-Path -Path (Get-IcingaFrameworkRootPath) -ChildPath 'certificate') -WriteOutput | Out-Null;
 
     if ($IcingaAgentData.Installed) {
         Test-IcingaAgentConfig | Out-Null;

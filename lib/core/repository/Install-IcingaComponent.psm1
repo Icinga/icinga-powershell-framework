@@ -367,7 +367,7 @@ function Install-IcingaComponent()
             return $FALSE;
         }
 
-        Set-IcingaAgentServiceUser -User $ServiceUser -SetPermission;
+        Set-IcingaServiceUser -User $ServiceUser -SetPermission;
         Update-IcingaServiceUser;
 
         Write-IcingaConsoleNotice 'Installation of component "agent" with version "{0}" was successful.' -Objects $MSIData.ProductVersion;

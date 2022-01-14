@@ -1,4 +1,4 @@
-function Invoke-IcingaForWindowsMangementConsoleToogleFrameworkDebug()
+function Invoke-IcingaForWindowsManagementConsoleToggleFrameworkDebug()
 {
     if (Get-IcingaFrameworkDebugMode) {
         Disable-IcingaFrameworkDebugMode;

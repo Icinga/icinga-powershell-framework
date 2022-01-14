@@ -43,7 +43,7 @@ function Show-IcingaForWindowsManagementConsoleManageFramework()
                 'Help'     = 'In case enabled, all check commands executed by "Exit-IcingaExecutePlugin" are forwarded to an internal REST-Api and executed from within the Icinga for Windows background daemon. Requires the Icinga for Windows background daemon';
                 'Disabled' = $FALSE;
                 'Action'   = @{
-                    'Command'   = 'Invoke-IcingaForWindowsMangementConsoleToogleFrameworkApiChecks';
+                    'Command'   = 'Invoke-IcingaForWindowsManagementConsoleToggleFrameworkApiChecks';
                     'Arguments' = @{ };
                 }
             },
@@ -53,7 +53,7 @@ function Show-IcingaForWindowsManagementConsoleManageFramework()
                 'Help'     = 'Disable or enable the Icinga PowerShell Framework debug mode';
                 'Disabled' = $FALSE;
                 'Action'   = @{
-                    'Command' = 'Invoke-IcingaForWindowsMangementConsoleToogleFrameworkDebug';
+                    'Command' = 'Invoke-IcingaForWindowsManagementConsoleToggleFrameworkDebug';
                 }
             },
             @{

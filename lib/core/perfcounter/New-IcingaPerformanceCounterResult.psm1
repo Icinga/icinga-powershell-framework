@@ -44,7 +44,7 @@ function New-IcingaPerformanceCounterResult()
     }
 
     $pc_instance | Add-Member -MemberType ScriptMethod -Name 'Value' -Value {
-        [hashtable]$CounterResults = @{};
+        [hashtable]$CounterResults = @{ };
 
         foreach ($counter in $this.Counters) {
             $CounterResults.Add($counter.Name(), $counter.Value());

@@ -18,9 +18,9 @@
 .PARAMETER Recurse
     Applies a container inherit flag and grants permission not only on the specific Wmi tree but also objects within this namespace (recommended)
 .PARAMETER DenyAccess
-    Blocks the user from having access to this Wmi and or subnamespace tree.
+    Blocks the user from having access to this Wmi and or sub namespace tree.
 .PARAMETER Flags
-    Allows to specify additional flags for permssion granting: PartialWrite, Subscribe, ProviderWrite,ReadSecurity, WriteSecurity, Publish, MethodExecute, FullWrite
+    Allows to specify additional flags for permission granting: PartialWrite, Subscribe, ProviderWrite,ReadSecurity, WriteSecurity, Publish, MethodExecute, FullWrite
 .INPUTS
     System.String
 .OUTPUTS
@@ -87,6 +87,6 @@ function Test-IcingaWmiPermissions()
     if ($UserACL.AccessMask -ne $PermissionMask -Or $RecurseMatch -eq $FALSE) {
         return $FALSE;
     }
-    
+
     return $TRUE;
 }

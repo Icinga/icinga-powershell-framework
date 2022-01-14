@@ -52,7 +52,7 @@ function Get-IcingaNetworkInterface()
 
     $IPBinStringMaster = ConvertTo-IcingaIPBinaryString -IP $IP;
 
-    [hashtable]$InterfaceData=@{};
+    [hashtable]$InterfaceData = @{ };
 
     $InterfaceInfo = Get-NetRoute;
     $Counter = 0;
@@ -106,7 +106,7 @@ function Get-IcingaNetworkInterface()
     }
 
     $InterfaceDataOrdered = $InterfaceData.GetEnumerator() | Sort-Object -Property Name -Descending;
-    $ExternalInterfaces   = @{};
+    $ExternalInterfaces   = @{ };
 
     foreach ( $Route in $InterfaceDataOrdered ) {
         foreach ($destinationIP in $IPBinStringMaster) {

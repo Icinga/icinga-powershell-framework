@@ -114,7 +114,7 @@ function Install-IcingaAgentCertificates()
             }
 
             if ((Start-IcingaAgentCertificateProcess -Arguments $arguments) -eq $FALSE) {
-                Write-IcingaConsoleError 'Unable to connect to your provided Icinga CA. Please verify the entered configuration is correct.' `
+                Write-IcingaConsoleError -Message 'Unable to connect to your provided Icinga CA. Please verify the entered configuration is correct.' `
                     'If you are not able to connect to your Icinga CA from this machine, you will have to provide the path' `
                     'to your Icinga ca.crt and use the CA-Proxy certificate handling.';
                 return $FALSE;
@@ -150,7 +150,7 @@ function Install-IcingaAgentCertificates()
 
         return $TRUE;
     } elseif (-Not [string]::IsNullOrEmpty($CACert)) {
-        if (-Not (Copy-IcingaAgentCACertificate -CAPath $CACert -Desination $CertificateDirectory)) {
+        if (-Not (Copy-IcingaAgentCACertificate -CAPath $CACert -Destination $CertificateDirectory)) {
             return $FALSE;
         }
         Write-IcingaConsoleNotice 'Host-Certificates and ca.crt are present. Please start your Icinga Agent now and manually sign your certificate request on your CA master. You can lookup open requests with "icinga2 ca list"';
@@ -209,7 +209,7 @@ function Test-IcingaAgentCertificates()
             Write-IcingaConsoleNotice 'Your ca.crt is present. No generation or fetching required';
             return $TRUE;
         } else {
-            Write-IcingaConsoleWarning 'Your ca.crt is not present. Manuall copy or fetching from your Icinga CA is required.';
+            Write-IcingaConsoleWarning 'Your ca.crt is not present. Manually copy or fetching from your Icinga CA is required.';
             return $FALSE;
         }
     }
@@ -261,16 +261,16 @@ function Copy-IcingaAgentCACertificate()
 {
     param(
         [string]$CAPath,
-        [string]$Desination
+        [string]$Destination
     );
 
     # Copy ca.crt from local path or network share to certificate path
     if ((Test-Path $CAPath)) {
-        Copy-Item -Path $CAPath -Destination (Join-Path -Path $Desination -ChildPath 'ca.crt') | Out-Null;
-        Write-IcingaConsoleNotice ([string]::Format('Copied ca.crt from "{0}" to "{1}', $CAPath, $Desination));
+        Copy-Item -Path $CAPath -Destination (Join-Path -Path $Destination -ChildPath 'ca.crt') | Out-Null;
+        Write-IcingaConsoleNotice ([string]::Format('Copied ca.crt from "{0}" to "{1}', $CAPath, $Destination));
     } else {
         Set-IcingaTLSVersion;
-        # It could also be a web ressource
+        # It could also be a web resource
         try {
             $response   = Invoke-IcingaWebRequest $CAPath -UseBasicParsing;
             [int]$Index = $response.RawContent.IndexOf("`r`n`r`n") + 4;
@@ -279,10 +279,10 @@ function Copy-IcingaAgentCACertificate()
                 $Index,
                 $response.RawContent.Length - $Index
             );
-            Write-IcingaFileSecure -File (Join-Path $Desination -ChildPath 'ca.crt') -Value $CAContent;
-            Write-IcingaConsoleNotice ([string]::Format('Downloaded ca.crt from "{0}" to "{1}', $CAPath, $Desination))
+            Write-IcingaFileSecure -File (Join-Path $Destination -ChildPath 'ca.crt') -Value $CAContent;
+            Write-IcingaConsoleNotice ([string]::Format('Downloaded ca.crt from "{0}" to "{1}', $CAPath, $Destination))
         } catch {
-            Write-IcingaConsoleError 'Failed to load any provided ca.crt ressource';
+            Write-IcingaConsoleError 'Failed to load any provided ca.crt resource';
             return $FALSE;
         }
     }

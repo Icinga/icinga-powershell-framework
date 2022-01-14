@@ -6,7 +6,7 @@ function Get-IcingaBackgroundDaemons()
         return $null;
     }
 
-    [hashtable]$Output = @{};
+    [hashtable]$Output = @{ };
 
     foreach ($daemon in $Daemons.PSObject.Properties) {
         $Arguments = @{ };

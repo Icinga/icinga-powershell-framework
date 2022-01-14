@@ -1,7 +1,7 @@
 function Read-IcingaTCPStream()
 {
     param(
-        [System.Net.Sockets.TcpClient]$Client  = @{},
+        [System.Net.Sockets.TcpClient]$Client  = @{ },
         [System.Net.Security.SslStream]$Stream = $null,
         [int]$ReadLength                       = 0
     );

@@ -23,7 +23,7 @@ function Convert-Base64ToCredentials()
         [String]$AuthString
     );
 
-    [hashtable]$Credentials = @{};
+    [hashtable]$Credentials = @{ };
 
     $AuthArray = $AuthString.Split(' ');
 
@@ -33,7 +33,7 @@ function Convert-Base64ToCredentials()
         };
         default {
             Write-IcingaEventMessage -EventId 1550 -Namespace 'Framework' -Objects $AuthArray[0];
-            return @{};
+            return @{ };
         }
     }
 
@@ -44,7 +44,7 @@ function Convert-Base64ToCredentials()
         )
     );
 
-    # If no ':' is within the string, the credential data is not properly formated
+    # If no ':' is within the string, the credential data is not properly formatted
     if ($AuthString.Contains(':') -eq $FALSE) {
         Write-IcingaEventMessage -EventId 1551 -Namespace 'Framework';
         $AuthString = $null;
@@ -93,7 +93,7 @@ function Convert-Base64ToCredentials()
         $UserData = $null;
     } catch {
         Write-IcingaEventMessage -EventId 1552 -Namespace 'Framework' -Objects $_.Exception;
-        return @{};
+        return @{ };
     }
 
     return $Credentials;

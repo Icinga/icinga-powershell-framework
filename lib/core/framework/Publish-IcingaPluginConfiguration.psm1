@@ -5,14 +5,14 @@
    Icinga 2 configuration files.
 
    The configuration files are printed within a `config` folder of the
-   specific module and splitted into `director` and `icinga`
+   specific module and split into `director` and `icinga`
 .DESCRIPTION
    etches plugins within the namespace `Invoke-IcingaCheck*` for a given
    component name or the direct path and creates Icinga Director as well as
    Icinga 2 configuration files.
 
    The configuration files are printed within a `config` folder of the
-   specific module and splitted into `director` and `icinga`
+   specific module and split into `director` and `icinga`
 .FUNCTIONALITY
    Creates Icinga 2 and Icinga Director configuration files for plugins
 .EXAMPLE

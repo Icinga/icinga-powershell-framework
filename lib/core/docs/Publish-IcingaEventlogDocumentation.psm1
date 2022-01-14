@@ -1,4 +1,4 @@
-function Publish-IcingaEventlogDocumentation()
+function Publish-IcingaEventLogDocumentation()
 {
     param(
         [string]$Namespace,
@@ -6,12 +6,12 @@ function Publish-IcingaEventlogDocumentation()
     );
 
     [string]$DocContent = [string]::Format(
-        '# {0} Eventlog Documentation',
+        '# {0} EventLog Documentation',
         $Namespace
     );
     $DocContent += New-IcingaNewLine;
     $DocContent += New-IcingaNewLine;
-    $DocContent += "Below you will find a list of EventId's which are exported by this module. The short and detailed message are both written directly into the eventlog. This documentation shall simply provide a summary of available EventId's";
+    $DocContent += "Below you will find a list of EventId's which are exported by this module. The short and detailed message are both written directly into the EventLog. This documentation shall simply provide a summary of available EventId's";
 
     $SortedArray = $IcingaEventLogEnums[$Namespace].Keys.GetEnumerator() | Sort-Object;
 

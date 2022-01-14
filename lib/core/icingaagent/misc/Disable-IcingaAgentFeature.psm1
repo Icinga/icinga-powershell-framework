@@ -13,7 +13,7 @@ function Disable-IcingaAgentFeature()
         return;
     }
 
-    $Binary  = Get-IcingaAGentBinary;
+    $Binary  = Get-IcingaAgentBinary;
     $Process = Start-IcingaProcess -Executable $Binary -Arguments ([string]::Format('feature disable {0}', $Feature));
 
     if ($Process.ExitCode -ne 0) {

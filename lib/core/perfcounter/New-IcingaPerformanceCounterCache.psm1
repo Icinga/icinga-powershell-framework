@@ -16,7 +16,7 @@ function New-IcingaPerformanceCounterCache()
     if ($null -eq $global:Icinga_PerfCounterCache) {
         $global:Icinga_PerfCounterCache = (
             [hashtable]::Synchronized(
-                @{}
+                @{ }
             )
         );
     }

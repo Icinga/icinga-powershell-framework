@@ -28,7 +28,7 @@ function Show-IcingaPerformanceCounterInstances()
         [string]$Counter
     );
 
-    [hashtable]$Instances = @{};
+    [hashtable]$Instances = @{ };
 
     if ([string]::IsNullOrEmpty($Counter)) {
         Write-IcingaConsoleError 'Please enter a Performance Counter';

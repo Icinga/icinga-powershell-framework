@@ -1,7 +1,7 @@
 function Get-IcingaRESTHeaderValue()
 {
     param(
-        [hashtable]$Request = @{},
+        [hashtable]$Request = @{ },
         [string]$Header     = $null
     );
 

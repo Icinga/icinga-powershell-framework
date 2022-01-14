@@ -54,7 +54,7 @@ function Get-IcingaAgentMSIPackage()
                         $UseVersion = $PackageVersion;
                     }
                 } catch {
-                    # Nothing to catch specifically   
+                    # Nothing to catch specifically
                 }
             }
         } else {

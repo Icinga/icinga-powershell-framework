@@ -157,7 +157,7 @@ function Start-IcingaDirectorAPIArgumentOverride()
         $Arguments
     );
 
-    $NewArguments = @{};
+    $NewArguments = @{ };
     Write-IcingaConsoleNotice 'Please follow the wizard and manually override all entries you intend to';
     Write-IcingaConsoleNotice '====';
 

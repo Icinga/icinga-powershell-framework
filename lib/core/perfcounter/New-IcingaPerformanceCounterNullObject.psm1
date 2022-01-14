@@ -1,15 +1,15 @@
 <#
 .SYNOPSIS
     This will create a Performance Counter object in case a counter instance
-    does not exis, but still returning default members to allow us to smoothly
+    does not exist, but still returning default members to allow us to smoothly
     execute our code
 .DESCRIPTION
     This will create a Performance Counter object in case a counter instance
-    does not exis, but still returning default members to allow us to smoothly
+    does not exist, but still returning default members to allow us to smoothly
     execute our code
 .FUNCTIONALITY
     This will create a Performance Counter object in case a counter instance
-    does not exis, but still returning default members to allow us to smoothly
+    does not exist, but still returning default members to allow us to smoothly
     execute our code
 .EXAMPLE
     PS>New-IcingaPerformanceCounterNullObject '\Processor(20)\%processor time' -ErrorMessage 'This counter with instance 20 does not exist';
@@ -45,7 +45,7 @@ function New-IcingaPerformanceCounterNullObject()
     }
 
     $pc_instance | Add-Member -MemberType ScriptMethod -Name 'Value' -Value {
-        [hashtable]$ErrorMessage = @{};
+        [hashtable]$ErrorMessage = @{ };
 
         $ErrorMessage.Add('value', $null);
         $ErrorMessage.Add('sample', $null);

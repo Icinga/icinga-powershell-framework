@@ -3,17 +3,17 @@
     Will use an array of provided Performance Counter and sort the input by
     a given counter category. In this case we can fetch all Processor instances
     and receive values for each core which can then be accessed from a hashtable
-    with an eady query. Allows to modify output in addition
+    with an ready query. Allows to modify output in addition
 .DESCRIPTION
     Will use an array of provided Performance Counter and sort the input by
     a given counter category. In this case we can fetch all Processor instances
     and receive values for each core which can then be accessed from a hashtable
-    with an eady query. Allows to modify output in addition
+    with an ready query. Allows to modify output in addition
 .FUNCTIONALITY
     Will use an array of provided Performance Counter and sort the input by
     a given counter category. In this case we can fetch all Processor instances
     and receive values for each core which can then be accessed from a hashtable
-    with an eady query. Allows to modify output in addition
+    with an ready query. Allows to modify output in addition
 .EXAMPLE
     PS>New-IcingaPerformanceCounterStructure -CounterCategory 'Processor' -PerformanceCounterHash (New-IcingaPerformanceCounterArray '\Processor(*)\% processor time');
 
@@ -60,13 +60,13 @@ function New-IcingaPerformanceCounterStructure()
 {
     param(
         [string]$CounterCategory           = '',
-        [hashtable]$PerformanceCounterHash = @{},
+        [hashtable]$PerformanceCounterHash = @{ },
         [array]$InstanceNameCleanupArray   = @()
     )
 
     # The storage variables we require to store our data
     [array]$AvailableInstances        = @();
-    [hashtable]$StructuredCounterData = @{};
+    [hashtable]$StructuredCounterData = @{ };
 
     # With this little trick we can fetch all instances we have and get their unique name
     $CounterInstances = New-Object System.Diagnostics.PerformanceCounterCategory($CounterCategory);
@@ -93,7 +93,7 @@ function New-IcingaPerformanceCounterStructure()
     foreach ($instance in $AvailableInstances) {
 
         # First build a hashtable for each instance to add data to later
-        $StructuredCounterData.Add($instance, @{});
+        $StructuredCounterData.Add($instance, @{ });
 
         # Now we need to loop all return values from our Performance Counters
         foreach ($InterfaceCounter in $PerformanceCounterHash.Keys) {

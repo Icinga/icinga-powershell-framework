@@ -183,7 +183,7 @@ function Start-IcingaForWindowsInstallation()
             Reset-IcingaAgentConfigFile;
             Move-IcingaAgentDefaultConfig;
             Set-IcingaAgentNodeName -Hostname $Hostname;
-            Set-IcingaAgentServiceUser -User $ServiceUser -Password (ConvertTo-IcingaSecureString $ServicePassword) -SetPermission | Out-Null;
+            Set-IcingaServiceUser -User $ServiceUser -Password (ConvertTo-IcingaSecureString $ServicePassword) -SetPermission | Out-Null;
             Install-IcingaAgentBaseFeatures;
             Write-IcingaAgentApiConfig -Port $IcingaPort;
         }

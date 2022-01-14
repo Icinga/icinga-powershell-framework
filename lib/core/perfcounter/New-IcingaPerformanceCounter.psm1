@@ -2,15 +2,15 @@
 .SYNOPSIS
     Creates counter objects and sub-instances from a given Performance Counter
     Will return either a New-IcingaPerformanceCounterObject or New-IcingaPerformanceCounterResult
-    which both contain the same members, allowing for dynmically use of objects
+    which both contain the same members, allowing for dynamically use of objects
 .DESCRIPTION
     Creates counter objects and sub-instances from a given Performance Counter
     Will return either a New-IcingaPerformanceCounterObject or New-IcingaPerformanceCounterResult
-    which both contain the same members, allowing for dynmically use of objects
+    which both contain the same members, allowing for dynamically use of objects
 .FUNCTIONALITY
     Creates counter objects and sub-instances from a given Performance Counter
     Will return either a New-IcingaPerformanceCounterObject or New-IcingaPerformanceCounterResult
-    which both contain the same members, allowing for dynmically use of objects
+    which both contain the same members, allowing for dynamically use of objects
 .EXAMPLE
     PS>New-IcingaPerformanceCounter -Counter '\Processor(*)\% processor time';
 
@@ -72,10 +72,10 @@ function New-IcingaPerformanceCounter()
     # At last get the actual counter containing our values
     $UseCounterName = $CounterArray[2];
 
-    # Now as we know how the counter path is constructed and has been splitted into
+    # Now as we know how the counter path is constructed and has been split into
     # the different values, we need to know how to handle the instances of the counter
 
-    # If we specify a instance with (*) we want the module to automaticly fetch all
+    # If we specify a instance with (*) we want the module to automatically fetch all
     # instances for this counter. This will result in an New-IcingaPerformanceCounterResult
     # which contains the parent name including counters for all instances that
     # have been found
@@ -91,12 +91,12 @@ function New-IcingaPerformanceCounter()
         # create single performance counters and add them to a custom array and
         # later to a custom object
         try {
-            [array]$AllCountersIntances = @();
+            [array]$AllCountersInstances = @();
             $CounterInstances = New-Object System.Diagnostics.PerformanceCounterCategory($UseCounterCategory);
             foreach ($instance in $CounterInstances.GetInstanceNames()) {
                 [string]$NewCounterName = $Counter.Replace('*', $instance);
                 $NewCounter             = New-IcingaPerformanceCounterObject -FullName $NewCounterName -Category $UseCounterCategory -Counter $UseCounterName -Instance $instance -SkipWait $TRUE;
-                $AllCountersIntances += $NewCounter;
+                $AllCountersInstances += $NewCounter;
             }
         } catch {
             # Throw an exception in case our permissions are not enough to fetch performance counter
@@ -108,7 +108,7 @@ function New-IcingaPerformanceCounter()
         }
 
         # If we load multiple instances, we should add a global wait here instead of a wait for each single instance
-        # This will speed up CPU loading for example with plenty of cores avaiable
+        # This will speed up CPU loading for example with plenty of cores available
         if ($SkipWait -eq $FALSE) {
             Start-Sleep -Milliseconds 500;
         }
@@ -116,11 +116,11 @@ function New-IcingaPerformanceCounter()
         # Add the parent counter including the array of Performance Counters to our
         # caching mechanism and return the New-IcingaPerformanceCounterResult object for usage
         # within the monitoring modules
-        Add-IcingaPerformanceCounterCache -Counter $Counter -Instances $AllCountersIntances;
-        return (New-IcingaPerformanceCounterResult -FullName $Counter -PerformanceCounters $AllCountersIntances);
+        Add-IcingaPerformanceCounterCache -Counter $Counter -Instances $AllCountersInstances;
+        return (New-IcingaPerformanceCounterResult -FullName $Counter -PerformanceCounters $AllCountersInstances);
     } else {
         # This part will handle the counters without any instances as well as
-        # specificly assigned instances, like (_Total) CPU usage.
+        # specifically assigned instances, like (_Total) CPU usage.
 
         # In case we already have the counter within our cache, return the
         # cached informations
@@ -137,7 +137,7 @@ function New-IcingaPerformanceCounter()
     }
 
     # This function will always return non-instance counters or
-    # specificly defined instance counters. Performance Counter Arrays
+    # specifically defined instance counters. Performance Counter Arrays
     # are returned within their function. This is just to ensure that the
     # function looks finished from developer point of view
     return (Get-IcingaPerformanceCounterCacheItem -Counter $Counter);

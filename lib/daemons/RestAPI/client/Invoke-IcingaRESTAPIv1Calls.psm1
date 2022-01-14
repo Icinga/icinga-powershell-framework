@@ -1,8 +1,8 @@
 function Invoke-IcingaRESTAPIv1Calls()
 {
     param (
-        [Hashtable]$Request    = @{},
-        [Hashtable]$Connection = @{}
+        [Hashtable]$Request    = @{ },
+        [Hashtable]$Connection = @{ }
     );
 
     [string]$ModuleToLoad = Get-IcingaRESTPathElement -Request $Request -Index 1;

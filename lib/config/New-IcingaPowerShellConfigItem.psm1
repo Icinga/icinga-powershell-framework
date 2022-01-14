@@ -28,7 +28,7 @@ function New-IcingaPowerShellConfigItem()
     );
 
     if ($null -eq $ConfigValue) {
-        $ConfigValue = (New-Object -TypeName PSOBject);
+        $ConfigValue = (New-Object -TypeName PSObject);
     }
 
     $ConfigObject | Add-Member -MemberType NoteProperty -Name $ConfigKey -Value $ConfigValue;

@@ -1,7 +1,7 @@
 function Get-IcingaRESTPathElement()
 {
     param(
-        [Hashtable]$Request = @{},
+        [Hashtable]$Request = @{ },
         [int]$Index         = 0
     );
 

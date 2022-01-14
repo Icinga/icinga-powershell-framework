@@ -1,7 +1,7 @@
 function Get-IcingaRegisteredServiceChecks()
 {
     $Services = Get-IcingaPowerShellConfig -Path 'BackgroundDaemon.RegisteredServices';
-    [hashtable]$Output = @{};
+    [hashtable]$Output = @{ };
 
     foreach ($service in $Services.PSObject.Properties) {
         $Content = @{

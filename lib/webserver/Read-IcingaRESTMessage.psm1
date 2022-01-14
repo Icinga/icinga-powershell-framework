@@ -5,7 +5,7 @@ function Read-IcingaRESTMessage()
         [hashtable]$Connection = $null
     );
 
-    # Just in case we didnt receive anything - no need to
+    # Just in case we didn't receive anything - no need to
     # parse through everything
     if ([string]::IsNullOrEmpty($RestMessage)) {
         return $null;
@@ -14,18 +14,18 @@ function Read-IcingaRESTMessage()
     Write-IcingaDebugMessage (
         [string]::Format(
             'Receiving client message{0}{0}{1}',
-            (New-IcingaNewline),
+            (New-IcingaNewLine),
             $RestMessage
         )
     );
 
-    [hashtable]$Request = @{};
+    [hashtable]$Request = @{ };
     $RestMessage -match '(.+) (.+) (.+)' | Out-Null;
 
     $Request.Add('Method', $Matches[1]);
     $Request.Add('FullRequest', $Matches[2]);
-    $Request.Add('RequestPath', @{});
-    $Request.Add('RequestArguments', @{});
+    $Request.Add('RequestPath', @{ });
+    $Request.Add('RequestArguments', @{ });
 
     #Path
     $PathMatch = $Matches[2];
@@ -75,7 +75,7 @@ function Read-IcingaRESTMessage()
         $Request.Add('Body', $Matches[1]);
     }
 
-    # We received a content length, but couldnt load the body. Some clients will send the body as separate message
+    # We received a content length, but couldn't load the body. Some clients will send the body as separate message
     # Lets try to read the body content
     if ($null -ne $Connection) {
         if ($Request.ContainsKey('ContentLength') -And $Request.ContentLength -gt 0 -And ($Request.ContainsKey('Body') -eq $FALSE -Or [string]::IsNullOrEmpty($Request.Body))) {

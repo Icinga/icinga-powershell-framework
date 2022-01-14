@@ -37,7 +37,7 @@
    Tells the wizard which Icinga Agent version to install. You can provide latest, snapshot or a specific version like 2.11.6
    Set the value to one mentioned above. Leave it empty to be prompted the wizard question
 .PARAMETER InstallDir
-   Tells the wizard which directory the Icinga Agent will beinstalled into. Default is `C:\Program Files\ICINGA2`
+   Tells the wizard which directory the Icinga Agent will be installed into. Default is `C:\Program Files\ICINGA2`
    Set the value to one mentioned above.
 .PARAMETER AllowVersionChanges
    Tells the wizard if the Icinga Agent should be updated/downgraded in case the current/target version are not matching
@@ -312,7 +312,7 @@ function Start-IcingaAgentInstallWizard()
     # 'latest' is deprecated starting with 1.1.0
     if ($AgentVersion -eq 'latest') {
         $AgentVersion = 'release';
-        Write-IcingaConsoleWarning -Message 'The value "latest" for the argmument "AgentVersion" is deprecated. Please use the value "release" in the future!';
+        Write-IcingaConsoleWarning -Message 'The value "latest" for the argument "AgentVersion" is deprecated. Please use the value "release" in the future!';
     }
 
     if ([string]::IsNullOrEmpty($Hostname) -And $null -eq $AutoUseFQDN -And $null -eq $AutoUseHostname) {
@@ -477,7 +477,7 @@ function Start-IcingaAgentInstallWizard()
     }
 
     if ($null -eq $ConvertEndpointIPConfig -And $CanConnectToParent -eq $TRUE) {
-        if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to convert parent node(s) connection data to IP adresses?' -Default 'y').result -eq 1) {
+        if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to convert parent node(s) connection data to IP addresses?' -Default 'y').result -eq 1) {
             $InstallerArguments     += "-ConvertEndpointIPConfig 1";
             $ConvertEndpointIPConfig = $TRUE;
             if ($EndpointConnections.Count -eq 0) {
@@ -556,7 +556,7 @@ function Start-IcingaAgentInstallWizard()
 
     if ($null -eq $GlobalZones) {
         if ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Do you want to add custom global zones?' -Default 'n').result -eq 0) {
-            $ArrayString = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please specify your additional zones seperated by "," (Example: "global-zone1, global-zone2")' -Default 'v').answer;
+            $ArrayString = (Get-IcingaAgentInstallerAnswerInput -Prompt 'Please specify your additional zones separated by "," (Example: "global-zone1, global-zone2")' -Default 'v').answer;
             if ([string]::IsNullOrEmpty($ArrayString) -eq $FALSE) {
                 $GlobalZones = ($ArrayString.Replace(' ', '')).Split(',')
                 $GlobalZoneConfig += $GlobalZones;
@@ -722,7 +722,7 @@ function Start-IcingaAgentInstallWizard()
             Reset-IcingaAgentConfigFile;
             Move-IcingaAgentDefaultConfig;
             Set-IcingaAgentNodeName -Hostname $Hostname;
-            Set-IcingaAgentServiceUser -User $ServiceUser -Password $ServicePass -SetPermission | Out-Null;
+            Set-IcingaServiceUser -User $ServiceUser -Password $ServicePass -SetPermission | Out-Null;
             if ($InstallFrameworkService) {
                 Install-IcingaForWindowsService -Path $ServiceBin -User $ServiceUser -Password $ServicePass | Out-Null;
             }

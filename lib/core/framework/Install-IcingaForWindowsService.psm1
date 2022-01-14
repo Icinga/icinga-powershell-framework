@@ -86,7 +86,7 @@ function Install-IcingaForWindowsService()
     # a proper user, like 'NT Authority\NetworkService'. For some reason the NetworkService
     # will not start without this workaround.
     # Todo: Figure out the reason and fix it properly
-    Set-IcingaAgentServiceUser -User 'LocalSystem' -Service 'icingapowershell' | Out-Null;
+    Set-IcingaServiceUser -User 'LocalSystem' -Service 'icingapowershell' | Out-Null;
     Restart-IcingaWindowsService;
     Start-Sleep -Seconds 1;
     Stop-IcingaWindowsService;
@@ -97,7 +97,7 @@ function Install-IcingaForWindowsService()
         Start-Sleep -Seconds 1;
     }
 
-    return (Set-IcingaAgentServiceUser -User $User -Password $Password -Service 'icingapowershell');
+    return (Set-IcingaServiceUser -User $User -Password $Password -Service 'icingapowershell');
 }
 
 Set-Alias -Name 'Install-IcingaFrameworkService' -Value 'Install-IcingaForWindowsService';

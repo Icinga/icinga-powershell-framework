@@ -2,9 +2,9 @@
  # WMI WBEM_SECURITY_FLAGS
  # https://docs.microsoft.com/en-us/windows/win32/api/wbemcli/ne-wbemcli-wbem_security_flags
  # https://docs.microsoft.com/en-us/windows/win32/secauthz/standard-access-rights
- #>
- 
- [hashtable]$SecurityFlags = @{
+#>
+
+[hashtable]$SecurityFlags = @{
     'WBEM_Enable'            = 1;
     'WBEM_Method_Execute'    = 2;
     'WBEM_Full_Write_Rep'    = 4;
