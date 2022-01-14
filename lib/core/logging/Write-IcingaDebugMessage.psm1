@@ -17,5 +17,5 @@ function Write-IcingaDebugMessage()
     [array]$DebugContent = @($Message);
     $DebugContent += $Objects;
 
-    Write-IcingaEventMessage -EventId 1000 -Namespace 'Framework' -ExceptionObject $ExceptionObject -Objects $DebugContent;
+    Write-IcingaEventMessage -EventId 1000 -Namespace 'Debug' -ExceptionObject $ExceptionObject -Objects $DebugContent;
 }

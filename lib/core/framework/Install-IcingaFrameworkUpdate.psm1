@@ -104,7 +104,7 @@ function Install-IcingaFrameworkUpdate()
     Import-Module -Name $ModuleDirectory -Force;
 
     # Apply migration tasks
-    Invoke-IcingaForWindowsMigration;
+    Use-Icinga;
 
     if ([string]::IsNullOrEmpty((Get-IcingaJEAContext)) -eq $FALSE) {
         Remove-IcingaFrameworkDependencyFile;

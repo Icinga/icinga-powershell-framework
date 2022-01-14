@@ -57,8 +57,9 @@ function Write-IcingaEventMessage()
     if ($EventLogMessage.Length -ge $MaxEventLogMessageSize) {
         while ($EventLogMessage.Length -ge $MaxEventLogMessageSize) {
             $CutMessage = $EventLogMessage.Substring(0, $MaxEventLogMessageSize);
-            Write-EventLog -LogName Application `
-                -Source 'Icinga for Windows' `
+            Write-EventLog `
+                -LogName 'Icinga for Windows' `
+                -Source ([string]::Format('IfW::{0}', $Namespace)) `
                 -EntryType $EntryType `
                 -EventId $EventId `
                 -Message $CutMessage;
@@ -71,8 +72,9 @@ function Write-IcingaEventMessage()
         return;
     }
 
-    Write-EventLog -LogName Application `
-        -Source 'Icinga for Windows' `
+    Write-EventLog `
+        -LogName 'Icinga for Windows' `
+        -Source ([string]::Format('IfW::{0}', $Namespace)) `
         -EntryType $EntryType `
         -EventId $EventId `
         -Message $EventLogMessage;

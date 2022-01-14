@@ -188,9 +188,10 @@ function Install-IcingaComponent()
                 }
 
                 Import-Module -Name $ComponentFolder -Force;
+                Import-Module -Name $ComponentFolder -Force -Global;
 
                 # Apply migration tasks
-                Invoke-IcingaForWindowsMigration;
+                Use-Icinga;
 
                 if ($ServiceStatus -eq 'Running') {
                     Write-IcingaConsoleNotice 'Starting Icinga for Windows service';
@@ -202,6 +203,7 @@ function Install-IcingaComponent()
                 }
             } else {
                 Import-Module -Name $ComponentFolder -Force;
+                Import-Module -Name $ComponentFolder -Force -Global;
             }
 
             # This will ensure that Framework functions will always win over third party functions, overwriting functionality

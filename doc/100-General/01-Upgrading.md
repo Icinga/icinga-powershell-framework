@@ -4,6 +4,22 @@ Upgrading Icinga PowerShell Framework is usually quite straightforward.
 
 Specific version upgrades are described below. Please note that version updates are incremental.
 
+## Upgrading to v1.8.0 (2022-02-08)
+
+### Service Binary
+
+With Icinga for Windows v1.8.0 we changed on where the application will write EventLog data to. If you are using the `Icinga for Windows Service`, it is **mandatory** to upgrade to version `v1.2.0` of the service binary, **before** upgrading to Icinga for Windows v1.8.0.
+
+Otherwise the service will not start and crash! You can either download the service binary manually from [icinga-powershell-service](https://github.com/Icinga/icinga-powershell-service/releases) or use the Icinga repository for updating:
+
+```powershell
+Update-Icinga -Name 'service';
+```
+
+After upgrading to Icinga for Windows v1.8.0, you will require to open a new Icinga shell by calling `icinga` or by using `Use-Icinga` once, to run the new migration process.
+
+**NOTE:** In some cases the changes for the EventLog will only apply, **after** the system has been rebooted. Afterwards every Icinga for Windows EventLog entry is written in a newly created `Icinga for Windows` log.
+
 ## Upgrading to v1.7.0 (2021-11-09)
 
 ### REST-Api and Api-Checks

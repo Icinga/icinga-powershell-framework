@@ -25,6 +25,11 @@ function Use-Icinga()
         Import-Module (Join-Path -Path (Get-IcingaForWindowsRootPath) -ChildPath 'icinga-powershell-framework') -Global -Force;
     }
 
+    # Only apply migrations if we directly call "Use-Icinga" without any other argument
+    if ($LibOnly -eq $FALSE -And $Daemon -eq $FALSE -and $Minimal -eq $FALSE) {
+        Invoke-IcingaForWindowsMigration;
+    }
+
     Disable-IcingaProgressPreference;
 
     if ($Minimal) {
@@ -86,6 +91,9 @@ function Use-Icinga()
     $EventLogMessages = Invoke-IcingaNamespaceCmdlets -Command 'Register-IcingaEventLogMessages*';
     foreach ($entry in $EventLogMessages.Values) {
         foreach ($event in $entry.Keys) {
+            if ($LibOnly -eq $FALSE) {
+                Register-IcingaEventLog -LogName $event;
+            }
             Add-IcingaHashtableItem -Hashtable $global:IcingaEventLogEnums `
                 -Key $event `
                 -Value $entry[$event] | Out-Null;
