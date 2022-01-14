@@ -15,5 +15,5 @@
 
 function Disable-IcingaFrameworkApiChecks()
 {
-    Set-IcingaPowerShellConfig -Path 'Framework.Experimental.UseApiChecks' -Value $FALSE;
+    Set-IcingaPowerShellConfig -Path 'Framework.ApiChecks' -Value $FALSE;
 }

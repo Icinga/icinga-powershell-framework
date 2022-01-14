@@ -1,6 +1,7 @@
 function Show-IcingaForWindowsManagementConsoleManageFramework()
 {
     $FrameworkDebug = Get-IcingaFrameworkDebugMode;
+    $ApiChecks      = Get-IcingaFrameworkApiChecks;
     $IcingaService  = Get-Service 'icingapowershell' -ErrorAction SilentlyContinue;
     $AdminShell     = $global:Icinga.InstallWizard.AdminShell;
     $ServiceStatus  = $null;
@@ -35,6 +36,16 @@ function Show-IcingaForWindowsManagementConsoleManageFramework()
                 'Help'           = 'Allows you to manage Icinga for Windows JEA profile';
                 'Disabled'       = $JEADisabled;
                 'DisabledReason' = ([string]::Format('PowerShell version "{0}" is lower than 5.0 or you are not inside an administrative shell', $PSVersionTable.PSVersion.ToString(2)));
+            },
+            @{
+                'Caption'  = ([string]::Format('Forward checks to Api: {0}', (& { if ($ApiChecks) { 'Enabled' } else { 'Disabled' } } )));
+                'Command'  = 'Show-IcingaForWindowsManagementConsoleManageFramework';
+                'Help'     = 'In case enabled, all check commands executed by "Exit-IcingaExecutePlugin" are forwarded to an internal REST-Api and executed from within the Icinga for Windows background daemon. Requires the Icinga for Windows background daemon';
+                'Disabled' = $FALSE;
+                'Action'   = @{
+                    'Command'   = 'Invoke-IcingaForWindowsMangementConsoleToogleFrameworkApiChecks';
+                    'Arguments' = @{ };
+                }
             },
             @{
                 'Caption'  = ([string]::Format('Framework Debug Mode: {0}', (& { if ($FrameworkDebug) { 'Enabled' } else { 'Disabled' } } )));

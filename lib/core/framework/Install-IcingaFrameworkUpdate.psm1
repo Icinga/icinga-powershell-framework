@@ -101,6 +101,11 @@ function Install-IcingaFrameworkUpdate()
         Write-IcingaFrameworkCodeCache;
     }
 
+    Import-Module -Name $ModuleDirectory -Force;
+
+    # Apply migration tasks
+    Invoke-IcingaForWindowsMigration;
+
     if ([string]::IsNullOrEmpty((Get-IcingaJEAContext)) -eq $FALSE) {
         Remove-IcingaFrameworkDependencyFile;
         Write-IcingaConsoleNotice 'Updating Icinga JEA profile';
