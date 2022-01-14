@@ -23,6 +23,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#411](https://github.com/Icinga/icinga-powershell-framework/pull/411) Fixes Icinga Director error message output because of missing `[string]::Format()`
 * [#412](https://github.com/Icinga/icinga-powershell-framework/issues/412) Fixes possible defective state of the Icinga Agent by using a custom service user for JEA profiles which is larger than 20 digits
 * [#418](https://github.com/Icinga/icinga-powershell-framework/pull/418) Fixes crash on wrong variable usage introduced by [#411](https://github.com/Icinga/icinga-powershell-framework/pull/411)
+* [#421](https://github.com/Icinga/icinga-powershell-framework/issues/421) Fixes experimental state of `API Check` feature by removing that term and removing the requirement to install `icinga-powershell-restapi` and `icinga-powershell-apichecks`
 
 ### Enhancements
 

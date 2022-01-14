@@ -29,11 +29,6 @@ function Invoke-IcingaInternalServiceCall()
         return;
     }
 
-    # If neither 'icinga-powershell-restapi' or 'icinga-powershell-apichecks' is installed, execute the plugin locally
-    if ((Test-IcingaFunction 'Invoke-IcingaApiChecksRESTCall') -eq $FALSE -Or (Test-IcingaFunction 'Start-IcingaWindowsRESTApi') -eq $FALSE) {
-        return;
-    }
-
     $RestApiPort  = 5668;
     [int]$Timeout = 30;
     $Daemon       = $BackgroundDaemons['Start-IcingaWindowsRESTApi'];

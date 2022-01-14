@@ -18,11 +18,11 @@
 
 function Get-IcingaFrameworkApiChecks()
 {
-    $CodeCaching = Get-IcingaPowerShellConfig -Path 'Framework.Experimental.UseApiChecks';
+    $ApiChecks = Get-IcingaPowerShellConfig -Path 'Framework.ApiChecks';
 
-    if ($null -eq $CodeCaching) {
+    if ($null -eq $ApiChecks) {
         return $FALSE;
     }
 
-    return $CodeCaching;
+    return $ApiChecks;
 }
