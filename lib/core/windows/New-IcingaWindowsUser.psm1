@@ -24,17 +24,13 @@ function New-IcingaWindowsUser()
     }
 
     $UserMetadata = Get-IcingaWindowsUserMetadata;
-    $UserConfig   = $null;
+    $UserConfig   = Get-IcingaWindowsUserConfig -UserName $IcingaUser;
 
-    $SID = Get-IcingaUserSID -User $IcingaUser;
-    if ([string]::IsNullOrEmpty($SID) -eq $FALSE) {
-        $UserConfig = Get-IcingaWindowsInformation -Class 'Win32_UserAccount' -Filter ([string]::Format("SID = '{0}'", $SID));
-    }
-
-    if ($null -ne $UserConfig) {
+    # In case the user exist, we can check if it is a managed user for modifying the login password
+    if ($UserConfig.UserExist) {
 
         # User already exist -> override password - but only if the user is entirely managed by Icinga
-        if ($UserConfig.FullName -eq $UserMetadata.FullName -And $UserConfig.Description -eq $UserMetadata.Description) {
+        if ($UserConfig.IcingaManagedUser) {
             $Result = Start-IcingaProcess -Executable 'net' -Arguments ([string]::Format('user "{0}" "{1}"', $IcingaUser, (ConvertFrom-IcingaSecureString -SecureString (New-IcingaWindowsUserPassword))));
 
             if ($Result.ExitCode -ne 0) {
@@ -78,8 +74,7 @@ function New-IcingaWindowsUser()
     $LocalUserGroup.Add("WinNT://$Env:COMPUTERNAME/$IcingaUser,user")
     #>
 
-    $SID        = Get-IcingaUserSID -User $IcingaUser;
-    $UserConfig = Get-IcingaWindowsInformation -Class 'Win32_UserAccount' -Filter ([string]::Format("SID = '{0}'", $SID));
+    $UserConfig = Get-IcingaWindowsUserConfig -UserName $IcingaUser;
 
     Write-IcingaConsoleNotice 'User was successfully created.';
 

@@ -15,6 +15,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 * [#291](https://github.com/Icinga/icinga-powershell-framework/issues/291) Fixes `Split-IcingaVersion` by returning data with naming `mayor` for the version instead of `major`. We will return both results to give developers time to adjust their code before removing the `mayor` object
 * [#379](https://github.com/Icinga/icinga-powershell-framework/issues/379) Fixes memory leak for Icinga for Windows by using a custom function being more aggressive on memory cleanup
+* [#394](https://github.com/Icinga/icinga-powershell-framework/issues/394) Fixes lookup time for Icinga managed user for large Active Directory environments by limiting lookup to local system only
 * [#402](https://github.com/Icinga/icinga-powershell-framework/pull/402) Fixes missing address attribute for REST-Api daemon, making it unable to change the listening address
 * [#403](https://github.com/Icinga/icinga-powershell-framework/pull/403) Fixes memory leak on newly EventLog reader for CLI event stream
 * [#407](https://github.com/Icinga/icinga-powershell-framework/pull/407) Removes unnecessary module import inside `Invoke-IcingaNamespaceCmdlets`
