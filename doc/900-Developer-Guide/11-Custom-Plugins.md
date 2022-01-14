@@ -4,7 +4,7 @@ With the [Icinga PowerShell Framework](https://icinga.com/docs/windows/latest) y
 
 ## File Structure
 
-For plugins we will have to distinguish between general components. The plugin file itself with the Cmdlet and the general check/treshold comparison and possible data providers, delivery the content for our modules. If you for example write plugins for your application monitoring and you require different functions to collect these information, the way to gois to separate the collector functions from the plugin itself.
+For plugins we will have to distinguish between general components. The plugin file itself with the Cmdlet and the general check/threshold comparison and possible data providers, delivery the content for our modules. If you for example write plugins for your application monitoring and you require different functions to collect these information, the way to go is to separate the collector functions from the plugin itself.
 
 This will result in the following file structure
 
@@ -46,9 +46,9 @@ C:\Program Files\WindowsPowerShell\Modules
 
 Now create a new folder with the name `icinga-powershell-plugintutorial` and navigate into it.
 
-As we require a `psm1` file which contains our code, we will create a new file with the name `icinga-powershell-plugintutorial.psm1`. This will allow the PowerShell autoloader to load the module automaticly.
+As we require a `psm1` file which contains our code, we will create a new file with the name `icinga-powershell-plugintutorial.psm1`. This will allow the PowerShell autoloader to load the module automatically.
 
-**Note:** It could be possible, depending on your [execution policies](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.security/set-executionpolicy?view=powershell-6), that your module is not loaded properly. If this is the case, you can try to unblock the file by opening a PowerShell and use the `Unblock-File` Cmdelet
+**Note:** It could be possible, depending on your [execution policies](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.security/set-executionpolicy?view=powershell-6), that your module is not loaded properly. If this is the case, you can try to unblock the file by opening a PowerShell and use the `Unblock-File` Cmdlet
 
 ```powershell
 Unblock-File -Path 'C:\Program Files\WindowsPowerShell\Modules\icinga-powershell-plugintutorial\icinga-powershell-plugintutorial.psm1'
@@ -58,7 +58,7 @@ Unblock-File -Path 'C:\Program Files\WindowsPowerShell\Modules\icinga-powershell
 
 Once the module files are created and unblocked, we can start testing if the autoloader is properly working and our module is detected.
 
-For this open the file `icinga-powershell-plugintutorial.psm1` in your prefered editor and add the following code snippet
+For this open the file `icinga-powershell-plugintutorial.psm1` in your preferred editor and add the following code snippet
 
 ```powershell
 function Test-MyIcingaPluginTutorialCommand()
@@ -107,7 +107,7 @@ At first we will create a variable inside our `Start-IcingaAgentServiceTest` fun
 ```powershell
 function Invoke-IcingaCheckTutorial()
 {
-    # Create our arguments we can use to parese thresholds
+    # Create our arguments we can use to parse thresholds
     # Example: Invoke-IcingaCheckTutorial -Warning 10 -Critical 30
     param (
         $Warning  = $null,
@@ -144,12 +144,12 @@ Our tutorial plugin will now output the current status, the name, performance da
 
 ### Optional Performance Data
 
-To make performance data optional on user input, we can now add another argument to our paramter list and update our check result object to use this argument
+To make performance data optional on user input, we can now add another argument to our parameter list and update our check result object to use this argument
 
 ```powershell
 function Invoke-IcingaCheckTutorial()
 {
-    # Create our arguments we can use to parese thresholds
+    # Create our arguments we can use to parse thresholds
     # Example: Invoke-IcingaCheckTutorial -Warning 10 -Critical 30
     param (
         $Warning            = $null,
@@ -189,7 +189,7 @@ Now as the basic skeleton is ready, we can dive into the actual check object. In
 ```powershell
 function Invoke-IcingaCheckTutorial()
 {
-    # Create our arguments we can use to parese thresholds
+    # Create our arguments we can use to parse thresholds
     # Example: Invoke-IcingaCheckTutorial -Warning 10 -Critical 30
     param (
         $Warning            = $null,
@@ -226,18 +226,18 @@ powershell -C { Use-Icinga; Invoke-IcingaCheckTutorial }
 0
 ```
 
-### Compare Value with Tresholds
+### Compare Value with Thresholds
 
-Now as we are holding a value inside our check object, we can start to compare it with our `Warning` and `Critical` tresholds. There are a bunch of functions inside the check object avaialble for this which can be found in the [check object documentation](01-New-IcingaCheck.md).
+Now as we are holding a value inside our check object, we can start to compare it with our `Warning` and `Critical` thresholds. There are a bunch of functions inside the check object available for this which can be found in the [check object documentation](01-New-IcingaCheck.md).
 
-For most plugins the generic approach will do just fine. This one will ensure we can use the Nagios/Icinga treshold syntax to compare values more dynamicly and add ranges support. (See also [Icinga Plugins](https://icinga.com/docs/windows/latest/plugins/doc/10-Icinga-Plugins/))
+For most plugins the generic approach will do just fine. This one will ensure we can use the Nagios/Icinga threshold syntax to compare values more dynamically and add ranges support. (See also [Icinga Plugins](https://icinga.com/docs/windows/latest/plugins/doc/10-Icinga-Plugins/))
 
 The two functions we will use for this are `WarnOutOfRange` and `CritOutOfRange`.
 
 ```powershell
 function Invoke-IcingaCheckTutorial()
 {
-    # Create our arguments we can use to parese thresholds
+    # Create our arguments we can use to parse thresholds
     # Example: Invoke-IcingaCheckTutorial -Warning 10 -Critical 30
     param (
         $Warning            = $null,
@@ -291,14 +291,14 @@ powershell -C { Use-Icinga; Invoke-IcingaCheckTutorial -Warning 20 -Critical 30 
 
 Now it is time to combine multiple check objects into one check package. Our basic plugin works just fine, but maybe we wish to compare multiple values for multiple checks. To do so, we will create another `check object` and one `check package object`.
 
-Dont forget to add the compare functions `WarnOutOfRange` and `CritOutOfRange` for the new `check object`!
+Don't forget to add the compare functions `WarnOutOfRange` and `CritOutOfRange` for the new `check object`!
 
-Last but not least we will modify our `New-IcingaCheckResult` fuction to use the `check package` instead of our old `check object`
+Last but not least we will modify our `New-IcingaCheckResult` function to use the `check package` instead of our old `check object`
 
 ```powershell
 function Invoke-IcingaCheckTutorial()
 {
-    # Create our arguments we can use to parese thresholds
+    # Create our arguments we can use to parse thresholds
     # Example: Invoke-IcingaCheckTutorial -Warning 10 -Critical 30
     param (
         $Warning            = $null,
@@ -328,8 +328,8 @@ function Invoke-IcingaCheckTutorial()
     #            or store the result inside a variable, as the check
     #            object is otherwise written into our plugin output
     $Check.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
-    # Dont forget to add our comparison for the second check with
-    # the identical tresholds. If you want to, you could compare
+    # Don't forget to add our comparison for the second check with
+    # the identical thresholds. If you want to, you could compare
     # them to different arguments
     $Check2.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
 
@@ -370,12 +370,12 @@ powershell -C { Use-Icinga; Invoke-IcingaCheckTutorial -Warning 20 -Critical 30 
 
 ### Package Operators
 
-As you see, the plugin output is `Ok` while clearly it should throw `Critical`. What we are missing is a comparing operator, telling the package how to count each assiged check. We have several operators on our hand:
+As you see, the plugin output is `Ok` while clearly it should throw `Critical`. What we are missing is a comparing operator, telling the package how to count each assigned check. We have several operators on our hand:
 
 * `-OperatorMin <number>` with `<number>` amount of checks require to be ok for the package to be ok
 * `-OperatorMax <number>` with `<number>` amount of checks require to be ok for the package to be ok
 * `-OperatorAnd` for all checks requiring to be ok for the package to be ok
-* `-OperatorOr` for atleast one check requiring to be ok for the package to be ok
+* `-OperatorOr` for at least one check requiring to be ok for the package to be ok
 * `-OperatorNone` for all checks to be `not` ok for the package to be ok
 
 You can only use one operator per check package, a combination is not possible.
@@ -385,7 +385,7 @@ On our example we will use the `-OperatorAnd` to ensure all checks have to be ok
 ```powershell
 function Invoke-IcingaCheckTutorial()
 {
-    # Create our arguments we can use to parese thresholds
+    # Create our arguments we can use to parse thresholds
     # Example: Invoke-IcingaCheckTutorial -Warning 10 -Critical 30
     param (
         $Warning            = $null,
@@ -415,8 +415,8 @@ function Invoke-IcingaCheckTutorial()
     #            or store the result inside a variable, as the check
     #            object is otherwise written into our plugin output
     $Check.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
-    # Dont forget to add our comparison for the second check with
-    # the identical tresholds. If you want to, you could compare
+    # Don't forget to add our comparison for the second check with
+    # the identical thresholds. If you want to, you could compare
     # them to different arguments
     $Check2.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
 
@@ -464,11 +464,11 @@ As you can see our package is now critical, outputting each check which is `not`
 [CRITICAL] Tutorial, Tutorial 2
 ```
 
-inside the short plugin output to ensure we have a quick overview within Icinga Web 2, telling us which checks are failling.
+inside the short plugin output to ensure we have a quick overview within Icinga Web 2, telling us which checks are failing.
 
 ### Increasing Verbosity
 
-In case our checks are ok, they are not printed by default to keep the view as little as possible. We can test this by executing the plugin without tresholds
+In case our checks are ok, they are not printed by default to keep the view as little as possible. We can test this by executing the plugin without thresholds
 
 ```powershell
 powershell -C { Use-Icinga; Invoke-IcingaCheckTutorial }
@@ -487,7 +487,7 @@ In addition, we will parse the new `$Verbosity` as argument to our `check packag
 ```powershell
 function Invoke-IcingaCheckTutorial()
 {
-    # Create our arguments we can use to parese thresholds
+    # Create our arguments we can use to parse thresholds
     # Example: Invoke-IcingaCheckTutorial -Warning 10 -Critical 30
     param (
         $Warning            = $null,
@@ -520,8 +520,8 @@ function Invoke-IcingaCheckTutorial()
     #            or store the result inside a variable, as the check
     #            object is otherwise written into our plugin output
     $Check.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
-    # Dont forget to add our comparison for the second check with
-    # the identical tresholds. If you want to, you could compare
+    # Don't forget to add our comparison for the second check with
+    # the identical thresholds. If you want to, you could compare
     # them to different arguments
     $Check2.WarnOutOfRange($Warning).CritOutOfRange($Critical) | Out-Null;
 
@@ -550,7 +550,7 @@ function Invoke-IcingaCheckTutorial()
 }
 ```
 
-If we now exectue the plugin with `Verbosity` and the value `2`, every single check will be printed, even when the check itself is Ok
+If we now execute the plugin with `Verbosity` and the value `2`, every single check will be printed, even when the check itself is Ok
 
 ```powershell
 powershell -C { Use-Icinga; Invoke-IcingaCheckTutorial -Verbosity 2 }
@@ -578,7 +578,7 @@ You simply have to ensure you are adding `checks` and `check packages` correctly
 
 ### Icinga Configuration
 
-Now as we are done with writing our plugin, it is time to test it inside Icinga 2. Instead of having to write an `Icinga Director` command configuration yourself, we can use an integrated Framework Cmdlet to generate a `Basket` file for us which can be imorted into the `Icinga Director`.
+Now as we are done with writing our plugin, it is time to test it inside Icinga 2. Instead of having to write an `Icinga Director` command configuration yourself, we can use an integrated Framework Cmdlet to generate a `Basket` file for us which can be imported into the `Icinga Director`.
 
 ```powershell
 Get-IcingaCheckCommandConfig -CheckName 'Invoke-IcingaCheckTutorial' -OutDirectory 'C:\users\public';

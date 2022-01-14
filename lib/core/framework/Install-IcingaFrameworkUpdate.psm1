@@ -13,7 +13,7 @@
 .EXAMPLE
     PS>Install-IcingaFrameworkUpdate -FrameworkUrl 'https://github.com/Icinga/icinga-powershell-framework/archive/v1.0.2.zip';
 .PARAMETER FrameworkUrl
-    The url to a remote or local ressource pointing directly to a .zip file containing the required files for updating
+    The url to a remote or local resource pointing directly to a .zip file containing the required files for updating
 .INPUTS
    System.String
 .OUTPUTS

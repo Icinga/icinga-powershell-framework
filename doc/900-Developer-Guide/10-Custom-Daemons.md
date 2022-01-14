@@ -146,14 +146,14 @@ function Add-IcingaAgentServiceTest()
     # allow to share data collected from this daemon with others
     $IcingaDaemonData.BackgroundDaemon.Add(
         'TestIcingaAgentService',
-        [hashtable]::Synchronized(@{})
+        [hashtable]::Synchronized(@{ })
     );
     # This will add another hashtable to our previous
     # TestIcingaAgentService hashtable to store actual service
     # information
     $IcingaDaemonData.BackgroundDaemon.TestIcingaAgentService.Add(
         'ServiceState',
-        [hashtable]::Synchronized(@{})
+        [hashtable]::Synchronized(@{ })
     );
 }
 ```
@@ -179,14 +179,14 @@ function Add-IcingaAgentServiceTest()
     # allow to share data collected from this daemon with others
     $IcingaDaemonData.BackgroundDaemon.Add(
         'TestIcingaAgentService',
-        [hashtable]::Synchronized(@{})
+        [hashtable]::Synchronized(@{ })
     );
     # This will add another hashtable to our previous
     # TestIcingaAgentService hashtable to store actual service
     # information
     $IcingaDaemonData.BackgroundDaemon.TestIcingaAgentService.Add(
         'ServiceState',
-        [hashtable]::Synchronized(@{})
+        [hashtable]::Synchronized(@{ })
     );
 
     # Keep our code executed as long as the PowerShell service is
@@ -197,7 +197,7 @@ function Add-IcingaAgentServiceTest()
 }
 ```
 
-*ALWAYS* ensure you add some sort for `sleep` at the end of the `while` loop to allow your CPU some breaks. If you do not do this, you might suffer from high CPU loads. The `sleep duration` interval can depend either on a simple CPU cycle break or by telling the daemon to execute tasks only in certain intervalls. In our case we wish to execute the daemon every `5 seconds`.
+*ALWAYS* ensure you add some sort for `sleep` at the end of the `while` loop to allow your CPU some breaks. If you do not do this, you might suffer from high CPU loads. The `sleep duration` interval can depend either on a simple CPU cycle break or by telling the daemon to execute tasks only in certain interval. In our case we wish to execute the daemon every `5 seconds`.
 
 ```powershell
 function Add-IcingaAgentServiceTest()
@@ -216,14 +216,14 @@ function Add-IcingaAgentServiceTest()
     # allow to share data collected from this daemon with others
     $IcingaDaemonData.BackgroundDaemon.Add(
         'TestIcingaAgentService',
-        [hashtable]::Synchronized(@{})
+        [hashtable]::Synchronized(@{ })
     );
     # This will add another hashtable to our previous
     # TestIcingaAgentService hashtable to store actual service
     # information
     $IcingaDaemonData.BackgroundDaemon.TestIcingaAgentService.Add(
         'ServiceState',
-        [hashtable]::Synchronized(@{})
+        [hashtable]::Synchronized(@{ })
     );
 
     # Keep our code executed as long as the PowerShell service is
@@ -257,14 +257,14 @@ function Add-IcingaAgentServiceTest()
     # allow to share data collected from this daemon with others
     $IcingaDaemonData.BackgroundDaemon.Add(
         'TestIcingaAgentService',
-        [hashtable]::Synchronized(@{})
+        [hashtable]::Synchronized(@{ })
     );
     # This will add another hashtable to our previous
     # TestIcingaAgentService hashtable to store actual service
     # information
     $IcingaDaemonData.BackgroundDaemon.TestIcingaAgentService.Add(
         'ServiceState',
-        [hashtable]::Synchronized(@{})
+        [hashtable]::Synchronized(@{ })
     );
 
     # Initialise our error counter variable

@@ -34,7 +34,7 @@ function New-IcingaBasicAuthHeader()
 
     if ($null -eq $Password -or [string]::IsNullOrEmpty($Username)) {
         Write-IcingaConsoleWarning 'Please specify your username and password to continue';
-        return @{};
+        return @{ };
     }
 
     $Credentials = [System.Convert]::ToBase64String(

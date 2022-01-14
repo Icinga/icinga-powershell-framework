@@ -16,7 +16,7 @@
     \Processor(*)\% dpc time
     \Processor(*)\% privileged time
 .PARAMETER CounterCategory
-    The name of the category to fetch availble counters for
+    The name of the category to fetch available counters for
 .INPUTS
     System.String
 .OUTPUTS
@@ -30,7 +30,7 @@ function Show-IcingaPerformanceCounters()
         [string]$CounterCategory
     );
 
-    [hashtable]$counters = @{};
+    [hashtable]$counters = @{ };
 
     if ([string]::IsNullOrEmpty($CounterCategory)) {
         $counters.Add('error', 'Please specify a counter category');

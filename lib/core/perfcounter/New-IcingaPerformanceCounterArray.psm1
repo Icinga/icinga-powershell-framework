@@ -31,7 +31,7 @@ function New-IcingaPerformanceCounterArray()
         [array]$CounterArray = @()
     )
 
-    [hashtable]$CounterResult = @{};
+    [hashtable]$CounterResult = @{ };
     [bool]$RequireSleep       = $TRUE;
     foreach ($counter in $CounterArray) {
         # We want to speed up things with loading, so we will check if a specified
@@ -59,14 +59,14 @@ function New-IcingaPerformanceCounterArray()
     # Internally we could do something like this
     # $global:Icinga_PerfCounterCache += $CounterResult;
 
-    # Above we initialse ever single counter and we only require a sleep once
+    # Above we initialise ever single counter and we only require a sleep once
     # in case a new, yet unknown counter was added
     if ($RequireSleep) {
         Start-Sleep -Milliseconds 500;
 
         # Agreed, this is some sort of code duplication but it wouldn't make
         # any sense to create a own function for this. Why are we doing
-        # this anway?
+        # this anyway?
         # Simple: In case we found counters which have yet not been initialised
         #         we did this above. Now we have waited 500 ms to receive proper
         #         values from these counters. As the previous generated result
@@ -76,9 +76,9 @@ function New-IcingaPerformanceCounterArray()
         #         applies to the first call of the module with the counters.
         #         This 'duplication' however decreased the execution from
         #         certain modules from 25s to 1s on the first run. Every
-        #         additional run is then beeing executed within 0.x s
+        #         additional run is then being executed within 0.x s
         #         which sounds like a very good performance and solution
-        $CounterResult = @{};
+        $CounterResult = @{ };
         foreach ($counter in $CounterArray) {
             $obj = New-IcingaPerformanceCounter -Counter $counter -SkipWait $TRUE;
             if ($CounterResult.ContainsKey($obj.Name()) -eq $FALSE) {

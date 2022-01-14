@@ -22,7 +22,7 @@ function New-IcingaForWindowsRESTApi()
     # allow to share data collected from this daemon with others
     $IcingaDaemonData.BackgroundDaemon.Add(
         'IcingaPowerShellRestApi',
-        [hashtable]::Synchronized(@{})
+        [hashtable]::Synchronized(@{ })
     );
 
     # Map our Icinga globals to a shorter variable
@@ -33,7 +33,7 @@ function New-IcingaForWindowsRESTApi()
     # endpoint configurations for the API
     $RestDaemon.Add(
         'RegisteredEndpoints',
-        [hashtable]::Synchronized(@{})
+        [hashtable]::Synchronized(@{ })
     );
 
     # This will add another hashtable to our previous
@@ -41,7 +41,7 @@ function New-IcingaForWindowsRESTApi()
     # command aliases for execution for the API
     $RestDaemon.Add(
         'CommandAliases',
-        [hashtable]::Synchronized(@{})
+        [hashtable]::Synchronized(@{ })
     );
 
     # This will add another hashtable to our previous
@@ -49,7 +49,7 @@ function New-IcingaForWindowsRESTApi()
     # command aliases for execution for the API
     $RestDaemon.Add(
         'ClientBlacklist',
-        [hashtable]::Synchronized(@{})
+        [hashtable]::Synchronized(@{ })
     );
 
     # Make the root folder of our rest daemon module available

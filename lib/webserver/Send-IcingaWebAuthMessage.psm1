@@ -20,7 +20,7 @@
 function Send-IcingaWebAuthMessage()
 {
     param (
-        [Hashtable]$Connection = @{}
+        [Hashtable]$Connection = @{ }
     );
 
     Send-IcingaTCPClientMessage -Message (

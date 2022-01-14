@@ -147,7 +147,7 @@ function Sync-IcingaRepository()
 
                 try {
                     Write-IcingaConsoleNotice 'Syncing repository component "{0}" as file "{1}" into temp directory' -Objects $component, $package.Location;
-                    Invoke-IcingaWebRequest -USeBasicParsing -Uri $DownloadLink -OutFile $TargetLocation | Out-Null;
+                    Invoke-IcingaWebRequest -UseBasicParsing -Uri $DownloadLink -OutFile $TargetLocation | Out-Null;
                 } catch {
                     Write-IcingaConsoleError 'Failed to download repository component "{0}". Exception: "{1}"' -Objects $DownloadLink, $_.Exception.Message;
                     continue;

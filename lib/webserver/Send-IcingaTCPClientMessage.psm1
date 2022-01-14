@@ -1,7 +1,7 @@
 function Send-IcingaTCPClientMessage()
 {
     param(
-        [Hashtable]$Message                     = @{},
+        [Hashtable]$Message                     = @{ },
         [System.Net.Security.SslStream]$Stream = $null
     );
 

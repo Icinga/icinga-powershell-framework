@@ -53,7 +53,7 @@ The user you are running this command as does not have permission to access the 
 
 ## Easy fetching of data
 
-To ensure the above mentioned funtionality is made easy, we added the wrapper function `Get-IcingaWindowsInformation`. This function will by default use the `Get-CimInstance` Cmdlet and as fallback `Get-WmiObject`:
+To ensure the above mentioned functionality is made easy, we added the wrapper function `Get-IcingaWindowsInformation`. This function will by default use the `Get-CimInstance` Cmdlet and as fallback `Get-WmiObject`:
 
 ```powershell
 Get-IcingaWindowsInformation Win32_ComputerSystem;
@@ -108,7 +108,7 @@ The provided class name you try to fetch with Get-CimInstance is not known on th
 
 ## Usage of filters
 
-As for `Get-CimInstance` or `Get-WmiObject` you can also use the `-Filter` argument to search for certain content wihtin the return output and only return specific content:
+As for `Get-CimInstance` or `Get-WmiObject` you can also use the `-Filter` argument to search for certain content within the return output and only return specific content:
 
 ```powershell
 Use-Icinga;

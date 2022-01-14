@@ -53,7 +53,7 @@ function Show-IcingaPerformanceCounterHelp()
             }
         }
     }
-    
+
     if ([string]::IsNullOrEmpty($HelpText) -eq $FALSE) {
         return $HelpText;
     }

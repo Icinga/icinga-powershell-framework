@@ -101,8 +101,8 @@ function New-IcingaForWindowsComponent()
             Add-Content -Path $InvokeFunctionFile -Value '{';
             Add-Content -Path $InvokeFunctionFile -Value '    # Do not modify the param section';
             Add-Content -Path $InvokeFunctionFile -Value '    param (';
-            Add-Content -Path $InvokeFunctionFile -Value '        [Hashtable]$Request    = @{},';
-            Add-Content -Path $InvokeFunctionFile -Value '        [Hashtable]$Connection = @{},';
+            Add-Content -Path $InvokeFunctionFile -Value '        [Hashtable]$Request    = @{ },';
+            Add-Content -Path $InvokeFunctionFile -Value '        [Hashtable]$Connection = @{ },';
             Add-Content -Path $InvokeFunctionFile -Value '        $IcingaGlobals,';
             Add-Content -Path $InvokeFunctionFile -Value '        [string]$ApiVersion    = $null';
             Add-Content -Path $InvokeFunctionFile -Value '    );'

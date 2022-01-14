@@ -1,7 +1,7 @@
 function Test-IcingaRESTClientConnection()
 {
     param(
-        [Hashtable]$Connection = @{}
+        [Hashtable]$Connection = @{ }
     );
 
     # If we couldn't establish a proper SSL stream, close the connection

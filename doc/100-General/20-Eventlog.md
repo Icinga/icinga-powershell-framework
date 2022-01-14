@@ -1,6 +1,6 @@
-# Framework Eventlog Documentation
+# Framework EventLog Documentation
 
-Below you will find a list of EventId's which are exported by this module. The short and detailed message are both written directly into the eventlog. This documentation shall simply provide a summary of available EventId's
+Below you will find a list of EventId's which are exported by this module. The short and detailed message are both written directly into the EventLog. This documentation shall simply provide a summary of available EventId's
 
 ## Event Id 1000
 
@@ -78,7 +78,7 @@ Below you will find a list of EventId's which are exported by this module. The s
 
 | Category | Short Message | Detailed Message |
 | --- | --- | --- |
-| Warning | Icinga for Windows JEA context not available | The Icinga for Windows JEA session is no longer available and is attempted to be restarted on the system. This could have either happenend due to a crash or a user action, like restarting the WinRM service. |
+| Warning | Icinga for Windows JEA context not available | The Icinga for Windows JEA session is no longer available and is attempted to be restarted on the system. This could have either happened due to a crash or a user action, like restarting the WinRM service. |
 
 ## Event Id 1550
 
@@ -90,7 +90,7 @@ Below you will find a list of EventId's which are exported by this module. The s
 
 | Category | Short Message | Detailed Message |
 | --- | --- | --- |
-| Warning | Invalid authentication credentials provided | A web request for a client was rejected because of invalid formated base64 encoded credentials. |
+| Warning | Invalid authentication credentials provided | A web request for a client was rejected because of invalid formatted base64 encoded credentials. |
 
 ## Event Id 1552
 

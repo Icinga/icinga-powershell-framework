@@ -6,7 +6,7 @@ function Get-IcingaPSObjectProperties()
         [array]$Exclude = @()
     );
 
-    [hashtable]$RetValue = @{};
+    [hashtable]$RetValue = @{ };
 
     if ($null -eq $Object) {
         return $RetValue;

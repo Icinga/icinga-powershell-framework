@@ -1,4 +1,4 @@
-function Invoke-IcingaForWindowsMangementConsoleToogleFrameworkApiChecks()
+function Invoke-IcingaForWindowsManagementConsoleToggleFrameworkApiChecks()
 {
     if (Get-IcingaFrameworkApiChecks) {
         Disable-IcingaFrameworkApiChecks;

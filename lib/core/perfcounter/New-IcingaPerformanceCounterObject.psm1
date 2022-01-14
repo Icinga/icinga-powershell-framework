@@ -103,12 +103,12 @@ function New-IcingaPerformanceCounterObject()
     }
 
     <#
-    # Return a hashtable containting the counter value including the
+    # Return a hashtable containing the counter value including the
     # Sample values for the counter itself. In case we run into an error,
     # keep the counter construct but add an error message in addition.
     #>
     $pc_instance | Add-Member -MemberType ScriptMethod -Name 'Value' -Value {
-        [hashtable]$CounterData = @{};
+        [hashtable]$CounterData = @{ };
 
         try {
             [string]$CounterType = $this.PerfCounter.CounterType;
@@ -118,7 +118,7 @@ function New-IcingaPerformanceCounterObject()
             $CounterData.Add('type', $CounterType);
             $CounterData.Add('error', $null);
         } catch {
-            $CounterData = @{};
+            $CounterData = @{ };
             $CounterData.Add('value', $null);
             $CounterData.Add('sample', $null);
             $CounterData.Add('help', $null);
@@ -129,7 +129,7 @@ function New-IcingaPerformanceCounterObject()
         return $CounterData;
     }
 
-    # Initialiste the entire counter and internal handlers
+    # Initialise the entire counter and internal handlers
     $pc_instance.Init();
 
     # Return this custom object

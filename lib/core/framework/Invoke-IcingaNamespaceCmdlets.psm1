@@ -4,7 +4,7 @@ function Invoke-IcingaNamespaceCmdlets()
         [string]$Command
     );
 
-    [Hashtable]$CommandConfig = @{};
+    [Hashtable]$CommandConfig = @{ };
 
     if ($Command.Contains('*') -eq $FALSE) {
         $Command = [string]::Format('{0}*', $Command);

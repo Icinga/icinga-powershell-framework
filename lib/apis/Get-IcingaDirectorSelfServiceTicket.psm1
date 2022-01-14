@@ -52,7 +52,7 @@ function Get-IcingaDirectorSelfServiceTicket()
                 break;
             };
             500 {
-                $ErrorMessage = 'Failed to fetch certificate ticket for this host over Self-Service API. Please check that your Icinga CA is running, you have configured a Ticketsalt and that your Icinga Director has enough permissions to communicate with the Icinga 2 API for generating tickets.';
+                $ErrorMessage = 'Failed to fetch certificate ticket for this host over Self-Service API. Please check that your Icinga CA is running, you have configured a TicketSalt and that your Icinga Director has enough permissions to communicate with the Icinga 2 API for generating tickets.';
                 break;
             };
             901 {
