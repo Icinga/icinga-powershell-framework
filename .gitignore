@@ -4,6 +4,7 @@ config/*
 cache/*
 
 .vscode/
+.vs/
 *.log
 
 # JEA
