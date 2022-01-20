@@ -13,6 +13,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 ### Bugfixes
 
+* [#273](https://github.com/Icinga/icinga-powershell-framework/issues/273) Fixes exceptions and freezes while using Icinga for Windows within an PowerShell ISE session and informing the user properly about the limitations
 * [#291](https://github.com/Icinga/icinga-powershell-framework/issues/291) Fixes `Split-IcingaVersion` by returning data with naming `mayor` for the version instead of `major`. We will return both results to give developers time to adjust their code before removing the `mayor` object
 * [#379](https://github.com/Icinga/icinga-powershell-framework/issues/379) Fixes memory leak for Icinga for Windows by using a custom function being more aggressive on memory cleanup
 * [#394](https://github.com/Icinga/icinga-powershell-framework/issues/394) Fixes lookup time for Icinga managed user for large Active Directory environments by limiting lookup to local system only
