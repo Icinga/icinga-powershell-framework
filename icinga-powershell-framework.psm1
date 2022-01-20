@@ -242,6 +242,17 @@ function Invoke-IcingaCommand()
         Write-IcingaFrameworkCodeCache;
     }
 
+    if ($Manage -And $null -ne $psISE) {
+        Use-Icinga;
+        Write-IcingaConsoleError -Message 'Icinga for Windows was loaded, but the Icinga Management Console is not available within the PowerShell ISE context. Please start a regular PowerShell to use it.';
+        return;
+    }
+
+    if ($null -ne $psISE) {
+        Write-IcingaConsoleWarning -Message 'Icinga for Windows was successfully loaded, but the current PowerShell ISE environment is not fully supported. For advanced and production tasks, please use Icinga for Windows inside a regular PowerShell environment.';
+        return;
+    }
+
     powershell.exe -NoExit -Command {
         $Script          = $args[0];
         $RootPath        = $args[1];
