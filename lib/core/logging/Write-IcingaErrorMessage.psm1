@@ -9,5 +9,5 @@ function Write-IcingaErrorMessage()
         return;
     }
 
-    Write-EventLog -LogName Application -Source 'Icinga for Windows' -EntryType Error -EventId $EventId -Message $Message;
+    Write-EventLog -LogName 'Icinga for Windows' -Source 'Icinga for Windows' -EntryType Error -EventId $EventId -Message $Message;
 }

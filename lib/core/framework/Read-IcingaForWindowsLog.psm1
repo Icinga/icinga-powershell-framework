@@ -1,4 +1,8 @@
 function Read-IcingaForWindowsLog()
 {
-    Read-IcingaWindowsEventLog -LogName 'Application' -Source 'Icinga for Windows' -MaxEntries 500;
+    param (
+        [array]$Source = @()
+    );
+
+    Read-IcingaWindowsEventLog -LogName 'Icinga for Windows' -Source $Source -MaxEntries 500;
 }

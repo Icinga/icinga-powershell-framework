@@ -5,8 +5,6 @@ function Start-IcingaPowerShellDaemon()
         [switch]$JEARestart   = $FALSE
     );
 
-    Use-Icinga;
-
     $global:IcingaDaemonData.FrameworkRunningAsDaemon = $TRUE;
 
     [string]$MainServicePidFile                                           = (Join-Path -Path (Get-IcingaCacheDir) -ChildPath 'service.pid');
@@ -36,7 +34,7 @@ function Start-IcingaPowerShellDaemon()
         Write-IcingaDebugMessage -Message 'Starting Icinga for Windows service inside JEA context' -Objects $RunAsService, $JEARestart, $JeaProfile;
         & powershell.exe -NoProfile -NoLogo -ConfigurationName $JeaProfile -Command {
             try {
-                Use-Icinga;
+                Use-Icinga -Daemon;
 
                 Write-IcingaFileSecure -File ($args[1]) -Value $PID;
 
