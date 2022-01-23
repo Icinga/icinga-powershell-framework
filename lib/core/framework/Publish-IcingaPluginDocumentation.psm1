@@ -54,7 +54,7 @@ function Publish-IcingaPluginDocumentation()
         [string]$PluginDocName = '';
         foreach ($DocFile in $MDFiles) {
             $DocFileName = $DocFile.Name;
-            if ($DocFileName -Like "*$PluginName*") {
+            if ($DocFileName -Like "*$PluginName.md") {
                 $PluginDocName = $DocFile.Name;
                 break;
             }
