@@ -56,6 +56,9 @@ function Start-IcingaForWindowsInstallation()
     # JEA Profile
     $InstallJEAProfile     = Get-IcingaForWindowsInstallerStepSelection -InstallerStep 'Show-IcingaForWindowsInstallerMenuSelectInstallJEAProfile';
 
+    # Api Checks
+    $InstallApiChecks      = Get-IcingaForWindowsInstallerStepSelection -InstallerStep 'Show-IcingaForWindowsInstallerMenuSelectInstallApiChecks';
+
     $Hostname              = '';
     $GlobalZones           = @();
     $IcingaParentAddresses = @();
@@ -255,7 +258,25 @@ function Start-IcingaForWindowsInstallation()
         };
         '2' {
             # Do not install JEA profile
-        }
+        };
+    }
+
+    switch ($InstallApiChecks) {
+        '0' {
+            Disable-IcingaFrameworkApiChecks;
+            break;
+        };
+        '1' {
+            Register-IcingaBackgroundDaemon -Command 'Start-IcingaWindowsRESTApi';
+            Add-IcingaRESTApiCommand -Command 'Invoke-IcingaCheck*' -Endpoint 'apichecks';
+            Enable-IcingaFrameworkApiChecks;
+            if ($InstallService) {
+                Restart-IcingaWindowsService;
+            } else {
+                Write-IcingaConsoleWarning -Message 'You have selected to install the Api-Check feature and all required configurations were made. The Icinga for Windows service is however not marked for installation, which will cause this feature to not work.';
+            }
+            break;
+        };
     }
 
     # Update configuration and clear swap

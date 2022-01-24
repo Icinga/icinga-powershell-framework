@@ -25,6 +25,7 @@ function Add-IcingaForWindowsInstallationAdvancedEntries()
     Show-IcingaForWindowsInstallationMenuStableRepository -Automated -Advanced;
     Show-IcingaForWindowsInstallerMenuSelectInstallJEAProfile -Automated -Advanced;
     Show-IcingaForWindowsInstallationMenuEnterIcingaCAServer -Automated -Advanced;
+    Show-IcingaForWindowsInstallerMenuSelectInstallApiChecks -Automated -Advanced;
 
     Enable-IcingaFrameworkConsoleOutput;
 
