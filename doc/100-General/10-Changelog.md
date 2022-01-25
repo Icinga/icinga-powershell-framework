@@ -35,6 +35,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#417](https://github.com/Icinga/icinga-powershell-framework/issues/417) Adds support to allow the force creation of Icinga Agent certificates, even when they are already present on the system over Icinga Management Console installation
 * [#427](https://github.com/Icinga/icinga-powershell-framework/issues/427) Moves Icinga for Windows EventLog from `Application` to a custom log `Icinga for Windows`, allowing better separation
 * [#438](https://github.com/Icinga/icinga-powershell-framework/pull/438) Adds support for enabling the REST-Api background daemon and the Api-Check feature during the IMC installation wizard on advanced settings, which will be enabled by default
+* [#440](https://github.com/Icinga/icinga-powershell-framework/pull/440) Adds upgrade notification if Icinga for Windows Service binary older than v1.2.0 is used, which will not work with Icinga for Windows v1.8.0 or later
 
 ## 1.7.1 (2021-11-11)
 
