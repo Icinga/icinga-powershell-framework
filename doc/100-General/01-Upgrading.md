@@ -20,7 +20,7 @@ After upgrading to Icinga for Windows v1.8.0, you will require to open a new Ici
 
 **NOTE:** In some cases the changes for the EventLog will only apply, **after** the system has been rebooted. Afterwards every Icinga for Windows EventLog entry is written in a newly created `Icinga for Windows` log.
 
-### Custom Daemon Handling
+### Custom Daemon Handling (Developers only)
 
 With Icinga for Windows v1.8.0 we removed the entire list of currently available `$Global` variables:
 
