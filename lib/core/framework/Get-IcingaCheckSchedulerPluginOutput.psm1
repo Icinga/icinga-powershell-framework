@@ -17,12 +17,8 @@
 
 function Get-IcingaCheckSchedulerPluginOutput()
 {
-    if ($null -eq $global:Icinga) {
-        return $null;
-    }
-
-    $CheckResult = [string]::Join("`r`n", $global:Icinga.CheckResults);
-    $global:Icinga.CheckResults = @();
+    $CheckResult                                  = [string]::Join("`r`n", $Global:Icinga.Private.Scheduler.CheckResults);
+    $Global:Icinga.Private.Scheduler.CheckResults = @();
 
     return $CheckResult;
 }

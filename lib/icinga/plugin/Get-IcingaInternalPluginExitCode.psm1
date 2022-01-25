@@ -1,4 +1,4 @@
 function Get-IcingaInternalPluginExitCode()
 {
-    return $Global:Icinga.PluginExecution.LastExitCode;
+    return $Global:Icinga.Private.Scheduler.ExitCode;
 }

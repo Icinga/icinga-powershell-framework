@@ -31,15 +31,10 @@ function Use-Icinga()
     }
 
     Disable-IcingaProgressPreference;
+    New-IcingaEnvironmentVariable;
 
     if ($Minimal) {
-        if ($null -eq $global:Icinga) {
-            $global:Icinga = @{ };
-        }
-
-        if ($global:Icinga.ContainsKey('Minimal') -eq $FALSE) {
-            $global:Icinga.Add('Minimal', $TRUE);
-        }
+        $Global:Icinga.Protected.Minimal = $TRUE;
     }
 
     # Ensure we autoload the Icinga Plugin collection, provided by the external
@@ -48,50 +43,23 @@ function Use-Icinga()
         Use-IcingaPlugins;
     }
 
-    if ($LibOnly -eq $FALSE) {
-        $global:IcingaThreads       = [hashtable]::Synchronized(@{ });
-        $global:IcingaThreadContent = [hashtable]::Synchronized(@{ });
-        $global:IcingaThreadPool    = [hashtable]::Synchronized(@{ });
-        $global:IcingaTimers        = [hashtable]::Synchronized(@{ });
-        $global:IcingaDaemonData    = [hashtable]::Synchronized(
-            @{
-                'IcingaThreads'            = $global:IcingaThreads;
-                'IcingaThreadContent'      = $global:IcingaThreadContent;
-                'IcingaThreadPool'         = $global:IcingaThreadPool;
-                'IcingaTimers'             = $global:IcingaTimers;
-                'FrameworkRunningAsDaemon' = $Daemon;
-                'JEAContext'               = $FALSE;
-                'DebugMode'                = $DebugMode;
-            }
-        );
-    } else {
-        # This will fix the debug mode in case we are only using Libs
-        # without any other variable content and daemon handling
-        if ($null -eq $global:IcingaDaemonData) {
-            $global:IcingaDaemonData = [hashtable]::Synchronized(@{ });
-        }
-        if ($global:IcingaDaemonData.ContainsKey('DebugMode') -eq $FALSE) {
-            $global:IcingaDaemonData.DebugMode = $DebugMode;
-        }
-        if ($global:IcingaDaemonData.ContainsKey('JEAContext') -eq $FALSE) {
-            $global:IcingaDaemonData.JEAContext = $FALSE;
-        }
-        if ($global:IcingaDaemonData.ContainsKey('FrameworkRunningAsDaemon') -eq $FALSE) {
-            $global:IcingaDaemonData.FrameworkRunningAsDaemon = $Daemon;
-        }
+    if ($Daemon) {
+        $Global:Icinga.Protected.RunAsDaemon = $TRUE;
     }
-    New-IcingaPerformanceCounterCache;
+
+    if ($DebugMode) {
+        $Global:Icinga.Protected.DebugMode = $TRUE;
+    }
 
     # Enable DebugMode in case it is enabled in our config
     if (Get-IcingaFrameworkDebugMode) {
         Enable-IcingaFrameworkDebugMode;
-        $DebugMode = $TRUE;
     }
 
     $EventLogMessages = Invoke-IcingaNamespaceCmdlets -Command 'Register-IcingaEventLogMessages*';
     foreach ($entry in $EventLogMessages.Values) {
         foreach ($event in $entry.Keys) {
-            if ($LibOnly -eq $FALSE) {
+            if ($LibOnly -eq $FALSE -And $Daemon -eq $FALSE) {
                 Register-IcingaEventLog -LogName $event;
             }
             Add-IcingaHashtableItem -Hashtable $global:IcingaEventLogEnums `
@@ -100,7 +68,7 @@ function Use-Icinga()
         }
     }
 
-    if ($LibOnly -eq $FALSE) {
+    if ($LibOnly -eq $FALSE -And $Daemon -eq $FALSE) {
         Register-IcingaEventLog;
     }
 }

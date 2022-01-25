@@ -54,29 +54,20 @@ function Start-IcingaWindowsRESTApi()
         [int]$Timeout           = 30
     );
 
-    $RootFolder = $PSScriptRoot;
-
-    $global:IcingaDaemonData.IcingaThreadContent.Add('RESTApi', ([hashtable]::Synchronized(@{ })));
-    $global:IcingaDaemonData.IcingaThreadPool.Add('IcingaRESTApi', (New-IcingaThreadPool -MaxInstances ($ThreadId + 3)));
-    $global:IcingaDaemonData.IcingaThreadContent.RESTApi.Add('ApiRequests', ([hashtable]::Synchronized(@{ })));
-    $global:IcingaDaemonData.IcingaThreadContent.RESTApi.Add('ApiCallThreadAssignment', ([hashtable]::Synchronized(@{ })));
-    $global:IcingaDaemonData.IcingaThreadContent.RESTApi.Add('TotalThreads', $ConcurrentThreads);
-    $global:IcingaDaemonData.IcingaThreadContent.RESTApi.Add('LastThreadId', 0);
+    New-IcingaForWindowsRESTEnvironment -ThreadCount $ConcurrentThreads;
 
     # Now create a new thread for our REST-Api, assign a name and parse all required arguments to it.
     # Last but not least start it directly
     New-IcingaThreadInstance `
-        -Name 'Icinga_for_Windows_REST_Api' `
-        -ThreadPool $global:IcingaDaemonData.IcingaThreadPool.IcingaRESTApi `
+        -Name 'Main' `
+        -ThreadPool (Get-IcingaThreadPool -Name 'RESTApiPool') `
         -Command 'New-IcingaForWindowsRESTApi' `
         -CmdParameters @{
-            'IcingaDaemonData' = $global:IcingaDaemonData;
-            'Address'          = $Address;
-            'Port'             = $Port;
-            'RootFolder'       = $RootFolder;
-            'CertFile'         = $CertFile;
-            'CertThumbprint'   = $CertThumbprint;
-            'RequireAuth'      = $RequireAuth;
+            'Address'        = $Address;
+            'Port'           = $Port;
+            'CertFile'       = $CertFile;
+            'CertThumbprint' = $CertThumbprint;
+            'RequireAuth'    = $RequireAuth;
         } `
         -Start;
 
@@ -85,7 +76,7 @@ function Start-IcingaWindowsRESTApi()
     while ($ConcurrentThreads -gt 0) {
         $ConcurrentThreads                         = $ConcurrentThreads - 1;
         [System.Collections.Queue]$RESTThreadQueue = @();
-        $global:IcingaDaemonData.IcingaThreadContent.RESTApi.ApiRequests.Add($ThreadId, [System.Collections.Queue]::Synchronized($RESTThreadQueue));
+        $Global:Icinga.Public.Daemons.RESTApi.ApiRequests.Add($ThreadId, [System.Collections.Queue]::Synchronized($RESTThreadQueue));
         Start-IcingaForWindowsRESTThread -ThreadId $ThreadId -RequireAuth:$RequireAuth;
         $ThreadId += 1;
 

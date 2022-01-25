@@ -8,5 +8,5 @@ function Test-IcingaThread()
         return $FALSE;
     }
 
-    return $global:IcingaDaemonData.IcingaThreads.ContainsKey($Thread);
+    return $Global:Icinga.Public.Threads.ContainsKey($Thread);
 }

@@ -29,7 +29,7 @@ function Read-IcingaPowerShellConfig()
             Move-Item -Path $ConfigFile -Destination $NewConfigFile -ErrorAction SilentlyContinue;
             New-Item -ItemType File -Path $ConfigFile -ErrorAction SilentlyContinue;
 
-            Write-IcingaEventMessage -EventId 1100 -Namespace 'Framework' -Objects $ConfigFile, $Content;
+            Write-IcingaEventMessage -EventId 1100 -Namespace 'Framework' -ExceptionObject $_ -Objects $ConfigFile, $Content;
             Write-IcingaConsoleError -Message 'Your configuration file "{0}" was corrupt and could not be read. It was moved to "{1}" for review and a new plain file has been created' -Objects $ConfigFile, $NewConfigFile;
 
             $ConfigObject = (New-Object -TypeName PSObject);

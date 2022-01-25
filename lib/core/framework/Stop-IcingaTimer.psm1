@@ -36,11 +36,9 @@ function Stop-IcingaTimer()
         $TimerObject.Stop();
     }
     Add-IcingaHashtableItem -Key $Name -Value (
-        [hashtable]::Synchronized(
-            @{
-                'Active' = $FALSE;
-                'Timer'  = $TimerObject;
-            }
-        )
-    ) -Hashtable $global:IcingaDaemonData.IcingaTimers -Override | Out-Null;
+         @{
+               'Active' = $FALSE;
+               'Timer'  = $TimerObject;
+         }
+    ) -Hashtable $Global:Icinga.Private.Timers -Override | Out-Null;
 }

@@ -1,22 +1,22 @@
 <#
 .SYNOPSIS
-   Tests if a specific timer object is already present and started with Start-IcingaTimer
+    Tests if a specific timer object is already present and started with Start-IcingaTimer
 .DESCRIPTION
-   Tests if a specific timer object is already present and started with Start-IcingaTimer
+    Tests if a specific timer object is already present and started with Start-IcingaTimer
 .FUNCTIONALITY
-   Tests if a specific timer object is already present and started with Start-IcingaTimer
+    Tests if a specific timer object is already present and started with Start-IcingaTimer
 .EXAMPLE
-   PS>Test-IcingaTimer;
+    PS>Test-IcingaTimer;
 .EXAMPLE
-   PS>Test-IcingaTimer -Name 'My Test Timer';
+    PS>Test-IcingaTimer -Name 'My Test Timer';
 .PARAMETER Name
-   The name of a custom identifier to run mutliple timers at once
+    The name of a custom identifier to run mutliple timers at once
 .INPUTS
-   System.String
+    System.String
 .OUTPUTS
-   Boolean
+    Boolean
 .LINK
-   https://github.com/Icinga/icinga-powershell-framework
+    https://github.com/Icinga/icinga-powershell-framework
 #>
 
 function Test-IcingaTimer()
@@ -25,7 +25,7 @@ function Test-IcingaTimer()
         [string]$Name = 'DefaultTimer'
     );
 
-    $TimerData = Get-IcingaHashtableItem -Key $Name -Hashtable $global:IcingaDaemonData.IcingaTimers;
+    $TimerData = Get-IcingaHashtableItem -Key $Name -Hashtable $Global:Icinga.Private.Timers;
 
     if ($null -eq $TimerData) {
         return $FALSE;

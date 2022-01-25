@@ -134,7 +134,7 @@ function Get-IcingaJEAConfiguration()
         -CmdName 'Exit-IcingaExecutePlugin' `
         -CmdType 'Function';
 
-    # We need to add this function for our background daemon we start with 'Start-IcingaPowerShellDaemon',
+    # We need to add this function for our background daemon we start with 'Start-IcingaForWindowsDaemon',
     # as this function is called outside the JEA context
     $UsedCmdlets = Get-IcingaCommandDependency `
         -DependencyList $DependencyList `

@@ -16,13 +16,5 @@
 
 function Clear-IcingaCheckSchedulerCheckData()
 {
-    if ($null -eq $global:Icinga) {
-        return;
-    }
-
-    if ($global:Icinga.ContainsKey('CheckData') -eq $FALSE) {
-        return;
-    }
-
-    $global:Icinga.CheckData.Clear();
+    $global:Icinga.Private.Scheduler.CheckData.Clear();
 }

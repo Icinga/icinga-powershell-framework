@@ -24,8 +24,8 @@ function Get-IcingaPerformanceCounterCacheItem()
         $Counter
     );
 
-    if ($global:Icinga_PerfCounterCache.ContainsKey($Counter)) {
-        return $global:Icinga_PerfCounterCache[$Counter];
+    if ($Global:Icinga.Public.PerformanceCounter.Cache.ContainsKey($Counter)) {
+        return $Global:Icinga.Public.PerformanceCounter.Cache[$Counter];
     }
 
     return $null;

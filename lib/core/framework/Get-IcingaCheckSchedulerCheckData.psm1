@@ -16,13 +16,5 @@
 
 function Get-IcingaCheckSchedulerCheckData()
 {
-    if ($null -eq $global:Icinga) {
-        return $null;
-    }
-
-    if ($global:Icinga.ContainsKey('CheckData') -eq $FALSE) {
-        return @{ };
-    }
-
-    return $global:Icinga.CheckData;
+    return $global:Icinga.Private.Scheduler.CheckData;
 }

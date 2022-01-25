@@ -19,13 +19,13 @@ function Write-IcingaPluginPerfData()
         $PerformanceData = $PerformanceData.perfdata;
     }
 
-    if ([string]::IsNullOrEmpty($CheckCommand) -eq $FALSE -And $Global:Icinga.ThresholdCache.ContainsKey($CheckCommand)) {
-        $CheckResultCache = $Global:Icinga.ThresholdCache[$CheckCommand];
+    if ([string]::IsNullOrEmpty($CheckCommand) -eq $FALSE -And $Global:Icinga.Private.Scheduler.ThresholdCache.ContainsKey($CheckCommand)) {
+        $CheckResultCache = $Global:Icinga.Private.Scheduler.ThresholdCache[$CheckCommand];
     } else {
         $CheckResultCache = New-Object PSCustomObject;
     }
 
-    if ($global:IcingaDaemonData.FrameworkRunningAsDaemon -eq $FALSE -And $global:IcingaDaemonData.JEAContext -eq $FALSE) {
+    if ($Global:Icinga.Protected.RunAsDaemon -eq $FALSE -And $Global:Icinga.Protected.JEAContext -eq $FALSE) {
         [string]$PerfDataOutput = (Get-IcingaPluginPerfDataContent -PerfData $PerformanceData -CheckResultCache $CheckResultCache -IcingaCheck $IcingaCheck);
         Write-IcingaConsolePlain ([string]::Format('| {0}', $PerfDataOutput));
     } else {
@@ -60,7 +60,7 @@ function Get-IcingaPluginPerfDataContent()
 
                     if ($AsObject) {
                         # New behavior with local thread separated results
-                        $global:Icinga.PerfData += $cachedresult;
+                        $global:Icinga.Private.Scheduler.PerformanceData += $cachedresult;
                     }
                     $PerfDataOutput += $cachedresult;
                 }
@@ -70,7 +70,7 @@ function Get-IcingaPluginPerfDataContent()
 
             if ($AsObject) {
                 # New behavior with local thread separated results
-                $global:Icinga.PerfData += $compiledPerfData;
+                $global:Icinga.Private.Scheduler.PerformanceData += $compiledPerfData;
             }
             $PerfDataOutput += $compiledPerfData;
         }

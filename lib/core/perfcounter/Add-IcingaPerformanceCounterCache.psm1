@@ -27,10 +27,10 @@ function Add-IcingaPerformanceCounterCache()
         $Instances
     );
 
-    if ($global:Icinga_PerfCounterCache.ContainsKey($Counter)) {
-        $global:Icinga_PerfCounterCache[$Counter] = $Instances;
+    if ($Global:Icinga.Public.PerformanceCounter.Cache.ContainsKey($Counter)) {
+        $Global:Icinga.Public.PerformanceCounter.Cache[$Counter] = $Instances;
     } else {
-        $global:Icinga_PerfCounterCache.Add(
+        $Global:Icinga.Public.PerformanceCounter.Cache.Add(
             $Counter, $Instances
         );
     }

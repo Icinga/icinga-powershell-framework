@@ -3,21 +3,13 @@ function Invoke-IcingaApiChecksRESTCall()
     param (
         [Hashtable]$Request    = @{ },
         [Hashtable]$Connection = @{ },
-        $IcingaGlobals,
         [string]$ApiVersion    = $null
     );
-
-    $Global:IcingaDaemonData = $IcingaGlobals;
-
-    # Initialise some global variables we use to actually store check result data from
-    # plugins properly. This is doable from each thread instance as this part isn't
-    # shared between daemons
-    New-IcingaCheckSchedulerEnvironment;
 
     [Hashtable]$ContentResponse = @{ };
 
     # Short our call
-    $CheckerAliases = $IcingaGlobals.BackgroundDaemon.IcingaPowerShellRestApi.CommandAliases.checker;
+    $CheckerAliases = $Global:Icinga.Public.Daemons.RESTApi.CommandAliases.checker;
     $CheckConfig    = $Request.Body;
     [int]$ExitCode  = 3; #Unknown
 
@@ -117,7 +109,7 @@ function Invoke-IcingaApiChecksRESTCall()
         }
 
         # Free our memory again
-        Clear-IcingaCheckSchedulerEnvironment;
+        Clear-IcingaCheckSchedulerEnvironment -ClearCheckData;
 
         Write-IcingaDebugMessage -Message 'Check Executed. Result below' -Objects $ExecuteCommand, $CheckResult, $PerfData, $ExitCode;
 

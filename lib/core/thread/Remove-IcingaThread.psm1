@@ -10,8 +10,10 @@ function Remove-IcingaThread()
 
     Stop-IcingaThread -Thread $Thread;
 
-    if ($global:IcingaDaemonData.IcingaThreads.ContainsKey($Thread)) {
-        $global:IcingaDaemonData.IcingaThreads[$Thread].Shell.Dispose();
-        $global:IcingaDaemonData.IcingaThreads.Remove($Thread);
+    if ($Global:Icinga.Public.Threads.ContainsKey($Thread)) {
+        $Global:Icinga.Public.Threads[$Thread].Shell.Dispose();
+        $Global:Icinga.Public.Threads.Remove($Thread);
+
+        Write-IcingaDebugMessage 'Removing Thread: {0}' -Objects $Thread;
     }
 }

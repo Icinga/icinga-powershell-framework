@@ -22,9 +22,6 @@ function Get-IcingaPrivateEnvironmentVariable()
         return $null;
     }
 
-    # Setup the environments in case not present already
-    New-IcingaEnvironmentVariable;
-
     if ($global:Icinga.Private.ContainsKey($Name) -eq $FALSE) {
         return $null;
     }

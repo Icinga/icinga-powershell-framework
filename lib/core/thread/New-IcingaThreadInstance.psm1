@@ -10,14 +10,19 @@ function New-IcingaThreadInstance()
         [Switch]$Start
     );
 
+    $CallStack     = Get-PSCallStack;
+    $SourceCommand = $CallStack[1].Command;
+
     if ([string]::IsNullOrEmpty($Name)) {
         $Name = New-IcingaThreadHash -ShellScript $ScriptBlock -Arguments $Arguments;
     }
 
+    $ThreadName = [string]::Format('{0}::{1}::{2}::0', $SourceCommand, $Command, $Name);
+
     Write-IcingaDebugMessage -Message (
         [string]::Format(
             'Creating new thread instance {0}{1}Arguments:{1}{2}',
-            $Name,
+            $ThreadName,
             "`r`n",
             ($Arguments | Out-String)
         )
@@ -29,9 +34,16 @@ function New-IcingaThreadInstance()
 
     if ([string]::IsNullOrEmpty($Command) -eq $FALSE) {
 
+        # Initialize the Icinga for Windows environment in each thread
         [void]$Shell.AddCommand('Use-Icinga');
         [void]$Shell.AddParameter('-LibOnly', $TRUE);
         [void]$Shell.AddParameter('-Daemon', $TRUE);
+
+        # Share our public data between all threads
+        if ($null -ne $Global:Icinga -And $Global:Icinga.ContainsKey('Public')) {
+            [void]$Shell.AddCommand('Set-IcingaEnvironmentGlobal');
+            [void]$Shell.AddParameter('GlobalEnvironment', $Global:Icinga.Public);
+        }
 
         [void]$Shell.AddCommand($Command);
 
@@ -76,12 +88,16 @@ function New-IcingaThreadInstance()
         Add-Member -InputObject $Thread -MemberType NoteProperty -Name Started -Value $FALSE;
     }
 
-    if ($global:IcingaDaemonData.IcingaThreads.ContainsKey($Name) -eq $FALSE) {
-        $global:IcingaDaemonData.IcingaThreads.Add($Name, $Thread);
-    } else {
-        $global:IcingaDaemonData.IcingaThreads.Add(
-            (New-IcingaThreadHash -ShellScript $CodeHash -Arguments $Arguments),
-            $Thread
-        );
+    [int]$ThreadIndex = 0;
+
+    while ($TRUE) {
+
+        if ($Global:Icinga.Public.Threads.ContainsKey($ThreadName) -eq $FALSE) {
+            $Global:Icinga.Public.Threads.Add($ThreadName, $Thread);
+            break;
+        }
+
+        $ThreadIndex += 1;
+        $ThreadName   = [string]::Format('{0}::{1}::{2}::{3}', $SourceCommand, $Command, $Name, $ThreadIndex);
     }
 }

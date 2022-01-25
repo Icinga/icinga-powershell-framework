@@ -110,7 +110,6 @@ function Invoke-IcingaAPITutorialRESTCall()
     param (
         [Hashtable]$Request    = @{ },
         [Hashtable]$Connection = @{ },
-        $IcingaGlobals,
         [string]$ApiVersion    = $null
     );
 }
@@ -187,10 +186,6 @@ This only applies to any request which can send data as body and tells you how m
 
 This argument is containing the connection details of the client including the TCP stream object. You only require this for sending data back to the client or for troubleshooting. In general you only have to parse this object to other functions without modifying it.
 
-#### IcingaGlobals Argument
-
-This argument contains all global data and content of the REST-Api background daemon. This will then come in handy to share data between API endpoints and to access some global configuration data.
-
 ### Sending Data to the Client
 
 Now we are basically ready to process data. To do so, we will fetch the current folder content of our PowerShell module with `Get-ChildItem` and send this content to our client. For sending data to the client, we can use `Send-IcingaTCPClientMessage`. This Cmdlet will use a `Message` as `New-IcingaTCPClientRESTMessage` object which itself contains the `HTTPResponse` and our `ContentBody`. In addition to `Send-IcingaTCPClientMessage` we also have to specify the `Stream` to write to. The stream object is part of our `Connection` argument.
@@ -204,7 +199,6 @@ function Invoke-IcingaAPITutorialRESTCall()
     param (
         [Hashtable]$Request    = @{ },
         [Hashtable]$Connection = @{ },
-        $IcingaGlobals,
         [string]$ApiVersion    = $null
     );
 

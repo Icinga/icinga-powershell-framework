@@ -22,7 +22,7 @@ function Invoke-IcingaNamespaceCmdlets()
                 -Key $Cmdlet.Name `
                 -Value $Content | Out-Null;
         } catch {
-            Write-IcingaEventMessage -EventId 1103 -Namespace 'Framework' -Objects $CommandName, $_.Exception.Message;
+            Write-IcingaEventMessage -EventId 1103 -Namespace 'Framework' -ExceptionObject $_ -Objects $CommandName;
         }
     }
 

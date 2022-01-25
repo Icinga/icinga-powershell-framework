@@ -8,11 +8,11 @@ function Stop-IcingaThread()
         return;
     }
 
-    if ($global:IcingaDaemonData.IcingaThreads.ContainsKey($Thread)) {
-        if ($global:IcingaDaemonData.IcingaThreads[$Thread].Started -eq $TRUE) {
-            $global:IcingaDaemonData.IcingaThreads[$Thread].Shell.Stop();
-            $global:IcingaDaemonData.IcingaThreads[$Thread].Handle  = $null;
-            $global:IcingaDaemonData.IcingaThreads[$Thread].Started = $FALSE;
+    if ($Global:Icinga.Public.Threads.ContainsKey($Thread)) {
+        if ($Global:Icinga.Public.Threads[$Thread].Started -eq $TRUE) {
+            $Global:Icinga.Public.Threads[$Thread].Shell.Stop();
+            $Global:Icinga.Public.Threads[$Thread].Handle  = $null;
+            $Global:Icinga.Public.Threads[$Thread].Started = $FALSE;
         }
     }
 }

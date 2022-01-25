@@ -52,7 +52,7 @@ function Write-IcingaConsoleOutput()
     }
 
     # Never write console output in case the Framework is running as daemon
-    if ($null -ne $global:IcingaDaemonData -And $null -ne $global:IcingaDaemonData.FrameworkRunningAsDaemon -And $global:IcingaDaemonData.FrameworkRunningAsDaemon -eq $TRUE) {
+    if ($Global:Icinga.Protected.RunAsDaemon -eq $TRUE) {
         return;
     }
 

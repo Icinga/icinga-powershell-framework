@@ -19,7 +19,7 @@
 
 function Get-IcingaPowerShellConfig()
 {
-    param(
+    param (
         $Path = ''
     );
 

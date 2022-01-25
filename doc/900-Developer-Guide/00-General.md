@@ -45,6 +45,81 @@ In this case, our `NestedModules` variable within our `.psd1` file requires the 
     )
 ```
 
+### Data Management
+
+Icinga for Windows is using one global variable `$Global:Icinga`, to store information for daemons and other tasks. This variable is split into three different categories, which you can read more on below. The general architecture of this construct is a simple `hashtable`.
+You can interact with this variable and sub-entries like you would with normal `hashtables`, making data stored a lot easier to access and maintain.
+
+#### Private
+
+Everything which should be stored while a daemon is running internally or within a PowerShell session and **not** being shared with other daemons, is stored within the `$Global:Icinga.Private` space.
+
+The following entries are set by default within the `Private` space:
+
+| Category  | Description |
+| ---       | ---         |
+| Timers    | All created timers by using `Start-IcingaTimer` are stored under this environment variable |
+| Scheduler | Once plugins are executed, performance data, check results and exit codes are stored in this section, in case the PowerShell instance is set to run as daemon |
+| Daemons   | This is a place where all daemon data should be added and stored, separated by a namespace for each module as entry. This data is **not** shared between other daemons |
+
+#### Example Data
+
+```powershell
+$Global:Icinga.Private.Timers.DefaultTimer
+```
+
+```powershell
+$Global:Icinga.Private.Scheduler.CheckResults
+```
+
+```powershell
+$Global:Icinga.Private.Daemons.ServiceCheck.PerformanceCache
+```
+
+#### Public
+
+Everything stored within the `Public` space of `$Global:Icinga` is automatically shared between all threads of the current PowerShell instance. If you run the `ServiceCheckDaemon` in addition with the `RestAPI` for example, metrics over time will be read from the public shared space from the `RestApi` and used during check execution.
+
+There is no manual configuration required to share the information, as Icinga for Windows will deal with this for you, once a new thread instance is created.
+
+The following entries are set by default within the `Public` space:
+
+| Category           | Description |
+| ---                | ---         |
+| ThreadPools        | A list of all thread pools available to create new thread limits for certain background daemons |
+| Daemons            | A place to store shared information for each single daemon within a namespace, making data accessible to other threads |
+| Threads            | A list of all started and available threads running by Icinga for Windows |
+| PerformanceCounter | A space to share all PerformanceCounter information between threads, which counters are already created for internal usage |
+
+##### Example Data
+
+```powershell
+$Global:Icinga.Public.ThreadPools.MainPool
+```
+
+```powershell
+$Global:Icinga.Public.Daemons.RESTApi.ClientBlacklist
+```
+
+```powershell
+$Global:Icinga.Public.Threads.'Start-IcingaForWindowsDaemon::Add-IcingaForWindowsDaemon::Main::0'
+```
+
+#### Protected
+
+This is a section reserved for Icinga for Windows and Icinga developers in general. This space will store general information for Icinga for Windows, determining on how the PowerShell instance is handling internal requests and procedures.
+
+As custom module developer, you can **read** from this space but are in genetal **not** allowed to store information there. Please use the `Private` and `Public` space for this.
+
+The following entries are set by default within the `Protected` space:
+
+| Category    | Description |
+| ---         | ---         |
+| JEAContext  | Tells Icinga for Windows that the current environment is running within a JEA context |
+| RunAsDaemon | Tells Icinga for Windows that the current PowerShell instance is running as daemon, changing behaviors on error and plugin execution handling |
+| DebugMode   | Enables the debug mode of Icinga for Windows, printing additional details during operations or tasks |
+| Minimal     | Changes certain behavior regarding check execution and internal error handling |
+
 ## Using Icinga for Windows Dev Tools
 
 Maintaining the entire structure above seems to be complicated at the beginning, especially when considering to update the `NestedModules` section whenever you make changes. To mitigate this, Icinga for Windows provides a bunch of Cmdlets to help with the process

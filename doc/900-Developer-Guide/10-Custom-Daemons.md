@@ -94,18 +94,13 @@ function Add-IcingaAgentServiceTest()
 }
 ```
 
-Depending on our daemon, later usage and possible sharing of data between all loaded daemons might be required. In addition we might want to spawn child threads as single tasks being executed. To do so, we will parse the frameworks `global` data to the thread.
+Depending on our daemon, later usage and possible sharing of data between all loaded daemons might be required. In addition we might want to spawn child threads as single tasks being executed. To access the global, shared data, use can use the `Global:Icinga.Public` variable. This content is shared automatically between each single created thread.
 
 Our recommendation is to always do this for every daemon, as later changes might be more complicated and time consuming.
 
 ```powershell
 function Add-IcingaAgentServiceTest()
 {
-    # Allow us to parse the framework global data to this thread
-    param (
-        $IcingaDaemonData
-    );
-
     # Everything which will be executed inside the thread
     # belongs here
 }
@@ -116,11 +111,6 @@ Now as the basic part is finished, we will require to make our framework librari
 ```powershell
 function Add-IcingaAgentServiceTest()
 {
-    # Allow us to parse the framework global data to this thread
-    param (
-        $IcingaDaemonData
-    );
-
     # Import the framework library components and initialise it
     # as daemon
     Use-Icinga -LibOnly -Daemon;
@@ -132,29 +122,19 @@ As we will parse the `global` framework data anyways, we should already make use
 ```powershell
 function Add-IcingaAgentServiceTest()
 {
-    # Allow us to parse the framework global data to this thread
-    param (
-        $IcingaDaemonData
-    );
-
     # Import the framework library components and initialise it
     # as daemon
     Use-Icinga -LibOnly -Daemon;
 
-    # Add a synchronized hashtable to the global data background
+    # Add a hashtable to the public data background
     # daemon hashtable to write data to. In addition it will
     # allow to share data collected from this daemon with others
-    $IcingaDaemonData.BackgroundDaemon.Add(
-        'TestIcingaAgentService',
-        [hashtable]::Synchronized(@{ })
-    );
+    $Global:Icinga.Public.Daemons.Add('TestIcingaAgentService', @{ });
+
     # This will add another hashtable to our previous
     # TestIcingaAgentService hashtable to store actual service
     # information
-    $IcingaDaemonData.BackgroundDaemon.TestIcingaAgentService.Add(
-        'ServiceState',
-        [hashtable]::Synchronized(@{ })
-    );
+    $Global:Icinga.Public.Daemons.TestIcingaAgentService.Add('ServiceState', @{ });
 }
 ```
 
@@ -165,29 +145,19 @@ Because the code is executed as separate thread, we will have to ensure it will 
 ```powershell
 function Add-IcingaAgentServiceTest()
 {
-    # Allow us to parse the framework global data to this thread
-    param (
-        $IcingaDaemonData
-    );
-
     # Import the framework library components and initialise it
     # as daemon
     Use-Icinga -LibOnly -Daemon;
 
-    # Add a synchronized hashtable to the global data background
+    # Add a hashtable to the public data background
     # daemon hashtable to write data to. In addition it will
     # allow to share data collected from this daemon with others
-    $IcingaDaemonData.BackgroundDaemon.Add(
-        'TestIcingaAgentService',
-        [hashtable]::Synchronized(@{ })
-    );
+    $Global:Icinga.Public.Daemons.Add('TestIcingaAgentService', @{ });
+
     # This will add another hashtable to our previous
     # TestIcingaAgentService hashtable to store actual service
     # information
-    $IcingaDaemonData.BackgroundDaemon.TestIcingaAgentService.Add(
-        'ServiceState',
-        [hashtable]::Synchronized(@{ })
-    );
+    $Global:Icinga.Public.Daemons.TestIcingaAgentService.Add('ServiceState', @{ });
 
     # Keep our code executed as long as the PowerShell service is
     # being executed. This is required to ensure we will execute
@@ -197,34 +167,24 @@ function Add-IcingaAgentServiceTest()
 }
 ```
 
-*ALWAYS* ensure you add some sort for `sleep` at the end of the `while` loop to allow your CPU some breaks. If you do not do this, you might suffer from high CPU loads. The `sleep duration` interval can depend either on a simple CPU cycle break or by telling the daemon to execute tasks only in certain interval. In our case we wish to execute the daemon every `5 seconds`.
+*ALWAYS* ensure you add some sort for `sleep` at the end of the `while` loop to allow your CPU some breaks. If you do not do this, you might suffer from high CPU loads. The `sleep duration` interval can depend either on a simple CPU cycle break or by telling the daemon to execute tasks only in certain Intervalls. In our case we wish to execute the daemon every `5 seconds`.
 
 ```powershell
 function Add-IcingaAgentServiceTest()
 {
-    # Allow us to parse the framework global data to this thread
-    param (
-        $IcingaDaemonData
-    );
-
     # Import the framework library components and initialise it
     # as daemon
     Use-Icinga -LibOnly -Daemon;
 
-    # Add a synchronized hashtable to the global data background
+    # Add a hashtable to the public data background
     # daemon hashtable to write data to. In addition it will
     # allow to share data collected from this daemon with others
-    $IcingaDaemonData.BackgroundDaemon.Add(
-        'TestIcingaAgentService',
-        [hashtable]::Synchronized(@{ })
-    );
+    $Global:Icinga.Public.Daemons.Add('TestIcingaAgentService', @{ });
+
     # This will add another hashtable to our previous
     # TestIcingaAgentService hashtable to store actual service
     # information
-    $IcingaDaemonData.BackgroundDaemon.TestIcingaAgentService.Add(
-        'ServiceState',
-        [hashtable]::Synchronized(@{ })
-    );
+    $Global:Icinga.Public.Daemons.TestIcingaAgentService.Add('ServiceState', @{ });
 
     # Keep our code executed as long as the PowerShell service is
     # being executed. This is required to ensure we will execute
@@ -243,29 +203,19 @@ This is basically the foundation of every single daemon you will write. Now we w
 ```powershell
 function Add-IcingaAgentServiceTest()
 {
-    # Allow us to parse the framework global data to this thread
-    param (
-        $IcingaDaemonData
-    );
-
     # Import the framework library components and initialise it
     # as daemon
     Use-Icinga -LibOnly -Daemon;
 
-    # Add a synchronized hashtable to the global data background
+    # Add a hashtable to the public data background
     # daemon hashtable to write data to. In addition it will
     # allow to share data collected from this daemon with others
-    $IcingaDaemonData.BackgroundDaemon.Add(
-        'TestIcingaAgentService',
-        [hashtable]::Synchronized(@{ })
-    );
+    $Global:Icinga.Public.Daemons.Add('TestIcingaAgentService', @{ });
+
     # This will add another hashtable to our previous
     # TestIcingaAgentService hashtable to store actual service
     # information
-    $IcingaDaemonData.BackgroundDaemon.TestIcingaAgentService.Add(
-        'ServiceState',
-        [hashtable]::Synchronized(@{ })
-    );
+    $Global:Icinga.Public.Daemons.TestIcingaAgentService.Add('ServiceState', @{ });
 
     # Initialise our error counter variable
     [int]$RestartErrors = 0;
@@ -283,7 +233,7 @@ function Add-IcingaAgentServiceTest()
         if ($null -ne $ServiceState) {
             # Add the current service state to our hashtable.
             Add-IcingaHashtableItem `
-                -Hashtable $IcingaDaemonData.BackgroundDaemon.TestIcingaAgentService.ServiceState `
+                -Hashtable $Global:Icinga.Public.Daemons.TestIcingaAgentService.ServiceState `
                 -Key 'value' `
                 -Value $ServiceState.Status `
                 -Override | Out-Null;
@@ -295,7 +245,7 @@ function Add-IcingaAgentServiceTest()
                     Restart-Service 'icinga2' -ErrorAction Stop;
 
                     Add-IcingaHashtableItem `
-                        -Hashtable $IcingaDaemonData.BackgroundDaemon.TestIcingaAgentService.ServiceState `
+                        -Hashtable $Global:Icinga.Public.Daemons.TestIcingaAgentService.ServiceState `
                         -Key 'restart_error' `
                         -Value 0 `
                         -Override | Out-Null;
@@ -303,7 +253,7 @@ function Add-IcingaAgentServiceTest()
                     # Add an error counter in case we failed
                     $RestartErrors += 1;
                     Add-IcingaHashtableItem `
-                        -Hashtable $IcingaDaemonData.BackgroundDaemon.TestIcingaAgentService.ServiceState `
+                        -Hashtable $Global:Icinga.Public.Daemons.TestIcingaAgentService.ServiceState `
                         -Key 'restart_error' `
                         -Value $RestartErrors `
                         -Override | Out-Null;
@@ -322,7 +272,7 @@ function Add-IcingaAgentServiceTest()
 
 Once our function is completed we only require to call it once our daemon is registered. Do to so, we will use the Cmdlet `New-IcingaThreadInstance`.
 
-As arguments we will have to add a unique `name` to use for this thread as well as a `thread pool`, on which the function will be added to. In our case we will use the Frameworks default pool. Last but not least we require to parse possible `Arguments` to our function and tell the thread to `Start` right after being created. For the arguments we will parse the frameworks `global` `IcingaDaemonData` we also use inside our function to store data in.
+As arguments we will have to add a unique `name` to use for this thread as well as a `thread pool`, on which the function will be added to. The name of the thread is automatically constructed based on the caller function, the function being executed and the given name. If you create a thread which is used as a `main` thread for several sub-threads, you could call it `Main`. For our example, the constructed thread name will then internally be `Start-IcingaAgentServiceTest::IcingaAgentServiceTest::Main::0`. The last added digit will auto increment, in case you are adding the identical thread multiple times, allowing you to access certain threads again by their index id. For the thread pool, we will use the default thread pool `MainPool` of Icinga for Windows. To customize this, you can use `Add-IcingaThreadPool` with a unique name and the amount if allowed instances. Last but not least we require to parse possible `Arguments` to our function and tell the thread to `Start` right after being created.
 
 This call will be added inside the `Start-IcingaAgentServiceTest` we created earlier and didn't touch so far yet.
 
@@ -333,12 +283,10 @@ function Start-IcingaAgentServiceTest()
     # function as command to call it and parse all our
     # arguments to it
     New-IcingaThreadInstance `
-        -Name 'Icinga_PowerShell_IcingaAgent_StateCheck' `
-        -ThreadPool $global:IcingaDaemonData.IcingaThreadPool.BackgroundPool `
+        -Name 'Main' `
+        -ThreadPool (Get-IcingaThreadPool -Name 'MainPool') `
         -Command 'Add-IcingaAgentServiceTest' `
-        -CmdParameters @{
-            'IcingaDaemonData' = $global:IcingaDaemonData;
-        } `
+        -CmdParameters @{ } `
         -Start;
 ```
 
@@ -368,13 +316,13 @@ Once the service is stopped and your `administrative PowerShell` is open, we wil
 
 ```powershell
 Use-Icinga;
-Start-IcingaPowerShellDaemon;
+Start-IcingaForWindowsDaemon;
 ```
 
 Once done you will receive back your prompt, however all registered background daemons are running. To access the collected data from daemons, you can print the content of the `global` framework data. If you wish to check if your daemon was loaded properly and data is actually written, we can access our created hashtable and get the current service state of it
 
 ```powershell
-$global:IcingaDaemonData.BackgroundDaemon.TestIcingaAgentService.ServiceState['value'];
+$Global:Icinga.Public.Daemons.TestIcingaAgentService.ServiceState['value'];
 ```
 
 In case your Icinga Agent service is installed and your daemon is running properly, this should print the current state of the service.

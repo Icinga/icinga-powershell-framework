@@ -20,6 +20,24 @@ After upgrading to Icinga for Windows v1.8.0, you will require to open a new Ici
 
 **NOTE:** In some cases the changes for the EventLog will only apply, **after** the system has been rebooted. Afterwards every Icinga for Windows EventLog entry is written in a newly created `Icinga for Windows` log.
 
+### Custom Daemon Handling
+
+With Icinga for Windows v1.8.0 we removed the entire list of currently available `$Global` variables:
+
+* `$Global:IcingaThreads`
+* `$Global:IcingaThreadContent`
+* `$Global:IcingaThreadPool`
+* `$Global:IcingaTimers`
+* `$Global:IcingaDaemonData`
+
+All of these have been centralized inside one, new variable called `$Global:Icinga`. You can read more about the structure of this `hashtable` object on the [Developer Guide](../900-Developer-Guide/00-General.md/#Data-Management).
+
+The important change is, that in case you created custom daemons or API endpoints using on of the above globals, you will have to migrate your code to properly make use of `$Global:Icinga`, otherwise your daemons will not work anymore once you upgrade to Icinga for Windows v1.8.0.
+
+The benefit of this change is that you no longer require to take care of synchronising global data between newly created threads, as Icinga for Windows will make the public part of `$Global:Icinga.Public` shared for every single instance automatically.
+
+Please [contact us](https://icinga.com/company/contact/) in case you require assistance with migrating your current code to Icinga for Windows v1.8.0.
+
 ## Upgrading to v1.7.0 (2021-11-09)
 
 ### REST-Api and Api-Checks

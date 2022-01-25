@@ -44,6 +44,30 @@ if ($null -eq $IcingaEventLogEnums -Or $IcingaEventLogEnums.ContainsKey('Framewo
                 'Details'   = 'Icinga for Windows could not find the Function or Cmdlet for the specified background daemon. The daemon was not loaded.';
                 'EventId'   = 1400;
             };
+            1401 = @{
+                'EntryType' = 'Error';
+                'Message'   = 'Icinga for Windows thread pool not found';
+                'Details'   = 'Icinga for Windows was unable to find a specified thread pool with [Get-IcingaThreadPool] for a background daemon. To keep the daemon running, it defaulted to a basic pool but this issue should be addressed. The name of the inquired pool is:';
+                'EventId'   = 1401;
+            };
+            1450 = @{
+                'EntryType' = 'Error';
+                'Message'   = 'Icinga for Windows service check daemon invalid index';
+                'Details'   = 'Icinga for Windows is unable to process the provided time index for a background service check task, as a given index is not numeric';
+                'EventId'   = 1450;
+            };
+            1451 = @{
+                'EntryType' = 'Error';
+                'Message'   = 'Icinga for Windows service check daemon exception on plugin execution';
+                'Details'   = 'Icinga for Windows failed to execute a plugin within the background service check daemon with an exception';
+                'EventId'   = 1451;
+            };
+            1452 = @{
+                'EntryType' = 'Error';
+                'Message'   = 'Icinga for Windows service check daemon failed with exception';
+                'Details'   = 'Icinga for Windows failed to properly execute a task within the background service check daemon with a given exception';
+                'EventId'   = 1452;
+            };
             1500 = @{
                 'EntryType' = 'Error';
                 'Message'   = 'Failed to securely establish a communication between this server and the client';

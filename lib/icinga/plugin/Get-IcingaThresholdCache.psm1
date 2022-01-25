@@ -8,17 +8,9 @@ function Get-IcingaThresholdCache()
         return $null;
     }
 
-    if ($null -eq $Global:Icinga) {
+    if ($Global:Icinga.Private.Scheduler.ThresholdCache.ContainsKey($CheckCommand) -eq $FALSE) {
         return $null;
     }
 
-    if ($Global:Icinga.ContainsKey('ThresholdCache') -eq $FALSE) {
-        return $null;
-    }
-
-    if ($Global:Icinga.ThresholdCache.ContainsKey($CheckCommand) -eq $FALSE) {
-        return $null;
-    }
-
-    return $Global:Icinga.ThresholdCache[$CheckCommand];
+    return $Global:Icinga.Private.Scheduler.ThresholdCache[$CheckCommand];
 }

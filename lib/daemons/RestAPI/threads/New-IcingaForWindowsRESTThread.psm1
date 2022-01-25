@@ -1,7 +1,6 @@
 function New-IcingaForWindowsRESTThread()
 {
     param(
-        $IcingaDaemonData,
         $RequireAuth,
         $ThreadId
     );
@@ -9,7 +8,6 @@ function New-IcingaForWindowsRESTThread()
     # Import the framework library components and initialise it
     # as daemon
     Use-Icinga -LibOnly -Daemon;
-    $Global:IcingaDaemonData = $IcingaDaemonData;
 
     # Initialise our performance counter categories
     Show-IcingaPerformanceCounterCategories | Out-Null;
@@ -17,17 +15,17 @@ function New-IcingaForWindowsRESTThread()
     while ($TRUE) {
 
         try {
-            if ($IcingaDaemonData.IcingaThreadContent.RESTApi.ApiRequests.ContainsKey($ThreadId) -eq $FALSE) {
+            if ($Global:Icinga.Public.Daemons.RESTApi.ApiRequests.ContainsKey($ThreadId) -eq $FALSE) {
                 Start-Sleep -Milliseconds 10;
                 continue;
             }
 
-            if ($IcingaDaemonData.IcingaThreadContent.RESTApi.ApiRequests.$ThreadId.Count -eq 0) {
+            if ($Global:Icinga.Public.Daemons.RESTApi.ApiRequests.$ThreadId.Count -eq 0) {
                 Start-Sleep -Milliseconds 10;
                 continue;
             }
 
-            $Connection = $IcingaDaemonData.IcingaThreadContent.RESTApi.ApiRequests.$ThreadId.Dequeue();
+            $Connection = $Global:Icinga.Public.Daemons.RESTApi.ApiRequests.$ThreadId.Dequeue();
 
             if ($null -eq $Connection) {
                 Start-Sleep -Milliseconds 10;
@@ -49,7 +47,7 @@ function New-IcingaForWindowsRESTThread()
                         # to ensure we are not spammed and "attacked" by a client with useless requests
                         Add-IcingaRESTClientBlacklistCount `
                             -Client $Connection.Client `
-                            -ClientList $IcingaDaemonData.BackgroundDaemon.IcingaPowerShellRestApi.ClientBlacklist;
+                            -ClientList $Global:Icinga.Public.Daemons.RESTApi.ClientBlacklist;
                         # Send the authentication prompt
                         Send-IcingaWebAuthMessage -Connection $Connection;
                         # Close the connection
@@ -66,7 +64,7 @@ function New-IcingaForWindowsRESTThread()
                         # Failed attempts should increase the blacklist counter
                         Add-IcingaRESTClientBlacklistCount `
                             -Client $Connection.Client `
-                            -ClientList $IcingaDaemonData.BackgroundDaemon.IcingaPowerShellRestApi.ClientBlacklist;
+                            -ClientList $Global:Icinga.Public.Daemons.RESTApi.ClientBlacklist;
                         # Re-send the authentication prompt
                         Send-IcingaWebAuthMessage -Connection $Connection;
                         # Close the connection
@@ -76,7 +74,7 @@ function New-IcingaForWindowsRESTThread()
                 }
 
                 # We should remove clients from the blacklist who are sending valid requests
-                Remove-IcingaRESTClientBlacklist -Client $Connection.Client -ClientList $IcingaDaemonData.BackgroundDaemon.IcingaPowerShellRestApi.ClientBlacklist;
+                Remove-IcingaRESTClientBlacklist -Client $Connection.Client -ClientList $Global:Icinga.Public.Daemons.RESTApi.ClientBlacklist;
                 switch (Get-IcingaRESTPathElement -Request $RESTRequest -Index 0) {
                     'v1' {
                         Invoke-IcingaRESTAPIv1Calls -Request $RESTRequest -Connection $Connection;
@@ -101,7 +99,7 @@ function New-IcingaForWindowsRESTThread()
                                 -ContentBody $ExMsg
                         ) -Stream $Connection.Stream;
 
-            Write-IcingaEventMessage -Namespace 'RESTApi' -EventId 2051 -Objects $ExMsg;
+            Write-IcingaEventMessage -Namespace 'RESTApi' -EventId 2051 -ExceptionObject $_;
         }
 
         # Finally close the clients connection as we are done here and

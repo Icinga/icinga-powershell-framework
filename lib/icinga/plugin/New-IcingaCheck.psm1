@@ -287,16 +287,11 @@ function New-IcingaCheck()
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Name '__AddCheckDataToCache' -Value {
 
         # We only require this in case we are running as daemon
-        if ([string]::IsNullOrEmpty($this.__CheckCommand) -Or $global:IcingaDaemonData.FrameworkRunningAsDaemon -eq $FALSE) {
+        if ([string]::IsNullOrEmpty($this.__CheckCommand) -Or $Global:Icinga.Protected.RunAsDaemon -eq $FALSE) {
             return;
         }
 
-        # If no check table has been created, do nothing
-        if ($null -eq $global:Icinga -Or $global:Icinga.ContainsKey('CheckData') -eq $FALSE) {
-            return;
-        }
-
-        if ($global:Icinga.CheckData.ContainsKey($this.__CheckCommand) -eq $FALSE) {
+        if ($global:Icinga.Private.Scheduler.CheckData.ContainsKey($this.__CheckCommand) -eq $FALSE) {
             return;
         }
 
@@ -304,8 +299,8 @@ function New-IcingaCheck()
         # and check execution within the same time slot because of this
         [string]$TimeIndex = Get-IcingaUnixTime;
 
-        Add-IcingaHashtableItem -Hashtable $global:Icinga.CheckData[$this.__CheckCommand]['results'] -Key $this.Name -Value @{ } | Out-Null;
-        Add-IcingaHashtableItem -Hashtable $global:Icinga.CheckData[$this.__CheckCommand]['results'][$this.Name] -Key $TimeIndex -Value $this.Value -Override | Out-Null;
+        Add-IcingaHashtableItem -Hashtable $global:Icinga.Private.Scheduler.CheckData[$this.__CheckCommand]['results'] -Key $this.Name -Value @{ } | Out-Null;
+        Add-IcingaHashtableItem -Hashtable $global:Icinga.Private.Scheduler.CheckData[$this.__CheckCommand]['results'][$this.Name] -Key $TimeIndex -Value $this.Value -Override | Out-Null;
     }
 
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Name 'SetOk' -Value {
