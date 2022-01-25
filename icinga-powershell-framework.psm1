@@ -31,7 +31,6 @@ function Use-Icinga()
     }
 
     Disable-IcingaProgressPreference;
-    New-IcingaEnvironmentVariable;
 
     if ($Minimal) {
         $Global:Icinga.Protected.Minimal = $TRUE;
@@ -282,6 +281,12 @@ function Start-IcingaShellAsUser()
                 $User
             )
         );
+}
+
+# Always ensure our environment variables are set to reduce possibles errors
+# in case we call functions accessing them
+if (Get-Command -Name 'New-IcingaEnvironmentVariable' -ErrorAction SilentlyContinue) {
+    New-IcingaEnvironmentVariable;
 }
 
 Set-Alias icinga Invoke-IcingaCommand -Description "Execute Icinga Framework commands in a new PowerShell instance for testing or quick access to data";
