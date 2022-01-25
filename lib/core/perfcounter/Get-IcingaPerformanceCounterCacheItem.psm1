@@ -24,8 +24,12 @@ function Get-IcingaPerformanceCounterCacheItem()
         $Counter
     );
 
-    if ($Global:Icinga.Public.PerformanceCounter.Cache.ContainsKey($Counter)) {
-        return $Global:Icinga.Public.PerformanceCounter.Cache[$Counter];
+    if ([string]::IsNullOrEmpty($Counter)) {
+       return $null;
+    }
+
+    if ($Global:Icinga.Private.PerformanceCounter.Cache.ContainsKey($Counter)) {
+        return $Global:Icinga.Private.PerformanceCounter.Cache[$Counter];
     }
 
     return $null;
