@@ -56,11 +56,12 @@ Everything which should be stored while a daemon is running internally or within
 
 The following entries are set by default within the `Private` space:
 
-| Category  | Description |
-| ---       | ---         |
-| Timers    | All created timers by using `Start-IcingaTimer` are stored under this environment variable |
-| Scheduler | Once plugins are executed, performance data, check results and exit codes are stored in this section, in case the PowerShell instance is set to run as daemon |
-| Daemons   | This is a place where all daemon data should be added and stored, separated by a namespace for each module as entry. This data is **not** shared between other daemons |
+| Category           | Description |
+| ---                | ---         |
+| Timers             | All created timers by using `Start-IcingaTimer` are stored under this environment variable |
+| Scheduler          | Once plugins are executed, performance data, check results and exit codes are stored in this section, in case the PowerShell instance is set to run as daemon |
+| Daemons            | This is a place where all daemon data should be added and stored, separated by a namespace for each module as entry. This data is **not** shared between other daemons |
+| PerformanceCounter | A space to share all PerformanceCounter information between threads, which counters are already created for internal usage |
 
 #### Example Data
 
@@ -84,12 +85,11 @@ There is no manual configuration required to share the information, as Icinga fo
 
 The following entries are set by default within the `Public` space:
 
-| Category           | Description |
-| ---                | ---         |
-| ThreadPools        | A list of all thread pools available to create new thread limits for certain background daemons |
-| Daemons            | A place to store shared information for each single daemon within a namespace, making data accessible to other threads |
-| Threads            | A list of all started and available threads running by Icinga for Windows |
-| PerformanceCounter | A space to share all PerformanceCounter information between threads, which counters are already created for internal usage |
+| Category    | Description |
+| ---         | ---         |
+| ThreadPools | A list of all thread pools available to create new thread limits for certain background daemons |
+| Daemons     | A place to store shared information for each single daemon within a namespace, making data accessible to other threads |
+| Threads     | A list of all started and available threads running by Icinga for Windows |
 
 ##### Example Data
 

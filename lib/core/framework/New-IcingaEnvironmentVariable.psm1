@@ -33,6 +33,13 @@ function New-IcingaEnvironmentVariable()
                 'ExitCode'        = $null;
             }
         );
+
+        $Global:Icinga.Private.Add(
+            'PerformanceCounter',
+            @{
+                'Cache' = @{ };
+            }
+        );
     }
 
     # Shared configuration for all threads
@@ -42,12 +49,6 @@ function New-IcingaEnvironmentVariable()
         $Global:Icinga.Public.Add('Daemons', @{ });
         $Global:Icinga.Public.Add('Threads', @{ });
         $Global:Icinga.Public.Add('ThreadPools', @{ });
-        $Global:Icinga.Public.Add(
-            'PerformanceCounter',
-            @{
-                'Cache' = @{ };
-            }
-        );
     }
 
     # Session specific configuration which should never be modified by users!

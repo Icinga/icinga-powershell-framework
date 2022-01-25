@@ -56,7 +56,7 @@ function New-IcingaPerformanceCounterArray()
     #       for each session to speed up the loading. This cold be something like
     #       this:
     #
-    # $Global:Icinga.Public.PerformanceCounter.Cache += $CounterResult;
+    # $Global:Icinga.Private.PerformanceCounter.Cache += $CounterResult;
 
     # Above we initialise ever single counter and we only require a sleep once
     # in case a new, yet unknown counter was added
