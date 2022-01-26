@@ -8,10 +8,6 @@
     Manually enabling the feature is no longer required.
 #>
 
-$Global:Icinga = @{
-    'RebuildCache' = $TRUE;
-};
-
 Write-IcingaFrameworkCodeCache;
 
 Import-Module icinga-powershell-framework -Global -Force;
