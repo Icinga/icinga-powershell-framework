@@ -13,7 +13,7 @@ Icinga for Windows provides tools and functionality to entirely manage itself. T
 
 In order to install Icinga for Windows as easy as possible, we will require at least from one location access to [packages.icinga.com](https://packages.icinga.com). On this page we can find the sub-section [IcingaForWindows](https://packages.icinga.com/IcingaForWindows), which contains an installation script [IcingaForWindows.ps1](https://packages.icinga.com/IcingaForWindows/IcingaForWindows.ps1) and our repositories we can fetch our components, including the [Icinga PowerShell Framework](https://github.com/Icinga/icinga-powershell-framework) from.
 
-**Note:** If you already installed Icinga for Windows, you can synchronize the exiting repository from [packages.icinga.com](https://packages.icinga.com/IcingaForWindows) and download and paste the [IcingaForWindows.ps1](https://packages.icinga.com/IcingaForWindows/IcingaForWindows.ps1) with our synced content to an internal webserver, network share or locally on systems. The next steps can then be adjusted depending on your locations.
+**Note:** If you already installed Icinga for Windows, you can synchronize the existing repository from [packages.icinga.com](https://packages.icinga.com/IcingaForWindows) and download and paste the [IcingaForWindows.ps1](https://packages.icinga.com/IcingaForWindows/IcingaForWindows.ps1) with our synced content to an internal webserver, network share or locally on systems. The next steps can then be adjusted depending on your locations.
 
 ## Install Icinga for Windows
 
