@@ -25,34 +25,8 @@ function Write-IcingaManagementConsoleCommand()
         }
     }
 
-    foreach ($cmdArg in $DefinedArgs.Keys) {
-        $PrintValue        = $DefinedArgs[$cmdArg];
-        [string]$StringArg = ([string]$cmdArg).Replace('-', '');
-        if ($PrintValue.GetType().Name -eq 'Boolean') {
-            if ((Get-Command $PrintCommand).Parameters.$StringArg.ParameterType.Name -eq 'SwitchParameter') {
-                $PrintValue = '';
-            } else {
-                if ($PrintValue) {
-                    $PrintValue = '$TRUE';
-                } else {
-                    $PrintValue = '$FALSE';
-                }
-            }
-        } elseif ($PrintValue.GetType().Name -eq 'String') {
-            $PrintValue = (ConvertFrom-IcingaArrayToString -Array $PrintValue -AddQuotes -UseSingleQuotes);
-        }
-        if ([string]::IsNullOrEmpty($PrintValue)) {
-            $PrintArguments += ([string]::Format('{0} ', $cmdArg));
-        } else {
-            $PrintArguments += ([string]::Format('{0} {1} ', $cmdArg, $PrintValue));
-        }
-    }
-
+    $PrintArguments = ConvertTo-IcingaCommandArgumentString -Command $PrintCommand -CommandArguments $DefinedArgs;
     $PrintArguments = $PrintArguments.Replace('$DefaultValues$', ((ConvertFrom-IcingaArrayToString -Array $Values -AddQuotes)));
-
-    while ($PrintArguments[-1] -eq ' ') {
-        $PrintArguments = $PrintArguments.SubString(0, $PrintArguments.Length - 1);
-    }
 
     if ([string]::IsNullOrEmpty($PrintArguments) -eq $FALSE) {
         $PrintArguments = [string]::Format(' {0}', $PrintArguments);

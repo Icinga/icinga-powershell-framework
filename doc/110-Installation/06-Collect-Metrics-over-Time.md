@@ -85,22 +85,24 @@ Register-IcingaServiceCheck `
 
 ### Show Registered Service Checks
 
-To fetch a list of currently registerd service checks, you can run the following command:
+To fetch a list of currently registered service checks, you can run the following command:
 
 ```powershell
 Show-IcingaRegisteredServiceChecks;
 ```
 
 ```powershell
-[Notice]: Service Id: 1332191811682909517982372151451071972043015735175
-[Notice]:
-Name                           Value
-----                           -----
-CheckCommand                   Invoke-IcingaCheckPerfCounter
-Interval                       15
-Arguments                      @{-PerfCounter=System.Object[]}
-Id                             1332191811682909517982372151451071972043015735175
-TimeIndexes                    {1, 3, 5, 10...}
+List of configured background service checks on this system.
+=> https://icinga.com/docs/icinga-for-windows/latest/doc/110-Installation/06-Collect-Metrics-over-Time/
+
+Invoke-IcingaCheckPerfCounter
+-----------
+Arguments    => -PerfCounter '\Processor(*)\% Processor Time', '\Memory\% committed bytes in use', '\Memory\Available Bytes'
+CheckCommand => Invoke-IcingaCheckPerfCounter
+Id           => 1332191811682909517982372151451071972043015735175
+Interval     => 15
+TimeIndexes  => 1, 3, 5, 10, 15, 20
+
 ```
 
 You will then receive a list of all configured plugins, including their configuration and `service id`.

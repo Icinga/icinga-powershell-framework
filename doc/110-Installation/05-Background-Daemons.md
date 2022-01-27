@@ -62,7 +62,15 @@ Register-IcingaBackgroundDaemon `
 To print a list of configured background daemons, you can run
 
 ```powershell
-Get-IcingaBackgroundDaemons;
+Show-IcingaRegisteredBackgroundDaemons;
+```
+
+```powershell
+List of configured background daemons on this system.
+
+Start-IcingaServiceCheckDaemon
+-----------
+No arguments defined
 ```
 
 ## Restart PowerShell Service

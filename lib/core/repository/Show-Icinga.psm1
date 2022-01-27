@@ -91,12 +91,16 @@ function Show-Icinga()
     $Output += ([string]::Format('Operating System Version        => {0}', $WindowsInformation.Version));
     $Output += ([string]::Format('JEA Context                     => {0}', $JEAContext));
     $Output += ([string]::Format('JEA Session File                => {0}', $JEASessionFile));
+    $Output += ([string]::Format('Api Check Forwarder             => {0}', (Get-IcingaFrameworkApiChecks)));
+    $Output += ([string]::Format('Debug Mode                      => {0}', (Get-IcingaFrameworkDebugMode)));
     $Output += '';
     $Output += 'Icinga for Windows Certificate';
     $Output += '';
     $Output += $IcingaForWindowsCert;
-
     $Output += '';
+
+    $Output += (Show-IcingaRegisteredBackgroundDaemons);
+    $Output += (Show-IcingaRegisteredServiceChecks);
     $Output += (Show-IcingaRepository);
 
     Write-Output $Output;

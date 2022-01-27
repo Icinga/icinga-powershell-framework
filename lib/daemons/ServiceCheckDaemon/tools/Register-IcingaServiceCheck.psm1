@@ -19,5 +19,5 @@ function Register-IcingaServiceCheck()
     Set-IcingaPowerShellConfig -Path ([string]::Format('{0}.Interval', $Path)) -Value $Interval;
     Set-IcingaPowerShellConfig -Path ([string]::Format('{0}.TimeIndexes', $Path)) -Value $TimeIndexes;
 
-    Write-IcingaConsoleNotice 'Icinga Service Check has been configured';
+    Write-IcingaConsoleNotice 'Icinga background service check has been added';
 }
