@@ -31,6 +31,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#439](https://github.com/Icinga/icinga-powershell-framework/pull/439) Moves PerformanceCounter to private space from previous public, which caused some problems
 * [#441](https://github.com/Icinga/icinga-powershell-framework/pull/441) Fixes an exception while loading the Framework, caused by a race condition for missing environment variables which are accessed by some plugins before the Framework is loaded properly
 * [#446](https://github.com/Icinga/icinga-powershell-framework/pull/446) Fixes Icinga for Windows progress preference, which sometimes caused UI glitches
+* [#449](https://github.com/Icinga/icinga-powershell-framework/pull/449) Fixes unhandled exception while importing modules during `Install-IcingaComponent` process, because of possible missing dependencies
 
 ### Enhancements
 
