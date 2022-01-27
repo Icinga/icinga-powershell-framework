@@ -154,6 +154,13 @@ function Get-IcingaJEAConfiguration()
         -CmdName 'Add-IcingaForWindowsDaemon' `
         -CmdType 'Function';
 
+    # Fixes error if only the Icinga PowerShell Framework is installed, which then causes JEA to fail entirely because of this missing Cmdlet
+    $UsedCmdlets = Get-IcingaCommandDependency `
+        -DependencyList $DependencyList `
+        -CompiledList $UsedCmdlets `
+        -CmdName 'Select-Object' `
+        -CmdType 'Cmdlet';
+
     # Finally loop through all commands again and build our JEA command list
     $DeserializedFile = Read-IcingaPowerShellModuleFile -FileContent $ModuleContent;
     [array]$JeaCmds   = $DeserializedFile.CommandList + $DeserializedFile.FunctionList;
