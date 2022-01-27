@@ -7,10 +7,15 @@ function Write-IcingaPluginResult()
 
     [string]$CheckResult = $PluginOutput;
 
-    if ($PluginPerfData -ne 0) {
-        $CheckResult += "`n`r| ";
+    if ($PluginPerfData.Count -ne 0) {
+        [string]$PerfDataContent = '';
         foreach ($PerfData in $PluginPerfData) {
-            $CheckResult += $PerfData;
+            $PerfDataContent += $PerfData;
+        }
+
+        if ([string]::IsNullOrEmpty($PerfDataContent) -eq $FALSE) {
+            $CheckResult += "`n`r| ";
+            $CheckResult += $PerfDataContent;
         }
     }
 
