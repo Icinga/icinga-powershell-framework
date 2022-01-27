@@ -21,6 +21,7 @@ function New-IcingaEnvironmentVariable()
 
         $Global:Icinga.Private.Add('Daemons', @{ });
         $Global:Icinga.Private.Add('Timers', @{ });
+        $Global:Icinga.Private.Add('ProgressStatus', @{ });
 
         $Global:Icinga.Private.Add(
             'Scheduler',
