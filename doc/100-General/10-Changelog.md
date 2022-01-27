@@ -40,6 +40,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#438](https://github.com/Icinga/icinga-powershell-framework/pull/438) Adds support for enabling the REST-Api background daemon and the Api-Check feature during the IMC installation wizard on advanced settings, which will be enabled by default
 * [#440](https://github.com/Icinga/icinga-powershell-framework/pull/440) Adds upgrade notification if Icinga for Windows Service binary older than v1.2.0 is used, which will not work with Icinga for Windows v1.8.0 or later
 * [#445](https://github.com/Icinga/icinga-powershell-framework/pull/445) Adds command `Repair-IcingaService` to repair Icinga Agent service in case it was broken during upgrades, mostly caused by `The specified service has been marked for deletion`
+* [#448](https://github.com/Icinga/icinga-powershell-framework/pull/448) Adds support to sort arrays without ScriptBlocks
 
 ## 1.7.1 (2021-11-11)
 
