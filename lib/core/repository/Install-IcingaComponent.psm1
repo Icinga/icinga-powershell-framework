@@ -202,16 +202,20 @@ function Install-IcingaComponent()
                     Start-IcingaService 'icinga2';
                 }
             } else {
-                Import-Module -Name $ComponentFolder -Force;
-                Import-Module -Name $ComponentFolder -Force -Global;
+                try {
+                    Import-Module -Name $ComponentFolder -Force -ErrorAction Stop;
+                    Import-Module -Name $ComponentFolder -Force -Global -ErrorAction Stop;
+
+                    Write-IcingaConsoleNotice 'Installation of component "{0}" with version "{1}" was successful. Open a new PowerShell to apply the changes' -Objects $Name.ToLower(), $ManifestFile.ModuleVersion;
+                } catch {
+                    Write-IcingaConsoleError 'Component "{0}" has been installed with version "{1}", but while importing the component an exception was thrown: {2}' -Objects $Name.ToLower(), $ManifestFile.ModuleVersion, $_.Exception.Message;
+                }
             }
 
             # This will ensure that Framework functions will always win over third party functions, overwriting functionality
             # of the Framework, which might cause problems during installation otherwise
             Import-Module (Join-Path -Path (Get-IcingaForWindowsRootPath) -ChildPath 'icinga-powershell-framework') -Force;
             Import-Module (Join-Path -Path (Get-IcingaForWindowsRootPath) -ChildPath 'icinga-powershell-framework') -Global -Force;
-
-            Write-IcingaConsoleNotice 'Installation of component "{0}" with version "{1}" was successful. Open a new PowerShell to apply the changes' -Objects $Name.ToLower(), $ManifestFile.ModuleVersion;
         } else {
             <#
                 Handles installation of Icinga for Windows service
