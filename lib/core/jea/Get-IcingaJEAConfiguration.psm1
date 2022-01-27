@@ -27,8 +27,10 @@ function Get-IcingaJEAConfiguration()
     # Lookup all PowerShell modules installed for Icinga for Windows inside the same folder as the Framework
     # and fetch each single module file to list the used Cmdlets and Functions
     # Add each file content to a big string file for better parsing
+
+    New-IcingaProgressStatus -Name 'Icinga for Windows Components' -Message 'Fetching Icinga for Windows Components' -MaxValue $PowerShellModules.Count -Details;
     foreach ($module in $PowerShellModules) {
-        $Progress = Write-IcingaProgressStatus -Message 'Fetching Icinga for Windows Components' -CurrentValue $Progress -MaxValue $PowerShellModules.Count -Details;
+        Write-IcingaProgressStatus -Name 'Icinga for Windows Components';
         if ($module.Name.ToLower() -eq 'icinga-powershell-framework') {
             continue;
         }
@@ -78,12 +80,16 @@ function Get-IcingaJEAConfiguration()
         $ModuleContent += $ModuleFileContent;
     }
 
+    Complete-IcingaProgressStatus -Name 'Icinga for Windows Components';
+
     if ($DependencyCache -eq $FALSE) {
         # Now lets lookup every single Framework file and get all used Cmdlets and Functions so we know our dependencies
         $FrameworkFiles = Get-ChildItem -Path (Get-IcingaFrameworkRootPath) -Recurse -Filter '*.psm1';
 
+        New-IcingaProgressStatus -Name 'Icinga for Windows Files' -Message 'Compiling Icinga PowerShell Framework Dependency List' -MaxValue $FrameworkFiles.Count -Details;
+
         foreach ($ModuleFile in $FrameworkFiles) {
-            $Progress = Write-IcingaProgressStatus -Message 'Compiling Icinga PowerShell Framework Dependency List' -CurrentValue $Progress -MaxValue $FrameworkFiles.Count -Details;
+            Write-IcingaProgressStatus -Name 'Icinga for Windows Files';
 
             # Just ignore our cache file
             if ($ModuleFile.FullName -eq (Get-IcingaFrameworkCodeCacheFile)) {
@@ -99,6 +105,8 @@ function Get-IcingaJEAConfiguration()
             }
         }
 
+        Complete-IcingaProgressStatus -Name 'Icinga for Windows Files';
+
         Write-IcingaFileSecure -File (Join-Path -Path (Get-IcingaCacheDir) -ChildPath 'framework_dependencies.json') -Value $DependencyList;
     }
 
@@ -107,8 +115,10 @@ function Get-IcingaJEAConfiguration()
     # Check all our configured background daemons and ensure we get all Cmdlets and Functions including the dependency list
     $BackgroundDaemons = (Get-IcingaBackgroundDaemons).Keys;
 
+    New-IcingaProgressStatus -Name 'Compiling Icinga for Windows Daemons' -Message 'Compiling Background Daemon Dependency List' -MaxValue $BackgroundDaemons.Count -Details;
+
     foreach ($daemon in $BackgroundDaemons) {
-        $Progress = Write-IcingaProgressStatus -Message 'Compiling Background Daemon Dependency List' -CurrentValue $Progress -MaxValue $BackgroundDaemons.Count -Details;
+        Write-IcingaProgressStatus -Name 'Compiling Icinga for Windows Daemons';
 
         $DaemonCmd = (Get-Command $daemon);
 
@@ -126,6 +136,8 @@ function Get-IcingaJEAConfiguration()
             -CmdName $DaemonCmd.Name `
             -CmdType $CommandType;
     }
+
+    Complete-IcingaProgressStatus -Name 'Compiling Icinga for Windows Daemons';
 
     # We need to add this function which is not used anywhere else and should still add the entire dependency tree
     $UsedCmdlets = Get-IcingaCommandDependency `
@@ -146,8 +158,10 @@ function Get-IcingaJEAConfiguration()
     $DeserializedFile = Read-IcingaPowerShellModuleFile -FileContent $ModuleContent;
     [array]$JeaCmds   = $DeserializedFile.CommandList + $DeserializedFile.FunctionList;
 
+    New-IcingaProgressStatus -Name 'Compiling JEA' -Message 'Compiling JEA Profile Catalog' -MaxValue $JeaCmds.Count -Details;
+
     foreach ($cmd in $JeaCmds) {
-        $Progress = Write-IcingaProgressStatus -Message 'Compiling JEA Profile Catalog' -CurrentValue $Progress -MaxValue $JeaCmds.Count -Details;
+        Write-IcingaProgressStatus -Name 'Compiling JEA';
         $CmdData  = Get-Command $cmd -ErrorAction SilentlyContinue;
 
         if ($null -eq $CmdData) {
@@ -162,6 +176,8 @@ function Get-IcingaJEAConfiguration()
             -CmdName $cmd `
             -CmdType $CommandType;
     }
+
+    Complete-IcingaProgressStatus -Name 'Compiling JEA';
 
     Disable-IcingaProgressPreference;
 

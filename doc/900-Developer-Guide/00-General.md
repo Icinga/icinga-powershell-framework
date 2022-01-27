@@ -62,6 +62,7 @@ The following entries are set by default within the `Private` space:
 | Scheduler          | Once plugins are executed, performance data, check results and exit codes are stored in this section, in case the PowerShell instance is set to run as daemon |
 | Daemons            | This is a place where all daemon data should be added and stored, separated by a namespace for each module as entry. This data is **not** shared between other daemons |
 | PerformanceCounter | A space to share all PerformanceCounter information between threads, which counters are already created for internal usage |
+| ProgressStatus     | A list of all created progress status bars from Icinga for Windows |
 
 #### Example Data
 
