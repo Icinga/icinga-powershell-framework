@@ -36,6 +36,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#451](https://github.com/Icinga/icinga-powershell-framework/pull/451) Fixes PowerShell being unable to enter JEA context if only the Framework is installed and removes the `|` from plugin output, in case a JEA error is thrown that check commands are not present
 * [#452](https://github.com/Icinga/icinga-powershell-framework/pull/452) Fixes unhandled `true` output on the console while running the installer
 * [#454](https://github.com/Icinga/icinga-powershell-framework/pull/454) Fixes JEA catalog compiler and background daemon execution in JEA context
+* [#456](https://github.com/Icinga/icinga-powershell-framework/pull/456) Fixes JEA service error count not resetting itself after a certain amount of time without errors
 
 ### Enhancements
 
