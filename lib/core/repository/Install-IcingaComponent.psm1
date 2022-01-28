@@ -176,7 +176,7 @@ function Install-IcingaComponent()
                 [void](Remove-ItemSecure -Path $entry.FullName -Recurse -Force);
             }
 
-            [void](Copy-ItemSecure -Path $PackageRoot -Destination $ComponentFolder -Recurse -Force);
+            Copy-ItemSecure -Path $PackageRoot -Destination $ComponentFolder -Recurse -Force | Out-Null;
 
             Write-IcingaConsoleNotice 'Installing version "{0}" of component "{1}"' -Objects $ManifestFile.ModuleVersion, $Name.ToLower();
 
@@ -269,7 +269,7 @@ function Install-IcingaComponent()
 
                     Write-IcingaConsoleNotice 'Installing component "service" into "{0}"' -Objects $ServiceDirectory;
 
-                    Copy-ItemSecure -Path $binary.FullName -Destination $UpdateBin -Force;
+                    Copy-ItemSecure -Path $binary.FullName -Destination $UpdateBin -Force | Out-Null;
 
                     [void](Install-IcingaForWindowsService -Path $ServiceBin -User $ServiceUser -Password (Get-IcingaInternalPowerShellServicePassword));
                     Update-IcingaServiceUser;
@@ -373,7 +373,7 @@ function Install-IcingaComponent()
             return $FALSE;
         }
 
-        Set-IcingaServiceUser -User $ServiceUser -SetPermission;
+        Set-IcingaServiceUser -User $ServiceUser -SetPermission | Out-Null;
         Update-IcingaServiceUser;
 
         Write-IcingaConsoleNotice 'Installation of component "agent" with version "{0}" was successful.' -Objects $MSIData.ProductVersion;
