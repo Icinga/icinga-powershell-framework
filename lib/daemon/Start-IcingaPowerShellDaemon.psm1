@@ -73,6 +73,7 @@ function Start-IcingaForWindowsDaemon()
 
     if ($RunAsService) {
         [int]$JeaRestartCounter = 1;
+        $FailureTime            = $null;
         while ($TRUE) {
             if ([string]::IsNullOrEmpty($JeaProfile) -eq $FALSE) {
                 if ([string]::IsNullOrEmpty($JeaPid)) {
@@ -86,14 +87,22 @@ function Start-IcingaForWindowsDaemon()
                     }
 
                     Write-IcingaFileSecure -File $JeaPidFile -Value '';
+                    $FailureTime = [DateTime]::Now;
                     Write-IcingaEventMessage -EventId 1505 -Namespace Framework -Objects ([string]::Format('{0}/5', $JeaRestartCounter));
                     Start-IcingaForWindowsDaemon -RunAsService:$RunAsService -JEAContext:$JEAContext -JEARestart;
 
-                    $JeaRestartCounter += 1;
+                    if (([DateTime]::Now - $FailureTime).TotalSeconds -lt 180) {
+                        $JeaRestartCounter += 1;
+                    } else {
+                        $JeaRestartCounter = 1;
+                    }
+
                     $JeaPid = '';
                 }
 
                 Start-Sleep -Seconds 5;
+                $JeaAliveCounter += 1;
+
                 continue;
             }
             Start-Sleep -Seconds 100;
