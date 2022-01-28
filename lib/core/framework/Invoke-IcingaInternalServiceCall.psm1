@@ -2,31 +2,32 @@ function Invoke-IcingaInternalServiceCall()
 {
     param (
         [string]$Command  = '',
-        [array]$Arguments = @()
+        [array]$Arguments = @(),
+        [switch]$NoExit   = $FALSE
     );
 
     # If our Framework is running as daemon, never call our api
     if ($Global:Icinga.Protected.RunAsDaemon) {
-        return;
+        return $NULL;
     }
 
     # If the API forward feature is disabled, do nothing
     if ((Get-IcingaFrameworkApiChecks) -eq $FALSE) {
-        return;
+        return $NULL;
     }
 
     # Test our Icinga for Windows service. If the service is not installed or not running, execute the plugin locally
     $IcingaForWindowsService = (Get-Service 'icingapowershell' -ErrorAction SilentlyContinue);
 
     if ($null -eq $IcingaForWindowsService -Or $IcingaForWindowsService.Status -ne 'Running') {
-        return;
+        return $NULL;
     }
 
     # In case the REST-Api module ist not configured, do nothing
     $BackgroundDaemons = Get-IcingaBackgroundDaemons;
 
     if ($null -eq $BackgroundDaemons -Or $BackgroundDaemons.ContainsKey('Start-IcingaWindowsRESTApi') -eq $FALSE) {
-        return;
+        return $NULL;
     }
 
     $RestApiPort  = 5668;
@@ -57,6 +58,11 @@ function Invoke-IcingaInternalServiceCall()
         [string]$Argument      = [string]$Value;
         $ArgumentValue         = $null;
 
+        if ($Argument -eq '-IcingaForWindowsRemoteExecution' -Or $Argument -eq '-IcingaForWindowsJEARemoteExecution') {
+            $ArgumentIndex += 1;
+            continue;
+        }
+
         if ($Value[0] -eq '-') {
             if (($ArgumentIndex + 1) -lt $Arguments.Count) {
                 [string]$NextValue = $Arguments[$ArgumentIndex + 1];
@@ -85,7 +91,7 @@ function Invoke-IcingaInternalServiceCall()
     } catch {
         # Fallback to execute plugin locally
         Write-IcingaEventMessage -Namespace 'Framework' -EventId 1553 -ExceptionObject $_ -Objects $Command, $CommandArguments;
-        return;
+        return $NULL;
     }
 
     # Resolve our result from the API
@@ -95,12 +101,12 @@ function Invoke-IcingaInternalServiceCall()
     # In case we didn't receive a check result, fallback to local execution
     if ([string]::IsNullOrEmpty($IcingaResult.$Command.checkresult)) {
         Write-IcingaEventMessage -Namespace 'Framework' -EventId 1553 -Objects 'The check result for the executed command was empty', $Command, $CommandArguments;
-        return;
+        return $NULL;
     }
 
     if ([string]::IsNullOrEmpty($IcingaResult.$Command.exitcode)) {
         Write-IcingaEventMessage -Namespace 'Framework' -EventId 1553 -Objects 'The check result for the executed command was empty', $Command, $CommandArguments;
-        return;
+        return $NULL;
     }
 
     $IcingaCR = ($IcingaResult.$Command.checkresult.Replace("`r`n", "`n"));
@@ -110,6 +116,12 @@ function Invoke-IcingaInternalServiceCall()
         foreach ($perfdata in $IcingaResult.$Command.perfdata) {
             $IcingaCR += $perfdata;
         }
+    }
+
+    if ($NoExit) {
+        Set-IcingaInternalPluginExitCode -ExitCode $IcingaResult.$Command.exitcode;
+
+        return $IcingaCR;
     }
 
     # Print our response and exit with the provide exit code
