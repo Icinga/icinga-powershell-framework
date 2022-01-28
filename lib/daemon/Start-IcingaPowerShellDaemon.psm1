@@ -2,20 +2,23 @@ function Start-IcingaPowerShellDaemon()
 {
     param (
         [switch]$RunAsService = $FALSE,
+        [switch]$JEAContext   = $FALSE,
         [switch]$JEARestart   = $FALSE
     );
 
-    Start-IcingaForWindowsDaemon -RunAsService:$RunAsService -JEARestart:$JEARestart;
+    Start-IcingaForWindowsDaemon -RunAsService:$RunAsService -JEARestart:$JEARestart -JEAContext:$JEAContext;
 }
 
 function Start-IcingaForWindowsDaemon()
 {
     param (
         [switch]$RunAsService = $FALSE,
+        [switch]$JEAContext   = $FALSE,
         [switch]$JEARestart   = $FALSE
     );
 
-    $Global:Icinga.Protected.RunAsDaemon                                  = $TRUE;
+    $Global:Icinga.Protected.RunAsDaemon                                  = [bool]$RunAsService;
+    $Global:Icinga.Protected.JEAContext                                   = [bool]$JEAContext;
     [string]$MainServicePidFile                                           = (Join-Path -Path (Get-IcingaCacheDir) -ChildPath 'service.pid');
     [string]$JeaPidFile                                                   = (Join-Path -Path (Get-IcingaCacheDir) -ChildPath 'jea.pid');
     [string]$JeaProfile                                                   = Get-IcingaPowerShellConfig -Path 'Framework.JEAProfile';
@@ -32,7 +35,6 @@ function Start-IcingaForWindowsDaemon()
     if ([string]::IsNullOrEmpty($JeaProfile)) {
         Write-IcingaDebugMessage -Message 'Starting Icinga for Windows service without JEA context' -Objects $RunAsService, $JEARestart, $JeaProfile;
 
-        $Global:Icinga.Protected.RunAsDaemon = $TRUE;
         # Todo: Add config for active background tasks. Set it to 20 for the moment
         Add-IcingaThreadPool -Name 'MainPool' -MaxInstances 20;
         $Global:Icinga.Public.Add('SSLCertificate', $Certificate);
@@ -41,6 +43,7 @@ function Start-IcingaForWindowsDaemon()
         New-IcingaThreadInstance -Name "Main" -ThreadPool (Get-IcingaThreadPool -Name 'MainPool') -Command 'Add-IcingaForWindowsDaemon' -Start;
     } else {
         Write-IcingaDebugMessage -Message 'Starting Icinga for Windows service inside JEA context' -Objects $RunAsService, $JEARestart, $JeaProfile;
+
         & powershell.exe -NoProfile -NoLogo -ConfigurationName $JeaProfile -Command {
             try {
                 Use-Icinga -Daemon;
@@ -84,7 +87,7 @@ function Start-IcingaForWindowsDaemon()
 
                     Write-IcingaFileSecure -File $JeaPidFile -Value '';
                     Write-IcingaEventMessage -EventId 1505 -Namespace Framework -Objects ([string]::Format('{0}/5', $JeaRestartCounter));
-                    Start-IcingaForWindowsDaemon -RunAsService:$RunAsService -JEARestart;
+                    Start-IcingaForWindowsDaemon -RunAsService:$RunAsService -JEAContext:$JEAContext -JEARestart;
 
                     $JeaRestartCounter += 1;
                     $JeaPid = '';

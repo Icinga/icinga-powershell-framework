@@ -5,10 +5,6 @@ function New-IcingaForWindowsRESTThread()
         $ThreadId
     );
 
-    # Import the framework library components and initialise it
-    # as daemon
-    Use-Icinga -LibOnly -Daemon;
-
     # Initialise our performance counter categories
     Show-IcingaPerformanceCounterCategories | Out-Null;
 
