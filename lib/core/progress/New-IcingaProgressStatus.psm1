@@ -20,6 +20,11 @@ function New-IcingaProgressStatus()
         return;
     }
 
+    # Can happen while upgrading from < 1.8.0 to >= 1.8.0
+    if ($Global:Icinga.Private.ContainsKey('ProgressStatus') -eq $FALSE) {
+        $Global:Icinga.Private.Add('ProgressStatus', @{ });
+    }
+
     if ($Global:Icinga.Private.ProgressStatus.ContainsKey($Name)) {
         Write-IcingaConsoleError -Message 'Failed to create new progress status. A progress status with this name is already active. Use "Complete-IcingaProgressStatus" to remove it.' -DropMessage:$(-Not $PrintErrors);
         return;
