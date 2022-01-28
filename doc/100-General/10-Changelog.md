@@ -37,6 +37,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#452](https://github.com/Icinga/icinga-powershell-framework/pull/452) Fixes unhandled `true` output on the console while running the installer
 * [#454](https://github.com/Icinga/icinga-powershell-framework/pull/454) Fixes JEA catalog compiler and background daemon execution in JEA context
 * [#456](https://github.com/Icinga/icinga-powershell-framework/pull/456) Fixes JEA service error count not resetting itself after a certain amount of time without errors
+* [#458](https://github.com/Icinga/icinga-powershell-framework/pull/458) Fixes `Install-IcingaSecurity` which should only run in an administrative shell
 
 ### Enhancements
 
