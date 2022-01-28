@@ -9,7 +9,7 @@ function New-IcingaThreadPool()
     $SessionFile          = Get-IcingaJEASessionFile;
 
     if ([string]::IsNullOrEmpty((Get-IcingaJEAContext))) {
-        $SessionConfiguration = [System.Management.Automation.Runspaces.InitialSessionState]::CreateDefault();
+        $SessionConfiguration = [System.Management.Automation.RunSpaces.InitialSessionState]::CreateDefault();
     } else {
         if ([string]::IsNullOrEmpty($SessionFile)) {
             Write-IcingaEventMessage -EventId 1502 -Namespace 'Framework';
@@ -18,14 +18,14 @@ function New-IcingaThreadPool()
         $SessionConfiguration = [System.Management.Automation.Runspaces.InitialSessionState]::CreateFromSessionConfigurationFile($SessionFile);
     }
 
-    $Runspaces = [RunspaceFactory]::CreateRunspacePool(
+    $RunSpaces = [RunSpaceFactory]::CreateRunSpacePool(
         $MinInstances,
         $MaxInstances,
         $SessionConfiguration,
         $host
     )
 
-    $Runspaces.Open();
+    $RunSpaces.Open();
 
-    return $Runspaces;
+    return $RunSpaces;
 }

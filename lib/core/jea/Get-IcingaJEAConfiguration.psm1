@@ -147,11 +147,17 @@ function Get-IcingaJEAConfiguration()
         -CmdType 'Function';
 
     # We need to add this function for our background daemon we start with 'Start-IcingaForWindowsDaemon',
-    # as this function is called outside the JEA context
+    # as these functions are called outside the JEA context
     $UsedCmdlets = Get-IcingaCommandDependency `
         -DependencyList $DependencyList `
         -CompiledList $UsedCmdlets `
-        -CmdName 'Add-IcingaForWindowsDaemon' `
+        -CmdName 'Start-IcingaPowerShellDaemon' `
+        -CmdType 'Function';
+
+    $UsedCmdlets = Get-IcingaCommandDependency `
+        -DependencyList $DependencyList `
+        -CompiledList $UsedCmdlets `
+        -CmdName 'Start-IcingaForWindowsDaemon' `
         -CmdType 'Function';
 
     # Fixes error if only the Icinga PowerShell Framework is installed, which then causes JEA to fail entirely because of this missing Cmdlet

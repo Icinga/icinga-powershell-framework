@@ -9,10 +9,6 @@ function New-IcingaForWindowsRESTApi()
         $RequireAuth
     );
 
-    # Import the framework library components and initialise it
-    # as daemon
-    Use-Icinga -LibOnly -Daemon;
-
     $RESTEndpoints = Invoke-IcingaNamespaceCmdlets -Command 'Register-IcingaRESTAPIEndpoint*';
     Write-IcingaDebugMessage -Message (
         [string]::Format(

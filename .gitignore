@@ -6,6 +6,7 @@ cache/*
 .vscode/
 .vs/
 *.log
+*.pfx
 
 # JEA
 RoleCapabilities/IcingaForWindows.psrc

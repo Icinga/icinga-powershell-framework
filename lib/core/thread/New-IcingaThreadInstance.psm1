@@ -45,6 +45,12 @@ function New-IcingaThreadInstance()
             [void]$Shell.AddParameter('GlobalEnvironment', $Global:Icinga.Public);
         }
 
+        # Set the JEA context for all threads
+        if ($null -ne $Global:Icinga -And $Global:Icinga.ContainsKey('Protected') -And $Global:Icinga.Protected.ContainsKey('JEAContext')) {
+            [void]$Shell.AddCommand('Set-IcingaEnvironmentJEA');
+            [void]$Shell.AddParameter('JeaEnabled', $Global:Icinga.Protected.JEAContext);
+        }
+
         [void]$Shell.AddCommand($Command);
 
         $CodeHash = $Command;

@@ -172,8 +172,6 @@ function New-IcingaForWindowsComponent()
             Add-Content -Path (Join-Path -Path $ModuleDir -ChildPath ([string]::Format('daemon\{0}.psm1', $DaemonEntry))) -Value '    # This is your main daemon function. Add your code inside the WHILE() loop which is executed once the daemon is loaded.';
             Add-Content -Path (Join-Path -Path $ModuleDir -ChildPath ([string]::Format('daemon\{0}.psm1', $DaemonEntry))) -Value '    # Also check the developer guide for further details: https://icinga.com/docs/icinga-for-windows/latest/doc/900-Developer-Guide/10-Custom-Daemons/';
             Add-Content -Path (Join-Path -Path $ModuleDir -ChildPath ([string]::Format('daemon\{0}.psm1', $DaemonEntry))) -Value '';
-            Add-Content -Path (Join-Path -Path $ModuleDir -ChildPath ([string]::Format('daemon\{0}.psm1', $DaemonEntry))) -Value '    Use-Icinga -LibOnly -Daemon;';
-            Add-Content -Path (Join-Path -Path $ModuleDir -ChildPath ([string]::Format('daemon\{0}.psm1', $DaemonEntry))) -Value '';
             Add-Content -Path (Join-Path -Path $ModuleDir -ChildPath ([string]::Format('daemon\{0}.psm1', $DaemonEntry))) -Value '    while ($TRUE) {';
             Add-Content -Path (Join-Path -Path $ModuleDir -ChildPath ([string]::Format('daemon\{0}.psm1', $DaemonEntry))) -Value '        # Add your daemon code within this loop';
             Add-Content -Path (Join-Path -Path $ModuleDir -ChildPath ([string]::Format('daemon\{0}.psm1', $DaemonEntry))) -Value '        Start-Sleep -Seconds 1;';
