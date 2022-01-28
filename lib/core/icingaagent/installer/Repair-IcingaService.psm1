@@ -78,7 +78,7 @@ function Repair-IcingaService()
         $ServiceUser = $ConfigUser;
     }
 
-    Set-IcingaServiceUser -User $ServiceUser -SetPermission;
+    Set-IcingaServiceUser -User $ServiceUser -SetPermission | Out-Null;
     Update-IcingaServiceUser;
 
     Write-IcingaConsoleNotice -Message 'Icinga Agent service was successfully repaired. You can start it now with "Start-Service icinga2"';

@@ -8,12 +8,12 @@ function Set-IcingaServiceUser()
     );
 
     if ([string]::IsNullOrEmpty($User)) {
-        throw 'Please specify a username to modify the service user';
+        Write-IcingaConsoleError -Message 'Please specify a username to modify the service user';
         return $FALSE;
     }
 
     if ($null -eq (Get-Service $Service -ErrorAction SilentlyContinue)) {
-        return;
+        return $FALSE;
     }
 
     if ($User.Contains('\') -eq $FALSE) {

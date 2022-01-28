@@ -34,6 +34,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#446](https://github.com/Icinga/icinga-powershell-framework/pull/446) Fixes Icinga for Windows progress preference, which sometimes caused UI glitches
 * [#449](https://github.com/Icinga/icinga-powershell-framework/pull/449) Fixes unhandled exception while importing modules during `Install-IcingaComponent` process, because of possible missing dependencies
 * [#451](https://github.com/Icinga/icinga-powershell-framework/pull/451) Fixes PowerShell being unable to enter JEA context if only the Framework is installed and removes the `|` from plugin output, in case a JEA error is thrown that check commands are not present
+* [#452](https://github.com/Icinga/icinga-powershell-framework/pull/452) Fixes unhandled `true` output on the console while running the installer
 
 ### Enhancements
 
