@@ -16,7 +16,7 @@ Otherwise the service will not start and crash! You can either download the serv
 Update-Icinga -Name 'service';
 ```
 
-After upgrading to Icinga for Windows v1.8.0, you will require to open a new Icinga shell by calling `icinga` or by using `Use-Icinga` once, to run the new migration process.
+After upgrading to Icinga for Windows v1.8.0, you will require to open a new Icinga shell by calling `icinga -Shell` or simply `icinga` to open the IMC for running the migration tasks.
 
 **NOTE:** In some cases the changes for the EventLog will only apply, **after** the system has been rebooted. Afterwards every Icinga for Windows EventLog entry is written in a newly created `Icinga for Windows` log.
 

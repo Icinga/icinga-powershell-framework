@@ -8,8 +8,6 @@ function Show-IcingaForWindowsInstallerMenuSelectForceCertificateGeneration()
         [switch]$Advanced      = $FALSE
     );
 
-    $Global:Icinga.InstallWizard.DirectorSelfService = $FALSE;
-
     Show-IcingaForWindowsInstallerMenu `
         -Header 'Do you want to force the creation of possible existing Icinga Agent certificates?' `
         -Entries @(

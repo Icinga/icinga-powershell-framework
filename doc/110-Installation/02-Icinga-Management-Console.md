@@ -5,7 +5,7 @@ As we now have deployed our Icinga PowerShell Framework on our Windows machine, 
 **Note:** You can always open the IMC by running the following command:
 
 ```powershell
-icinga -Manage;
+icinga;
 ```
 
 ## Navigating the IMC

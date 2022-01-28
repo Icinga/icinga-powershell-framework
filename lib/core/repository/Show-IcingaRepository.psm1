@@ -2,7 +2,7 @@ function Show-IcingaRepository()
 {
     [hashtable]$Repositories = @{ };
     [array]$RepoSummary      = @(
-        'List of configured repositories on this system. The list order matches the apply order.',
+        'List of configured repositories on this system. The list order matches the apply order:',
         ''
     );
     [array]$RepoList = Get-IcingaRepositories;

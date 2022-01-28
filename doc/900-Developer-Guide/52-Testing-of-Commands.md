@@ -1,14 +1,6 @@
 # Developer Guide: Testing of Commands
 
-Actively developing new code for the Framework will result in core files to be changed or new functionality added. To load the Framework we use in general `Use-Icinga`, which does how ever not cover changes we made afterwards. To keep track of the changes for new features or while testing something, we always have to open a new PowerShell instance.
-
-To make things more usable, we can of course run a PowerShell command directly from our shell:
-
-```powershell
-powershell -C { Use-Icinga; <# your code #> }
-```
-
-While this is straight forward and easy to use, the idea is to make this way simpler.
+Actively developing new code for the Framework will result in core files to be changed or new functionality added. To load the Framework we use in general `icinga -Shell`, which does how ever not cover changes we made afterwards. To keep track of the changes for new features or while testing something, we always have to open a new PowerShell instance.
 
 ## Invoke-IcingaCommand or simply icinga
 
@@ -58,7 +50,7 @@ icinga> Exit-IcingaThrowException -Force -CustomMessage 'Force Exit of our Shell
 Unhandled exception occured:
 ```
 
-Instead of our own shell closing, we still have our previous one open and can start another shell by using `icinga` with the entire Framework loaded.
+Instead of our own shell closing, we still have our previous one open and can start another shell by using `icinga -Shell` with the entire Framework loaded.
 
 This also works for code we directly invoke to the `icinga` alias:
 

@@ -1,7 +1,21 @@
 function Show-IcingaForWindowsManagementConsoleManageJEA()
 {
+    [bool]$JEAContext = (-Not [string]::IsNullOrEmpty((Get-IcingaJEAContext)));
+    $ServiceData      = Get-IcingaAgentInstallation;
+    $ServiceUser      = 'No service installed';
+
+    if ($ServiceData.Installed -eq $FALSE) {
+        $ServiceData = Get-IcingaServices 'icingapowershell';
+        if ($null -ne $ServiceData) {
+            $ServiceUser = $ServiceData.icingapowershell.configuration.ServiceUser;
+        }
+    } else {
+        $ServiceUser = $ServiceData.User;
+    }
+
     Show-IcingaForWindowsInstallerMenu `
-        -Header 'Manage Icinga for Windows JEA configuration:' `
+        -Header ([string]::Format('Manage Icinga for Windows JEA configuration:{0}=> Current User: {1}{0}=> JEA installed: {2}', (New-IcingaNewLine), $ServiceUser, $JEAContext)) `
+        -DefaultIndex '0' `
         -Entries @(
             @{
                 'Caption' = 'Install JEA profile with managed user "icinga"';
@@ -10,24 +24,45 @@ function Show-IcingaForWindowsManagementConsoleManageJEA()
                 'Action'  = @{
                     'Command'   = 'Show-IcingaWindowsManagementConsoleYesNoDialog';
                     'Arguments' = @{
-                        '-Caption' = 'Install JEA profile with managed user "icinga"';
-                        '-Command' = 'Install-IcingaSecurity';
+                        '-Caption'      = 'Install JEA profile with managed user "icinga"';
+                        '-Command'      = 'Install-IcingaSecurity';
+                        '-CmdArguments' = @{
+                            '-RebuildFramework' = $TRUE;
+                        }
                     }
                 }
             },
             @{
-                'Caption' = 'Install/Update JEA profile';
+                'Caption' = 'Install JEA profile without managed user';
                 'Command' = 'Show-IcingaForWindowsManagementConsoleManageJEA';
-                'Help'    = 'Installs or updates the JEA profile for Icinga for Windows for the current user assigned to the "icinga2" service';
+                'Help'    = 'Installs the JEA profile for Icinga for Windows for the current user assigned to the "icinga2" service';
                 'Action'  = @{
                     'Command'   = 'Show-IcingaWindowsManagementConsoleYesNoDialog';
                     'Arguments' = @{
-                        '-Caption' = 'Install/Update JEA profile';
-                        '-Command' = 'Install-IcingaJEAProfile';
+                        '-Caption'      = 'Install JEA profile without managed user';
+                        '-Command'      = 'Install-IcingaJEAProfile';
+                        '-CmdArguments' = @{
+                            '-RebuildFramework' = $TRUE;
+                        }
                     }
                 }
             },
             @{
+                'Caption' = 'Update JEA profile';
+                'Command' = 'Show-IcingaForWindowsManagementConsoleManageJEA';
+                'Help'    = 'Update JEA profile';
+                'Action'  = @{
+                    'Command'   = 'Show-IcingaWindowsManagementConsoleYesNoDialog';
+                    'Arguments' = @{
+                        '-Caption'      = 'Update JEA profile';
+                        '-Command'      = 'Install-IcingaJEAProfile';
+                        '-CmdArguments' = @{
+                            '-RebuildFramework' = $TRUE;
+                        }
+                    }
+                }
+            },
+            <#@{
                 'Caption' = 'Install JEA profile with "ConstrainedLanguage" and managed user "icinga"';
                 'Command' = 'Show-IcingaForWindowsManagementConsoleManageJEA';
                 'Help'    = 'Will create a managed user called "icinga", updates the services "icinga2" and "icingapowershell" with the new user and creates a JEA profile with "ConstrainedLanguage" based on installed modules. This is NOT recommended in case you are using the Icinga for Windows service, as it will not work in "ConstrainedLanguage" mode';
@@ -56,7 +91,7 @@ function Show-IcingaForWindowsManagementConsoleManageJEA()
                         }
                     }
                 }
-            },
+            },#>
             @{
                 'Caption' = 'Uninstall JEA profile and managed user "icinga"';
                 'Command' = 'Show-IcingaForWindowsManagementConsoleManageJEA';
@@ -70,29 +105,14 @@ function Show-IcingaForWindowsManagementConsoleManageJEA()
                 }
             },
             @{
-                'Caption' = 'Uninstall JEA profile';
+                'Caption' = 'Uninstall JEA profile without managed user';
                 'Command' = 'Show-IcingaForWindowsManagementConsoleManageJEA';
                 'Help'    = 'Uninstalls the JEA profile from this system';
                 'Action'  = @{
                     'Command'   = 'Show-IcingaWindowsManagementConsoleYesNoDialog';
                     'Arguments' = @{
-                        '-Caption' = 'Uninstall JEA profile';
+                        '-Caption' = 'Uninstall JEA profile without managed user';
                         '-Command' = 'Uninstall-IcingaJEAProfile';
-                    }
-                }
-            },
-            @{
-                'Caption' = 'Rebuild Icinga PowerShell Framework dependency cache';
-                'Command' = 'Show-IcingaForWindowsManagementConsoleManageJEA';
-                'Help'    = 'Rebuilds the Icinga for Windows Framework dependency cache for JEA profile generation';
-                'Action'  = @{
-                    'Command'   = 'Show-IcingaWindowsManagementConsoleYesNoDialog';
-                    'Arguments' = @{
-                        '-Caption'      = 'Rebuild Icinga PowerShell Framework dependency cache';
-                        '-Command'      = 'Get-IcingaJEAConfiguration';
-                        '-CmdArguments' = @{
-                            '-RebuildFramework' = $TRUE;
-                        }
                     }
                 }
             }

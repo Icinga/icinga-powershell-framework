@@ -14,6 +14,11 @@ function Install-IcingaComponent()
         return;
     }
 
+    # Branch snapshot versions will have '/' inside their name
+    if ($Name.Contains('/') -And $Snapshot) {
+        $Name = $Name.Split('/')[0];
+    }
+
     Set-IcingaTLSVersion;
 
     if ($Version -eq 'release') {

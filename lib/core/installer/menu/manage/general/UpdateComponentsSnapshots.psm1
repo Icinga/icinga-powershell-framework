@@ -1,6 +1,6 @@
-function Show-IcingaForWindowsMenuUpdateComponents()
+function Show-IcingaForWindowsMenuUpdateComponentsSnapshot()
 {
-    $IcingaInstallation      = Get-IcingaInstallation -Release;
+    $IcingaInstallation      = Get-IcingaInstallation -Snapshot;
     [int]$MaxComponentLength = Get-IcingaMaxTextLength -TextArray $IcingaInstallation.Keys;
     [array]$UpdateList       = @();
 
@@ -19,24 +19,21 @@ function Show-IcingaForWindowsMenuUpdateComponents()
             continue;
         }
 
-        if ([Version]$Component.CurrentVersion -eq [Version]$LatestVersion) {
-            continue;
-        }
-
         $UpdateList += @{
-            'Caption'  = ([string]::Format('{0} [{1}] => [{2}]', (Add-IcingaWhiteSpaceToString -Text $entry -Length $MaxComponentLength), $Component.CurrentVersion, $LatestVersion));
+            'Caption'  = ([string]::Format('{0} [{1}] => [snapshot]', (Add-IcingaWhiteSpaceToString -Text $entry -Length $MaxComponentLength), $Component.CurrentVersion));
             'Command'  = 'Show-IcingaForWindowsMenuUpdateComponents';
-            'Help'     = ([string]::Format('This will update "{0}" from current version "{1}" to stable version "{2}"', $entry, $Component.CurrentVersion, $LatestVersion));
+            'Help'     = ([string]::Format('This will update "{0}" from current version "{1}" to latest snapshot version', $entry, $Component.CurrentVersion));
             'Disabled' = $FALSE;
             'Action'   = @{
                 'Command'   = 'Show-IcingaWindowsManagementConsoleYesNoDialog';
                 'Arguments' = @{
-                    '-Caption'      = ([string]::Format('Update "{0}" from version "{1}" to stable version "{2}"', $entry, $Component.CurrentVersion, $LatestVersion));
+                    '-Caption'      = ([string]::Format('Update "{0}" from version "{1}" to latest snapshot version', $entry, $Component.CurrentVersion));
                     '-Command'      = 'Update-Icinga';
                     '-CmdArguments' = @{
-                        '-Name'    = $entry;
-                        '-Release' = $TRUE;
-                        '-Confirm' = $TRUE;
+                        '-Name'     = $entry;
+                        '-Snapshot' = $TRUE;
+                        '-Confirm'  = $TRUE;
+                        '-Force'    = $TRUE;
                     }
                 }
             }
@@ -47,7 +44,7 @@ function Show-IcingaForWindowsMenuUpdateComponents()
         $UpdateList += @{
             'Caption'  = 'Update entire environment';
             'Command'  = 'Show-IcingaForWindowsMenuUpdateComponents';
-            'Help'     = 'This will update all components listed above to the mentioned stable version'
+            'Help'     = 'This will update all components listed above to the mentioned snapshot version'
             'Disabled' = $FALSE;
             'Action'   = @{
                 'Command'   = 'Show-IcingaWindowsManagementConsoleYesNoDialog';
@@ -55,8 +52,9 @@ function Show-IcingaForWindowsMenuUpdateComponents()
                     '-Caption'      = 'Update entire Icinga for Windows environment';
                     '-Command'      = 'Update-Icinga';
                     '-CmdArguments' = @{
-                        '-Release' = $TRUE;
-                        '-Confirm' = $TRUE;
+                        '-Snapshot' = $TRUE;
+                        '-Confirm'  = $TRUE;
+                        '-Force'    = $TRUE;
                     }
                 }
             }

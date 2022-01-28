@@ -16,6 +16,8 @@
     "icinga", you require to specify the user to remove it entirely
 .PARAMETER Force
     Suppress the question if you are sure to uninstall everything
+.PARAMETER ComponentsOnly
+    Only uninstalls components like Icinga Agent, plugins, and so on and keeps the Framework
 .INPUTS
    System.String
 .OUTPUTS
@@ -27,8 +29,9 @@
 function Uninstall-IcingaForWindows()
 {
     param (
-        $IcingaUser    = 'icinga',
-        [switch]$Force = $FALSE
+        $IcingaUser             = 'icinga',
+        [switch]$Force          = $FALSE,
+        [switch]$ComponentsOnly = $FALSE
     );
 
     $ModuleList      = Get-Module 'icinga-powershell-*' -ListAvailable;
@@ -53,15 +56,21 @@ function Uninstall-IcingaForWindows()
     Uninstall-IcingaSecurity -IcingaUser $IcingaUser;
     Write-IcingaConsoleNotice 'Uninstalling Icinga Agent';
     Uninstall-IcingaAgent -RemoveDataFolder | Out-Null;
-    Write-IcingaConsoleNotice 'Uninstalling Icinga for Windows EventLog';
-    Unregister-IcingaEventLog;
+    if ($ComponentsOnly -eq $FALSE) {
+        Write-IcingaConsoleNotice 'Uninstalling Icinga for Windows EventLog';
+        Unregister-IcingaEventLog;
+    }
     Write-IcingaConsoleNotice 'Uninstalling Icinga for Windows service';
     Uninstall-IcingaForWindowsService | Out-Null;
 
     $HasErrors = $FALSE;
 
     foreach ($module in $ModuleList.Name) {
-        [string]$ModuleName = $module.Replace('icinga-powershell-', '');
+        [string]$ModuleName = $module.Replace('icinga-powershell-', '').ToLower();
+
+        if ($ModuleName -eq 'framework' -And $ComponentsOnly) {
+            continue;
+        }
 
         if ((Uninstall-IcingaFrameworkComponent -Name $ModuleName)) {
             continue;
@@ -70,7 +79,9 @@ function Uninstall-IcingaForWindows()
         $HasErrors = $TRUE;
     }
 
-    Remove-Module 'icinga-powershell-framework' -Force -ErrorAction SilentlyContinue;
+    if ($ComponentsOnly -eq $FALSE) {
+        Remove-Module 'icinga-powershell-framework' -Force -ErrorAction SilentlyContinue;
+    }
 
     if ($HasErrors) {
         Write-Host 'Not all components could be removed. Please ensure no other PowerShell/Application is currently open and accessing Icinga for Windows files';

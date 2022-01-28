@@ -121,6 +121,10 @@ function Show-IcingaForWindowsInstallerMenu()
                     $FontColor = 'DarkGray';
                 }
 
+                if ($Global:Icinga.InstallWizard.AdminShell -eq $FALSE -And $null -ne $entry.AdminMenu -And $entry.AdminMenu -eq $TRUE) {
+                    $FontColor = 'DarkGray';
+                }
+
                 # Mark our previous selection in another color for better highlighting
                 if ($null -ne $SelectionForCurrentMenu -And $SelectionForCurrentMenu -eq $EntryIndex) {
                     $FontColor = 'Green';
@@ -240,15 +244,30 @@ function Show-IcingaForWindowsInstallerMenu()
 
     Write-IcingaConsolePlain '';
 
-    if ([string]::IsNullOrEmpty($global:Icinga.InstallWizard.LastError) -eq $FALSE) {
-        Write-IcingaConsoleError ($global:Icinga.InstallWizard.LastError);
-        $global:Icinga.InstallWizard.LastError = '';
+    if ($Global:Icinga.InstallWizard.LastError.Count -ne 0) {
+        foreach ($entry in $global:Icinga.InstallWizard.LastError) {
+            if ([string]::IsNullOrEmpty($entry)) {
+                continue;
+            }
+            Write-IcingaConsoleError -Message $entry;
+        }
+        $Global:Icinga.InstallWizard.LastError.Clear();
+        Write-IcingaConsolePlain '';
+    }
+    if ($Global:Icinga.InstallWizard.LastWarning.Count -ne 0) {
+        foreach ($entry in $Global:Icinga.InstallWizard.LastWarning) {
+            if ([string]::IsNullOrEmpty($entry)) {
+                continue;
+            }
+            Write-IcingaConsoleWarning -Message $entry;
+        }
+        $Global:Icinga.InstallWizard.LastWarning.Clear();
         Write-IcingaConsolePlain '';
     }
 
-    if ([string]::IsNullOrEmpty($global:Icinga.InstallWizard.LastNotice) -eq $FALSE) {
-        Write-IcingaConsoleNotice ($global:Icinga.InstallWizard.LastNotice);
-        $global:Icinga.InstallWizard.LastNotice = '';
+    if ([string]::IsNullOrEmpty($Global:Icinga.InstallWizard.LastNotice) -eq $FALSE) {
+        Write-IcingaConsoleNotice ($Global:Icinga.InstallWizard.LastNotice);
+        $Global:Icinga.InstallWizard.LastNotice = '';
         Write-IcingaConsolePlain '';
     }
 
@@ -306,7 +325,7 @@ function Show-IcingaForWindowsInstallerMenu()
                 return;
             }
 
-            $global:Icinga.InstallWizard.LastError = 'You cannot move to the previous menu from here.';
+            $global:Icinga.InstallWizard.LastError += 'You cannot move to the previous menu from here.';
             if ($global:Icinga.InstallWizard.LastParent.Count -eq 0) {
                 $global:Icinga.InstallWizard.NextCommand   = $null;
                 $global:Icinga.InstallWizard.NextArguments = $null;
@@ -327,7 +346,7 @@ function Show-IcingaForWindowsInstallerMenu()
         };
         'c' {
             if ($MandatoryValue -And $StoredValues.Count -eq 0) {
-                $global:Icinga.InstallWizard.LastError = 'You need to add at least one value!';
+                $global:Icinga.InstallWizard.LastError += 'You need to add at least one value!';
 
                 return;
             }
@@ -357,17 +376,17 @@ function Show-IcingaForWindowsInstallerMenu()
                         if ($DefaultValues.Count -ne 0) {
                             $global:Icinga.InstallWizard.LastNotice = 'Empty values are not allowed! Resetting to default.';
                         } else {
-                            $global:Icinga.InstallWizard.LastError = 'You cannot add an empty value!';
+                            $global:Icinga.InstallWizard.LastError += 'You cannot add an empty value!';
                         }
                     }
                 } else {
-                    $global:Icinga.InstallWizard.LastError = [string]::Format('You can only add {0} value(s)', $ConfigLimit);
+                    $global:Icinga.InstallWizard.LastError += [string]::Format('You can only add {0} value(s)', $ConfigLimit);
                 }
 
                 return;
             }
             if ((Test-Numeric $Result) -eq $FALSE -Or $KnownIndexes.ContainsKey([string]$Result) -eq $FALSE) {
-                $global:Icinga.InstallWizard.LastError = [string]::Format('Invalid selection has been made: {0}', $Result);
+                $global:Icinga.InstallWizard.LastError += [string]::Format('Invalid selection has been made: {0}', $Result);
 
                 return;
             }
@@ -376,6 +395,7 @@ function Show-IcingaForWindowsInstallerMenu()
         };
     }
 
+    [bool]$AdminMenu      = $FALSE;
     [bool]$DisabledMenu     = $FALSE;
     [string]$DisabledReason = '';
     $NextMenu               = $null;
@@ -395,6 +415,10 @@ function Show-IcingaForWindowsInstallerMenu()
                         $DisabledReason = $Entries[0].DisabledReason;
                     }
                 }
+
+                if ($null -ne $Entries[0].AdminMenu) {
+                    $AdminMenu = $Entries[0].AdminMenu;
+                }
             }
             $ActionCmd  = $Entries[0].Action.Command;
             $ActionArgs = $Entries[0].Action.Arguments;
@@ -402,10 +426,15 @@ function Show-IcingaForWindowsInstallerMenu()
             $NextMenu = $Entries[$Result].Command;
             if ($null -ne $Entries[$Result].Disabled) {
                 $DisabledMenu = $Entries[$Result].Disabled;
-                if ($null -ne $Entries[0].DisabledReason) {
-                    $DisabledReason = $Entries[0].DisabledReason;
+                if ($null -ne $Entries[$Result].DisabledReason) {
+                    $DisabledReason = $Entries[$Result].DisabledReason;
                 }
             }
+
+            if ($null -ne $Entries[$Result].AdminMenu) {
+                $AdminMenu = $Entries[$Result].AdminMenu;
+            }
+
             if ($Entries[$Result].ContainsKey('Arguments')) {
                 $NextArguments = $Entries[$Result].Arguments;
             }
@@ -414,11 +443,17 @@ function Show-IcingaForWindowsInstallerMenu()
         }
     }
 
+    if ($AdminMenu -And (Test-AdministrativeShell) -eq $FALSE) {
+        $Global:Icinga.InstallWizard.LastNotice = [string]::Format('This menu is not enabled: [{0}] => You require to run this shell in administrative mode', $Result);
+
+        return;
+    }
+
     if ($DisabledMenu) {
         if ([string]::IsNullOrEmpty($DisabledReason) -eq $FALSE) {
             $DisabledReason = [string]::Format(' => Reason: {0}', $DisabledReason);
         }
-        $global:Icinga.InstallWizard.LastNotice = [string]::Format('This menu is not enabled: {0}{1}', $Result, $DisabledReason);
+        $global:Icinga.InstallWizard.LastNotice = [string]::Format('This menu is not enabled: [{0}]{1}', $Result, $DisabledReason);
 
         return;
     }
