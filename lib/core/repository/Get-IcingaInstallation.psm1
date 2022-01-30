@@ -25,10 +25,6 @@ function Get-IcingaInstallation()
                 [string]$LatestVersion = $InstallPackage.Package.Version;
             }
 
-            if ([string]::IsNullOrEmpty($LatestVersion) -eq $FALSE -And [Version]$LatestVersion -le [Version]$CurrentVersion) {
-                $LatestVersion = '';
-            }
-
             Add-IcingaHashtableItem `
                 -Hashtable $InstalledComponents `
                 -Key $ComponentName `
@@ -58,10 +54,6 @@ function Get-IcingaInstallation()
             [string]$LatestVersion = $InstallPackage.Package.Version;
         }
 
-        if ([string]::IsNullOrEmpty($LatestVersion) -eq $FALSE -And [Version]$LatestVersion -le [Version]$CurrentVersion) {
-            $LatestVersion = '';
-        }
-
         $InstalledComponents.Add(
             'service',
             @{
@@ -87,10 +79,6 @@ function Get-IcingaInstallation()
 
         if ($InstallPackage.HasPackage) {
             $LatestVersion = $InstallPackage.Package.Version;
-        }
-
-        if ([string]::IsNullOrEmpty($LatestVersion) -eq $FALSE -And [Version]$LatestVersion -le [Version]$CurrentVersion) {
-            $LatestVersion = '';
         }
 
         $InstalledComponents.Add(
