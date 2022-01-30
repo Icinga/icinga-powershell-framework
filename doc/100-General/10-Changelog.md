@@ -38,6 +38,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#454](https://github.com/Icinga/icinga-powershell-framework/pull/454) Fixes JEA catalog compiler and background daemon execution in JEA context
 * [#456](https://github.com/Icinga/icinga-powershell-framework/pull/456) Fixes JEA service error count not resetting itself after a certain amount of time without errors
 * [#458](https://github.com/Icinga/icinga-powershell-framework/pull/458) Fixes `Install-IcingaSecurity` which should only run in an administrative shell
+* [#459](https://github.com/Icinga/icinga-powershell-framework/pull/459) Fixes `Update-Icinga` which was not working to downgrade snapshot packages pack to release (**NOTE:** It can still happen that migrations of the `Framework` might break your environment. Not recommended in production environments for the `Framework` component)
 
 ### Enhancements
 
