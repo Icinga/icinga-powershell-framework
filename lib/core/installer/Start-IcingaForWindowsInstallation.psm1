@@ -180,20 +180,15 @@ function Start-IcingaForWindowsInstallation()
     if ($InstallAgent) {
         Set-IcingaPowerShellConfig -Path 'Framework.Icinga.AgentLocation' -Value $AgentInstallDir;
         Install-IcingaComponent -Name 'agent' -Version $AgentVersion -Confirm -Release;
-
-        # Only continue this, if our installation was successful
-        if ((Get-IcingaAgentInstallation).Installed) {
-            Reset-IcingaAgentConfigFile;
-            Move-IcingaAgentDefaultConfig;
-            Set-IcingaAgentNodeName -Hostname $Hostname;
-            Set-IcingaServiceUser -User $ServiceUser -Password (ConvertTo-IcingaSecureString $ServicePassword) -SetPermission | Out-Null;
-            Install-IcingaAgentBaseFeatures;
-            Write-IcingaAgentApiConfig -Port $IcingaPort;
-        }
     }
 
     # Only continue this, if our installation was successful
     if ((Get-IcingaAgentInstallation).Installed) {
+        Set-IcingaAgentNodeName -Hostname $Hostname;
+        Set-IcingaServiceUser -User $ServiceUser -Password (ConvertTo-IcingaSecureString $ServicePassword) -SetPermission | Out-Null;
+        Install-IcingaAgentBaseFeatures;
+        Write-IcingaAgentApiConfig -Port $IcingaPort;
+
         if ((Install-IcingaAgentCertificates -Hostname $Hostname -Endpoint $IcingaCAServer -Port $IcingaPort -CACert $CertificateCAFile -Ticket $CertificateTicket -Force:$ForceCertificateGen) -eq $FALSE) {
             Disable-IcingaAgentFeature 'api';
             Write-IcingaConsoleWarning `
@@ -239,7 +234,7 @@ function Start-IcingaForWindowsInstallation()
     Write-IcingaFrameworkCodeCache;
     Test-IcingaAgent;
 
-    if ($InstallAgent) {
+    if ((Get-IcingaAgentInstallation).Installed) {
         Restart-IcingaService 'icinga2';
     }
 
