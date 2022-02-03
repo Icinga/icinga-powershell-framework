@@ -30,10 +30,18 @@ function Add-IcingaRepository()
         Write-IcingaConsoleError 'A repository with the given name "{0}" does already exist. Use "-Force" to overwrite the current repository' -Objects $Name;
         return;
     } elseif ($RepoExists -And $Force) {
-        Write-IcingaConsoleNotice 'Repository "{0}" is already registered. Forcing removal and re-adding it.' -Objects $Name;
-        Remove-IcingaRepository -Name $Name;
+        Write-IcingaConsoleNotice 'Repository "{0}" is already registered. Forcing override of data.' -Objects $Name;
 
-        $CurrentRepositories = Get-IcingaPowerShellConfig -Path 'Framework.Repository.Repositories';
+        foreach ($entry in $CurrentRepositories.PSObject.Properties) {
+            if ($Name.ToLower() -eq $entry.Name.ToLower()) {
+                $entry.Value.RemotePath = $RemotePath;
+                break;
+            }
+        }
+
+        Set-IcingaPowerShellConfig -Path 'Framework.Repository.Repositories' -Value $CurrentRepositories;
+
+        return;
     }
 
     [array]$RepoCount = $CurrentRepositories.PSObject.Properties.Count;
