@@ -328,6 +328,8 @@ function Install-IcingaComponent()
             Set-IcingaPowerShellConfig -Path 'Framework.Icinga.ServiceUser' -Value $ServiceUser;
         }
 
+        Set-IcingaPowerShellConfig -Path 'Framework.Icinga.AgentLocation' -Value $InstallTarget;
+
         [string]$InstallFolderMsg = $InstallTarget;
 
         if ([string]::IsNullOrEmpty($InstallTarget) -eq $FALSE) {
@@ -372,6 +374,9 @@ function Install-IcingaComponent()
             Write-IcingaConsoleError -Message 'Failed to install component "agent": {0}{1}' -Objects $InstallProcess.Message, $InstallProcess.Error;
             return $FALSE;
         }
+
+        Reset-IcingaAgentConfigFile;
+        Move-IcingaAgentDefaultConfig;
 
         Set-IcingaServiceUser -User $ServiceUser -SetPermission | Out-Null;
         Update-IcingaServiceUser;
