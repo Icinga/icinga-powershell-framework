@@ -18,6 +18,7 @@ function Start-IcingaForWindowsInstallation()
 
     $ConnectionType        = Get-IcingaForWindowsInstallerStepSelection -InstallerStep 'Show-IcingaForWindowsInstallerMenuSelectConnection';
     $HostnameType          = Get-IcingaForWindowsInstallerStepSelection -InstallerStep 'Show-IcingaForWindowsInstallerMenuSelectHostname';
+    $CustomHostname        = Get-IcingaForWindowsInstallerValuesFromStep -InstallerStep 'Show-IcingaForWindowsInstallationMenuEnterCustomHostname';
     $FirewallType          = Get-IcingaForWindowsInstallerStepSelection -InstallerStep 'Show-IcingaForWindowsInstallerMenuSelectOpenWindowsFirewall';
 
     # Certificate handler
@@ -70,6 +71,8 @@ function Start-IcingaForWindowsInstallation()
     $PluginPackageRelease  = $FALSE;
     $PluginPackageSnapshot = $FALSE;
     $ForceCertificateGen   = $FALSE;
+    [bool]$InstallJEA      = $FALSE;
+    [bool]$InstallRESTApi  = $FALSE;
 
     if ([string]::IsNullOrEmpty($IcingaStableRepo) -eq $FALSE) {
         Add-IcingaRepository -Name 'Icinga Stable' -RemotePath $IcingaStableRepo -Force;
@@ -106,6 +109,10 @@ function Start-IcingaForWindowsInstallation()
             $Hostname = (Get-IcingaHostname -AutoUseHostname 1 -UpperCase 1);
             break;
         };
+        '6' {
+            $Hostname = $CustomHostname;
+            break;
+        }
     }
 
     switch ($GlobalZonesType) {
@@ -245,10 +252,12 @@ function Start-IcingaForWindowsInstallation()
     switch ($InstallJEAProfile) {
         '0' {
             Install-IcingaJEAProfile;
+            $InstallJEA = $TRUE;
             break;
         };
         '1' {
             Install-IcingaSecurity;
+            $InstallJEA = $TRUE;
             break;
         };
         '2' {
@@ -265,6 +274,7 @@ function Start-IcingaForWindowsInstallation()
             Register-IcingaBackgroundDaemon -Command 'Start-IcingaWindowsRESTApi';
             Add-IcingaRESTApiCommand -Command 'Invoke-IcingaCheck*' -Endpoint 'apichecks';
             Enable-IcingaFrameworkApiChecks;
+            $InstallRESTApi = $TRUE;
             if ($InstallService) {
                 Restart-IcingaWindowsService;
             } else {
@@ -272,6 +282,11 @@ function Start-IcingaForWindowsInstallation()
             }
             break;
         };
+    }
+
+    # Install Icinga for Windows certificate if both, JEA and REST is installed
+    if ($InstallJEA -And $InstallRESTApi) {
+        Install-IcingaForWindowsCertificate;
     }
 
     # Update configuration and clear swap

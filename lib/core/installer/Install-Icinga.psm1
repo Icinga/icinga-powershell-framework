@@ -15,7 +15,8 @@ function Install-Icinga()
                 'AdminShell'             = (Test-AdministrativeShell);
                 'LastInput'              = '';
                 'LastNotice'             = '';
-                'LastError'              = '';
+                'LastWarning'            = @();
+                'LastError'              = @();
                 'DirectorError'          = '';
                 'HeaderPreview'          = '';
                 'DirectorSelfService'    = $FALSE;
@@ -41,6 +42,9 @@ function Install-Icinga()
                 'Closing'                = $FALSE;
             }
         );
+    } else {
+        $Global:Icinga.InstallWizard.LastWarning.Clear();
+        $Global:Icinga.InstallWizard.LastError.Clear();
     }
 
     if ([string]::IsNullOrEmpty($InstallFile) -eq $FALSE) {
@@ -119,36 +123,29 @@ function Install-Icinga()
                 -Header 'What do you want to do?' `
                 -Entries @(
                     @{
-                        'Caption' = 'Installation';
+                        'Caption' = 'Base Installation';
                         'Command' = 'Show-IcingaForWindowsInstallerMenuInstallWindows';
                         'Help'    = 'Allows you to install Icinga for Windows with all required components and options.'
                     },
                     @{
-                        'Caption'  = 'Install components';
-                        'Command'  = 'Show-IcingaForWindowsMenuInstallComponents';
-                        'Help'     = 'Allows you to install new components for Icinga for Windows from your repositories.';
-                        'Disabled' = (-Not ($global:Icinga.InstallWizard.AdminShell));
+                        'Caption'   = 'Component Manager';
+                        'Command'   = 'Show-IcingaForWindowsManagementConsoleComponentManager';
+                        'Help'      = 'Allows you to manage components for Icinga for Windows.';
+                        'AdminMenu' = $TRUE;
                     },
                     @{
-                        'Caption'  = 'Update components';
-                        'Command'  = 'Show-IcingaForWindowsMenuUpdateComponents';
-                        'Help'     = 'Allows you to modify your current Icinga for Windows installation.';
-                        'Disabled' = (-Not ($global:Icinga.InstallWizard.AdminShell));
-                    },
-                    @{
-                        'Caption'  = 'Remove components';
-                        'Command'  = 'Show-IcingaForWindowsMenuRemoveComponents';
-                        'Help'     = 'Allows you to modify your current Icinga for Windows installation.';
-                        'Disabled' = (-Not ($global:Icinga.InstallWizard.AdminShell));
-                    },
-                    @{
-                        'Caption' = 'Manage environment';
+                        'Caption' = 'Settings';
                         'Command' = 'Show-IcingaForWindowsMenuManage';
                         'Help'    = 'Allows you to modify your current Icinga for Windows installation.';
                     },
                     @{
-                        'Caption' = 'List environment';
+                        'Caption' = 'Overview';
                         'Command' = 'Show-IcingaForWindowsMenuListEnvironment';
+                        'Help'    = 'Shows you an overview of your current Icinga for Windows installation, including installed components and system informations.';
+                    },
+                    @{
+                        'Caption' = 'Icinga Shell';
+                        'Command' = 'Invoke-IcingaForWindowsMenuStartIcingaShell';
                         'Help'    = 'Shows you an overview of your current Icinga for Windows installation, including installed components and system informations.';
                     }
                 ) `
@@ -172,7 +169,7 @@ function Install-Icinga()
             } catch {
                 $ErrMsg = $_.Exception.Message;
 
-                $global:Icinga.InstallWizard.LastError     = [string]::Format('Failed to enter menu "{0}". Error "{1}', $global:Icinga.InstallWizard.NextCommand, $ErrMsg);
+                $global:Icinga.InstallWizard.LastError     += [string]::Format('Failed to enter menu "{0}". Error "{1}', $global:Icinga.InstallWizard.NextCommand, $ErrMsg);
                 $global:Icinga.InstallWizard.NextCommand   = 'Install-Icinga';
                 $global:Icinga.InstallWizard.NextArguments = @{ };
             }

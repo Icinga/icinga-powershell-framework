@@ -2,11 +2,11 @@
 
 The Icinga PowerShell Framework is shipping wish a bunch of Cmdlets to manage the Icinga Agent in a very easy way. This includes a test for the entire configuration and state of the Icinga Agent on the machine.
 
-**Note:** Before using any of the commands below you will have to initialize the Icinga PowerShell Framework inside a new PowerShell instance with `Use-Icinga`. Starting with version `1.2.0` of the Framework you can also simply type `icinga` into the command line.
+**Note:** Before using any of the commands below you will have to initialize the Icinga PowerShell Framework inside a new PowerShell instance with `icinga -Shell`
 
 ## Testing for errors
 
-A very important part of an Agent is to ensure that it is running properly and no configuration error is present. In addition it is important that required directories are accessable by the service user the Icinga Agent is running with. For this you can use the Cmdlet `Test-IcingaAgent`:
+A very important part of an Agent is to ensure that it is running properly and no configuration error is present. In addition it is important that required directories are accessible by the service user the Icinga Agent is running with. For this you can use the Cmdlet `Test-IcingaAgent`:
 
 ```powershell
 Test-IcingaAgent;
@@ -51,7 +51,7 @@ In addition for testing, the Icinga PowerShell Framework will suggest methods to
 [Passed]: Icinga Agent debug log is disabled
 ```
 
-As you can see, the mandatory directory `C:\ProgramData\icinga2\var` is not accessable by our `NT AUTHORITY\NetworkService` user. To resolve this, the Framework provides the Cmdlet `Set-IcingaAcl`. It will automatically set the correct permissions for a specific directory for the service user the Icinga Agent is running with:
+As you can see, the mandatory directory `C:\ProgramData\icinga2\var` is not accessible by our `NT AUTHORITY\NetworkService` user. To resolve this, the Framework provides the Cmdlet `Set-IcingaAcl`. It will automatically set the correct permissions for a specific directory for the service user the Icinga Agent is running with:
 
 ```powershell
 Set-IcingaAcl -Directory 'C:\ProgramData\icinga2\var';
@@ -97,7 +97,7 @@ As our configuration is for some reason broken we have to resolve this. The Icin
 Test-IcingaAgentConfig -WriteStackTrace | Out-Null;
 ```
 
-By using the argument `-WriteStackTrace` we will print the actual error ouptut from the Icinga Agent binary to our console for troubleshooting:
+By using the argument `-WriteStackTrace` we will print the actual error output from the Icinga Agent binary to our console for troubleshooting:
 
 ```text
 [2020-08-12 16:54:26 +0200] information/cli: Icinga application loader (version: v2.12.0)

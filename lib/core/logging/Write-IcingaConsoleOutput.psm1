@@ -68,6 +68,19 @@ function Write-IcingaConsoleOutput()
         $Index++;
     }
 
+    if ($Global:Icinga.ContainsKey('InstallWizard') -And [string]::IsNullOrEmpty($OutputMessage) -eq $FALSE) {
+        if ($Severity -eq 'Error') {
+            if ($Global:Icinga.InstallWizard.LastError -NotContains $OutputMessage) {
+                $Global:Icinga.InstallWizard.LastError += $OutputMessage;
+            }
+        }
+        if ($Severity -eq 'Warning') {
+            if ($Global:Icinga.InstallWizard.LastWarning -NotContains $OutputMessage) {
+                $Global:Icinga.InstallWizard.LastWarning += $OutputMessage;
+            }
+        }
+    }
+
     if ([string]::IsNullOrEmpty($Severity) -eq $FALSE) {
         Write-Host '[' -NoNewline;
         Write-Host $Severity -NoNewline -ForegroundColor $ForeColor;

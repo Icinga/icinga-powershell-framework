@@ -52,6 +52,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#445](https://github.com/Icinga/icinga-powershell-framework/pull/445) Adds command `Repair-IcingaService` to repair Icinga Agent service in case it was broken during upgrades, mostly caused by `The specified service has been marked for deletion`
 * [#448](https://github.com/Icinga/icinga-powershell-framework/pull/448) Adds support to sort arrays without ScriptBlocks
 * [#450](https://github.com/Icinga/icinga-powershell-framework/pull/450) Improves show command `Show-IcingaRegisteredServiceChecks`, adds new command `Show-IcingaRegisteredBackgroundDaemons` and extends `Show-Icinga` by both commands and adds debug and api forwarder features to environment list
+* [#453](https://github.com/Icinga/icinga-powershell-framework/pull/453) Reworks Icinga Management Console menu structure and naming and changes the default behavior of executing `icinga` to now open the IMC by default and `icinga -Shell` to open a shell as done previously
 * [#455](https://github.com/Icinga/icinga-powershell-framework/pull/455) Adds support for remote execution plugin [check_by_icingaforwindows](https://github.com/LordHepipud/check_by_icingaforwindows)
 
 ## 1.7.1 (2021-11-11)

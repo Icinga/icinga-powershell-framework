@@ -39,6 +39,12 @@ function Update-Icinga()
             continue;
         }
 
-        Install-IcingaComponent -Name $entry -Version $NewVersion -Release:$Release -Snapshot:$Snapshot -Confirm:$Confirm -Force:$Force
+        Install-IcingaComponent -Name $entry -Version $NewVersion -Release:$Release -Snapshot:$Snapshot -Confirm:$Confirm -Force:$Force;
+    }
+
+    # Update JEA profile if JEA is enabled once the update is complete
+    if ([string]::IsNullOrEmpty((Get-IcingaJEAContext)) -eq $FALSE) {
+        Update-IcingaJEAProfile;
+        Restart-IcingaWindowsService;
     }
 }

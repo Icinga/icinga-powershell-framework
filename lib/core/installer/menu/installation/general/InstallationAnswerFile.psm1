@@ -13,7 +13,7 @@ function Export-IcingaForWindowsManagementConsoleInstallationAnswerFile()
         $global:Icinga.InstallWizard.LastNotice  = ([string]::Format('Answer file "IfW_answer.json" successfully exported into "{0}"', $FilePath));
         Clear-IcingaForWindowsManagementConsolePaginationCache;
     } else {
-        $global:Icinga.InstallWizard.LastError   = ([string]::Format('The provided path to store the answer file is invalid: "{0}"', $FilePath));
+        $global:Icinga.InstallWizard.LastError   += ([string]::Format('The provided path to store the answer file is invalid: "{0}"', $FilePath));
         $global:Icinga.InstallWizard.NextCommand = 'Show-IcingaForWindowsManagementConsoleInstallationFileExport';
     }
 }

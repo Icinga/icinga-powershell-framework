@@ -1,7 +1,7 @@
 function Show-IcingaRegisteredBackgroundDaemons()
 {
     [array]$DaemonSummary  = @(
-        'List of configured background daemons on this system.',
+        'List of configured background daemons on this system:',
         ''
     );
 

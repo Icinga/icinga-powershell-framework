@@ -39,7 +39,7 @@ function Show-IcingaForWindowsInstallerMenuEnterIcingaParentAddresses()
                         continue;
                     }
 
-                    $global:Icinga.InstallWizard.LastError = ([string]::Format('Failed to resolve the address for the following endpoint: {0}', $EndpointConfig.Endpoint));
+                    $global:Icinga.InstallWizard.LastError += ([string]::Format('Failed to resolve the address for the following endpoint: {0}', $EndpointConfig.Endpoint));
 
                     $Address = Get-IcingaForWindowsInstallerValuesFromStep -InstallerStep 'Show-IcingaForWindowsInstallerMenuEnterIcingaParentAddresses' -Parent $EndpointConfig.Endpoint;
 

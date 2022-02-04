@@ -179,7 +179,8 @@ function Invoke-IcingaCommand()
     param (
         $ScriptBlock,
         [switch]$SkipHeader   = $FALSE,
-        [switch]$Manage       = $FALSE,
+        [switch]$Manage       = $FALSE, # Only for backwards compatibility, has no use at all
+        [switch]$Shell        = $FALSE,
         [switch]$RebuildCache = $FALSE,
         [array]$ArgumentList  = @()
     );
@@ -191,7 +192,7 @@ function Invoke-IcingaCommand()
 
     # Print a header informing our user that loaded the Icinga Framework with a specific
     # version. We can also skip the header by using $SKipHeader
-    if ([string]::IsNullOrEmpty($ScriptBlock) -And $SkipHeader -eq $FALSE -And $Manage -eq $FALSE) {
+    if ([string]::IsNullOrEmpty($ScriptBlock) -And $SkipHeader -eq $FALSE -And $Shell) {
         [array]$Headers = @(
             'Icinga for Windows $FrameworkVersion',
             'Copyright $Copyright',
@@ -209,7 +210,7 @@ function Invoke-IcingaCommand()
         Write-IcingaFrameworkCodeCache;
     }
 
-    if ($Manage -And $null -ne $psISE) {
+    if ($null -ne $psISE) {
         Use-Icinga;
         Write-IcingaConsoleError -Message 'Icinga for Windows was loaded, but the Icinga Management Console is not available within the PowerShell ISE context. Please start a regular PowerShell to use it.';
         return;
@@ -224,7 +225,7 @@ function Invoke-IcingaCommand()
         $Script          = $args[0];
         $RootPath        = $args[1];
         $Version         = $args[2];
-        $Manage          = $args[3];
+        $Shell           = $args[3];
         $IcingaShellArgs = $args[4];
 
         # Load our Icinga Framework
@@ -235,7 +236,7 @@ function Invoke-IcingaCommand()
         # Set the location to the Icinga Framework module folder
         Set-Location $RootPath;
 
-        if ($Manage) {
+        if ($Shell -eq $FALSE -And [string]::IsNullOrEmpty($Script)) {
             Install-Icinga;
             exit $LASTEXITCODE;
         }
@@ -253,7 +254,7 @@ function Invoke-IcingaCommand()
             return "> "
         }
 
-    } -Args $ScriptBlock, $PSScriptRoot, $IcingaFrameworkData.PrivateData.Version, ([bool]$Manage), $ArgumentList;
+    } -Args $ScriptBlock, $PSScriptRoot, $IcingaFrameworkData.PrivateData.Version, ([bool]$Shell), $ArgumentList;
 }
 
 function Start-IcingaShellAsUser()

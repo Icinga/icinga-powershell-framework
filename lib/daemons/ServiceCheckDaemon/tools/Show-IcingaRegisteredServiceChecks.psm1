@@ -1,7 +1,7 @@
 function Show-IcingaRegisteredServiceChecks()
 {
     [array]$ServiceSummary  = @(
-        'List of configured background service checks on this system.',
+        'List of configured background service checks on this system:',
         '=> https://icinga.com/docs/icinga-for-windows/latest/doc/110-Installation/06-Collect-Metrics-over-Time/',
         ''
     );

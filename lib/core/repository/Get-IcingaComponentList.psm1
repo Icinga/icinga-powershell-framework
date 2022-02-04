@@ -57,6 +57,16 @@ function Get-IcingaComponentList()
                     continue;
                 }
 
+                if ($Snapshot -And (Test-Numeric $package.Version.Replace('.', '')) -eq $FALSE) {
+                    # Branch snapshot
+                    [string]$SnapshotPackageName = ([string]::Format('{0}/{1}', $repoEntry, $package.Version));
+                    if ($SearchList.Components.ContainsKey($SnapshotPackageName) -eq $FALSE) {
+                        $SearchList.Components.Add($SnapshotPackageName, $package.Version);
+                    }
+
+                    continue;
+                }
+
                 if ($SearchList.Components.ContainsKey($repoEntry) -eq $FALSE) {
                     $SearchList.Components.Add($repoEntry, $package.Version);
                 }

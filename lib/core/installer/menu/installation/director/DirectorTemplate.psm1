@@ -16,8 +16,9 @@ function Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate()
         Add-IcingaForWindowsInstallerConfigEntry -Selection 'c' -Values $SelfServiceKey -OverwriteValues -OverwriteMenu 'Show-IcingaForWindowsManagementConsoleInstallationEnterDirectorSelfServiceKey';
     } else {
         $Global:Icinga.InstallWizard.DirectorRegisteredHost = $TRUE;
-        $HostnameType = Get-IcingaForWindowsInstallerStepSelection -InstallerStep 'Show-IcingaForWindowsInstallerMenuSelectHostname';
-        $Hostname     = '';
+        $HostnameType   = Get-IcingaForWindowsInstallerStepSelection -InstallerStep 'Show-IcingaForWindowsInstallerMenuSelectHostname';
+        $CustomHostname = Get-IcingaForWindowsInstallerValuesFromStep -InstallerStep 'Show-IcingaForWindowsInstallationMenuEnterCustomHostname';
+        $Hostname       = '';
 
         switch ($HostnameType) {
             '0' {
@@ -44,6 +45,10 @@ function Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate()
                 $Hostname = (Get-IcingaHostname -AutoUseHostname 1 -UpperCase 1);
                 break;
             };
+            '6' {
+                $Hostname = $CustomHostname;
+                break;
+            }
         }
 
         [bool]$RegisterFailed = $FALSE;
@@ -75,7 +80,7 @@ function Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate()
         $DirectorConfig = Get-IcingaDirectorSelfServiceConfig -DirectorUrl $DirectorUrl -ApiKey $SelfServiceKey;
     } catch {
         Set-IcingaForWindowsManagementConsoleMenu 'Show-IcingaForWindowsInstallerConfigurationSummary';
-        $global:Icinga.InstallWizard.LastError            = 'Failed to fetch host configuration with the given Director Url and Self-Service key. Please ensure the template key is correct and in case a previous host key was used, that it matches the one configured within the Icinga Director. In case this form was loaded previously with a key, it might be that the host key is no longer valid and requires to be dropped. In addition please ensure that this host can connect to the Icinga Director and the SSL certificate is trusted. Otherwise run "Enable-IcingaUntrustedCertificateValidation" before starting the management console. Otherwise modify the "DirectorSelfServiceKey" configuration element above with the correct key and try again.';
+        $global:Icinga.InstallWizard.LastError            += 'Failed to fetch host configuration with the given Director Url and Self-Service key. Please ensure the template key is correct and in case a previous host key was used, that it matches the one configured within the Icinga Director. In case this form was loaded previously with a key, it might be that the host key is no longer valid and requires to be dropped. In addition please ensure that this host can connect to the Icinga Director and the SSL certificate is trusted. Otherwise run "Enable-IcingaUntrustedCertificateValidation" before starting the management console. Otherwise modify the "DirectorSelfServiceKey" configuration element above with the correct key and try again.';
         $global:Icinga.InstallWizard.DirectorError        = $global:Icinga.InstallWizard.LastError;
         $global:Icinga.InstallWizard.DirectorInstallError = $TRUE;
         return;
@@ -204,13 +209,18 @@ function Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate()
 
     Disable-IcingaFrameworkConsoleOutput;
 
-    $HostRegisterSetting = (Get-IcingaForWindowsInstallerStepSelection -InstallerStep 'Show-IcingaForWindowsInstallerMenuSelectHostname');
+    $HostRegisterSetting = Get-IcingaForWindowsInstallerStepSelection -InstallerStep 'Show-IcingaForWindowsInstallerMenuSelectHostname';
 
     if ($null -ne $HostRegisterSetting -And $HostnameSelection -ne $HostRegisterSetting) {
         $HostnameSelection = $HostRegisterSetting;
     }
 
     Show-IcingaForWindowsInstallerMenuSelectHostname -DefaultInput $HostnameSelection -Automated;
+
+    if ($HostnameSelection -eq '6') {
+        Show-IcingaForWindowsInstallationMenuEnterCustomHostname -Value $CustomHostname -Automated;
+    }
+
     Add-IcingaForWindowsInstallationAdvancedEntries;
     Disable-IcingaFrameworkConsoleOutput;
 

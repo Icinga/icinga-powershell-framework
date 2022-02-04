@@ -10,7 +10,7 @@ To start the Icinga Agent installation wizard you will have to open a PowerShell
 Use-Icinga
 ```
 
-*Note:* Starting with Icinga PowerShell Framework `1.2.0` you can simply type `icinga` to open an Icinga PowerShell Framework shell,
+*Note:* Starting with Icinga PowerShell Framework `1.2.0` you can simply type `icinga -Shell` to open an Icinga PowerShell Framework shell,
 
 Once the command is executed, the Framework and all required components are loaded. To get started, we can now run
 

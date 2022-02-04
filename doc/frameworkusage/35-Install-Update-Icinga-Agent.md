@@ -2,7 +2,7 @@
 
 Managing the Icinga Agent is one of the main goals for Icinga for Windows. This also includes installing and updating the Icinga Agent itself.
 
-**Note:** Before using any of the commands below you will have to initialize the Icinga PowerShell Framework inside a new PowerShell instance with `Use-Icinga`. Starting with version `1.2.0` of the Framework you can also simply type `icinga` into the command line.
+**Note:** Before using any of the commands below you will have to initialize the Icinga PowerShell Framework inside a new PowerShell instance with `icinga -Shell`
 
 ## Installing the Icinga Agent
 

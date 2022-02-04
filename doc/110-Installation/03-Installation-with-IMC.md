@@ -5,7 +5,7 @@ We can now use the Icinga Management Console to configure our local Windows syst
 If we are not already inside the IMC, we can open it with
 
 ```powershell
-icinga -Manage;
+icinga;
 ```
 
 ## Installation menu

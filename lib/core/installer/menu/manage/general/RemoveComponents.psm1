@@ -24,14 +24,14 @@ function Show-IcingaForWindowsMenuRemoveComponents()
     }
 
     $UninstallFeatures += @{
-        'Caption'  = 'Uninstall Icinga Agent (include ProgramData)';
+        'Caption'  = 'Uninstall Icinga Agent including ProgramData';
         'Command'  = 'Show-IcingaForWindowsMenuRemoveComponents';
         'Help'     = 'Will remove the Icinga Agent from this system. Please note that this option will leave content inside "ProgramData", like certificates, alone'
         'Disabled' = (-Not (Test-Path -Path (Join-Path -Path $Env:ProgramData -ChildPath 'icinga2')));
         'Action'   = @{
             'Command'   = 'Show-IcingaWindowsManagementConsoleYesNoDialog';
             'Arguments' = @{
-                '-Caption'      = 'Uninstall Icinga Agent (include ProgramData)';
+                '-Caption'      = 'Uninstall Icinga Agent including ProgramData';;
                 '-Command'      = 'Uninstall-IcingaComponent';
                 '-CmdArguments' = @{
                     '-Name'               = 'agent';
@@ -59,14 +59,14 @@ function Show-IcingaForWindowsMenuRemoveComponents()
     }
 
     $UninstallFeatures += @{
-        'Caption'  = 'Uninstall Icinga for Windows Service (include files)';
+        'Caption'  = 'Uninstall Icinga for Windows Service including binary';
         'Command'  = 'Show-IcingaForWindowsMenuRemoveComponents';
         'Help'     = 'This will remove the icingapowershell service for Icinga for Windows if installed and the service binary including the folder, if empty afterwards'
         'Disabled' = (-Not (Test-Path $IcingaWindowsServiceData.Directory));
         'Action'   = @{
             'Command'   = 'Show-IcingaWindowsManagementConsoleYesNoDialog';
             'Arguments' = @{
-                '-Caption'      = 'Uninstall Icinga for Windows service (include files)';
+                '-Caption'      = 'Uninstall Icinga for Windows Service including binary';
                 '-Command'      = 'Uninstall-IcingaComponent';
                 '-CmdArguments' = @{
                     '-Name'               = 'service';
@@ -78,7 +78,7 @@ function Show-IcingaForWindowsMenuRemoveComponents()
 
     foreach ($module in $ModuleList) {
         $ComponentName = $module.Name.Replace('icinga-powershell-', '');
-        $Caption       = ([string]::Format('Uninstall component "{0}"', $ComponentName));
+        $Caption       = ([string]::Format('Uninstall "{0}"', $ComponentName));
 
         if ($ComponentName -eq 'framework' -Or $ComponentName -eq 'service' -Or $ComponentName -eq 'agent') {
             continue;
@@ -97,6 +97,39 @@ function Show-IcingaForWindowsMenuRemoveComponents()
                     '-CmdArguments' = @{
                         '-Name' = $ComponentName;
                     }
+                }
+            }
+        }
+    }
+
+    $UninstallFeatures += @{
+        'Caption' = 'Uninstall all components';
+        'Command' = 'Show-IcingaForWindowsMenuRemoveComponents';
+        'Help'    = 'This will remove all current installed components of Icinga for Windows, but will keep the Framework installed'
+        'Action'  = @{
+            'Command'   = 'Show-IcingaWindowsManagementConsoleYesNoDialog';
+            'Arguments' = @{
+                '-Caption'      = 'Uninstall all components';
+                '-Command'      = 'Uninstall-IcingaForWindows';
+                '-CmdArguments' = @{
+                    '-Force'          = $TRUE;
+                    '-ComponentsOnly' = $TRUE;
+                }
+            }
+        }
+    }
+
+    $UninstallFeatures += @{
+        'Caption' = 'Uninstall Icinga for Windows';
+        'Command' = 'Show-IcingaForWindowsMenuRemoveComponents';
+        'Help'    = 'This will remove everything installed and configured by Icinga for Windows on this machine'
+        'Action'  = @{
+            'Command'   = 'Show-IcingaWindowsManagementConsoleYesNoDialog';
+            'Arguments' = @{
+                '-Caption'      = 'Uninstall Icinga for Windows';
+                '-Command'      = 'Uninstall-IcingaForWindows';
+                '-CmdArguments' = @{
+                    '-Force' = $TRUE;
                 }
             }
         }

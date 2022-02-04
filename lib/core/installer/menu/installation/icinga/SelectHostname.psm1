@@ -40,6 +40,11 @@ function Show-IcingaForWindowsInstallerMenuSelectHostname()
                 'Caption' = ([string]::Format('"{0}": Hostname (uppercase)', (Get-IcingaHostname -AutoUseHostname 1 -UpperCase 1)));
                 'Command' = 'Show-IcingaForWindowsInstallerMenuEnterIcingaParentZone';
                 'Help'    = 'This will use the hostname only without FQDN extension and modify all characters to uppercase';
+            },
+            @{
+                'Caption' = 'Set custom Hostname';
+                'Command' = 'Show-IcingaForWindowsInstallationMenuEnterCustomHostname';
+                'Help'    = 'Allows you to set a custom hostname';
             }
         ) `
         -DefaultIndex $DefaultInput `
@@ -47,6 +52,16 @@ function Show-IcingaForWindowsInstallerMenuSelectHostname()
         -ConfigElement `
         -Automated:$Automated `
         -Advanced:$Advanced;
+
+    $LastInput = Get-IcingaForWindowsManagementConsoleLastInput;
+
+    if ([string]::IsNullOrEmpty($LastInput) -eq $FALSE -and $LastInput -ne '6') {
+        # Remove the set hostname in case we choose a different option
+        Remove-IcingaForWindowsInstallerConfigEntry -Menu 'Show-IcingaForWindowsInstallationMenuEnterCustomHostname';
+    } elseif ($LastInput -eq '6' -And $JumpToSummary) {
+        $global:Icinga.InstallWizard.NextCommand   = 'Show-IcingaForWindowsInstallationMenuEnterCustomHostname';
+        $global:Icinga.InstallWizard.NextArguments = @{ 'JumpToSummary' = $TRUE; };
+    }
 }
 
 Set-Alias -Name 'IfW-Hostname' -Value 'Show-IcingaForWindowsInstallerMenuSelectHostname';

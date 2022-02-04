@@ -5,7 +5,7 @@ function Show-Icinga()
     );
 
     $IcingaInstallation      = Get-IcingaInstallation -Release;
-    [array]$Output           = @( 'Icinga for Windows environment' );
+    [array]$Output           = @( 'Icinga for Windows environment:' );
     [array]$VersionList      = @();
     [int]$MaxComponentLength = Get-IcingaMaxTextLength -TextArray $IcingaInstallation.Keys;
 
@@ -30,31 +30,6 @@ function Show-Icinga()
         [array]$Output = @();
     }
 
-    $Output                 += 'Installed components on this system';
-    $Output                 += '';
-    $Output                 += [string]::Format('{0}   {1}   Available', $ComponentHeader, ((Add-IcingaWhiteSpaceToString -Text 'Version' -Length $MaxVersionLength)));
-    $Output                 += [string]::Format('{0}   {1}   ---', $ComponentLine, ((Add-IcingaWhiteSpaceToString -Text '---' -Length $MaxVersionLength)));
-
-    foreach ($component in $IcingaInstallation.Keys) {
-        $Data           = $IcingaInstallation[$component];
-        $LatestVersion  = $Data.LatestVersion;
-        $CurrentVersion = $Data.CurrentVersion;
-
-        if ([string]::IsNullOrEmpty($Data.LockedVersion) -eq $FALSE) {
-            if ($Data.LockedVersion -eq $Data.CurrentVersion) {
-                $CurrentVersion = [string]::Format('{0}*', $CurrentVersion);
-            } else {
-                $LatestVersion = [string]::Format('{0}*', $Data.LockedVersion);
-            }
-        }
-
-        [string]$ComponentName = Add-IcingaWhiteSpaceToString -Text $component -Length $MaxComponentLength;
-        $Output               += [string]::Format('{0}   {1}   {2}', $ComponentName, (Add-IcingaWhiteSpaceToString -Text $CurrentVersion -Length $MaxVersionLength), $LatestVersion);
-    }
-
-    $Output                 += '';
-    $Output                 += 'Available versions flagged with "*" mean that this component is locked to this version';
-
     $IcingaForWindowsService = Get-IcingaForWindowsServiceData;
     $IcingaAgentService      = Get-IcingaAgentInstallation;
     $WindowsInformation      = Get-IcingaWindowsInformation Win32_OperatingSystem | Select-Object Version, BuildNumber, Caption;
@@ -77,7 +52,7 @@ function Show-Icinga()
     }
 
     $Output += '';
-    $Output += 'Environment configuration';
+    $Output += 'Environment configuration:';
     $Output += '';
     $Output += ([string]::Format('PowerShell Root                 => {0}', (Get-IcingaForWindowsRootPath)));
     $Output += ([string]::Format('Icinga for Windows Service Path => {0}', $IcingaForWindowsService.Directory));
@@ -102,6 +77,33 @@ function Show-Icinga()
     $Output += (Show-IcingaRegisteredBackgroundDaemons);
     $Output += (Show-IcingaRegisteredServiceChecks);
     $Output += (Show-IcingaRepository);
+
+    $Output += 'Installed components on this system:';
+    $Output += '';
+    $Output += [string]::Format('{0}   {1}   Available', $ComponentHeader, ((Add-IcingaWhiteSpaceToString -Text 'Version' -Length $MaxVersionLength)));
+    $Output += [string]::Format('{0}   {1}   ---', $ComponentLine, ((Add-IcingaWhiteSpaceToString -Text '---' -Length $MaxVersionLength)));
+
+    $IcingaInstallation = $IcingaInstallation.GetEnumerator() | Sort-Object -Property Name;
+
+    foreach ($component in $IcingaInstallation) {
+        $Data           = $component.Value;
+        $LatestVersion  = $Data.LatestVersion;
+        $CurrentVersion = $Data.CurrentVersion;
+
+        if ([string]::IsNullOrEmpty($Data.LockedVersion) -eq $FALSE) {
+            if ($Data.LockedVersion -eq $Data.CurrentVersion) {
+                $CurrentVersion = [string]::Format('{0}*', $CurrentVersion);
+            } else {
+                $LatestVersion = [string]::Format('{0}*', $Data.LockedVersion);
+            }
+        }
+
+        [string]$ComponentName = Add-IcingaWhiteSpaceToString -Text $component.Name -Length $MaxComponentLength;
+        $Output               += [string]::Format('{0}   {1}   {2}', $ComponentName, (Add-IcingaWhiteSpaceToString -Text $CurrentVersion -Length $MaxVersionLength), $LatestVersion);
+    }
+
+    $Output += '';
+    $Output += 'Available versions flagged with "*" mean that this component is locked to this version';
 
     Write-Output $Output;
 }
