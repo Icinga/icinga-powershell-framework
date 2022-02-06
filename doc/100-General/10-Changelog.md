@@ -41,6 +41,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#459](https://github.com/Icinga/icinga-powershell-framework/pull/459) Fixes `Update-Icinga` which was not working to downgrade snapshot packages pack to release (**NOTE:** It can still happen that migrations of the `Framework` might break your environment. Not recommended in production environments for the `Framework` component)
 * [#460](https://github.com/Icinga/icinga-powershell-framework/issues/460) Fixes Icinga Agent installation over IMC and Director Self-Service, in case the Self-Service is configured to not install the Icinga Agent or the user manually set `Do not install Icinga Agent` inside the IMC, which results in most configurations not being applied to the Agent, in case it is already installed
 * [#461](https://github.com/Icinga/icinga-powershell-framework/issues/461) Fixes `Add-IcingaRepository` which now only overrides the `RemotePath` by using `-Force` instead of removing and adding the repository again, causing problems with installation orders over IMC for example
+* [#464](https://github.com/Icinga/icinga-powershell-framework/pull/464) Fixes Icinga for Windows uninstaller which did not remove the service binary for the PowerShell service
 
 ### Enhancements
 
