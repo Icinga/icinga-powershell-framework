@@ -61,7 +61,7 @@ function Uninstall-IcingaForWindows()
         Unregister-IcingaEventLog;
     }
     Write-IcingaConsoleNotice 'Uninstalling Icinga for Windows service';
-    Uninstall-IcingaForWindowsService | Out-Null;
+    Uninstall-IcingaForWindowsService -RemoveFiles | Out-Null;
 
     $HasErrors = $FALSE;
 
