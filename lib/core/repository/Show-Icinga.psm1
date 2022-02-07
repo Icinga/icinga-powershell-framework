@@ -37,6 +37,8 @@ function Show-Icinga()
     $JEAContext              = Get-IcingaJEAContext;
     $JEASessionFile          = Get-IcingaJEASessionFile;
     $IcingaForWindowsCert    = Get-IcingaForWindowsCertificate;
+    $ServicePid              = Get-IcingaForWindowsServicePid;
+    $JEAServicePid           = Get-IcingaJEAServicePid;
 
     if ([string]::IsNullOrEmpty($DefinedServiceUser)) {
         $DefinedServiceUser = '';
@@ -47,8 +49,11 @@ function Show-Icinga()
     if ([string]::IsNullOrEmpty($JEASessionFile)) {
         $JEASessionFile = '';
     }
-    if ($null -eq $IcingaForWindowsCert -Or [string]::IsNullOrEmpty($IcingaForWindowsCert)) {
-        $IcingaForWindowsCert = 'Not installed';
+    if ([string]::IsNullOrEmpty($ServicePid)) {
+        $ServicePid = '';
+    }
+    if ([string]::IsNullOrEmpty($JEAServicePid)) {
+        $JEAServicePid = '';
     }
 
     $Output += '';
@@ -57,6 +62,8 @@ function Show-Icinga()
     $Output += ([string]::Format('PowerShell Root                 => {0}', (Get-IcingaForWindowsRootPath)));
     $Output += ([string]::Format('Icinga for Windows Service Path => {0}', $IcingaForWindowsService.Directory));
     $Output += ([string]::Format('Icinga for Windows Service User => {0}', $IcingaForWindowsService.User));
+    $Output += ([string]::Format('Icinga for Windows Service Pid  => {0}', $ServicePid));
+    $Output += ([string]::Format('Icinga for Windows JEA Pid      => {0}', $JEAServicePid));
     $Output += ([string]::Format('Icinga Agent Path               => {0}', $IcingaAgentService.RootDir));
     $Output += ([string]::Format('Icinga Agent User               => {0}', $IcingaAgentService.User));
     $Output += ([string]::Format('Defined Default User            => {0}', $DefinedServiceUser));
@@ -69,9 +76,15 @@ function Show-Icinga()
     $Output += ([string]::Format('Api Check Forwarder             => {0}', (Get-IcingaFrameworkApiChecks)));
     $Output += ([string]::Format('Debug Mode                      => {0}', (Get-IcingaFrameworkDebugMode)));
     $Output += '';
-    $Output += 'Icinga for Windows Certificate';
+    $Output += 'Icinga for Windows Certificate:';
     $Output += '';
-    $Output += $IcingaForWindowsCert;
+    if ($null -eq $IcingaForWindowsCert -Or [string]::IsNullOrEmpty($IcingaForWindowsCert)) {
+        $Output += 'Not installed';
+    } else {
+        $Output += ([string]::Format('Issuer  => {0}', ($IcingaForWindowsCert.Issuer)));
+        $Output += ([string]::Format('Subject => {0}', ($IcingaForWindowsCert.Subject)));
+    }
+
     $Output += '';
 
     $Output += (Show-IcingaRegisteredBackgroundDaemons);
