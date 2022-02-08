@@ -7,6 +7,14 @@ documentation before upgrading to a new release.
 
 Released closed milestones can be found on [GitHub](https://github.com/Icinga/icinga-powershell-framework/milestones?state=closed).
 
+## 1.9.0 (2022-05-03)
+
+[Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/20?closed=1)
+
+### Enhancements
+
+* [#469](https://github.com/Icinga/icinga-powershell-framework/pull/469) Improves plugin doc generator to allow multi-lines in code examples and updates plugin overview as table, adding a short description on what the plugin is for
+
 ## 1.8.0 (2022-02-08)
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/19?closed=1)

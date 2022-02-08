@@ -47,11 +47,15 @@ function Publish-IcingaPluginDocumentation()
     Add-Content -Path $PluginDocFile -Value '\_ [WARNING] Core Total: 29,14817700% is greater than threshold 20% (15m avg.)';
     Add-Content -Path $PluginDocFile -Value "| 'core_total_1'=31.545677%;;;0;100 'core_total_15'=29.148177%;20;40;0;100 'core_total_5'=28.827410%;;;0;100 'core_total_20'=30.032942%;;;0;100 'core_total_3'=27.731669%;;;0;100 'core_total'=33.87817%;;;0;100";
     Add-Content -Path $PluginDocFile -Value '```';
+    Add-Content -Path $PluginDocFile -Value ''
+    Add-Content -Path $PluginDocFile -Value '| Plugin Name | Description |'
+    Add-Content -Path $PluginDocFile -Value '| ---         | --- |'
 
     $AvailablePlugins = Get-ChildItem -Path $PluginDir -Recurse -Filter *.psm1;
     foreach ($plugin in $AvailablePlugins) {
         [string]$PluginName    = $plugin.Name.Replace('.psm1', '');
         [string]$PluginDocName = '';
+        $PluginDetails         = Get-Help -Name $PluginName -Full;
         foreach ($DocFile in $MDFiles) {
             $DocFileName = $DocFile.Name;
             if ($DocFileName -Like "*$PluginName.md") {
@@ -73,9 +77,10 @@ function Publish-IcingaPluginDocumentation()
         [string]$PluginDescriptionFile = Join-Path -Path $PluginDocDir -ChildPath $PluginDocName;
 
         Add-Content -Path $PluginDocFile -Value ([string]::Format(
-            '* [{0}](plugins/{1})',
+            '| [{0}](plugins/{1}) | {2} |',
             $PluginName,
-            $PluginDocName
+            $PluginDocName,
+            $PluginDetails.Synopsis
         ));
 
         $PluginHelp = Get-Help $PluginName -Full;
@@ -136,10 +141,6 @@ function Publish-IcingaPluginDocumentation()
             foreach ($example in $PluginHelp.examples.example) {
                 [string]$ExampleDescription = $example.remarks.Text;
                 if ([string]::IsNullOrEmpty($ExampleDescription) -eq $FALSE) {
-                    $ExampleDescription = $ExampleDescription.Replace("`r`n", '');
-                    $ExampleDescription = $ExampleDescription.Replace("`r", '');
-                    $ExampleDescription = $ExampleDescription.Replace("`n", '');
-                    $ExampleDescription = $ExampleDescription.Replace('  ', '');
                 }
 
                 Add-Content -Path $PluginDescriptionFile -Value ([string]::Format('### Example Command {0}', $ExampleIndex));
