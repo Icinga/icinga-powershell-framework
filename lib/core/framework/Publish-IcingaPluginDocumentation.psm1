@@ -53,9 +53,17 @@ function Publish-IcingaPluginDocumentation()
 
     $AvailablePlugins = Get-ChildItem -Path $PluginDir -Recurse -Filter *.psm1;
     foreach ($plugin in $AvailablePlugins) {
-        [string]$PluginName    = $plugin.Name.Replace('.psm1', '');
-        [string]$PluginDocName = '';
-        $PluginDetails         = Get-Help -Name $PluginName -Full;
+        [string]$PluginName     = $plugin.Name.Replace('.psm1', '');
+        [string]$PluginDocName  = '';
+        [string]$PluginSynopsis = '-';
+        $PluginDetails          = Get-Help -Name $PluginName -Full;
+
+        if ($null -ne $PluginDetails -And [string]::IsNullOrEmpty($PluginDetails.Synopsis) -eq $FALSE) {
+            $PluginSynopsis = $PluginDetails.Synopsis.Replace("`r`n", ' ');
+            $PluginSynopsis = $PluginSynopsis.Replace("`r", ' ');
+            $PluginSynopsis = $PluginSynopsis.Replace("`n", ' ');
+        }
+
         foreach ($DocFile in $MDFiles) {
             $DocFileName = $DocFile.Name;
             if ($DocFileName -Like "*$PluginName.md") {
@@ -80,7 +88,7 @@ function Publish-IcingaPluginDocumentation()
             '| [{0}](plugins/{1}) | {2} |',
             $PluginName,
             $PluginDocName,
-            $PluginDetails.Synopsis
+            $PluginSynopsis
         ));
 
         $PluginHelp = Get-Help $PluginName -Full;
