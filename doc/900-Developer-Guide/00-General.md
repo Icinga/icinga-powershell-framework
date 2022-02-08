@@ -110,7 +110,7 @@ $Global:Icinga.Public.Threads.'Start-IcingaForWindowsDaemon::Add-IcingaForWindow
 
 This is a section reserved for Icinga for Windows and Icinga developers in general. This space will store general information for Icinga for Windows, determining on how the PowerShell instance is handling internal requests and procedures.
 
-As custom module developer, you can **read** from this space but are in genetal **not** allowed to store information there. Please use the `Private` and `Public` space for this.
+As custom module developer, you can **read** from this space but are in general **not** allowed to store information there. Please use the `Private` and `Public` space for this.
 
 The following entries are set by default within the `Protected` space:
 
@@ -141,7 +141,7 @@ The command ships with a bunch of configurations to modify the created `.psd1` i
 
 Once you have started to write your own code, you can use the Cmdlet `Publish-IcingaForWindowsComponent` to update the `NestedModules` attribute inside the `.psd1` file automatically, including the documentation in case the module is of type plugin.
 
-In addition, you ca create a `.zip` file for this module which can be integrated directly into the [Repository Manager](..\120-Repository-Manager\01-Add-Repositories.md). By default, created `.zip` files will be created in your home folder, the path can how ever be changed while executing the command.
+In addition, you ca create a `.zip` file for this module which can be integrated directly into the [Repository Manager](../120-Repository-Manager/01-Add-Repositories.md). By default, created `.zip` files will be created in your home folder, the path can how ever be changed while executing the command.
 
 | Argument             | Type   | Description                                     |
 | ---                  | ---    | ---                                             |

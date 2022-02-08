@@ -123,4 +123,4 @@ A huge benefit of the implementation we choose is the possibility to export the 
 Publish-IcingaEventLogDocumentation -Namespace 'Framework' -OutFile 'C:\users\public\EventLog-doc.md':
 ```
 
-An example on how the exported result looks like can be found on the [Framework EventLog Documentation](../100-General/20-EventLog.md).
+An example on how the exported result looks like can be found on the [Framework EventLog Documentation](../100-General/20-Eventlog.md).
