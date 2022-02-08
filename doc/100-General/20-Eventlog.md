@@ -2,12 +2,6 @@
 
 Below you will find a list of EventId's which are exported by this module. The short and detailed message are both written directly into the EventLog. This documentation shall simply provide a summary of available EventId's
 
-## Event Id 1000
-
-| Category | Short Message | Detailed Message |
-| --- | --- | --- |
-| Information | Generic debug message issued by the Framework or its components | The Framework or is components can issue generic debug message in case the debug log is enabled. Please ensure to disable it, if not used. You can do so with the command "Disable-IcingaFrameworkDebugMode" |
-
 ## Event Id 1001
 
 | Category | Short Message | Detailed Message |
@@ -44,6 +38,30 @@ Below you will find a list of EventId's which are exported by this module. The s
 | --- | --- | --- |
 | Error | Icinga for Windows background daemon not found | Icinga for Windows could not find the Function or Cmdlet for the specified background daemon. The daemon was not loaded. |
 
+## Event Id 1401
+
+| Category | Short Message | Detailed Message |
+| --- | --- | --- |
+| Error | Icinga for Windows thread pool not found | Icinga for Windows was unable to find a specified thread pool with [Get-IcingaThreadPool] for a background daemon. To keep the daemon running, it defaulted to a basic pool but this issue should be addressed. The name of the inquired pool is: |
+
+## Event Id 1450
+
+| Category | Short Message | Detailed Message |
+| --- | --- | --- |
+| Error | Icinga for Windows service check daemon invalid index | Icinga for Windows is unable to process the provided time index for a background service check task, as a given index is not numeric |
+
+## Event Id 1451
+
+| Category | Short Message | Detailed Message |
+| --- | --- | --- |
+| Error | Icinga for Windows service check daemon exception on plugin execution | Icinga for Windows failed to execute a plugin within the background service check daemon with an exception |
+
+## Event Id 1452
+
+| Category | Short Message | Detailed Message |
+| --- | --- | --- |
+| Error | Icinga for Windows service check daemon failed with exception | Icinga for Windows failed to properly execute a task within the background service check daemon with a given exception |
+
 ## Event Id 1500
 
 | Category | Short Message | Detailed Message |
@@ -78,7 +96,7 @@ Below you will find a list of EventId's which are exported by this module. The s
 
 | Category | Short Message | Detailed Message |
 | --- | --- | --- |
-| Warning | Icinga for Windows JEA context not available | The Icinga for Windows JEA session is no longer available and is attempted to be restarted on the system. This could have either happened due to a crash or a user action, like restarting the WinRM service. |
+| Warning | Icinga for Windows JEA context not available | The Icinga for Windows JEA session is no longer available and is attempted to be restarted on the system. This could have either happenend due to a crash or a user action, like restarting the WinRM service. |
 
 ## Event Id 1550
 
@@ -90,7 +108,7 @@ Below you will find a list of EventId's which are exported by this module. The s
 
 | Category | Short Message | Detailed Message |
 | --- | --- | --- |
-| Warning | Invalid authentication credentials provided | A web request for a client was rejected because of invalid formatted base64 encoded credentials. |
+| Warning | Invalid authentication credentials provided | A web request for a client was rejected because of invalid formated base64 encoded credentials. |
 
 ## Event Id 1552
 
