@@ -13,6 +13,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 ### Bugfixes
 
+* [#473](https://github.com/Icinga/icinga-powershell-framework/pull/473) Fixes an issue with current string rendering config implementation, as string values containing whitespaces or `$` are rendered wrong by default, if not set in single quotes `''`
 * [#476](https://github.com/Icinga/icinga-powershell-framework/pull/476) Fixes exception `You cannot call a method on va null-valued expression` during installation in case no background daemon is configured
 * [#529](https://github.com/Icinga/icinga-powershell-framework/pull/529) Fixes package manifest reader for Icinga for Windows components on Windows 2012 R2 and older
 * [#523](https://github.com/Icinga/icinga-powershell-framework/pull/523) Fixes errors on encapsulated PowerShell calls for missing Cmdlets `Write-IcingaConsoleError` and `Optimize-IcingaForWindowsMemory`
