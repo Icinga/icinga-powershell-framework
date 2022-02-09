@@ -7,6 +7,7 @@ cache/*
 .vs/
 *.log
 *.pfx
+*.dll
 
 # JEA
 RoleCapabilities/IcingaForWindows.psrc

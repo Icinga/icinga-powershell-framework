@@ -11,6 +11,10 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/20?closed=1)
 
+### Bugfixes
+
+* [#472](https://github.com/Icinga/icinga-powershell-framework/pull/472) Fixes random errors while dynamically compiling Add-Type code by now writing a DLL inside `cache/dll` for later usage
+
 ### Enhancements
 
 * [#469](https://github.com/Icinga/icinga-powershell-framework/pull/469) Improves plugin doc generator to allow multi-lines in code examples and updates plugin overview as table, adding a short description on what the plugin is for
