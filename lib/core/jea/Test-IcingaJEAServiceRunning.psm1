@@ -12,6 +12,10 @@ function Test-IcingaJEAServiceRunning()
         return $FALSE;
     }
 
+    if ($JeaPid -eq '0' -Or $JeaPid -eq 0) {
+        return $FALSE;
+    }
+
     $JeaPowerShellProcess = Get-Process -Id $JeaPid -ErrorAction SilentlyContinue;
     if ($null -eq $JeaPowerShellProcess) {
         return $FALSE;

@@ -26,12 +26,19 @@ function Start-IcingaService()
 
     if (Get-Service $Service -ErrorAction SilentlyContinue) {
         Write-IcingaConsoleNotice -Message 'Starting service "{0}"' -Objects $Service;
-        powershell.exe -Command {
-            $Service = $args[0]
 
-            Start-Service "$Service";
-        } -Args $Service;
+        Invoke-IcingaCommand -ArgumentList $Service -ScriptBlock {
+            try {
+                Start-Service "$($IcingaShellArgs[0])" -ErrorAction Stop;
+                Start-Sleep -Seconds 2;
+                Optimize-IcingaForWindowsMemory;
+            } catch {
+                Write-IcingaConsoleError -Message 'Failed to start service "{0}". Error: {1}' -Objects $IcingaShellArgs[0], $_.Exception.Message;
+            }
+        }
     } else {
         Write-IcingaConsoleWarning -Message 'The service "{0}" is not installed' -Objects $Service;
     }
+
+    Optimize-IcingaForWindowsMemory;
 }
