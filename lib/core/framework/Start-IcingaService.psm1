@@ -35,7 +35,7 @@ function Start-IcingaService()
             } catch {
                 Write-IcingaConsoleError -Message 'Failed to start service "{0}". Error: {1}' -Objects $IcingaShellArgs[0], $_.Exception.Message;
             }
-        }
+        } | Out-Null;
     } else {
         Write-IcingaConsoleWarning -Message 'The service "{0}" is not installed' -Objects $Service;
     }
