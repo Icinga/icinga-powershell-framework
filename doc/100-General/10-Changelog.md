@@ -16,6 +16,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#472](https://github.com/Icinga/icinga-powershell-framework/pull/472) Fixes random errors while dynamically compiling Add-Type code by now writing a DLL inside `cache/dll` for later usage
 * [#472](https://github.com/Icinga/icinga-powershell-framework/pull/472) Fixes random errors while dynamically compiling Add-Type code by now writing a DLL inside `cache/dll` for later usage
 * [#479](https://github.com/Icinga/icinga-powershell-framework/pull/479) Fixes possible exceptions while trying to remove downloaded repository temp files which might still contain a file lock from virusscanners or other tasks
+* [#480](https://github.com/Icinga/icinga-powershell-framework/pull/480) Fixes service locking during Icinga Agent upgrade and ensures errors on service management are caught and printed with internal error handling
 
 ### Enhancements
 

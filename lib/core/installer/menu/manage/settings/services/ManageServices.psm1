@@ -24,8 +24,8 @@ function Show-IcingaForWindowsMenuManageIcingaForWindowsServices()
                 'DisabledReason' = 'The Icinga Agent service is either not installed or the service is already running';
                 'AdminMenu'      = $TRUE;
                 'Action'         = @{
-                    'Command'   = 'Start-Service';
-                    'Arguments' = @{ '-Name' = 'icinga2'; };
+                    'Command'   = 'Start-IcingaService';
+                    'Arguments' = @{ '-Service' = 'icinga2'; };
                 }
             },
             @{
@@ -36,8 +36,8 @@ function Show-IcingaForWindowsMenuManageIcingaForWindowsServices()
                 'DisabledReason' = 'The Icinga Agent service is either not installed or the service is not running';
                 'AdminMenu'      = $TRUE;
                 'Action'         = @{
-                    'Command'   = 'Stop-Service';
-                    'Arguments' = @{ '-Name' = 'icinga2'; };
+                    'Command'   = 'Stop-IcingaService';
+                    'Arguments' = @{ '-Service' = 'icinga2'; };
                 }
             },
             @{
@@ -48,8 +48,8 @@ function Show-IcingaForWindowsMenuManageIcingaForWindowsServices()
                 'DisabledReason' = 'The Icinga Agent service is not installed';
                 'AdminMenu'      = $TRUE;
                 'Action'         = @{
-                    'Command'   = 'Restart-Service';
-                    'Arguments' = @{ '-Name' = 'icinga2'; };
+                    'Command'   = 'Restart-IcingaService';
+                    'Arguments' = @{ '-Service' = 'icinga2'; };
                 }
             },
             @{
@@ -71,8 +71,8 @@ function Show-IcingaForWindowsMenuManageIcingaForWindowsServices()
                 'DisabledReason' = 'The Icinga for Windows service is either not installed or already running';
                 'AdminMenu'      = $TRUE;
                 'Action'         = @{
-                    'Command'   = 'Start-Service';
-                    'Arguments' = @{ '-Name' = 'icingapowershell'; };
+                    'Command'   = 'Start-IcingaService';
+                    'Arguments' = @{ '-Service' = 'icingapowershell'; };
                 }
             },
             @{

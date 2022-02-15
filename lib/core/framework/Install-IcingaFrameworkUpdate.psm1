@@ -109,7 +109,7 @@ function Install-IcingaFrameworkUpdate()
     if ([string]::IsNullOrEmpty((Get-IcingaJEAContext)) -eq $FALSE) {
         Remove-IcingaFrameworkDependencyFile;
         Write-IcingaConsoleNotice 'Updating Icinga JEA profile';
-        Invoke-IcingaCommand { Install-IcingaJEAProfile };
+        Invoke-IcingaCommand { Install-IcingaJEAProfile; };
     }
 
     Write-IcingaConsoleNotice 'Framework update has been completed. Please start a new PowerShell instance now to complete the update';
