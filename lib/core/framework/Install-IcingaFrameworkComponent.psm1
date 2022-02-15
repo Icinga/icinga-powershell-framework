@@ -112,7 +112,7 @@ function Install-IcingaFrameworkComponent()
 
     if ([string]::IsNullOrEmpty((Get-IcingaJEAContext)) -eq $FALSE) {
         Write-IcingaConsoleNotice 'Updating Icinga JEA profile';
-        Invoke-IcingaCommand { Install-IcingaJEAProfile; };
+        Invoke-IcingaCommand -ScriptBlock { Install-IcingaJEAProfile; } | Out-Null;
     }
 
     # Unload the module if it was loaded before
