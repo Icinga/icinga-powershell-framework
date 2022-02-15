@@ -27,6 +27,14 @@ function Show-IcingaForWindowsInstallerMenuEnterIcingaCAFile()
         -ConfigElement `
         -Automated:$Automated `
         -Advanced:$Advanced;
+
+    # By default, we are never prompt to enter the CA target path, unless we are connecting
+    # from Parent->Agent, which is option 1 von IfW-Connection
+    # In case we run this configuration, we are forwarded from that menu to here and require
+    # to enter the hostname in addition
+    if ((Test-IcingaForWindowsManagementConsoleContinue) -And $JumpToSummary -eq $FALSE) {
+        $global:Icinga.InstallWizard.NextCommand = 'Show-IcingaForWindowsInstallerMenuSelectHostname';
+    }
 }
 
 Set-Alias -Name 'IfW-CAFile' -Value 'Show-IcingaForWindowsInstallerMenuEnterIcingaCAFile';

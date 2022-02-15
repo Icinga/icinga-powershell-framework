@@ -49,6 +49,17 @@ function Show-IcingaForWindowsInstallerMenuSelectCertificate()
             break;
         };
     }
+
+    # By Default, we are not jumping to the Summary on this menu but will require this in case
+    # we choose CAFile selection and are on the summary page, as then we do not want to be prompted
+    # for the Hostname again and require to tell the CA menu, that we should directly move to the
+    # summary page again
+    $LastInput = Get-IcingaForWindowsManagementConsoleLastInput;
+
+    if ($LastInput -eq '2' -And $JumpToSummary) {
+        $global:Icinga.InstallWizard.NextCommand   = 'Show-IcingaForWindowsInstallerMenuEnterIcingaCAFile';
+        $global:Icinga.InstallWizard.NextArguments = @{ 'JumpToSummary' = $TRUE; };
+    }
 }
 
 Set-Alias -Name 'IfW-Certificate' -Value 'Show-IcingaForWindowsInstallerMenuSelectCertificate';
