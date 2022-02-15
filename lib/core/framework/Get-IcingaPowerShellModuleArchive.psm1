@@ -119,7 +119,7 @@ function Get-IcingaPowerShellModuleArchive()
     if ((Invoke-IcingaWebRequest -UseBasicParsing -Uri $DownloadUrl -OutFile $DownloadDestination).HasErrors) {
         Write-IcingaConsoleError ([string]::Format('Failed to download "{0}" into "{1}". Starting cleanup process', $ModuleName, $DownloadDirectory));
         Start-Sleep -Seconds 2;
-        Remove-Item -Path $DownloadDirectory -Recurse -Force;
+        Remove-ItemSecure -Path $DownloadDirectory -Recurse -Force -Retries 5 | Out-Null;
 
         Write-IcingaConsoleNotice 'Starting to re-run the download wizard';
 

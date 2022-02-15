@@ -83,7 +83,7 @@ function Install-IcingaComponent()
     if ((Invoke-IcingaWebRequest -UseBasicParsing -Uri $FileSource -OutFile $DownloadDestination).HasErrors) {
         Write-IcingaConsoleError ([string]::Format('Failed to download "{0}" from "{1}" into "{2}". Starting cleanup process', $Name.ToLower(), $FileSource, $DownloadDestination));
         Start-Sleep -Seconds 2;
-        Remove-Item -Path $DownloadDirectory -Recurse -Force;
+        Remove-ItemSecure -Path $DownloadDirectory -Recurse -Force -Retries 5 | Out-Null;
 
         return;
     }
@@ -128,7 +128,7 @@ function Install-IcingaComponent()
             if ($null -eq $ManifestFile) {
                 Write-IcingaConsoleError ([string]::Format('Unable to read manifest for package "{0}". Aborting installation', $Name.ToLower()));
                 Start-Sleep -Seconds 2;
-                Remove-Item -Path $DownloadDirectory -Recurse -Force;
+                Remove-ItemSecure -Path $DownloadDirectory -Recurse -Force -Retries 5 | Out-Null;
                 return;
             }
 
@@ -145,7 +145,7 @@ function Install-IcingaComponent()
             if ($ManifestFile.ModuleVersion -eq $InstallVersion -And $Force -eq $FALSE) {
                 Write-IcingaConsoleWarning ([string]::Format('The package "{0}" with version "{1}" is already installed. Use "-Force" to re-install the component', $Name.ToLower(), $ManifestFile.ModuleVersion));
                 Start-Sleep -Seconds 2;
-                Remove-Item -Path $DownloadDirectory -Recurse -Force;
+                Remove-ItemSecure -Path $DownloadDirectory -Recurse -Force -Retries 5 | Out-Null;
                 return;
             }
 
@@ -285,13 +285,13 @@ function Install-IcingaComponent()
 
                 if ($Success -eq 0) {
                     Write-IcingaConsoleWarning ([string]::Format('The package "service" with version "{0}" is already installed. Use "-Force" to re-install the component', $InstalledService.ProductVersion));
-                    Remove-Item -Path $DownloadDirectory -Recurse -Force;
+                    Remove-ItemSecure -Path $DownloadDirectory -Recurse -Force -Retries 5 | Out-Null;
 
                     return;
                 }
 
                 if ($Success -eq 1) {
-                    Remove-Item -Path $DownloadDirectory -Recurse -Force;
+                    Remove-ItemSecure -Path $DownloadDirectory -Recurse -Force -Retries 5 | Out-Null;
                     Write-IcingaConsoleNotice 'Installation of component "service" was successful';
 
                     return;
@@ -299,7 +299,7 @@ function Install-IcingaComponent()
 
                 Write-IcingaConsoleError 'Failed to install component "service". Either the package did not include a service binary or the checksum of the binary did not match';
                 Start-Sleep -Seconds 2;
-                Remove-Item -Path $DownloadDirectory -Recurse -Force;
+                Remove-ItemSecure -Path $DownloadDirectory -Recurse -Force -Retries 5 | Out-Null;
                 return;
             } else {
                 Write-IcingaConsoleError 'There was no manifest file found inside the package';
@@ -352,7 +352,7 @@ function Install-IcingaComponent()
 
         if ($InstalledVersion.Full -eq $MSIData.ProductVersion -And $Force -eq $FALSE) {
             Write-IcingaConsoleWarning 'The package "agent" with version "{0}" is already installed. Use "-Force" to re-install the component' -Objects $InstalledVersion.Full;
-            Remove-Item -Path $DownloadDirectory -Recurse -Force;
+            Remove-ItemSecure -Path $DownloadDirectory -Recurse -Force -Retries 5 | Out-Null;
 
             return;
         }
@@ -391,6 +391,5 @@ function Install-IcingaComponent()
         Write-IcingaConsoleError ([string]::Format('Unsupported file extension "{0}" found for package "{1}". Aborting installation', ([IO.Path]::GetExtension($FileName)), $Name.ToLower()));
     }
 
-    Start-Sleep -Seconds 1;
-    Remove-Item -Path $DownloadDirectory -Recurse -Force;
+    Remove-ItemSecure -Path $DownloadDirectory -Recurse -Force -Retries 5 | Out-Null;
 }
