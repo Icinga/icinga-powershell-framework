@@ -20,8 +20,8 @@ function Show-IcingaForWindowsInstallerMenuSelectConnection()
             },
             @{
                 'Caption' = 'Connecting from parent system';
-                'Command' = 'Show-IcingaForWindowsInstallerMenuSelectHostname';
-                'Help'    = 'Choose this option if the Icinga Agent should not or cannot connect to a parent Icinga node and only connections from a Master/Satellite are possible. This will open the Windows firewall for the chosen Icinga protocol port (default 5665). Certificate generation might require additional steps.';
+                'Command' = 'Show-IcingaForWindowsInstallerMenuEnterIcingaCAFile';
+                'Help'    = 'Choose this option if the Icinga Agent should not or cannot connect to a parent Icinga node and only connections from a Master/Satellite are possible. This will open the Windows firewall for the chosen Icinga protocol port (default 5665). Certificate generation requires to specify the location of the Icinga ca.crt, which is required to complete the setup process.';
             },
             @{
                 'Caption' = 'Connecting from both systems';
@@ -39,6 +39,22 @@ function Show-IcingaForWindowsInstallerMenuSelectConnection()
         -ConfigElement `
         -Automated:$Automated `
         -Advanced:$Advanced;
+
+    # If we choose option 1 "Connecting from parent system", we require to ask the user for the
+    # location of the ca.crt, as otherwise the api feature will not be enabled. This section will
+    # ensure we are forwarded to the proper menu later on and certain options are defined for our
+    # certificate handling
+    $LastInput = Get-IcingaForWindowsManagementConsoleLastInput;
+
+    if ([string]::IsNullOrEmpty($LastInput) -eq $FALSE -and $LastInput -ne '1') {
+        # Remove the set hostname in case we choose a different option
+        Add-IcingaForWindowsInstallerConfigEntry -Selection '0' -OverwriteMenu 'Show-IcingaForWindowsInstallerMenuSelectCertificate' -Advanced;
+        Remove-IcingaForWindowsInstallerConfigEntry -Menu 'Show-IcingaForWindowsInstallerMenuEnterIcingaCAFile';
+    } elseif ($LastInput -eq '1') {
+        Add-IcingaForWindowsInstallerConfigEntry -Selection '2' -OverwriteMenu 'Show-IcingaForWindowsInstallerMenuSelectCertificate' -Advanced;
+        $global:Icinga.InstallWizard.NextCommand   = 'Show-IcingaForWindowsInstallerMenuEnterIcingaCAFile';
+        $global:Icinga.InstallWizard.NextArguments = @{ 'JumpToSummary' = $JumpToSummary; };
+    }
 }
 
 Set-Alias -Name 'IfW-Connection' -Value 'Show-IcingaForWindowsInstallerMenuSelectConnection';

@@ -14,6 +14,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 ### Bugfixes
 
 * [#472](https://github.com/Icinga/icinga-powershell-framework/pull/472) Fixes random errors while dynamically compiling Add-Type code by now writing a DLL inside `cache/dll` for later usage
+* [#478](https://github.com/Icinga/icinga-powershell-framework/pull/478) Fixes connection option "Connecting from parent system" which is not asking for ca.crt location
 
 ### Enhancements
 

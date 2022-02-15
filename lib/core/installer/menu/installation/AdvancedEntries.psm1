@@ -11,7 +11,11 @@ function Add-IcingaForWindowsInstallationAdvancedEntries()
 
     Show-IcingaForWindowsInstallationMenuEnterIcingaPort -Automated -Advanced;
     Show-IcingaForWindowsInstallerMenuSelectOpenWindowsFirewall -DefaultInput $OpenFirewall -Automated -Advanced;
-    Show-IcingaForWindowsInstallerMenuSelectCertificate -Automated -Advanced;
+    # Only apply the certificate menu in case it was not selected previously, if
+    # we choose IfW-Connection 1 for example, which tells the Parent to connect to Agent only
+    if ($null -eq (Get-IcingaForWindowsInstallerStepSelection -InstallerStep 'Show-IcingaForWindowsInstallerMenuSelectCertificate')) {
+        Show-IcingaForWindowsInstallerMenuSelectCertificate -Automated -Advanced;
+    }
     Show-IcingaForWindowsInstallerMenuSelectForceCertificateGeneration -Automated -Advanced;
     Show-IcingaForWindowsInstallerMenuSelectGlobalZones -Automated -Advanced;
     Show-IcingaForWindowsInstallationMenuEnterCustomGlobalZones -Automated -Advanced;
