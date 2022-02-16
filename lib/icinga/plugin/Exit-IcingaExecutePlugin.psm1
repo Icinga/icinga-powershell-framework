@@ -4,6 +4,8 @@ function Exit-IcingaExecutePlugin()
         [string]$Command = ''
     );
 
+    # We need to fix the argument encoding hell
+    [hashtable]$ConvertedArgs      = ConvertTo-IcingaPowerShellArguments -Arguments $args;
     [string]$JEAProfile            = Get-IcingaJEAContext;
     [bool]$CheckByIcingaForWindows = $FALSE;
     [bool]$CheckByJEAShell         = $FALSE;
@@ -19,7 +21,7 @@ function Exit-IcingaExecutePlugin()
     # checks from a Linux/Windows remote source
     if ($CheckByIcingaForWindows) {
         # First try to queue the check over the REST-Api
-        $CheckResult = Invoke-IcingaInternalServiceCall -Command $Command -Arguments $args -NoExit;
+        $CheckResult = Invoke-IcingaInternalServiceCall -Command $Command -Arguments $ConvertedArgs -NoExit;
 
         if ($null -ne $CheckResult) {
             # Seems we got a result
@@ -36,14 +38,14 @@ function Exit-IcingaExecutePlugin()
 
         try {
             # Execute our plugin
-            (& $Command @args) | Out-Null;
+            (& $Command @ConvertedArgs) | Out-Null;
         } catch {
             # Handle errors within our plugins
             # If anything goes wrong handle the error very detailed
 
             $Global:Icinga.Protected.RunAsDaemon = $FALSE;
-            Write-IcingaExecutePluginException -Command $Command -ErrorObject $_ -Arguments $args;
-            $args.Clear();
+            Write-IcingaExecutePluginException -Command $Command -ErrorObject $_ -Arguments $ConvertedArgs;
+            $ConvertedArgs.Clear();
 
             # Do not close the session, we need to read the ExitCode from Get-IcingaInternalPluginExitCode
             # The plugin itself will terminate the session
@@ -64,7 +66,7 @@ function Exit-IcingaExecutePlugin()
 
     # Regardless of JEA enabled or disabled, forward all checks to the internal API
     # and check if we get a result from there
-    Invoke-IcingaInternalServiceCall -Command $Command -Arguments $args;
+    Invoke-IcingaInternalServiceCall -Command $Command -Arguments $ConvertedArgs;
 
     try {
         # If the plugin is not installed, throw a good exception
@@ -106,7 +108,7 @@ function Exit-IcingaExecutePlugin()
                         'PerfData' = (Get-IcingaCheckSchedulerPerfData)
                         'ExitCode' = $ExitCode;
                     }
-                } -args $Command, $args
+                } -args $Command, $ConvertedArgs
             ) 2>$ErrorHandler;
 
             # If we have an exit code larger or equal 0, the execution inside the JEA shell was successfully and we can share the result
@@ -123,12 +125,12 @@ function Exit-IcingaExecutePlugin()
         } else {
             # If we simply run the check without JEA context or from remote, we can just execute the plugin and
             # exit with the exit code received from the result
-            exit (& $Command @args);
+            exit (& $Command @ConvertedArgs);
         }
     } catch {
         # If anything goes wrong handle the error
-        Write-IcingaExecutePluginException -Command $Command -ErrorObject $_ -Arguments $args;
-        $args.Clear();
+        Write-IcingaExecutePluginException -Command $Command -ErrorObject $_ -Arguments $ConvertedArgs;
+        $ConvertedArgs.Clear();
 
         exit 3;
     }

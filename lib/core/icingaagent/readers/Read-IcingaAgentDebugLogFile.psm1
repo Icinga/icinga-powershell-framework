@@ -6,5 +6,5 @@ function Read-IcingaAgentDebugLogFile()
         return;
     }
 
-    Get-Content -Path $Logfile -Tail 20 -Wait;
+    Get-Content -Path $Logfile -Tail 20 -Wait -Encoding 'UTF8';
 }
