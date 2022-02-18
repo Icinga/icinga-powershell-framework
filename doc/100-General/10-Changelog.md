@@ -28,6 +28,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#495](https://github.com/Icinga/icinga-powershell-framework/pull/495) Adds feature to check the sign status for the local Icinga Agent certificate and notifying the user, in case the certificate is not yet signed by the Icinga CA
 * [#496](https://github.com/Icinga/icinga-powershell-framework/pull/496) Improves REST-Api default timeout for internal plugin execution calls from 30s to 120s
 * [#498](https://github.com/Icinga/icinga-powershell-framework/pull/498) Adds feature for thread queuing optimisation and frozen thread detection for REST calls
+* [#514](https://github.com/Icinga/icinga-powershell-framework/pull/514) Adds support for Icinga for Windows module isolation
 
 ## 1.8.0 (2022-02-08)
 

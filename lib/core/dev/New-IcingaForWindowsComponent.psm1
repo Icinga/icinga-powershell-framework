@@ -75,13 +75,19 @@ function New-IcingaForWindowsComponent()
         'plugins' {
             New-Item -ItemType Directory -Path (Join-Path -Path $ModuleDir -ChildPath 'plugins') | Out-Null;
             New-Item -ItemType Directory -Path (Join-Path -Path $ModuleDir -ChildPath 'provider') | Out-Null;
+            New-Item -ItemType Directory -Path (Join-Path -Path $ModuleDir -ChildPath 'provider\public') | Out-Null;
+            New-Item -ItemType Directory -Path (Join-Path -Path $ModuleDir -ChildPath 'provider\private') | Out-Null;
             New-Item -ItemType Directory -Path (Join-Path -Path $ModuleDir -ChildPath 'lib') | Out-Null;
+            New-Item -ItemType Directory -Path (Join-Path -Path $ModuleDir -ChildPath 'lib\public') | Out-Null;
+            New-Item -ItemType Directory -Path (Join-Path -Path $ModuleDir -ChildPath 'lib\private') | Out-Null;
 
             break;
         };
         'apiendpoint' {
             New-Item -ItemType Directory -Path (Join-Path -Path $ModuleDir -ChildPath 'endpoint') | Out-Null;
             New-Item -ItemType Directory -Path (Join-Path -Path $ModuleDir -ChildPath 'lib') | Out-Null;
+            New-Item -ItemType Directory -Path (Join-Path -Path $ModuleDir -ChildPath 'lib\public') | Out-Null;
+            New-Item -ItemType Directory -Path (Join-Path -Path $ModuleDir -ChildPath 'lib\private') | Out-Null;
 
             [string]$RegisterFunction     = ([string]::Format('Register-IcingaRESTAPIEndpoint{0}', $TextInfo.ToTitleCase($Name.ToLower())));
             [string]$RegisterFunctionFile = (Join-Path -Path $ModuleDir -ChildPath ([string]::Format('endpoint\{0}.psm1', $RegisterFunction)));
@@ -124,6 +130,8 @@ function New-IcingaForWindowsComponent()
         'daemon' {
             New-Item -ItemType Directory -Path (Join-Path -Path $ModuleDir -ChildPath 'daemon') | Out-Null;
             New-Item -ItemType Directory -Path (Join-Path -Path $ModuleDir -ChildPath 'lib') | Out-Null;
+            New-Item -ItemType Directory -Path (Join-Path -Path $ModuleDir -ChildPath 'lib\public') | Out-Null;
+            New-Item -ItemType Directory -Path (Join-Path -Path $ModuleDir -ChildPath 'lib\private') | Out-Null;
             New-Item `
                 -ItemType File `
                 -Path (Join-Path -Path (Join-Path -Path $ModuleDir -ChildPath 'daemon') -ChildPath ([string]::Format('Start-IcingaForWindowsDaemon{0}.psm1', $TextInfo.ToTitleCase($Name.ToLower())))) | Out-Null;
@@ -182,6 +190,8 @@ function New-IcingaForWindowsComponent()
         };
         'library' {
             New-Item -ItemType Directory -Path (Join-Path -Path $ModuleDir -ChildPath 'lib') | Out-Null;
+            New-Item -ItemType Directory -Path (Join-Path -Path $ModuleDir -ChildPath 'lib\public') | Out-Null;
+            New-Item -ItemType Directory -Path (Join-Path -Path $ModuleDir -ChildPath 'lib\private') | Out-Null;
 
             break;
         }
@@ -193,23 +203,26 @@ function New-IcingaForWindowsComponent()
         -Force | Out-Null;
 
     Write-IcingaForWindowsComponentManifest -Name $Name -ModuleConfig @{
-        '$MODULENAME$'      = ([string]::Format('Windows {0}', $Name));
-        '$GUID$'            = (New-Guid);
-        '$ROOTMODULE$'      = ([string]::Format('{0}.psm1', $ModuleName));
-        '$AUTHOR$'          = $Author;
-        '$COMPANYNAME$'     = $CompanyName;
-        '$COPYRIGHT$'       = $Copyright;
-        '$MODULEVERSION$'   = $ModuleVersion.ToString();
-        '$VMODULEVERSION$'  = ([string]::Format('v{0}', $ModuleVersion.ToString()));
-        '$DESCRIPTION$'     = $Description;
-        '$REQUIREDMODULES$' = $RequiredModules;
-        '$NESTEDMODULES$'   = '';
-        '$TAGS$'            = $Tags;
-        '$PROJECTURI$'      = $ProjectUri;
-        '$LICENSEURI$'      = $LicenseUri;
-        '$COMPONENTTYPE$'   = $ComponentType;
-        '$DAEMONFUNCTION$'  = $DaemonFunction;
-        '$APIENDPOINT$'     = $EndpointName;
+        '$MODULENAME$'        = ([string]::Format('Windows {0}', $Name));
+        '$GUID$'              = (New-Guid);
+        '$ROOTMODULE$'        = ([string]::Format('{0}.psm1', $ModuleName));
+        '$AUTHOR$'            = $Author;
+        '$COMPANYNAME$'       = $CompanyName;
+        '$COPYRIGHT$'         = $Copyright;
+        '$MODULEVERSION$'     = $ModuleVersion.ToString();
+        '$VMODULEVERSION$'    = ([string]::Format('v{0}', $ModuleVersion.ToString()));
+        '$DESCRIPTION$'       = $Description;
+        '$REQUIREDMODULES$'   = $RequiredModules;
+        '$NESTEDMODULES$'     = '';
+        '$FUNCTIONSTOEXPORT$' = '';
+        '$VARIABLESTOEXPORT$' = '';
+        '$ALIASESTOEXPORT$'   = '';
+        '$TAGS$'              = $Tags;
+        '$PROJECTURI$'        = $ProjectUri;
+        '$LICENSEURI$'        = $LicenseUri;
+        '$COMPONENTTYPE$'     = $ComponentType;
+        '$DAEMONFUNCTION$'    = $DaemonFunction;
+        '$APIENDPOINT$'       = $EndpointName;
     };
 
     Set-Content `

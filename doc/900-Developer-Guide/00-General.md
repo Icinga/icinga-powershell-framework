@@ -121,6 +121,18 @@ The following entries are set by default within the `Protected` space:
 | DebugMode   | Enables the debug mode of Icinga for Windows, printing additional details during operations or tasks |
 | Minimal     | Changes certain behavior regarding check execution and internal error handling |
 
+## Private and Public Functions
+
+Icinga for Windows will by default only export `Functions` and `Cmdlets`, in case they are either located within the `root .psm1` file, inside a folder called `public` or in case `Global:` is added before the function:
+
+```powershell
+function Global:Invoke-MyCommand()
+```
+
+In addition, all commands with the alias `Invoke-IcingaCheck` are automatically exported for plugins. This ensures that each module is isolated from each other and functions with the same name can be used within different modules, without overwriting existing ones. This ensures a better integrity of the module itself.
+
+Last but not least, each module is created with a compilation file which is created during the first run of the module and used later on. This ensures en even faster response and reduced load on the system.
+
 ## Using Icinga for Windows Dev Tools
 
 Maintaining the entire structure above seems to be complicated at the beginning, especially when considering to update the `NestedModules` section whenever you make changes. To mitigate this, Icinga for Windows provides a bunch of Cmdlets to help with the process
@@ -139,7 +151,7 @@ The command ships with a bunch of configurations to modify the created `.psd1` i
 
 ### Publish/Update Components
 
-Once you have started to write your own code, you can use the Cmdlet `Publish-IcingaForWindowsComponent` to update the `NestedModules` attribute inside the `.psd1` file automatically, including the documentation in case the module is of type plugin.
+Once you have started to write your own code, you can use the Cmdlet `Publish-IcingaForWindowsComponent` to compile and add requires functions for the calls, including the documentation in case the module is of type plugin.
 
 In addition, you ca create a `.zip` file for this module which can be integrated directly into the [Repository Manager](../120-Repository-Manager/01-Add-Repositories.md). By default, created `.zip` files will be created in your home folder, the path can how ever be changed while executing the command.
 
@@ -148,6 +160,8 @@ In addition, you ca create a `.zip` file for this module which can be integrated
 | Name                 | String | The name of your Icinga for Windows component to update information from |
 | ReleasePackagePath   | String | The path on where the `.zip` file will be created in. Defaults to the current users home folder |
 | CreateReleasePackage | Switch | This will toggle the `.zip` file creation of the specified package |
+
+Please note that using `Publish-IcingaForWindowsComponent` is mandatory, before you can use the module on target systems. Each Icinga for Windows module is isolated from the general environment and allows to overwrite certain functions locally, inside the module instead of having to worry about them being overwritten on other, critical areas.
 
 ### Testing Your Component
 
