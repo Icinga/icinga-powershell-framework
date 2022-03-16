@@ -11,11 +11,11 @@ function Uninstall-IcingaComponent()
     }
 
     if ($Name.ToLower() -eq 'agent') {
-        return Uninstall-IcingaAgent -RemoveDataFolder:$RemovePackageFiles;
+        return (Uninstall-IcingaAgent -RemoveDataFolder:$RemovePackageFiles);
     }
 
     if ($Name.ToLower() -eq 'service') {
-        return; Uninstall-IcingaForWindowsService -RemoveFiles:$RemovePackageFiles;
+        return (Uninstall-IcingaForWindowsService -RemoveFiles:$RemovePackageFiles);
     }
 
     $ModuleBase         = Get-IcingaForWindowsRootPath;
