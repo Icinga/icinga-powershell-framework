@@ -11,6 +11,10 @@
     properly
 .PARAMETER ClearErrorStack
     Also clears the current error stack to free additional memory
+.PARAMETER SmartGC
+    Ensures that memory is not flushed whenever this function is called, but instead
+    every 30 attempts this function is called to reduce CPU load. Only works for
+    PowerShell sessions with "$Global:Icinga.Protected.ThreadName" being set
 .EXAMPLE
     Optimize-IcingaForWindowsMemory;
 .EXAMPLE
@@ -21,8 +25,25 @@
 function Optimize-IcingaForWindowsMemory()
 {
     param (
-        [switch]$ClearErrorStack = $FALSE
+        [switch]$ClearErrorStack = $FALSE,
+        [switch]$SmartGC         = $FALSE
     );
+
+    if ([string]::IsNullOrEmpty($Global:Icinga.Protected.ThreadName) -eq $FALSE -And $SmartGC) {
+        if ($Global:Icinga.Protected.GarbageCollector.ContainsKey($Global:Icinga.Protected.ThreadName) -eq $FALSE) {
+            $Global:Icinga.Protected.GarbageCollector.Add($Global:Icinga.Protected.ThreadName, 0);
+
+            return;
+        } else {
+            $Global:Icinga.Protected.GarbageCollector[$Global:Icinga.Protected.ThreadName] += 1;
+        }
+
+        if ($Global:Icinga.Protected.GarbageCollector[$Global:Icinga.Protected.ThreadName] -le 30) {
+            return;
+        }
+
+        $Global:Icinga.Protected.GarbageCollector[$Global:Icinga.Protected.ThreadName] = 0;
+    }
 
     # Clear all errors within our error stack
     if ($ClearErrorStack) {

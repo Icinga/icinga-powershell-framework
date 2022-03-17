@@ -20,9 +20,12 @@ function Add-IcingaForWindowsDaemon()
     }
 
     while ($TRUE) {
-        Start-Sleep -Seconds 1;
+        Start-Sleep -Seconds 10;
 
         # Handle possible threads being frozen
         Suspend-IcingaForWindowsFrozenThreads;
+
+        # Force Icinga for Windows Garbage Collection
+        Optimize-IcingaForWindowsMemory -ClearErrorStack -SmartGC;
     }
 }

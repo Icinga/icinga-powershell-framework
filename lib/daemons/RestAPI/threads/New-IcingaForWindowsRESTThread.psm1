@@ -101,6 +101,6 @@ function New-IcingaForWindowsRESTThread()
         Close-IcingaTCPConnection -Client $Connection.Client;
 
         # Force Icinga for Windows Garbage Collection
-        Optimize-IcingaForWindowsMemory -ClearErrorStack;
+        Optimize-IcingaForWindowsMemory -ClearErrorStack -SmartGC;
     }
 }

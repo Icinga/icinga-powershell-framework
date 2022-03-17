@@ -78,7 +78,7 @@ function New-IcingaForWindowsRESTApi()
     while ($TRUE) {
 
         # Force Icinga for Windows Garbage Collection
-        Optimize-IcingaForWindowsMemory -ClearErrorStack;
+        Optimize-IcingaForWindowsMemory -ClearErrorStack -SmartGC;
 
         $Connection = Open-IcingaTCPClientConnection `
             -Client (New-IcingaTCPClient -Socket $Socket) `

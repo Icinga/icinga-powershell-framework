@@ -62,5 +62,6 @@ function New-IcingaEnvironmentVariable()
         $Global:Icinga.Protected.Add('RunAsDaemon', $FALSE);
         $Global:Icinga.Protected.Add('Minimal', $FALSE);
         $Global:Icinga.Protected.Add('ThreadName', '');
+        $Global:Icinga.Protected.Add('GarbageCollector', @{ });
     }
 }
