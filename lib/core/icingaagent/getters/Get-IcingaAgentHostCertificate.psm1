@@ -27,6 +27,16 @@ function Get-IcingaAgentHostCertificate()
 
     $Certificate = New-Object Security.Cryptography.X509Certificates.X509Certificate2 $CertPath;
 
+    if ($null -ne $Certificate) {
+        if ($Certificate.Issuer.ToLower() -eq ([string]::Format('cn={0}', $Hostname).ToLower())) {
+            Write-IcingaConsoleWarning `
+                -Message 'The Icinga Agent certificate "{0}" seems not to be signed by our Icinga CA yet. Using this certificate for the REST-Api as example might not work. Please check the state of the certificate and complete the signing process if required. [IWKB000013]' `
+                -Objects $CertPath;
+
+            Write-IcingaEventMessage -EventId 1506 -Namespace 'Framework' -Objects $CertPath;
+        }
+    }
+
     return @{
         'CertFile'   = $CertPath;
         'Subject'    = $Certificate.Subject;

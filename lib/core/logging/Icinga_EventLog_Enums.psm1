@@ -101,8 +101,14 @@ if ($null -eq $IcingaEventLogEnums -Or $IcingaEventLogEnums.ContainsKey('Framewo
             1505 = @{
                 'EntryType' = 'Warning';
                 'Message'   = 'Icinga for Windows JEA context not available';
-                'Details'   = 'The Icinga for Windows JEA session is no longer available and is attempted to be restarted on the system. This could have either happenend due to a crash or a user action, like restarting the WinRM service.';
+                'Details'   = 'The Icinga for Windows JEA session is no longer available and is attempted to be restarted on the system. This could have either happened due to a crash or a user action, like restarting the WinRM service.';
                 'EventId'   = 1505;
+            };
+            1506 = @{
+                'EntryType' = 'Error';
+                'Message'   = 'Icinga Agent certificate not signed by Icinga CA';
+                'Details'   = 'The local Icinga Agent certificate seems not to be signed by our Icinga CA yet. Using this certificate for the REST-Api as example might not work yet. Please check the state of the certificate and complete the signing process if required [IWKB000013]';
+                'EventId'   = 1506;
             };
             1550 = @{
                 'EntryType' = 'Error';
@@ -113,7 +119,7 @@ if ($null -eq $IcingaEventLogEnums -Or $IcingaEventLogEnums.ContainsKey('Framewo
             1551 = @{
                 'EntryType' = 'Warning';
                 'Message'   = 'Invalid authentication credentials provided';
-                'Details'   = 'A web request for a client was rejected because of invalid formated base64 encoded credentials.';
+                'Details'   = 'A web request for a client was rejected because of invalid formatted base64 encoded credentials.';
                 'EventId'   = 1551;
             };
             1552 = @{
