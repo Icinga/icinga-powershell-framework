@@ -34,7 +34,7 @@ function Get-IcingaSSLCertForSocket()
         }
     }
 
-    # If no cert file or thumbprint was specified or simpy as fallback,
+    # If no cert file or thumbprint was specified or simply as fallback,
     # we should use the Icinga 2 Agent certificates
     $AgentCertificate = Get-IcingaAgentHostCertificate;
 

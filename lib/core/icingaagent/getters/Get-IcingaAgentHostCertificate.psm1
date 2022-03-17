@@ -11,7 +11,7 @@ function Get-IcingaAgentHostCertificate()
     # Default for Icinga 2.8.0 and above
     [string]$CertDirectory = (Join-Path -Path $Env:ProgramData -ChildPath 'icinga2\var\lib\icinga2\certs\*');
     $FolderContent         = Get-ChildItem -Path $CertDirectory -Filter '*.crt' -Exclude 'ca.crt';
-    $Hostname              = Get-IcingaHostname -LowerCase $TRUE;
+    $Hostname              = Get-IcingaHostname -ReadConstants;
     $CertPath              = $null;
 
     foreach ($certFile in $FolderContent) {
