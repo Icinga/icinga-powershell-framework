@@ -51,7 +51,7 @@ function Start-IcingaWindowsRESTApi()
         [string]$CertThumbprint = $null,
         [bool]$RequireAuth      = $FALSE,
         [int]$ConcurrentThreads = 5,
-        [int]$Timeout           = 30
+        [int]$Timeout           = 120
     );
 
     New-IcingaForWindowsRESTEnvironment -ThreadCount $ConcurrentThreads;
