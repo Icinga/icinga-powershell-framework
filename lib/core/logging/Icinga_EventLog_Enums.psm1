@@ -110,6 +110,12 @@ if ($null -eq $IcingaEventLogEnums -Or $IcingaEventLogEnums.ContainsKey('Framewo
                 'Details'   = 'The local Icinga Agent certificate seems not to be signed by our Icinga CA yet. Using this certificate for the REST-Api as example might not work yet. Please check the state of the certificate and complete the signing process if required [IWKB000013]';
                 'EventId'   = 1506;
             };
+            1507 = @{
+                'EntryType' = 'Error';
+                'Message'   = 'An internal threading error occurred. A frozen thread was detected';
+                'Details'   = 'One of the internal Icinga for Windows threads was being active but not responding for at least 5 minutes. The frozen thread has been terminated and restarted.';
+                'EventId'   = 1507;
+            };
             1550 = @{
                 'EntryType' = 'Error';
                 'Message'   = 'Unsupported web authentication used';

@@ -1,6 +1,6 @@
 function New-IcingaForWindowsRESTThread()
 {
-    param(
+    param (
         $RequireAuth,
         $ThreadId
     );
@@ -69,6 +69,9 @@ function New-IcingaForWindowsRESTThread()
                     }
                 }
 
+                # Set our thread being active
+                Set-IcingaForWindowsThreadAlive -ThreadName $Global:Icinga.Protected.ThreadName -Active -TerminateAction @{ 'Command' = 'Close-IcingaTCPConnection'; 'Arguments' = @{ 'Client' = $Connection.Client } };
+
                 # We should remove clients from the blacklist who are sending valid requests
                 Remove-IcingaRESTClientBlacklist -Client $Connection.Client -ClientList $Global:Icinga.Public.Daemons.RESTApi.ClientBlacklist;
                 switch (Get-IcingaRESTPathElement -Request $RESTRequest -Index 0) {
@@ -85,6 +88,10 @@ function New-IcingaForWindowsRESTThread()
                         ) -Stream $Connection.Stream;
                     };
                 }
+
+                # set our thread no longer be active. We do this, because below there is no way we can
+                # actually get stuck on a endless loop, caused by external modules
+                Set-IcingaForWindowsThreadAlive -ThreadName $Global:Icinga.Protected.ThreadName;
             }
         } catch {
             $ExMsg = $_.Exception.Message;

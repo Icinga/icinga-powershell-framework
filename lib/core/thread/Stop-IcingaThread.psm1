@@ -1,7 +1,7 @@
 function Stop-IcingaThread()
 {
-    param(
-        [string]$Thread
+    param (
+        [string]$Thread = ''
     );
 
     if ([string]::IsNullOrEmpty($Thread)) {
