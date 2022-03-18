@@ -24,6 +24,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 * [#469](https://github.com/Icinga/icinga-powershell-framework/pull/469) Improves plugin doc generator to allow multi-lines in code examples and updates plugin overview as table, adding a short description on what the plugin is for
 * [#495](https://github.com/Icinga/icinga-powershell-framework/pull/495) Adds feature to check the sign status for the local Icinga Agent certificate and notifying the user, in case the certificate is not yet signed by the Icinga CA
+* [#496](https://github.com/Icinga/icinga-powershell-framework/pull/496) Improves REST-Api default timeout for internal plugin execution calls from 30s to 120s
 
 ## 1.8.0 (2022-02-08)
 

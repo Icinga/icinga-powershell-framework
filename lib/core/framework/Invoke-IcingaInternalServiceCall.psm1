@@ -31,7 +31,7 @@ function Invoke-IcingaInternalServiceCall()
     }
 
     $RestApiPort  = 5668;
-    [int]$Timeout = 30;
+    [int]$Timeout = 120;
     $Daemon       = $BackgroundDaemons['Start-IcingaWindowsRESTApi'];
 
     # Fetch our deamon configuration
