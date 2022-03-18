@@ -15,5 +15,6 @@ function Start-IcingaForWindowsRESTThread()
             'RequireAuth' = $RequireAuth;
             'ThreadId'    = $ThreadId;
         } `
-        -Start;
+        -Start `
+        -CheckAliveState;
 }

@@ -1,23 +1,39 @@
 function New-IcingaThreadInstance()
 {
     param (
-        [string]$Name,
-        $ThreadPool,
-        [ScriptBlock]$ScriptBlock,
-        [string]$Command,
-        [hashtable]$CmdParameters,
-        [array]$Arguments,
-        [Switch]$Start
+        [string]$Name             = '',
+        [string]$ThreadName       = $null,
+        $ThreadPool               = $null,
+        [ScriptBlock]$ScriptBlock = $null,
+        [string]$Command          = '',
+        [hashtable]$CmdParameters = @{ },
+        [array]$Arguments         = @(),
+        [Switch]$Start            = $FALSE,
+        [switch]$CheckAliveState  = $FALSE
     );
 
-    $CallStack     = Get-PSCallStack;
-    $SourceCommand = $CallStack[1].Command;
+    if ([string]::IsNullOrEmpty($ThreadName)) {
+        $CallStack     = Get-PSCallStack;
+        $SourceCommand = $CallStack[1].Command;
 
-    if ([string]::IsNullOrEmpty($Name)) {
-        $Name = New-IcingaThreadHash -ShellScript $ScriptBlock -Arguments $Arguments;
+        if ([string]::IsNullOrEmpty($Name)) {
+            $Name = New-IcingaThreadHash -ShellScript $ScriptBlock -Arguments $Arguments;
+        }
+
+        $ThreadName = [string]::Format('{0}::{1}::{2}::0', $SourceCommand, $Command, $Name);
+
+        [int]$ThreadIndex = 0;
+
+        while ($TRUE) {
+
+            if ($Global:Icinga.Public.Threads.ContainsKey($ThreadName) -eq $FALSE) {
+                break;
+            }
+
+            $ThreadIndex += 1;
+            $ThreadName   = [string]::Format('{0}::{1}::{2}::{3}', $SourceCommand, $Command, $Name, $ThreadIndex);
+        }
     }
-
-    $ThreadName = [string]::Format('{0}::{1}::{2}::0', $SourceCommand, $Command, $Name);
 
     Write-IcingaDebugMessage -Message (
         [string]::Format(
@@ -50,6 +66,9 @@ function New-IcingaThreadInstance()
             [void]$Shell.AddCommand('Set-IcingaEnvironmentJEA');
             [void]$Shell.AddParameter('JeaEnabled', $Global:Icinga.Protected.JEAContext);
         }
+
+        [void]$Shell.AddCommand('Set-IcingaEnvironmentThreadName');
+        [void]$Shell.AddParameter('ThreadName', $ThreadName);
 
         [void]$Shell.AddCommand($Command);
 
@@ -94,16 +113,13 @@ function New-IcingaThreadInstance()
         Add-Member -InputObject $Thread -MemberType NoteProperty -Name Started -Value $FALSE;
     }
 
-    [int]$ThreadIndex = 0;
+    $Global:Icinga.Public.Threads.Add($ThreadName, $Thread);
 
-    while ($TRUE) {
-
-        if ($Global:Icinga.Public.Threads.ContainsKey($ThreadName) -eq $FALSE) {
-            $Global:Icinga.Public.Threads.Add($ThreadName, $Thread);
-            break;
-        }
-
-        $ThreadIndex += 1;
-        $ThreadName   = [string]::Format('{0}::{1}::{2}::{3}', $SourceCommand, $Command, $Name, $ThreadIndex);
+    if ($CheckAliveState) {
+        Set-IcingaForWindowsThreadAlive `
+            -ThreadName $ThreadName `
+            -ThreadCmd $Command `
+            -ThreadArgs $CmdParameters `
+            -ThreadPool $ThreadPool;
     }
 }

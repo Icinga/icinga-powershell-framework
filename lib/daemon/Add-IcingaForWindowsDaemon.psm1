@@ -21,5 +21,8 @@ function Add-IcingaForWindowsDaemon()
 
     while ($TRUE) {
         Start-Sleep -Seconds 1;
+
+        # Handle possible threads being frozen
+        Suspend-IcingaForWindowsFrozenThreads;
     }
 }

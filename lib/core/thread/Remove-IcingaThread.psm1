@@ -1,7 +1,7 @@
 function Remove-IcingaThread()
 {
     param(
-        [string]$Thread
+        [string]$Thread = ''
     );
 
     if ([string]::IsNullOrEmpty($Thread)) {

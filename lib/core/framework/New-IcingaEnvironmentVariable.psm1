@@ -50,6 +50,7 @@ function New-IcingaEnvironmentVariable()
         $Global:Icinga.Public.Add('Daemons', @{ });
         $Global:Icinga.Public.Add('Threads', @{ });
         $Global:Icinga.Public.Add('ThreadPools', @{ });
+        $Global:Icinga.Public.Add('ThreadAliveHousekeeping', @{ });
     }
 
     # Session specific configuration which should never be modified by users!
@@ -60,5 +61,6 @@ function New-IcingaEnvironmentVariable()
         $Global:Icinga.Protected.Add('JEAContext', $FALSE);
         $Global:Icinga.Protected.Add('RunAsDaemon', $FALSE);
         $Global:Icinga.Protected.Add('Minimal', $FALSE);
+        $Global:Icinga.Protected.Add('ThreadName', '');
     }
 }
