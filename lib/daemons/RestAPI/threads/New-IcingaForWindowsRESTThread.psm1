@@ -16,17 +16,8 @@ function New-IcingaForWindowsRESTThread()
                 continue;
             }
 
-            if ($Global:Icinga.Public.Daemons.RESTApi.ApiRequests.$ThreadId.Count -eq 0) {
-                Start-Sleep -Milliseconds 10;
-                continue;
-            }
-
-            $Connection = $Global:Icinga.Public.Daemons.RESTApi.ApiRequests.$ThreadId.Dequeue();
-
-            if ($null -eq $Connection) {
-                Start-Sleep -Milliseconds 10;
-                continue;
-            }
+            # block sleeping until content available
+            $Connection = $Global:Icinga.Public.Daemons.RESTApi.ApiRequests.$ThreadId.Take();
 
             # Read the received message from the stream by using our smart functions
             [string]$RestMessage = Read-IcingaTCPStream -Client $Connection.Client -Stream $Connection.Stream;
@@ -107,9 +98,7 @@ function New-IcingaForWindowsRESTThread()
 
         # Finally close the clients connection as we are done here and
         # ensure this thread will close by simply leaving the function
-        if ($null -ne $Connection) {
-            Close-IcingaTCPConnection -Client $Connection.Client;
-        }
+        Close-IcingaTCPConnection -Client $Connection.Client;
 
         # Force Icinga for Windows Garbage Collection
         Optimize-IcingaForWindowsMemory -ClearErrorStack;
