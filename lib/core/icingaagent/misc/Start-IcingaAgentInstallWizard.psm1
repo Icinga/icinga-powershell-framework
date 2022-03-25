@@ -213,6 +213,7 @@ function Start-IcingaAgentInstallWizard()
                 -DirectorUrl $DirectorUrl `
                 -SelfServiceAPIKey $SelfServiceAPIKey `
                 -OverrideDirectorVars $OverrideDirectorVars `
+                -Hostname $Hostname `
                 -RunInstaller $RunInstaller;
 
             $Result              = Set-IcingaWizardArgument -DirectorArgs $DirectorArgs -WizardArg 'DirectorUrl' -Value $DirectorUrl -InstallerArguments $InstallerArguments;

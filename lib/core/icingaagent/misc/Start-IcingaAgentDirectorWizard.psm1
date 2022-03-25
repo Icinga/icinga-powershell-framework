@@ -5,7 +5,8 @@ function Start-IcingaAgentDirectorWizard()
         [string]$SelfServiceAPIKey = $null,
         $OverrideDirectorVars      = $null,
         [bool]$RunInstaller        = $FALSE,
-        [switch]$ForceTemplateKey  = $FALSE
+        [switch]$ForceTemplateKey  = $FALSE,
+        [string]$Hostname          = $null
     );
 
     [hashtable]$DirectorOverrideArgs        = @{ }
@@ -64,6 +65,7 @@ function Start-IcingaAgentDirectorWizard()
                 -DirectorUrl $DirectorUrl `
                 -SelfServiceAPIKey $TemplateKey `
                 -OverrideDirectorVars $OverrideDirectorVars `
+                -Hostname $Hostname `
                 -ForceTemplateKey;
         }
     } else {
@@ -74,7 +76,7 @@ function Start-IcingaAgentDirectorWizard()
 
             return Start-IcingaAgentDirectorWizard `
                 -SelfServiceAPIKey ((Get-IcingaAgentInstallerAnswerInput -Prompt 'Please re-enter your SelfService API Key for the Host-Template in case the key is no longer assigned to your host' -Default 'v' -DefaultInput $SelfServiceAPIKey).answer) `
-                -OverrideDirectorVars $OverrideDirectorVars;
+                -OverrideDirectorVars $OverrideDirectorVars -Hostname $Hostname;
         }
     }
 
@@ -87,6 +89,10 @@ function Start-IcingaAgentDirectorWizard()
                 $Arguments[$entry] = $DirectorOverrideArgs[$entry];
             }
         }
+    }
+
+    if($Hostname -ne $null){
+        $Arguments.Add('Hostname', $Hostname);
     }
 
     if ($HostKnown -eq $FALSE) {
