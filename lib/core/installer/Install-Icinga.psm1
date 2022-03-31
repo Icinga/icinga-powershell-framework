@@ -79,6 +79,17 @@ function Install-Icinga()
         if ($IcingaConfiguration.ContainsKey('IfW-DirectorSelfServiceKey') -And $IcingaConfiguration.ContainsKey('IfW-DirectorUrl')) {
             Enable-IcingaFrameworkConsoleOutput;
             Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate;
+            Disable-IcingaFrameworkConsoleOutput;
+            
+            # Now apply our configuration again to ensure the defaults are overwritten again
+            # Suite a mess, but we can improve this later
+            $Success = Invoke-IcingaForWindowsManagementConsoleCustomConfig -IcingaConfiguration $IcingaConfiguration;
+
+            if ($Success -eq $FALSE) {
+                return;
+            }
+            
+            Enable-IcingaFrameworkConsoleOutput;
             Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate -Register;
             Disable-IcingaFrameworkConsoleOutput;
         } else {
