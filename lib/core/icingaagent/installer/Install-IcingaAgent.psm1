@@ -73,17 +73,16 @@ function Install-IcingaAgent()
         }
     }
 
-    $InstallProcess = Invoke-IcingaCommand -ArgumentList $IcingaInstaller, $InstallTarget -ScriptBlock {
-        $IcingaInstaller = $IcingaShellArgs[0];
-        $InstallTarget   = $IcingaShellArgs[1];
-
+    $InstallProcess = & powershell.exe -Command {
+        $IcingaInstaller = $args[0];
+        $InstallTarget   = $args[1];
         $InstallProcess  = Start-IcingaProcess -Executable 'MsiExec.exe' -Arguments ([string]::Format('/quiet /i "{0}" {1}', $IcingaInstaller.InstallerPath, $InstallTarget)) -FlushNewLines;
 
         Start-Sleep -Seconds 2;
         Optimize-IcingaForWindowsMemory;
 
         return $InstallProcess;
-    }
+    } -Args $IcingaInstaller, $InstallTarget;
 
     if ($InstallProcess.ExitCode -ne 0) {
         Write-IcingaConsoleError -Message 'Failed to install Icinga 2 Agent: {0}{1}' -Objects $InstallProcess.Message, $InstallProcess.Error;
