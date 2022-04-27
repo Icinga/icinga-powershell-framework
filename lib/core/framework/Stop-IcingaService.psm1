@@ -24,18 +24,19 @@ function Stop-IcingaService()
         $Service
     );
 
-    if (Get-Service $Service -ErrorAction SilentlyContinue) {
+    if (Get-Service "$Service" -ErrorAction SilentlyContinue) {
         Write-IcingaConsoleNotice -Message 'Stopping service "{0}"' -Objects $Service;
 
-        Invoke-IcingaCommand -ArgumentList $Service -ScriptBlock {
+        & powershell.exe -Command {
+            $Service = $args[0];
             try {
-                Stop-Service "$($IcingaShellArgs[0])" -ErrorAction Stop;
+                Stop-Service "$Service" -ErrorAction Stop;
                 Start-Sleep -Seconds 2;
                 Optimize-IcingaForWindowsMemory;
             } catch {
-                Write-IcingaConsoleError -Message 'Failed to stop service "{0}". Error: {1}' -Objects $IcingaShellArgs[0], $_.Exception.Message;
+                Write-IcingaConsoleError -Message 'Failed to stop service "{0}". Error: {1}' -Objects $Service, $_.Exception.Message;
             }
-        } | Out-Null;
+        } -Args $Service;
     } else {
         Write-IcingaConsoleWarning -Message 'The service "{0}" is not installed' -Objects $Service;
     }

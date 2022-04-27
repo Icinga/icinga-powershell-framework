@@ -348,9 +348,10 @@ function Install-IcingaComponent()
             }
         }
 
-        $MSIData = Invoke-IcingaCommand -ArgumentList $DownloadDestination -ScriptBlock {
-            return (Read-IcingaMSIMetadata -File $IcingaShellArgs[0]);
-        }
+        $MSIData = & powershell.exe -Command {
+            $DownloadDestination = $args[0];
+            return (Read-IcingaMSIMetadata -File $DownloadDestination);
+        } -Args $DownloadDestination;
 
         if ($InstalledVersion.Full -eq $MSIData.ProductVersion -And $Force -eq $FALSE) {
             Write-IcingaConsoleWarning 'The package "agent" with version "{0}" is already installed. Use "-Force" to re-install the component' -Objects $InstalledVersion.Full;
@@ -367,17 +368,16 @@ function Install-IcingaComponent()
             }
         }
 
-        $InstallProcess = Invoke-IcingaCommand -ArgumentList $DownloadDestination, $InstallTarget -ScriptBlock {
-            $IcingaInstaller = $IcingaShellArgs[0];
-            $InstallTarget   = $IcingaShellArgs[1];
-
-            $InstallProcess  = Start-IcingaProcess -Executable 'MsiExec.exe' -Arguments ([string]::Format('/quiet /i "{0}" {1}', $IcingaInstaller, $InstallTarget)) -FlushNewLines;
+        $InstallProcess = & powershell.exe -Command {
+            $DownloadDestination = $args[0];
+            $InstallTarget       = $args[1];
+            $InstallProcess      = Start-IcingaProcess -Executable 'MsiExec.exe' -Arguments ([string]::Format('/quiet /i "{0}" {1}', $DownloadDestination, $InstallTarget)) -FlushNewLines;
 
             Start-Sleep -Seconds 2;
             Optimize-IcingaForWindowsMemory;
 
             return $InstallProcess;
-        }
+        } -Args $DownloadDestination, $InstallTarget;
 
         if ($InstallProcess.ExitCode -ne 0) {
             Write-IcingaConsoleError -Message 'Failed to install component "agent": {0}{1}' -Objects $InstallProcess.Message, $InstallProcess.Error;
