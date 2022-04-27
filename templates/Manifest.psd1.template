@@ -1,6 +1,5 @@
 @{
     ModuleVersion     = '$MODULEVERSION$'
-    RootModule        = '$ROOTMODULE$'
     GUID              = '$GUID$'
     Author            = '$AUTHOR$'
     CompanyName       = '$COMPANYNAME$'
