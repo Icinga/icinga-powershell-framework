@@ -205,7 +205,6 @@ function New-IcingaForWindowsComponent()
     Write-IcingaForWindowsComponentManifest -Name $Name -ModuleConfig @{
         '$MODULENAME$'        = ([string]::Format('Windows {0}', $Name));
         '$GUID$'              = (New-Guid);
-        '$ROOTMODULE$'        = ([string]::Format('{0}.psm1', $ModuleName));
         '$AUTHOR$'            = $Author;
         '$COMPANYNAME$'       = $CompanyName;
         '$COPYRIGHT$'         = $Copyright;
