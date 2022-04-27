@@ -78,7 +78,8 @@ function Add-IcingaServiceCheckDaemon()
             }
         }
 
-        Optimize-IcingaForWindowsMemory;
+        # Force Icinga for Windows Garbage Collection
+        Optimize-IcingaForWindowsMemory -SmartGC;
 
         Start-Sleep -Seconds 10;
     }

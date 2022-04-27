@@ -36,7 +36,7 @@ function Add-IcingaServiceCheckTask()
             Clear-IcingaCheckSchedulerEnvironment;
 
             # Force Icinga for Windows Garbage Collection
-            Optimize-IcingaForWindowsMemory -ClearErrorStack;
+            Optimize-IcingaForWindowsMemory -ClearErrorStack -SmartGC;
 
             continue;
         }
@@ -133,6 +133,6 @@ function Add-IcingaServiceCheckTask()
         # Reset certain values from the scheduler environment
         Clear-IcingaServiceCheckDaemonEnvironment;
         # Force Icinga for Windows Garbage Collection
-        Optimize-IcingaForWindowsMemory -ClearErrorStack;
+        Optimize-IcingaForWindowsMemory -ClearErrorStack -SmartGC;
     }
 }
