@@ -13,19 +13,29 @@ function Read-IcingaPowerShellModuleFile()
         $FileContent = Read-IcingaFileSecure -File $File;
     }
 
-    $PSParser              = [System.Management.Automation.PSParser]::Tokenize($FileContent, [ref]$null);
-    [array]$Comments       = @();
-    [array]$RegexFilter    = @();
-    [string]$RegexPattern  = '';
-    [array]$CommandList    = @();
-    [array]$FunctionList   = @();
-    [hashtable]$CmdCache   = @{ };
-    [hashtable]$FncCache   = @{ };
-    [int]$Index            = 0;
-    [bool]$ThreadCommand   = $FALSE;
-    [bool]$ThreadFetchNext = $FALSE;
-    [bool]$ShellCommand    = $FALSE;
-    [bool]$ShellGroupStart = $FALSE;
+    $PSParser                  = [System.Management.Automation.PSParser]::Tokenize($FileContent, [ref]$null);
+    [array]$Comments           = @();
+    [array]$RegexFilter        = @();
+    [string]$RegexPattern      = '';
+    [array]$CommandList        = @();
+    [array]$FunctionList       = @();
+    [array]$VariableList       = @();
+    [array]$AliasList          = @();
+    [array]$ExportFunctionList = @();
+    [array]$ExportCmdletList   = @();
+    [hashtable]$CmdCache       = @{ };
+    [hashtable]$FncCache       = @{ };
+    [int]$Index                = 0;
+    [bool]$ThreadCommand       = $FALSE;
+    [bool]$ThreadFetchNext     = $FALSE;
+    [bool]$ShellCommand        = $FALSE;
+    [bool]$ShellGroupStart     = $FALSE;
+    [bool]$BeginExportMember   = $FALSE;
+    [bool]$BeginExportFunc     = $FALSE;
+    [bool]$BeginExportCmdlet   = $FALSE;
+    [bool]$BeginExportVar      = $FALSE;
+    [bool]$BeginExportAlias    = $FALSE;
+    [bool]$BeginReadExport     = $FALSE;
 
     foreach ($entry in $PSParser) {
         if ($entry.Type -eq 'Comment') {
@@ -34,6 +44,10 @@ function Read-IcingaPowerShellModuleFile()
             if ($CmdCache.ContainsKey($entry.Content) -eq $FALSE) {
                 $CommandList += [string]$entry.Content;
                 $CmdCache.Add($entry.Content, 0);
+            }
+
+            if ($entry.Content.ToLower() -eq 'export-modulemember') {
+                $BeginExportMember = $TRUE;
             }
 
             # We need to include commands we call with New-IcingaThreadInstance e.g.
@@ -52,6 +66,52 @@ function Read-IcingaPowerShellModuleFile()
             # In case we have objects that use .AddCommand() we should add these to our function list e.g.
             # => [void]$Shell.AddCommand('Set-IcingaEnvironmentGlobal');
             $ShellCommand = $TRUE;
+        }
+
+        if ($BeginExportMember) {
+            if ($entry.Type -eq 'NewLine' -Or ($entry.Type -eq 'StatementSeparator' -And $entry.Content -eq ';')) {
+                $BeginExportMember = $FALSE;
+            }
+
+            if ($BeginExportVar -Or $BeginExportAlias -Or $BeginExportFunc -Or $BeginExportCmdlet) {
+                if ($BeginReadExport) {
+                    if ($entry.Type -ne 'String' -And ($entry.Type -ne 'Operator' -And $entry.Content -ne ',')) {
+                        $BeginReadExport   = $FALSE;
+                        $BeginExportVar    = $FALSE;
+                        $BeginExportAlias  = $FALSE;
+                        $BeginExportFunc   = $FALSE;
+                        $BeginExportCmdlet = $FALSE;
+                    }
+                }
+                if ($entry.Type -eq 'String') {
+                    $BeginReadExport = $TRUE;
+                    if ($BeginExportVar) {
+                        $VariableList += $entry.Content;
+                    }
+                    if ($BeginExportAlias) {
+                        $AliasList += $entry.Content;
+                    }
+                    if ($BeginExportFunc) {
+                        $ExportFunctionList += $entry.Content;
+                    }
+                    if ($BeginExportCmdlet) {
+                        $ExportCmdletList += $entry.Content;
+                    }
+                }
+            }
+            # Read -Variable argument
+            if ($entry.Type -eq 'CommandParameter' -And $entry.Content.ToLower() -eq '-variable') {
+                $BeginExportVar = $TRUE;
+            }
+            if ($entry.Type -eq 'CommandParameter' -And $entry.Content.ToLower() -eq '-alias') {
+                $BeginExportAlias = $TRUE;
+            }
+            if ($entry.Type -eq 'CommandParameter' -And $entry.Content.ToLower() -eq '-function') {
+                $BeginExportFunc = $TRUE;
+            }
+            if ($entry.Type -eq 'CommandParameter' -And $entry.Content.ToLower() -eq '-cmdlet') {
+                $BeginExportCmdlet = $TRUE;
+            }
         }
 
         # If we reached -Command for New-IcingaThreadInstance, check for the String element and add its value to our function list e.g.
@@ -113,5 +173,9 @@ function Read-IcingaPowerShellModuleFile()
         'RawContent'        = $FileContent;
         'CommandList'       = $CommandList;
         'FunctionList'      = $FunctionList;
+        'VariableList'      = $VariableList;
+        'AliasList'         = $AliasList;
+        'ExportFunction'    = $ExportFunctionList;
+        'ExportCmdlet'      = $ExportCmdletList;
     };
 }

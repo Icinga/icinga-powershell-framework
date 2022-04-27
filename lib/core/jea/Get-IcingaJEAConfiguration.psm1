@@ -43,6 +43,10 @@ function Get-IcingaJEAConfiguration()
         $ModuleFileContent = '';
 
         foreach ($PSFile in $ModuleFiles) {
+            if ($PSFile.Name.ToLower() -eq ([string]::Format('{0}.ifw_compilation.psm1', $module.Name))) {
+                continue;
+            }
+
             $DeserializedFile = Read-IcingaPowerShellModuleFile -File $PSFile.FullName;
             $RawModuleContent = $DeserializedFile.NormalisedContent;
 

@@ -66,27 +66,47 @@ function Publish-IcingaForWindowsComponent()
 
     [ScriptBlock]$ManifestScriptBlock = [ScriptBlock]::Create('return ' + $ManifestScript);
     $ModuleManifestData               = (& $ManifestScriptBlock);
-    $ModuleList                       = @();
     $ModuleFiles                      = Get-ChildItem -Path $ModuleDir -Recurse -Filter '*.psm1';
+    [array]$FunctionList              = @();
+    [array]$CmdletList                = @();
+    [array]$VariableList              = @();
+    [array]$AliasList                 = @();
+    [string]$CompiledFolder           = (Join-Path -Path $ModuleDir -ChildPath 'compiled');
+    [string]$CompiledFile             = [string]::Format('{0}.ifw_compilation.psm1', $ModuleName.ToLower());
+    [string]$CompiledFileInclude      = [string]::Format('.\compiled\{0}', $CompiledFile);
+    [string]$CompiledFilePath         = (Join-Path -Path $CompiledFolder -ChildPath $CompiledFile);
 
     foreach ($entry in $ModuleFiles) {
-        if ($entry.Name -eq ([string]::Format('{0}.psm1', $ModuleName))) {
+        # Ensure the compilation file never includes itself
+        if ($entry.FullName -eq $CompiledFilePath) {
             continue;
         }
 
-        $ModuleList += $entry.FullName.Replace($ModuleDir, '.');
+        $FunctionList += Get-IcingaForWindowsComponentPublicFunctions -FileObject $entry -ModuleName $ModuleName;
+        $FileConfig    = (Read-IcingaPowerShellModuleFile -File $entry.FullName);
+        $VariableList += $FileConfig.VariableList;
+        $AliasList    += $FileConfig.AliasList;
+        $CmdletList   += $FileConfig.ExportCmdlet;
     }
+
+    if ((Test-Path -Path $CompiledFolder) -eq $FALSE) {
+        New-Item -Path $CompiledFolder -ItemType Directory -Force | Out-Null;
+    }
+
+    Copy-ItemSecure -Path (Join-Path -Path (Get-IcingaFrameworkRootPath) -ChildPath 'templates\compilation.psm1.template') -Destination $CompiledFilePath -Force | Out-Null;
 
     if ($NoOutput) {
         Disable-IcingaFrameworkConsoleOutput;
     }
 
-    Write-IcingaForWindowsComponentManifest -Name $Name -ModuleList $ModuleList;
+    Write-IcingaForWindowsComponentManifest -Name $Name -ModuleList @( $CompiledFileInclude ) -FunctionList $FunctionList -VariableList $VariableList -AliasList $AliasList -CmdletList $CmdletList;
 
     if ($ModuleManifestData.PrivateData.Type -eq 'plugins') {
         Publish-IcingaPluginConfiguration -ComponentName $Name;
         Publish-IcingaPluginDocumentation -ModulePath $ModuleDir;
     }
+
+    Copy-ItemSecure -Path (Join-Path -Path (Get-IcingaFrameworkRootPath) -ChildPath 'templates\compilation.psm1.template') -Destination $CompiledFilePath -Force | Out-Null;
 
     if ($CreateReleasePackage) {
         if ([string]::IsNullOrEmpty($ReleasePackagePath)) {

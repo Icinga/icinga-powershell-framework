@@ -17,7 +17,11 @@ function Write-IcingaForWindowsComponentManifest()
     param (
         [string]$Name,
         [hashtable]$ModuleConfig = @{ },
-        [array]$ModuleList       = @()
+        [array]$ModuleList       = @(),
+        [array]$FunctionList     = @(),
+        [array]$CmdletList       = @(),
+        [array]$VariableList     = @(),
+        [array]$AliasList        = @()
     );
 
     if ([string]::IsNullOrEmpty($Name)) {
@@ -75,71 +79,14 @@ function Write-IcingaForWindowsComponentManifest()
 
     $ContentString.Clear() | Out-Null;
 
-    [array]$ManifestContent = Get-Content -Path (Join-Path -Path $ModuleDir -ChildPath ([string]::Format('{0}.psd1', $ModuleName)));
+    [string]$ManifestFile = (Join-Path -Path $ModuleDir -ChildPath ([string]::Format('{0}.psd1', $ModuleName)));
 
-    if ($null -eq $ManifestContent -Or $ManifestContent.Count -eq 0) {
-        Write-IcingaConsoleWarning 'The manifest file of module "{0}" could not be loaded for updating NestedModules' -Objects $ModuleName;
-        return;
-    }
+    Update-IcingaForWindowsManifestArray -ArrayVariableName 'NestedModules' -ArrayVariableValues $ModuleList -ManifestFile $ManifestFile;
+    Update-IcingaForWindowsManifestArray -ArrayVariableName 'FunctionsToExport' -ArrayVariableValues $FunctionList -ManifestFile $ManifestFile;
+    Update-IcingaForWindowsManifestArray -ArrayVariableName 'CmdletsToExport' -ArrayVariableValues $CmdletList -ManifestFile $ManifestFile;
+    Update-IcingaForWindowsManifestArray -ArrayVariableName 'VariablesToExport' -ArrayVariableValues $VariableList -ManifestFile $ManifestFile;
+    Update-IcingaForWindowsManifestArray -ArrayVariableName 'AliasesToExport' -ArrayVariableValues $AliasList -ManifestFile $ManifestFile;
 
-    [bool]$UpdateNestedModules = $FALSE;
-
-    foreach ($entry in $ManifestContent) {
-        [string]$ManifestLine = $entry;
-
-        if ($UpdateNestedModules -And $entry -Like '*)*') {
-            $UpdateNestedModules = $FALSE;
-            continue;
-        }
-
-        if ($UpdateNestedModules) {
-            continue;
-        }
-
-        if ($entry -Like '*nestedmodules*') {
-            if ($entry -NotLike '*)*') {
-                $UpdateNestedModules = $TRUE;
-            }
-            $ContentString.AppendLine('    NestedModules     = @(') | Out-Null;
-
-            if ($ModuleList.Count -ne 0) {
-                [array]$NestedModules = (ConvertFrom-IcingaArrayToString -Array $ModuleList -AddQuotes -UseSingleQuotes).Split(',');
-                [int]$ModuleIndex     = 0;
-                foreach ($module in $NestedModules) {
-                    if ([string]::IsNullOrEmpty($module)) {
-                        continue;
-                    }
-
-                    $ModuleIndex += 1;
-
-                    if ($ModuleIndex -ne $NestedModules.Count) {
-                        if ($ModuleIndex -eq 1) {
-                            $ManifestLine = [string]::Format('        {0},', $module);
-                        } else {
-                            $ManifestLine = [string]::Format('       {0},', $module);
-                        }
-                    } else {
-                        if ($ModuleIndex -eq 1) {
-                            $ManifestLine = [string]::Format('        {0}', $module);
-                        } else {
-                            $ManifestLine = [string]::Format('       {0}', $module);
-                        }
-                    }
-
-                    $ContentString.AppendLine($ManifestLine) | Out-Null;
-                }
-            }
-
-            $ContentString.AppendLine('    )') | Out-Null;
-            continue;
-        }
-
-        if ([string]::IsNullOrEmpty($ManifestLine.Replace(' ', '')) -Or $ManifestLine -eq "`r`n" -Or $ManifestLine -eq "`n") {
-            continue;
-        }
-
-        $ContentString.AppendLine($ManifestLine) | Out-Null;
-    }
-
-    Write-IcingaFileSecure -File (Join-Path -Path $ModuleDir -ChildPath ([string]::Format('{0}.psd1', $ModuleName))) -Value $ContentString.ToString();
+    Import-Module -Name $ManifestFile -Force;
+    Import-Module -Name $ManifestFile -Force -Global;
 }
