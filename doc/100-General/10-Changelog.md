@@ -7,6 +7,14 @@ documentation before upgrading to a new release.
 
 Released closed milestones can be found on [GitHub](https://github.com/Icinga/icinga-powershell-framework/milestones?state=closed).
 
+## 1.9.1 (2022-05-13)
+
+### Bugfixes
+
+[Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/24?closed=1)
+
+* [#519](https://github.com/Icinga/icinga-powershell-framework/pull/519) Fixes missing loading of Icinga for Windows modules, which is required to ensure an Icinga for Windows environment is providing all commands and variables to a session, allowing other modules to access these information
+
 ## 1.9.0 (2022-05-03)
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/20?closed=1)

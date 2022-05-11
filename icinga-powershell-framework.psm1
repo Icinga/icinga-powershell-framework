@@ -28,11 +28,8 @@ function Use-Icinga()
         $Global:Icinga.Protected.Minimal = $TRUE;
     }
 
-    # Ensure we autoload the Icinga Plugin collection, provided by the external
-    # module 'icinga-powershell-plugins'
-    if (Get-Command 'Use-IcingaPlugins' -ErrorAction SilentlyContinue) {
-        Use-IcingaPlugins;
-    }
+    # Ensure we autoload Icinga for Windows modules into this session
+    Import-IcingaForWindowsModulesInSession;
 
     if ($Daemon) {
         $Global:Icinga.Protected.RunAsDaemon = $TRUE;
@@ -61,6 +58,29 @@ function Use-Icinga()
 
     if ($LibOnly -eq $FALSE -And $Daemon -eq $FALSE) {
         Register-IcingaEventLog;
+    }
+}
+
+function Import-IcingaForWindowsModulesInSession()
+{
+    $CommandList = Get-Command 'Import-IcingaPowerShellComponent*';
+
+    foreach ($entry in $CommandList) {
+        $ModuleName = $entry.Module.Name;
+        $ModulePath = $entry.Module.Path;
+        $RootPath   = $ModulePath.Substring(0, $ModulePath.IndexOf($ModuleName));
+        $Command    = $entry.Name;
+
+        if ($RootPath.ToLower() -ne (Get-IcingaForWindowsRootPath).ToLower()) {
+            continue;
+        }
+
+        if ([string]::IsNullOrEmpty($Command) -Or (Test-IcingaFunction $Command) -eq $FALSE) {
+            continue;
+        }
+
+        # Execute the command if the module is located at the same location as our Framework
+        & $Command | Out-Null;
     }
 }
 
