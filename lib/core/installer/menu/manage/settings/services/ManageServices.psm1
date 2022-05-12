@@ -96,6 +96,28 @@ function Show-IcingaForWindowsMenuManageIcingaForWindowsServices()
                 'Action'         = @{
                     'Command' = 'Restart-IcingaWindowsService';
                 }
+            },
+            @{
+                'Caption'        = 'Enable recovery settings for services';
+                'Command'        = 'Show-IcingaForWindowsMenuManageIcingaForWindowsServices';
+                'Help'           = 'Enables automatic service recovery for the Icinga Agent and Icinga for Windows service, in case the server terminates itself because of errors';
+                'Disabled'       = ($null -eq $IcingaForWindowsService -And $null -eq $IcingaAgentService);
+                'DisabledReason' = 'Neither the Icinga Agent nor the Icinga for Windows service are installed';
+                'AdminMenu'      = $TRUE;
+                'Action'         = @{
+                    'Command' = 'Enable-IcingaServiceRecovery';
+                }
+            },
+            @{
+                'Caption'        = 'Disable recovery settings for services';
+                'Command'        = 'Show-IcingaForWindowsMenuManageIcingaForWindowsServices';
+                'Help'           = 'Disables automatic service recovery for the Icinga Agent and Icinga for Windows service, in case the server terminates itself because of errors';
+                'Disabled'       = ($null -eq $IcingaForWindowsService -And $null -eq $IcingaAgentService);
+                'DisabledReason' = 'Neither the Icinga Agent nor the Icinga for Windows service are installed';
+                'AdminMenu'      = $TRUE;
+                'Action'         = @{
+                    'Command' = 'Disable-IcingaServiceRecovery';
+                }
             }
         );
 }

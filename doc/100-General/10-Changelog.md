@@ -7,11 +7,19 @@ documentation before upgrading to a new release.
 
 Released closed milestones can be found on [GitHub](https://github.com/Icinga/icinga-powershell-framework/milestones?state=closed).
 
+## 1.10.0 (2022-08-16)
+
+[Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/23?closed=1)
+
+### Enhancements
+
+* [#40](https://github.com/Icinga/icinga-powershell-framework/issues/40) Adds support to set service recovery for the Icinga Agent and Icinga for Windows service, to restart them in case of a crash or error
+
 ## 1.9.1 (2022-05-13)
 
-### Bugfixes
-
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/24?closed=1)
+
+### Bugfixes
 
 * [#519](https://github.com/Icinga/icinga-powershell-framework/pull/519) Fixes missing loading of Icinga for Windows modules, which is required to ensure an Icinga for Windows environment is providing all commands and variables to a session, allowing other modules to access these information
 * [#520](https://github.com/Icinga/icinga-powershell-framework/pull/520) Adds missing `Import-IcingaPowerShellComponent` function while creating new components by using the developer tools
