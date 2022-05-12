@@ -14,6 +14,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/24?closed=1)
 
 * [#519](https://github.com/Icinga/icinga-powershell-framework/pull/519) Fixes missing loading of Icinga for Windows modules, which is required to ensure an Icinga for Windows environment is providing all commands and variables to a session, allowing other modules to access these information
+* [#520](https://github.com/Icinga/icinga-powershell-framework/pull/520) Adds missing `Import-IcingaPowerShellComponent` function while creating new components by using the developer tools
 
 ## 1.9.0 (2022-05-03)
 
