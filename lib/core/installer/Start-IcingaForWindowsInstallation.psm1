@@ -60,6 +60,9 @@ function Start-IcingaForWindowsInstallation()
     # Api Checks
     $InstallApiChecks      = Get-IcingaForWindowsInstallerStepSelection -InstallerStep 'Show-IcingaForWindowsInstallerMenuSelectInstallApiChecks';
 
+    # Service Recovery
+    $ServiceRecovery       = Get-IcingaForWindowsInstallerStepSelection -InstallerStep 'Show-IcingaForWindowsInstallerMenuSelectServiceRecovery';
+
     $Hostname              = '';
     $GlobalZones           = @();
     $IcingaParentAddresses = @();
@@ -280,6 +283,17 @@ function Start-IcingaForWindowsInstallation()
             } else {
                 Write-IcingaConsoleWarning -Message 'You have selected to install the Api-Check feature and all required configurations were made. The Icinga for Windows service is however not marked for installation, which will cause this feature to not work.';
             }
+            break;
+        };
+    }
+
+    switch ($ServiceRecovery) {
+        '0' {
+            Disable-IcingaServiceRecovery;
+            break;
+        };
+        '1' {
+            Enable-IcingaServiceRecovery;
             break;
         };
     }
