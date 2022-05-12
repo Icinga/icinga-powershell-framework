@@ -71,6 +71,13 @@ function New-IcingaForWindowsComponent()
     New-Item -ItemType File -Path (Join-Path -Path $ModuleDir -ChildPath 'README.md') | Out-Null;
     New-Item -ItemType File -Path (Join-Path -Path $ModuleDir -ChildPath ([string]::Format('{0}.psm1', $ModuleName))) | Out-Null;
 
+    $ModuleMainFile = Join-Path -Path $ModuleDir -ChildPath ([string]::Format('{0}.psm1', $ModuleName));
+
+    Set-Content -Path $ModuleMainFile -Value ([string]::Format('function Import-IcingaPowerShellComponent{0}()', $TextInfo.ToTitleCase($Name)));
+    Add-Content -Path $ModuleMainFile -Value '{';
+    Add-Content -Path $ModuleMainFile -Value '';
+    Add-Content -Path $ModuleMainFile -Value '}';
+
     switch ($ComponentType) {
         'plugins' {
             New-Item -ItemType Directory -Path (Join-Path -Path $ModuleDir -ChildPath 'plugins') | Out-Null;
