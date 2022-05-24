@@ -11,6 +11,10 @@ function New-IcingaCheckResult()
     $IcingaCheckResult | Add-Member -MemberType NoteProperty -Name 'NoPerfData' -Value $NoPerfData;
 
     $IcingaCheckResult | Add-Member -MemberType ScriptMethod -Name 'Compile' -Value {
+        # Always ensure our cache is cleared before compiling new check data
+        Get-IcingaCheckSchedulerPluginOutput | Out-Null;
+        Get-IcingaCheckSchedulerPerfData | Out-Null;
+
         if ($null -eq $this.Check) {
             return $IcingaEnums.IcingaExitCode.Unknown;
         }

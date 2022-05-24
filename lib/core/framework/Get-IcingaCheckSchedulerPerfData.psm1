@@ -17,8 +17,8 @@
 
 function Get-IcingaCheckSchedulerPerfData()
 {
-    $PerfData                                        = $Global:Icinga.Private.Scheduler.PerformanceData;
-    $Global:Icinga.Private.Scheduler.PerformanceData = @();
+    $PerfData                                               = $Global:Icinga.Private.Scheduler.PerformanceData;
+    [array]$Global:Icinga.Private.Scheduler.PerformanceData = @();
 
     return $PerfData;
 }

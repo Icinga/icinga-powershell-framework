@@ -362,12 +362,12 @@ function New-IcingaCheckPackage()
 
     # __GetTimeSpanThreshold(0, 'Core_30_20', 'Core_30')
     $IcingaCheckPackage | Add-Member -MemberType ScriptMethod -Force -Name '__GetTimeSpanThreshold' -Value {
-        param ($TimeSpanLabel, $Label);
+        param ($TimeSpanLabel, $Label, $MultiOutput);
 
         foreach ($check in $this.__Checks) {
-            $Result = $check.__GetTimeSpanThreshold($TimeSpanLabel, $Label);
+            $Result = $check.__GetTimeSpanThreshold($TimeSpanLabel, $Label, $MultiOutput);
 
-            if ([string]::IsNullOrEmpty($Result) -eq $FALSE) {
+            if ([string]::IsNullOrEmpty($Result.Interval) -eq $FALSE) {
                 return $Result;
             }
         }
@@ -375,6 +375,7 @@ function New-IcingaCheckPackage()
         return @{
             'Warning'  = '';
             'Critical' = '';
+            'Interval' = '';
         };
     }
 
