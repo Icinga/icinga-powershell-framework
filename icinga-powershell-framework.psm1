@@ -97,6 +97,10 @@ function Import-IcingaLib()
 
 function Write-IcingaFrameworkCodeCache()
 {
+    param (
+        [switch]$DeveloperMode = $FALSE
+    );
+
     [string]$CacheFile    = Get-IcingaFrameworkCodeCacheFile;
     [string]$directory    = Join-Path -Path $PSScriptRoot -ChildPath 'lib\';
     [string]$CacheContent = '';
@@ -109,9 +113,27 @@ function Write-IcingaFrameworkCodeCache()
         }
 
     $CacheContent += "Export-ModuleMember -Function @( '*' ) -Alias @( '*' ) -Variable @( '*' )";
+
+    if ($DeveloperMode -Or $Global:Icinga.Protected.DeveloperMode) {
+        [ScriptBlock]$CodeCache = [ScriptBlock]::Create($CacheContent);
+        . $CodeCache;
+
+        Copy-IcingaFrameworkCacheTemplate;
+        return;
+    }
+
     Set-Content -Path $CacheFile -Value $CacheContent;
 
     Remove-IcingaFrameworkDependencyFile;
+
+    if ($Global:Icinga.Protected.DeveloperMode) {
+        Copy-IcingaFrameworkCacheTemplate;
+    }
+}
+
+function Copy-IcingaFrameworkCacheTemplate()
+{
+    Copy-Item -Path (Join-Path -Path (Get-IcingaFrameworkRootPath) -ChildPath '\templates\framework_cache.psm1.template') -Destination (Get-IcingaFrameworkCodeCacheFile) -Force;
 }
 
 function Publish-IcingaEventLogDocumentation()
@@ -198,11 +220,12 @@ function Invoke-IcingaCommand()
     [CmdletBinding()]
     param (
         $ScriptBlock,
-        [switch]$SkipHeader   = $FALSE,
-        [switch]$Manage       = $FALSE, # Only for backwards compatibility, has no use at all
-        [switch]$Shell        = $FALSE,
-        [switch]$RebuildCache = $FALSE,
-        [array]$ArgumentList  = @()
+        [switch]$SkipHeader    = $FALSE,
+        [switch]$Manage        = $FALSE, # Only for backwards compatibility, has no use at all
+        [switch]$Shell         = $FALSE,
+        [switch]$RebuildCache  = $FALSE,
+        [switch]$DeveloperMode = $FALSE,
+        [array]$ArgumentList   = @()
     );
 
     Import-LocalizedData `
@@ -226,8 +249,12 @@ function Invoke-IcingaCommand()
         Write-IcingaConsoleHeader -HeaderLines $Headers;
     }
 
-    if ($RebuildCache) {
-        Write-IcingaFrameworkCodeCache;
+    if ($DeveloperMode) {
+        $Global:Icinga.Protected.DeveloperMode = $TRUE;
+    }
+
+    if ($RebuildCache -Or $DeveloperMode) {
+        Write-IcingaFrameworkCodeCache -DeveloperMode:$DeveloperMode;
     }
 
     if ($null -ne $psISE) {
@@ -247,9 +274,15 @@ function Invoke-IcingaCommand()
         $Version         = $args[2];
         $Shell           = $args[3];
         $IcingaShellArgs = $args[4];
+        $DeveloperMode   = $args[5];
 
         # Load our Icinga Framework
         Use-Icinga;
+
+        if ($DeveloperMode) {
+            $Global:Icinga.Protected.DeveloperMode = $TRUE;
+            Copy-IcingaFrameworkCacheTemplate;
+        }
 
         $Host.UI.RawUI.WindowTitle = ([string]::Format('Icinga for Windows {0}', $Version));
 
@@ -274,7 +307,7 @@ function Invoke-IcingaCommand()
             return "> "
         }
 
-    } -Args $ScriptBlock, $PSScriptRoot, $IcingaFrameworkData.PrivateData.Version, ([bool]$Shell), $ArgumentList;
+    } -Args $ScriptBlock, $PSScriptRoot, $IcingaFrameworkData.PrivateData.Version, ([bool]$Shell), $ArgumentList, $DeveloperMode;
 }
 
 function Start-IcingaShellAsUser()

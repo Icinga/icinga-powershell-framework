@@ -57,6 +57,7 @@ function New-IcingaEnvironmentVariable()
     if ($Global:Icinga.ContainsKey('Protected') -eq $FALSE) {
         $Global:Icinga.Add('Protected', @{ });
 
+        $Global:Icinga.Protected.Add('DeveloperMode', $FALSE);
         $Global:Icinga.Protected.Add('DebugMode', $FALSE);
         $Global:Icinga.Protected.Add('JEAContext', $FALSE);
         $Global:Icinga.Protected.Add('RunAsDaemon', $FALSE);

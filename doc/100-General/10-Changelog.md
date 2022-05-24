@@ -14,6 +14,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 ### Enhancements
 
 * [#40](https://github.com/Icinga/icinga-powershell-framework/issues/40) Adds support to set service recovery for the Icinga Agent and Icinga for Windows service, to restart them in case of a crash or error
+* [#525](https://github.com/Icinga/icinga-powershell-framework/pull/525) Adds new developer mode for `icinga` command and improved cache handling, to ensure within `-DeveloperMode` and inside a VS Code environment, the framework cache file is never overwritten, while still all functions are loaded and imported.
 
 ## 1.9.1 (2022-05-13)
 
