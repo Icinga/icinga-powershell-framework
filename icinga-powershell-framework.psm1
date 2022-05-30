@@ -133,7 +133,18 @@ function Write-IcingaFrameworkCodeCache()
 
 function Copy-IcingaFrameworkCacheTemplate()
 {
-    Copy-Item -Path (Join-Path -Path (Get-IcingaFrameworkRootPath) -ChildPath '\templates\framework_cache.psm1.template') -Destination (Get-IcingaFrameworkCodeCacheFile) -Force;
+    Copy-ItemSecure -Path (Join-Path -Path (Get-IcingaFrameworkRootPath) -ChildPath '\templates\framework_cache.psm1.template') -Destination (Get-IcingaFrameworkCodeCacheFile) -Force | Out-Null;
+
+    $WindowsModules = Get-Module -Name 'icinga-powershell-*' -ListAvailable;
+
+    foreach ($entry in $WindowsModules) {
+        $ModulePath = $entry.Path.Replace([string]::Format('{0}.psd1', $entry.Name), '');
+        $CacheFile  = Join-Path -Path $ModulePath -ChildPath ([string]::Format('\compiled\{0}.ifw_compilation.psm1', $entry.Name));
+
+        if (Test-Path $CacheFile) {
+            Copy-ItemSecure -Path (Join-Path -Path (Get-IcingaFrameworkRootPath) -ChildPath '\templates\compilation.psm1.template') -Destination $CacheFile -Force | Out-Null;
+        }
+    }
 }
 
 function Publish-IcingaEventLogDocumentation()
