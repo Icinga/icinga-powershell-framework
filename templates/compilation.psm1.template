@@ -17,3 +17,7 @@ if ($null -eq (Get-Command -Name 'Write-IcingaForWindowsComponentCompilationFile
 Write-IcingaForWindowsComponentCompilationFile `
     -ScriptRootPath $PSScriptRoot `
     -CompiledFilePath ($MyInvocation.MyCommand.Path);
+
+if ($null -ne $env:TERM_PROGRAM -Or $Global:Icinga.Protected.DeveloperMode) {
+    Copy-IcingaFrameworkCacheTemplate;
+}
