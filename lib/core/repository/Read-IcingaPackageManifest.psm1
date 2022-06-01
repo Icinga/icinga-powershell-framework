@@ -34,7 +34,7 @@ function Read-IcingaPackageManifest()
                 $FileName                   = $entry.Name.Replace('.psd1', '');
                 $FilePath                   = $entry.FullName.Replace($entry.Name, '');
                 $FileStream                 = $entry.Open();
-                $FileReader                 = [System.IO.StreamReader]::new($FileStream);
+                $FileReader                 = New-Object 'System.IO.StreamReader'($FileStream);
                 $PackageManifestContent     = $FileReader.ReadToEnd();
                 $FileReader.Dispose();
 

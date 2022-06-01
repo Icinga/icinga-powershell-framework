@@ -7,6 +7,14 @@ documentation before upgrading to a new release.
 
 Released closed milestones can be found on [GitHub](https://github.com/Icinga/icinga-powershell-framework/milestones?state=closed).
 
+## 1.9.2 (2022-06-03)
+
+[Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/25?closed=1)
+
+### Bugfixes
+
+* [#529](https://github.com/Icinga/icinga-powershell-framework/pull/529) Fixes package manifest reader for Icinga for Windows components on Windows 2012 R2 and older
+
 ## 1.9.1 (2022-05-13)
 
 ### Bugfixes
