@@ -43,13 +43,24 @@ function Show-IcingaForWindowsMenuManageTroubleshooting()
             },
             @{
                 'Caption'        = 'Repair Icinga Agent service';
-                'Command'        = 'Show-IcingaForWindowsMenuManageIcingaForWindowsServices';
+                'Command'        = 'Show-IcingaForWindowsMenuManageTroubleshooting';
                 'Help'           = 'Allows to repair the Icinga Agent service in case it was removed or broke during installation/upgrade';
                 'Disabled'       = ($null -ne $IcingaAgentService);
                 'DisabledReason' = 'The Icinga Agent service is already present';
                 'AdminMenu'      = $TRUE;
                 'Action'         = @{
                     'Command' = 'Repair-IcingaService';
+                }
+            },
+            @{
+                'Caption'        = 'Repair Icinga Agent state file';
+                'Command'        = 'Show-IcingaForWindowsMenuManageTroubleshooting';
+                'Help'           = 'Allows to repair the Icinga Agent state file, in case the file is corrupt';
+                'Disabled'       = (Test-IcingaStateFile);
+                'DisabledReason' = 'The Icinga Agent state file is healthy';
+                'AdminMenu'      = $TRUE;
+                'Action'         = @{
+                    'Command' = 'Repair-IcingaStateFile';
                 }
             },
             @{

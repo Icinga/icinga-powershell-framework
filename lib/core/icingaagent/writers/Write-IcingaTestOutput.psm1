@@ -3,8 +3,13 @@ function Write-IcingaTestOutput()
     param(
         [ValidateSet('Passed', 'Warning', 'Failed')]
         $Severity,
-        $Message
+        $Message,
+        [switch]$DropMessage = $FALSE
     );
+
+    if ($DropMessage) {
+        return;
+    }
 
     $Color = 'Green';
 
