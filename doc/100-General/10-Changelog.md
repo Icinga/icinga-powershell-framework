@@ -21,6 +21,14 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#525](https://github.com/Icinga/icinga-powershell-framework/pull/525) Adds new developer mode for `icinga` command and improved cache handling, to ensure within `-DeveloperMode` and inside a VS Code environment, the framework cache file is never overwritten, while still all functions are loaded and imported.
 * [#531](https://github.com/Icinga/icinga-powershell-framework/pull/531) Adds `Test-IcingaStateFile` and `Repair-IcingaStateFile`, which is integrated into `Test-IcingaAgent`, to ensure the Icinga Agent state file is healthy and not corrupt, causing the Icinga Agent to fail on start
 
+## 1.9.2 (2022-06-03)
+
+[Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/25?closed=1)
+
+### Bugfixes
+
+* [#529](https://github.com/Icinga/icinga-powershell-framework/pull/529) Fixes package manifest reader for Icinga for Windows components on Windows 2012 R2 and older
+
 ## 1.9.1 (2022-05-13)
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/24?closed=1)
