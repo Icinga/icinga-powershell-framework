@@ -28,6 +28,8 @@ function Stop-IcingaService()
         Write-IcingaConsoleNotice -Message 'Stopping service "{0}"' -Objects $Service;
 
         & powershell.exe -Command {
+            Use-Icinga -Minimal;
+
             $Service = $args[0];
             try {
                 Stop-Service "$Service" -ErrorAction Stop;

@@ -28,6 +28,8 @@ function Restart-IcingaService()
         Write-IcingaConsoleNotice ([string]::Format('Restarting service "{0}"', $Service));
 
         & powershell.exe -Command {
+            Use-Icinga -Minimal;
+
             $Service = $args[0];
             try {
                 Restart-Service "$Service" -ErrorAction Stop;

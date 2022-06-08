@@ -349,6 +349,8 @@ function Install-IcingaComponent()
         }
 
         $MSIData = & powershell.exe -Command {
+            Use-Icinga -Minimal;
+
             $DownloadDestination = $args[0];
             return (Read-IcingaMSIMetadata -File $DownloadDestination);
         } -Args $DownloadDestination;
@@ -369,6 +371,8 @@ function Install-IcingaComponent()
         }
 
         $InstallProcess = & powershell.exe -Command {
+            Use-Icinga -Minimal;
+
             $DownloadDestination = $args[0];
             $InstallTarget       = $args[1];
             $InstallProcess      = Start-IcingaProcess -Executable 'MsiExec.exe' -Arguments ([string]::Format('/quiet /i "{0}" {1}', $DownloadDestination, $InstallTarget)) -FlushNewLines;
