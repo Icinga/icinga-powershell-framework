@@ -28,6 +28,8 @@ function Start-IcingaService()
         Write-IcingaConsoleNotice -Message 'Starting service "{0}"' -Objects $Service;
 
         & powershell.exe -Command {
+            Use-Icinga -Minimal;
+
             $Service = $args[0];
             try {
                 Start-Service "$Service" -ErrorAction Stop;

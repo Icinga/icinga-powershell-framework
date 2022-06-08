@@ -74,6 +74,8 @@ function Install-IcingaAgent()
     }
 
     $InstallProcess = & powershell.exe -Command {
+        Use-Icinga -Minimal;
+
         $IcingaInstaller = $args[0];
         $InstallTarget   = $args[1];
         $InstallProcess  = Start-IcingaProcess -Executable 'MsiExec.exe' -Arguments ([string]::Format('/quiet /i "{0}" {1}', $IcingaInstaller.InstallerPath, $InstallTarget)) -FlushNewLines;
