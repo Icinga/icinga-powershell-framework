@@ -257,7 +257,7 @@ function Get-IcingaCheckCommandConfig()
                         'value' = @{
                             'type' = 'Function';
                             'body' = [string]::Format(
-                                'var arr = macro("{0}");{1}    if (len(arr) == 0) {2}{1}        return "@()";{1}    {3}{1}    return arr.map({1}        x => if (typeof(x) == String) {2}{1}            var argLen = len(x);{1}            if (argLen != 0 && x.substr(0,1) == "{4}" && x.substr(argLen - 1, argLen) == "{4}") {2}{1}                x;{1}            {3} else {2}{1}                "{4}" + x + "{4}";{1}            {3}{1}        {3} else {2}{1}            x;{1}        {3}{1}    ).join(",");',
+                                'var arr = macro("{0}");{1}{1}if (len(arr) == 0) {2}{1}    return "@()";{1}{3}{1}{1}var psarr = arr.map({1}    x => if (typeof(x) == String) {2}{1}        var argLen = len(x);{1}        if (argLen != 0 && x.substr(0,1) == "{4}" && x.substr(argLen - 1, argLen) == "{4}") {2}{1}            x;{1}        {3} else {2}{1}            "{4}" + x + "{4}";{1}        {3}{1}    {3} else {2}{1}        x;{1}    {3}{1}).join(",");{1}{1}return "@(" + psarr + ")";',
                                 $IcingaCustomVariable,
                                 "`r`n",
                                 '{',
