@@ -102,5 +102,5 @@ Invoke-WebRequest `
 & $ScriptFile `
     -ModuleDirectory 'C:\Program Files\WindowsPowerShell\Modules\' `
     -InstallCommand '{"IfW-DirectorSelfServiceKey":{"Values":["651f889ca5f364e89ed709eabde6237fb02050ff"]},"IfW-DirectorUrl":{"Values":["https://icinga.example.com/icingaweb2/director"]}}' `
-    -IcingaRepository 'https://icinga.example.com/repositories/stable';
+    -IcingaRepository 'https://icinga.example.com/repositories/stable/ifw.repo.json';
 ```
