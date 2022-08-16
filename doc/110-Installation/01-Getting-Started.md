@@ -101,6 +101,8 @@ Invoke-WebRequest `
 
 & $ScriptFile `
     -ModuleDirectory 'C:\Program Files\WindowsPowerShell\Modules\' `
-    -InstallCommand '{"IfW-DirectorSelfServiceKey":{"Values":["651f889ca5f364e89ed709eabde6237fb02050ff"]},"IfW-DirectorUrl":{"Values":["https://icinga.example.com/icingaweb2/director"]}}' `
+    -InstallCommand '{"IfW-DirectorSelfServiceKey":{"Values":["651f889ca5f364e89ed709eabde6237fb02050ff"]},"IfW-DirectorUrl":{"Values":["https://icinga.example.com/icingaweb2/director"]},"IfW-StableRepository":{"Values":["https://icinga.example.com/repositories/stable"]}}' `
     -IcingaRepository 'https://icinga.example.com/repositories/stable/ifw.repo.json';
 ```
+
+**Note:** By using custom repositories, you will have to add the `IfW-StableRepository` argument including the path to the repository inside the `-InstallCommand` as well as use the `-IcingaRepository` argument and provide the path there as well for initial configuration as well as automated installation
