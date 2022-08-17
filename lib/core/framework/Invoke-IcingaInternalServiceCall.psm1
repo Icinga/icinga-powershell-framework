@@ -1,9 +1,9 @@
 function Invoke-IcingaInternalServiceCall()
 {
     param (
-        [string]$Command  = '',
-        [array]$Arguments = @(),
-        [switch]$NoExit   = $FALSE
+        [string]$Command      = '',
+        [hashtable]$Arguments = @{ },
+        [switch]$NoExit       = $FALSE
     );
 
     # If our Framework is running as daemon, never call our api
@@ -49,48 +49,12 @@ function Invoke-IcingaInternalServiceCall()
     Set-IcingaTLSVersion;
     Enable-IcingaUntrustedCertificateValidation -SuppressMessages;
 
-    [hashtable]$CommandArguments = @{ };
-    [int]$ArgumentIndex          = 0;
-
-    # Resolve our array arguments provided by $args and build proper check arguments
-    while ($ArgumentIndex -lt $Arguments.Count) {
-        $Value                 = $Arguments[$ArgumentIndex];
-        [string]$Argument      = [string]$Value;
-        $ArgumentValue         = $null;
-
-        if ($Argument -eq '-IcingaForWindowsRemoteExecution' -Or $Argument -eq '-IcingaForWindowsJEARemoteExecution') {
-            $ArgumentIndex += 1;
-            continue;
-        }
-
-        if ($Value[0] -eq '-') {
-            if (($ArgumentIndex + 1) -lt $Arguments.Count) {
-                [string]$NextValue = $Arguments[$ArgumentIndex + 1];
-                if ($NextValue[0] -eq '-') {
-                    $ArgumentValue = $TRUE;
-                } else {
-                    $ArgumentValue = $Arguments[$ArgumentIndex + 1];
-                }
-            } else {
-                $ArgumentValue = $TRUE;
-            }
-        } else {
-            $ArgumentIndex += 1;
-            continue;
-        }
-
-        $Argument = $Argument.Replace('-', '');
-
-        $CommandArguments.Add($Argument, $ArgumentValue);
-        $ArgumentIndex += 1;
-    }
-
     # Now queue the check inside our REST-Api
     try {
-        $ApiResult = Invoke-WebRequest -Method POST -UseBasicParsing -Uri ([string]::Format('https://localhost:{0}/v1/checker?command={1}', $RestApiPort, $Command)) -Body (ConvertTo-JsonUTF8Bytes -InputObject $CommandArguments -Depth 100 -Compress) -ContentType 'application/json' -TimeoutSec $Timeout;
+        $ApiResult = Invoke-WebRequest -Method POST -UseBasicParsing -Uri ([string]::Format('https://localhost:{0}/v1/checker?command={1}', $RestApiPort, $Command)) -Body (ConvertTo-JsonUTF8Bytes -InputObject $Arguments -Depth 100 -Compress) -ContentType 'application/json' -TimeoutSec $Timeout;
     } catch {
         # Fallback to execute plugin locally
-        Write-IcingaEventMessage -Namespace 'Framework' -EventId 1553 -ExceptionObject $_ -Objects $Command, $CommandArguments;
+        Write-IcingaEventMessage -Namespace 'Framework' -EventId 1553 -ExceptionObject $_ -Objects $Command, $Arguments;
         return $NULL;
     }
 
@@ -100,12 +64,12 @@ function Invoke-IcingaInternalServiceCall()
 
     # In case we didn't receive a check result, fallback to local execution
     if ([string]::IsNullOrEmpty($IcingaResult.$Command.checkresult)) {
-        Write-IcingaEventMessage -Namespace 'Framework' -EventId 1553 -Objects 'The check result for the executed command was empty', $Command, $CommandArguments;
+        Write-IcingaEventMessage -Namespace 'Framework' -EventId 1553 -Objects 'The check result for the executed command was empty', $Command, $Arguments;
         return $NULL;
     }
 
     if ([string]::IsNullOrEmpty($IcingaResult.$Command.exitcode)) {
-        Write-IcingaEventMessage -Namespace 'Framework' -EventId 1553 -Objects 'The check result for the executed command was empty', $Command, $CommandArguments;
+        Write-IcingaEventMessage -Namespace 'Framework' -EventId 1553 -Objects 'The check result for the executed command was empty', $Command, $Arguments;
         return $NULL;
     }
 
