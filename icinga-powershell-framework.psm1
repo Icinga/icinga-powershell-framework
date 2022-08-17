@@ -321,7 +321,7 @@ function Invoke-IcingaCommand()
             return "> "
         }
 
-    } -Args $ScriptBlock, $PSScriptRoot, $IcingaFrameworkData.PrivateData.Version, ([bool]$Shell), $ArgumentList, $DeveloperMode;
+    } -Args $ScriptBlock, $PSScriptRoot, $IcingaFrameworkData.PrivateData.Version, ([bool]$Shell), $ArgumentList, ([bool]$DeveloperMode);
 
     # In case we close the newly created PowerShell, ensure we set the script root back to the Framework folder
     if (Test-Path $PSScriptRoot) {
