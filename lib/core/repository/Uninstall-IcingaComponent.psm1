@@ -27,11 +27,16 @@ function Uninstall-IcingaComponent()
         return $FALSE;
     }
 
+    # Set our current location to the PowerShell modules folder, to prevent possible folder lock during uninstallation
+    Set-Location (Get-IcingaForWindowsRootPath);
+
     Write-IcingaConsoleNotice -Message 'Uninstalling Icinga for Windows component "{0}" from "{1}"' -Objects $UninstallComponent, $UninstallPath;
     if (Remove-ItemSecure -Path $UninstallPath -Recurse -Force) {
         Write-IcingaConsoleNotice -Message 'Successfully removed Icinga for Windows component "{0}" from "{1}"' -Objects $UninstallComponent, $UninstallPath;
         if ($UninstallComponent -ne 'icinga-powershell-framework') {
             Remove-Module $UninstallComponent -Force -ErrorAction SilentlyContinue;
+            # In case we are not removing the framework itself, set the location to the Icinga for Windows Folder
+            Set-Location (Get-IcingaFrameworkRootPath);
         }
         return $TRUE;
     } else {
