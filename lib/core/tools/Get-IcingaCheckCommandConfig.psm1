@@ -216,7 +216,7 @@ function Get-IcingaCheckCommandConfig()
         # Loop through parameters of a given command
         foreach ($parameter in $CheckParamList) {
 
-            $IsDataList      = $FALSE;
+            $IsDataList = $FALSE;
 
             # IsNumeric-Check on position to determine the order-value
             If (Test-Numeric($parameter.position) -eq $TRUE) {
@@ -266,6 +266,26 @@ function Get-IcingaCheckCommandConfig()
                             );
                         }
                         'order' = $Order;
+                    }
+                );
+            } elseif ($parameter.type.name -eq 'String') {
+                # Conditional whether type of parameter is String
+                $Basket.Command[$check].arguments.Add(
+                    [string]::Format('-{0}', $parameter.Name), @{
+                        'value'         = @{
+                            'type' = 'Function';
+                            'body' = [string]::Format(
+                                'var str = macro("{0}");{1}var argLen = len(str);{1}{1}if (argLen == 0) {2}{1}    return;{1}{3}{1}{1}if (argLen != 0 && str.substr(0,1) == "{4}" && str.substr(argLen - 1, argLen) == "{4}") {2}{1}    return str;{1}{3}{1}{1}return ("{4}" + str + "{4}");',
+                                $IcingaCustomVariable,
+                                "`r`n",
+                                '{',
+                                '}',
+                                "'"
+                            );
+                        }
+                        'set_if'        = [string]::Format('var str = macro("{0}"); if (len(str) == 0) {{ return false; }}; return true;', $IcingaCustomVariable);
+                        'set_if_format' = 'expression';
+                        'order'         = $Order;
                     }
                 );
             } elseif ($parameter.type.name -eq 'SecureString') {
@@ -528,9 +548,11 @@ function Write-IcingaPlainConfigurationFiles()
                     # Order is numeric -> no "" required
                     if ($argconfig -eq 'order') {
                         $StringFormater = '            {0} = {1}{2}';
+                    } elseif ($argconfig -eq 'set_if' -And $CheckArgument[$argconfig] -Like '*var str = macro*') {
+                        $StringFormater = '            {0} = {{{{{2}                {1}{2}            }}}}{2}';
                     } else {
                         # All other entries should be handled as strings and contain ""
-                        $StringFormater ='            {0} = "{1}"{2}'
+                        $StringFormater = '            {0} = "{1}"{2}'
                     }
 
                     # In case it is a hashtable, this is most likely a DSL function
