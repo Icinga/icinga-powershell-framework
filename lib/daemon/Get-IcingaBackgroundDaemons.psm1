@@ -1,12 +1,11 @@
 function Get-IcingaBackgroundDaemons()
 {
-    $Daemons = Get-IcingaPowerShellConfig -Path 'BackgroundDaemon.EnabledDaemons';
+    $Daemons           = Get-IcingaPowerShellConfig -Path 'BackgroundDaemon.EnabledDaemons';
+    [hashtable]$Output = @{ };
 
     if ($null -eq $Daemons) {
-        return $null;
+        return $Output;
     }
-
-    [hashtable]$Output = @{ };
 
     foreach ($daemon in $Daemons.PSObject.Properties) {
         $Arguments = @{ };
