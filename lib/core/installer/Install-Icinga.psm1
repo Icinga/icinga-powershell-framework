@@ -146,7 +146,7 @@ function Install-Icinga()
                     @{
                         'Caption' = 'Icinga Shell';
                         'Command' = 'Invoke-IcingaForWindowsMenuStartIcingaShell';
-                        'Help'    = 'Shows you an overview of your current Icinga for Windows installation, including installed components and system informations.';
+                        'Help'    = 'Starts an interactive PowerShell with all loaded Icinga for Windows components.';
                     }
                 ) `
                 -DefaultIndex 0;

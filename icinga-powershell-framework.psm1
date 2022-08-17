@@ -279,6 +279,9 @@ function Invoke-IcingaCommand()
         return;
     }
 
+    # Ensure we set the path to another folder to prevent locking the Framework Root Folder
+    Set-Location (Get-IcingaForWindowsRootPath);
+
     powershell.exe -NoExit -Command {
         $Script          = $args[0];
         $RootPath        = $args[1];
@@ -319,6 +322,11 @@ function Invoke-IcingaCommand()
         }
 
     } -Args $ScriptBlock, $PSScriptRoot, $IcingaFrameworkData.PrivateData.Version, ([bool]$Shell), $ArgumentList, $DeveloperMode;
+
+    # In case we close the newly created PowerShell, ensure we set the script root back to the Framework folder
+    if (Test-Path $PSScriptRoot) {
+        Set-Location $PSScriptRoot;
+    }
 }
 
 function Start-IcingaShellAsUser()
