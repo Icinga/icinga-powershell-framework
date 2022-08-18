@@ -59,7 +59,15 @@ function Update-IcingaRepository()
             Write-IcingaConsoleNotice 'Updating Icinga for Windows repository "{0}"' -Objects $definedRepo.Name;
         }
 
-        $IcingaRepository = New-IcingaRepositoryFile -Path $Path -RemotePath $RemotePath;
+        # Ensure we use the default RemotePath within our IMC config, unless we specify a different path during update
+        [string]$SetRemotePath = $definedRepo.Value.RemotePath;
+
+        if ([string]::IsNullOrEmpty($RemotePath) -eq $FALSE) {
+            Set-IcingaPowerShellConfig -Path ([string]::Format('Framework.Repository.Repositories.{0}.RemotePath', $definedRepo.Name)) -Value $RemotePath;
+            $SetRemotePath = $RemotePath;
+        }
+
+        $IcingaRepository = New-IcingaRepositoryFile -Path $Path -RemotePath $SetRemotePath;
 
         if ($CreateNew) {
             return $IcingaRepository;
