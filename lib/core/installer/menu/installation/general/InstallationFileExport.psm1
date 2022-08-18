@@ -12,7 +12,7 @@ function Show-IcingaForWindowsManagementConsoleInstallationFileExport()
             @{
                 'Caption' = '';
                 'Command' = 'Export-IcingaForWindowsManagementConsoleInstallationAnswerFile';
-                'Help'    = 'This will all you to export the answer file with the given configuration. You can install Icinga for Windows with this file by using the command "Install-Icinga -AnswerFile <path to the file>".';
+                'Help'    = 'This will all you to export the answer file with the given configuration. You can install Icinga for Windows with this file by using the command "Install-Icinga -InstallFile <path to the file>".';
             }
         ) `
         -AddConfig `

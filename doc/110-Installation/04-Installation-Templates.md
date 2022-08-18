@@ -10,7 +10,7 @@ The installation commands and answer files are simple JSON strings, containing r
 '{"IfW-DirectorSelfServiceKey":{"Values":["651f889ca5f364e89ed709eabde6237fb02050ff"]},"IfW-DirectorUrl":{"Values":["https://icinga.example.com/icingaweb2/director"]}}'
 ```
 
-If you want to use them as answer files, you can simply copy them as mentioned below inside a simple text file without modifications. This is required if you are using the `-AnswerFile` argument.
+If you want to use them as answer files, you can simply copy them as mentioned below inside a simple text file without modifications. This is required if you are using the `-InstallFile` argument.
 
 ### Usage Examples
 
@@ -20,10 +20,10 @@ Using the `-InstallCommand` argument for `Install-Icinga`:
 Install-Icinga -InstallCommand '{"IfW-DirectorSelfServiceKey":{"Values":["651f889ca5f364e89ed709eabde6237fb02050ff"]},"IfW-DirectorUrl":{"Values":["https://icinga.example.com/icingaweb2/director"]}}';
 ```
 
-Using the `-AnswerFile` argument for `Install-Icinga`:
+Using the `-InstallFile` argument for `Install-Icinga`:
 
 ```powershell
-Install-Icinga -AnswerFile 'C:\Users\Public\icinga_installation.json';
+Install-Icinga -InstallFile 'C:\Users\Public\icinga_installation.json';
 ```
 
 **Note:** You can use the same arguments on the `IcingaForWindows.ps1` as described in the [Getting Started](01-Getting-Started.md) page, for a full automation without user interaction.
