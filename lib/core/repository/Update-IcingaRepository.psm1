@@ -89,13 +89,21 @@ function Update-IcingaRepository()
             continue;
         }
 
+        # Ensure we use the default RemotePath within our IMC config, unless we specify a different path during update
+        [string]$SetRemotePath = $definedRepo.Value.RemotePath;
+
+        if ([string]::IsNullOrEmpty($RemotePath) -eq $FALSE) {
+            Set-IcingaPowerShellConfig -Path ([string]::Format('Framework.Repository.Repositories.{0}.RemotePath', $definedRepo.Name)) -Value $RemotePath;
+            $SetRemotePath = $RemotePath;
+        }
+
         Write-IcingaConsoleNotice 'Syncing repository "{0}"' -Objects $definedRepo.Name;
 
         if ([string]::IsNullOrEmpty($definedRepo.Value.CloneSource) -eq $FALSE) {
             Sync-IcingaRepository `
                 -Name $definedRepo.Name `
                 -Path $definedRepo.Value.LocalPath `
-                -RemotePath $definedRepo.Value.RemotePath `
+                -RemotePath $SetRemotePath `
                 -Source $definedRepo.Value.CloneSource `
                 -UseSCP:$definedRepo.Value.UseSCP `
                 -Force `
