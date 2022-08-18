@@ -19,6 +19,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#529](https://github.com/Icinga/icinga-powershell-framework/pull/529) Fixes package manifest reader for Icinga for Windows components on Windows 2012 R2 and older
 * [#523](https://github.com/Icinga/icinga-powershell-framework/pull/523) Fixes errors on encapsulated PowerShell calls for missing Cmdlets `Write-IcingaConsoleError` and `Optimize-IcingaForWindowsMemory`
 * [#524](https://github.com/Icinga/icinga-powershell-framework/issues/524) Fixes uninstallation process by improving the location handling of PowerShell instances with Icinga IMC or Shell
+* [#545](https://github.com/Icinga/icinga-powershell-framework/issues/545) Fixes `RemoteSource` being cleared within repository `.json` files during `Update-IcingaRepository` tasks
 
 ### Enhancements
 
