@@ -22,6 +22,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#524](https://github.com/Icinga/icinga-powershell-framework/issues/524) Fixes uninstallation process by improving the location handling of PowerShell instances with Icinga IMC or Shell
 * [#545](https://github.com/Icinga/icinga-powershell-framework/issues/545) Fixes `RemoteSource` being cleared within repository `.json` files during `Update-IcingaRepository` tasks
 * [#552](https://github.com/Icinga/icinga-powershell-framework/pull/552) Fixes file encoding for Icinga for Windows v1.10.0 to ensure the cache is always properly created with the correct encoding
+* [#553](https://github.com/Icinga/icinga-powershell-framework/pull/553) Fixes an exception caused by service recovery setting, if the required service was not installed before
 
 ### Enhancements
 

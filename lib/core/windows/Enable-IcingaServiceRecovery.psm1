@@ -1,6 +1,6 @@
 function Enable-IcingaServiceRecovery()
 {
-    if ($null -ne (Get-Service 'icinga2')) {
+    if ($null -ne (Get-Service 'icinga2' -ErrorAction SilentlyContinue)) {
         $ServiceStatus = Start-IcingaProcess -Executable 'sc.exe' -Arguments 'failure icinga2 reset=0 actions=restart/0/restart/0/restart/0';
 
         if ($ServiceStatus.ExitCode -ne 0) {
@@ -10,7 +10,7 @@ function Enable-IcingaServiceRecovery()
         }
     }
 
-    if ($null -ne (Get-Service 'icingapowershell')) {
+    if ($null -ne (Get-Service 'icingapowershell' -ErrorAction SilentlyContinue)) {
         $ServiceStatus = Start-IcingaProcess -Executable 'sc.exe' -Arguments 'failure icingapowershell reset=0 actions=restart/0/restart/0/restart/0';
 
         if ($ServiceStatus.ExitCode -ne 0) {
