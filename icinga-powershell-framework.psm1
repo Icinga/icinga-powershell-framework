@@ -108,8 +108,16 @@ function Write-IcingaFrameworkCodeCache()
     # Load modules from directory
     Get-ChildItem -Path $directory -Recurse -Filter '*.psm1' |
         ForEach-Object {
-            $CacheContent += (Get-Content -Path $_.FullName -Raw -Encoding 'UTF8');
-            $CacheContent += "`r`n";
+            [System.IO.FileStream]$FileStream = [System.IO.File]::Open(
+                $_.FullName,
+                [System.IO.FileMode]::Open,
+                [System.IO.FileAccess]::Read,
+                [System.IO.FileShare]::Read
+            );
+            $FileReader                       = New-Object 'System.IO.StreamReader'($FileStream), (New-Object System.Text.UTF8Encoding $TRUE);
+            $CacheContent                     += $FileReader.ReadToEnd();
+            $FileReader.Close();
+            $FileReader.Dispose();
         }
 
     $CacheContent += "Export-ModuleMember -Function @( '*' ) -Alias @( '*' ) -Variable @( '*' )";
@@ -122,7 +130,7 @@ function Write-IcingaFrameworkCodeCache()
         return;
     }
 
-    Set-Content -Path $CacheFile -Value $CacheContent -Encoding 'UTF8';
+    [System.IO.File]::WriteAllLines($CacheFile, $CacheContent, (New-Object System.Text.UTF8Encoding $TRUE));
 
     Remove-IcingaFrameworkDependencyFile;
 

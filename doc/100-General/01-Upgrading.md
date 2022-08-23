@@ -4,6 +4,28 @@ Upgrading Icinga PowerShell Framework is usually quite straightforward.
 
 Specific version upgrades are described below. Please note that version updates are incremental.
 
+## Upgrading to v1.10.0 (2022-08-30)
+
+Icinga for Windows v1.10.0 made some changes regarding encoding, to ensure Icinga checks are always properly encoded to work with German umlauts. Because of this change, the update from a previous Icinga for Windows version to v1.10.0 requires some additional steps. To properly upgrade your environment, please use the following code and add the `icinga-powershell-framework` update procedure in-between:
+
+```powershell
+# Store our file locations in a variable
+$FrameworkRootPath = Get-IcingaFrameworkRootPath;
+$FrameworkCache    = Get-IcingaFrameworkCodeCacheFile;
+
+# Update your Icinga PowerShell Framework to the latest version (v1.10.0)
+Update-Icinga -Name 'framework' -Force -Confirm;
+
+# Copy the newly created template for the cache file to location of the current cache
+Copy-Item -Path (Join-Path -Path $FrameworkRootPath -ChildPath '\templates\framework_cache.psm1.template') -Destination $FrameworkCache -Force | Out-Null;
+
+# Import our module again to apply all changes and properly rebuild the cache
+Import-Module icinga-powershell-framework -Force;
+Import-Module icinga-powershell-framework -Global -Force;
+
+# Add your own update procedure code
+```
+
 ## Upgrading to v1.8.0 (2022-02-08)
 
 ### Service Binary
