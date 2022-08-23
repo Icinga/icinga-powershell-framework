@@ -148,7 +148,7 @@ function Compare-IcingaPluginThresholds()
     if ([string]::IsNullOrEmpty($BaseValue) -eq $FALSE -And $BaseValue -ne 0 -And $IcingaThresholds.Unit -eq '%') {
         $InputValue           = $InputValue / $BaseValue * 100;
         $UseDynamicPercentage = $TRUE;
-    } elseif (([string]::IsNullOrEmpty($BaseValue) -eq $TRUE -Or $BaseValue -eq 0) -And $IcingaThresholds.Unit -eq '%') {
+    } elseif ([string]::IsNullOrEmpty($BaseValue) -eq $TRUE -And $IcingaThresholds.Unit -eq '%') {
         $IcingaThresholds.HasError = $TRUE;
         $IcingaThresholds.ErrorMessage = 'This argument does not support the % unit';
 
