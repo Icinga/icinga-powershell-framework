@@ -4,9 +4,11 @@ function Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate()
         [switch]$Register = $FALSE
     );
 
-    $DirectorUrl    = Get-IcingaForWindowsInstallerValuesFromStep -InstallerStep 'Show-IcingaForWindowsManagementConsoleInstallationEnterDirectorUrl';
-    $SelfServiceKey = Get-IcingaForWindowsInstallerValuesFromStep -InstallerStep 'Show-IcingaForWindowsManagementConsoleInstallationEnterDirectorSelfServiceKey';
-    $UsedEnteredKey = $SelfServiceKey;
+    $DirectorUrl         = Get-IcingaForWindowsInstallerValuesFromStep -InstallerStep 'Show-IcingaForWindowsManagementConsoleInstallationEnterDirectorUrl';
+    $SelfServiceKey      = Get-IcingaForWindowsInstallerValuesFromStep -InstallerStep 'Show-IcingaForWindowsManagementConsoleInstallationEnterDirectorSelfServiceKey';
+    $HostRegisterSetting = Get-IcingaForWindowsInstallerStepSelection -InstallerStep 'Show-IcingaForWindowsInstallerMenuSelectHostname';
+    $CustomHostname      = Get-IcingaForWindowsInstallerValuesFromStep -InstallerStep 'Show-IcingaForWindowsInstallationMenuEnterCustomHostname';
+    $UsedEnteredKey      = $SelfServiceKey;
 
     # Once we run this menu, we require to reset everything to have a proper state
     if ($Register -eq $FALSE) {
@@ -14,6 +16,13 @@ function Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate()
 
         Add-IcingaForWindowsInstallerConfigEntry -Selection 'c' -Values $DirectorUrl -OverwriteValues -OverwriteMenu 'Show-IcingaForWindowsManagementConsoleInstallationEnterDirectorUrl';
         Add-IcingaForWindowsInstallerConfigEntry -Selection 'c' -Values $SelfServiceKey -OverwriteValues -OverwriteMenu 'Show-IcingaForWindowsManagementConsoleInstallationEnterDirectorSelfServiceKey';
+
+        if ($null -ne $HostRegisterSetting) {
+            Add-IcingaForWindowsInstallerConfigEntry -Selection $HostRegisterSetting -OverwriteValues -OverwriteMenu 'Show-IcingaForWindowsInstallerMenuSelectHostname'
+            if ($HostRegisterSetting -eq '6') {
+                Add-IcingaForWindowsInstallerConfigEntry -Selection 'c' -Values $CustomHostname -OverwriteValues -OverwriteMenu 'Show-IcingaForWindowsInstallationMenuEnterCustomHostname';
+            }
+        }
     } else {
         $Global:Icinga.InstallWizard.DirectorRegisteredHost = $TRUE;
         $HostnameType   = Get-IcingaForWindowsInstallerStepSelection -InstallerStep 'Show-IcingaForWindowsInstallerMenuSelectHostname';
