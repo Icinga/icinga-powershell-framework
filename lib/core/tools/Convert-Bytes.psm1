@@ -8,11 +8,11 @@ function Convert-Bytes()
     # Ensure we always use proper formatting of values
     $Value = $Value.Replace(',', '.');
 
-    If (($Value -Match "(^[\d\.]*) ?(B|KB|MB|GB|TB|PT|KiB|MiB|GiB|TiB|PiB)") -eq $FALSE) {
+    If (($Value -Match "(^-?[0-9].*)+((\.|\,)+[0-9])?(B|KB|MB|GB|TB|PT|KiB|MiB|GiB|TiB|PiB)") -eq $FALSE) {
         $Value = [string]::Format('{0}B', $Value);
     }
 
-    If (($Value -Match "(^[\d\.]*) ?(B|KB|MB|GB|TB|PT|KiB|MiB|GiB|TiB|PiB)")) {
+    If (($Value -Match "(^-?[0-9].*)+((\.|\,)+[0-9])?(B|KB|MB|GB|TB|PT|KiB|MiB|GiB|TiB|PiB)")) {
         [single]$CurrentValue = $Matches[1];
         [string]$CurrentUnit = $Matches[2];
 
