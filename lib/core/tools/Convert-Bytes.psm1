@@ -12,7 +12,7 @@ function Convert-Bytes()
         $Value = [string]::Format('{0}B', $Value);
     }
 
-    If (($Value -Match "(^-?[0-9].*)+((\.|\,)+[0-9])?(B|KB|MB|GB|TB|PT|KiB|MiB|GiB|TiB|PiB)")) {
+    If (($Value -Match "(^[\d\.]*) ?(B|KB|MB|GB|TB|PT|KiB|MiB|GiB|TiB|PiB)")) {
         [single]$CurrentValue = $Matches[1];
         [string]$CurrentUnit = $Matches[2];
 
