@@ -1,4 +1,4 @@
-﻿<#
+<#
     ### Note ###
 
     This file is shipping plain with Icinga for Windows for each version.

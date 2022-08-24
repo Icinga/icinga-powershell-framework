@@ -134,14 +134,14 @@ function Convert-IcingaPluginThresholds()
             $ThresholdValue = $ThresholdValue.Substring(1, $ThresholdValue.Length - 1);
         }
 
-        If (($ThresholdValue -Match "(^[\d\.]*) ?(B|KB|MB|GB|TB|PT|KiB|MiB|GiB|TiB|PiB)")) {
+        If (($ThresholdValue -Match "(^-?[0-9].*)+((\.|\,)+[0-9])?(B|KB|MB|GB|TB|PT|KiB|MiB|GiB|TiB|PiB)")) {
             $WorkUnit = 'B';
             if ([string]::IsNullOrEmpty($RetValue.Unit) -eq $FALSE -And $RetValue.Unit -ne $WorkUnit) {
                 Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.MultipleUnitUsage -Force;
             }
             $Value         = (Convert-Bytes -Value $ThresholdValue -Unit $WorkUnit).Value;
             $RetValue.Unit = $WorkUnit;
-        } elseif (($ThresholdValue -Match "(^[\d\.]*) ?(ms|s|m|h|d|w|M|y)")) {
+        } elseif (($ThresholdValue -Match "(^-?[0-9].*)+((\.|\,)+[0-9])?(ms|s|m|h|d|w|M|y)")) {
             $WorkUnit = 's';
             if ([string]::IsNullOrEmpty($RetValue.Unit) -eq $FALSE -And $RetValue.Unit -ne $WorkUnit) {
                 Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.MultipleUnitUsage -Force;
