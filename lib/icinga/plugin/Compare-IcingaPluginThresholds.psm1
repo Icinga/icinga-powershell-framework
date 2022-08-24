@@ -10,6 +10,7 @@ function Compare-IcingaPluginThresholds()
         [string]$Unit           = '',
         $ThresholdCache         = $null,
         [string]$CheckName      = '',
+        [string]$PerfDataLabel  = '',
         [hashtable]$Translation = @{ },
         $Minium                 = $null,
         $Maximum                = $null,
@@ -44,6 +45,7 @@ function Compare-IcingaPluginThresholds()
     $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'MaxRangeValue'   -Value $null;
     $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'PercentValue'    -Value '';
     $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'TimeSpan'        -Value '';
+    $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'TimeSpanOutput'  -Value '';
     $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'InRange'         -Value $TRUE;
     $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'Message'         -Value '';
     $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'Range'           -Value '';
@@ -60,15 +62,35 @@ function Compare-IcingaPluginThresholds()
     }
 
     if ([string]::IsNullOrEmpty($TimeInterval) -eq $FALSE -And $null -ne $ThresholdCache) {
-        $TimeSeconds        = ConvertTo-Seconds $TimeInterval;
-        $MinuteInterval     = [math]::round(([TimeSpan]::FromSeconds($TimeSeconds)).TotalMinutes, 0);
-        $CheckPerfDataLabel = [string]::Format('{0}_{1}', (Format-IcingaPerfDataLabel $CheckName), $MinuteInterval);
+        $TimeSeconds            = ConvertTo-Seconds $TimeInterval;
+        $IntervalLabelName      = (Format-IcingaPerfDataLabel -PerfData $CheckName);
+        $IntervalMultiLabelName = (Format-IcingaPerfDataLabel -PerfData $CheckName -MultiOutput);
+
+        if ([string]::IsNullOrEmpty($PerfDataLabel) -eq $FALSE) {
+            $IntervalLabelName      = $PerfDataLabel;
+            $IntervalMultiLabelName = $PerfDataLabel;
+        }
+
+        $MinuteInterval      = [math]::round(([TimeSpan]::FromSeconds($TimeSeconds)).TotalMinutes, 0);
+        $CheckPerfDataLabel  = [string]::Format('{0}_{1}', $IntervalLabelName, $MinuteInterval);
+        $MultiPerfDataLabel  = [string]::Format('::{0}::Interval{1}', $IntervalMultiLabelName, $TimeSeconds);
+        [bool]$FoundInterval = $FALSE;
 
         if ($null -ne $ThresholdCache.$CheckPerfDataLabel) {
-            $InputValue                = $ThresholdCache.$CheckPerfDataLabel;
-            $InputValue                = [math]::round([decimal]$InputValue, 6);
-            $IcingaThresholds.TimeSpan = $MinuteInterval;
-        } else {
+            $InputValue                      = $ThresholdCache.$CheckPerfDataLabel;
+            $InputValue                      = [math]::round([decimal]$InputValue, 6);
+            $IcingaThresholds.TimeSpanOutput = $MinuteInterval;
+            $IcingaThresholds.TimeSpan       = $MinuteInterval;
+            $FoundInterval                   = $TRUE;
+        }
+        if ($null -ne $ThresholdCache.$MultiPerfDataLabel) {
+            $InputValue                      = $ThresholdCache.$MultiPerfDataLabel;
+            $InputValue                      = [math]::round([decimal]$InputValue, 6);
+            $IcingaThresholds.TimeSpanOutput = $MinuteInterval;
+            $IcingaThresholds.TimeSpan       = $TimeSeconds;
+            $FoundInterval                   = $TRUE;
+        }
+        if ($FoundInterval -eq $FALSE) {
             $IcingaThresholds.HasError     = $TRUE;
             $IcingaThresholds.ErrorMessage = [string]::Format(
                 'The provided time interval "{0}" which translates to "{1}m" in your "-ThresholdInterval" argument does not exist',

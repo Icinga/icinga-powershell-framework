@@ -11,6 +11,6 @@ function Write-IcingaPluginOutput()
         Write-IcingaConsolePlain $Output;
     } else {
         # New behavior with local thread separated results
-        $global:Icinga.Private.Scheduler.CheckResults += $Output;
+        [array]$Global:Icinga.Private.Scheduler.CheckResults += $Output;
     }
 }

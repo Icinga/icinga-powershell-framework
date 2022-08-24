@@ -17,8 +17,10 @@ function Add-IcingaServiceCheckTask()
     # Read our check result store data from disk for this service check
     Read-IcingaCheckResultStore -CheckCommand $CheckCommand;
 
+    [int]$CheckInterval   = ConvertTo-Seconds $Interval;
+
     while ($TRUE) {
-        if ($Global:Icinga.Private.Daemons.ServiceCheck.PassedTime -lt $Interval) {
+        if ($Global:Icinga.Private.Daemons.ServiceCheck.PassedTime -lt $CheckInterval) {
             $Global:Icinga.Private.Daemons.ServiceCheck.PassedTime += 1;
             Start-Sleep -Seconds 1;
 
@@ -75,12 +77,9 @@ function Add-IcingaServiceCheckTask()
 
                 foreach ($calc in $Global:Icinga.Private.Daemons.ServiceCheck.AverageCalculation.Keys) {
                     if ($Global:Icinga.Private.Daemons.ServiceCheck.AverageCalculation[$calc].Count -ne 0) {
-                        $AverageValue         = ($Global:Icinga.Private.Daemons.ServiceCheck.AverageCalculation[$calc].Sum / $Global:Icinga.Private.Daemons.ServiceCheck.AverageCalculation[$calc].Count);
-                        [string]$MetricName   = Format-IcingaPerfDataLabel (
-                            [string]::Format('{0}_{1}', $HashIndex, $Global:Icinga.Private.Daemons.ServiceCheck.AverageCalculation[$calc].Interval)
-                        );
-
-                        $Global:Icinga.Private.Scheduler.CheckData[$CheckCommand]['average'] | Add-Member -MemberType NoteProperty -Name $MetricName -Value $AverageValue -Force;
+                        $AverageValue            = ($Global:Icinga.Private.Daemons.ServiceCheck.AverageCalculation[$calc].Sum / $Global:Icinga.Private.Daemons.ServiceCheck.AverageCalculation[$calc].Count);
+                        [string]$MetricMultiName = [string]::Format('::{0}::Interval{1}', (Format-IcingaPerfDataLabel -PerfData $HashIndex -MultiOutput), $Global:Icinga.Private.Daemons.ServiceCheck.AverageCalculation[$calc].Time);
+                        $Global:Icinga.Private.Scheduler.CheckData[$CheckCommand]['average'] | Add-Member -MemberType NoteProperty -Name $MetricMultiName -Value $AverageValue -Force;
                     }
 
                     $Global:Icinga.Private.Daemons.ServiceCheck.AverageCalculation[$calc].Sum   = 0;

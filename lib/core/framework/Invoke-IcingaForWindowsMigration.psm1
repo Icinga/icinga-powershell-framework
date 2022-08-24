@@ -39,4 +39,41 @@ function Invoke-IcingaForWindowsMigration()
             Restart-IcingaService -Service 'icingapowershell';
         }
     }
+
+    if (Test-IcingaForWindowsMigration -MigrationVersion (New-IcingaVersionObject -Version '1.10.0')) {
+        Write-IcingaConsoleNotice 'Applying pending migrations required for Icinga for Windows v1.10.0';
+
+        $ServiceStatus = (Get-Service 'icingapowershell' -ErrorAction SilentlyContinue).Status;
+
+        if ($ServiceStatus -eq 'Running') {
+            Stop-IcingaWindowsService;
+        }
+
+        # Convert the time intervals for the background daemon services from the previous index handling
+        # 1, 3, 5, 15 as example to 1m, 3m, 5m, 15m
+        $BackgroundServices = Get-IcingaPowerShellConfig -Path 'BackgroundDaemon.RegisteredServices';
+        [hashtable]$Output = @{ };
+
+        foreach ($service in $BackgroundServices.PSObject.Properties) {
+            [array]$ConvertedTimeIndex = @();
+
+            foreach ($interval in $service.Value.TimeIndexes) {
+                if (Test-Numeric $interval) {
+                    $ConvertedTimeIndex += [string]::Format('{0}m', $interval);
+                } else {
+                    $ConvertedTimeIndex = $interval;
+                }
+            }
+
+            $service.Value.TimeIndexes = $ConvertedTimeIndex;
+        }
+
+        Set-IcingaPowerShellConfig -Path 'BackgroundDaemon.RegisteredServices' -Value $BackgroundServices;
+
+        Set-IcingaForWindowsMigration -MigrationVersion (New-IcingaVersionObject -Version '1.10.0');
+
+        if ($ServiceStatus -eq 'Running') {
+            Restart-IcingaWindowsService -Service 'icingapowershell';
+        }
+    }
 }

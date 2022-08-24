@@ -5,6 +5,9 @@ function New-IcingaCheck()
         $Value              = $null,
         $BaseValue          = $null,
         $Unit               = '',
+        $MetricIndex        = 'default',
+        $MetricName         = '',
+        $MetricTemplate     = '',
         [string]$Minimum    = '',
         [string]$Maximum    = '',
         $ObjectExists       = -1,
@@ -21,6 +24,9 @@ function New-IcingaCheck()
     $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'Value'             -Value $Value;
     $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'BaseValue'         -Value $BaseValue;
     $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'Unit'              -Value $Unit;
+    $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'MetricIndex'       -Value $MetricIndex;
+    $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'MetricName'        -Value $MetricName;
+    $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'MetricTemplate'    -Value $MetricTemplate;
     $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'Minimum'           -Value $Minimum;
     $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'Maximum'           -Value $Maximum;
     $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'ObjectExists'      -Value $ObjectExists;
@@ -114,7 +120,7 @@ function New-IcingaCheck()
             $TimeSpan = [string]::Format(
                 '{0}({1}m avg.)',
                 (&{ if ([string]::IsNullOrEmpty($PluginThresholds)) { return ''; } else { return ' ' } }),
-                $this.__ThresholdObject.TimeSpan
+                $this.__ThresholdObject.TimeSpanOutput
             );
         }
 
@@ -138,14 +144,15 @@ function New-IcingaCheck()
 
     # __GetTimeSpanThreshold(0, 'Core_30_20', 'Core_30')
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Force -Name '__GetTimeSpanThreshold' -Value {
-        param ($TimeSpanLabel, $Label);
+        param ($TimeSpanLabel, $Label, $MultiOutput);
 
         [hashtable]$TimeSpans = @{
             'Warning'  = '';
             'Critical' = '';
+            'Interval' = '';
         }
 
-        [string]$LabelName = (Format-IcingaPerfDataLabel $this.Name);
+        [string]$LabelName = (Format-IcingaPerfDataLabel -PerfData $this.Name -MultiOutput:$MultiOutput);
         if ([string]::IsNullOrEmpty($this.LabelName) -eq $FALSE) {
             $LabelName = $this.LabelName;
         }
@@ -154,7 +161,7 @@ function New-IcingaCheck()
             return $TimeSpans;
         }
 
-        $TimeSpan = $TimeSpanLabel.Replace($Label, '').Replace('_', '');
+        $TimeSpan = $TimeSpanLabel.Replace($Label, '').Replace('_', '').Replace('::Interval', '').Replace('::', '');
 
         if ($null -ne $this.__WarningValue -And [string]::IsNullOrEmpty($this.__WarningValue.TimeSpan) -eq $FALSE -And $this.__WarningValue.TimeSpan -eq $TimeSpan) {
             $TimeSpans.Warning = $this.__WarningValue.IcingaThreshold;
@@ -162,6 +169,7 @@ function New-IcingaCheck()
         if ($null -ne $this.__CriticalValue -And [string]::IsNullOrEmpty($this.__CriticalValue.TimeSpan) -eq $FALSE -And $this.__CriticalValue.TimeSpan -eq $TimeSpan) {
             $TimeSpans.Critical = $this.__CriticalValue.IcingaThreshold;
         }
+        $TimeSpans.Interval = $TimeSpan;
 
         return $TimeSpans;
     }
@@ -179,10 +187,11 @@ function New-IcingaCheck()
             return;
         }
 
-        [string]$LabelName = (Format-IcingaPerfDataLabel $this.Name);
-        $value             = ConvertTo-Integer -Value $this.__ThresholdObject.RawValue -NullAsEmpty;
-        $warning           = '';
-        $critical          = '';
+        [string]$LabelName      = (Format-IcingaPerfDataLabel -PerfData $this.Name);
+        [string]$MultiLabelName = (Format-IcingaPerfDataLabel -PerfData $this.Name -MultiOutput);
+        $value                  = ConvertTo-Integer -Value $this.__ThresholdObject.RawValue -NullAsEmpty;
+        $warning                = '';
+        $critical               = '';
 
         # Set our threshold to nothing if we use time spans, as it would cause performance metrics to
         # contain warning/critical values for everything, which is not correct
@@ -194,7 +203,8 @@ function New-IcingaCheck()
         }
 
         if ([string]::IsNullOrEmpty($this.LabelName) -eq $FALSE) {
-            $LabelName = $this.LabelName;
+            $LabelName      = $this.LabelName;
+            $MultiLabelName = $this.LabelName;
         }
 
         if ([string]::IsNullOrEmpty($this.Minimum) -And [string]::IsNullOrEmpty($this.Maximum)) {
@@ -211,16 +221,26 @@ function New-IcingaCheck()
             }
         }
 
+        $PerfDataTemplate = ($this.__CheckCommand.Replace('Invoke-IcingaCheck', ''));
+
+        if ([string]::IsNullOrEmpty($this.MetricTemplate) -eq $FALSE) {
+            $PerfDataTemplate = $this.MetricTemplate;
+        }
+
         $this.__CheckPerfData = @{
-            'label'    = $LabelName;
-            'perfdata' = '';
-            'unit'     = $this.__ThresholdObject.PerfUnit;
-            'value'    = (Format-IcingaPerfDataValue $value);
-            'warning'  = (Format-IcingaPerfDataValue $warning);
-            'critical' = (Format-IcingaPerfDataValue $critical);
-            'minimum'  = (Format-IcingaPerfDataValue $this.Minimum);
-            'maximum'  = (Format-IcingaPerfDataValue $this.Maximum);
-            'package'  = $FALSE;
+            'index'      = $this.MetricIndex;
+            'name'       = $this.MetricName;
+            'template'   = $PerfDataTemplate;
+            'label'      = $LabelName;
+            'multilabel' = $MultiLabelName;
+            'perfdata'   = '';
+            'unit'       = $this.__ThresholdObject.PerfUnit;
+            'value'      = (Format-IcingaPerfDataValue $value);
+            'warning'    = (Format-IcingaPerfDataValue $warning);
+            'critical'   =  (Format-IcingaPerfDataValue $critical);
+            'minimum'    = (Format-IcingaPerfDataValue $this.Minimum);
+            'maximum'    = (Format-IcingaPerfDataValue $this.Maximum);
+            'package'    = $FALSE;
         };
     }
 
@@ -253,6 +273,20 @@ function New-IcingaCheck()
 
             $this.__LockState();
             $this.unit = $null;
+        }
+    }
+
+    $IcingaCheck | Add-Member -MemberType ScriptMethod -Name '__ValidateMetricsName' -Value {
+        if ([string]::IsNullOrEmpty($this.MetricIndex)) {
+            Write-IcingaConsoleError -Message 'The metric index has no default value for the check object "{0}"' -Objects $this.Name;
+        } else {
+            $this.MetricIndex = Format-IcingaPerfDataLabel -PerfData $this.MetricIndex -MultiOutput;
+        }
+
+        if ([string]::IsNullOrEmpty($this.MetricName)) {
+            $this.MetricName = Format-IcingaPerfDataLabel -PerfData $this.Name -MultiOutput;
+        } else {
+            $this.MetricName = Format-IcingaPerfDataLabel -PerfData $this.MetricName -MultiOutput;
         }
     }
 
@@ -298,9 +332,14 @@ function New-IcingaCheck()
         # Fix possible error for identical time stamps due to internal exceptions
         # and check execution within the same time slot because of this
         [string]$TimeIndex = Get-IcingaUnixTime;
+        [string]$LabelName = $this.Name;
 
-        Add-IcingaHashtableItem -Hashtable $global:Icinga.Private.Scheduler.CheckData[$this.__CheckCommand]['results'] -Key $this.Name -Value @{ } | Out-Null;
-        Add-IcingaHashtableItem -Hashtable $global:Icinga.Private.Scheduler.CheckData[$this.__CheckCommand]['results'][$this.Name] -Key $TimeIndex -Value $this.Value -Override | Out-Null;
+        if ([string]::IsNullOrEmpty($this.LabelName) -eq $FALSE) {
+            $LabelName = $this.LabelName;
+        }
+
+        Add-IcingaHashtableItem -Hashtable $global:Icinga.Private.Scheduler.CheckData[$this.__CheckCommand]['results'] -Key $LabelName -Value @{ } | Out-Null;
+        Add-IcingaHashtableItem -Hashtable $global:Icinga.Private.Scheduler.CheckData[$this.__CheckCommand]['results'][$LabelName] -Key $TimeIndex -Value $this.Value -Override | Out-Null;
     }
 
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Name 'SetOk' -Value {
@@ -399,6 +438,7 @@ function New-IcingaCheck()
             '-BaseValue'      = $this.BaseValue;
             '-Unit'           = $this.Unit;
             '-CheckName'      = $this.__GetName();
+            '-PerfDataLabel'  = $this.LabelName;
             '-ThresholdCache' = (Get-IcingaThresholdCache -CheckCommand $this.__CheckCommand);
             '-Translation'    = $this.Translation;
             '-TimeInterval'   = $this.__TimeInterval;
@@ -936,6 +976,7 @@ function New-IcingaCheck()
 
     $IcingaCheck.__ValidateObject();
     $IcingaCheck.__ValidateUnit();
+    $IcingaCheck.__ValidateMetricsName();
     $IcingaCheck.__SetCurrentExecutionTime();
     $IcingaCheck.__AddCheckDataToCache();
     $IcingaCheck.__SetInternalTimeInterval();

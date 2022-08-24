@@ -26,7 +26,7 @@ function New-IcingaServiceCheckDaemonEnvironment()
 
     foreach ($index in $TimeIndexes) {
         # Only allow numeric index values
-        if ((Test-Numeric $index) -eq $FALSE) {
+        if ((Test-Numeric (ConvertTo-Seconds $index)) -eq $FALSE) {
             Write-IcingaEventMessage -EventId 1450 -Namespace 'Framework' -Objects $CheckCommand, ($Arguments | Out-String), ($TimeIndexes | Out-String), $index;
             continue;
         }
@@ -34,15 +34,16 @@ function New-IcingaServiceCheckDaemonEnvironment()
             $Global:Icinga.Private.Daemons.ServiceCheck.AverageCalculation.Add(
                 [string]$index,
                 @{
-                    'Interval' = ([int]$index);
-                    'Time'     = ([int]$index * 60);
-                    'Sum'      = 0;
-                    'Count'    = 0;
+                    'Interval'    = ([int]($index -Replace '[^0-9]', ''));
+                    'RawInterval' = $index;
+                    'Time'        = (ConvertTo-Seconds $index);
+                    'Sum'         = 0;
+                    'Count'       = 0;
                 }
             );
         }
-        if ($Global:Icinga.Private.Daemons.ServiceCheck.MaxTime -le [int]$index) {
-            $Global:Icinga.Private.Daemons.ServiceCheck.MaxTime = [int]$index;
+        if ($Global:Icinga.Private.Daemons.ServiceCheck.MaxTime -le (ConvertTo-Seconds $index)) {
+            $Global:Icinga.Private.Daemons.ServiceCheck.MaxTime = (ConvertTo-Seconds $index);
         }
     }
 
