@@ -11,14 +11,21 @@
     The array of arguments for re-encoding. By default, this could be $args
     for calls from Exit-IcingaExecutePlugin
 .EXAMPLE
-    PS> [hashtable]$ConvertedArgs = ConvertTo-IcingaPowerShellArguments -Arguments $args;
+    PS> [hashtable]$ConvertedArgs = ConvertTo-IcingaPowerShellArguments -Command $CheckCommand -Arguments $args;
 #>
 
 function ConvertTo-IcingaPowerShellArguments()
 {
     param (
+        [string]$Command  = '',
         [array]$Arguments = @()
     );
+
+    if ([string]::IsNullOrEmpty($Command)) {
+        return @{ };
+    }
+
+    $CommandHelp = Get-Help -Name $Command -Full;
 
     [hashtable]$IcingaArguments = @{ };
     [int]$ArgumentIndex         = 0;
@@ -37,8 +44,8 @@ function ConvertTo-IcingaPowerShellArguments()
             continue;
         }
 
-        # Check if it starts with '-', which should indicate it being an argument
-        if ($Arguments[$ArgumentIndex][0] -ne '-') {
+        # Check if our string value is a argument contained inside the command being executed
+        if ($CommandHelp.parameters.parameter.name -Contains ($Arguments[$ArgumentIndex].SubString(1, $Arguments[$ArgumentIndex].Length - 1)) -eq $FALSE) {
              # Continue if we are not an argument
              $ArgumentIndex += 1;
              continue;
@@ -52,7 +59,9 @@ function ConvertTo-IcingaPowerShellArguments()
         # Check if there is anything beyond this argument, if not
         # -> We are a switch argument, adding TRUE;
         if (($ArgumentIndex + 1) -ge $Arguments.Count) {
-            $IcingaArguments.Add($Argument, $TRUE);
+            if ($IcingaArguments.ContainsKey($Argument) -eq $FALSE) {
+                $IcingaArguments.Add($Argument, $TRUE);
+            }
             $ArgumentIndex += 1;
             continue;
         }
@@ -61,10 +70,12 @@ function ConvertTo-IcingaPowerShellArguments()
         if ($Arguments[$ArgumentIndex + 1] -Is [string]) {
             [string]$NextValue = $Arguments[$ArgumentIndex + 1];
 
-            # If our next value on the index starts with '-', we found another argument
+            # If our next value on the index is an argument in our command
             # -> The current argument seems to be a switch argument
-            if ($NextValue[0] -eq '-') {
-                $IcingaArguments.Add($Argument, $TRUE);
+            if ($CommandHelp.parameters.parameter.name -Contains ($NextValue.SubString(1, $NextValue.Length - 1))) {
+                if ($IcingaArguments.ContainsKey($Argument) -eq $FALSE) {
+                    $IcingaArguments.Add($Argument, $TRUE);
+                }
                 $ArgumentIndex += 1;
                 continue;
             }
@@ -86,8 +97,8 @@ function ConvertTo-IcingaPowerShellArguments()
 
                 [string]$NextValue = $Arguments[$ReadStringIndex + 1];
 
-                # In case the next string element starts with '-', this could be an argument
-                if ($NextValue[0] -eq '-') {
+                # Check the next string element and evaluate if it is an argument for our command
+                if ($CommandHelp.parameters.parameter.name -Contains ($NextValue.SubString(1, $NextValue.Length - 1))) {
                     break;
                 }
 
@@ -103,7 +114,9 @@ function ConvertTo-IcingaPowerShellArguments()
 
             # Add our argument with the string builder value, in case we had something to add there
             if ($StringValue.Length -ne 0) {
-                $IcingaArguments.Add($Argument, (ConvertTo-IcingaUTF8Value -InputObject $StringValue.ToString()));
+                if ($IcingaArguments.ContainsKey($Argument) -eq $FALSE) {
+                    $IcingaArguments.Add($Argument, (ConvertTo-IcingaUTF8Value -InputObject $StringValue.ToString()));
+                }
                 $ArgumentIndex += 1;
                 continue;
             }
@@ -114,17 +127,21 @@ function ConvertTo-IcingaPowerShellArguments()
         # If we are an array object, handle empty arrays
         if ($Arguments[$ArgumentIndex + 1] -Is [array]) {
             if ($null -eq $Arguments[$ArgumentIndex + 1] -Or ($Arguments[$ArgumentIndex + 1]).Count -eq 0) {
-                $IcingaArguments.Add($Argument, @());
+                if ($IcingaArguments.ContainsKey($Argument) -eq $FALSE) {
+                    $IcingaArguments.Add($Argument, @());
+                }
                 $ArgumentIndex += 1;
                 continue;
             }
         }
 
-        # Add everything else
-        $IcingaArguments.Add(
-            $Argument,
-            (ConvertTo-IcingaUTF8Value -InputObject $Arguments[$ArgumentIndex + 1])
-        );
+        if ($IcingaArguments.ContainsKey($Argument) -eq $FALSE) {
+            # Add everything else
+            $IcingaArguments.Add(
+                $Argument,
+                (ConvertTo-IcingaUTF8Value -InputObject $Arguments[$ArgumentIndex + 1])
+            );
+        }
 
         $ArgumentIndex += 1;
     }

@@ -5,7 +5,7 @@ function Exit-IcingaExecutePlugin()
     );
 
     # We need to fix the argument encoding hell
-    [hashtable]$ConvertedArgs      = ConvertTo-IcingaPowerShellArguments -Arguments $args;
+    [hashtable]$ConvertedArgs      = ConvertTo-IcingaPowerShellArguments -Command $Command -Arguments $args;
     [string]$JEAProfile            = Get-IcingaJEAContext;
     [bool]$CheckByIcingaForWindows = $FALSE;
     [bool]$CheckByJEAShell         = $FALSE;
