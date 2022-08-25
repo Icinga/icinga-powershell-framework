@@ -39,14 +39,14 @@ You can either edit the configuration for the module within Icinga Web or edit t
 host = "grafana.example.com:3000"
 protocol = "https"
 timerangeAll = "1w/w"
-defaultdashboarduid = "XIU_LcW4z"
+defaultdashboarduid = "QsPVl5W4z"
 defaultdashboardpanelid = "1"
 shadows = "0"
 theme = "dark"
 datasource = "<influxdb source>"
 accessmode = "iframe"
 debug = "0"
-defaultdashboard = "Windows-Default"
+defaultdashboard = "windows-plugins-web"
 defaultorgid = "1"
 ssl_verifypeer = "0"
 ssl_verifyhost = "0"
@@ -54,7 +54,7 @@ custvardisable = ""
 timerange = "3h"
 ```
 
-Please update the fields `host`, `datasource` and possibly `custvardisable` accordingly. The `defaultdashboarduid` with value `XIU_LcW4z` is the Icinga for Windows Base-Template, while the `defaultdashboard` with `Windows-Default` is the name.
+Please update the fields `host`, `datasource` and possibly `custvardisable` accordingly. The `defaultdashboarduid` with value `QsPVl5W4z` is the Icinga for Windows Base-Template, while the `defaultdashboard` with `windows-plugins-web` is the name.
 
 ### Install Icinga for Windows Graphs
 
