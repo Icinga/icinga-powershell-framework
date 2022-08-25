@@ -70,7 +70,7 @@ The default location is
 
 ### Install Grafana Dashboards
 
-Each plugin repository ship with a bunch of `.json` files, containing the configuration for the Grafana dashboards. These are located inside `config/grafana/dashboards/`.
+Each plugin repository ships with a bunch of `.json` files, containing the configuration for the Grafana dashboards. These are located inside `config/grafana/dashboards/`.
 
 To `Import` these dashboards, you simply have to navigate to `Dashboards` -> `Import` inside Grafana
 
