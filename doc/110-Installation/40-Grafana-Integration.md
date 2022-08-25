@@ -90,4 +90,4 @@ Now on the left side, click on `Variables` and search for the variable `influxbu
 
 Once all above steps are successfully completed, you can have a look on your Grafana dashboards
 
-![Import Dashboards](../images/05_installation/01_grafana/03_example_view.png)
+![Import Dashboards](../images/05_installation/01_grafana/03_example_overview.png)
