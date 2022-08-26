@@ -6,6 +6,10 @@ Specific version upgrades are described below. Please note that version updates 
 
 ## Upgrading to v1.10.0 (2022-08-30)
 
+### <span style="color:red">**Breaking changes with v1.10.0 - Read carefully before upgrading!**</span>
+
+### Updating existing installations to v1.10.0
+
 Icinga for Windows v1.10.0 made some changes regarding encoding, to ensure Icinga checks are always properly encoded to work with German umlauts. Because of this change, the update from a previous Icinga for Windows version to v1.10.0 requires some additional steps. To properly upgrade your environment, please use the following code and add the `icinga-powershell-framework` update procedure in-between:
 
 ```powershell
@@ -23,8 +27,31 @@ Copy-Item -Path (Join-Path -Path $FrameworkRootPath -ChildPath '\templates\frame
 Import-Module icinga-powershell-framework -Force;
 Import-Module icinga-powershell-framework -Global -Force;
 
+# Restart the Icinga for Windows service in case installed, to ensure the functionality
+Restart-IcingaWindowsService;
+
 # Add your own update procedure code
 ```
+
+In case your installation is already broken, please have a look on the corresponding knowledge base entry [IWKB000014](../knowledgebase/IWKB000014.md).
+
+### New Performance-Data Metrics
+
+Icinga for Windows v1.10.0 made a change on how performance metrics are designed. Instead of the old labels
+
+```
+used_partition_c
+```
+
+we moved to the `check_multi` output, which allows easier filtering inside graphing solutions:
+
+```
+c::ifw_partitionspace::used
+```
+
+Once upgrade to v1.10.0, please ensure to update all installed components like [Plugins](https://icinga.com/docs/icinga-for-windows/latest/plugins/doc/01-Introduction/), [MSSQL](https://icinga.com/docs/icinga-for-windows/latest/mssql/doc/01-Introduction/), [Hyper-V](https://icinga.com/docs/icinga-for-windows/latest/hyperv/doc/01-Introduction/) and [Cluster](https://icinga.com/docs/icinga-for-windows/latest/cluster/doc/01-Introduction/) to the latest versions, to properly support the new format and write Performance Metrics with the correct index, template and naming handling.
+
+Prior to this release, we have published a [Blogpost on Icinga](https://icinga.com/blog/2022/07/18/icinga-for-windows-preview-visualize-your-metrics/) to announce these changes early on.
 
 ## Upgrading to v1.8.0 (2022-02-08)
 
