@@ -55,6 +55,8 @@ function Uninstall-IcingaForWindows()
     if ($ComponentsOnly -eq $FALSE) {
         Write-IcingaConsoleNotice 'Uninstalling Icinga for Windows EventLog';
         Unregister-IcingaEventLog;
+        # Ensure we close the IMC in case being open and we uninstall the Framework
+        Set-IcingaForWindowsManagementConsoleClosing;
     }
     Write-IcingaConsoleNotice 'Uninstalling Icinga for Windows service';
     Uninstall-IcingaForWindowsService -RemoveFiles | Out-Null;
