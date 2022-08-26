@@ -8,15 +8,7 @@ function Write-IcingaPluginResult()
     [string]$CheckResult = $PluginOutput;
 
     if ($PluginPerfData.Count -ne 0) {
-        [string]$PerfDataContent = '';
-        foreach ($PerfData in $PluginPerfData) {
-            $PerfDataContent += $PerfData;
-        }
-
-        if ([string]::IsNullOrEmpty($PerfDataContent) -eq $FALSE) {
-            $CheckResult += "`n`r| ";
-            $CheckResult += $PerfDataContent;
-        }
+        $CheckResult = [string]::Format('{0}{1}| {2}', $CheckResult, "`r`n", ([string]::Join(' ', $PluginPerfData)));
     }
 
     Write-IcingaConsolePlain $CheckResult;

@@ -27,6 +27,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#552](https://github.com/Icinga/icinga-powershell-framework/pull/552) Fixes file encoding for Icinga for Windows v1.10.0 to ensure the cache is always properly created with the correct encoding
 * [#553](https://github.com/Icinga/icinga-powershell-framework/pull/553) Fixes an exception caused by service recovery setting, if the required service was not installed before
 * [#556](https://github.com/Icinga/icinga-powershell-framework/pull/556) Fixes the certificate folder not present during first installation, preventing permissions properly set from the start which might cause issues once required
+* [#562](https://github.com/Icinga/icinga-powershell-framework/pull/562) Fixes corrupt Performance Data, in case plugins were executed inside a JEA context without the REST-Api
 
 ### Enhancements
 
