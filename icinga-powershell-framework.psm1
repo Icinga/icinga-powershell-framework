@@ -252,6 +252,9 @@ function Invoke-IcingaCommand()
         -FileName 'icinga-powershell-framework.psd1' `
         -BindingVariable IcingaFrameworkData;
 
+    # Ensure we always remove the update file in case present
+    Set-IcingaForWindowsManagementConsoleUpdating -Completed;
+
     # Print a header informing our user that loaded the Icinga Framework with a specific
     # version. We can also skip the header by using $SKipHeader
     if ([string]::IsNullOrEmpty($ScriptBlock) -And $SkipHeader -eq $FALSE -And $Shell) {
@@ -334,6 +337,24 @@ function Invoke-IcingaCommand()
     # In case we close the newly created PowerShell, ensure we set the script root back to the Framework folder
     if (Test-Path $PSScriptRoot) {
         Set-Location $PSScriptRoot;
+    }
+
+    # In case we applied updates to the Framework while inside the IMC -> reopen it
+    if (Test-IcingaForWindowsManagementConsoleUpdating) {
+        Set-IcingaForWindowsManagementConsoleUpdating -Completed;
+
+        # Use the same arguments again to open the IMC
+        $IMCReopenArguments = @{
+            'ScriptBlock'   = $ScriptBlock;
+            'SkipHeader'    = $SkipHeader;
+            'Manage'        = $Manage;
+            'Shell'         = $Shell;
+            'RebuildCache'  = $RebuildCache;
+            'DeveloperMode' = $DeveloperMode;
+            'ArgumentList'  = $ArgumentList;
+        };
+
+        Invoke-IcingaCommand @IMCReopenArguments;
     }
 }
 

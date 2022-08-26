@@ -165,6 +165,9 @@ function Install-IcingaComponent()
                     Stop-IcingaService 'icinga2';
                     Start-Sleep -Seconds 1;
                 }
+
+                # Ensure we close the IMC in case we do some updates on the Framework
+                Set-IcingaForWindowsManagementConsoleUpdating;
             }
 
             if ((Test-Path $ComponentFolder) -eq $FALSE) {

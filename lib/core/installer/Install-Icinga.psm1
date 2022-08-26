@@ -175,4 +175,8 @@ function Install-Icinga()
             }
         }
     }
+
+    if ($null -ne (Get-Command -Name 'Set-IcingaForWindowsManagementConsoleClosing' -ErrorAction SilentlyContinue)) {
+        Set-IcingaForWindowsManagementConsoleClosing -Completed;
+    }
 }
