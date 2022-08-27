@@ -42,6 +42,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#534](https://github.com/Icinga/icinga-powershell-framework/pull/534) Improves Icinga and Director configuration generator, by wrapping PowerShell arrays inside `@()` instead of simply writing them comma separated
 * [#536](https://github.com/Icinga/icinga-powershell-framework/pull/536) Adds new function `Test-IcingaArrayFilter` for easier include and exclude filtering during plugin runtime and to allow filtering of array content for intended values only
 * [#560](https://github.com/Icinga/icinga-powershell-framework/pull/560) Improves handling for Icinga Management Console which will now terminate itself during full uninstallation and restarts after updating the Icinga PowerShell Framework, to apply changes directly
+* [#569](https://github.com/Icinga/icinga-powershell-framework/pull/569) Adds `-Include` and `-Exclude` filter for EventLog CLI parser, to only contain certain messages or exclude them from the output
 
 ## 1.9.2 (2022-06-03)
 
