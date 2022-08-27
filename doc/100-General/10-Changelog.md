@@ -28,6 +28,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#553](https://github.com/Icinga/icinga-powershell-framework/pull/553) Fixes an exception caused by service recovery setting, if the required service was not installed before
 * [#556](https://github.com/Icinga/icinga-powershell-framework/pull/556) Fixes the certificate folder not present during first installation, preventing permissions properly set from the start which might cause issues once required
 * [#562](https://github.com/Icinga/icinga-powershell-framework/pull/562) Fixes corrupt Performance Data, in case plugins were executed inside a JEA context without the REST-Api
+* [#563](https://github.com/Icinga/icinga-powershell-framework/pull/563) Fixes checks like MSSQL using arguments of type `SecureString` not being usable with the Icinga for Windows REST-Api
 
 ### Enhancements
 

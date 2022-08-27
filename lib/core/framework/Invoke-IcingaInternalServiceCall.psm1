@@ -46,6 +46,18 @@ function Invoke-IcingaInternalServiceCall()
         $Timeout = $Daemon['Timeout'];
     }
 
+    # In case we are using SecureStrings for credentials, we have to convert them back to regular strings
+    # before pushing them to the REST-Api
+    [array]$CommandArguments = $Arguments.Keys;
+
+    foreach ($arg in $CommandArguments) {
+        $Value = $Arguments[$arg];
+
+        if ($Value -Is [SecureString]) {
+            $Arguments[$arg] = ConvertFrom-IcingaSecureString -SecureString $Value;
+        }
+    }
+
     Set-IcingaTLSVersion;
     Enable-IcingaUntrustedCertificateValidation -SuppressMessages;
 
