@@ -71,6 +71,14 @@ function Invoke-IcingaApiChecksRESTCall()
             # Convert our JSON config for checks to a PSCustomObject
             $PSArguments = ConvertFrom-Json -InputObject $CheckConfig;
 
+            # Read the command definition and arguments type, to ensure we properly handle SecureStrings
+            $CommandHelp    = Get-Help -Name $ExecuteCommand -Full;
+            $CommandDetails = @{ };
+
+            foreach ($parameter in $CommandHelp.parameters.parameter) {
+                $CommandDetails.Add($parameter.Name, $parameter.Type.Name);
+            }
+
             # For executing the checks, we will require the data as
             # hashtable, so declare it here
             [hashtable]$Arguments = @{ };
@@ -79,10 +87,17 @@ function Invoke-IcingaApiChecksRESTCall()
             # a valid hashtable, allowing us to parse arguments
             # to our check command
             $PSArguments.PSObject.Properties | ForEach-Object {
+                $CmdArgValue = $_.Value;
+
+                # Ensure we convert strings to SecureString, in case the plugin argument requires it
+                if ($CommandDetails.ContainsKey($_.Name) -And $CommandDetails[$_.Name] -Like 'SecureString') {
+                    $CmdArgValue = ConvertTo-IcingaSecureString -String $_.Value;
+                }
+
                 Add-IcingaHashtableItem `
                     -Hashtable $Arguments `
                     -Key $_.Name `
-                    -Value $_.Value | Out-Null;
+                    -Value $CmdArgValue | Out-Null;
             };
 
             [int]$ExitCode = & $ExecuteCommand @Arguments;
