@@ -11,6 +11,10 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/23?closed=1)
 
+### Deprecated
+
+* We have decided to now officially deprecate the previous installation method `Start-IcingaAgentInstallWizard`. It hasn't been updated or promoted in a long time and all new features have been moved to the [Icinga Management Console](https://icinga.com/docs/icinga-for-windows/latest/doc/110-Installation/02-Icinga-Management-Console/). Please update your installation method to the new solution. The old method will be removed in a future release.
+
 ### Bugfixes
 
 * [#473](https://github.com/Icinga/icinga-powershell-framework/pull/473) Fixes an issue with current string rendering config implementation, as string values containing whitespaces or `$` are rendered wrong by default, if not set in single quotes `''`
