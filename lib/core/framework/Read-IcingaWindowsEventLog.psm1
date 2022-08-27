@@ -3,6 +3,8 @@ function Read-IcingaWindowsEventLog()
     param (
         [string]$LogName = 'Application',
         [array]$Source   = @(),
+        [array]$Include  = @(),
+        [array]$Exclude  = @(),
         [int]$MaxEntries = 500
     );
 
@@ -17,7 +19,7 @@ function Read-IcingaWindowsEventLog()
     $MaxEvents   = 40000;
 
     while ($TRUE) {
-        [array]$IcingaEvents    = Get-WinEvent -LogName $LogName -MaxEvents $MaxEvents -ErrorAction Stop;
+        [array]$IcingaEvents    = Get-WinEvent -LogName $LogName -MaxEvents $MaxEvents -ErrorAction SilentlyContinue;
         [int]$CurrentIndex      = $MaxEntries;
         [array]$CollectedEvents = @();
 
@@ -41,6 +43,10 @@ function Read-IcingaWindowsEventLog()
             if ($event.TimeCreated -eq $LastEvent -And (Get-StringSha1 -Content $event.Message) -eq $LastMessage -And $event.Id -eq $LastId) {
                 $MaxEvents = 500;
                 break;
+            }
+
+            if ((Test-IcingaArrayFilter -InputObject $event.Message -Include $Include -Exclude $Exclude) -eq $FALSE) {
+                continue;
             }
 
             $CollectedEvents += $event;
