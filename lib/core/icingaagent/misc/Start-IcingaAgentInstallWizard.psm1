@@ -192,6 +192,8 @@ function Start-IcingaAgentInstallWizard()
         $PluginsUrl                  = $null
     );
 
+    Write-IcingaDeprecated -Function 'Start-IcingaAgentInstallWizard';
+
     [array]$InstallerArguments = @();
     [array]$GlobalZoneConfig   = @();
 
