@@ -31,6 +31,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#563](https://github.com/Icinga/icinga-powershell-framework/pull/563) Fixes checks like MSSQL using arguments of type `SecureString` not being usable with the Icinga for Windows REST-Api
 * [#565](https://github.com/Icinga/icinga-powershell-framework/pull/565) Fixes internal cache file writer and reader to store changes inside a `.tmp` file first and validating the file state and content, before applying it to the actual file to prevent data corruption
 * [#566](https://github.com/Icinga/icinga-powershell-framework/pull/566) Fixes useless testing and printing of error messages, in case the Icinga Agent is not installed during installation and Icinga for Windows printing plenty of errors, because the ACL checks cannot be completed because of the missing Agent
+* [#568](https://github.com/Icinga/icinga-powershell-framework/pull/568) Fixes misleading SID error during uninstallation of Icinga for Windows or the Agent component
 
 ### Enhancements
 

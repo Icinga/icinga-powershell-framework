@@ -22,7 +22,10 @@ function Uninstall-IcingaServiceUser()
     Set-IcingaUserPermissions -IcingaUser $IcingaUser -Remove;
 
     $UserConfig = Remove-IcingaWindowsUser -IcingaUser $IcingaUser;
-    Update-IcingaWindowsUserPermission -SID $UserConfig.SID -Remove;
+
+    if ($null -ne $UserConfig -And ([string]::IsNullOrEmpty($UserConfig.SID) -eq $FALSE)) {
+        Update-IcingaWindowsUserPermission -SID $UserConfig.SID -Remove;
+    }
 
     Restart-IcingaService 'icinga2';
     Restart-IcingaWindowsService;
