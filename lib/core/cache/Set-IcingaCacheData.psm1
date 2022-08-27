@@ -34,14 +34,19 @@ function Set-IcingaCacheData()
         $Value
     );
 
-    $CacheFile = Join-Path -Path (Join-Path -Path (Join-Path -Path (Get-IcingaCacheDir) -ChildPath $Space) -ChildPath $CacheStore) -ChildPath ([string]::Format('{0}.json', $KeyName));
-    $cacheData = @{ };
+    $CacheFile    = Join-Path -Path (Join-Path -Path (Join-Path -Path (Get-IcingaCacheDir) -ChildPath $Space) -ChildPath $CacheStore) -ChildPath ([string]::Format('{0}.json', $KeyName));
+    $CacheTmpFile = [string]::Format('{0}.tmp', $CacheFile);
+    $cacheData    = @{ };
+
+    if ((Test-IcingaCacheDataTempFile -Space $Space -CacheStore $CacheStore -KeyName $KeyName)) {
+        Copy-IcingaCacheTempFile -CacheFile $CacheFile -CacheTmpFile $CacheTmpFile;
+    }
 
     if ((Test-Path $CacheFile)) {
         $cacheData = Get-IcingaCacheData -Space $Space -CacheStore $CacheStore;
     } else {
         try {
-            New-Item -ItemType File -Path $CacheFile -Force -ErrorAction Stop | Out-Null;
+            New-Item -ItemType File -Path $CacheTmpFile -Force -ErrorAction Stop | Out-Null;
         } catch {
             Exit-IcingaThrowException -InputString $_.Exception -CustomMessage (Get-IcingaCacheDir) -StringPattern 'NewItemUnauthorizedAccessError' -ExceptionType 'Permission' -ExceptionThrown $IcingaExceptions.Permission.CacheFolder;
             Exit-IcingaThrowException -CustomMessage $_.Exception -ExceptionType 'Unhandled' -Force;
@@ -60,5 +65,14 @@ function Set-IcingaCacheData()
         }
     }
 
-    Write-IcingaFileSecure -File $CacheFile -Value (ConvertTo-Json -InputObject $cacheData -Depth 100);
+    # First write all content to a tmp file at the same location, just with '.tmp' at the end
+    Write-IcingaFileSecure -File $CacheTmpFile -Value (ConvertTo-Json -InputObject $cacheData -Depth 100);
+
+    # If something went wrong, remove the cache file again
+    if ((Test-IcingaCacheDataTempFile -Space $Space -CacheStore $CacheStore -KeyName $KeyName) -eq $FALSE) {
+        Remove-ItemSecure -Path $CacheTmpFile -Retries 5 -Force | Out-Null;
+        return;
+    }
+
+    Copy-IcingaCacheTempFile -CacheFile $CacheFile -CacheTmpFile $CacheTmpFile;
 }
