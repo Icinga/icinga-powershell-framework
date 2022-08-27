@@ -10,6 +10,8 @@ function Test-IcingaAgent()
         Write-IcingaTestOutput -Severity 'Failed' -Message 'Icinga Agent service is still present, while Icinga Agent itself is not installed.';
     } elseif ($IcingaAgentData.Installed -eq $FALSE -And $null -eq $AgentServicePresent) {
         Write-IcingaTestOutput -Severity 'Passed' -Message 'Icinga Agent is not installed and service is not present.';
+
+        return;
     }
 
     Test-IcingaAgentServicePermission | Out-Null;
