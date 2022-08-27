@@ -16,6 +16,9 @@
 .PARAMETER KeyName
     This is the actual cache file located under icinga-powershell-framework/cache/<space>/<CacheStore>/<KeyName>.json
     Please note to only provide the name without the '.json' apendix. This is done by the module itself
+.PARAMETER TempFile
+    To safely write data, by default Icinga for Windows will write all content into a .tmp file at the same location with the same name
+    before applying it to the proper file. Set this argument to read the content of a temp file instead
 .INPUTS
     System.String
 .OUTPUTS
@@ -29,12 +32,18 @@ function Get-IcingaCacheData()
     param(
         [string]$Space,
         [string]$CacheStore,
-        [string]$KeyName
+        [string]$KeyName,
+        [switch]$TempFile   = $FALSE
     );
 
     $CacheFile       = Join-Path -Path (Join-Path -Path (Join-Path -Path (Get-IcingaCacheDir) -ChildPath $Space) -ChildPath $CacheStore) -ChildPath ([string]::Format('{0}.json', $KeyName));
     [string]$Content = '';
     $cacheData       = @{ };
+
+    # Read a tmp file if present
+    if ($TempFile) {
+        $CacheFile = [string]::Format('{0}.tmp', $CacheFile);
+    }
 
     if ((Test-Path $CacheFile) -eq $FALSE) {
         return $null;
@@ -46,7 +55,12 @@ function Get-IcingaCacheData()
         return $null;
     }
 
-    $cacheData = ConvertFrom-Json -InputObject ([string]$Content);
+    try {
+        $cacheData = ConvertFrom-Json -InputObject ([string]$Content);
+    } catch {
+        Write-IcingaEventMessage -EventId 1104 -Namespace 'Framework' -ExceptionObject $_ -Objects $CacheFile;
+        return $null;
+    }
 
     if ([string]::IsNullOrEmpty($KeyName)) {
         return $cacheData;

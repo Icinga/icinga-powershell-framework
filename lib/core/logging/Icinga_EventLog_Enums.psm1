@@ -38,6 +38,12 @@ if ($null -eq $IcingaEventLogEnums -Or $IcingaEventLogEnums.ContainsKey('Framewo
                 'Details'   = 'Icinga for Windows was unable to run a specific command within the namespace content, to load additional extensions and component data into Icinga for Windows.';
                 'EventId'   = 1103;
             };
+            1104 = @{
+                'EntryType' = 'Error';
+                'Message'   = 'Unable to read Icinga for Windows cache file';
+                'Details'   = 'Icinga for Windows could not read the specified cache file, as the content seems to be corrupt. This happens mostly in case of unexpected shutdowns or terminations during the write process.';
+                'EventId'   = 1104;
+            };
             1400 = @{
                 'EntryType' = 'Error';
                 'Message'   = 'Icinga for Windows background daemon not found';
