@@ -25,7 +25,12 @@ function ConvertTo-IcingaPowerShellArguments()
         return @{ };
     }
 
-    $CommandHelp = Get-Help -Name $Command -Full;
+    $CommandHelp = Get-Help -Name $Command -Full -ErrorAction SilentlyContinue;
+
+    # Ensure we do not cause exceptions along the border in case the plugin is not installed
+    if ($null -eq $CommandHelp) {
+        return @{ };
+    }
 
     [hashtable]$IcingaArguments = @{ };
     [int]$ArgumentIndex         = 0;
