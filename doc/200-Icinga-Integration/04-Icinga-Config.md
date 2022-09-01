@@ -7,7 +7,7 @@ To make the integration as easy as possible, the Framework is shipping with an I
 To automatically generate the Icinga configuration, open a PowerShell terminal and type in
 
 ```powershell
-icinga
+Use-Icinga
 ```
 
 to load the Icinga PowerShell Framework.
