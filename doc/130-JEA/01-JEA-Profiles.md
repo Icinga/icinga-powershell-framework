@@ -23,7 +23,7 @@ For monitoring for example, certain `Scheduled Tasks` or even `Services` are not
 
 ## What can Icinga for Windows JEA and what can't it do
 
-Icinga for Windows provides `Cmdlets`, to automatically build a JEA profile based on your installed Icinga for Windows components. Each single used `Cmldet` is being analyzed and checked for commands being executed, to ensure plugins have access to all required tools to properly execute them and return the plugin information.
+Icinga for Windows provides `Cmdlets`, to automatically build a JEA profile based on your installed Icinga for Windows components. Each single used `Cmdlet` is being analyzed and checked for commands being executed, to ensure plugins have access to all required tools to properly execute them and return the plugin information.
 
 ### No hundred percent security
 
