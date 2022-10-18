@@ -52,28 +52,41 @@ function Invoke-IcingaForWindowsMigration()
         # Convert the time intervals for the background daemon services from the previous index handling
         # 1, 3, 5, 15 as example to 1m, 3m, 5m, 15m
         $BackgroundServices = Get-IcingaPowerShellConfig -Path 'BackgroundDaemon.RegisteredServices';
-        [hashtable]$Output = @{ };
 
-        foreach ($service in $BackgroundServices.PSObject.Properties) {
-            [array]$ConvertedTimeIndex = @();
+        # Only run this migration in case background services are defined
+        if ($null -ne $BackgroundServices) {
+            foreach ($service in $BackgroundServices.PSObject.Properties) {
+                [array]$ConvertedTimeIndex = @();
 
-            foreach ($interval in $service.Value.TimeIndexes) {
-                if (Test-Numeric $interval) {
-                    $ConvertedTimeIndex += [string]::Format('{0}m', $interval);
-                } else {
-                    $ConvertedTimeIndex = $interval;
+                foreach ($interval in $service.Value.TimeIndexes) {
+                    if (Test-Numeric $interval) {
+                        $ConvertedTimeIndex += [string]::Format('{0}m', $interval);
+                    } else {
+                        $ConvertedTimeIndex = $interval;
+                    }
                 }
+
+                $service.Value.TimeIndexes = $ConvertedTimeIndex;
             }
 
-            $service.Value.TimeIndexes = $ConvertedTimeIndex;
+            Set-IcingaPowerShellConfig -Path 'BackgroundDaemon.RegisteredServices' -Value $BackgroundServices;
         }
-
-        Set-IcingaPowerShellConfig -Path 'BackgroundDaemon.RegisteredServices' -Value $BackgroundServices;
 
         Set-IcingaForWindowsMigration -MigrationVersion (New-IcingaVersionObject -Version '1.10.0');
 
         if ($ServiceStatus -eq 'Running') {
             Restart-IcingaWindowsService -Service 'icingapowershell';
         }
+    }
+
+    if (Test-IcingaForWindowsMigration -MigrationVersion (New-IcingaVersionObject -Version '1.10.1')) {
+        Write-IcingaConsoleNotice 'Applying pending migrations required for Icinga for Windows v1.10.1';
+
+        # Fix Icinga for Windows v1.10.0 broken background service registration
+        if ($null -eq (Get-IcingaPowerShellConfig -Path 'BackgroundDaemon.RegisteredServices')) {
+            Remove-IcingaPowerShellConfig -Path 'BackgroundDaemon.RegisteredServices';
+        }
+
+        Set-IcingaForWindowsMigration -MigrationVersion (New-IcingaVersionObject -Version '1.10.1');
     }
 }
