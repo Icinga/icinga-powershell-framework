@@ -7,6 +7,14 @@ documentation before upgrading to a new release.
 
 Released closed milestones can be found on [GitHub](https://github.com/Icinga/icinga-powershell-framework/milestones?state=closed).
 
+## 1.10.1 (2022-27-10)
+
+[Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/27?closed=1)
+
+### Bugfixes
+
+* [#582](https://github.com/Icinga/icinga-powershell-framework/issues/582) Fixes background service registration caused by migration task for v1.10.0 being executed even when no services were defined before
+
 ## 1.10.0 (2022-08-30)
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/23?closed=1)
