@@ -29,7 +29,7 @@ Invoke-WebRequest `
     -Uri 'https://packages.icinga.com/IcingaForWindows/IcingaForWindows.ps1' `
     -OutFile $ScriptFile;
 
-& $ScriptFile
+powershell.exe -ExecutionPolicy Bypass $ScriptFile
 ```
 
 This will write the PowerShell scriptfile into `C:\Users\Public`.
