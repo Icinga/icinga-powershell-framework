@@ -14,6 +14,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 ### Bugfixes
 
 * [#582](https://github.com/Icinga/icinga-powershell-framework/issues/582) Fixes background service registration caused by migration task for v1.10.0 being executed even when no services were defined before
+* [#588](https://github.com/Icinga/icinga-powershell-framework/issues/588) Fixes threshold values causing an error because of too aggressive regex expression
 
 ## 1.10.0 (2022-08-30)
 
