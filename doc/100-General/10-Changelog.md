@@ -13,6 +13,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 ### Bugfixes
 
+* [#578](https://github.com/Icinga/icinga-powershell-framework/issues/578) Fixes installation and uninstallation commands changing PowerShell location even when not necessary
 * [#582](https://github.com/Icinga/icinga-powershell-framework/issues/582) Fixes background service registration caused by migration task for v1.10.0 being executed even when no services were defined before
 * [#588](https://github.com/Icinga/icinga-powershell-framework/issues/588) Fixes threshold values causing an error because of too aggressive regex expression
 * [#599](https://github.com/Icinga/icinga-powershell-plugins/issues/599) Fixes plugin argument parser to proceed with real argument names and possible provided aliases
