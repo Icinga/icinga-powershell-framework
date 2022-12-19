@@ -7,7 +7,7 @@ documentation before upgrading to a new release.
 
 Released closed milestones can be found on [GitHub](https://github.com/Icinga/icinga-powershell-framework/milestones?state=closed).
 
-## 1.10.1 (2022-27-10)
+## 1.10.1 (2022-12-20)
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/27?closed=1)
 
@@ -15,6 +15,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 * [#582](https://github.com/Icinga/icinga-powershell-framework/issues/582) Fixes background service registration caused by migration task for v1.10.0 being executed even when no services were defined before
 * [#588](https://github.com/Icinga/icinga-powershell-framework/issues/588) Fixes threshold values causing an error because of too aggressive regex expression
+* [#599](https://github.com/Icinga/icinga-powershell-plugins/issues/599) Fixes plugin argument parser to proceed with real argument names and possible provided aliases
 
 ## 1.10.0 (2022-08-30)
 
