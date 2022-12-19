@@ -25,11 +25,25 @@ function ConvertTo-IcingaPowerShellArguments()
         return @{ };
     }
 
-    $CommandHelp = Get-Help -Name $Command -Full -ErrorAction SilentlyContinue;
+    $CmdData               = Get-Command $Command -ErrorAction SilentlyContinue;
+    [array]$CmdAllowedArgs = $CmdData.Parameters.Keys;
 
     # Ensure we do not cause exceptions along the border in case the plugin is not installed
-    if ($null -eq $CommandHelp) {
+    if ($null -eq $CmdAllowedArgs) {
         return @{ };
+    }
+
+    # Ensure we not only add the parameter name to our allow list but also possible aliases
+    foreach ($entry in $CmdData.Parameters.Keys) {
+        if ($CmdData.Parameters[$entry].Aliases.Count -eq 0) {
+            continue;
+        }
+
+        foreach ($cmdAlias in $CmdData.Parameters[$entry].Aliases) {
+            if ($CmdAllowedArgs -NotContains $cmdAlias) {
+                $CmdAllowedArgs += $cmdAlias;
+            }
+        }
     }
 
     [hashtable]$IcingaArguments = @{ };
@@ -50,7 +64,7 @@ function ConvertTo-IcingaPowerShellArguments()
         }
 
         # Check if our string value is a argument contained inside the command being executed
-        if ($CommandHelp.parameters.parameter.name -Contains ($Arguments[$ArgumentIndex].SubString(1, $Arguments[$ArgumentIndex].Length - 1)) -eq $FALSE) {
+        if ($CmdAllowedArgs -Contains ($Arguments[$ArgumentIndex].SubString(1, $Arguments[$ArgumentIndex].Length - 1)) -eq $FALSE) {
              # Continue if we are not an argument
              $ArgumentIndex += 1;
              continue;
@@ -77,7 +91,7 @@ function ConvertTo-IcingaPowerShellArguments()
 
             # If our next value on the index is an argument in our command
             # -> The current argument seems to be a switch argument
-            if ($CommandHelp.parameters.parameter.name -Contains ($NextValue.SubString(1, $NextValue.Length - 1))) {
+            if ($CmdAllowedArgs -Contains ($NextValue.SubString(1, $NextValue.Length - 1))) {
                 if ($IcingaArguments.ContainsKey($Argument) -eq $FALSE) {
                     $IcingaArguments.Add($Argument, $TRUE);
                 }
@@ -103,7 +117,7 @@ function ConvertTo-IcingaPowerShellArguments()
                 [string]$NextValue = $Arguments[$ReadStringIndex + 1];
 
                 # Check the next string element and evaluate if it is an argument for our command
-                if ($CommandHelp.parameters.parameter.name -Contains ($NextValue.SubString(1, $NextValue.Length - 1))) {
+                if ($CmdAllowedArgs -Contains ($NextValue.SubString(1, $NextValue.Length - 1))) {
                     break;
                 }
 
