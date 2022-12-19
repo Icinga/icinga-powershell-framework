@@ -5,6 +5,8 @@ function Write-IcingaForWindowsComponentCompilationFile()
         [string]$CompiledFilePath = ''
     );
 
+    # Store our current shell location
+    [string]$OldLocation = Get-Location;
     # Get the current location and leave this folder
     Set-Location -Path $ScriptRootPath;
     Set-Location -Path '..';
@@ -57,4 +59,7 @@ function Write-IcingaForWindowsComponentCompilationFile()
 
     Import-Module -Name $ModulePath -Force;
     Import-Module -Name $ModulePath -Force -Global;
+
+    # Set our location back to the previous folder
+    Set-Location -Path $OldLocation;
 }
