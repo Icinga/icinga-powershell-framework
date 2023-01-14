@@ -37,7 +37,7 @@ function Get-IcingaServices()
         [int]$StartModeId         = 5;
         [string]$StartMode        = 'Unknown';
 
-        if ($Exclude -contains $service.ServiceName) {
+        if ((Test-IcingaArrayFilter -InputObject $Service.ServiceName -Exclude $Exclude) -eq $FALSE) {
             continue;
         }
 
