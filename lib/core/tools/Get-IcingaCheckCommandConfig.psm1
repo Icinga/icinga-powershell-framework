@@ -100,12 +100,14 @@ function Get-IcingaCheckCommandConfig()
         @{
             'arguments'       = @{
                 '-NoProfile'       = @{
-                    'order'  = '-3';
-                    'set_if' = $TRUE;
+                    'order'    = '-3';
+                    'skip_key' = $TRUE;
+                    'value'    = '-NoLogo';
                 };
                 '-NoLogo'          = @{
-                    'order'  = '-2';
-                    'set_if' = $TRUE;
+                    'order'    = '-2';
+                    'skip_key' = $TRUE;
+                    'value'    = '-NoLogo';
                 };
                 '-ExecutionPolicy' = @{
                     'order' = '-1';
