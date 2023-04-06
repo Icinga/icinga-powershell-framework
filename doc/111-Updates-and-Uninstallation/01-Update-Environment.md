@@ -15,6 +15,7 @@ The command for updating is `Update-Icinga` and provides the following arguments
 | Snapshot | Switch | This will allow to update all components by using snapshot repositories |
 | Confirm  | Switch | Each component being updated will ask for a prompt if the package should be updated. Use this switch to confirm the installation and continue |
 | Force    | Switch | Allows to re-install components in case the no new version was found with the name version |
+| Version  | String | Allows to set a specific version to update the package to |
 
 ## Updating all components
 
