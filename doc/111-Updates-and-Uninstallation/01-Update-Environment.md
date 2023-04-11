@@ -15,6 +15,7 @@ The command for updating is `Update-Icinga` and provides the following arguments
 | Snapshot | Switch | This will allow to update all components by using snapshot repositories |
 | Confirm  | Switch | Each component being updated will ask for a prompt if the package should be updated. Use this switch to confirm the installation and continue |
 | Force    | Switch | Allows to re-install components in case the no new version was found with the name version |
+| Version | String | Allows to set a specific version to update the package to |
 
 ## Updating all components
 
@@ -35,6 +36,14 @@ Update-Icinga -Name 'plugins;
 ```
 
 You have to proceed this step then for all components you want to update.
+
+## Updating a component to a specific version
+
+To update a component to a specific version, you can use the `-Version` argument:
+
+```powershell
+Update-Icinga -Name 'plugins -Version '1.10.0';
+```
 
 ## Pinned components
 
