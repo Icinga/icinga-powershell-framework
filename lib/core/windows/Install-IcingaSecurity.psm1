@@ -4,7 +4,8 @@ function Install-IcingaSecurity()
         [string]$IcingaUser          = 'icinga',
         [switch]$RebuildFramework    = $FALSE,
         [switch]$AllowScriptBlocks   = $FALSE,
-        [switch]$ConstrainedLanguage = $FALSE
+        [switch]$ConstrainedLanguage = $FALSE,
+        [switch]$RunAsTask           = $FALSE
     );
 
     if ($PSVersionTable.PSVersion -lt (New-IcingaVersionObject -Version 5, 0)) {
@@ -27,7 +28,12 @@ function Install-IcingaSecurity()
     }
 
     Install-IcingaServiceUser -IcingaUser $IcingaUser;
-    Install-IcingaJEAProfile -IcingaUser $IcingaUser -RebuildFramework:$RebuildFramework -AllowScriptBlocks:$AllowScriptBlocks -ConstrainedLanguage:$ConstrainedLanguage;
+
+    if ($RunAsTask) {
+        Invoke-IcingaWindowsScheduledTask -JobType InstallJEA -Timeout 600 | Out-Null;
+    } else {
+        Install-IcingaJEAProfile -IcingaUser $IcingaUser -RebuildFramework:$RebuildFramework -AllowScriptBlocks:$AllowScriptBlocks -ConstrainedLanguage:$ConstrainedLanguage;
+    }
 
     Restart-IcingaForWindows;
 }

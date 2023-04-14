@@ -21,27 +21,25 @@
 function Restart-IcingaService()
 {
     param (
-        $Service
+        $Service,
+        [switch]$Force = $FALSE
     );
 
-    if (Get-Service "$Service" -ErrorAction SilentlyContinue) {
-        Write-IcingaConsoleNotice ([string]::Format('Restarting service "{0}"', $Service));
-
-        & powershell.exe -Command {
-            Use-Icinga -Minimal;
-
-            $Service = $args[0];
-            try {
-                Restart-Service "$Service" -ErrorAction Stop;
-                Start-Sleep -Seconds 2;
-                Optimize-IcingaForWindowsMemory;
-            } catch {
-                Write-IcingaConsoleError -Message 'Failed to restart service "{0}". Error: {1}' -Objects $Service, $_.Exception.Message;
-            }
-        } -Args $Service;
-    } else {
-        Write-IcingaConsoleWarning -Message 'The service "{0}" is not installed' -Objects $Service;
+    if ($Global:Icinga.Protected.ServiceRestartLock -And $Force -eq $FALSE) {
+        return;
     }
 
-    Optimize-IcingaForWindowsMemory;
+    $Result = Invoke-IcingaWindowsScheduledTask -JobType 'RestartWindowsService' -ObjectName $Service;
+
+    if ($Result.Success -eq $FALSE) {
+        Write-IcingaConsoleError $Result.ErrMsg;
+    } else {
+        Write-IcingaConsoleNotice $Result.Message;
+    }
+
+    if ($Service -eq 'icinga2') {
+        $Global:Icinga.Protected.IcingaServiceState = $Result.Status;
+    } elseif ($Service -eq 'icingapowershell') {
+        $Global:Icinga.Protected.IfWServiceState = $Result.Status;
+    }
 }

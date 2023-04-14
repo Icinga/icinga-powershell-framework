@@ -1,14 +1,14 @@
 function Test-IcingaAgent()
 {
     $IcingaAgentData     = Get-IcingaAgentInstallation;
-    $AgentServicePresent = Get-Service 'icinga2' -ErrorAction SilentlyContinue;
-    if ($IcingaAgentData.Installed -And $null -ne $AgentServicePresent) {
+    $AgentServicePresent = Get-IcingaWindowsServiceStatus -Service 'icinga2';
+    if ($IcingaAgentData.Installed -And $AgentServicePresent.Present) {
         Write-IcingaTestOutput -Severity 'Passed' -Message 'Icinga Agent service is installed';
-    } elseif ($IcingaAgentData.Installed -And $null -eq $AgentServicePresent) {
+    } elseif ($IcingaAgentData.Installed -And $AgentServicePresent.Present -eq $FALSE) {
         Write-IcingaTestOutput -Severity 'Failed' -Message 'Icinga Agent service is not installed';
-    } elseif ($IcingaAgentData.Installed -eq $FALSE -And $null -ne $AgentServicePresent) {
+    } elseif ($IcingaAgentData.Installed -eq $FALSE -And $AgentServicePresent.Present) {
         Write-IcingaTestOutput -Severity 'Failed' -Message 'Icinga Agent service is still present, while Icinga Agent itself is not installed.';
-    } elseif ($IcingaAgentData.Installed -eq $FALSE -And $null -eq $AgentServicePresent) {
+    } elseif ($IcingaAgentData.Installed -eq $FALSE -And $AgentServicePresent.Present -eq $FALSE) {
         Write-IcingaTestOutput -Severity 'Passed' -Message 'Icinga Agent is not installed and service is not present.';
 
         return;

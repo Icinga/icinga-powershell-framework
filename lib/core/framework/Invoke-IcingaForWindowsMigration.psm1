@@ -13,7 +13,7 @@ function Invoke-IcingaForWindowsMigration()
 
     # Upgrade to v1.8.0
     if (Test-IcingaForWindowsMigration -MigrationVersion (New-IcingaVersionObject -Version '1.8.0')) {
-        $ServiceStatus = (Get-Service 'icingapowershell' -ErrorAction SilentlyContinue).Status;
+        $ServiceStatus = (Get-IcingaWindowsServiceStatus -Service 'icingapowershell').Status;
 
         Write-IcingaConsoleNotice 'Applying pending migrations required for Icinga for Windows v1.8.0';
         if ($ServiceStatus -eq 'Running') {
@@ -43,7 +43,7 @@ function Invoke-IcingaForWindowsMigration()
     if (Test-IcingaForWindowsMigration -MigrationVersion (New-IcingaVersionObject -Version '1.10.0')) {
         Write-IcingaConsoleNotice 'Applying pending migrations required for Icinga for Windows v1.10.0';
 
-        $ServiceStatus = (Get-Service 'icingapowershell' -ErrorAction SilentlyContinue).Status;
+        $ServiceStatus = (Get-IcingaWindowsServiceStatus -Service 'icingapowershell').Status;
 
         if ($ServiceStatus -eq 'Running') {
             Stop-IcingaWindowsService;

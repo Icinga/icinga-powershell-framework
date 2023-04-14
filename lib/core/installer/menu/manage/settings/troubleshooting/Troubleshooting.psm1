@@ -1,6 +1,6 @@
 function Show-IcingaForWindowsMenuManageTroubleshooting()
 {
-    $IcingaAgentService = Get-Service 'icinga2' -ErrorAction SilentlyContinue;
+    $IcingaAgentService = Get-IcingaWindowsServiceStatus -Service 'icinga2';
 
     Show-IcingaForWindowsInstallerMenu `
         -Header 'Troubleshooting options for problems:' `
@@ -45,7 +45,7 @@ function Show-IcingaForWindowsMenuManageTroubleshooting()
                 'Caption'        = 'Repair Icinga Agent service';
                 'Command'        = 'Show-IcingaForWindowsMenuManageTroubleshooting';
                 'Help'           = 'Allows to repair the Icinga Agent service in case it was removed or broke during installation/upgrade';
-                'Disabled'       = ($null -ne $IcingaAgentService);
+                'Disabled'       = (-Not $IcingaAgentService.Present);
                 'DisabledReason' = 'The Icinga Agent service is already present';
                 'AdminMenu'      = $TRUE;
                 'Action'         = @{

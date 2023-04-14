@@ -13,6 +13,8 @@ function Install-Icinga()
     # Always ensure we use the proper TLS Version
     Set-IcingaTLSVersion;
 
+    $Global:Icinga.Protected.ServiceRestartLock = $TRUE;
+
     # Ignore SSL validation in case we set the flag
     if ($NoSSLValidation) {
         Enable-IcingaUntrustedCertificateValidation;
@@ -68,6 +70,7 @@ function Install-Icinga()
             $JsonInstallCmd = ConvertFrom-Json -InputObject $InstallCommand -ErrorAction Stop;
         } catch {
             Write-IcingaConsoleError 'Failed to deserialize the provided JSON from file or command: {0}' -Objects $_.Exception.Message;
+            Clear-IcingaInternalServiceInformation;
             return;
         }
 
@@ -81,6 +84,7 @@ function Install-Icinga()
         $Success = Invoke-IcingaForWindowsManagementConsoleCustomConfig -IcingaConfiguration $IcingaConfiguration;
 
         if ($Success -eq $FALSE) {
+            Clear-IcingaInternalServiceInformation;
             return;
         }
 
@@ -101,6 +105,7 @@ function Install-Icinga()
         $Success = Invoke-IcingaForWindowsManagementConsoleCustomConfig -IcingaConfiguration $IcingaConfiguration;
 
         if ($Success -eq $FALSE) {
+            Clear-IcingaInternalServiceInformation;
             return;
         }
 
@@ -111,7 +116,7 @@ function Install-Icinga()
         # Set our "old" swap live again. By doing so, we can still continue our old
         # configuration
         Set-IcingaPowerShellConfig -Path 'Framework.Config.Swap' -Value $OldConfigSwap;
-
+        Clear-IcingaInternalServiceInformation;
         return;
     }
 
@@ -185,6 +190,8 @@ function Install-Icinga()
             }
         }
     }
+
+    Clear-IcingaInternalServiceInformation;
 
     if ($null -ne (Get-Command -Name 'Set-IcingaForWindowsManagementConsoleClosing' -ErrorAction SilentlyContinue)) {
         Set-IcingaForWindowsManagementConsoleClosing -Completed;
