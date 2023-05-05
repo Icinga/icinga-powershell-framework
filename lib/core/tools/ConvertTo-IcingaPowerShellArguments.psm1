@@ -31,6 +31,10 @@ function ConvertTo-IcingaPowerShellArguments()
     # Ensure we do not cause exceptions along the border in case the plugin is not installed
     if ($null -eq $CmdAllowedArgs) {
         return @{ };
+    } else {
+        # We need to manually add the "-ThresholdInterval" argument, as this is an artificial
+        # one we do need to take care off
+        $CmdAllowedArgs += 'ThresholdInterval';
     }
 
     # Ensure we not only add the parameter name to our allow list but also possible aliases
