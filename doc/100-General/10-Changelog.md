@@ -17,6 +17,10 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#609](https://github.com/Icinga/icinga-powershell-framework/issues/609) Fixes config generator to never use `set_if = true` on Icinga 2/Icinga Director configuration
 * [#617](https://github.com/Icinga/icinga-powershell-framework/issues/617) Fixes failing calls for plugins which use a switch argument like `-NoPerfData`, which is followed directly by the `-ThresholdInterval` argument
 
+### Enhancements
+
+* [#619](https://github.com/Icinga/icinga-powershell-framework/pull/619) Adds feature to securely read enum provider values with new function `Get-IcingaProviderEnumData`
+
 ## 1.10.1 (2022-12-20)
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/27?closed=1)
