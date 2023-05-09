@@ -15,6 +15,10 @@ function New-IcingaEnvironmentVariable()
         $Global:Icinga = @{ };
     }
 
+    if ($Global:Icinga.ContainsKey('CacheBuilding') -eq $FALSE) {
+        $Global:Icinga.Add('CacheBuilding', $FALSE);
+    }
+
     # Session specific configuration for this shell
     if ($Global:Icinga.ContainsKey('Private') -eq $FALSE) {
         $Global:Icinga.Add('Private', @{ });
