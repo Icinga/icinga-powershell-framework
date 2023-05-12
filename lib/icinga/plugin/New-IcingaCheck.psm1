@@ -66,7 +66,7 @@ function New-IcingaCheck()
                         $this.__TimeInterval = $SetArg;
                         break;
                     }
-                    if ($SetArg -eq '-ThresholdInterval') {
+                    if ($SetArg -eq '-ThresholdInterval' -Or $SetArg -eq '-ThresholdInterval:') {
                         $FoundInterval = $TRUE;
                         continue;
                     }

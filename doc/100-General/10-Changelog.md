@@ -16,6 +16,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#603](https://github.com/Icinga/icinga-powershell-framework/issues/603) Fixes service filter to handle exclude with wildcards instead of requiring the full service name (*not* applying to the display name)
 * [#609](https://github.com/Icinga/icinga-powershell-framework/issues/609) Fixes config generator to never use `set_if = true` on Icinga 2/Icinga Director configuration
 * [#617](https://github.com/Icinga/icinga-powershell-framework/issues/617) Fixes failing calls for plugins which use a switch argument like `-NoPerfData`, which is followed directly by the `-ThresholdInterval` argument
+* [#621](https://github.com/Icinga/icinga-powershell-framework/pull/621) Fixes `-ThresholdInterval` key detection on newer systems
 
 ### Enhancements
 
