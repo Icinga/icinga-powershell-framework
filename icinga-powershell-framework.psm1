@@ -132,7 +132,11 @@ function Write-IcingaFrameworkCodeCache()
 
     [System.IO.File]::WriteAllLines($CacheFile, $CacheContent, (New-Object System.Text.UTF8Encoding $TRUE));
 
-    Remove-IcingaFrameworkDependencyFile;
+    $DependencyFile = Join-Path -Path (Get-IcingaCacheDir) -ChildPath 'framework_dependencies.json';
+
+    if ((Test-Path $DependencyFile)) {
+        Remove-Item -Path $DependencyFile -Force | Out-Null;
+    }
 
     if ($Global:Icinga.Protected.DeveloperMode) {
         Copy-IcingaFrameworkCacheTemplate;
