@@ -16,7 +16,10 @@ function Set-IcingaServiceUser()
         return $FALSE;
     }
 
-    if ($User.Contains('\') -eq $FALSE) {
+    if ($User.Contains('@')) {
+        $UserData = $User.Split('@');
+        $User     = [string]::Format('{0}\{1}', $UserData[1], $UserData[0]);
+    } elseif ($User.Contains('\') -eq $FALSE) {
         $User = [string]::Format('.\{0}', $User);
     }
 
