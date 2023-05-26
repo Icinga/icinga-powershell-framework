@@ -5,20 +5,21 @@
  #>
 
 [hashtable]$Permission = @{
-    PerformanceCounter = 'A Plugin failed to fetch Performance Counter information. This may be caused when the used Service User is not permitted to access these information. To fix this, please add the User the Icinga Agent is running on into the "Performance Monitor Users" group and restart the service.';
-    CacheFolder        = "A plugin failed to write new data into the configured cache directory. Please update the permissions of this folder to allow write access for the user the Icinga Service is running with or use another folder as cache directory.";
-    CimInstance        = @{
+    PerformanceCounter    = 'A Plugin failed to fetch Performance Counter information. This may be caused when the used Service User is not permitted to access these information. To fix this, please add the User the Icinga Agent is running on into the "Performance Monitor Users" group and restart the service.';
+    CacheFolder           = "A plugin failed to write new data into the configured cache directory. Please update the permissions of this folder to allow write access for the user the Icinga Service is running with or use another folder as cache directory.";
+    CimInstance           = @{
         'Message' = 'The user you are running this command as does not have permission to access the requested Cim-Object. To fix this, please add the user the Agent is running with to the "Remote Management Users" groups and grant access to the WMI branch for the Class/Namespace mentioned above and add the permission "Remote enable".';
         'IWKB'    = 'IWKB000001';
-    }
-    WMIObject          = @{
+    };
+    WMIObject             = @{
         'Message' = 'The user you are running this command as does not have permission to access the requested Wmi-Object. To fix this, please add the user the Agent is running with to the "Remote Management Users" groups and grant access to the WMI branch for the Class/Namespace mentioned above and add the permission "Remote enable".';
         'IWKB'    = 'IWKB000001';
-    }
-    WindowsUpdate      = @{
+    };
+    WindowsUpdate         = @{
         'Message' = 'The user you are running this command as does not have permission to access the Windows Update ComObject "Microsoft.Update.Session".';
         'IWKB'    = 'IWKB000006';
-    }
+    };
+    WindowsAuthentication = "A plugin failed to authenticate against the authentication servers or the local machine with the given credentials";
 };
 
 [hashtable]$Inputs = @{
