@@ -19,6 +19,9 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#617](https://github.com/Icinga/icinga-powershell-framework/issues/617) Fixes failing calls for plugins which use a switch argument like `-NoPerfData`, which is followed directly by the `-ThresholdInterval` argument
 * [#621](https://github.com/Icinga/icinga-powershell-framework/pull/621) Fixes `-ThresholdInterval` key detection on newer systems
 
+### Enhancements
+
+* [#623](https://github.com/Icinga/icinga-powershell-framework/issues/623) Adds support to provide the Icinga service user written as `user@domain`
 
 ### Enhancements
 
