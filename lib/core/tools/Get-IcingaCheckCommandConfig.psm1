@@ -102,7 +102,7 @@ function Get-IcingaCheckCommandConfig()
                 '-NoProfile'       = @{
                     'order'    = '-3';
                     'skip_key' = $TRUE;
-                    'value'    = '-NoLogo';
+                    'value'    = '-NoProfile';
                 };
                 '-NoLogo'          = @{
                     'order'    = '-2';
