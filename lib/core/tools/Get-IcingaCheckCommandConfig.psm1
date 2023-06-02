@@ -100,18 +100,24 @@ function Get-IcingaCheckCommandConfig()
         @{
             'arguments'       = @{
                 '-NoProfile'       = @{
-                    'order'    = '-3';
-                    'skip_key' = $TRUE;
-                    'value'    = '-NoProfile';
+                    'set_if'        = 'return !macro("$ifw_api_port$");';
+                    'set_if_format' = 'expression';
+                    'order'         = '-3';
+                    'skip_key'      = $TRUE;
+                    'value'         = '-NoProfile';
                 };
                 '-NoLogo'          = @{
-                    'order'    = '-2';
-                    'skip_key' = $TRUE;
-                    'value'    = '-NoLogo';
+                    'set_if'        = 'return !macro("$ifw_api_port$");';
+                    'set_if_format' = 'expression';
+                    'order'         = '-2';
+                    'skip_key'      = $TRUE;
+                    'value'         = '-NoLogo';
                 };
                 '-ExecutionPolicy' = @{
-                    'order' = '-1';
-                    'value' = '$IcingaPowerShellBase_String_ExecutionPolicy$';
+                    'set_if'        = 'return !macro("$ifw_api_port$");';
+                    'set_if_format' = 'expression';
+                    'order'         = '-1';
+                    'value'         = '$IcingaPowerShellBase_String_ExecutionPolicy$';
                 };
             };
             'command'         = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe';
@@ -203,8 +209,10 @@ function Get-IcingaCheckCommandConfig()
                 'arguments'   = @{
                     # Set the Command handling for every check command
                     '-C' = @{
-                        'value' = [string]::Format('try {{ Use-Icinga -Minimal; }} catch {{ Write-Output {1}The Icinga PowerShell Framework is either not installed on the system or not configured properly. Please check https://icinga.com/docs/windows for further details{1}; Write-Output {1}Error:{1} $$($$_.Exception.Message)Components:`r`n$$( Get-Module -ListAvailable {1}icinga-powershell-*{1} )`r`n{1}Module-Path:{1}`r`n$$($$Env:PSModulePath); exit 3; }}; Exit-IcingaExecutePlugin -Command {1}{0}{1} ', $check, "'");
-                        'order' = '0';
+                        'set_if'        = 'return !macro("$ifw_api_port$");';
+                        'set_if_format' = 'expression';
+                        'value'         = [string]::Format('try {{ Use-Icinga -Minimal; }} catch {{ Write-Output {1}The Icinga PowerShell Framework is either not installed on the system or not configured properly. Please check https://icinga.com/docs/windows for further details{1}; Write-Output {1}Error:{1} $$($$_.Exception.Message)Components:`r`n$$( Get-Module -ListAvailable {1}icinga-powershell-*{1} )`r`n{1}Module-Path:{1}`r`n$$($$Env:PSModulePath); exit 3; }}; Exit-IcingaExecutePlugin -Command {1}{0}{1} ', $check, "'");
+                        'order'         = '0';
                     };
                 }
                 'fields'      = @();
@@ -642,15 +650,16 @@ function Write-IcingaPlainConfigurationFiles()
     $PowerShellBase         += [string]::Format('    arguments += {{{0}', (New-IcingaNewLine));
     $PowerShellBase         += [string]::Format('        "-ExecutionPolicy" = {{{0}', (New-IcingaNewLine));
     $PowerShellBase         += [string]::Format('            order = -1{0}', (New-IcingaNewLine));
+    $PowerShellBase         += [string]::Format('            set_if = {{{{ !macro("$ifw_api_port$") }}}}{0}', (New-IcingaNewLine));
     $PowerShellBase         += [string]::Format('            value = "$IcingaPowerShellBase_String_ExecutionPolicy$"{0}', (New-IcingaNewLine));
     $PowerShellBase         += [string]::Format('        }}{0}', (New-IcingaNewLine));
     $PowerShellBase         += [string]::Format('        "-NoLogo" = {{{0}', (New-IcingaNewLine));
     $PowerShellBase         += [string]::Format('            order = -2{0}', (New-IcingaNewLine));
-    $PowerShellBase         += [string]::Format('            set_if = "1"{0}', (New-IcingaNewLine));
+    $PowerShellBase         += [string]::Format('            set_if = {{{{ !macro("$ifw_api_port$") }}}}{0}', (New-IcingaNewLine));
     $PowerShellBase         += [string]::Format('        }}{0}', (New-IcingaNewLine));
     $PowerShellBase         += [string]::Format('        "-NoProfile" = {{{0}', (New-IcingaNewLine));
     $PowerShellBase         += [string]::Format('            order = -3{0}', (New-IcingaNewLine));
-    $PowerShellBase         += [string]::Format('            set_if = "1"{0}', (New-IcingaNewLine));
+    $PowerShellBase         += [string]::Format('            set_if = {{{{ !macro("$ifw_api_port$") }}}}{0}', (New-IcingaNewLine));
     $PowerShellBase         += [string]::Format('        }}{0}', (New-IcingaNewLine));
     $PowerShellBase         += [string]::Format('    }}{0}', (New-IcingaNewLine));
     $PowerShellBase         += [string]::Format('    vars.IcingaPowerShellBase_String_ExecutionPolicy = "ByPass"{0}', (New-IcingaNewLine));
