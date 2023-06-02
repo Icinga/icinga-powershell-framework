@@ -6,7 +6,7 @@ Icinga for Windows provides tools and functionality to entirely manage itself. T
 
 * Windows 2012 R2 or later
 * PowerShell Version 4.0 or later
-* [Execution Policies](https://docs.microsoft.com/de-de/powershell/module/microsoft.powershell.core/about/about_execution_policies) allowing module/script execution
+* [Execution Policies](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies) allowing module/script execution
 * Access to [packages.icinga.com](https://packages.icinga.com) at least from one location
 
 ## Installation Dependencies

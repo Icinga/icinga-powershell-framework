@@ -2,7 +2,7 @@
 
 Starting with Icinga for Windows v1.6.0, we are supporting JEA profiles and provide all required tools to build a profile based on installed Icinga for Windows components.
 
-JEA stands for "Just Enough Administration" and you can read more about it on the [Microsoft Docs](https://docs.microsoft.com/de-de/powershell/scripting/learn/remoting/jea/overview).
+JEA stands for "Just Enough Administration" and you can read more about it on the [Microsoft Docs](https://docs.microsoft.com/en-us/powershell/scripting/learn/remoting/jea/overview).
 
 In short, JEA allows you to limit the access to certain Cmdlets, Functions and Binaries on the system. In addition, you can grant additional privileges to users to perform tasks, which are permitted to Administrators only in general.
 
