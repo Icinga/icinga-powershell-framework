@@ -211,7 +211,9 @@ function Get-IcingaCheckCommandConfig()
                 'imports'     = @( 'PowerShell Base' );
                 'object_name' = $check;
                 'object_type' = 'object';
-                'vars'        = @{ };
+                'vars'        = @{
+                    'ifw_api_arguments' = @{ };
+		};
             }
         );
 
@@ -312,6 +314,16 @@ function Get-IcingaCheckCommandConfig()
                     }
                 );
             }
+
+            if ($parameter.type.name -eq 'SwitchParameter') {
+                $Basket.Command[$check].vars.ifw_api_arguments.Add([string]::Format('-{0}', $parameter.Name), @{
+                    'set_if' = $IcingaCustomVariable;
+                });
+            } else {
+                $Basket.Command[$check].vars.ifw_api_arguments.Add([string]::Format('-{0}', $parameter.Name), @{
+                    'value' = $IcingaCustomVariable;
+                });
+	    }
 
             # Determine wether a parameter is required based on given syntax-information
             if ($parameter.required -eq $TRUE) {
