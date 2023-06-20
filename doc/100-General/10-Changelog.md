@@ -7,7 +7,7 @@ documentation before upgrading to a new release.
 
 Released closed milestones can be found on [GitHub](https://github.com/Icinga/icinga-powershell-framework/milestones?state=closed).
 
-## 1.11.0 (2023-05-16)
+## 1.11.0 (2023-08-01)
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/26)
 
@@ -29,6 +29,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#623](https://github.com/Icinga/icinga-powershell-framework/issues/623) Adds support to provide the Icinga service user written as `user@domain`
 * [#633](https://github.com/Icinga/icinga-powershell-framework/pull/633) Adds support for Icinga 2.14.0 native Icinga for Windows API communication
 * [#635](https://github.com/Icinga/icinga-powershell-framework/pull/635) Adds support for `Write-IcingaAgentApiConfig` function to configure the Icinga Agent TLS cipher list setting by new argument `-CipherList`
+* [#637](https://github.com/Icinga/icinga-powershell-framework/pull/637) Adds new base handling for future data providers with first metrics for `CPU` information
 * [#640](https://github.com/Icinga/icinga-powershell-framework/issues/640) Adds support to set the flag `-NoSSLValidation` for Cmdlets `icinga` and `Install-Icinga`, to ignore errors on self-signed certificates within the environment
 * [#643](https://github.com/Icinga/icinga-powershell-framework/pull/643) Adds support for `-RebuildCache` flag on `icinga` cmd to rebuild component cache as well
 * [#644](https://github.com/Icinga/icinga-powershell-framework/pull/644) Adds progress bar output to repository interaction (sync, update, new) instead of plain text output
