@@ -23,7 +23,7 @@ function Show-IcingaForWindowsInstallerMenu()
     );
 
     if ($global:Icinga.InstallWizard.DirectorInstallError -eq $FALSE -And (Test-IcingaForWindowsInstallationHeaderPrint) -eq $FALSE -And (Get-IcingaFrameworkDebugMode) -eq $FALSE) {
-        Clear-Host;
+        Clear-CLIConsole;
     }
 
     $PSCallStack   = Get-PSCallStack;
@@ -295,7 +295,7 @@ function Show-IcingaForWindowsInstallerMenu()
 
     switch ($Result) {
         'x' {
-            Clear-Host;
+            Clear-CLIConsole;
             $global:Icinga.InstallWizard.Closing = $TRUE;
             return;
         };
