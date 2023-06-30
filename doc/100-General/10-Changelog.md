@@ -29,6 +29,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#544](https://github.com/Icinga/icinga-powershell-framework/issues/544) Adds support to configure the Icinga Director JSON string for registering hosts via self-service API
 * [#572](https://github.com/Icinga/icinga-powershell-framework/issues/572) Adds support to write the name of the repository synced/created into the local `ifw.repo.json` file
 * [#573](https://github.com/Icinga/icinga-powershell-framework/issues/573) Adds support to run command `icinga` with new argument `-NoNewInstance`, to use `-RebuildCache` as example to update the current PowerShell instance with all applied changes
+* [#613](https://github.com/Icinga/icinga-powershell-framework/pull/613) Adds a `-Version` parameter to the `Update-Icinga` command, to be able to update a component to a specified version [@log1-c]
 * [#619](https://github.com/Icinga/icinga-powershell-framework/pull/619) Adds feature to securely read enum provider values with new function `Get-IcingaProviderEnumData`
 * [#623](https://github.com/Icinga/icinga-powershell-framework/issues/623) Adds support to provide the Icinga service user written as `user@domain`
 * [#633](https://github.com/Icinga/icinga-powershell-framework/pull/633) Adds support for Icinga 2.14.0 native Icinga for Windows API communication
@@ -38,12 +39,9 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#640](https://github.com/Icinga/icinga-powershell-framework/issues/640) Adds support to set the flag `-NoSSLValidation` for Cmdlets `icinga` and `Install-Icinga`, to ignore errors on self-signed certificates within the environment
 * [#643](https://github.com/Icinga/icinga-powershell-framework/pull/643) Adds support for `-RebuildCache` flag on `icinga` cmd to rebuild component cache as well
 * [#644](https://github.com/Icinga/icinga-powershell-framework/pull/644) Adds progress bar output to repository interaction (sync, update, new) instead of plain text output
+* [#649](https://github.com/Icinga/icinga-powershell-framework/pull/649) Adds new basic data provider base for Hyper-V information
 * [#655](https://github.com/Icinga/icinga-powershell-framework/pull/655) Adds [IWKB](https://icinga.com/docs/icinga-for-windows/latest/doc/knowledgebase/IWKB000016/) and test/manage Cmdlets for SCOM intercept counters
 * [#656](https://github.com/Icinga/icinga-powershell-framework/pull/656) Adds new feature to write document content easier by storing it in memory first and then allowing to write it to disk at once with proper UTF8 encoding
-
-### Enhancements
-
-* [#613](https://github.com/Icinga/icinga-powershell-framework/pull/613) Adds a `-Version` parameter to the `Update-Icinga` command, to be able to update a component to a specified version [@log1-c]
 
 ## 1.10.1 (2022-12-20)
 
