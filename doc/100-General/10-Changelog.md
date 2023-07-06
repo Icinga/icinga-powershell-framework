@@ -26,6 +26,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 ### Enhancements
 
 * [#619](https://github.com/Icinga/icinga-powershell-framework/pull/619) Adds feature to securely read enum provider values with new function `Get-IcingaProviderEnumData`
+* [#638](https://github.com/Icinga/icinga-powershell-framework/pull/638) Adds option for formatted, colored console prints with `Write-ColoredOutput`
 
 ## 1.10.1 (2022-12-20)
 
