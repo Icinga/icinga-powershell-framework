@@ -21,12 +21,10 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 ### Enhancements
 
+* [#619](https://github.com/Icinga/icinga-powershell-framework/pull/619) Adds feature to securely read enum provider values with new function `Get-IcingaProviderEnumData`
 * [#623](https://github.com/Icinga/icinga-powershell-framework/issues/623) Adds support to provide the Icinga service user written as `user@domain`
 * [#635](https://github.com/Icinga/icinga-powershell-framework/pull/635) Adds support for `Write-IcingaAgentApiConfig` function to configure the Icinga Agent TLS cipher list setting by new argument `-CipherList`
-
-### Enhancements
-
-* [#619](https://github.com/Icinga/icinga-powershell-framework/pull/619) Adds feature to securely read enum provider values with new function `Get-IcingaProviderEnumData`
+* [#640](https://github.com/Icinga/icinga-powershell-framework/issues/640) Adds support to set the flag `-NoSSLValidation` for Cmdlets `icinga` and `Install-Icinga`, to ignore errors on self-signed certificates within the environment
 
 ## 1.10.1 (2022-12-20)
 

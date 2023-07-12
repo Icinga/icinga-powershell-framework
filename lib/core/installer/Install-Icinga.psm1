@@ -1,12 +1,21 @@
 function Install-Icinga()
 {
     param (
-        [string]$InstallCommand = $null,
-        [string]$InstallFile    = ''
+        [string]$InstallCommand  = $null,
+        [string]$InstallFile     = '',
+        [switch]$NoSSLValidation = $FALSE
     );
 
     if ($null -eq $global:Icinga) {
         $global:Icinga = @{ };
+    }
+
+    # Always ensure we use the proper TLS Version
+    Set-IcingaTLSVersion;
+
+    # Ignore SSL validation in case we set the flag
+    if ($NoSSLValidation) {
+        Enable-IcingaUntrustedCertificateValidation;
     }
 
     if ($global:Icinga.ContainsKey('InstallWizard') -eq $FALSE) {
