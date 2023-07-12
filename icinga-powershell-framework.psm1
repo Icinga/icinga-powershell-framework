@@ -243,12 +243,13 @@ function Invoke-IcingaCommand()
     [CmdletBinding()]
     param (
         $ScriptBlock,
-        [switch]$SkipHeader    = $FALSE,
-        [switch]$Manage        = $FALSE, # Only for backwards compatibility, has no use at all
-        [switch]$Shell         = $FALSE,
-        [switch]$RebuildCache  = $FALSE,
-        [switch]$DeveloperMode = $FALSE,
-        [array]$ArgumentList   = @()
+        [switch]$SkipHeader      = $FALSE,
+        [switch]$Manage          = $FALSE, # Only for backwards compatibility, has no use at all
+        [switch]$Shell           = $FALSE,
+        [switch]$NoSSLValidation = $FALSE,
+        [switch]$RebuildCache    = $FALSE,
+        [switch]$DeveloperMode   = $FALSE,
+        [array]$ArgumentList     = @()
     );
 
     Import-LocalizedData `
@@ -304,9 +305,18 @@ function Invoke-IcingaCommand()
         $Shell           = $args[3];
         $IcingaShellArgs = $args[4];
         $DeveloperMode   = $args[5];
+        $NoSSLValidation = $args[6];
 
         # Load our Icinga Framework
         Use-Icinga;
+
+        # Always ensure we use the proper TLS Version
+        Set-IcingaTLSVersion;
+
+        # Ignore SSL validation in case we set the flag
+        if ($NoSSLValidation) {
+            Enable-IcingaUntrustedCertificateValidation;
+        }
 
         if ($DeveloperMode) {
             $Global:Icinga.Protected.DeveloperMode = $TRUE;
@@ -336,7 +346,7 @@ function Invoke-IcingaCommand()
             return "> "
         }
 
-    } -Args $ScriptBlock, $PSScriptRoot, $IcingaFrameworkData.PrivateData.Version, ([bool]$Shell), $ArgumentList, ([bool]$DeveloperMode);
+    } -Args $ScriptBlock, $PSScriptRoot, $IcingaFrameworkData.PrivateData.Version, ([bool]$Shell), $ArgumentList, ([bool]$DeveloperMode), ([bool]$NoSSLValidation);
 
     # In case we close the newly created PowerShell, ensure we set the script root back to the Framework folder
     if (Test-Path $PSScriptRoot) {
@@ -349,13 +359,14 @@ function Invoke-IcingaCommand()
 
         # Use the same arguments again to open the IMC
         $IMCReopenArguments = @{
-            'ScriptBlock'   = $ScriptBlock;
-            'SkipHeader'    = $SkipHeader;
-            'Manage'        = $Manage;
-            'Shell'         = $Shell;
-            'RebuildCache'  = $RebuildCache;
-            'DeveloperMode' = $DeveloperMode;
-            'ArgumentList'  = $ArgumentList;
+            'ScriptBlock'     = $ScriptBlock;
+            'SkipHeader'      = $SkipHeader;
+            'Manage'          = $Manage;
+            'Shell'           = $Shell;
+            'NoSSLValidation' = $NoSSLValidation;
+            'RebuildCache'    = $RebuildCache;
+            'DeveloperMode'   = $DeveloperMode;
+            'ArgumentList'    = $ArgumentList;
         };
 
         Invoke-IcingaCommand @IMCReopenArguments;
