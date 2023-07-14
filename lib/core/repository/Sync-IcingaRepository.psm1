@@ -116,9 +116,13 @@ function Sync-IcingaRepository()
         foreach ($component in $JsonRepo.Packages.PSObject.Properties.Name) {
             $IfWPackage = $JsonRepo.Packages.$component
 
+            New-IcingaProgressStatus -Name 'Sync Repository' -Message ([string]::Format('Syncing Icinga for Windows repository {0} ({1}). Downloaded {2} packages', $Name, $JsonRepo.Info.RemoteSource, $component)) -MaxValue $IfWPackage.Count -Details;
+
             foreach ($package in $IfWPackage) {
                 $DownloadLink   = $package.Location;
                 $TargetLocation = $TmpDir;
+
+                Write-IcingaProgressStatus -Name 'Sync Repository';
 
                 if ($package.RelativePath -eq $TRUE) {
                     $DownloadLink   = Join-WebPath -Path $JsonRepo.Info.RemoteSource -ChildPath $package.Location;
@@ -146,13 +150,15 @@ function Sync-IcingaRepository()
                 }
 
                 try {
-                    Write-IcingaConsoleNotice 'Syncing repository component "{0}" as file "{1}" into temp directory' -Objects $component, $package.Location;
+                    Write-IcingaConsoleDebug 'Syncing repository component "{0}" as file "{1}" into temp directory' -Objects $component, $package.Location;
                     Invoke-IcingaWebRequest -UseBasicParsing -Uri $DownloadLink -OutFile $TargetLocation | Out-Null;
                 } catch {
                     Write-IcingaConsoleError 'Failed to download repository component "{0}". Exception: "{1}"' -Objects $DownloadLink, $_.Exception.Message;
                     continue;
                 }
             }
+
+            Complete-IcingaProgressStatus -Name 'Sync Repository';
         }
     }
 
@@ -187,7 +193,7 @@ function Sync-IcingaRepository()
     }
 
     if ($HasNonRelative) {
-        [void](New-IcingaRepositoryFile -Path $TmpDir -RemotePath $RemotePath);
+        [void](New-IcingaRepositoryFile -Path $TmpDir -RemotePath $RemotePath -Name $Name);
         $RepoContent = Get-Content -Path $RepoFile -Raw;
         $JsonRepo    = ConvertFrom-Json -InputObject $RepoContent;
         Start-Sleep -Seconds 2;
