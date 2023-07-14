@@ -61,8 +61,26 @@ function Register-IcingaDirectorSelfServiceHost()
         }
     }
 
-    $Interface          = Get-IcingaNetworkInterface $Endpoint;
-    $DirectorConfigJson = [string]::Format('{0} "address":"{2}" {1}', '{', '}', $Interface);
+    $Interface = Get-IcingaNetworkInterface $Endpoint;
+
+    if ($null -eq $Global:Icinga.InstallWizard.DirectorSelfServiceConfig) {
+        $DirectorConfigJson = [string]::Format('{{ "address": "{0}" }}', $Interface);
+    } else {
+        try {
+            $DirectorConfigJson = ConvertTo-Json -InputObject $Global:Icinga.InstallWizard.DirectorSelfServiceConfig -Compress -ErrorAction Stop;
+            $DirectorConfigJson = $DirectorConfigJson.Replace('$ifw.hostaddress$', $Interface);
+            $DirectorConfigJson = $DirectorConfigJson.Replace('$ifw.hostname.tolower$', (Get-IcingaHostname -AutoUseHostname 1 -LowerCase 1));
+            $DirectorConfigJson = $DirectorConfigJson.Replace('$ifw.hostname.toupper$', (Get-IcingaHostname -AutoUseHostname 1 -UpperCase 1));
+            $DirectorConfigJson = $DirectorConfigJson.Replace('$ifw.hostname$', (Get-IcingaHostname -AutoUseHostname 1));
+            $DirectorConfigJson = $DirectorConfigJson.Replace('$ifw.hostfqdn.tolower$', (Get-IcingaHostname -AutoUseFQDN 1 -LowerCase 1));
+            $DirectorConfigJson = $DirectorConfigJson.Replace('$ifw.hostfqdn.toupper$', (Get-IcingaHostname -AutoUseFQDN 1 -UpperCase 1));
+            $DirectorConfigJson = $DirectorConfigJson.Replace('$ifw.hostfqdn$', (Get-IcingaHostname -AutoUseFQDN 1));
+         } catch {
+            # Fallback to default
+            Write-IcingaConsosoleError 'Failed to deserialize your custom Icinga Director Self-Service configuration. Using Icinga for Windows defaults.'
+            $DirectorConfigJson = [string]::Format('{{ "address": "{0}" }}', $Interface);
+        }
+    }
 
     $EndpointUrl = Join-WebPath -Path $DirectorUrl -ChildPath ([string]::Format('/self-service/register-host?name={0}&key={1}', $Hostname, $ApiKey));
 

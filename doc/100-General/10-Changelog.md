@@ -21,6 +21,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 ### Enhancements
 
+* [#544](https://github.com/Icinga/icinga-powershell-framework/issues/544) Adds support to configure the Icinga Director JSON string for registering hosts via self-service API
 * [#619](https://github.com/Icinga/icinga-powershell-framework/pull/619) Adds feature to securely read enum provider values with new function `Get-IcingaProviderEnumData`
 * [#623](https://github.com/Icinga/icinga-powershell-framework/issues/623) Adds support to provide the Icinga service user written as `user@domain`
 * [#635](https://github.com/Icinga/icinga-powershell-framework/pull/635) Adds support for `Write-IcingaAgentApiConfig` function to configure the Icinga Agent TLS cipher list setting by new argument `-CipherList`

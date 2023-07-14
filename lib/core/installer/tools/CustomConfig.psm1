@@ -16,7 +16,7 @@ function Invoke-IcingaForWindowsManagementConsoleCustomConfig()
         }
 
         if ($cmdConfig.ContainsKey('Values') -And $null -ne $cmdConfig.Values) {
-            $cmdArguments.Add('Value', $cmdConfig.Values)
+            $cmdArguments.Add('Value', $cmdConfig.Values);
         }
         if ($cmdConfig.ContainsKey('Selection') -And $null -ne $cmdConfig.Selection) {
             $cmdArguments.Add('DefaultInput', $cmdConfig.Selection)
