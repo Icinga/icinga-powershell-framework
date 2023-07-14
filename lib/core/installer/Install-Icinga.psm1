@@ -21,34 +21,35 @@ function Install-Icinga()
     if ($global:Icinga.ContainsKey('InstallWizard') -eq $FALSE) {
         $global:Icinga.Add(
             'InstallWizard', @{
-                'AdminShell'             = (Test-AdministrativeShell);
-                'LastInput'              = '';
-                'LastNotice'             = '';
-                'LastWarning'            = @();
-                'LastError'              = @();
-                'DirectorError'          = '';
-                'HeaderPreview'          = '';
-                'DirectorSelfService'    = $FALSE;
-                'DirectorRegisteredHost' = $FALSE;
-                'DirectorInstallError'   = $FALSE;
-                'LastParent'             = [System.Collections.ArrayList]@();
-                'LastValues'             = @();
-                'DisabledEntries'        = @{ };
-                'Config'                 = @{ };
-                'ConfigSwap'             = @{ };
-                'ParentConfig'           = $null;
-                'Menu'                   = 'Install-Icinga';
-                'NextCommand'            = '';
-                'NextArguments'          = $null;
-                'HeaderSelection'        = $null;
-                'DisplayAdvanced'        = $FALSE;
-                'ShowAdvanced'           = $FALSE;
-                'ShowHelp'               = $FALSE;
-                'ShowCommand'            = $FALSE;
-                'DeleteValues'           = $FALSE;
-                'HeaderPrint'            = $FALSE;
-                'JumpToSummary'          = $FALSE;
-                'Closing'                = $FALSE;
+                'AdminShell'                = (Test-AdministrativeShell);
+                'LastInput'                 = '';
+                'LastNotice'                = '';
+                'LastWarning'               = @();
+                'LastError'                 = @();
+                'DirectorError'             = '';
+                'HeaderPreview'             = '';
+                'DirectorSelfServiceConfig' = $null;
+                'DirectorSelfService'       = $FALSE;
+                'DirectorRegisteredHost'    = $FALSE;
+                'DirectorInstallError'      = $FALSE;
+                'LastParent'                = [System.Collections.ArrayList]@();
+                'LastValues'                = @();
+                'DisabledEntries'           = @{ };
+                'Config'                    = @{ };
+                'ConfigSwap'                = @{ };
+                'ParentConfig'              = $null;
+                'Menu'                      = 'Install-Icinga';
+                'NextCommand'               = '';
+                'NextArguments'             = $null;
+                'HeaderSelection'           = $null;
+                'DisplayAdvanced'           = $FALSE;
+                'ShowAdvanced'              = $FALSE;
+                'ShowHelp'                  = $FALSE;
+                'ShowCommand'               = $FALSE;
+                'DeleteValues'              = $FALSE;
+                'HeaderPrint'               = $FALSE;
+                'JumpToSummary'             = $FALSE;
+                'Closing'                   = $FALSE;
             }
         );
     } else {
