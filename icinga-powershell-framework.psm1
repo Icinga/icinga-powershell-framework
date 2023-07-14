@@ -281,6 +281,7 @@ function Invoke-IcingaCommand()
     }
 
     if ($RebuildCache -Or $DeveloperMode) {
+        Copy-IcingaFrameworkCacheTemplate;
         Write-IcingaFrameworkCodeCache -DeveloperMode:$DeveloperMode;
     }
 
