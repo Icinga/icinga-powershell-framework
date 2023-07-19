@@ -18,6 +18,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#615](https://github.com/Icinga/icinga-powershell-framework/issues/615) Fixes the framework migration tasks which fails in case multiple versions of the framework are installed, printing warnings in case there is
 * [#617](https://github.com/Icinga/icinga-powershell-framework/issues/617) Fixes failing calls for plugins which use a switch argument like `-NoPerfData`, which is followed directly by the `-ThresholdInterval` argument
 * [#621](https://github.com/Icinga/icinga-powershell-framework/pull/621) Fixes `-ThresholdInterval` key detection on newer systems
+* [#645](https://github.com/Icinga/icinga-powershell-framework/pull/645) Fixes error and exception handling while using API-Checks, which now will in most cases always return a proper check-result object and also abort while running into plugin execution errors, in case a server is not reachable by the time sync plugin for example
 
 ### Enhancements
 
