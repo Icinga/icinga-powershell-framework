@@ -8,9 +8,9 @@ This will reduce the performance impact on the CPU as well as lower the loading 
 
 To use this feature, you wil require the following
 
-* Icinga Agent is certificates installed
-* Icinga for Windows v1.6.0 installed
-* [Icinga for Windows Service installed](https://icinga.com/docs/icinga-for-windows/latest/doc/service/01-Install-Service/)
+* Icinga Agent certificate installed
+* Icinga for Windows v1.6.0 or later installed
+* [Icinga for Windows Service installed](05-Background-Daemons.md)
 * Icinga for Windows v1.4.0+ CheckCommand configuration applied (**Important:** Update your entire Windows environment to v1.4.0+ before updating the Icinga configuration!)
 
 ## Installation with IMC
@@ -22,7 +22,7 @@ In order to install the REST-Api feature, you can simply enable it by using the 
 * Navigate to `Icinga for Windows Features`
 * Toggle the setting `Api-Check Forwarder` by using the menu index entry (besides the feature is mentioned if it is `Enabled` or `Disabled`)
 
-Please note that you will require to have the [Icinga for Windows Service](https://icinga.com/docs/icinga-for-windows/latest/doc/service/01-Install-Service/) already installed. The menu entry will only ensure, that the entire configuration is made and that check commands are enabled as commands.
+Please note that you will require to have the [Icinga for Windows Service](05-Background-Daemons.md) already installed. The menu entry will only ensure, that the entire configuration is made and that check commands are enabled as commands.
 
 ## Manual Installation and Configuration
 
@@ -40,7 +40,7 @@ Register-IcingaBackgroundDaemon -Command 'Start-IcingaWindowsRESTApi';
 
 By default, it will start listening on Port `5668` on `localhost` and use the Icinga Agents certificates for TLS encrypted communication. As long as the Windows firewall is not allowing access to this port, external communication is not possible.
 
-To modify any REST-Api arguments, please follow the [REST-Api installation guide](https://icinga.com/docs/icinga-for-windows/latest/restapi/doc/02-Installation/#daemon-registration).
+To modify any REST-Api arguments, please follow the [background daemon page](05-Background-Daemons.md).
 
 ### Whitelist Check Commands
 
@@ -78,7 +78,7 @@ Last but not least restart the Icinga for Windows service:
 Restart-IcingaWindowsService;
 ```
 
-As long as the feature is enabled, the Icinga for Windows service is running, the REST-Api daemon is registered and both modules, [icinga-powershell-restapi](https://icinga.com/docs/icinga-for-windows/latest/restapi/doc/01-Introduction/) and [icinga-powershell-apichecks](https://icinga.com/docs/icinga-for-windows/doc/icinga_for_windows_v1.6.0/apichecks/doc/01-Introduction/) are installed, checks will be forwarded to the REST-Api and executed, if whitelisted.
+As long as the feature is enabled, the Icinga for Windows service is running and the REST-Api daemon is registered, checks will be forwarded to the REST-Api and executed, if whitelisted.
 
 ### Disable Api Check Feature
 
@@ -105,7 +105,7 @@ Enable-IcingaFrameworkApiChecks;
 
 ## EventLog Errors
 
-In case a check could not be executed by using this experimental feature, either because of timeouts or other issues, they are added with `EventId 1553` inside the EventLog for `Icinga for Windows`. A description on why the check could not be executed is added within the event output.
+In case a check could not be executed by using this feature, either because of timeouts or other issues, they are added with `EventId 1553` inside the EventLog for `Icinga for Windows`. A description on why the check could not be executed is added within the event output.
 
 ## Icinga Communication to API
 
