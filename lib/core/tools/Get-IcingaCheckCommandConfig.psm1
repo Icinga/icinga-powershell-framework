@@ -211,7 +211,9 @@ function Get-IcingaCheckCommandConfig()
                 'imports'     = @( 'PowerShell Base' );
                 'object_name' = $check;
                 'object_type' = 'object';
-                'vars'        = @{ };
+                'vars'        = @{
+                    'ifw_api_arguments' = @{ };
+                };
             }
         );
 
@@ -312,6 +314,16 @@ function Get-IcingaCheckCommandConfig()
                     }
                 );
             }
+
+            if ($parameter.type.name -eq 'SwitchParameter') {
+                $Basket.Command[$check].vars.ifw_api_arguments.Add([string]::Format('{0}', $parameter.Name), @{
+                    'set_if' = $IcingaCustomVariable;
+                });
+            } else {
+                $Basket.Command[$check].vars.ifw_api_arguments.Add([string]::Format('{0}', $parameter.Name), @{
+                    'value' = $IcingaCustomVariable;
+                });
+	        }
 
             # Determine wether a parameter is required based on given syntax-information
             if ($parameter.required -eq $TRUE) {
@@ -614,11 +626,47 @@ function Write-IcingaPlainConfigurationFiles()
 
         # In case we pre-define custom variables, we should add them here
         if ($CheckCommand.vars.Count -ne 0) {
-            $IcingaConfig += New-IcingaNewLine;
+            $IcingaConfig    += New-IcingaNewLine;
+            [bool]$AddNewLine = $FALSE;
 
             foreach ($var in $CheckCommand.vars.Keys) {
-                [string]$Value = $CheckCommand.vars[$var];
-                $IcingaConfig += [string]::Format('    vars.{0} = {1}{2}', $var, $Value.ToLower(), (New-IcingaNewLine));
+                if ($CheckCommand.vars[$var] -Is [Hashtable]) {
+                    if ($AddNewLine) {
+                        $IcingaConfig += New-IcingaNewLine;
+                    }
+                    [string]$HashtableArguments = '';
+                    [bool]$AddConfigNewLine     = $FALSE;
+                    foreach ($item in $CheckCommand.vars[$var].Keys) {
+                        if ($AddConfigNewLine) {
+                            $HashtableArguments += New-IcingaNewLine;
+                        }
+                        $HashtableArguments += [string]::Format('        "{0}" = {{{1}', $item, (New-IcingaNewLine));
+
+                        if ($CheckCommand.vars[$var][$item] -Is [Hashtable]) {
+                            foreach ($icingaconf in $CheckCommand.vars[$var][$item].Keys) {
+                                [string]$Value = $CheckCommand.vars[$var][$item][$icingaconf];
+                                $HashtableArguments += [string]::Format('            {0} = "{1}"{2}', $icingaconf, $Value, (New-IcingaNewLine));
+                            }
+                        } else {
+                            [string]$Value = $CheckCommand.vars[$var][$item];
+                            $HashtableArguments += [string]::Format('            value = "{0}"{1}', $Value, (New-IcingaNewLine));
+                        }
+                        $HashtableArguments += '        }';
+                        $AddConfigNewLine = $TRUE;
+                    }
+
+                    $IcingaConfig += [string]::Format('    vars.{0} = {{{1}', $var, (New-IcingaNewLine));
+                    $IcingaConfig += [string]::Format('{0}{1}', $HashtableArguments, (New-IcingaNewLine));
+                    $IcingaConfig += '    }';
+                    $AddNewLine = $TRUE;
+                } else {
+                    if ($AddNewLine) {
+                        $IcingaConfig += New-IcingaNewLine;
+                        $AddNewLine    = $FALSE;
+                    }
+                    [string]$Value = $CheckCommand.vars[$var];
+                    $IcingaConfig += [string]::Format('    vars.{0} = {1}{2}', $var, $Value.ToLower(), (New-IcingaNewLine));
+                }
             }
         } else {
             $IcingaConfig += New-IcingaNewLine;
