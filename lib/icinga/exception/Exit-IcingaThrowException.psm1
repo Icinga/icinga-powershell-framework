@@ -113,5 +113,7 @@ function Exit-IcingaThrowException()
     if ($Global:Icinga.Protected.RunAsDaemon -eq $FALSE -And $Global:Icinga.Protected.JEAContext -eq $FALSE) {
         Write-IcingaConsolePlain $OutputMessage;
         exit $IcingaEnums.IcingaExitCode.Unknown;
+    } else {
+        throw $OutputMessage;
     }
 }

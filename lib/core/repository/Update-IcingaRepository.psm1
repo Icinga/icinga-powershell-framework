@@ -67,7 +67,7 @@ function Update-IcingaRepository()
             $SetRemotePath = $RemotePath;
         }
 
-        $IcingaRepository = New-IcingaRepositoryFile -Path $Path -RemotePath $SetRemotePath;
+        $IcingaRepository = New-IcingaRepositoryFile -Path $Path -RemotePath $SetRemotePath -Name $Name;
 
         if ($CreateNew) {
             return $IcingaRepository;
@@ -97,7 +97,7 @@ function Update-IcingaRepository()
             $SetRemotePath = $RemotePath;
         }
 
-        Write-IcingaConsoleNotice 'Syncing repository "{0}"' -Objects $definedRepo.Name;
+        Write-IcingaConsoleDebug 'Syncing repository "{0}"' -Objects $definedRepo.Name;
 
         if ([string]::IsNullOrEmpty($definedRepo.Value.CloneSource) -eq $FALSE) {
             Sync-IcingaRepository `

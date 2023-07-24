@@ -1,7 +1,8 @@
 function Write-IcingaAgentApiConfig()
 {
-    param(
-        [int]$Port = 5665
+    param (
+        [int]$Port          = 5665,
+        [string]$CipherList = $null
     );
 
     [string]$ApiConf = '';
@@ -11,6 +12,9 @@ function Write-IcingaAgentApiConfig()
     $ApiConf = [string]::Format('{0}    accept_config = true;{1}', $ApiConf, "`r`n");
     $ApiConf = [string]::Format('{0}    bind_host = "::";{1}', $ApiConf, "`r`n");
     $ApiConf = [string]::Format('{0}    bind_port = {1};{2}', $ApiConf, $Port, "`r`n");
+    if ([string]::IsNullOrEmpty($CipherList) -eq $FALSE) {
+        $ApiConf = [string]::Format('{0}    cipher_list = "{1}";{2}', $ApiConf, $CipherList, "`r`n");
+    }
     $ApiConf = [string]::Format('{0}{1}{2}{2}', $ApiConf, '}', "`r`n");
 
     $ApiConf = $ApiConf.Substring(0, $ApiConf.Length - 4);
