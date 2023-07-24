@@ -84,6 +84,25 @@ function Import-IcingaForWindowsModulesInSession()
     }
 }
 
+function Import-IcingaForWindowsModules()
+{
+    [array]$IcingaForWindowsModules = Get-ChildItem -Path (Get-IcingaForWindowsRootPath);
+
+    foreach ($module in $IcingaForWindowsModules) {
+        if ($module.Name -Like 'icinga-powershell-*') {
+            try {
+                Import-Module $module.Name -Force -ErrorAction Stop;
+                Import-Module $module.Name -Force -Global -ErrorAction Stop;
+            } catch {
+                Write-Host ([string]::Format('Failed to import Icinga for Windows module "{0}": {1}', $module.Name, $_.Exception.Message));
+            }
+        }
+    }
+
+    Import-Module 'icinga-powershell-framework' -Force;
+    Import-Module 'icinga-powershell-framework' -Force -Global;
+}
+
 function Get-IcingaFrameworkCodeCacheFile()
 {
     return (Join-Path -Path (Get-IcingaCacheDir) -ChildPath 'framework_cache.psm1');
@@ -249,8 +268,14 @@ function Invoke-IcingaCommand()
         [switch]$NoSSLValidation = $FALSE,
         [switch]$RebuildCache    = $FALSE,
         [switch]$DeveloperMode   = $FALSE,
+        [switch]$NoNewInstance   = $FALSE,
         [array]$ArgumentList     = @()
     );
+
+    If ($DeveloperMode -And $NoNewInstance) {
+        Write-Host 'DeveloperMode is not supported while using NoNewInstance argument.' -ForegroundColor red;
+        return;
+    }
 
     Import-LocalizedData `
         -BaseDirectory (Get-IcingaFrameworkRootPath) `
@@ -283,6 +308,14 @@ function Invoke-IcingaCommand()
     if ($RebuildCache -Or $DeveloperMode) {
         Copy-IcingaFrameworkCacheTemplate;
         Write-IcingaFrameworkCodeCache -DeveloperMode:$DeveloperMode;
+    }
+
+    # Try to re-import everything within the same instance
+    if ($NoNewInstance) {
+        Import-IcingaForWindowsModules;
+        Use-Icinga;
+
+        return;
     }
 
     if ($null -ne $psISE) {
