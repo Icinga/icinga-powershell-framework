@@ -13,6 +13,7 @@ function New-IcingaRepositoryFile()
     $IcingaRepository | Add-Member -MemberType NoteProperty -Name 'Info' -Value (New-Object -TypeName PSObject);
 
     # Info
+    $IcingaRepository.Info | Add-Member -MemberType NoteProperty -Name 'Name'         -Value $Name;
     $IcingaRepository.Info | Add-Member -MemberType NoteProperty -Name 'LocalSource'  -Value $Path;
     $IcingaRepository.Info | Add-Member -MemberType NoteProperty -Name 'RemoteSource' -Value $RemotePath;
     $IcingaRepository.Info | Add-Member -MemberType NoteProperty -Name 'Created'      -Value ((Get-Date).ToUniversalTime().ToString('yyyy\/MM\/dd HH:mm:ss'));

@@ -199,6 +199,12 @@ function Sync-IcingaRepository()
         Start-Sleep -Seconds 2;
     }
 
+    if ((Test-PSCustomObjectMember -PSObject $JsonRepo.Info -Name 'Name') -eq $FALSE) {
+        $JsonRepo.Info | Add-Member -MemberType NoteProperty -Name 'Name' -Value $Name;
+    } else {
+        $JsonRepo.Info.Name = $Name;
+    }
+
     $JsonRepo.Info.RepoHash     = Get-IcingaRepositoryHash -Path $TmpDir;
     $JsonRepo.Info.LocalSource  = $Path;
     $JsonRepo.Info.RemoteSource = $RemotePath;

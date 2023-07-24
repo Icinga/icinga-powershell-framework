@@ -25,6 +25,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 ### Enhancements
 
 * [#544](https://github.com/Icinga/icinga-powershell-framework/issues/544) Adds support to configure the Icinga Director JSON string for registering hosts via self-service API
+* [#572](https://github.com/Icinga/icinga-powershell-framework/issues/572) Adds support to write the name of the repository synced/created into the local `ifw.repo.json` file
 * [#573](https://github.com/Icinga/icinga-powershell-framework/issues/573) Adds support to run command `icinga` with new argument `-NoNewInstance`, to use `-RebuildCache` as example to update the current PowerShell instance with all applied changes
 * [#619](https://github.com/Icinga/icinga-powershell-framework/pull/619) Adds feature to securely read enum provider values with new function `Get-IcingaProviderEnumData`
 * [#623](https://github.com/Icinga/icinga-powershell-framework/issues/623) Adds support to provide the Icinga service user written as `user@domain`
