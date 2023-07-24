@@ -57,6 +57,26 @@ function Invoke-IcingaApiChecksRESTCall()
             [string]$ExecuteCommand = $Request.RequestArguments.command;
         }
 
+        if ((Test-IcingaFunction -Name $ExecuteCommand) -eq $FALSE) {
+
+            Add-IcingaHashtableItem `
+                -Hashtable $ContentResponse `
+                -Key $ExecuteCommand `
+                -Value @{
+                    'exitcode'    = 3;
+                    'checkresult' = [string]::Format('[UNKNOWN] Icinga plugin not found exception: Command "{0}" is not present on the system{1}{1}The command "{0}" you are trying to execute over the REST-Api endpoint "apichecks" is not available on the system.', $ExecuteCommand, (New-IcingaNewLine));
+                    'perfdata'    = @();
+                } | Out-Null;
+
+            Send-IcingaTCPClientMessage -Message (
+                New-IcingaTCPClientRESTMessage `
+                    -HTTPResponse ($IcingaHTTPEnums.HTTPResponseType.'Not Found') `
+                    -ContentBody $ContentResponse
+            ) -Stream $Connection.Stream;
+
+            return;
+        }
+
         if ((Test-IcingaRESTApiCommand -Command $ExecuteCommand -Endpoint 'apichecks') -eq $FALSE) {
 
             Add-IcingaHashtableItem `

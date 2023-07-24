@@ -20,6 +20,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#621](https://github.com/Icinga/icinga-powershell-framework/pull/621) Fixes `-ThresholdInterval` key detection on newer systems
 * [#645](https://github.com/Icinga/icinga-powershell-framework/pull/645) Fixes error and exception handling while using API-Checks, which now will in most cases always return a proper check-result object and also abort while running into plugin execution errors, in case a server is not reachable by the time sync plugin for example
 * [#646](https://github.com/Icinga/icinga-powershell-framework/pull/646) Fixes REST-Api to allow arguments for check execution with and without leading `-`
+* [#648](https://github.com/Icinga/icinga-powershell-framework/pull/648) Fixes some memory management while using the REST-Api to clear connection objects once they are no longer required
 
 ### Enhancements
 
