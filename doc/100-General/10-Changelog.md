@@ -16,6 +16,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#579](https://github.com/Icinga/icinga-powershell-framework/issues/579) Fixes error message during config generation with `Get-IcingaCheckCommandConfig` to make it more clear, in case the custom variables generated are too long for the Icinga Director import
 * [#603](https://github.com/Icinga/icinga-powershell-framework/issues/603) Fixes service filter to handle exclude with wildcards instead of requiring the full service name (*not* applying to the display name)
 * [#609](https://github.com/Icinga/icinga-powershell-framework/issues/609) Fixes config generator to never use `set_if = true` on Icinga 2/Icinga Director configuration
+* [#611](https://github.com/Icinga/icinga-powershell-framework/issues/611) Fixes `Sync-IcingaRepository` which did not save the SSH user and host inside the repository configuration, preventing `Update-IcingaRepository` to work properly and added missing scp progress
 * [#615](https://github.com/Icinga/icinga-powershell-framework/issues/615) Fixes the framework migration tasks which fails in case multiple versions of the framework are installed, printing warnings in case there is
 * [#617](https://github.com/Icinga/icinga-powershell-framework/issues/617) Fixes failing calls for plugins which use a switch argument like `-NoPerfData`, which is followed directly by the `-ThresholdInterval` argument
 * [#621](https://github.com/Icinga/icinga-powershell-framework/pull/621) Fixes `-ThresholdInterval` key detection on newer systems
