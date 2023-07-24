@@ -22,3 +22,4 @@ For this reason you will find a list of Icinga knowledge base entries below. Ent
 | [IWKB000012](knowledgebase/IWKB000012.md) | Icinga for Windows cannot be used with Microsoft Defender: `Windows Defender Antivirus has detected malware or other potentially unwanted software` |
 | [IWKB000013](knowledgebase/IWKB000013.md) | The local Icinga Agent certificate seems not to be signed by our Icinga CA yet. Using this certificate for the REST-Api as example might not work yet. Please check the state of the certificate and complete the signing process if required |
 | [IWKB000014](knowledgebase/IWKB000014.md) | Installing or Updating Icinga for Windows causes error messages regarding `framework_cache.psm1` errors |
+| [IWKB000015](knowledgebase/IWKB000015.md) | Got JSON, but not an object, from IfW API on host 'localhost' port '5668': "Exception while calling \\"Fill\\" with 1 arguments: \\"Invalid syntax near \\"`<Argument>:`\\".\\"" |

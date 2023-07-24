@@ -35,7 +35,7 @@ function New-IcingaRepository()
         return;
     }
 
-    $IcingaRepository = New-IcingaRepositoryFile -Path $Path -RemotePath $RemotePath;
+    $IcingaRepository = New-IcingaRepositoryFile -Path $Path -RemotePath $RemotePath -Name $Name;
 
     [array]$ConfigCount = $IcingaRepository.Packages.PSObject.Properties.Count;
 

@@ -1,45 +1,55 @@
 function Install-Icinga()
 {
     param (
-        [string]$InstallCommand = $null,
-        [string]$InstallFile    = ''
+        [string]$InstallCommand  = $null,
+        [string]$InstallFile     = '',
+        [switch]$NoSSLValidation = $FALSE
     );
 
     if ($null -eq $global:Icinga) {
         $global:Icinga = @{ };
     }
 
+    # Always ensure we use the proper TLS Version
+    Set-IcingaTLSVersion;
+
+    # Ignore SSL validation in case we set the flag
+    if ($NoSSLValidation) {
+        Enable-IcingaUntrustedCertificateValidation;
+    }
+
     if ($global:Icinga.ContainsKey('InstallWizard') -eq $FALSE) {
         $global:Icinga.Add(
             'InstallWizard', @{
-                'AdminShell'             = (Test-AdministrativeShell);
-                'LastInput'              = '';
-                'LastNotice'             = '';
-                'LastWarning'            = @();
-                'LastError'              = @();
-                'DirectorError'          = '';
-                'HeaderPreview'          = '';
-                'DirectorSelfService'    = $FALSE;
-                'DirectorRegisteredHost' = $FALSE;
-                'DirectorInstallError'   = $FALSE;
-                'LastParent'             = [System.Collections.ArrayList]@();
-                'LastValues'             = @();
-                'DisabledEntries'        = @{ };
-                'Config'                 = @{ };
-                'ConfigSwap'             = @{ };
-                'ParentConfig'           = $null;
-                'Menu'                   = 'Install-Icinga';
-                'NextCommand'            = '';
-                'NextArguments'          = $null;
-                'HeaderSelection'        = $null;
-                'DisplayAdvanced'        = $FALSE;
-                'ShowAdvanced'           = $FALSE;
-                'ShowHelp'               = $FALSE;
-                'ShowCommand'            = $FALSE;
-                'DeleteValues'           = $FALSE;
-                'HeaderPrint'            = $FALSE;
-                'JumpToSummary'          = $FALSE;
-                'Closing'                = $FALSE;
+                'AdminShell'                = (Test-AdministrativeShell);
+                'LastInput'                 = '';
+                'LastNotice'                = '';
+                'LastWarning'               = @();
+                'LastError'                 = @();
+                'DirectorError'             = '';
+                'HeaderPreview'             = '';
+                'DirectorSelfServiceConfig' = $null;
+                'DirectorSelfService'       = $FALSE;
+                'DirectorRegisteredHost'    = $FALSE;
+                'DirectorInstallError'      = $FALSE;
+                'LastParent'                = [System.Collections.ArrayList]@();
+                'LastValues'                = @();
+                'DisabledEntries'           = @{ };
+                'Config'                    = @{ };
+                'ConfigSwap'                = @{ };
+                'ParentConfig'              = $null;
+                'Menu'                      = 'Install-Icinga';
+                'NextCommand'               = '';
+                'NextArguments'             = $null;
+                'HeaderSelection'           = $null;
+                'DisplayAdvanced'           = $FALSE;
+                'ShowAdvanced'              = $FALSE;
+                'ShowHelp'                  = $FALSE;
+                'ShowCommand'               = $FALSE;
+                'DeleteValues'              = $FALSE;
+                'HeaderPrint'               = $FALSE;
+                'JumpToSummary'             = $FALSE;
+                'Closing'                   = $FALSE;
             }
         );
     } else {

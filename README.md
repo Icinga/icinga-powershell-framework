@@ -1,3 +1,10 @@
+[![PowerShell Version](https://img.shields.io/badge/PowerShell-5.1-777BB4?logo=PowerSHell)](https://learn.microsoft.com/en-US/powershell/scripting/install/installing-powershell-on-windows?view=powershell-5.1)
+[![GitHub Tag](https://img.shields.io/github/tag/Icinga/icinga-powershell-framework.svg)](https://github.com/Icinga/icinga-powershell-framework/releases/latest)
+[![GitHub Issues](https://img.shields.io/github/issues-search?query=repo%3Aicinga%2Ficinga-powershell-framework%20is%3Aopen%20is%3Aissue&label=Issues&color=red
+)](https://github.com/Icinga/icinga-powershell-framework/issues)
+[![GitHub Pull Requests](https://img.shields.io/github/issues-search?query=repo%3Aicinga%2Ficinga-powershell-framework%20is%3Aopen%20is%3Apr&label=Pull%20Requests&color=green
+)](https://github.com/Icinga/icinga-powershell-framework/pulls)
+
 Icinga PowerShell Framework
 ==============
 

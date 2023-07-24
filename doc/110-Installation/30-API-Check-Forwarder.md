@@ -106,3 +106,111 @@ Enable-IcingaFrameworkApiChecks;
 ## EventLog Errors
 
 In case a check could not be executed by using this experimental feature, either because of timeouts or other issues, they are added with `EventId 1553` inside the EventLog for `Icinga for Windows`. A description on why the check could not be executed is added within the event output.
+
+## Icinga Communication to API
+
+With Icinga 2.14.0 and later, you can enable the Icinga Agent to natively communicate with the Icinga for Windows API, allowing checks being executed without having to start a PowerShell.
+
+This is a huge performance boost and should be **mandatory** on all Windows machines.
+
+To enable this feature, ensure you have **all** plugins updated by importing the latest version of the Icinga Director baskets or use the latest `.conf` files for Icinga provided by each plugin repository.
+
+Once your configuration is updated, you have to enable this feature.
+
+### Requirements
+
+* Icinga for Windows v1.11.0 or later
+* Icinga Director v.1.11.0 or later
+* Icinga 2.14.0 or later (at least master)
+
+### Icinga Director
+
+Navigate to `Icinga Director` and click on `Commands` -> `Commands` and search for `PowerShell Base`.
+
+Click on this CheckCommand and under the `Import` section add the check `ifw-api`.
+
+If the CheckCommand `ifw-api` does not exist, click on the `Icinga Director` on the menu and then `Icinga Infrastructure` -> `Kickstart Wizard` and then `Run Import` to import the latest CheckCommands shipped with Icinga. Please ensure you have updated to Icinga 2.14.0 or later on your master, otherwise this command is not available.
+
+You can verify that the `ifw-api` CheckCommand was installed by clicking on `Icinga Director` on the menu and then `Activity Log`. You should now see an entry like this:
+
+```
+[username] create command "ifw-api"
+```
+
+Now proceed with the previous step, to update the `PowerShell Base` to import the `ifw-api` CheckCommand.
+
+![Icinga Director IfW Api](../images/05_installation/02_ifw-api/01_powershell_base.png)
+
+Once you deploy the configuration, Icinga will communicate directly with the Icinga for Windows API, as long as on the Agent side 2.14.0 or later is installed. In case you are running an older version, Icinga will fall back to the previous handling and check the system either with or without API, depending on the configuration.
+
+### Icinga Plain Configuration
+
+Ensure you have updated to the latest version of Icinga and all `.conf` files for the Icinga for Windows CheckCommands are updated to the latest version.
+
+Afterwards navigate to the file containing your `PowerShell Base` CheckCommand and add the following line
+
+```
+import "ifw-api"
+```
+
+directly below `import "plugin-check-command"`
+
+**Note:** For backwards compatibility, if you didn't manage to update your entire environment (Master, Satellite and Agents) to v2.14.0 or later, you will have to deploy an additional check command on your global zones. This global configuration will create a dummy check-command `ifw-api`, ensuring the older Agents and Satellites older than 2.14.0 will not fail with a configuration error. Please read the section **`Global Zone Config`** for more details below.
+
+**Example:**
+
+```
+object CheckCommand "PowerShell Base" {
+    import "plugin-check-command"
+    import "ifw-api"
+
+...
+```
+
+Once modified, save the file and test your Icinga configuration with
+
+```
+icinga2 daemon -C
+```
+
+If the configuration is valid, restart your Icinga service
+
+```
+systemctl restart icinga2
+```
+
+**Global Zone Config:**
+
+<span style="color:red">**This only applies in multi-version environments NOT using Icinga Director and not fully upgraded to v2.14.0**!</span>
+
+Please validate your Icinga zones.conf for your global zone in (`/etc/icinga2/zones.conf`). There should be a zone configured as `global = true`, like `global-templates`. Please **DO NOT USE** `director-global`!
+
+In case your global zone is using the default `global-templates`, create a new file at the location
+
+`/etc/icinga2/zones.d/global-templates`
+
+with the name `ifw-fallback.conf` and add the following content:
+
+```
+if (! globals.System || ! System.get_template || ! get_template(CheckCommand, "ifw-api-check-command")) {
+  object CheckCommand "ifw-api" {
+    import "plugin-check-command"
+  }
+}
+```
+
+Full path example: `/etc/icinga2/zones.d/global-templates/ifw-fallback.conf`
+
+Now validate your configuration and restart your master.
+
+```
+icinga2 daemon -C
+```
+
+If the configuration is valid, restart your Icinga service
+
+```
+systemctl restart icinga2
+```
+
+Icinga will now communicate directly with the Icinga for Windows API, as long as on the Agent side 2.14.0 or later is installed. In case you are running an older version, Icinga will fall back to the previous handling and check the system either with or without API, depending on the configuration.

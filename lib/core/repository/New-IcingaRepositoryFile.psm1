@@ -2,7 +2,8 @@ function New-IcingaRepositoryFile()
 {
     param (
         [string]$Path       = $null,
-        [string]$RemotePath = $null
+        [string]$RemotePath = $null,
+        [string]$Name       = ''
     );
 
     $RepoFile = 'ifw.repo.json';
@@ -12,6 +13,7 @@ function New-IcingaRepositoryFile()
     $IcingaRepository | Add-Member -MemberType NoteProperty -Name 'Info' -Value (New-Object -TypeName PSObject);
 
     # Info
+    $IcingaRepository.Info | Add-Member -MemberType NoteProperty -Name 'Name'         -Value $Name;
     $IcingaRepository.Info | Add-Member -MemberType NoteProperty -Name 'LocalSource'  -Value $Path;
     $IcingaRepository.Info | Add-Member -MemberType NoteProperty -Name 'RemoteSource' -Value $RemotePath;
     $IcingaRepository.Info | Add-Member -MemberType NoteProperty -Name 'Created'      -Value ((Get-Date).ToUniversalTime().ToString('yyyy\/MM\/dd HH:mm:ss'));
@@ -23,10 +25,14 @@ function New-IcingaRepositoryFile()
 
     $RepositoryFolder = Get-ChildItem -Path $Path -Recurse -Include '*.msi', '*.zip';
 
+    New-IcingaProgressStatus -Name 'Updating Repository' -Message ([string]::Format('Update Icinga for Windows repository ({0}). Processed files', $Name)) -MaxValue $RepositoryFolder.Count -Details;
+
     foreach ($entry in $RepositoryFolder) {
         $RepoFilePath            = $entry.FullName.Replace($Path, '');
         $FileHash                = Get-FileHash -Path $entry.FullName -Algorithm SHA256;
         $ComponentName           = '';
+
+        Write-IcingaProgressStatus -Name 'Updating Repository';
 
         $IcingaForWindowsPackage = New-Object -TypeName PSObject;
         $IcingaForWindowsPackage | Add-Member -MemberType NoteProperty -Name 'Hash'         -Value $FileHash.Hash;
@@ -84,6 +90,8 @@ function New-IcingaRepositoryFile()
 
         $IcingaRepository.Info.RepoHash = Get-IcingaRepositoryHash -Path $Path;
     }
+
+    Complete-IcingaProgressStatus -Name 'Updating Repository';
 
     Write-IcingaFileSecure -File $RepoPath -Value (ConvertTo-Json -InputObject $IcingaRepository -Depth 100);
 

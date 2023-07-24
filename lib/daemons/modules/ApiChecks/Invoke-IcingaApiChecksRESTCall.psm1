@@ -9,9 +9,11 @@ function Invoke-IcingaApiChecksRESTCall()
     [Hashtable]$ContentResponse = @{ };
 
     # Short our call
-    $CheckerAliases = $Global:Icinga.Public.Daemons.RESTApi.CommandAliases.checker;
-    $CheckConfig    = $Request.Body;
-    [int]$ExitCode  = 3; #Unknown
+    $CheckerAliases        = $Global:Icinga.Public.Daemons.RESTApi.CommandAliases.checker;
+    $CheckConfig           = $Request.Body;
+    [int]$ExitCode         = 3; #Unknown
+    [string]$CheckResult   = '';
+    [string]$InternalError = '';
 
     # Check if there are an inventory aliases configured
     # This should be maintained by the developer and not occur
@@ -55,11 +57,41 @@ function Invoke-IcingaApiChecksRESTCall()
             [string]$ExecuteCommand = $Request.RequestArguments.command;
         }
 
+        if ((Test-IcingaFunction -Name $ExecuteCommand) -eq $FALSE) {
+
+            Add-IcingaHashtableItem `
+                -Hashtable $ContentResponse `
+                -Key $ExecuteCommand `
+                -Value @{
+                    'exitcode'    = 3;
+                    'checkresult' = [string]::Format('[UNKNOWN] Icinga plugin not found exception: Command "{0}" is not present on the system{1}{1}The command "{0}" you are trying to execute over the REST-Api endpoint "apichecks" is not available on the system.', $ExecuteCommand, (New-IcingaNewLine));
+                    'perfdata'    = @();
+                } | Out-Null;
+
+            Send-IcingaTCPClientMessage -Message (
+                New-IcingaTCPClientRESTMessage `
+                    -HTTPResponse ($IcingaHTTPEnums.HTTPResponseType.'Not Found') `
+                    -ContentBody $ContentResponse
+            ) -Stream $Connection.Stream;
+
+            return;
+        }
+
         if ((Test-IcingaRESTApiCommand -Command $ExecuteCommand -Endpoint 'apichecks') -eq $FALSE) {
+
+            Add-IcingaHashtableItem `
+                -Hashtable $ContentResponse `
+                -Key $ExecuteCommand `
+                -Value @{
+                    'exitcode'    = 3;
+                    'checkresult' = [string]::Format('[UNKNOWN] Icinga Permission error was thrown: Permission denied for command "{0}"{1}{1}The command "{0}" you are trying to execute over the REST-Api endpoint "apichecks" is not whitelisted for remote execution.', $ExecuteCommand, (New-IcingaNewLine));
+                    'perfdata'    = @();
+                } | Out-Null;
+
             Send-IcingaTCPClientMessage -Message (
                 New-IcingaTCPClientRESTMessage `
                     -HTTPResponse ($IcingaHTTPEnums.HTTPResponseType.'Forbidden') `
-                    -ContentBody ([string]::Format('The command "{0}" you are trying to execute over this REST-Api endpoint "apichecks" is not whitelisted for remote execution.', $ExecuteCommand))
+                    -ContentBody $ContentResponse
             ) -Stream $Connection.Stream;
 
             return;
@@ -87,22 +119,38 @@ function Invoke-IcingaApiChecksRESTCall()
             # a valid hashtable, allowing us to parse arguments
             # to our check command
             $PSArguments.PSObject.Properties | ForEach-Object {
-                $CmdArgValue = $_.Value;
+                $CmdArgValue        = $_.Value;
+                [string]$CmdArgName = $_.Name;
+
+                # Ensure we can use both, `-MyArgument` and `MyArgument` as valid input
+                if ($CmdArgName[0] -eq '-') {
+                    $CmdArgName = $CmdArgName.Substring(1, $CmdArgName.Length - 1);
+                }
 
                 # Ensure we convert strings to SecureString, in case the plugin argument requires it
-                if ($CommandDetails.ContainsKey($_.Name) -And $CommandDetails[$_.Name] -Like 'SecureString') {
+                if ($CommandDetails.ContainsKey($CmdArgName) -And $CommandDetails[$CmdArgName] -Like 'SecureString') {
                     $CmdArgValue = ConvertTo-IcingaSecureString -String $_.Value;
                 }
 
                 Add-IcingaHashtableItem `
                     -Hashtable $Arguments `
-                    -Key $_.Name `
+                    -Key $CmdArgName `
                     -Value $CmdArgValue | Out-Null;
             };
 
-            [int]$ExitCode = & $ExecuteCommand @Arguments;
+            try {
+                [int]$ExitCode = & $ExecuteCommand @Arguments;
+            } catch {
+                [int]$ExitCode = 3;
+                $InternalError = $_.Exception.Message;
+            }
         } elseif ($Request.Method -eq 'GET') {
-            [int]$ExitCode = & $ExecuteCommand;
+            try {
+                [int]$ExitCode = & $ExecuteCommand;
+            } catch {
+                [int]$ExitCode = 3;
+                $InternalError = $_.Exception.Message;
+            }
         } else {
             Send-IcingaTCPClientMessage -Message (
                 New-IcingaTCPClientRESTMessage `
@@ -115,7 +163,16 @@ function Invoke-IcingaApiChecksRESTCall()
 
         # Once the check is executed, the plugin output and the performance data are stored
         # within a special cache map we can use for accessing
-        $CheckResult     = Get-IcingaCheckSchedulerPluginOutput;
+        if ([string]::IsNullOrEmpty($InternalError)) {
+            $CheckResult = Get-IcingaCheckSchedulerPluginOutput;
+        } else {
+            if ($InternalError.Contains('[UNKNOWN]') -eq $FALSE) {
+                # Ensure we format the error message more user friendly
+                $CheckResult = [string]::Format('[UNKNOWN] Icinga Plugin execution error was thrown during API request:{0}{0}{1}', (New-IcingaNewLine), $InternalError);
+            } else {
+                $CheckResult = $InternalError;
+            }
+        }
         [array]$PerfData = Get-IcingaCheckSchedulerPerfData;
 
         # Ensure our PerfData variable is always an array

@@ -7,26 +7,36 @@ documentation before upgrading to a new release.
 
 Released closed milestones can be found on [GitHub](https://github.com/Icinga/icinga-powershell-framework/milestones?state=closed).
 
-## 1.11.0 (2023-05-16)
+## 1.11.0 (2023-08-01)
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/26)
 
 ### Bugfixes
 
+* [#579](https://github.com/Icinga/icinga-powershell-framework/issues/579) Fixes error message during config generation with `Get-IcingaCheckCommandConfig` to make it more clear, in case the custom variables generated are too long for the Icinga Director import
 * [#603](https://github.com/Icinga/icinga-powershell-framework/issues/603) Fixes service filter to handle exclude with wildcards instead of requiring the full service name (*not* applying to the display name)
 * [#609](https://github.com/Icinga/icinga-powershell-framework/issues/609) Fixes config generator to never use `set_if = true` on Icinga 2/Icinga Director configuration
 * [#615](https://github.com/Icinga/icinga-powershell-framework/issues/615) Fixes the framework migration tasks which fails in case multiple versions of the framework are installed, printing warnings in case there is
 * [#617](https://github.com/Icinga/icinga-powershell-framework/issues/617) Fixes failing calls for plugins which use a switch argument like `-NoPerfData`, which is followed directly by the `-ThresholdInterval` argument
 * [#621](https://github.com/Icinga/icinga-powershell-framework/pull/621) Fixes `-ThresholdInterval` key detection on newer systems
+* [#645](https://github.com/Icinga/icinga-powershell-framework/pull/645) Fixes error and exception handling while using API-Checks, which now will in most cases always return a proper check-result object and also abort while running into plugin execution errors, in case a server is not reachable by the time sync plugin for example
+* [#646](https://github.com/Icinga/icinga-powershell-framework/pull/646) Fixes REST-Api to allow arguments for check execution with and without leading `-`
+* [#648](https://github.com/Icinga/icinga-powershell-framework/pull/648) Fixes some memory management while using the REST-Api to clear connection objects once they are no longer required
 
 ### Enhancements
 
-* [#623](https://github.com/Icinga/icinga-powershell-framework/issues/623) Adds support to provide the Icinga service user written as `user@domain`
-
-### Enhancements
-
+* [#544](https://github.com/Icinga/icinga-powershell-framework/issues/544) Adds support to configure the Icinga Director JSON string for registering hosts via self-service API
+* [#572](https://github.com/Icinga/icinga-powershell-framework/issues/572) Adds support to write the name of the repository synced/created into the local `ifw.repo.json` file
+* [#573](https://github.com/Icinga/icinga-powershell-framework/issues/573) Adds support to run command `icinga` with new argument `-NoNewInstance`, to use `-RebuildCache` as example to update the current PowerShell instance with all applied changes
 * [#619](https://github.com/Icinga/icinga-powershell-framework/pull/619) Adds feature to securely read enum provider values with new function `Get-IcingaProviderEnumData`
+* [#623](https://github.com/Icinga/icinga-powershell-framework/issues/623) Adds support to provide the Icinga service user written as `user@domain`
+* [#633](https://github.com/Icinga/icinga-powershell-framework/pull/633) Adds support for Icinga 2.14.0 native Icinga for Windows API communication
+* [#635](https://github.com/Icinga/icinga-powershell-framework/pull/635) Adds support for `Write-IcingaAgentApiConfig` function to configure the Icinga Agent TLS cipher list setting by new argument `-CipherList`
+* [#637](https://github.com/Icinga/icinga-powershell-framework/pull/637) Adds new base handling for future data providers with first metrics for `CPU` information
 * [#638](https://github.com/Icinga/icinga-powershell-framework/pull/638) Adds option for formatted, colored console prints with `Write-ColoredOutput`
+* [#640](https://github.com/Icinga/icinga-powershell-framework/issues/640) Adds support to set the flag `-NoSSLValidation` for Cmdlets `icinga` and `Install-Icinga`, to ignore errors on self-signed certificates within the environment
+* [#643](https://github.com/Icinga/icinga-powershell-framework/pull/643) Adds support for `-RebuildCache` flag on `icinga` cmd to rebuild component cache as well
+* [#644](https://github.com/Icinga/icinga-powershell-framework/pull/644) Adds progress bar output to repository interaction (sync, update, new) instead of plain text output
 
 ## 1.10.1 (2022-12-20)
 

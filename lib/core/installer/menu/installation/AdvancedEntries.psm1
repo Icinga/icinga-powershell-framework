@@ -31,6 +31,7 @@ function Add-IcingaForWindowsInstallationAdvancedEntries()
     Show-IcingaForWindowsInstallationMenuEnterIcingaCAServer -Automated -Advanced;
     Show-IcingaForWindowsInstallerMenuSelectInstallApiChecks -Automated -Advanced;
     Show-IcingaForWindowsInstallerMenuSelectServiceRecovery -Automated -Advanced;
+    Show-IcingaForWindowsManagementConsoleInstallationEnterDirectorSelfServiceConfig -Automated -Advanced;
 
     Enable-IcingaFrameworkConsoleOutput;
 
