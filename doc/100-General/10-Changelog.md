@@ -13,6 +13,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 ### Bugfixes
 
+* [#579](https://github.com/Icinga/icinga-powershell-framework/issues/579) Fixes error message during config generation with `Get-IcingaCheckCommandConfig` to make it more clear, in case the custom variables generated are too long for the Icinga Director import
 * [#603](https://github.com/Icinga/icinga-powershell-framework/issues/603) Fixes service filter to handle exclude with wildcards instead of requiring the full service name (*not* applying to the display name)
 * [#609](https://github.com/Icinga/icinga-powershell-framework/issues/609) Fixes config generator to never use `set_if = true` on Icinga 2/Icinga Director configuration
 * [#615](https://github.com/Icinga/icinga-powershell-framework/issues/615) Fixes the framework migration tasks which fails in case multiple versions of the framework are installed, printing warnings in case there is
