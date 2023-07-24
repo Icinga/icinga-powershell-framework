@@ -247,13 +247,17 @@ function Sync-IcingaRepository()
 
         Write-IcingaConsoleNotice 'Syncing new repository files to "{0}"' -Objects $Path;
 
-        $Result = Start-IcingaProcess -Executable 'scp' -Arguments ([string]::Format('-r "{0}" "{1}:{2}"', $CopySource, $SSHAuth, $Path));
+        $SSHRemotePath = ([string]::Format('{0}:{1}', $SSHAuth, $Path));
 
-        if ($Result.ExitCode -ne 0) {
-            Write-IcingaConsoleError 'SCP Error while copying repository files: {0}' -Objects $Result.Error;
+        & scp -r "$CopySource" "$SSHRemotePath";
+
+        if ($LASTEXITCODE -ne 0) {
+            Write-IcingaConsoleError 'SCP Error while copying repository files';
             $Success = Remove-Item -Path $TmpDir -Recurse -Force;
             return;
         }
+
+        $Path = $SSHRemotePath;
     }
 
     $Success = Remove-Item -Path $TmpDir -Recurse -Force;
