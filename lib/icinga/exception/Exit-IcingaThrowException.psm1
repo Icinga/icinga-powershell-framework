@@ -110,10 +110,13 @@ function Exit-IcingaThrowException()
     Set-IcingaInternalPluginExitCode -ExitCode $IcingaEnums.IcingaExitCode.Unknown;
     Set-IcingaInternalPluginException -PluginException $OutputMessage;
 
-    if ($Global:Icinga.Protected.RunAsDaemon -eq $FALSE -And $Global:Icinga.Protected.JEAContext -eq $FALSE) {
-        Write-IcingaConsolePlain $OutputMessage;
-        exit $IcingaEnums.IcingaExitCode.Unknown;
-    } else {
+    if ($Global:Icinga.Protected.RunAsDaemon -eq $TRUE -Or $Global:Icinga.Protected.JEAContext -eq $TRUE) {
         throw $OutputMessage;
+
+        # Just in case we don't end - shouldn't happen anyway
+        return;
     }
+
+    Write-IcingaConsolePlain $OutputMessage;
+    exit $IcingaEnums.IcingaExitCode.Unknown;
 }
