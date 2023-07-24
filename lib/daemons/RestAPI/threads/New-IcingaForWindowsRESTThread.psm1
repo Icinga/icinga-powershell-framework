@@ -39,6 +39,7 @@ function New-IcingaForWindowsRESTThread()
                         Send-IcingaWebAuthMessage -Connection $Connection;
                         # Close the connection
                         Close-IcingaTCPConnection -Client $Connection.Client;
+                        $Connection = $null;
                         continue;
                     }
 
@@ -56,6 +57,7 @@ function New-IcingaForWindowsRESTThread()
                         Send-IcingaWebAuthMessage -Connection $Connection;
                         # Close the connection
                         Close-IcingaTCPConnection -Client $Connection.Client;
+                        $Connection = $null;
                         continue;
                     }
                 }
@@ -99,6 +101,7 @@ function New-IcingaForWindowsRESTThread()
         # Finally close the clients connection as we are done here and
         # ensure this thread will close by simply leaving the function
         Close-IcingaTCPConnection -Client $Connection.Client;
+        $Connection = $null;
 
         # Force Icinga for Windows Garbage Collection
         Optimize-IcingaForWindowsMemory -ClearErrorStack -SmartGC;

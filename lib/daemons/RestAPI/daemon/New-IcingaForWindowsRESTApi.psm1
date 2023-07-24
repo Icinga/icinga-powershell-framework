@@ -87,16 +87,19 @@ function New-IcingaForWindowsRESTApi()
         if (Test-IcingaRESTClientBlacklisted -Client $Connection.Client -ClientList $Global:Icinga.Public.Daemons.RESTApi.ClientBlacklist) {
             Write-IcingaDebugMessage -Message 'A remote client which is trying to connect was blacklisted' -Objects $Connection.Client.Client;
             Close-IcingaTCPConnection -Client $Connection.Client;
+            $Connection = $null;
             continue;
         }
 
         if ((Test-IcingaRESTClientConnection -Connection $Connection) -eq $FALSE) {
+            $Connection = $null;
             continue;
         }
 
         # API not yet ready
         if ($Global:Icinga.Public.Daemons.RESTApi.ApiRequests.Count -eq 0) {
             Close-IcingaTCPConnection -Client $Connection.Client;
+            $Connection = $null;
             continue;
         }
 
@@ -105,6 +108,7 @@ function New-IcingaForWindowsRESTApi()
 
             if ($Global:Icinga.Public.Daemons.RESTApi.ApiRequests.ContainsKey($NextRESTApiThreadId) -eq $FALSE) {
                 Close-IcingaTCPConnection -Client $Connection.Client;
+                $Connection = $null;
                 continue;
             }
 
