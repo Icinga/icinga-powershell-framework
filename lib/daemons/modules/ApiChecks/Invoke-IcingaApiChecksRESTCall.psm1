@@ -99,16 +99,22 @@ function Invoke-IcingaApiChecksRESTCall()
             # a valid hashtable, allowing us to parse arguments
             # to our check command
             $PSArguments.PSObject.Properties | ForEach-Object {
-                $CmdArgValue = $_.Value;
+                $CmdArgValue        = $_.Value;
+                [string]$CmdArgName = $_.Name;
+
+                # Ensure we can use both, `-MyArgument` and `MyArgument` as valid input
+                if ($CmdArgName[0] -eq '-') {
+                    $CmdArgName = $CmdArgName.Substring(1, $CmdArgName.Length - 1);
+                }
 
                 # Ensure we convert strings to SecureString, in case the plugin argument requires it
-                if ($CommandDetails.ContainsKey($_.Name) -And $CommandDetails[$_.Name] -Like 'SecureString') {
+                if ($CommandDetails.ContainsKey($CmdArgName) -And $CommandDetails[$CmdArgName] -Like 'SecureString') {
                     $CmdArgValue = ConvertTo-IcingaSecureString -String $_.Value;
                 }
 
                 Add-IcingaHashtableItem `
                     -Hashtable $Arguments `
-                    -Key $_.Name `
+                    -Key $CmdArgName `
                     -Value $CmdArgValue | Out-Null;
             };
 
