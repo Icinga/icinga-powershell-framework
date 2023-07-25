@@ -39,6 +39,10 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#643](https://github.com/Icinga/icinga-powershell-framework/pull/643) Adds support for `-RebuildCache` flag on `icinga` cmd to rebuild component cache as well
 * [#644](https://github.com/Icinga/icinga-powershell-framework/pull/644) Adds progress bar output to repository interaction (sync, update, new) instead of plain text output
 
+### Enhancements
+
+* [#613](https://github.com/Icinga/icinga-powershell-framework/pull/613) Adds a `-Version` parameter to the `Update-Icinga` command, to be able to update a component to a specified version [@log1-c]
+
 ## 1.10.1 (2022-12-20)
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/27?closed=1)

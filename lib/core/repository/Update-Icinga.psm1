@@ -2,6 +2,7 @@ function Update-Icinga()
 {
     param (
         [string]$Name     = $null,
+        [string]$Version  = $null,
         [switch]$Release  = $FALSE,
         [switch]$Snapshot = $FALSE,
         [switch]$Confirm  = $FALSE,
@@ -21,7 +22,11 @@ function Update-Icinga()
             continue;
         }
 
-        $NewVersion = $Component.LatestVersion;
+        if ([string]::IsNullOrEmpty($Version) -eq $FALSE){
+            $NewVersion = $Component.LatestVersion;
+        } else {
+            $NewVersion = $Version;
+        }
 
         if ([string]::IsNullOrEmpty($NewVersion)) {
             Write-IcingaConsoleNotice 'No update package found for component "{0}"' -Objects $entry;
