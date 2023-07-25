@@ -212,6 +212,7 @@ function Get-IcingaCheckCommandConfig()
                 'object_name' = $check;
                 'object_type' = 'object';
                 'vars'        = @{
+                    'ifw_api_command'   = $check;
                     'ifw_api_arguments' = @{ };
                 };
             }
