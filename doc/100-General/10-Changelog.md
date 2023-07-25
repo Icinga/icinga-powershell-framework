@@ -16,6 +16,10 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#603](https://github.com/Icinga/icinga-powershell-framework/issues/603) Fixed service filter to handle exclude with wildcards instead of requiring the full service name (*not* applying to the display name)
 * [#609](https://github.com/Icinga/icinga-powershell-framework/issues/609) Fixed config generator to never use `set_if = true` on Icinga 2/Icinga Director configuration
 
+### Enhancements
+
+* [#613](https://github.com/Icinga/icinga-powershell-framework/pull/613) Adds a `-Version` parameter to the `Update-Icinga` command, to be able to update a component to a specified version [@log1-c]
+
 ## 1.10.1 (2022-12-20)
 
 [Issue and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/27?closed=1)
