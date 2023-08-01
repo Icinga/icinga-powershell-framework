@@ -6,7 +6,7 @@ function Write-IcingaPluginOutput()
 
     if ($Global:Icinga.Protected.RunAsDaemon -eq $FALSE -And $Global:Icinga.Protected.JEAContext -eq $FALSE) {
         if ($Global:Icinga.Protected.Minimal) {
-            Clear-Host;
+            Clear-CLIConsole;
         }
         Write-IcingaConsolePlain $Output;
     } else {

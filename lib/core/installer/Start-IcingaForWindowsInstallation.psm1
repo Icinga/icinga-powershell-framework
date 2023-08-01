@@ -5,7 +5,7 @@ function Start-IcingaForWindowsInstallation()
     );
 
     if ($global:Icinga.InstallWizard.DirectorInstallError -eq $FALSE -And (Get-IcingaFrameworkDebugMode) -eq $FALSE) {
-        Clear-Host;
+        Clear-CLIConsole;
     }
 
     Write-IcingaConsoleNotice 'Starting Icinga for Windows installation';
