@@ -40,6 +40,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#640](https://github.com/Icinga/icinga-powershell-framework/issues/640) Adds support to set the flag `-NoSSLValidation` for Cmdlets `icinga` and `Install-Icinga`, to ignore errors on self-signed certificates within the environment
 * [#643](https://github.com/Icinga/icinga-powershell-framework/pull/643) Adds support for `-RebuildCache` flag on `icinga` cmd to rebuild component cache as well
 * [#644](https://github.com/Icinga/icinga-powershell-framework/pull/644) Adds progress bar output to repository interaction (sync, update, new) instead of plain text output
+* [#649](https://github.com/Icinga/icinga-powershell-framework/pull/649) Adds new basic data provider base for Hyper-V information
 * [#655](https://github.com/Icinga/icinga-powershell-framework/pull/655) Adds [IWKB](https://icinga.com/docs/icinga-for-windows/latest/doc/knowledgebase/IWKB000016/) and test/manage Cmdlets for SCOM intercept counters
 * [#656](https://github.com/Icinga/icinga-powershell-framework/pull/656) Adds new feature to write document content easier by storing it in memory first and then allowing to write it to disk at once with proper UTF8 encoding
 
