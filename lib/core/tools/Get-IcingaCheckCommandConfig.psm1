@@ -666,7 +666,11 @@ function Write-IcingaPlainConfigurationFiles()
                         $AddNewLine    = $FALSE;
                     }
                     [string]$Value = $CheckCommand.vars[$var];
-                    $IcingaConfig += [string]::Format('    vars.{0} = {1}{2}', $var, $Value.ToLower(), (New-IcingaNewLine));
+                    if ($CheckCommand.vars[$var] -Is [bool]) {
+                        $IcingaConfig += [string]::Format('    vars.{0} = {1}{2}', $var, $Value.ToLower(), (New-IcingaNewLine));
+                    } else {
+                        $IcingaConfig += [string]::Format('    vars.{0} = "{1}"{2}', $var, $Value.ToLower(), (New-IcingaNewLine));
+                    }
                 }
             }
         } else {
