@@ -7,6 +7,14 @@ documentation before upgrading to a new release.
 
 Released closed milestones can be found on [GitHub](https://github.com/Icinga/icinga-powershell-framework/milestones?state=closed).
 
+## 1.11.1 (tbd)
+
+[Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/29)
+
+### Bugfixes
+
+* [#659](https://github.com/Icinga/icinga-powershell-framework/pull/659) Fixes configuration writer which publishes invalid Icinga plain configuration files
+
 ## 1.11.0 (2023-08-01)
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/26)
