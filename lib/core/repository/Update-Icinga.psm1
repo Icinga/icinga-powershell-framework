@@ -22,9 +22,9 @@ function Update-Icinga()
             continue;
         }
 
-        if ([string]::IsNullOrEmpty($Version) -eq $FALSE){
-            $NewVersion = $Component.LatestVersion;
-        } else {
+        $NewVersion = $Component.LatestVersion;
+
+        if ([string]::IsNullOrEmpty($Version) -eq $FALSE) {
             $NewVersion = $Version;
         }
 
