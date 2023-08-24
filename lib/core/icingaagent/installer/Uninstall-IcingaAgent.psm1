@@ -26,7 +26,7 @@ function Uninstall-IcingaAgent()
         Use-Icinga -Minimal;
 
         $IcingaData  = $args[0];
-        $Uninstaller = Start-IcingaProcess -Executable 'MsiExec.exe' -Arguments ([string]::Format('{0} /q', $IcingaData.Uninstaller)) -FlushNewLine;
+        $Uninstaller = Start-IcingaProcess -Executable 'MsiExec.exe' -Arguments ([string]::Format('{0} /q /norestart', $IcingaData.Uninstaller)) -FlushNewLine;
 
         Start-Sleep -Seconds 2;
         Optimize-IcingaForWindowsMemory;
