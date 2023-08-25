@@ -14,6 +14,7 @@ function Update-Icinga()
     }
 
     $CurrentInstallation = Get-IcingaInstallation -Release:$Release -Snapshot:$Snapshot;
+    [bool]$UpdateJEA     = $FALSE;
 
     foreach ($entry in $CurrentInstallation.Keys) {
         $Component = $CurrentInstallation[$entry];
@@ -44,11 +45,15 @@ function Update-Icinga()
             continue;
         }
 
+        if ($entry.ToLower() -ne 'agent' -And $entry.ToLower() -ne 'service') {
+            $UpdateJEA = $TRUE;
+        }
+
         Install-IcingaComponent -Name $entry -Version $NewVersion -Release:$Release -Snapshot:$Snapshot -Confirm:$Confirm -Force:$Force;
     }
 
     # Update JEA profile if JEA is enabled once the update is complete
-    if ([string]::IsNullOrEmpty((Get-IcingaJEAContext)) -eq $FALSE) {
+    if ([string]::IsNullOrEmpty((Get-IcingaJEAContext)) -eq $FALSE -And $UpdateJEA) {
         Update-IcingaJEAProfile;
         Restart-IcingaWindowsService;
     }
