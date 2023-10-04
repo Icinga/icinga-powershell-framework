@@ -252,22 +252,6 @@ function Start-IcingaForWindowsInstallation()
         Restart-IcingaWindowsService;
     }
 
-    switch ($InstallJEAProfile) {
-        '0' {
-            Install-IcingaJEAProfile;
-            $InstallJEA = $TRUE;
-            break;
-        };
-        '1' {
-            Install-IcingaSecurity;
-            $InstallJEA = $TRUE;
-            break;
-        };
-        '2' {
-            # Do not install JEA profile
-        };
-    }
-
     switch ($InstallApiChecks) {
         '0' {
             Disable-IcingaFrameworkApiChecks;
@@ -298,9 +282,26 @@ function Start-IcingaForWindowsInstallation()
         };
     }
 
+    switch ($InstallJEAProfile) {
+        '0' {
+            Install-IcingaJEAProfile;
+            $InstallJEA = $TRUE;
+            break;
+        };
+        '1' {
+            Install-IcingaSecurity;
+            $InstallJEA = $TRUE;
+            break;
+        };
+        '2' {
+            # Do not install JEA profile
+        };
+    }
+
     # Install Icinga for Windows certificate if both, JEA and REST is installed
     if ($InstallJEA -And $InstallRESTApi) {
         Install-IcingaForWindowsCertificate;
+        Restart-IcingaWindowsService;
     }
 
     # Update configuration and clear swap
