@@ -54,7 +54,8 @@
 
 .PARAMETER IcingaConfig
    Will switch the configuration generator to write plain Icinga 2 `.conf`
-   files instead of Icinga Director Basket `.json` files
+   files instead of Icinga Director Basket `.json` files.
+   Does only affect the written files, not the Cmdlet's String output.
 
 .INPUTS
    System.Array
