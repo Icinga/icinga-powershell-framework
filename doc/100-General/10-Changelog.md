@@ -17,6 +17,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#660](https://github.com/Icinga/icinga-powershell-framework/pull/660) Fixes `Update-Icinga` not updating to the latest available version for a component and specifying `-Version` is updating to the latest one instead of the given one instead
 * [#661](https://github.com/Icinga/icinga-powershell-framework/pull/661) Fixes Icinga Agent installation and uninstallation, which could cause unintended automatic reboots
 * [#662](https://github.com/Icinga/icinga-powershell-framework/pull/662) Fixes JEA-Profiles always being updated during `Update-Icinga` calls, even when no component or non JEA related components were updated
+* [#664](https://github.com/Icinga/icinga-powershell-framework/pull/664) Fixes JEA profile compiler not including REST-Api configuration during first installation
 
 ## 1.11.0 (2023-08-01)
 
