@@ -2,7 +2,7 @@ function Update-Icinga()
 {
     param (
         [string]$Name     = $null,
-        [string]$Version  = $null,
+        [string]$Version  = 'release',
         [switch]$Release  = $FALSE,
         [switch]$Snapshot = $FALSE,
         [switch]$Confirm  = $FALSE,
@@ -23,10 +23,13 @@ function Update-Icinga()
             continue;
         }
 
-        if ([string]::IsNullOrEmpty($Version) -eq $FALSE){
-            $NewVersion = $Component.LatestVersion;
-        } else {
-            $NewVersion = $Version;
+        $NewVersion = $Component.LatestVersion;
+
+        if ([string]::IsNullOrEmpty($Version) -eq $FALSE) {
+            # Ensure we are backwards compatible with Icinga for Windows v1.11.0 which broke the version update feature
+            if ($Version.ToLower() -ne 'release' -And $Version.ToLower() -ne 'latest') {
+                $NewVersion = $Version;
+            }
         }
 
         if ([string]::IsNullOrEmpty($NewVersion)) {
