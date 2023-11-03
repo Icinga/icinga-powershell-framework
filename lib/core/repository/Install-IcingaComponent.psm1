@@ -21,7 +21,7 @@ function Install-IcingaComponent()
 
     Set-IcingaTLSVersion;
 
-    if ($Version -eq 'release') {
+    if ($Version.ToLower() -eq 'release' -Or $Version.ToLower() -eq 'latest') {
         $Version = $null;
     }
 
