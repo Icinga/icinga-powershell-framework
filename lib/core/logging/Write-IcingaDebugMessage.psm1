@@ -18,4 +18,6 @@ function Write-IcingaDebugMessage()
     $DebugContent += $Objects;
 
     Write-IcingaEventMessage -EventId 1000 -Namespace 'Debug' -ExceptionObject $ExceptionObject -Objects $DebugContent;
+
+    $DebugContent = $null;
 }

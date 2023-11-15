@@ -40,11 +40,17 @@ function New-IcingaCheckResult()
 
         Set-IcingaInternalPluginExitCode -ExitCode $ExitCode;
 
+        $this.Check = $null;
+
         return $ExitCode;
     }
 
     if ($Compile) {
-        return $IcingaCheckResult.Compile();
+        $IcingaExitCode    = $IcingaCheckResult.Compile();
+        $IcingaCheckResult = $null;
+        $Check             = $null;
+
+        return $IcingaExitCode;
     }
 
     return $IcingaCheckResult;

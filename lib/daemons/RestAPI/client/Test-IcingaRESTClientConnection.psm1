@@ -11,7 +11,7 @@ function Test-IcingaRESTClientConnection()
             -Client $Connection.Client `
             -ClientList $Global:Icinga.Public.Daemons.RESTApi.ClientBlacklist;
         Write-IcingaEventMessage -EventId 1501 -Namespace 'Framework' -Objects $Connection.Client.Client;
-        Close-IcingaTCPConnection -Client $Connection.Client;
+        Close-IcingaTCPConnection -Connection $Connection;
         $Connection = $null;
         return $FALSE;
     }

@@ -33,7 +33,8 @@ function Get-IcingaCacheData()
         [string]$Space,
         [string]$CacheStore,
         [string]$KeyName,
-        [switch]$TempFile   = $FALSE
+        [switch]$TempFile   = $FALSE,
+        [switch]$AsObject   = $FALSE
     );
 
     $CacheFile       = Join-Path -Path (Join-Path -Path (Join-Path -Path (Get-IcingaCacheDir) -ChildPath $Space) -ChildPath $CacheStore) -ChildPath ([string]::Format('{0}.json', $KeyName));
@@ -62,7 +63,7 @@ function Get-IcingaCacheData()
         return $null;
     }
 
-    if ([string]::IsNullOrEmpty($KeyName)) {
+    if ($AsObject -Or [string]::IsNullOrEmpty($KeyName)) {
         return $cacheData;
     } else {
         return $cacheData.$KeyName;
