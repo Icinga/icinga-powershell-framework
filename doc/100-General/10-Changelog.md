@@ -11,6 +11,14 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/28)
 
+## 1.11.2 (tbd)
+
+[Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/30)
+
+### Bugfixes
+
+* [#673](https://github.com/Icinga/icinga-powershell-framework/pull/673) Fixes a memory leak while fetching Windows EventLog information by using CLI tools and inside the Hyper-V provide
+
 ## 1.11.1 (2023-11-07)
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/29)

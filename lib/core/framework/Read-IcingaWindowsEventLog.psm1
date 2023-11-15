@@ -52,6 +52,11 @@ function Read-IcingaWindowsEventLog()
             $CollectedEvents += $event;
         }
 
+        if ($null -ne $IcingaEvents) {
+            $IcingaEvents.Dispose();
+            $IcingaEvents = $null;
+        }
+
         $CollectedEvents = $CollectedEvents | Sort-Object { $_.TimeCreated };
 
         foreach ($event in $CollectedEvents) {
@@ -70,6 +75,8 @@ function Read-IcingaWindowsEventLog()
 
             Write-IcingaConsolePlain -Message '[{0}] {1}' -Objects $event.TimeCreated, $event.Message -ForeColor $ForeColor;
         }
+
+        $CollectedEvents = $null;
 
         Start-Sleep -Seconds 1;
         # Force Icinga for Windows Garbage Collection

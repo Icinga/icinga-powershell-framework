@@ -11,6 +11,11 @@ function Show-IcingaEventLogAnalysis()
     try {
         [array]$BasicLogArray = Get-WinEvent -ListLog $LogName -ErrorAction Stop;
         $BasicLogData         = $BasicLogArray[0];
+
+        if ($null -ne $BasicLogArray) {
+            $BasicLogArray.Dispose();
+            $BasicLogArray = $null;
+        }
     } catch {
         Write-IcingaConsoleError 'Failed to fetch data for EventLog "{0}". Probably this log does not exist.' -Objects $LogName;
         return;
@@ -79,6 +84,11 @@ function Show-IcingaEventLogAnalysis()
         $LogAnalysis.Day.Average    = [math]::Ceiling($LogAnalysis.Day.Count / $LogAnalysis.Day.Entries.Count);
         $LogAnalysis.Hour.Average   = [math]::Ceiling($LogAnalysis.Hour.Count / $LogAnalysis.Hour.Entries.Count);
         $LogAnalysis.Minute.Average = [math]::Ceiling($LogAnalysis.Minute.Count / $LogAnalysis.Minute.Entries.Count);
+    }
+
+    if ($null -ne $LogData) {
+        $LogData.Dispose();
+        $LogData = $null;
     }
 
     foreach ($value in $LogAnalysis.Day.Entries.Values) {

@@ -102,6 +102,16 @@ function Get-IcingaProviderDataValuesHyperV()
                 }
             }
         }
+
+        if ($null -ne $InformationBlackoutTimes) {
+            $InformationBlackoutTimes.Dispose();
+            $InformationBlackoutTimes = $null;
+        }
+
+        if ($null -ne $WarningBlackoutTimes) {
+            $WarningBlackoutTimes.Dispose();
+            $WarningBlackoutTimes = $null;
+        }
     } catch {
         Exit-IcingaThrowException -ExceptionType 'Custom' -CustomMessage 'Hyper-V Error' -ExceptionThrown $_.Exception.Message -Force;
     }
