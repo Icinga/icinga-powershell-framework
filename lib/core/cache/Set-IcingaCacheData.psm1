@@ -43,7 +43,7 @@ function Set-IcingaCacheData()
     }
 
     if ((Test-Path $CacheFile)) {
-        $cacheData = Get-IcingaCacheData -Space $Space -CacheStore $CacheStore;
+        $cacheData = Get-IcingaCacheData -Space $Space -CacheStore $CacheStore -KeyName $KeyName -AsObject;
     } else {
         try {
             New-Item -ItemType File -Path $CacheTmpFile -Force -ErrorAction Stop | Out-Null;

@@ -38,7 +38,7 @@ function New-IcingaForWindowsRESTThread()
                         # Send the authentication prompt
                         Send-IcingaWebAuthMessage -Connection $Connection;
                         # Close the connection
-                        Close-IcingaTCPConnection -Client $Connection.Client;
+                        Close-IcingaTCPConnection -Connection $Connection;
                         $Connection = $null;
                         continue;
                     }
@@ -56,14 +56,14 @@ function New-IcingaForWindowsRESTThread()
                         # Re-send the authentication prompt
                         Send-IcingaWebAuthMessage -Connection $Connection;
                         # Close the connection
-                        Close-IcingaTCPConnection -Client $Connection.Client;
+                        Close-IcingaTCPConnection -Connection $Connection;
                         $Connection = $null;
                         continue;
                     }
                 }
 
                 # Set our thread being active
-                Set-IcingaForWindowsThreadAlive -ThreadName $Global:Icinga.Protected.ThreadName -Active -TerminateAction @{ 'Command' = 'Close-IcingaTCPConnection'; 'Arguments' = @{ 'Client' = $Connection.Client } };
+                Set-IcingaForWindowsThreadAlive -ThreadName $Global:Icinga.Protected.ThreadName -Active -TerminateAction @{ 'Command' = 'Close-IcingaTCPConnection'; 'Arguments' = @{ 'Connection' = $Connection } };
 
                 # We should remove clients from the blacklist who are sending valid requests
                 Remove-IcingaRESTClientBlacklist -Client $Connection.Client -ClientList $Global:Icinga.Public.Daemons.RESTApi.ClientBlacklist;
@@ -100,7 +100,7 @@ function New-IcingaForWindowsRESTThread()
 
         # Finally close the clients connection as we are done here and
         # ensure this thread will close by simply leaving the function
-        Close-IcingaTCPConnection -Client $Connection.Client;
+        Close-IcingaTCPConnection -Connection $Connection;
         $Connection = $null;
 
         # Force Icinga for Windows Garbage Collection
