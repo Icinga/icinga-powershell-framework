@@ -19,6 +19,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 * [#673](https://github.com/Icinga/icinga-powershell-framework/pull/673) Fixes a memory leak while fetching Windows EventLog information by using CLI tools and inside the Hyper-V provide
 * [#678](https://github.com/Icinga/icinga-powershell-framework/pull/678) Fixes various memory leaks in Icinga for Windows API core and check handler
+* [#680](https://github.com/Icinga/icinga-powershell-framework/pull/680) Fixes exception in some cases, when provider or metrics return values as `null` instead of `0` while units are being used for check objects
 
 ## 1.11.1 (2023-11-07)
 
