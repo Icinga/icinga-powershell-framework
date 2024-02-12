@@ -21,7 +21,13 @@ function New-IcingaCheck()
     $IcingaCheck.Name         = $Name;
     $IcingaCheck.__ObjectType = 'IcingaCheck';
 
-    $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'Value'             -Value $Value;
+    # Ensure we always set our current value to 0 in case it is null and we set a unit, to prevent conversion exceptions
+    if ([string]::IsNullOrEmpty($Unit) -eq $FALSE -And $null -eq $Value) {
+        $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'Value' -Value 0;
+    } else {
+        $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'Value' -Value $Value;
+    }
+
     $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'BaseValue'         -Value $BaseValue;
     $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'Unit'              -Value $Unit;
     $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'MetricIndex'       -Value $MetricIndex;
