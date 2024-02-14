@@ -1,6 +1,8 @@
 function Get-IcingaProviderDataValuesHyperV()
 {
     param (
+        [array]$IncludeFilter   = @(),
+        [array]$ExcludeFilter   = @(),
         [switch]$IncludeDetails = $FALSE
     );
 

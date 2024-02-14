@@ -1,6 +1,8 @@
 function Get-IcingaProviderDataValuesCpu()
 {
     param (
+        [array]$IncludeFilter   = @(),
+        [array]$ExcludeFilter   = @(),
         [switch]$IncludeDetails = $FALSE
     );
 

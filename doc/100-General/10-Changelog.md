@@ -11,6 +11,10 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/28)
 
+### Enhancements
+
+* [#679](https://github.com/Icinga/icinga-powershell-framework/pull/679) Adds a new data provider for fetching process information of Windows systems, while sorting all objects based on a process name and their process id
+
 ## 1.11.2 (tbd)
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/30)

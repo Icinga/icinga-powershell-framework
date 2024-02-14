@@ -1,7 +1,10 @@
 function Get-IcingaProviderData()
 {
     param (
-        [array]$Name = ''
+        [array]$Name            = '',
+        [array]$IncludeFilter   = @(),
+        [array]$ExcludeFilter   = @(),
+        [switch]$IncludeDetails = $FALSE
     );
 
     [hashtable]$ProviderData = @{ };
@@ -24,9 +27,8 @@ function Get-IcingaProviderData()
             continue;
         }
 
-        $ProviderCmd = $ProviderDataList[0];
-
-        $ProviderContent = (& $ProviderCmd -IncludeDetails);
+        $ProviderCmd     = $ProviderDataList[0];
+        $ProviderContent = (& $ProviderCmd -IncludeDetails:$IncludeDetails -IncludeFilter $IncludeFilter -ExcludeFilter $ExcludeFilter);
 
         if ($ProviderData.ContainsKey($ProviderContent.Name) -eq $FALSE) {
             $ProviderData.Add($ProviderContent.Name, $ProviderContent);
