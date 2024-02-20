@@ -11,6 +11,10 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/28)
 
+### Bugfixes
+
+* [#683](https://github.com/Icinga/icinga-powershell-framework/pull/683) Fixes JEA installer to exclude domain from user name length check, which can easily exceed the Windows 20 digits username limit
+
 ### Enhancements
 
 * [#679](https://github.com/Icinga/icinga-powershell-framework/pull/679) Adds a new data provider for fetching process information of Windows systems, while sorting all objects based on a process name and their process id

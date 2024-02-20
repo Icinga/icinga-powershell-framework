@@ -13,9 +13,11 @@ function New-IcingaWindowsUser()
         };
     }
 
+    $IcingaUserInfo = Split-IcingaUserDomain -User $IcingaUser;
+
     # Max length for the user name
-    if ($IcingaUser.Length -gt 20) {
-        Write-IcingaConsoleError 'The specified user name "{0}" is too long. The maximum character limit is 20 digits.' -Objects $IcingaUser;
+    if ($IcingaUserInfo.User.Length -gt 20) {
+        Write-IcingaConsoleError 'The specified user name "{0}" is too long. The maximum character limit is 20 digits.' -Objects $IcingaUserInfo.User;
 
         return @{
             'User' = $null;
