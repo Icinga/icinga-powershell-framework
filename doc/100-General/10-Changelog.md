@@ -14,6 +14,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 ### Bugfixes
 
 * [#683](https://github.com/Icinga/icinga-powershell-framework/pull/683) Fixes JEA installer to exclude domain from user name length check, which can easily exceed the Windows 20 digits username limit
+* [#686](https://github.com/Icinga/icinga-powershell-framework/pull/686) Fixes certutil error handling and message output in case the icingaforwindows.pfx could not be created
 
 ### Enhancements
 

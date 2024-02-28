@@ -44,14 +44,16 @@ function ConvertTo-IcingaX509Certificate()
         [string]::Format(
             'Certutil merge request has been completed. Certutil message:{0}{0}{1}',
             (New-IcingaNewLine),
-            $CertUtilOutput
+            ($CertUtilOutput | Out-String)
         )
     );
 
     # If no target file exists afterwards (a valid PFX certificate)
     # then throw an exception
     if (-Not (Test-Path $TargetFile)) {
-        throw 'The specified/created certificate file could not be found.';
+        [string]$ErrMessage = [string]::Format('Unable to create the Icinga for Windows certificate file "icingaforwindows.pfx". Certutil output:{0}{1}', (New-IcingaNewLine), ($CertUtilOutput | Out-String));
+        Write-IcingaConsoleError $ErrMessage;
+        throw $ErrMessage;
     }
 
     # Now load the actual certificate from the path
