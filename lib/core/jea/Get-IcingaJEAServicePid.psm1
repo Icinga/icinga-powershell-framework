@@ -7,5 +7,9 @@ function Get-IcingaJEAServicePid()
         $JeaPid = $JeaPid.Replace("`r`n", '').Replace("`n", '').Replace(' ', '');
     }
 
+    if ([string]::IsNullOrEmpty($JeaPid) -Or $JeaPid -eq '0' -Or $JeaPid -eq 0) {
+        return $null;
+    }
+
     return $JeaPid;
 }

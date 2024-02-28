@@ -5,7 +5,7 @@ function Restart-IcingaWindowsService()
     Stop-IcingaService -Service 'icingapowershell';
 
     if ((Test-IcingaJEAServiceRunning -JeaPid $JeaPid)) {
-        Stop-Process -Id $JeaPid -Force;
+        Stop-IcingaJEAProcess -JeaPid $JeaPid;
     }
 
     Restart-IcingaService -Service 'icingapowershell';
