@@ -282,6 +282,9 @@ function Start-IcingaForWindowsInstallation()
         };
     }
 
+    # Ensure we add the scheduled task to renew the certificates for Icinga for Windows on a daily basis
+    Register-IcingaWindowsScheduledTaskRenewCertificate -Force;
+
     switch ($InstallJEAProfile) {
         '0' {
             Install-IcingaJEAProfile;

@@ -89,4 +89,13 @@ function Invoke-IcingaForWindowsMigration()
 
         Set-IcingaForWindowsMigration -MigrationVersion (New-IcingaVersionObject -Version '1.10.1');
     }
+
+    if (Test-IcingaForWindowsMigration -MigrationVersion (New-IcingaVersionObject -Version '1.12.0')) {
+        Write-IcingaConsoleNotice 'Applying pending migrations required for Icinga for Windows v1.12.0';
+
+        # Add a new scheduled task to automatically renew the Icinga for Windows certificate
+        Register-IcingaWindowsScheduledTaskRenewCertificate -Force;
+
+        Set-IcingaForWindowsMigration -MigrationVersion (New-IcingaVersionObject -Version '1.12.0');
+    }
 }
