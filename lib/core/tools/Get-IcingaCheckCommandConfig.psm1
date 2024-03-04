@@ -69,6 +69,8 @@
 .NOTES
 #>
 
+[string]$PsBaseCArg = [string]::Format('try {{ Use-Icinga -Minimal; }} catch {{ Write-Output {0}The Icinga PowerShell Framework is either not installed on the system or not configured properly. Please check https://icinga.com/docs/windows for further details{0}; Write-Output {0}Error:{0} $$($$_.Exception.Message)Components:`r`n$$( Get-Module -ListAvailable {0}icinga-powershell-*{0} )`r`n{0}Module-Path:{0}`r`n$$($$Env:PSModulePath); exit 3; }}; Exit-IcingaExecutePlugin -Command {0}$ifw_api_command${0} ', "'");
+
 function Get-IcingaCheckCommandConfig()
 {
     param(
@@ -113,6 +115,10 @@ function Get-IcingaCheckCommandConfig()
                 '-ExecutionPolicy' = @{
                     'order' = '-1';
                     'value' = '$IcingaPowerShellBase_String_ExecutionPolicy$';
+                };
+                '-C' = @{
+                    'order' = '0';
+                    'value' = $PsBaseCArg;
                 };
             };
             'command'         = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe';
@@ -201,13 +207,7 @@ function Get-IcingaCheckCommandConfig()
         # Add command Structure
         $Basket.Command.Add(
             $check, @{
-                'arguments'   = @{
-                    # Set the Command handling for every check command
-                    '-C' = @{
-                        'value' = [string]::Format('try {{ Use-Icinga -Minimal; }} catch {{ Write-Output {1}The Icinga PowerShell Framework is either not installed on the system or not configured properly. Please check https://icinga.com/docs/windows for further details{1}; Write-Output {1}Error:{1} $$($$_.Exception.Message)Components:`r`n$$( Get-Module -ListAvailable {1}icinga-powershell-*{1} )`r`n{1}Module-Path:{1}`r`n$$($$Env:PSModulePath); exit 3; }}; Exit-IcingaExecutePlugin -Command {1}{0}{1} ', $check, "'");
-                        'order' = '0';
-                    };
-                }
+                'arguments'   = @{ }
                 'fields'      = @();
                 'imports'     = @( 'PowerShell Base' );
                 'object_name' = $check;
@@ -694,6 +694,10 @@ function Write-IcingaPlainConfigurationFiles()
     $PowerShellBase         += [string]::Format('    ]{0}', (New-IcingaNewLine));
     $PowerShellBase         += [string]::Format('    timeout = 3m{0}', (New-IcingaNewLine));
     $PowerShellBase         += [string]::Format('    arguments += {{{0}', (New-IcingaNewLine));
+    $PowerShellBase         += [string]::Format('        "-C" = {{{0}', (New-IcingaNewLine));
+    $PowerShellBase         += [string]::Format('            order = 0{0}', (New-IcingaNewLine));
+    $PowerShellBase         += [string]::Format('            value = "{0}"{1}', $PsBaseCArg, (New-IcingaNewLine));
+    $PowerShellBase         += [string]::Format('        }}{0}', (New-IcingaNewLine));
     $PowerShellBase         += [string]::Format('        "-ExecutionPolicy" = {{{0}', (New-IcingaNewLine));
     $PowerShellBase         += [string]::Format('            order = -1{0}', (New-IcingaNewLine));
     $PowerShellBase         += [string]::Format('            value = "$IcingaPowerShellBase_String_ExecutionPolicy$"{0}', (New-IcingaNewLine));

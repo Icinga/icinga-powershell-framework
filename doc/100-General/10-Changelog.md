@@ -19,6 +19,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 ### Enhancements
 
+* [#631](https://github.com/Icinga/icinga-powershell-framework/pull/631) Deduplicates `-C try { Use-Icinga ...` boilerplate by adding it to the `PowerShell Base` template and removing it from every single command
 * [#679](https://github.com/Icinga/icinga-powershell-framework/pull/679) Adds a new data provider for fetching process information of Windows systems, while sorting all objects based on a process name and their process id
 
 ## 1.11.2 (tbd)
