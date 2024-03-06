@@ -199,7 +199,18 @@ function Start-IcingaForWindowsInstallation()
         Install-IcingaAgentBaseFeatures;
         Write-IcingaAgentApiConfig -Port $IcingaPort;
 
-        if ((Install-IcingaAgentCertificates -Hostname $Hostname -Endpoint $IcingaCAServer -Port $IcingaPort -CACert $CertificateCAFile -Ticket $CertificateTicket -Force:$ForceCertificateGen) -eq $FALSE) {
+        # Fixes an issue with the local Icinga for Windows listen port and the defined ports for communicating with the Icinga Parent/CA Nodes
+        # This will check if we provided a custom port for the endpoints and use this one instead of the configured listen port if Icinga for Windows
+        $IcingaCAPort = $IcingaPort;
+
+        if ($null -ne $IcingaParentAddresses -And $IcingaParentAddresses.Count -ne 0) {
+            $ConnectionConfig = Get-IPConfigFromString -IPConfig ($IcingaParentAddresses[0]);
+            if ($null -ne $ConnectionConfig -And $null -ne $ConnectionConfig.Port -And [string]::IsNullOrEmpty($ConnectionConfig.Port) -eq $FALSE) {
+                $IcingaCAPort = $ConnectionConfig.Port;
+            }
+        }
+
+        if ((Install-IcingaAgentCertificates -Hostname $Hostname -Endpoint $IcingaCAServer -Port $IcingaCAPort -CACert $CertificateCAFile -Ticket $CertificateTicket -Force:$ForceCertificateGen) -eq $FALSE) {
             Disable-IcingaAgentFeature 'api';
             Write-IcingaConsoleWarning `
                 -Message '{0}{1}{2}{3}{4}' `
