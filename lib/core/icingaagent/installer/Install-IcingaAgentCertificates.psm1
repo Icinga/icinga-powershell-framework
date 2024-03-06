@@ -93,6 +93,15 @@ function Install-IcingaAgentCertificates()
     }
 
     if (-Not [string]::IsNullOrEmpty($Endpoint)) {
+
+        # In case we use a custom configuration for our CA endpoint server with address and port, ensure we establish
+        # a connection to this endpoint as well as the port
+        $ConnectionConfig = Get-IPConfigFromString -IPConfig $Endpoint;
+        $Endpoint         = $ConnectionConfig.address;
+        if ([string]::IsNullOrEmpty($ConnectionConfig.port) -eq $FALSE) {
+            $Port = $ConnectionConfig.port;
+        }
+
         if (-Not (Test-IcingaAgentCertificates -CertDirectory $CertificateDirectory -Hostname $Hostname -TestTrustedParent -Force $Force)) {
 
             Write-IcingaConsoleNotice ([string]::Format('Fetching trusted master certificate from "{0}"', $Endpoint));
