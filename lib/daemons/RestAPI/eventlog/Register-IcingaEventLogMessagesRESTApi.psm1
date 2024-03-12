@@ -11,8 +11,26 @@ function Register-IcingaEventLogMessagesRESTApi()
             2001 = @{
                 'EntryType' = 'Error';
                 'Message'   = 'Failed to start REST-Api daemon in JEA context';
-                'Details'   = 'Icinga for Windows is being used inside a JEA context as service with the REST-Api daemon. To establish a secure TLS socket, it is required to create certificates in advance for the socket to bind on with "Install-IcingaForWindowsCertificate". The REST-Api daemon will now exit.';
+                'Details'   = 'Icinga for Windows is being used inside a JEA context as service with the REST-Api daemon. To establish a secure TLS socket, it is required to create certificates in advance for the socket to bind on with "Start-IcingaWindowsScheduledTaskRenewCertificate". The REST-Api daemon will now exit.';
                 'EventId'   = 2001;
+            };
+            2002 = @{
+                'EntryType' = 'Warning';
+                'Message'   = 'Icinga for Windows certificate not ready';
+                'Details'   = 'The Icinga for Windows REST-Api was not able to fetch the icingaforwindows.pfx certificate file. You can manually enforce the certificate creation by using the command "Start-IcingaWindowsScheduledTaskRenewCertificate". Once successful, this message should disappear and the REST-Api start. If the error persist, ensure your Icinga Agent certificate is configured properly and signed by your Icinga CA. This check is queued every 5 minutes and should vanish once everything works fine.';
+                'EventId'   = 2002;
+            };
+            2003 = @{
+                'EntryType' = 'Warning';
+                'Message'   = 'Icinga for Windows certificate was not found';
+                'Details'   = 'The Icinga for Windows "icingaforwindows.pfx" file was not found on the system while the REST-Api is running. Please ensure the certificate is created shortly, as the daemon will no longer work once it will be restarted or the certificate is due for renewal. Please run "Start-IcingaWindowsScheduledTaskRenewCertificate" to re-create the certificate on your machine.'
+                'EventId'   = 2003;
+            };
+            2004 = @{
+                'EntryType' = 'Information';
+                'Message'   = 'Icinga for Windows certificate was renewed';
+                'Details'   = 'The Icinga for Windows certificate has been modified and was updated inside the Icinga for Windows REST-Api daemon.'
+                'EventId'   = 2004;
             };
             2050 = @{
                 'EntryType' = 'Error';
