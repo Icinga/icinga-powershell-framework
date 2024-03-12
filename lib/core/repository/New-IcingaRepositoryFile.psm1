@@ -1,9 +1,10 @@
 function New-IcingaRepositoryFile()
 {
     param (
-        [string]$Path       = $null,
-        [string]$RemotePath = $null,
-        [string]$Name       = ''
+        [string]$Path         = $null,
+        [string]$RemotePath   = $null,
+        [string]$Name         = '',
+        [switch]$SnapshotFile = $FALSE
     );
 
     $RepoFile = 'ifw.repo.json';
@@ -57,7 +58,7 @@ function New-IcingaRepositoryFile()
 
             [bool]$IsSnapshot = $FALSE;
 
-            if ($entry.FullName.ToLower() -like '*\master.zip') {
+            if ($entry.FullName.ToLower() -like '*\master.zip' -Or $SnapshotFile) {
                 $IsSnapshot = $TRUE;
             }
 

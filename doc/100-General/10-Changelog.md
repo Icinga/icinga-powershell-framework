@@ -20,6 +20,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 ### Enhancements
 
+* [#587](https://github.com/Icinga/icinga-powershell-framework/issues/587) Adds support to create own snapshot repositories with `New-IcingaRepository`
 * [#631](https://github.com/Icinga/icinga-powershell-framework/pull/631) Deduplicates `-C try { Use-Icinga ...` boilerplate by adding it to the `PowerShell Base` template and removing it from every single command
 * [#679](https://github.com/Icinga/icinga-powershell-framework/pull/679) Adds a new data provider for fetching process information of Windows systems, while sorting all objects based on a process name and their process id
 * [#688](https://github.com/Icinga/icinga-powershell-framework/pull/688) Adds new handling to add scheduled tasks in Windows for interacting with Icinga for Windows core functionality as well as an auto renewal task for the Icinga for Windows certificate generation

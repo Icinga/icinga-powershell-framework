@@ -4,7 +4,8 @@ function New-IcingaRepository()
         [string]$Name       = $null,
         [string]$Path       = $null,
         [string]$RemotePath = $null,
-        [switch]$Force      = $FALSE
+        [switch]$Force      = $FALSE,
+        [switch]$Snapshot   = $FALSE
     );
 
     if ([string]::IsNullOrEmpty($Name)) {
@@ -35,7 +36,7 @@ function New-IcingaRepository()
         return;
     }
 
-    $IcingaRepository = New-IcingaRepositoryFile -Path $Path -RemotePath $RemotePath -Name $Name;
+    $IcingaRepository = New-IcingaRepositoryFile -Path $Path -RemotePath $RemotePath -Name $Name -SnapshotFile:$Snapshot;
 
     [array]$ConfigCount = $IcingaRepository.Packages.PSObject.Properties.Count;
 
