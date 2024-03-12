@@ -52,6 +52,8 @@ function Uninstall-IcingaForWindows()
     Uninstall-IcingaSecurity -IcingaUser $IcingaUser;
     Write-IcingaConsoleNotice 'Uninstalling Icinga Agent';
     Uninstall-IcingaAgent -RemoveDataFolder | Out-Null;
+    Write-IcingaConsoleNotice 'Uninstalling Certificate Renewal Task';
+    Unregister-IcingaWindowsScheduledTaskRenewCertificate;
     if ($ComponentsOnly -eq $FALSE) {
         Write-IcingaConsoleNotice 'Uninstalling Icinga for Windows EventLog';
         Unregister-IcingaEventLog;
