@@ -260,7 +260,7 @@ function Start-IcingaForWindowsInstallation()
     }
 
     if ($InstallService) {
-        Restart-IcingaWindowsService;
+        Restart-IcingaForWindows;
     }
 
     switch ($InstallApiChecks) {
@@ -274,7 +274,7 @@ function Start-IcingaForWindowsInstallation()
             Enable-IcingaFrameworkApiChecks;
             $InstallRESTApi = $TRUE;
             if ($InstallService) {
-                Restart-IcingaWindowsService;
+                Restart-IcingaForWindows;
             } else {
                 Write-IcingaConsoleWarning -Message 'You have selected to install the Api-Check feature and all required configurations were made. The Icinga for Windows service is however not marked for installation, which will cause this feature to not work.';
             }
@@ -314,7 +314,7 @@ function Start-IcingaForWindowsInstallation()
 
     # Always install the Icinga for Windows certificate
     Install-IcingaForWindowsCertificate;
-    Restart-IcingaWindowsService;
+    Restart-IcingaForWindows;
 
     # Update configuration and clear swap
     $ConfigSwap = Get-IcingaPowerShellConfig -Path 'Framework.Config.Swap';

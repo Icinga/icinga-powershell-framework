@@ -68,7 +68,7 @@ function Invoke-IcingaWindowsScheduledTask()
             }
         };
         'InstallJEA' {
-            $WinAction = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument ([string]::Format('-Command &{{ Use-Icinga -Minimal; Install-IcingaJEAProfile; Restart-IcingaWindowsService; }}', "'", $TmpFile.FullName, $FilePath))
+            $WinAction = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument ([string]::Format('-Command &{{ Use-Icinga -Minimal; Install-IcingaJEAProfile; Restart-IcingaForWindows; }}', "'", $TmpFile.FullName, $FilePath))
             Register-ScheduledTask -TaskName $TaskName -Action $WinAction -RunLevel Highest -TaskPath $TaskPath | Out-Null;
             Start-ScheduledTask -TaskName $TaskName -TaskPath $TaskPath;
 

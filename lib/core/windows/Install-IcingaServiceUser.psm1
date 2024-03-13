@@ -25,7 +25,7 @@ function Install-IcingaServiceUser()
     Set-IcingaUserPermissions -IcingaUser $IcingaUser;
 
     Restart-IcingaService 'icinga2';
-    Restart-IcingaWindowsService;
+    Restart-IcingaForWindows;
 
     Clear-IcingaWindowsUserPassword;
 

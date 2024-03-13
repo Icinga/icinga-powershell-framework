@@ -95,7 +95,7 @@ if ($null -eq $IcingaEventLogEnums -Or $IcingaEventLogEnums.ContainsKey('Framewo
             1503 = @{
                 'EntryType' = 'Error';
                 'Message'   = 'Unable to start Icinga for Windows service';
-                'Details'   = 'Unable to start Icinga for Windows service, as the JEA session created by the service is still active. Run "Restart-IcingaWindowsService" to restart the Icinga for Windows service, while running in JEA context to prevent this issue.';
+                'Details'   = 'Unable to start Icinga for Windows service, as the JEA session created by the service is still active. Run "Restart-IcingaForWindows" to restart the Icinga for Windows service, while running in JEA context to prevent this issue.';
                 'EventId'   = 1503;
             };
             1504 = @{

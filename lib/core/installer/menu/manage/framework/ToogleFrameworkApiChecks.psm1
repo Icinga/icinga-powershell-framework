@@ -12,5 +12,5 @@ function Invoke-IcingaForWindowsManagementConsoleToggleFrameworkApiChecks()
         Enable-IcingaFrameworkApiChecks;
     }
 
-    Restart-IcingaWindowsService;
+    Restart-IcingaForWindows;
 }

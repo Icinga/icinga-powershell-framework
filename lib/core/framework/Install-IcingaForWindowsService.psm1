@@ -87,7 +87,7 @@ function Install-IcingaForWindowsService()
     # will not start without this workaround.
     # Todo: Figure out the reason and fix it properly
     Set-IcingaServiceUser -User 'LocalSystem' -Service 'icingapowershell' | Out-Null;
-    Restart-IcingaWindowsService;
+    Restart-IcingaForWindows;
     Start-Sleep -Seconds 1;
     Stop-IcingaWindowsService;
 

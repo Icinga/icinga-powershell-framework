@@ -122,5 +122,5 @@ Unregister-IcingaServiceCheck -ServiceId 133219181168290951798237215145107197204
 Finally to apply all your changes, we have to restart the Icinga for Windows Powershell Daemon
 
 ```powershell
-Restart-IcingaWindowsService;
+Restart-IcingaForWindows;
 ```

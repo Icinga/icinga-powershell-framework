@@ -58,6 +58,6 @@ function Update-Icinga()
     # Update JEA profile if JEA is enabled once the update is complete
     if ([string]::IsNullOrEmpty((Get-IcingaJEAContext)) -eq $FALSE -And $UpdateJEA) {
         Update-IcingaJEAProfile;
-        Restart-IcingaWindowsService;
+        Restart-IcingaForWindows;
     }
 }

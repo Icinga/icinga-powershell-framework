@@ -75,7 +75,7 @@ function Invoke-IcingaForWindowsMigration()
         Set-IcingaForWindowsMigration -MigrationVersion (New-IcingaVersionObject -Version '1.10.0');
 
         if ($ServiceStatus -eq 'Running') {
-            Restart-IcingaWindowsService -Service 'icingapowershell';
+            Restart-IcingaForWindows;
         }
     }
 

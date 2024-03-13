@@ -28,7 +28,7 @@ function Uninstall-IcingaServiceUser()
     }
 
     Restart-IcingaService 'icinga2';
-    Restart-IcingaWindowsService;
+    Restart-IcingaForWindows;
 
     Write-IcingaConsoleNotice 'User "{0}" including permissions was removed from this host' -Objects $IcingaUser;
 }

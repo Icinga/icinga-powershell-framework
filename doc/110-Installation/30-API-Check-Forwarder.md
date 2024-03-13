@@ -75,7 +75,7 @@ Enable-IcingaFrameworkApiChecks;
 Last but not least restart the Icinga for Windows service:
 
 ```powershell
-Restart-IcingaWindowsService;
+Restart-IcingaForWindows;
 ```
 
 As long as the feature is enabled, the Icinga for Windows service is running and the REST-Api daemon is registered, checks will be forwarded to the REST-Api and executed, if whitelisted.
@@ -98,7 +98,7 @@ For quick installation, here the list of commands to get everything running:
 Register-IcingaBackgroundDaemon -Command 'Start-IcingaWindowsRESTApi';
 Add-IcingaRESTApiCommand -Command 'Invoke-IcingaCheck*' -Endpoint 'apichecks';
 
-Restart-IcingaWindowsService;
+Restart-IcingaForWindows;
 
 Enable-IcingaFrameworkApiChecks;
 ```
