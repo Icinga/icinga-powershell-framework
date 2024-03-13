@@ -39,7 +39,6 @@ function Start-IcingaForWindowsDaemon()
         Add-IcingaThreadPool -Name 'MainPool' -MaxInstances 20;
         $Global:Icinga.Public.Add('SSLCertificate', $Certificate);
 
-
         New-IcingaThreadInstance -Name "Main" -ThreadPool (Get-IcingaThreadPool -Name 'MainPool') -Command 'Add-IcingaForWindowsDaemon' -Start;
     } else {
         Write-IcingaDebugMessage -Message 'Starting Icinga for Windows service inside JEA context' -Objects $RunAsService, $JEARestart, $JeaProfile;

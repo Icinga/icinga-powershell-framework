@@ -54,21 +54,20 @@ function New-IcingaForWindowsRESTApi()
 
     Write-IcingaDebugMessage -Message ($Global:Icinga.Public.Daemons.RESTApi.RegisteredEndpoints | Out-String);
 
-    if ($Global:Icinga.Protected.JEAContext) {
-        if ($Global:Icinga.Public.ContainsKey('SSLCertificate') -eq $FALSE -Or $null -eq $Global:Icinga.Public.SSLCertificate) {
-            Write-IcingaEventMessage -EventId 2001 -Namespace 'RESTApi';
-            return;
+    while ($TRUE) {
+        if ($null -eq $Global:Icinga.Public.SSLCertificate) {
+            $Global:Icinga.Public.SSLCertificate = (Get-IcingaForWindowsCertificate);
+        } else {
+            break;
         }
 
-        $Certificate = $Global:Icinga.Public.SSLCertificate;
-    } else {
-        $Certificate = Get-IcingaSSLCertForSocket -CertFile $CertFile -CertThumbprint $CertThumbprint;
+        # Wait 5 minutes and try again
+        Write-IcingaEventMessage -EventId 2002 -Namespace 'RESTApi';
+        Start-Sleep -Seconds (60 * 5);
     }
 
-    if ($null -eq $Certificate) {
-        Write-IcingaEventMessage -EventId 2000 -Namespace 'RESTApi';
-        return;
-    }
+    # Create a background thread to renew the certificate on a regular basis
+    Start-IcingaForWindowsCertificateThreadTask;
 
     $Socket = New-IcingaTCPSocket -Address $Address -Port $Port -Start;
 
@@ -82,7 +81,7 @@ function New-IcingaForWindowsRESTApi()
 
         $Connection = Open-IcingaTCPClientConnection `
             -Client (New-IcingaTCPClient -Socket $Socket) `
-            -Certificate $Certificate;
+            -Certificate $Global:Icinga.Public.SSLCertificate;
 
         if ($Connection.Client -eq $null -Or $Connection.Stream -eq $null) {
             Close-IcingaTCPConnection -Connection $Connection;

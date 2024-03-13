@@ -312,11 +312,9 @@ function Start-IcingaForWindowsInstallation()
         };
     }
 
-    # Install Icinga for Windows certificate if both, JEA and REST is installed
-    if ($InstallJEA -And $InstallRESTApi) {
-        Install-IcingaForWindowsCertificate;
-        Restart-IcingaWindowsService;
-    }
+    # Always install the Icinga for Windows certificate
+    Install-IcingaForWindowsCertificate;
+    Restart-IcingaWindowsService;
 
     # Update configuration and clear swap
     $ConfigSwap = Get-IcingaPowerShellConfig -Path 'Framework.Config.Swap';

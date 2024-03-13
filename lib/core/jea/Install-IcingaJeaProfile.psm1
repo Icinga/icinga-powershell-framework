@@ -26,10 +26,7 @@ function Install-IcingaJEAProfile()
     Write-IcingaJEAProfile -RebuildFramework:$RebuildFramework -AllowScriptBlocks:$AllowScriptBlocks;
     Write-IcingaConsoleNotice 'Registering Icinga for Windows JEA profile'
     Register-IcingaJEAProfile -IcingaUser $IcingaUser -TestEnv:$TestEnv -ConstrainedLanguage:$ConstrainedLanguage;
-
-    if ((Get-IcingaBackgroundDaemons).ContainsKey('Start-IcingaWindowsRESTApi')) {
-        Install-IcingaForWindowsCertificate;
-    }
+    Install-IcingaForWindowsCertificate;
 }
 
 Set-Alias -Name 'Update-IcingaJEAProfile' -Value 'Install-IcingaJEAProfile';

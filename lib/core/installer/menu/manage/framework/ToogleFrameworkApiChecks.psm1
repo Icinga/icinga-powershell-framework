@@ -7,10 +7,8 @@ function Invoke-IcingaForWindowsManagementConsoleToggleFrameworkApiChecks()
             Register-IcingaBackgroundDaemon -Command 'Start-IcingaWindowsRESTApi';
             Add-IcingaRESTApiCommand -Command 'Invoke-IcingaCheck*' -Endpoint 'apichecks';
         }
-        if ([string]::IsNullOrEmpty((Get-IcingaJEAContext)) -eq $FALSE) {
-            Install-IcingaForWindowsCertificate;
-        }
 
+        Install-IcingaForWindowsCertificate;
         Enable-IcingaFrameworkApiChecks;
     }
 

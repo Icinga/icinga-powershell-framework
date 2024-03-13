@@ -95,6 +95,8 @@ function Invoke-IcingaForWindowsMigration()
 
         # Add a new scheduled task to automatically renew the Icinga for Windows certificate
         Register-IcingaWindowsScheduledTaskRenewCertificate -Force;
+        # Start the task to ensure the certificate is generated
+        Start-IcingaWindowsScheduledTaskRenewCertificate;
 
         Set-IcingaForWindowsMigration -MigrationVersion (New-IcingaVersionObject -Version '1.12.0');
     }

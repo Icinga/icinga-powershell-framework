@@ -20,7 +20,7 @@ function Register-IcingaWindowsScheduledTaskRenewCertificate()
     $TaskPrincipal = New-ScheduledTaskPrincipal -GroupId 'S-1-5-32-544' -RunLevel 'Highest';
     $TaskSettings  = New-ScheduledTaskSettingsSet -DontStopIfGoingOnBatteries -AllowStartIfOnBatteries -StartWhenAvailable;
 
-    Register-ScheduledTask -TaskName $TaskName -TaskPath $TaskPath -Force -Principal $TaskPrincipal -Action $TaskAction -Trigger $TaskTrigger -Settings $TaskSettings;
+    Register-ScheduledTask -TaskName $TaskName -TaskPath $TaskPath -Force -Principal $TaskPrincipal -Action $TaskAction -Trigger $TaskTrigger -Settings $TaskSettings | Out-Null;
 
-    Write-IcingaConsoleWarning -Message 'The task "{0}" has been successfully registered at location "{1}".' -Objects $TaskName, $TaskPath;
+    Write-IcingaConsoleNotice -Message 'The task "{0}" has been successfully registered at location "{1}".' -Objects $TaskName, $TaskPath;
 }

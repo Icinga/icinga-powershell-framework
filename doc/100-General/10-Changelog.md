@@ -23,6 +23,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#631](https://github.com/Icinga/icinga-powershell-framework/pull/631) Deduplicates `-C try { Use-Icinga ...` boilerplate by adding it to the `PowerShell Base` template and removing it from every single command
 * [#679](https://github.com/Icinga/icinga-powershell-framework/pull/679) Adds a new data provider for fetching process information of Windows systems, while sorting all objects based on a process name and their process id
 * [#688](https://github.com/Icinga/icinga-powershell-framework/pull/688) Adds new handling to add scheduled tasks in Windows for interacting with Icinga for Windows core functionality as well as an auto renewal task for the Icinga for Windows certificate generation
+* [#690](https://github.com/Icinga/icinga-powershell-framework/pull/690) Adds automatic renewal of the `icingaforwindows.pfx` certificate for the REST-Api daemon in case the certificate is not yet present, valid or changed during the runtime of the daemon while also making the `icingaforwindows.pfx` mandatory for all installations, regardless of JEA being used or not
 
 ## 1.11.2 (tbd)
 
