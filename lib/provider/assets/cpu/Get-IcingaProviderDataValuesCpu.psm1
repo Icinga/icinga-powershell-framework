@@ -11,6 +11,7 @@ function Get-IcingaProviderDataValuesCpu()
     $CounterStructure      = New-IcingaPerformanceCounterStructure -CounterCategory 'Processor Information' -PerformanceCounterHash $CpuCounter;
     [int]$TotalCpuThreads  = 0;
     [decimal]$TotalCpuLoad = 0;
+    [int]$SocketCount      = 0;
     [hashtable]$SocketList = @{ };
 
     foreach ($core in $CounterStructure.Keys) {
@@ -51,13 +52,15 @@ function Get-IcingaProviderDataValuesCpu()
         $SocketList[$entry].TotalLoad = $SocketList[$entry].TotalLoad / $SocketList[$entry].ThreadCount;
         $TotalCpuLoad                += $SocketList[$entry].TotalLoad;
         $TotalCpuThreads             += $SocketList[$entry].ThreadCount;
+        $SocketCount                 += 1;
 
         $CpuData.Metadata.Sockets        | Add-Member -MemberType NoteProperty -Name $entry    -Value (New-Object PSCustomObject);
         $CpuData.Metadata.Sockets.$entry | Add-Member -MemberType NoteProperty -Name 'Threads' -Value $SocketList[$entry].ThreadCount;
         $CpuData.Metrics.$entry          | Add-Member -MemberType NoteProperty -Name 'Total'   -Value $SocketList[$entry].TotalLoad;
     }
 
-    $CpuData.Metadata | Add-Member -MemberType NoteProperty -Name 'TotalLoad'    -Value $TotalCpuLoad;
+    $CpuData.Metadata | Add-Member -MemberType NoteProperty -Name 'TotalLoad'    -Value ($TotalCpuLoad / $SocketCount);
+    $CpuData.Metadata | Add-Member -MemberType NoteProperty -Name 'TotalLoadSum' -Value $TotalCpuLoad;
     $CpuData.Metadata | Add-Member -MemberType NoteProperty -Name 'TotalThreads' -Value $TotalCpuThreads;
     $CpuData.Metadata | Add-Member -MemberType NoteProperty -Name 'CoreDigits'   -Value ([string]$TotalCpuThreads).Length;
     $CpuData.Metadata | Add-Member -MemberType NoteProperty -Name 'CoreDetails'  -Value (New-Object PSCustomObject);
