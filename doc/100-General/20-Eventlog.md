@@ -84,7 +84,7 @@ Below you will find a list of EventId's which are exported by this module. The s
 
 | Category | Short Message | Detailed Message |
 | --- | --- | --- |
-| Error | Unable to start Icinga for Windows service | Unable to start Icinga for Windows service, as the JEA session created by the service is still active. Run "Restart-IcingaWindowsService" to restart the Icinga for Windows service, while running in JEA context to prevent this issue. |
+| Error | Unable to start Icinga for Windows service | Unable to start Icinga for Windows service, as the JEA session created by the service is still active. Run "Restart-IcingaForWindows" to restart the Icinga for Windows service, while running in JEA context to prevent this issue. |
 
 ## Event Id 1504
 

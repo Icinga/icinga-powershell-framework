@@ -29,5 +29,5 @@ function Install-IcingaSecurity()
     Install-IcingaServiceUser -IcingaUser $IcingaUser;
     Install-IcingaJEAProfile -IcingaUser $IcingaUser -RebuildFramework:$RebuildFramework -AllowScriptBlocks:$AllowScriptBlocks -ConstrainedLanguage:$ConstrainedLanguage;
 
-    Restart-IcingaWindowsService;
+    Restart-IcingaForWindows;
 }

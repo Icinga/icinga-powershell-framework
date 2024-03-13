@@ -1,4 +1,4 @@
-function Restart-IcingaWindowsService()
+function Restart-IcingaForWindows()
 {
     [string]$JeaPid = Get-IcingaJEAServicePid;
 
@@ -10,3 +10,5 @@ function Restart-IcingaWindowsService()
 
     Restart-IcingaService -Service 'icingapowershell';
 }
+
+Set-Alias -Name 'Restart-IcingaWindowsService' -Value 'Restart-IcingaForWindows';

@@ -752,7 +752,7 @@ function Start-IcingaAgentInstallWizard()
             }
             Test-IcingaAgent;
             if ($InstallFrameworkService) {
-                Restart-IcingaWindowsService;
+                Restart-IcingaForWindows;
             }
             Restart-IcingaService 'icinga2';
         }

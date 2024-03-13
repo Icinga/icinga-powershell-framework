@@ -77,5 +77,5 @@ No arguments defined
 In order to apply any changes on background daemons, you will always to restart the Icinga for Windows PowerShell service. You can do so with the following command:
 
 ```powershell
-Restart-IcingaWindowsService;
+Restart-IcingaForWindows;
 ```

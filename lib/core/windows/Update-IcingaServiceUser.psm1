@@ -17,5 +17,5 @@ function Update-IcingaServiceUser()
     Set-IcingaServiceUser -User $IcingaUser -Password $Global:Icinga.ServiceUserPassword -Service 'icingapowershell' | Out-Null;
 
     Restart-IcingaService 'icinga2';
-    Restart-IcingaWindowsService;
+    Restart-IcingaForWindows;
 }

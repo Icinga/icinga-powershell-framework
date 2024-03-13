@@ -28,7 +28,7 @@ Import-Module icinga-powershell-framework -Force;
 Import-Module icinga-powershell-framework -Global -Force;
 
 # Restart the Icinga for Windows service in case installed, to ensure the functionality
-Restart-IcingaWindowsService;
+Restart-IcingaForWindows;
 
 # Add your own update procedure code
 ```

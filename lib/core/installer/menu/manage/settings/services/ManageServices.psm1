@@ -94,7 +94,7 @@ function Show-IcingaForWindowsMenuManageIcingaForWindowsServices()
                 'DisabledReason' = 'The Icinga for Windows service is not installed';
                 'AdminMenu'      = $TRUE;
                 'Action'         = @{
-                    'Command' = 'Restart-IcingaWindowsService';
+                    'Command' = 'Restart-IcingaForWindows';
                 }
             },
             @{
