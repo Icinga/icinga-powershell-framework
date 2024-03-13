@@ -179,7 +179,7 @@ function New-IcingaCheckPackage()
 
             $check.Compile();
 
-            if ($check.__IsHidden()) {
+            if ($check.__IsHidden() -Or $check.__NoHeaderReport()) {
                 continue;
             }
 

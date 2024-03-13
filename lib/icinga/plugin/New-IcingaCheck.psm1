@@ -1,19 +1,20 @@
 function New-IcingaCheck()
 {
     param(
-        [string]$Name       = '',
-        $Value              = $null,
-        $BaseValue          = $null,
-        $Unit               = '',
-        $MetricIndex        = 'default',
-        $MetricName         = '',
-        $MetricTemplate     = '',
-        [string]$Minimum    = '',
-        [string]$Maximum    = '',
-        $ObjectExists       = -1,
-        $Translation        = $null,
-        [string]$LabelName  = $null,
-        [switch]$NoPerfData = $FALSE
+        [string]$Name           = '',
+        $Value                  = $null,
+        $BaseValue              = $null,
+        $Unit                   = '',
+        $MetricIndex            = 'default',
+        $MetricName             = '',
+        $MetricTemplate         = '',
+        [string]$Minimum        = '',
+        [string]$Maximum        = '',
+        $ObjectExists           = -1,
+        $Translation            = $null,
+        [string]$LabelName      = $null,
+        [switch]$NoPerfData     = $FALSE,
+        [switch]$NoHeaderReport = $FALSE
     );
 
     $IcingaCheck = New-IcingaCheckBaseObject;
@@ -44,6 +45,8 @@ function New-IcingaCheck()
     $IcingaCheck | Add-Member -MemberType NoteProperty -Name '__LockedState'     -Value $FALSE;
     $IcingaCheck | Add-Member -MemberType NoteProperty -Name '__ThresholdObject' -Value $null;
     $IcingaCheck | Add-Member -MemberType NoteProperty -Name '__TimeInterval'    -Value $null;
+
+    $IcingaCheck.__SetNoHeaderReport($NoHeaderReport);
 
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Force -Name 'Compile' -Value {
         $this.__ValidateThresholdInput();

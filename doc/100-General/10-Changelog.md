@@ -28,6 +28,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#690](https://github.com/Icinga/icinga-powershell-framework/pull/690) Adds automatic renewal of the `icingaforwindows.pfx` certificate for the REST-Api daemon in case the certificate is not yet present, valid or changed during the runtime of the daemon while also making the `icingaforwindows.pfx` mandatory for all installations, regardless of JEA being used or not
 * [#692](https://github.com/Icinga/icinga-powershell-framework/pull/692) Renames `Restart-IcingaWindowsService` to `Restart-IcingaForWindows` and adds alias for backwards compatibility to start unifying the Icinga for Windows cmdlets
 * [#693](https://github.com/Icinga/icinga-powershell-framework/pull/693) Adds new command `Restart-Icinga` to restart both, the Icinga Agent and Icinga for Windows
+* [#694](https://github.com/Icinga/icinga-powershell-framework/pull/694) Adds support for check objects not being added to summary header
 
 ## 1.11.2 (tbd)
 
