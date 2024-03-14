@@ -18,12 +18,7 @@ function Get-IcingaAgentInstallation()
         }
     }
 
-    $IcingaService = Get-IcingaServices -Service 'icinga2';
-    $ServiceUser   = 'NT AUTHORITY\NetworkService';
-
-    if ($null -ne $IcingaService) {
-        $ServiceUser = $IcingaService.icinga2.configuration.ServiceUser;
-    }
+    $ServiceUser = Get-IcingaServiceUser;
 
     if ($null -eq $IcingaData) {
         return @{

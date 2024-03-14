@@ -39,6 +39,8 @@ function Uninstall-IcingaAgent()
         return $FALSE;
     }
 
+    $Global:Icinga.Protected.Environment.'Icinga Service'.Present = $FALSE;
+
     if ($RemoveDataFolder) {
         Write-IcingaConsoleNotice -Message 'Removing Icinga Agent directory: "{0}"' -Objects $IcingaProgramData;
         if ((Remove-ItemSecure -Path $IcingaProgramData -Recurse -Force) -eq $FALSE) {

@@ -10,6 +10,7 @@ function Test-IcingaAgentServicePermission()
     [bool]$FoundSID    = $FALSE;
 
     if ($ServiceUser -eq 'NT Authority\SYSTEM') {
+        Write-IcingaTestOutput -Severity 'Passed' -Message ([string]::Format('The specified user "{0}" is allowed to run as service', $ServiceUser));
         return $TRUE;
     }
 

@@ -36,6 +36,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#694](https://github.com/Icinga/icinga-powershell-framework/pull/694) Adds support for check objects not being added to summary header
 * [#695](https://github.com/Icinga/icinga-powershell-framework/pull/695) Adds security hardening to JEA profiles by always prohibit certain cmdlets
 * [#700](https://github.com/Icinga/icinga-powershell-framework/pull/700) Adds feature to support using pipes and multi lines for plugin documentation
+* [#701](https://github.com/Icinga/icinga-powershell-framework/pull/701) Adds new command `Test-IcingaForWindows`to check the current environment health by also improving internal handlings on how service information are fetched, preventing a lock on those
 
 ## 1.11.1 (2023-11-07)
 

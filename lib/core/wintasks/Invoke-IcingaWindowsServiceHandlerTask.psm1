@@ -19,8 +19,9 @@ function Invoke-IcingaWindowsServiceHandlerTask()
         return $null;
     }
 
-    $WinAction = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument ([string]::Format("-WindowStyle Hidden -Command &{{ & '{0}' -ServiceName '{1}' -TmpFilePath '{2}' }}", $ScriptPath, $ServiceName, $TmpFile));
-    Register-ScheduledTask -TaskName $TaskName -Action $WinAction -RunLevel Highest -TaskPath $TaskPath | Out-Null;
+    $WinAction    = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument ([string]::Format("-WindowStyle Hidden -Command &{{ & '{0}' -ServiceName '{1}' -TmpFilePath '{2}' }}", $ScriptPath, $ServiceName, $TmpFile));
+    $TaskSettings = New-ScheduledTaskSettingsSet -DontStopIfGoingOnBatteries -AllowStartIfOnBatteries -StartWhenAvailable;
+    Register-ScheduledTask -TaskName $TaskName -Action $WinAction -RunLevel Highest -TaskPath $TaskPath -Settings $TaskSettings -Force | Out-Null;
 
     Start-ScheduledTask -TaskName $TaskName -TaskPath $TaskPath;
 

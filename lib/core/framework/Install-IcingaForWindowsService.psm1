@@ -28,7 +28,7 @@ function Install-IcingaForWindowsService()
 {
     param(
         $Path,
-        $User,
+        $User                   = 'NT Authority\NetworkService',
         [SecureString]$Password
     );
 
@@ -38,14 +38,13 @@ function Install-IcingaForWindowsService()
     }
 
     $UpdateFile = [string]::Format('{0}.update', $Path);
-
-    $ServiceStatus = (Get-Service 'icingapowershell' -ErrorAction SilentlyContinue).Status;
+    $IfWService = $Global:Icinga.Protected.Environment.'PowerShell Service';
 
     if ((Test-Path $UpdateFile)) {
 
         Write-IcingaConsoleNotice 'Updating Icinga PowerShell Service binary';
 
-        if ($ServiceStatus -eq 'Running') {
+        if ($IfWService.Status -eq 'Running') {
             Write-IcingaConsoleNotice 'Stopping Icinga PowerShell service';
             Stop-IcingaWindowsService;
             Start-Sleep -Seconds 1;
@@ -68,8 +67,10 @@ function Install-IcingaForWindowsService()
         (Get-IcingaPowerShellModuleFile)
     );
 
-    if ($null -eq $ServiceStatus) {
+    if ($IfWService.Present -eq $FALSE) {
         $ServiceCreation = Start-IcingaProcess -Executable 'sc.exe' -Arguments ([string]::Format('create icingapowershell binPath= "{0}" DisplayName= "Icinga PowerShell Service" start= auto', $Path));
+        $Global:Icinga.Protected.Environment.'PowerShell Service'.Present = $TRUE;
+        $Global:Icinga.Protected.Environment.'PowerShell Service'.User    = $User;
 
         if ($ServiceCreation.ExitCode -ne 0) {
             throw ([string]::Format('Failed to install Icinga PowerShell Service: {0}{1}', $ServiceCreation.Message, $ServiceCreation.Error));
@@ -90,8 +91,9 @@ function Install-IcingaForWindowsService()
     Restart-IcingaForWindows;
     Start-Sleep -Seconds 1;
     Stop-IcingaWindowsService;
+    Start-Sleep -Seconds 1;
 
-    if ($ServiceStatus -eq 'Running') {
+    if ($IfWService.Status -eq 'Running') {
         Write-IcingaConsoleNotice 'Starting Icinga PowerShell service';
         Start-IcingaService 'icingapowershell';
         Start-Sleep -Seconds 1;

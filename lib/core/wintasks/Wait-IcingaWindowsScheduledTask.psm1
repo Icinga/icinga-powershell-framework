@@ -9,7 +9,12 @@ function Wait-IcingaWindowsScheduledTask()
     [int]$TimeoutTicks = $Timeout * 1000;
 
     while ($TimeoutTicks -gt 0) {
-        $TaskStatus = Get-ScheduledTask -TaskName $TaskName -TaskPath $TaskPath;
+        $TaskStatus = Get-ScheduledTask -TaskName $TaskName -TaskPath $TaskPath -ErrorAction SilentlyContinue;
+
+        if ($null -eq $TaskStatus) {
+            return;
+        }
+
         if ($TaskStatus.State -eq 'Ready') {
             break;
         }

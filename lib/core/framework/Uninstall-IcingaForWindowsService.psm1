@@ -22,6 +22,8 @@ function Uninstall-IcingaForWindowsService()
         [switch]$RemoveFiles = $FALSE
     );
 
+    Set-IcingaServiceEnvironment;
+
     $ServiceData = Get-IcingaForWindowsServiceData;
 
     Stop-IcingaWindowsService;
@@ -32,6 +34,7 @@ function Uninstall-IcingaForWindowsService()
     switch ($ServiceCreation.ExitCode) {
         0 {
             Write-IcingaConsoleNotice 'Icinga PowerShell Service was successfully removed';
+            $Global:Icinga.Protected.Environment.'PowerShell Service'.Present = $FALSE;
         }
         1060 {
             Write-IcingaConsoleWarning 'The Icinga PowerShell Service is not installed';

@@ -8,7 +8,7 @@ function Get-IcingaUserSID()
         return $null;
     }
 
-    if ($User -eq 'LocalSystem') {
+    if ($User -eq 'LocalSystem' -Or $User -eq '.\LocalSystem') {
         $User = 'NT Authority\SYSTEM';
     }
 
