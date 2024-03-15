@@ -12,6 +12,10 @@ function Get-IcingaCommandDependency()
         return $CompiledList;
     }
 
+    if (Deny-IcingaJEACommand -Command $CmdName) {
+        return $CompiledList;
+    }
+
     # Create the list container for our object type if not existing
     # => Function, Cmdlet, Alias, Modules, Application
     if ($CompiledList.ContainsKey($CmdType) -eq $FALSE) {
