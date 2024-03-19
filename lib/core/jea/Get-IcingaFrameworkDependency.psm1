@@ -16,6 +16,10 @@ function Get-IcingaFrameworkDependency()
     $DeserializedFile = Read-IcingaPowerShellModuleFile -FileContent $ModuleContent;
     [array]$CheckCmd  = $DeserializedFile.CommandList + $DeserializedFile.FunctionList;
 
+    if (Deny-IcingaJEACommand -Command $Command -FileComment $DeserializedFile.Comment) {
+        return $DependencyList;
+    }
+
     foreach ($cmd in $CheckCmd) {
         if ($cmd -eq $Command) {
             continue;

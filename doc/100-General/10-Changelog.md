@@ -7,12 +7,15 @@ documentation before upgrading to a new release.
 
 Released closed milestones can be found on [GitHub](https://github.com/Icinga/icinga-powershell-framework/milestones?state=closed).
 
-## 1.12.0 (tbd)
+## 1.12.0 (2024-03-26)
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/28)
 
 ### Bugfixes
 
+* [#673](https://github.com/Icinga/icinga-powershell-framework/pull/673) Fixes a memory leak while fetching Windows EventLog information by using CLI tools and inside the Hyper-V provide
+* [#678](https://github.com/Icinga/icinga-powershell-framework/pull/678) Fixes various memory leaks in Icinga for Windows API core and check handler
+* [#680](https://github.com/Icinga/icinga-powershell-framework/pull/680) Fixes exception in some cases, when provider or metrics return values as `null` instead of `0` while units are being used for check objects
 * [#683](https://github.com/Icinga/icinga-powershell-framework/pull/683) Fixes JEA installer to exclude domain from user name length check, which can easily exceed the Windows 20 digits username limit
 * [#685](https://github.com/Icinga/icinga-powershell-framework/pull/685) Fixes an issue while trying to stop the JEA process in certain cases, which results in an error during installation but has no other effect on the environment
 * [#686](https://github.com/Icinga/icinga-powershell-framework/pull/686) Fixes certutil error handling and message output in case the icingaforwindows.pfx could not be created
@@ -30,16 +33,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#692](https://github.com/Icinga/icinga-powershell-framework/pull/692) Renames `Restart-IcingaWindowsService` to `Restart-IcingaForWindows` and adds alias for backwards compatibility to start unifying the Icinga for Windows cmdlets
 * [#693](https://github.com/Icinga/icinga-powershell-framework/pull/693) Adds new command `Restart-Icinga` to restart both, the Icinga Agent and Icinga for Windows
 * [#694](https://github.com/Icinga/icinga-powershell-framework/pull/694) Adds support for check objects not being added to summary header
-
-## 1.11.2 (tbd)
-
-[Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/30)
-
-### Bugfixes
-
-* [#673](https://github.com/Icinga/icinga-powershell-framework/pull/673) Fixes a memory leak while fetching Windows EventLog information by using CLI tools and inside the Hyper-V provide
-* [#678](https://github.com/Icinga/icinga-powershell-framework/pull/678) Fixes various memory leaks in Icinga for Windows API core and check handler
-* [#680](https://github.com/Icinga/icinga-powershell-framework/pull/680) Fixes exception in some cases, when provider or metrics return values as `null` instead of `0` while units are being used for check objects
+* [#695](https://github.com/Icinga/icinga-powershell-framework/pull/695) Adds security hardening to JEA profiles by always prohibit certain cmdlets
 
 ## 1.11.1 (2023-11-07)
 

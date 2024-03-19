@@ -102,6 +102,10 @@ function Get-IcingaJEAConfiguration()
 
             $DeserializedFile = Read-IcingaPowerShellModuleFile -File $ModuleFile.FullName;
 
+            if (Deny-IcingaJEACommand -FileComments $DeserializedFile.Comments) {
+                continue;
+            }
+
             foreach ($FoundFunction in $DeserializedFile.FunctionList) {
                 $DependencyList = Get-IcingaFrameworkDependency `
                     -Command $FoundFunction `
@@ -186,6 +190,10 @@ function Get-IcingaJEAConfiguration()
         }
 
         $CommandType = ([string]$CmdData.CommandType).Replace(' ', '');
+
+        if (Deny-IcingaJEACommand -Command $cmd) {
+            continue;
+        }
 
         $UsedCmdlets = Get-IcingaCommandDependency `
             -DependencyList $DependencyList `

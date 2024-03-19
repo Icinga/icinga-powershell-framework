@@ -15,7 +15,7 @@ By pressing `0` on the `main menu`, we can start the entire `Installation`:
 ```text
 *******************************************
 ** Icinga for Windows Management Console **
-** Copyright (c) 2021 Icinga GmbH | MIT  **
+** Copyright (c) 2024 Icinga GmbH | MIT  **
 **   User environment ws-icinga\icinga   **
 **  Icinga PowerShell Framework v1.6.0   **
 *******************************************
@@ -41,7 +41,7 @@ In case you already deployed a configuration before or aborted your previous att
 ```text
 *******************************************
 ** Icinga for Windows Management Console **
-** Copyright (c) 2021 Icinga GmbH | MIT  **
+** Copyright (c) 2024 Icinga GmbH | MIT  **
 **   User environment ws-icinga\icinga   **
 **  Icinga PowerShell Framework v1.6.0   **
 *******************************************

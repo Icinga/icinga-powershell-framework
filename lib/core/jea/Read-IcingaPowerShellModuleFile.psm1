@@ -177,5 +177,6 @@ function Read-IcingaPowerShellModuleFile()
         'AliasList'         = $AliasList;
         'ExportFunction'    = $ExportFunctionList;
         'ExportCmdlet'      = $ExportCmdletList;
+        'Comments'          = $Comments;
     };
 }
