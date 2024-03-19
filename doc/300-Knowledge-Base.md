@@ -24,3 +24,4 @@ For this reason you will find a list of Icinga knowledge base entries below. Ent
 | [IWKB000014](knowledgebase/IWKB000014.md) | Installing or Updating Icinga for Windows causes error messages regarding `framework_cache.psm1` errors |
 | [IWKB000015](knowledgebase/IWKB000015.md) | Got JSON, but not an object, from IfW API on host 'localhost' port '5668': "Exception while calling \\"Fill\\" with 1 arguments: \\"Invalid syntax near \\"`<Argument>:`\\".\\"" |
 | [IWKB000016](knowledgebase/IWKB000016.md) | Checks using Performance Counter fail with various messages like `Exception of type 'System.OutOfMemoryException' was thrown` or `Icinga Invalid Configuration Error was thrown: PerfCounterCategoryMissing: Category "Memory" not found` |
+| [IWKB000017](knowledgebase/IWKB000017.md) | Icinga throws exception during plugin execution after uninstalling SCOM or other vendor software using PowerShell modules |
