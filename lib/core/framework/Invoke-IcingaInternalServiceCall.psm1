@@ -17,7 +17,7 @@ function Invoke-IcingaInternalServiceCall()
     }
 
     # Test our Icinga for Windows service. If the service is not installed or not running, execute the plugin locally
-    $IcingaForWindowsService = (Get-Service 'icingapowershell' -ErrorAction SilentlyContinue);
+    $IcingaForWindowsService = Get-Service 'icingapowershell' -ErrorAction SilentlyContinue;
 
     if ($null -eq $IcingaForWindowsService -Or $IcingaForWindowsService.Status -ne 'Running') {
         return $NULL;

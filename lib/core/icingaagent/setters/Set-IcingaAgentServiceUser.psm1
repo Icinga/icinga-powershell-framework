@@ -12,7 +12,7 @@ function Set-IcingaServiceUser()
         return $FALSE;
     }
 
-    if ($null -eq (Get-Service $Service -ErrorAction SilentlyContinue)) {
+    if ((Get-IcingaWindowsServiceStatus -Service $Service).Present -eq $FALSE) {
         return $FALSE;
     }
 
@@ -38,6 +38,12 @@ function Set-IcingaServiceUser()
         if ($SetPermission) {
             Set-IcingaAgentServicePermission | Out-Null;
             Set-IcingaUserPermissions;
+        }
+
+        if ($Service -eq 'icinga2') {
+            $Global:Icinga.Protected.IcingaServiceUser = $User;
+        } elseif ($Service -eq 'icingapowershell') {
+            $Global:Icinga.Protected.IfWServiceUser = $User;
         }
 
         Write-IcingaConsoleNotice 'Service User "{0}" for service "{1}" successfully updated' -Objects $User, $Service;

@@ -74,7 +74,6 @@ function Start-IcingaForWindowsInstallation()
     $PluginPackageRelease  = $FALSE;
     $PluginPackageSnapshot = $FALSE;
     $ForceCertificateGen   = $FALSE;
-    [bool]$InstallJEA      = $FALSE;
     [bool]$InstallRESTApi  = $FALSE;
 
     if ([string]::IsNullOrEmpty($IcingaStableRepo) -eq $FALSE) {
@@ -322,6 +321,21 @@ function Start-IcingaForWindowsInstallation()
     Set-IcingaPowerShellConfig -Path 'Framework.Config.Live' -Value $ConfigSwap;
     $global:Icinga.InstallWizard.Config = @{ };
     Set-IcingaPowerShellConfig -Path 'Framework.Installed' -Value $TRUE;
+
+    # Always install the JEA profile at the end
+    switch ($InstallJEAProfile) {
+        '0' {
+            Invoke-IcingaWindowsScheduledTask -JobType InstallJEA -Timeout 600 | Out-Null;
+            break;
+        };
+        '1' {
+            Install-IcingaSecurity -RunAsTask;
+            break;
+        };
+        '2' {
+            # Do not install JEA profile
+        };
+    }
 
     if ($Automated -eq $FALSE) {
         Write-IcingaConsoleNotice 'Icinga for Windows is installed. Returning to main menu in 5 seconds'

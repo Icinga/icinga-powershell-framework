@@ -14,7 +14,7 @@ function Show-IcingaForWindowsMenuManage()
                 'Caption'   = 'Services';
                 'Command'   = 'Show-IcingaForWindowsMenuManageIcingaForWindowsServices';
                 'Help'      = 'Allows you to manage the Icinga Agent and Icinga for Windows service';
-                'Disabled'  = (-Not $AgentInstalled -And -Not ([bool](Get-Service 'icingapowershell' -ErrorAction SilentlyContinue)));
+                'Disabled'  = (-Not $AgentInstalled -And -Not (Get-IcingaWindowsServiceStatus -Service 'icingapowershell').Present);
                 'AdminMenu' = $TRUE;
             },
             @{
@@ -28,7 +28,7 @@ function Show-IcingaForWindowsMenuManage()
                 'Caption'        = 'Background Daemons';
                 'Command'        = 'Show-IcingaForWindowsManagementConsoleManageBackgroundDaemons';
                 'Help'           = 'Allows you to manage Icinga for Windows background daemons';
-                'Disabled'       = ($null -eq (Get-Service 'icingapowershell' -ErrorAction SilentlyContinue));
+                'Disabled'       = (-Not (Get-IcingaWindowsServiceStatus -Service 'icingapowershell').Present);
                 'DisabledReason' = 'Icinga for Windows service is not installed';
             },
             @{

@@ -68,6 +68,11 @@ function New-IcingaEnvironmentVariable()
         $Global:Icinga.Protected.Add('RunAsDaemon', $FALSE);
         $Global:Icinga.Protected.Add('Minimal', $FALSE);
         $Global:Icinga.Protected.Add('ThreadName', '');
+        $Global:Icinga.Protected.Add('IcingaServiceUser', '');
+        $Global:Icinga.Protected.Add('IfWServiceUser', '');
+        $Global:Icinga.Protected.Add('ServiceRestartLock', $FALSE);
+        $Global:Icinga.Protected.Add('IcingaServiceState', '');
+        $Global:Icinga.Protected.Add('IfWServiceState', '');
         $Global:Icinga.Protected.Add('GarbageCollector', @{ });
     }
 }

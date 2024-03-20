@@ -39,13 +39,13 @@ function Install-IcingaForWindowsService()
 
     $UpdateFile = [string]::Format('{0}.update', $Path);
 
-    $ServiceStatus = (Get-Service 'icingapowershell' -ErrorAction SilentlyContinue).Status;
+    $ServiceStatus = Get-IcingaWindowsServiceStatus -Service 'icingapowershell';
 
     if ((Test-Path $UpdateFile)) {
 
         Write-IcingaConsoleNotice 'Updating Icinga PowerShell Service binary';
 
-        if ($ServiceStatus -eq 'Running') {
+        if ($ServiceStatus.Status -eq 'Running') {
             Write-IcingaConsoleNotice 'Stopping Icinga PowerShell service';
             Stop-IcingaWindowsService;
             Start-Sleep -Seconds 1;
@@ -68,7 +68,7 @@ function Install-IcingaForWindowsService()
         (Get-IcingaPowerShellModuleFile)
     );
 
-    if ($null -eq $ServiceStatus) {
+    if ($ServiceStatus.Present -eq $FALSE) {
         $ServiceCreation = Start-IcingaProcess -Executable 'sc.exe' -Arguments ([string]::Format('create icingapowershell binPath= "{0}" DisplayName= "Icinga PowerShell Service" start= auto', $Path));
 
         if ($ServiceCreation.ExitCode -ne 0) {

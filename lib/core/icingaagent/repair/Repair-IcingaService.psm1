@@ -21,7 +21,7 @@ function Repair-IcingaService()
         [string]$RootFolder = ''
     );
 
-    if ($null -ne (Get-Service 'icinga2' -ErrorAction SilentlyContinue)) {
+    if ((Get-IcingaWindowsServiceStatus -Service 'icinga2').Present) {
         Write-IcingaConsoleNotice -Message 'The Icinga Agent service is already installed. If you received the error "The specified service has been marked for deletion", please have a look at https://icinga.com/docs/icinga-for-windows/latest/doc/knowledgebase/IWKB000011/'
         return;
     }

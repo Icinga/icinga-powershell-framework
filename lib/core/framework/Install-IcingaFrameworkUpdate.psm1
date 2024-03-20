@@ -52,8 +52,8 @@ function Install-IcingaFrameworkUpdate()
 
     Write-IcingaConsoleNotice ([string]::Format('Using content of folder "{0}" for updates', $ModuleContent));
 
-    $ServiceStatus = (Get-Service 'icingapowershell' -ErrorAction SilentlyContinue).Status;
-    $AgentStatus   = (Get-Service 'icinga2' -ErrorAction SilentlyContinue).Status;
+    $ServiceStatus = (Get-IcingaWindowsServiceStatus -Service 'icingapowershell').Status;
+    $AgentStatus   = (Get-IcingaWindowsServiceStatus -Service 'icinga2').Status;
 
     if ($ServiceStatus -eq 'Running') {
         Write-IcingaConsoleNotice 'Stopping Icinga PowerShell service';
@@ -109,7 +109,7 @@ function Install-IcingaFrameworkUpdate()
     if ([string]::IsNullOrEmpty((Get-IcingaJEAContext)) -eq $FALSE) {
         Remove-IcingaFrameworkDependencyFile;
         Write-IcingaConsoleNotice 'Updating Icinga JEA profile';
-        & powershell.exe -Command { Use-Icinga -Minimal; Install-IcingaJEAProfile; } | Out-Null;
+        Invoke-IcingaWindowsScheduledTask -JobType InstallJEA -Timeout 600 | Out-Null;
     }
 
     Write-IcingaConsoleNotice 'Framework update has been completed. Please start a new PowerShell instance now to complete the update';

@@ -152,8 +152,8 @@ function Install-IcingaComponent()
             # These update steps only apply for the framework
             if ($Name.ToLower() -eq 'framework') {
                 Remove-IcingaFrameworkDependencyFile;
-                $ServiceStatus = (Get-Service 'icingapowershell' -ErrorAction SilentlyContinue).Status;
-                $AgentStatus   = (Get-Service 'icinga2' -ErrorAction SilentlyContinue).Status;
+                $ServiceStatus = (Get-IcingaWindowsServiceStatus -Service 'icingapowershell').Status;
+                $AgentStatus   = (Get-IcingaWindowsServiceStatus -Service 'icinga2').Status;
 
                 if ($ServiceStatus -eq 'Running') {
                     Write-IcingaConsoleNotice 'Stopping Icinga for Windows service';
@@ -351,12 +351,7 @@ function Install-IcingaComponent()
             }
         }
 
-        $MSIData = & powershell.exe -Command {
-            Use-Icinga -Minimal;
-
-            $DownloadDestination = $args[0];
-            return (Read-IcingaMSIMetadata -File $DownloadDestination);
-        } -Args $DownloadDestination;
+        $MSIData = Invoke-IcingaWindowsScheduledTask -JobType ReadMSIPackage -FilePath $DownloadDestination;
 
         if ($InstalledVersion.Full -eq $MSIData.ProductVersion -And $Force -eq $FALSE) {
             Write-IcingaConsoleWarning 'The package "agent" with version "{0}" is already installed. Use "-Force" to re-install the component' -Objects $InstalledVersion.Full;
@@ -373,18 +368,7 @@ function Install-IcingaComponent()
             }
         }
 
-        $InstallProcess = & powershell.exe -Command {
-            Use-Icinga -Minimal;
-
-            $DownloadDestination = $args[0];
-            $InstallTarget       = $args[1];
-            $InstallProcess      = Start-IcingaProcess -Executable 'MsiExec.exe' -Arguments ([string]::Format('/quiet /norestart /i "{0}" {1}', $DownloadDestination, $InstallTarget)) -FlushNewLines;
-
-            Start-Sleep -Seconds 2;
-            Optimize-IcingaForWindowsMemory;
-
-            return $InstallProcess;
-        } -Args $DownloadDestination, $InstallTarget;
+        $InstallProcess = Start-IcingaProcess -Executable 'MsiExec.exe' -Arguments ([string]::Format('/quiet /i "{0}" {1}', $DownloadDestination, $InstallTarget)) -FlushNewLines;
 
         if ($InstallProcess.ExitCode -ne 0) {
             Write-IcingaConsoleError -Message 'Failed to install component "agent": {0}{1}' -Objects $InstallProcess.Message, $InstallProcess.Error;

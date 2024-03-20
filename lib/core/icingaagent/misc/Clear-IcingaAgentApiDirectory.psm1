@@ -28,7 +28,7 @@ function Clear-IcingaAgentApiDirectory()
         [switch]$Force = $FALSE
     );
 
-    $IcingaService = (Get-IcingaServices -Service icinga2).icinga2;
+    $IcingaService = Get-IcingaWindowsServiceStatus -Service 'icinga2';
     $ApiDirectory  = (Join-Path -Path $Env:ProgramData -ChildPath 'icinga2\var\lib\icinga2\api\');
 
     if ((Test-Path $ApiDirectory) -eq $FALSE) {
@@ -36,12 +36,12 @@ function Clear-IcingaAgentApiDirectory()
         return;
     }
 
-    if ($IcingaService.configuration.Status.raw -eq 4 -And $Force -eq $FALSE) {
+    if ($IcingaService.Status -eq 'Running' -And $Force -eq $FALSE) {
         Write-IcingaConsoleError 'The API directory can not be deleted while the Icinga Agent is running. Use the "-Force" argument to stop the service, flush the directory and restart the service again.';
         return;
     }
 
-    if ($IcingaService.configuration.Status.raw -eq 4) {
+    if ($IcingaService.Status -eq 'Running') {
         Stop-IcingaService icinga2;
         Start-Sleep -Seconds 1;
     }
@@ -50,7 +50,7 @@ function Clear-IcingaAgentApiDirectory()
     Remove-ItemSecure -Path (Join-Path -Path $ApiDirectory -ChildPath '*') -Recurse -Force | Out-Null;
     Start-Sleep -Seconds 1;
 
-    if ($IcingaService.configuration.Status.raw -eq 4) {
+    if ($IcingaService.Status -eq 'Running') {
         Start-IcingaService icinga2;
     }
 }

@@ -1,15 +1,15 @@
 function Show-IcingaForWindowsMenuManageIcingaForWindowsServices()
 {
-    $IcingaAgentService      = Get-Service 'icinga2' -ErrorAction SilentlyContinue;
+    $IcingaAgentService      = Get-IcingaWindowsServiceStatus -Service 'icinga2';
     $IcingaAgentStatus       = 'Not Installed';
-    $IcingaForWindowsService = Get-Service 'icingapowershell' -ErrorAction SilentlyContinue;
+    $IcingaForWindowsService = Get-IcingaWindowsServiceStatus -Service 'icingapowershell';
     $IcingaForWindowsStatus  = 'Not Installed';
 
-    if ($null -ne $IcingaAgentService) {
+    if ($IcingaAgentService.Present) {
         $IcingaAgentStatus = $IcingaAgentService.Status;
     }
 
-    if ($null -ne $IcingaForWindowsService) {
+    if ($IcingaForWindowsService.Present) {
         $IcingaForWindowsStatus = $IcingaForWindowsService.Status;
     }
 
@@ -20,43 +20,43 @@ function Show-IcingaForWindowsMenuManageIcingaForWindowsServices()
                 'Caption'        = 'Start Icinga Agent Service';
                 'Command'        = 'Show-IcingaForWindowsMenuManageIcingaForWindowsServices';
                 'Help'           = 'Allows you to start the Icinga Agent if the service is not running';
-                'Disabled'       = ($null -eq $IcingaAgentService -Or $IcingaAgentStatus -eq 'Running');
+                'Disabled'       = (-Not $IcingaAgentService.Present -Or $IcingaAgentStatus -eq 'Running');
                 'DisabledReason' = 'The Icinga Agent service is either not installed or the service is already running';
                 'AdminMenu'      = $TRUE;
                 'Action'         = @{
                     'Command'   = 'Start-IcingaService';
-                    'Arguments' = @{ '-Service' = 'icinga2'; };
+                    'Arguments' = @{ '-Service' = 'icinga2'; '-Force' = $TRUE; };
                 }
             },
             @{
                 'Caption'        = 'Stop Icinga Agent Service';
                 'Command'        = 'Show-IcingaForWindowsMenuManageIcingaForWindowsServices';
                 'Help'           = 'Allows you to stop the Icinga Agent if the service is not running';
-                'Disabled'       = ($null -eq $IcingaAgentService -Or $IcingaAgentStatus -ne 'Running');
+                'Disabled'       = (-Not $IcingaAgentService.Present -Or $IcingaAgentStatus -ne 'Running');
                 'DisabledReason' = 'The Icinga Agent service is either not installed or the service is not running';
                 'AdminMenu'      = $TRUE;
                 'Action'         = @{
                     'Command'   = 'Stop-IcingaService';
-                    'Arguments' = @{ '-Service' = 'icinga2'; };
+                    'Arguments' = @{ '-Service' = 'icinga2'; '-Force' = $TRUE; };
                 }
             },
             @{
                 'Caption'        = 'Restart Icinga Agent Service';
                 'Command'        = 'Show-IcingaForWindowsMenuManageIcingaForWindowsServices';
                 'Help'           = 'Allows you to restart the Icinga Agent if the service is installed';
-                'Disabled'       = ($null -eq $IcingaAgentService);
+                'Disabled'       = (-Not $IcingaAgentService.Present);
                 'DisabledReason' = 'The Icinga Agent service is not installed';
                 'AdminMenu'      = $TRUE;
                 'Action'         = @{
                     'Command'   = 'Restart-IcingaService';
-                    'Arguments' = @{ '-Service' = 'icinga2'; };
+                    'Arguments' = @{ '-Service' = 'icinga2'; '-Force' = $TRUE; };
                 }
             },
             @{
                 'Caption'        = 'Repair Icinga Agent Service';
                 'Command'        = 'Show-IcingaForWindowsMenuManageIcingaForWindowsServices';
                 'Help'           = 'Allows to repair the Icinga Agent service in case it was removed or broke during installation/upgrade';
-                'Disabled'       = ($null -ne $IcingaAgentService);
+                'Disabled'       = ($IcingaAgentService.Present);
                 'DisabledReason' = 'The Icinga Agent service is already present';
                 'AdminMenu'      = $TRUE;
                 'Action'         = @{
@@ -67,19 +67,19 @@ function Show-IcingaForWindowsMenuManageIcingaForWindowsServices()
                 'Caption'        = 'Start Icinga for Windows Service';
                 'Command'        = 'Show-IcingaForWindowsMenuManageIcingaForWindowsServices';
                 'Help'           = 'Allows you to start the Icinga for Windows Service if the service is not running';
-                'Disabled'       = ($null -eq $IcingaForWindowsService -Or $IcingaForWindowsStatus -eq 'Running');
+                'Disabled'       = (-Not $IcingaForWindowsService.Present -Or $IcingaForWindowsStatus -eq 'Running');
                 'DisabledReason' = 'The Icinga for Windows service is either not installed or already running';
                 'AdminMenu'      = $TRUE;
                 'Action'         = @{
                     'Command'   = 'Start-IcingaService';
-                    'Arguments' = @{ '-Service' = 'icingapowershell'; };
+                    'Arguments' = @{ '-Service' = 'icingapowershell'; '-Force' = $TRUE; };
                 }
             },
             @{
                 'Caption'        = 'Stop Icinga for Windows Service';
                 'Command'        = 'Show-IcingaForWindowsMenuManageIcingaForWindowsServices';
                 'Help'           = 'Allows you to stop the Icinga for Windows Service if the service is not running';
-                'Disabled'       = ($null -eq $IcingaForWindowsService -Or $IcingaForWindowsStatus -ne 'Running');
+                'Disabled'       = (-Not $IcingaForWindowsService.Present -Or $IcingaForWindowsStatus -ne 'Running');
                 'DisabledReason' = 'The Icinga for Windows service is either not installed or not running';
                 'AdminMenu'      = $TRUE;
                 'Action'         = @{
@@ -90,7 +90,7 @@ function Show-IcingaForWindowsMenuManageIcingaForWindowsServices()
                 'Caption'        = 'Restart Icinga for Windows Service';
                 'Command'        = 'Show-IcingaForWindowsMenuManageIcingaForWindowsServices';
                 'Help'           = 'Allows you to restart the Icinga for Windows Service if the service is installed';
-                'Disabled'       = ($null -eq $IcingaForWindowsService);
+                'Disabled'       = (-Not $IcingaForWindowsService.Present);
                 'DisabledReason' = 'The Icinga for Windows service is not installed';
                 'AdminMenu'      = $TRUE;
                 'Action'         = @{
@@ -101,7 +101,7 @@ function Show-IcingaForWindowsMenuManageIcingaForWindowsServices()
                 'Caption'        = 'Enable recovery settings for services';
                 'Command'        = 'Show-IcingaForWindowsMenuManageIcingaForWindowsServices';
                 'Help'           = 'Enables automatic service recovery for the Icinga Agent and Icinga for Windows service, in case the server terminates itself because of errors';
-                'Disabled'       = ($null -eq $IcingaForWindowsService -And $null -eq $IcingaAgentService);
+                'Disabled'       = (-Not $IcingaForWindowsService.Present -And -Not $IcingaAgentService.Present);
                 'DisabledReason' = 'Neither the Icinga Agent nor the Icinga for Windows service are installed';
                 'AdminMenu'      = $TRUE;
                 'Action'         = @{
@@ -112,7 +112,7 @@ function Show-IcingaForWindowsMenuManageIcingaForWindowsServices()
                 'Caption'        = 'Disable recovery settings for services';
                 'Command'        = 'Show-IcingaForWindowsMenuManageIcingaForWindowsServices';
                 'Help'           = 'Disables automatic service recovery for the Icinga Agent and Icinga for Windows service, in case the server terminates itself because of errors';
-                'Disabled'       = ($null -eq $IcingaForWindowsService -And $null -eq $IcingaAgentService);
+                'Disabled'       = (-Not $IcingaForWindowsService.Present -And -Not $IcingaAgentService.Present);
                 'DisabledReason' = 'Neither the Icinga Agent nor the Icinga for Windows service are installed';
                 'AdminMenu'      = $TRUE;
                 'Action'         = @{
