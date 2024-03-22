@@ -35,6 +35,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#693](https://github.com/Icinga/icinga-powershell-framework/pull/693) Adds new command `Restart-Icinga` to restart both, the Icinga Agent and Icinga for Windows
 * [#694](https://github.com/Icinga/icinga-powershell-framework/pull/694) Adds support for check objects not being added to summary header
 * [#695](https://github.com/Icinga/icinga-powershell-framework/pull/695) Adds security hardening to JEA profiles by always prohibit certain cmdlets
+* [#700](https://github.com/Icinga/icinga-powershell-framework/pull/700) Adds feature to support using pipes and multi lines for plugin documentation
 
 ## 1.11.1 (2023-11-07)
 

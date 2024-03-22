@@ -376,11 +376,19 @@ function Get-IcingaCheckCommandConfig()
             $IcingaDataType = [string]::Format('Icinga\Module\Director\DataType\DataType{0}', $IcingaDataType)
 
             if ($Basket.Datafield.Values.varname -ne $IcingaCustomVariable) {
+                $DataFieldDescription = $parameter.Description.Text;
+
+                # Remove HTML code tags and replace them with markdown tags
+                if ([string]::IsNullOrEmpty($DataFieldDescription) -eq $FALSE) {
+                    $DataFieldDescription = $DataFieldDescription.Replace('<pre>', '```');
+                    $DataFieldDescription = $DataFieldDescription.Replace('</pre>', '```');
+                }
+
                 $Basket.Datafield.Add(
                     [string]$FieldID, @{
                         'varname'     = $IcingaCustomVariable;
                         'caption'     = $parameter.Name;
-                        'description' = $parameter.Description.Text;
+                        'description' = $DataFieldDescription;
                         'datatype'    = $IcingaDataType;
                         'format'      = $NULL;
                         'originalId'  = [string]$FieldID;
