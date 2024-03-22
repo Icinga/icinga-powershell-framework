@@ -126,10 +126,17 @@ function Publish-IcingaPluginDocumentation()
             foreach ($parameter in $PluginHelp.parameters.parameter) {
                 [string]$ParamDescription = $parameter.description.Text;
                 if ([string]::IsNullOrEmpty($ParamDescription) -eq $FALSE) {
-                    $ParamDescription = $ParamDescription.Replace("`r`n", ' ');
-                    $ParamDescription = $ParamDescription.Replace("`r", ' ');
-                    $ParamDescription = $ParamDescription.Replace("`n", ' ');
+                    $ReplacementString = '<br /> ';
+
+                    $ParamDescription = $ParamDescription.Replace("`r`n", $ReplacementString);
+                    $ParamDescription = $ParamDescription.Replace("`r", $ReplacementString);
+                    $ParamDescription = $ParamDescription.Replace("`n", $ReplacementString);
+
+                    if ($ParamDescription.Contains('|')) {
+                        $ParamDescription = $ParamDescription.Replace('|', '&#124;');
+                    }
                 }
+
                 [string]$TableContent = [string]::Format(
                     '| {0} | {1} | {2} | {3} | {4} |',
                     $parameter.name,
