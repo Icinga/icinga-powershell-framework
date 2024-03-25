@@ -10,6 +10,8 @@ function Start-IcingaForWindowsInstallation()
 
     Write-IcingaConsoleNotice 'Starting Icinga for Windows installation';
 
+    Set-IcingaServiceEnvironment;
+
     if ($global:Icinga.InstallWizard.DirectorInstallError) {
         Write-IcingaConsoleError 'Failed to start Icinga for Windows installation, caused by an error while communicating with Icinga Director: {0}' -Objects $global:Icinga.InstallWizard.DirectorError;
         throw $global:Icinga.InstallWizard.DirectorError;
@@ -86,6 +88,8 @@ function Start-IcingaForWindowsInstallation()
 
         $IcingaParentAddresses += $EndpointAddress;
     }
+
+    Set-IcingaPowerShellConfig -Path 'Framework.Icinga.ServiceUser' -Value $ServiceUser;
 
     switch ($HostnameType) {
         '0' {
@@ -196,6 +200,7 @@ function Start-IcingaForWindowsInstallation()
     if ((Get-IcingaAgentInstallation).Installed) {
         Set-IcingaAgentNodeName -Hostname $Hostname;
         Set-IcingaServiceUser -User $ServiceUser -Password (ConvertTo-IcingaSecureString $ServicePassword) -SetPermission | Out-Null;
+        Set-IcingaUserPermissions -IcingaUser $ServiceUser;
         Install-IcingaAgentBaseFeatures;
         Write-IcingaAgentApiConfig -Port $IcingaPort;
 
@@ -228,7 +233,6 @@ function Start-IcingaForWindowsInstallation()
 
     if ($InstallService) {
         Set-IcingaPowerShellConfig -Path 'Framework.Icinga.IcingaForWindowsService' -Value $WindowsServiceDir;
-        Set-IcingaPowerShellConfig -Path 'Framework.Icinga.ServiceUser' -User $ServiceUser;
         Set-IcingaInternalPowerShellServicePassword -Password (ConvertTo-IcingaSecureString $ServicePassword);
 
         Install-IcingaComponent -Name 'service' -Release -Confirm;

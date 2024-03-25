@@ -19,6 +19,7 @@ function Install-IcingaComponent()
         $Name = $Name.Split('/')[0];
     }
 
+    Set-IcingaServiceEnvironment;
     Set-IcingaTLSVersion;
 
     if ($Version.ToLower() -eq 'release' -Or $Version.ToLower() -eq 'latest') {
@@ -390,6 +391,9 @@ function Install-IcingaComponent()
             Write-IcingaConsoleError -Message 'Failed to install component "agent": {0}{1}' -Objects $InstallProcess.Message, $InstallProcess.Error;
             return $FALSE;
         }
+
+        $Global:Icinga.Protected.Environment.'Icinga Service'.Present = $TRUE;
+        $Global:Icinga.Protected.Environment.'Icinga Service'.User    = $ServiceUser;
 
         Reset-IcingaAgentConfigFile;
         Move-IcingaAgentDefaultConfig;

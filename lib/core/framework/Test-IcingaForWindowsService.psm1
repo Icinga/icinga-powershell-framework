@@ -4,8 +4,10 @@ function Test-IcingaForWindowsService()
         [switch]$ResolveProblems = $FALSE
     );
 
+    Set-IcingaServiceEnvironment;
+
     $ServiceData   = Get-IcingaForWindowsServiceData;
-    $ServiceConfig = (Get-IcingaServices -Service 'icingapowershell').icingapowershell.configuration;
+    $ServiceConfig = $Global:Icinga.Protected.Environment.'PowerShell Service';
     [bool]$Passed  = $TRUE;
 
     if ($null -eq $ServiceConfig) {
@@ -18,7 +20,7 @@ function Test-IcingaForWindowsService()
         $ServiceData.FullPath,
         (Get-IcingaPowerShellModuleFile)
     );
-    [string]$ServicePath         = $ServiceConfig.ServicePath.SubString(0, $ServiceConfig.ServicePath.IndexOf(' "'));
+    [string]$ServicePath = $ServiceConfig.ServicePath.SubString(0, $ServiceConfig.ServicePath.IndexOf(' "'));
 
     if ($ServicePath.Contains('"')) {
         Write-IcingaTestOutput -Severity 'Passed' -Message 'Your service installation is not affected by IWKB000009';

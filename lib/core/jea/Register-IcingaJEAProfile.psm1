@@ -1,7 +1,7 @@
 function Register-IcingaJEAProfile()
 {
     param (
-        [string]$IcingaUser          = ((Get-IcingaServices).icinga2.configuration.ServiceUser),
+        [string]$IcingaUser          = (Get-IcingaServiceUser),
         [switch]$ConstrainedLanguage = $FALSE,
         [switch]$TestEnv             = $FALSE
     );

@@ -5,9 +5,9 @@ function Show-IcingaForWindowsManagementConsoleManageJEA()
     $ServiceUser      = 'No service installed';
 
     if ($ServiceData.Installed -eq $FALSE) {
-        $ServiceData = Get-IcingaServices 'icingapowershell';
+        $ServiceData = $Global:Icinga.Protected.Environment.'PowerShell Service';
         if ($null -ne $ServiceData) {
-            $ServiceUser = $ServiceData.icingapowershell.configuration.ServiceUser;
+            $ServiceUser = $ServiceData.User;
         }
     } else {
         $ServiceUser = $ServiceData.User;

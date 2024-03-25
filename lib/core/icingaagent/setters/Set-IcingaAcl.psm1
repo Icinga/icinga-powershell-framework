@@ -11,6 +11,10 @@ function Set-IcingaAcl()
         return;
     }
 
+    if ($IcingaUser.ToLower() -eq 'nt authority\system' -Or $IcingaUser.ToLower() -like '*localsystem') {
+        return;
+    }
+
     $DirectoryAcl        = (Get-Item -Path $Directory).GetAccessControl('Access');
     $DirectoryAccessRule = New-Object System.Security.AccessControl.FileSystemAccessRule(
         $IcingaUser,

@@ -58,6 +58,14 @@ function Use-Icinga()
 
     if ($LibOnly -eq $FALSE -And $Daemon -eq $FALSE) {
         Register-IcingaEventLog;
+
+        if ($Minimal -eq $FALSE -And (Test-IcingaFunction -Name 'Invoke-IcingaWindowsScheduledTask')) {
+
+            if (Test-IcingaFunction -Name 'Invoke-IcingaWindowsScheduledTask') {
+                # Use scheduled tasks to fetch our current service configuration for faster load times afterwards
+                Set-IcingaServiceEnvironment;
+            }
+        }
     }
 }
 

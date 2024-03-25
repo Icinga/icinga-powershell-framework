@@ -11,6 +11,11 @@ function Test-IcingaAcl()
         return $FALSE;
     }
 
+    if ($ServiceUser.ToLower() -eq 'nt authority\system' -Or $ServiceUser.ToLower() -like '*localsystem') {
+        Write-IcingaTestOutput -Severity 'Passed' -Message ([string]::Format('Directory "{0}" is fully accessible by "NT Authority\SYSTEM"', $Directory));
+        return $TRUE;
+    }
+
     $FolderACL      = Get-Acl $Directory;
     $UserFound      = $FALSE;
     $HasAccess      = $FALSE;

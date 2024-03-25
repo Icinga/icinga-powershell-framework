@@ -9,16 +9,23 @@ Use-Icinga -Minimal;
 [hashtable]$ServiceData = @{
     'Status'      = '';
     'Present'     = $FALSE;
-    'Name'        = 'Unknown';
-    'DisplayName' = 'Unknown';
+    'Name'        = $ServiceName;
+    'DisplayName' = $ServiceName;
+    'User'        = 'Unknown';
+    'ServicePath' = '';
 };
 
 try {
-    $SvcData                 = Get-Service "$ServiceName" -ErrorAction Stop;
-    $ServiceData.Status      = [string]$SvcData.Status;
-    $ServiceData.Name        = $SvcData.Name;
-    $ServiceData.DisplayName = $SvcData.DisplayName;
-    $ServiceData.Present     = $TRUE;
+    $SvcData = Get-IcingaServices "$ServiceName" -ErrorAction Stop;
+
+    if ($null -ne $SvcData) {
+        $ServiceData.Status      = [string]$SvcData."$ServiceName".configuration.Status.value;
+        $ServiceData.User        = [string]$SvcData."$ServiceName".configuration.ServiceUser;
+        $ServiceData.ServicePath = [string]$SvcData."$ServiceName".configuration.ServicePath;
+        $ServiceData.Name        = $SvcData."$ServiceName".metadata.ServiceName;
+        $ServiceData.DisplayName = $SvcData."$ServiceName".metadata.DisplayName;
+        $ServiceData.Present     = $TRUE;
+    }
 } catch {
     $ErrMsg  = [string]::Format('Failed to get data for service "{0}": {1}', $ServiceName, $_.Exception.Message);
 }

@@ -69,5 +69,11 @@ function New-IcingaEnvironmentVariable()
         $Global:Icinga.Protected.Add('Minimal', $FALSE);
         $Global:Icinga.Protected.Add('ThreadName', '');
         $Global:Icinga.Protected.Add('GarbageCollector', @{ });
+        $Global:Icinga.Protected.Add(
+            'Environment', @{
+                'Icinga Service'     = $null;
+                'PowerShell Service' = $null;
+            }
+        );
     }
 }

@@ -21,7 +21,7 @@ function Repair-IcingaService()
         [string]$RootFolder = ''
     );
 
-    if ($null -ne (Get-Service 'icinga2' -ErrorAction SilentlyContinue)) {
+    if ($Global:Icinga.Protected.Environment.'Icinga Service'.Present) {
         Write-IcingaConsoleNotice -Message 'The Icinga Agent service is already installed. If you received the error "The specified service has been marked for deletion", please have a look at https://icinga.com/docs/icinga-for-windows/latest/doc/knowledgebase/IWKB000011/'
         return;
     }
@@ -64,11 +64,13 @@ function Repair-IcingaService()
 
     if ($IcingaService.ExitCode -ne 0) {
         Write-IcingaConsoleError `
-            -Message 'Failed to install Icinga Agent service: {0}{1}' `
-            -Objects $IcingaService.Message, $IcingaService.Error;
+        -Message 'Failed to install Icinga Agent service: {0}{1}' `
+        -Objects $IcingaService.Message, $IcingaService.Error;
 
         return;
     }
+
+    $Global:Icinga.Protected.Environment.'Icinga Service'.Present = $TRUE;
 
     $IcingaData  = Get-IcingaAgentInstallation;
     $ConfigUser  = Get-IcingaPowerShellConfig -Path 'Framework.Icinga.ServiceUser';

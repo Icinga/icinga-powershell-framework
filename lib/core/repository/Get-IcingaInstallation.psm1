@@ -4,6 +4,9 @@ function Get-IcingaInstallation()
         [switch]$Release  = $FALSE,
         [switch]$Snapshot = $FALSE
     )
+
+    Set-IcingaServiceEnvironment;
+
     [hashtable]$InstalledComponents = @{ };
 
     $PowerShellModules = Get-Module -ListAvailable;
@@ -37,9 +40,9 @@ function Get-IcingaInstallation()
         }
     }
 
-    $IcingaForWindowsService = Get-IcingaServices -Service 'icingapowershell';
+    $IcingaForWindowsService = $Global:Icinga.Protected.Environment.'PowerShell Service';
 
-    if ($null -ne $IcingaForWindowsService) {
+    if ($null -ne $IcingaForWindowsService -And $IcingaForWindowsService.Present) {
         $ServicePath = Get-IcingaForWindowsServiceData;
 
         if ($InstalledComponents.ContainsKey('service')) {

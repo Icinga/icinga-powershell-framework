@@ -10,6 +10,8 @@ function Uninstall-IcingaComponent()
         return $FALSE;
     }
 
+    Set-IcingaServiceEnvironment;
+
     if ($Name.ToLower() -eq 'agent') {
         return (Uninstall-IcingaAgent -RemoveDataFolder:$RemovePackageFiles);
     }

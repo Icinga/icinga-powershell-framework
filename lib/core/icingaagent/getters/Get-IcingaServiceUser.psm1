@@ -1,18 +1,24 @@
 function Get-IcingaServiceUser()
 {
-    $Services = Get-IcingaServices -Service 'icinga2';
-    if ($null -eq $Services) {
-        $Services = Get-IcingaServices -Service 'icingapowershell';
-        if ($null -eq $Services) {
-            return $null;
-        }
+    $IcingaService = $Global:Icinga.Protected.Environment.'Icinga Service';
+    $IfWService    = $Global:Icinga.Protected.Environment.'PowerShell Service';
+    # Default User
+    $ServiceUser   = 'NT Authority\NetworkService';
+
+    if ($null -eq $IcingaService -Or $null -eq $IfWService) {
+        Set-IcingaServiceEnvironment;
     }
 
-    $Services    = $Services.GetEnumerator() | Select-Object -First 1;
-    $ServiceUser = ($Services.Value.configuration.ServiceUser).Replace('.\', '');
-
-    if ($ServiceUser -eq 'LocalSystem') {
-        $ServiceUser = 'NT Authority\SYSTEM';
+    if ($IcingaService.Present) {
+        $ServiceUser = $IcingaService.User.Replace('.\', '');
+        if ($ServiceUser -eq 'LocalSystem') {
+            return 'NT Authority\SYSTEM';
+        }
+    } elseif ($IfWService.Present) {
+        $ServiceUser = $IfWService.User.Replace('.\', '');
+        if ($ServiceUser -eq 'LocalSystem') {
+            return 'NT Authority\SYSTEM';
+        }
     }
 
     return $ServiceUser;

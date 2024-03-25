@@ -45,6 +45,7 @@ function Uninstall-IcingaForWindows()
         }
     }
 
+    Set-IcingaServiceEnvironment;
     Set-IcingaPSLocation;
 
     Write-IcingaConsoleNotice 'Uninstalling Icinga for Windows from this host';
