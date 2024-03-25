@@ -20,6 +20,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#685](https://github.com/Icinga/icinga-powershell-framework/pull/685) Fixes an issue while trying to stop the JEA process in certain cases, which results in an error during installation but has no other effect on the environment
 * [#686](https://github.com/Icinga/icinga-powershell-framework/pull/686) Fixes certutil error handling and message output in case the icingaforwindows.pfx could not be created
 * [#687](https://github.com/Icinga/icinga-powershell-framework/pull/687) Fixes Icinga for Windows port handling on installation, which will now use the proper defined port for communicating with the Icinga CA
+* [#699](https://github.com/Icinga/icinga-powershell-framework/issues/699) Fixes Icinga for Windows password management for the managed user `icinga`, which could fail in some cases because of ambiguous characters or complexity errors and will now retry up to 10 times before giving up
 * [#702](https://github.com/Icinga/icinga-powershell-framework/pull/702) Fixes an issue with Icinga Director Self-Service API, which ignored the defined service user
 
 ### Enhancements

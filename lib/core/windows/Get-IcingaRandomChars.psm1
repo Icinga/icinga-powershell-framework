@@ -2,7 +2,7 @@ function Get-IcingaRandomChars()
 {
     param (
         [int]$Count      = 10,
-        [string]$Symbols = 'abcdefghiklmnoprstuvwxyzABCDEFGHKLMNOPRSTUVWXYZ1234567890!§$%&/()=?}][{@#*+'
+        [string]$Symbols = 'abcdefghiklmnoprstuvwxyzABCDEFGHKLMNOPRSTUVWXYZ1234567890!§$%()=?}][{@#*+'
     );
 
     $RandomChars = '';
