@@ -117,6 +117,10 @@ function Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate()
     $Ticket                   = '';
     $DirectorHostRegister     = (Get-IcingaForWindowsInstallerStepSelection -InstallerStep 'Show-IcingaForWindowsManagementConsoleInstallationDirectorRegisterHost');
 
+    if ([string]::IsNullOrEmpty($ServiceUserName)) {
+        $ServiceUserName = 'NT Authority\NetworkService';
+    }
+
     if ($null -eq $DirectorHostRegister) {
         $DirectorHostRegister = 0;
     }
@@ -245,6 +249,7 @@ function Resolve-IcingaForWindowsManagementConsoleInstallationDirectorTemplate()
     }
 
     Show-IcingaForWindowsInstallationMenuEnterIcingaCAServer -Automated -Value $MasterAddress;
+    Show-IcingaForWindowsInstallationMenuEnterIcingaAgentUser -Automated -Value $ServiceUserName;
 
     Show-IcingaForWindowsInstallerMenuSelectCertificate -Automated -DefaultInput '1';
     Show-IcingaForWindowsInstallerMenuEnterIcingaTicket -Automated -Value $Ticket;
