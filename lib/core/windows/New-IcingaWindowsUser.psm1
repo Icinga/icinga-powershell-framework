@@ -33,9 +33,22 @@ function New-IcingaWindowsUser()
 
         # User already exist -> override password - but only if the user is entirely managed by Icinga
         if ($UserConfig.IcingaManagedUser) {
-            $Result = Start-IcingaProcess -Executable 'net' -Arguments ([string]::Format('user "{0}" "{1}"', $IcingaUser, (ConvertFrom-IcingaSecureString -SecureString (New-IcingaWindowsUserPassword))));
+            # In case the password set fails, we need to try again
+            [int]$Attempts = 0;
+            [bool]$Success = $FALSE;
 
-            if ($Result.ExitCode -ne 0) {
+            while ($Attempts -lt 10) {
+                $Result = Start-IcingaProcess -Executable 'net' -Arguments ([string]::Format('user "{0}" "{1}"', $IcingaUser, (ConvertFrom-IcingaSecureString -SecureString (New-IcingaWindowsUserPassword))));
+
+                if ($Result.ExitCode -eq 0) {
+                    $Success = $TRUE;
+                    break;
+                }
+
+                $Attempts += 1;
+            }
+
+            if ($Success -eq $FALSE) {
                 Write-IcingaConsoleError 'Failed to update password for user "{0}": {1}' -Objects $IcingaUser, $Result.Error;
 
                 return @{
@@ -43,7 +56,6 @@ function New-IcingaWindowsUser()
                     'SID'  = $UserConfig.SID;
                 };
             }
-
             Write-IcingaConsoleNotice 'User updated successfully.';
         } else {
             Write-IcingaConsoleWarning 'User "{0}" is not managed by Icinga for Windows. No changes were made.' -Objects $IcingaUser;
