@@ -11,6 +11,12 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/32)
 
+## 1.12.1 (tbd)
+
+### Bugfixes
+
+* [#707](https://github.com/Icinga/icinga-powershell-framework/pull/707) Fixes size of the `Icinga for Windows` eventlog by setting it to `20MiB`, allowing to store more events before they are overwritten
+
 ## 1.12.0 (2024-03-26)
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/28)

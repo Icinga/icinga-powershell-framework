@@ -100,4 +100,14 @@ function Invoke-IcingaForWindowsMigration()
 
         Set-IcingaForWindowsMigration -MigrationVersion (New-IcingaVersionObject -Version '1.12.0');
     }
+
+    if (Test-IcingaForWindowsMigration -MigrationVersion (New-IcingaVersionObject -Version '1.12.1')) {
+        Write-IcingaConsoleNotice 'Applying pending migrations required for Icinga for Windows v1.12.1';
+
+        # Fixes the size of the Icinga for Windows Eventlog, allowing more logs to be collected
+        # before older ones are faded out
+        Register-IcingaEventLog;
+
+        Set-IcingaForWindowsMigration -MigrationVersion (New-IcingaVersionObject -Version '1.12.1');
+    }
 }

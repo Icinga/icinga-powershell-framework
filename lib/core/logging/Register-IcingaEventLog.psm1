@@ -13,4 +13,9 @@ function Register-IcingaEventLog()
 
         New-EventLog -LogName 'Icinga for Windows' -Source $LogName -ErrorAction SilentlyContinue;
     }
+
+    $IfWEventLog = Get-WinEvent -ListLog 'Icinga for Windows';
+    # Set the size to 20MiB
+    $IfWEventLog.MaximumSizeInBytes = 20971520;
+    $IfWEventLog.SaveChanges();
 }
