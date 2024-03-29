@@ -17,7 +17,7 @@ function Add-IcingaServiceCheckDaemon()
         $RegisteredServices = Get-IcingaRegisteredServiceChecks;
 
         # Debugging message
-        Write-IcingaDebugMessage 'Found these service checks to load within service check daemon: {0}' -Objects ($RegisteredServices.Keys | Out-String);
+        Write-IcingaDebugMessage 'Found these service checks to load within service check daemon' -Objects ($RegisteredServices.Keys | Out-String);
 
         # Loop all found background services and create a new thread for each check
         foreach ($service in $RegisteredServices.Keys) {
