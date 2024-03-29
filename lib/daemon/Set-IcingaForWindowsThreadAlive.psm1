@@ -6,7 +6,8 @@ function Set-IcingaForWindowsThreadAlive()
         $ThreadPool                 = $null,
         [hashtable]$ThreadArgs      = @{ },
         [switch]$Active             = $FALSE,
-        [hashtable]$TerminateAction = @{ }
+        [hashtable]$TerminateAction = @{ },
+        [int]$Timeout               = 300
     );
 
     if ([string]::IsNullOrEmpty($ThreadName)) {
@@ -27,6 +28,7 @@ function Set-IcingaForWindowsThreadAlive()
                 'ThreadPool'      = $ThreadPool;
                 'Active'          = [bool]$Active;
                 'TerminateAction' = $TerminateAction;
+                'Timeout'         = $Timeout;
             }
         );
 
@@ -36,4 +38,5 @@ function Set-IcingaForWindowsThreadAlive()
     $Global:Icinga.Public.ThreadAliveHousekeeping[$ThreadName].LastSeen        = [DateTime]::Now;
     $Global:Icinga.Public.ThreadAliveHousekeeping[$ThreadName].Active          = [bool]$Active;
     $Global:Icinga.Public.ThreadAliveHousekeeping[$ThreadName].TerminateAction = $TerminateAction;
+    $Global:Icinga.Public.ThreadAliveHousekeeping[$ThreadName].Timeout         = $Timeout;
 }

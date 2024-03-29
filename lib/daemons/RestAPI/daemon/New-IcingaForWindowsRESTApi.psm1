@@ -125,6 +125,8 @@ function New-IcingaForWindowsRESTApi()
         try {
             $NextRESTApiThreadId = (Get-IcingaNextRESTApiThreadId);
 
+            Write-IcingaDebugMessage -Message 'Scheduling Icinga for Windows API request' -Objects 'REST-Thread Id', $NextRESTApiThreadId;
+
             if ($Global:Icinga.Public.Daemons.RESTApi.ApiRequests.ContainsKey($NextRESTApiThreadId) -eq $FALSE) {
                 Close-IcingaTCPConnection -Connection $Connection;
                 $Connection = $null;

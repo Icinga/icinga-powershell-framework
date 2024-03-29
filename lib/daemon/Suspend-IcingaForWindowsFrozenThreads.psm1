@@ -12,7 +12,7 @@ function Suspend-IcingaForWindowsFrozenThreads()
             }
 
             # Check if the thread is active and not doing something for 5 minutes
-            if (([DateTime]::Now - $ThreadConfig.LastSeen).TotalSeconds -lt 300) {
+            if (([DateTime]::Now - $ThreadConfig.LastSeen).TotalSeconds -lt $ThreadConfig.Timeout) {
                 continue;
             }
 
