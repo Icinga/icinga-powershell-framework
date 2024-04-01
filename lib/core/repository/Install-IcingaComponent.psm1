@@ -1,17 +1,22 @@
 function Install-IcingaComponent()
 {
     param (
-        [string]$Name     = $null,
-        [string]$Version  = $null,
-        [switch]$Release  = $FALSE,
-        [switch]$Snapshot = $FALSE,
-        [switch]$Confirm  = $FALSE,
-        [switch]$Force    = $FALSE
+        [string]$Name           = $null,
+        [string]$Version        = $null,
+        [switch]$Release        = $FALSE,
+        [switch]$Snapshot       = $FALSE,
+        [switch]$Confirm        = $FALSE,
+        [switch]$Force          = $FALSE,
+        [switch]$KeepRepoErrors = $FALSE
     );
 
     if ([string]::IsNullOrEmpty($Name)) {
         Write-IcingaConsoleError 'You have to provide a component name';
         return;
+    }
+
+    if ($KeepRepoErrors -eq $FALSE) {
+        Clear-IcingaRepositoryErrorState;
     }
 
     # Branch snapshot versions will have '/' inside their name

@@ -15,6 +15,9 @@ function Get-IcingaComponentList()
     $SearchList | Add-Member -MemberType NoteProperty -Name 'Repos'      -Value @();
     $SearchList | Add-Member -MemberType NoteProperty -Name 'Components' -Value @{ };
 
+    # Ensure our error list is cleared at this point
+    Clear-IcingaRepositoryErrorState;
+
     foreach ($entry in $Repositories) {
         $RepoContent = Read-IcingaRepositoryFile -Name $entry.Name;
 

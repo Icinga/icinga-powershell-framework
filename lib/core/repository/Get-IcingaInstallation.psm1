@@ -7,6 +7,9 @@ function Get-IcingaInstallation()
 
     Set-IcingaServiceEnvironment;
 
+    # Ensure our error list is cleared at this point
+    Clear-IcingaRepositoryErrorState;
+
     [hashtable]$InstalledComponents = @{ };
 
     $PowerShellModules = Get-Module -ListAvailable;
