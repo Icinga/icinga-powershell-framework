@@ -73,7 +73,7 @@ function Update-Icinga()
             $UpdateJEA = $TRUE;
         }
 
-        Install-IcingaComponent -Name $entry -Version $NewVersion -Release:$Release -Snapshot:$Snapshot -Confirm:$Confirm -Force:$Force;
+        Install-IcingaComponent -Name $entry -Version $NewVersion -Release:$Release -Snapshot:$Snapshot -Confirm:$Confirm -Force:$Force -KeepRepoErrors;
     }
 
     # Update JEA profile if JEA is enabled once the update is complete
