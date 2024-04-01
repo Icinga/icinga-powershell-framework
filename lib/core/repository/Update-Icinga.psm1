@@ -13,10 +13,31 @@ function Update-Icinga()
         $Release = $TRUE;
     }
 
-    $CurrentInstallation = Get-IcingaInstallation -Release:$Release -Snapshot:$Snapshot;
-    [bool]$UpdateJEA     = $FALSE;
+    $CurrentInstallation   = Get-IcingaInstallation -Release:$Release -Snapshot:$Snapshot;
+    [bool]$UpdateJEA       = $FALSE;
+    [array]$ComponentsList = @();
 
+    # We need to make sure that the framework is always installed first as component
+    # to prevent possible race-conditions during update, in case we update plugins
+    # before the framework. For plugins this applies as well, as other components
+    # could use them as depdency
+    if ($CurrentInstallation.ContainsKey('framework')) {
+        $ComponentsList += 'framework';
+    }
+    if ($CurrentInstallation.ContainsKey('plugins')) {
+        $ComponentsList += 'plugins';
+    }
+
+    # Add all other components, but skip the framework in this case
     foreach ($entry in $CurrentInstallation.Keys) {
+        if ($entry -eq 'framework' -Or $entry -eq 'plugins') {
+            continue;
+        }
+        $ComponentsList += $entry;
+    }
+
+    # Now process with your installation
+    foreach ($entry in $ComponentsList) {
         $Component = $CurrentInstallation[$entry];
 
         if ([string]::IsNullOrEmpty($Name) -eq $FALSE -And $Name -ne $entry) {
