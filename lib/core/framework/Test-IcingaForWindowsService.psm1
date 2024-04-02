@@ -4,7 +4,7 @@ function Test-IcingaForWindowsService()
         [switch]$ResolveProblems = $FALSE
     );
 
-    Set-IcingaServiceEnvironment;
+    Set-IcingaServiceEnvironment -Force;
 
     $ServiceData   = Get-IcingaForWindowsServiceData;
     $ServiceConfig = $Global:Icinga.Protected.Environment.'PowerShell Service';

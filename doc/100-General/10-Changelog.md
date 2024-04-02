@@ -18,6 +18,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#707](https://github.com/Icinga/icinga-powershell-framework/pull/707) Fixes size of the `Icinga for Windows` eventlog by setting it to `20MiB`, allowing to store more events before they are overwritten
 * [#710](https://github.com/Icinga/icinga-powershell-framework/pull/710) Fixes various console errors while running Icinga for Windows outside of an administrative shell
 * [#714](https://github.com/Icinga/icinga-powershell-framework/pull/714) Fixes missing service environment information during initial setup of Icinga for Windows v1.12 on some systems
+* [#715](https://github.com/Icinga/icinga-powershell-framework/pull/715) Fixes internal scheduled task handling and certificate renewal task by setting the user to `LocalSystem` instead of any administrative user or group, ensuring compatibility with all Windows versions as well as managing by using WinRM and SSH
 
 ## 1.12.0 (2024-03-26)
 

@@ -37,7 +37,7 @@ function Invoke-IcingaWindowsScheduledTask()
         };
         'UninstallAgent' {
             $WinAction = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument ([string]::Format('-WindowStyle Hidden -Command &{{ Use-Icinga -Minimal; Write-IcingaFileSecure -File {0}{1}{0} -Value (Start-IcingaProcess -Executable {0}MsiExec.exe{0} -Arguments {0}"{2}" /q{0} -FlushNewLines | ConvertTo-Json -Depth 100); }}', "'", $TmpFile.FullName, $FilePath, $TargetPath))
-            Register-ScheduledTask -TaskName $TaskName -Action $WinAction -RunLevel Highest -TaskPath $TaskPath | Out-Null;
+            Register-ScheduledTask -User 'System' -TaskName $TaskName -Action $WinAction -TaskPath $TaskPath | Out-Null;
 
             Start-ScheduledTask -TaskName $TaskName -TaskPath $TaskPath;
 
@@ -69,7 +69,7 @@ function Invoke-IcingaWindowsScheduledTask()
         };
         'InstallJEA' {
             $WinAction = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument ([string]::Format('-Command &{{ Use-Icinga -Minimal; Install-IcingaJEAProfile; Restart-IcingaForWindows; }}', "'", $TmpFile.FullName, $FilePath))
-            Register-ScheduledTask -TaskName $TaskName -Action $WinAction -RunLevel Highest -TaskPath $TaskPath | Out-Null;
+            Register-ScheduledTask -User 'System' -TaskName $TaskName -Action $WinAction -TaskPath $TaskPath | Out-Null;
             Start-ScheduledTask -TaskName $TaskName -TaskPath $TaskPath;
 
             Wait-IcingaWindowsScheduledTask;
