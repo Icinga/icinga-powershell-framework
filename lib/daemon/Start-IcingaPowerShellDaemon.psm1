@@ -22,7 +22,6 @@ function Start-IcingaForWindowsDaemon()
     [string]$MainServicePidFile                                           = (Join-Path -Path (Get-IcingaCacheDir) -ChildPath 'service.pid');
     [string]$JeaPidFile                                                   = (Join-Path -Path (Get-IcingaCacheDir) -ChildPath 'jea.pid');
     [string]$JeaProfile                                                   = Get-IcingaPowerShellConfig -Path 'Framework.JEAProfile';
-    [Security.Cryptography.X509Certificates.X509Certificate2]$Certificate = Get-IcingaForWindowsCertificate;
     [string]$JeaPid                                                       = '';
 
     if (Test-IcingaJEAServiceRunning) {
@@ -37,7 +36,14 @@ function Start-IcingaForWindowsDaemon()
 
         # Todo: Add config for active background tasks. Set it to 20 for the moment
         Add-IcingaThreadPool -Name 'MainPool' -MaxInstances 20;
-        $Global:Icinga.Public.Add('SSLCertificate', $Certificate);
+        $Global:Icinga.Public.Add(
+            'SSL',
+            @{
+                'Certificate'    = $null;
+                'CertFile'       = $null;
+                'CertThumbprint' = $null;
+            }
+        );
 
         New-IcingaThreadInstance -Name "Main" -ThreadPool (Get-IcingaThreadPool -Name 'MainPool') -Command 'Add-IcingaForWindowsDaemon' -Start;
     } else {
@@ -47,13 +53,21 @@ function Start-IcingaForWindowsDaemon()
             try {
                 Use-Icinga -Daemon;
 
-                Write-IcingaFileSecure -File ($args[1]) -Value $PID;
+                Write-IcingaFileSecure -File ($args[0]) -Value $PID;
 
                 $Global:Icinga.Protected.JEAContext  = $TRUE;
                 $Global:Icinga.Protected.RunAsDaemon = $TRUE;
                 # Todo: Add config for active background tasks. Set it to 20 for the moment
                 Add-IcingaThreadPool -Name 'MainPool' -MaxInstances 20;
-                $Global:Icinga.Public.Add('SSLCertificate', $args[0]);
+ 
+                $Global:Icinga.Public.Add(
+                    'SSL',
+                    @{
+                        'Certificate'    = $null;
+                        'CertFile'       = $null;
+                        'CertThumbprint' = $null;
+                    }
+                );
 
                 New-IcingaThreadInstance -Name "Main" -ThreadPool (Get-IcingaThreadPool -Name 'MainPool') -Command 'Add-IcingaForWindowsDaemon' -Start;
 
@@ -63,7 +77,7 @@ function Start-IcingaForWindowsDaemon()
             } catch {
                 Write-IcingaEventMessage -EventId 1600 -Namespace 'Framework' -ExceptionObject $_;
             }
-        } -Args $Certificate, $JeaPidFile;
+        } -Args $JeaPidFile;
     }
 
     if ($JEARestart) {
