@@ -22,11 +22,12 @@ function Install-IcingaJEAProfile()
         return;
     }
 
-    Write-IcingaConsoleNotice 'Writing Icinga for Windows environment information as JEA profile'
+    Write-IcingaConsoleNotice 'Writing Icinga for Windows environment information as JEA profile';
     Write-IcingaJEAProfile -RebuildFramework:$RebuildFramework -AllowScriptBlocks:$AllowScriptBlocks;
-    Write-IcingaConsoleNotice 'Registering Icinga for Windows JEA profile'
+    Write-IcingaConsoleNotice 'Registering Icinga for Windows JEA profile';
     Register-IcingaJEAProfile -IcingaUser $IcingaUser -TestEnv:$TestEnv -ConstrainedLanguage:$ConstrainedLanguage;
-    Install-IcingaForWindowsCertificate;
+    # We need to run the task renewal with our scheduled task to fix errors while using WinRM / SSH
+    Start-IcingaWindowsScheduledTaskRenewCertificate;
 }
 
 Set-Alias -Name 'Update-IcingaJEAProfile' -Value 'Install-IcingaJEAProfile';

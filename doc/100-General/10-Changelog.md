@@ -19,6 +19,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#710](https://github.com/Icinga/icinga-powershell-framework/pull/710) Fixes various console errors while running Icinga for Windows outside of an administrative shell
 * [#714](https://github.com/Icinga/icinga-powershell-framework/pull/714) Fixes missing service environment information during initial setup of Icinga for Windows v1.12 on some systems
 * [#715](https://github.com/Icinga/icinga-powershell-framework/pull/715) Fixes internal scheduled task handling and certificate renewal task by setting the user to `LocalSystem` instead of any administrative user or group, ensuring compatibility with all Windows versions as well as managing by using WinRM and SSH
+* [#716](https://github.com/Icinga/icinga-powershell-framework/pull/716) Fixes Icinga for Windows certificate creation while using WinRM or SSH for remote connections
 
 ## 1.12.0 (2024-03-26)
 
