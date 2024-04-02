@@ -71,8 +71,23 @@ function New-IcingaEnvironmentVariable()
         $Global:Icinga.Protected.Add('GarbageCollector', @{ });
         $Global:Icinga.Protected.Add(
             'Environment', @{
-                'Icinga Service'     = $null;
-                'PowerShell Service' = $null;
+                'Icinga Service'     = @{
+                    'Status'      = '';
+                    'Present'     = $FALSE;
+                    'Name'        = 'icinga2';
+                    'DisplayName' = 'icinga2';
+                    'User'        = 'NT Authority\NetworkService';
+                    'ServicePath' = '';
+                };
+                'PowerShell Service' = @{
+                    'Status'      = '';
+                    'Present'     = $FALSE;
+                    'Name'        = 'icingapowershell';
+                    'DisplayName' = 'icingapowershell';
+                    'User'        = 'NT Authority\NetworkService';
+                    'ServicePath' = '';
+                };
+                'FetchedServices'    = $FALSE;
             }
         );
     }
