@@ -17,10 +17,10 @@ function Register-IcingaWindowsScheduledTaskRenewCertificate()
     $ScriptPath    = Join-Path -Path (Get-IcingaFrameworkRootPath) -ChildPath '\jobs\RenewCertificate.ps1';
     $TaskTrigger   = New-ScheduledTaskTrigger -Daily -DaysInterval 1 -At '1am';
     $TaskAction    = New-ScheduledTaskAction -Execute 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -Argument ([string]::Format("-WindowStyle Hidden -Command &{{ & '{0}' }}", $ScriptPath));
-    $TaskPrincipal = New-ScheduledTaskPrincipal -GroupId 'S-1-5-32-544' -RunLevel 'Highest';
     $TaskSettings  = New-ScheduledTaskSettingsSet -DontStopIfGoingOnBatteries -AllowStartIfOnBatteries -StartWhenAvailable;
 
-    Register-ScheduledTask -TaskName $TaskName -TaskPath $TaskPath -Force -Principal $TaskPrincipal -Action $TaskAction -Trigger $TaskTrigger -Settings $TaskSettings | Out-Null;
+    # Set our user to execute the renewal script to LocalSystem, ensuring we have enough privilliges to create the certificate file and be able to use WinRM/SSH for service registering
+    Register-ScheduledTask -User 'System' -TaskName $TaskName -TaskPath $TaskPath -Force -Action $TaskAction -Trigger $TaskTrigger -Settings $TaskSettings | Out-Null;
 
     Write-IcingaConsoleNotice -Message 'The task "{0}" has been successfully registered at location "{1}".' -Objects $TaskName, $TaskPath;
 }

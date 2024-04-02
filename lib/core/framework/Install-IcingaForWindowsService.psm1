@@ -69,8 +69,9 @@ function Install-IcingaForWindowsService()
 
     if ($IfWService.Present -eq $FALSE) {
         $ServiceCreation = Start-IcingaProcess -Executable 'sc.exe' -Arguments ([string]::Format('create icingapowershell binPath= "{0}" DisplayName= "Icinga PowerShell Service" start= auto', $Path));
-        $Global:Icinga.Protected.Environment.'PowerShell Service'.Present = $TRUE;
-        $Global:Icinga.Protected.Environment.'PowerShell Service'.User    = $User;
+        $Global:Icinga.Protected.Environment.'PowerShell Service'.Present     = $TRUE;
+        $Global:Icinga.Protected.Environment.'PowerShell Service'.User        = $User;
+        $Global:Icinga.Protected.Environment.'PowerShell Service'.ServicePath = $Path;
 
         if ($ServiceCreation.ExitCode -ne 0) {
             throw ([string]::Format('Failed to install Icinga PowerShell Service: {0}{1}', $ServiceCreation.Message, $ServiceCreation.Error));
@@ -81,6 +82,8 @@ function Install-IcingaForWindowsService()
         if ($ServiceUpdate.ExitCode -ne 0) {
             throw ([string]::Format('Failed to update config for Icinga PowerShell Service: {0}{1}', $ServiceUpdate.Message, $ServiceUpdate.Error));
         }
+
+        $Global:Icinga.Protected.Environment.'PowerShell Service'.ServicePath = $Path;
     }
 
     # This is just a hotfix to ensure we setup the service properly before assigning it to
