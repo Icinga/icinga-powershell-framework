@@ -37,7 +37,7 @@ function Show-IcingaForWindowsMenuManageTroubleshooting()
                     'Command'   = 'Show-IcingaWindowsManagementConsoleYesNoDialog';
                     'Arguments' = @{
                         '-Caption' = 'Install Icinga for Windows certificate';
-                        '-Command' = 'Install-IcingaForWindowsCertificate';
+                        '-Command' = 'Start-IcingaWindowsScheduledTaskRenewCertificate';
                     }
                 }
             },

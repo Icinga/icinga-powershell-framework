@@ -317,7 +317,8 @@ function Start-IcingaForWindowsInstallation()
     }
 
     # Always install the Icinga for Windows certificate
-    Install-IcingaForWindowsCertificate;
+    # We need to run the task renewal with our scheduled task to fix errors while using WinRM / SSH
+    Start-IcingaWindowsScheduledTaskRenewCertificate;
     Restart-IcingaForWindows;
 
     # Update configuration and clear swap
