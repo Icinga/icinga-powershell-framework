@@ -17,7 +17,7 @@ function Register-IcingaEventLogMessagesRESTApi()
             2002 = @{
                 'EntryType' = 'Warning';
                 'Message'   = 'Icinga for Windows certificate not ready';
-                'Details'   = 'The Icinga for Windows REST-Api was not able to fetch the icingaforwindows.pfx certificate file. You can manually enforce the certificate creation by using the command "Start-IcingaWindowsScheduledTaskRenewCertificate". Once successful, this message should disappear and the REST-Api start. If the error persist, ensure your Icinga Agent certificate is configured properly and signed by your Icinga CA. This check is queued every 5 minutes and should vanish once everything works fine.';
+                'Details'   = 'The Icinga for Windows REST-Api was not able to fetch the Icinga Agent or icingaforwindows.pfx certificate file. You can manually enforce the certificate creation of the icingaforwindows.pfx by using the command "Start-IcingaWindowsScheduledTaskRenewCertificate". Once successful, this message should disappear and the REST-Api start in case you are running inside a JEA-Context. If you are not using JEA, the Icinga Agent certificate has to be present and signed by the Icinga CA. You can test if a certificate is present by using "Get-IcingaSSLCertForSocket". This should return a certificate object with the subject "CN=<hostname>", while "<hostname>" should match your hostname or object name in Icinga. This check is queued every 5 minutes and should vanish once everything works fine.';
                 'EventId'   = 2002;
             };
             2003 = @{
