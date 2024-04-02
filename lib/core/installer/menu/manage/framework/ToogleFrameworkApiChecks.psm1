@@ -8,7 +8,8 @@ function Invoke-IcingaForWindowsManagementConsoleToggleFrameworkApiChecks()
             Add-IcingaRESTApiCommand -Command 'Invoke-IcingaCheck*' -Endpoint 'apichecks';
         }
 
-        Install-IcingaForWindowsCertificate;
+        # We need to run the task renewal with our scheduled task to fix errors while using WinRM / SSH
+        Start-IcingaWindowsScheduledTaskRenewCertificate;
         Enable-IcingaFrameworkApiChecks;
     }
 
