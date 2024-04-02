@@ -108,6 +108,9 @@ function Invoke-IcingaForWindowsMigration()
         # before older ones are faded out
         Register-IcingaEventLog;
 
+        # Fixes user environment which is now set to LocalSystem, allowing configurations over WinRM and SSH
+        Register-IcingaWindowsScheduledTaskRenewCertificate -Force;
+
         Set-IcingaForWindowsMigration -MigrationVersion (New-IcingaVersionObject -Version '1.12.1');
     }
 }
