@@ -8,6 +8,11 @@ function Set-IcingaServiceEnvironment()
         return;
     }
 
+    # Don't do anything if we are not inside an administrative shell
+    if ((Test-AdministrativeShell) -eq $FALSE) {
+        return;
+    }
+
     # Use scheduled tasks to fetch our current service configuration for faster load times afterwards
     $IcingaService     = Invoke-IcingaWindowsScheduledTask -JobType GetWindowsService -ObjectName 'icinga2';
     $PowerShellService = Invoke-IcingaWindowsScheduledTask -JobType GetWindowsService -ObjectName 'icingapowershell';
