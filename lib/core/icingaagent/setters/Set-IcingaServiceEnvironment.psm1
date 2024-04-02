@@ -59,7 +59,7 @@ function Set-IcingaServiceEnvironment()
         );
     }
 
-    if ($Global:Icinga.Protected.Environment.FetchedServices) {
+    if ($Global:Icinga.Protected.Environment.FetchedServices -And $Force -eq $FALSE) {
         return;
     }
 
