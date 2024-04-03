@@ -54,15 +54,29 @@ function New-IcingaForWindowsRESTApi()
 
     Write-IcingaDebugMessage -Message ($Global:Icinga.Public.Daemons.RESTApi.RegisteredEndpoints | Out-String);
 
+    $Global:Icinga.Public.SSL.CertFile       = $CertFile;
+    $Global:Icinga.Public.SSL.CertThumbprint = $CertThumbprint;
+
     while ($TRUE) {
-        if ($null -eq $Global:Icinga.Public.SSLCertificate) {
-            $Global:Icinga.Public.SSLCertificate = (Get-IcingaForWindowsCertificate);
-        } else {
+        if ($null -eq $Global:Icinga.Public.SSL.Certificate) {
+            # In case we are not inside a JEA context, use the SSLCertForSocket function to create the certificate file on the fly
+            # while maintaining the new wait feature. This fix is required, as the NetworkService user has no permssion
+            # to read the icingaforwindows.pfx file with the private key
+            if ([string]::IsNullOrEmpty((Get-IcingaJEAContext))) {
+                $Global:Icinga.Public.SSL.Certificate = Get-IcingaSSLCertForSocket `
+                    -CertFile $Global:Icinga.Public.SSL.CertFile `
+                    -CertThumbprint $Global:Icinga.Public.SSL.CertThumbprint;
+            } else {
+                $Global:Icinga.Public.SSL.Certificate = Get-IcingaForWindowsCertificate;
+            }
+        }
+
+        if ($null -ne $Global:Icinga.Public.SSL.Certificate) {
             break;
         }
 
         # Wait 5 minutes and try again
-        Write-IcingaEventMessage -EventId 2002 -Namespace 'RESTApi';
+        Write-IcingaEventMessage -EventId 2002 -Namespace 'RESTApi' -Objects ($Global:Icinga.Public.SSL.Certificate | Out-String), $Global:Icinga.Public.SSL.CertFile, $Global:Icinga.Public.SSL.CertThumbprint;
         Start-Sleep -Seconds (60 * 5);
     }
 
@@ -81,7 +95,7 @@ function New-IcingaForWindowsRESTApi()
 
         $Connection = Open-IcingaTCPClientConnection `
             -Client (New-IcingaTCPClient -Socket $Socket) `
-            -Certificate $Global:Icinga.Public.SSLCertificate;
+            -Certificate $Global:Icinga.Public.SSL.Certificate;
 
         if ($Connection.Client -eq $null -Or $Connection.Stream -eq $null) {
             Close-IcingaTCPConnection -Connection $Connection;
