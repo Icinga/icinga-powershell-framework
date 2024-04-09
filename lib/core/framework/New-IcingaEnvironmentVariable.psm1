@@ -27,6 +27,12 @@ function New-IcingaEnvironmentVariable()
         $Global:Icinga.Private.Add('Documentation', @{ });
         $Global:Icinga.Private.Add('Timers', @{ });
         $Global:Icinga.Private.Add('ProgressStatus', @{ });
+        $Global:Icinga.Private.Add(
+            'RepositoryStatus',
+            @{
+                'FailedRepositories' = @{ };
+             }
+        );
 
         $Global:Icinga.Private.Add(
             'Scheduler',

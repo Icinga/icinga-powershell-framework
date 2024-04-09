@@ -30,6 +30,9 @@ function Search-IcingaRepository()
     $SearchList             = New-Object -TypeName PSObject;
     $SearchList | Add-Member -MemberType NoteProperty -Name 'Repos' -Value @();
 
+    # Ensure our error list is cleared at this point
+    Clear-IcingaRepositoryErrorState;
+
     foreach ($entry in $Repositories) {
         $RepoContent = Read-IcingaRepositoryFile -Name $entry.Name;
 
