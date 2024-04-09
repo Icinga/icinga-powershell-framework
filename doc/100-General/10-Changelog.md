@@ -19,6 +19,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 * [#672](https://github.com/Icinga/icinga-powershell-framework/pull/issues) Fixes Icinga for Windows REST-Api to fully read client data, even when they client is sending the packets on a very slow basis, preventing the API trying to process an incomplete request
 * [#707](https://github.com/Icinga/icinga-powershell-framework/pull/707) Fixes size of the `Icinga for Windows` eventlog by setting it to `20MiB`, allowing to store more events before they are overwritten
+* [#708](https://github.com/Icinga/icinga-powershell-framework/pull/708) Fixes the order for updating components with `Update-Icinga`, to ensure the `framework` is always updated first before all other components
 * [#710](https://github.com/Icinga/icinga-powershell-framework/pull/710) Fixes various console errors while running Icinga for Windows outside of an administrative shell
 * [#713](https://github.com/Icinga/icinga-powershell-framework/pull/713) Fixes Icinga for Windows REST-Api which fails during certificate auth handling while running as `NT Authority\NetworkService`
 * [#714](https://github.com/Icinga/icinga-powershell-framework/pull/714) Fixes missing service environment information during initial setup of Icinga for Windows v1.12 on some systems
