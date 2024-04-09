@@ -3,6 +3,8 @@ function Get-IcingaNextRESTApiThreadId()
     # Improve our thread management by distributing new REST requests to a non-active thread
     [array]$ConfiguredThreads = $Global:Icinga.Public.ThreadAliveHousekeeping.Keys;
 
+    Write-IcingaDebugMessage -Message 'Distributing Icinga for Windows REST-Api calls to one of those threads' -Objects 'REST-Thread Ids', ($ConfiguredThreads | Out-String);
+
     foreach ($thread in $ConfiguredThreads) {
         if ($thread.ToLower() -NotLike 'Start-IcingaForWindowsRESTThread::New-IcingaForWindowsRESTThread::CheckThread::*') {
             continue;

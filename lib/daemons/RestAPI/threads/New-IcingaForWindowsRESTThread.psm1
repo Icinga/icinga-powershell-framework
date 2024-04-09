@@ -16,13 +16,22 @@ function New-IcingaForWindowsRESTThread()
                 continue;
             }
 
+            Write-IcingaDebugMessage -Message 'Icinga for Windows REST-Api thread is processing a request' -Objects 'REST-Thread Id', $ThreadId;
+
             # block sleeping until content available
             $Connection = $Global:Icinga.Public.Daemons.RESTApi.ApiRequests.$ThreadId.Take();
+
+            # Set our thread being active before we start reading the TCP stream, as we otherwise might find ourself
+            # in a process were we block our API entirely, because all reqests are scheduled to one single thread
+            Set-IcingaForWindowsThreadAlive -ThreadName $Global:Icinga.Protected.ThreadName -Active -Timeout 6 -TerminateAction @{ 'Command' = 'Close-IcingaTCPConnection'; 'Arguments' = @{ 'Connection' = $Connection } };
 
             # Read the received message from the stream by using our smart functions
             [string]$RestMessage = Read-IcingaTCPStream -Client $Connection.Client -Stream $Connection.Stream;
             # Now properly translate the entire rest message to a parsable hashtable
             $RESTRequest         = Read-IcingaRESTMessage -RestMessage $RestMessage -Connection $Connection;
+
+            # Once we read all of our messages, reset the thread alive with the default timeout
+            Set-IcingaForWindowsThreadAlive -ThreadName $Global:Icinga.Protected.ThreadName -Active -TerminateAction @{ 'Command' = 'Close-IcingaTCPConnection'; 'Arguments' = @{ 'Connection' = $Connection } };
 
             if ($null -ne $RESTRequest) {
 
@@ -61,9 +70,6 @@ function New-IcingaForWindowsRESTThread()
                         continue;
                     }
                 }
-
-                # Set our thread being active
-                Set-IcingaForWindowsThreadAlive -ThreadName $Global:Icinga.Protected.ThreadName -Active -TerminateAction @{ 'Command' = 'Close-IcingaTCPConnection'; 'Arguments' = @{ 'Connection' = $Connection } };
 
                 # We should remove clients from the blacklist who are sending valid requests
                 Remove-IcingaRESTClientBlacklist -Client $Connection.Client -ClientList $Global:Icinga.Public.Daemons.RESTApi.ClientBlacklist;

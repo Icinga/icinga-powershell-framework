@@ -71,7 +71,45 @@ function Read-IcingaRESTMessage()
     # Body
     $RestMessage -match '(\{(.*\n)*}|\{.*\})' | Out-Null;
 
-    if ($null -ne $Matches) {
+    # Store your messag body inside a stringbuilder object
+    $MessageBody = New-Object 'System.Text.StringBuilder';
+
+    # Our message is not complete
+    if ($null -eq $Matches) {
+        # Try to figure out if we received parts of your body from the already read message
+        $RestMsgArray    = $RestMessage.Split("`r`n");
+        [bool]$EmptyLine = $FALSE;
+        [bool]$BeginBody = $FALSE;
+
+        foreach ($entry in $RestMsgArray) {
+            if ($BeginBody) {
+                $MessageBody.Append($entry) | Out-Null;
+                continue;
+            }
+
+            if ([string]::IsNullOrEmpty($entry)) {
+                Write-IcingaDebugMessage `
+                    -Message 'Found end of header, lets check for body elements';
+
+                # In case we found two empty lines in a row, we found our body
+                if ($EmptyLine) {
+                    $BeginBody = $TRUE;
+                    continue;
+                }
+
+                # A first empty line means we found a possible header end
+                $EmptyLine = $TRUE;
+            } else {
+                #Reset the empty line in case the next line contains content
+                $EmptyLine = $FALSE;
+            }
+        }
+
+        Write-IcingaDebugMessage `
+            -Message 'We partially received the body of the message, but it might be incomplete. Lets check. Read body length' `
+            -Objects $MessageBody.Length, $MessageBody.ToString();
+    } else {
+        # Our message is already complete
         $Request.Add('Body', $Matches[1]);
     }
 
@@ -79,8 +117,23 @@ function Read-IcingaRESTMessage()
     # Lets try to read the body content
     if ($null -ne $Connection) {
         if ($Request.ContainsKey('ContentLength') -And $Request.ContentLength -gt 0 -And ($Request.ContainsKey('Body') -eq $FALSE -Or [string]::IsNullOrEmpty($Request.Body))) {
-            $Request.Body = Read-IcingaTCPStream -Client $Connection.Client -Stream $Connection.Stream -ReadLength $Request.ContentLength;
-            Write-IcingaDebugMessage -Message 'Body Content' -Objects $Request;
+
+            Write-IcingaDebugMessage `
+                -Message 'The message body was not send or incomplete. Received body size and content' `
+                -Objects $MessageBody.Length, $MessageBody.ToString();
+
+            # In case we received party of the message earlier, read the remaining bytes from the message
+            # and append it to our body
+            $MessageBody.Append(
+                (Read-IcingaTCPStream -Client $Connection.Client -Stream $Connection.Stream -ReadLength ($Request.ContentLength - $MessageBody.Length))
+            ) | Out-Null;
+
+            # Add our fully read message to our body object
+            $Request.Body = $MessageBody.ToString();
+
+            # Some debug output
+            Write-IcingaDebugMessage -Message 'Full request dump' -Objects $Request;
+            Write-IcingaDebugMessage -Message 'Body Content' -Objects $Request.Body;
         }
     }
 
