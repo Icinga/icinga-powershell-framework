@@ -11,6 +11,14 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/32)
 
+## 1.12.2 (2024-04-10)
+
+[Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/34)
+
+### Bugfixes
+
+* [#719](https://github.com/Icinga/icinga-powershell-framework/pull/719) Fixes certificate handling for renewing certificates with the scheduled task background, which could fail on some Windows Server 2022 environments
+
 ## 1.12.1 (2024-04-09)
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/33)
