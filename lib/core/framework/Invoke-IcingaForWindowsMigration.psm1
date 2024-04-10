@@ -113,4 +113,19 @@ function Invoke-IcingaForWindowsMigration()
 
         Set-IcingaForWindowsMigration -MigrationVersion (New-IcingaVersionObject -Version '1.12.1');
     }
+
+    if (Test-IcingaForWindowsMigration -MigrationVersion (New-IcingaVersionObject -Version '1.12.2')) {
+        Write-IcingaConsoleNotice 'Applying pending migrations required for Icinga for Windows v1.12.2';
+
+        # Revokes certificate handling to run as local Administrators group with highest privileges instead of LocalSystem
+        Register-IcingaWindowsScheduledTaskRenewCertificate -Force;
+        Start-Sleep -Seconds 1;
+        # Enforce the certificate creation to update broken certificates
+        Start-IcingaWindowsScheduledTaskRenewCertificate;
+        # Restart the Icinga for Windows service
+        Start-Sleep -Seconds 2;
+        Restart-IcingaForWindows;
+
+        Set-IcingaForWindowsMigration -MigrationVersion (New-IcingaVersionObject -Version '1.12.2');
+    }
 }
