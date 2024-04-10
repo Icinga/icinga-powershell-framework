@@ -47,5 +47,5 @@ function Test-IcingaJSONObject()
         }
     }
 
-    return $TRUE;
+    return $FALSE;
 }
