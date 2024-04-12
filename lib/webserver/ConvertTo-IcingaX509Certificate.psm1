@@ -37,7 +37,7 @@ function ConvertTo-IcingaX509Certificate()
     # it is a temp file or we force its creation
     if (-Not (Test-Path $TargetFile) -Or $TempFile -Or $Force) {
         Write-Output "$Password
-        $Password" | certutil -mergepfx "$CertFile" "$TargetFile" | Set-Variable -Name 'CertUtilOutput';
+        $Password" | & 'C:\Windows\system32\certutil.exe' -mergepfx "$CertFile" "$TargetFile" | Set-Variable -Name 'CertUtilOutput';
     }
 
     Write-IcingaDebugMessage -Message (
