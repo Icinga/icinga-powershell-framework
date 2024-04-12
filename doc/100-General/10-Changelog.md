@@ -11,6 +11,15 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/32)
 
+## 1.12.3 (tbd)
+
+[Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/35)
+
+### Bugfixes
+
+* [#718](https://github.com/Icinga/icinga-powershell-framework/issues/718) Fixes Icinga repository JSON validator to report the correct state of the validation status, in case the JSON is not valid
+
+
 ## 1.12.2 (2024-04-10)
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/34)
