@@ -6,16 +6,7 @@ function New-IcingaForWindowsCertificateThreadTaskInstance()
         # Check every 10 minutes if our certificate is present and update it in case it is
         # missing or updates have happened
 
-        # In case we are not inside a JEA context, use the SSLCertForSocket function to create the certificate file on the fly
-        # while maintaining the new wait feature. This fix is required, as the NetworkService user has no permssion
-        # to read the icingaforwindows.pfx file with the private key
-        if ([string]::IsNullOrEmpty((Get-IcingaJEAContext))) {
-            $NewIcingaForWindowsCertificate = Get-IcingaSSLCertForSocket `
-                -CertFile $Global:Icinga.Public.SSL.CertFile `
-                -CertThumbprint $Global:Icinga.Public.SSL.CertThumbprint;
-        } else {
-            $NewIcingaForWindowsCertificate = Get-IcingaForWindowsCertificate;
-        }
+        $NewIcingaForWindowsCertificate = Get-IcingaForWindowsCertificate;
 
         if ($null -ne $NewIcingaForWindowsCertificate) {
             if ($NewIcingaForWindowsCertificate.Issuer.ToLower() -eq ([string]::Format('cn={0}', $IcingaHostname).ToLower())) {
