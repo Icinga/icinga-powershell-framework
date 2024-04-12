@@ -45,13 +45,14 @@
 function Start-IcingaWindowsRESTApi()
 {
     param (
-        [string]$Address        = '',
-        [int]$Port              = 5668,
-        [string]$CertFile       = $null,
-        [string]$CertThumbprint = $null,
-        [bool]$RequireAuth      = $FALSE,
-        [int]$ConcurrentThreads = 5,
-        [int]$Timeout           = 120
+        [string]$Address            = '',
+        [int]$Port                  = 5668,
+        [string]$CertFile           = $null,
+        [string]$CertThumbprint     = $null,
+        [PSCustomObject]$CertFilter = $null,
+        [bool]$RequireAuth          = $FALSE,
+        [int]$ConcurrentThreads     = 5,
+        [int]$Timeout               = 120
     );
 
     New-IcingaForWindowsRESTEnvironment -ThreadCount $ConcurrentThreads;
@@ -67,6 +68,7 @@ function Start-IcingaWindowsRESTApi()
             'Port'           = $Port;
             'CertFile'       = $CertFile;
             'CertThumbprint' = $CertThumbprint;
+            'CertFilter'     = $CertFilter;
             'RequireAuth'    = $RequireAuth;
         } `
         -Start;

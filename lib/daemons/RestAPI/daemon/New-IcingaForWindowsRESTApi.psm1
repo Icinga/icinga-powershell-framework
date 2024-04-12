@@ -2,10 +2,11 @@ function New-IcingaForWindowsRESTApi()
 {
     # Allow us to parse the framework global data to this thread
     param (
-        [string]$Address  = '',
+        [string]$Address            = '',
         $Port,
-        $CertFile,
-        $CertThumbprint,
+        $CertFile                   = $null,
+        $CertThumbprint             = $null,
+        [PSCustomObject]$CertFilter = $null,
         $RequireAuth
     );
 
@@ -56,28 +57,20 @@ function New-IcingaForWindowsRESTApi()
 
     $Global:Icinga.Public.SSL.CertFile       = $CertFile;
     $Global:Icinga.Public.SSL.CertThumbprint = $CertThumbprint;
+    $Global:Icinga.Public.SSL.CertFilter     = $CertFilter;
 
     while ($TRUE) {
         if ($null -eq $Global:Icinga.Public.SSL.Certificate) {
-            # In case we are not inside a JEA context, use the SSLCertForSocket function to create the certificate file on the fly
-            # while maintaining the new wait feature. This fix is required, as the NetworkService user has no permssion
-            # to read the icingaforwindows.pfx file with the private key
-            if ([string]::IsNullOrEmpty((Get-IcingaJEAContext))) {
-                $Global:Icinga.Public.SSL.Certificate = Get-IcingaSSLCertForSocket `
-                    -CertFile $Global:Icinga.Public.SSL.CertFile `
-                    -CertThumbprint $Global:Icinga.Public.SSL.CertThumbprint;
-            } else {
-                $Global:Icinga.Public.SSL.Certificate = Get-IcingaForWindowsCertificate;
-            }
+            $Global:Icinga.Public.SSL.Certificate = Get-IcingaForWindowsCertificate;
         }
 
         if ($null -ne $Global:Icinga.Public.SSL.Certificate) {
             break;
         }
 
-        # Wait 5 minutes and try again
-        Write-IcingaEventMessage -EventId 2002 -Namespace 'RESTApi' -Objects ($Global:Icinga.Public.SSL.Certificate | Out-String), $Global:Icinga.Public.SSL.CertFile, $Global:Icinga.Public.SSL.CertThumbprint;
-        Start-Sleep -Seconds (60 * 5);
+        # Wait 1 minutes and try again
+        Write-IcingaEventMessage -EventId 2002 -Namespace 'RESTApi' -Objects ($Global:Icinga.Public.SSL.Certificate | Out-String), $Global:Icinga.Public.SSL.CertFile, $Global:Icinga.Public.SSL.CertThumbprint, ($Global:Icinga.Public.SSL.CertFilter | Out-String);
+        Start-Sleep -Seconds 60;
     }
 
     # Create a background thread to renew the certificate on a regular basis

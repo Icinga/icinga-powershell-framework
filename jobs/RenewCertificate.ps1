@@ -6,11 +6,12 @@ Use-Icinga -Minimal;
 
 # To make the configuration of the task as easy as possible, we should fetch
 # the current configuration of our REST-Api and check if we provide a custom
-# certificate file or thumbprint. In case we do, ensure we use this certificate
+# certificate file. In case we do, ensure we use this certificate
 # for the icingaforwindows.pfx creation instead of the auto lookup
+# We do only require to check for cert files on the disk, as the cert store
+# is fetched automatically
 [hashtable]$RegisteredBackgroundDaemons = Get-IcingaBackgroundDaemons;
 [string]$CertificatePath                = '';
-[string]$CertificateThumbprint          = '';
 
 if ($RegisteredBackgroundDaemons.ContainsKey('Start-IcingaWindowsRESTApi')) {
     if ($RegisteredBackgroundDaemons['Start-IcingaWindowsRESTApi'].ContainsKey('CertFile')) {
@@ -19,15 +20,9 @@ if ($RegisteredBackgroundDaemons.ContainsKey('Start-IcingaWindowsRESTApi')) {
     if ($RegisteredBackgroundDaemons['Start-IcingaWindowsRESTApi'].ContainsKey('-CertFile')) {
         $CertificatePath = $RegisteredBackgroundDaemons['Start-IcingaWindowsRESTApi']['-CertFile'];
     }
-    if ($RegisteredBackgroundDaemons['Start-IcingaWindowsRESTApi'].ContainsKey('CertThumbprint')) {
-        $CertificateThumbprint = $RegisteredBackgroundDaemons['Start-IcingaWindowsRESTApi']['CertThumbprint'];
-    }
-    if ($RegisteredBackgroundDaemons['Start-IcingaWindowsRESTApi'].ContainsKey('-CertThumbprint')) {
-        $CertificateThumbprint = $RegisteredBackgroundDaemons['Start-IcingaWindowsRESTApi']['-CertThumbprint'];
-    }
 }
 
-Install-IcingaForWindowsCertificate -CertFile $CertificatePath -CertThumbprint $CertificateThumbprint;
+Install-IcingaForWindowsCertificate -CertFile $CertificatePath;
 
 # Tell the Task-Scheduler that the script was executed fine
 exit 0;
