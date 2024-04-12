@@ -11,13 +11,14 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/32)
 
-## 1.12.3 (tbd)
+## 1.12.3 (2024-04-24)
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/35)
 
 ### Bugfixes
 
 * [#718](https://github.com/Icinga/icinga-powershell-framework/issues/718) Fixes Icinga repository JSON validator to report the correct state of the validation status, in case the JSON is not valid
+* [#724](https://github.com/Icinga/icinga-powershell-framework/issues/724) Fixes `icingaforwindows.pfx` creation in case another `certutil` is installed on the system and being available in the `PATH` environment
 * [#725](https://github.com/Icinga/icinga-powershell-framework/pull/725) Fixes Icinga for Windows certificate handling by keeping the .pfx file on the system as created, without using the certificate store. Also fixes handling for providing thumbprints for certificates, which are now loaded directly from the certificate store by also providing a new filter mechanic to fetch the proper certificates from the store
 
 ## 1.12.2 (2024-04-10)
