@@ -30,24 +30,23 @@ function Install-IcingaForWindowsCertificate()
         }
     }
 
+    # This is no longer supported as certificates will now be read from the cert store directly
+    # We just keep the argument for compatibility reasons
     if ([string]::IsNullOrEmpty($CertThumbprint) -eq $FALSE) {
-        $Certificate = Get-ChildItem -Path 'cert:\*' -Include $CertThumbprint -Recurse
+        Write-IcingaDeprecated -Function 'Install-IcingaForWindowsCertificate' -Argument 'CertThumbprint';
+        <#$Certificate = Get-ChildItem -Path 'cert:\*' -Include $CertThumbprint -Recurse
 
         if ($null -ne $Certificate) {
             Export-Certificate -Cert $Certificate -FilePath $CertificateFile | Out-Null;
-        }
+        }#>
+        return;
     }
 
     if ([string]::IsNullOrEmpty($CertFile) -And [string]::IsNullOrEmpty($CertThumbprint)) {
         $IcingaHostCertificate = Get-IcingaAgentHostCertificate;
 
         if ([string]::IsNullOrEmpty($IcingaHostCertificate.CertFile) -eq $FALSE) {
-            $LocalCert = ConvertTo-IcingaX509Certificate -CertFile $IcingaHostCertificate.CertFile -OutFile $CertificateFile -Force;
-
-            Import-PfxCertificate -FilePath $CertificateFile -CertStoreLocation 'Cert:\LocalMachine\My\' -Exportable | Out-Null;
-            Remove-ItemSecure -Path $CertificateFile -Force | Out-Null;
-            $Certificate = Get-ChildItem -Path 'cert:\*' -Include $LocalCert.Thumbprint -Recurse
-            Export-Certificate -Cert $Certificate -FilePath $CertificateFile | Out-Null;
+            ConvertTo-IcingaX509Certificate -CertFile $IcingaHostCertificate.CertFile -OutFile $CertificateFile -Force | Out-Null;
         }
     }
 

@@ -42,6 +42,7 @@ function Start-IcingaForWindowsDaemon()
                 'Certificate'    = $null;
                 'CertFile'       = $null;
                 'CertThumbprint' = $null;
+                'CertFilter'     = $null;
             }
         );
 
@@ -66,6 +67,7 @@ function Start-IcingaForWindowsDaemon()
                         'Certificate'    = $null;
                         'CertFile'       = $null;
                         'CertThumbprint' = $null;
+                        'CertFilter'     = $null;
                     }
                 );
 
