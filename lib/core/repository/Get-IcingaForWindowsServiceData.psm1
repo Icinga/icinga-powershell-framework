@@ -12,7 +12,7 @@ function Get-IcingaForWindowsServiceData()
     if ($null -ne $IcingaForWindowsService -And ([string]::IsNullOrEmpty($IcingaForWindowsService.ServicePath)) -eq $FALSE) {
         $ServicePath           = $IcingaForWindowsService.ServicePath;
         $ServicePath           = $ServicePath.SubString(0, $ServicePath.IndexOf('.exe') + 4);
-        $ServicePath           = $ServicePath.Replace('"', '');
+        $ServicePath           = $ServicePath.Replace('\"', '').Replace('"', '');
         $ServiceData.Binary    = $ServicePath.SubString($ServicePath.LastIndexOf('\') + 1, $ServicePath.Length - $ServicePath.LastIndexOf('\') - 1);
         $ServiceData.FullPath  = $ServicePath;
         $ServiceData.Directory = $ServicePath.Substring(0, $ServicePath.LastIndexOf('\') + 1);
