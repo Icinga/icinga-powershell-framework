@@ -86,13 +86,3 @@ powershell.exe -ConfigurationName 'IcingaForWindowsTest';
 ```
 
 This will open a new `remote` PowerShell session over `WinRM` on the local machine with the provided JEA profile 'IcingaForWindowsTest'.
-
-### Apply JEA to Icinga configuration
-
-Each plugin bundle shipped by the Icinga Team has new configuration `baskets` for the Icinga Director and `conf` files for Icinga 2 compiled with a new argument `-JEAProfile`.
-
-To make sure the Icinga Agent will execute plugins with the Icinga for Windows JEA context, you will have to add this to your CheckCommand or Service templates.
-
-The profile we create is called `IcingaForWindows` and can simply added to the CheckCommand definition for global rollout.
-
-**Note:** If you add this configuration in Icinga globally, each single node will fail it's checks if the JEA profile is not installed there.
