@@ -121,9 +121,9 @@ function New-IcingaForWindowsRESTApi()
             Write-IcingaDebugMessage -Message 'Scheduling Icinga for Windows API request' -Objects 'REST-Thread Id', $NextRESTApiThreadId;
 
             if ($Global:Icinga.Public.Daemons.RESTApi.ApiRequests.ContainsKey($NextRESTApiThreadId) -eq $FALSE) {
-                Close-IcingaTCPConnection -Connection $Connection;
-                $Connection = $null;
-                continue;
+                # Ensure we allow API calls to be executed even in case not all threads are loaded
+                # This will increase responsiveness of the API
+                $NextRESTApiThreadId = 0;
             }
 
             $Global:Icinga.Public.Daemons.RESTApi.ApiRequests.$NextRESTApiThreadId.Add($Connection);
