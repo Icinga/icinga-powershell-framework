@@ -6,22 +6,28 @@
 function New-IcingaProviderFilterDataEventlog()
 {
     param(
-        [string]$LogName          = '',
-        [array]$IncludeEventId    = @(),
-        [array]$ExcludeEventId    = @(),
-        [array]$IncludeUsername   = @(),
-        [array]$ExcludeUsername   = @(),
-        [array]$IncludeEntryType  = @(),
-        [array]$ExcludeEntryType  = @(),
-        [array]$IncludeMessage    = @(),
-        [array]$ExcludeMessage    = @(),
-        [array]$IncludeSource     = @(),
-        [array]$ExcludeSource     = @(),
-        [string]$EventsAfter      = $null,
-        [string]$EventsBefore     = $null,
-        [int]$MaxEntries          = 40000,
-        [switch]$DisableTimeCache = $FALSE
+        [string]$LogName           = '',
+        [array]$IncludeEventId     = @(),
+        [array]$ExcludeEventId     = @(),
+        [array]$IncludeUsername    = @(),
+        [array]$ExcludeUsername    = @(),
+        [array]$IncludeEntryType   = @(),
+        [array]$ExcludeEntryType   = @(),
+        [array]$IncludeMessage     = @(),
+        [array]$ExcludeMessage     = @(),
+        [array]$IncludeSource      = @(),
+        [array]$ExcludeSource      = @(),
+        [array]$ProblemIds         = @(),
+        [array]$AcknowledgeIds     = @(),
+        [string]$EventsAfter       = $null,
+        [string]$EventsBefore      = $null,
+        [int]$MaxEntries           = 40000,
+        [switch]$DisableTimeCache  = $FALSE
     );
+
+    if ($ProblemIds.Count -ne $AcknowledgeIds.Count) {
+        Exit-IcingaThrowException -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Configuration.PluginArgumentAsymmetry -ExceptionList $IcingaPluginExceptions -CustomMessage ([string]::Format('ProblemIds count: {0}, AcknowledgeIds count: {1}', $ProblemIds.Count, $AcknowledgeIds.Count)) -Force;
+    }
 
     [string]$EventLogFilter = '';
     $EventIdFilter          = New-Object -TypeName 'System.Text.StringBuilder';
@@ -34,6 +40,30 @@ function New-IcingaProviderFilterDataEventlog()
     $EventsAfter            = (Convert-IcingaPluginThresholds -Threshold $EventsAfter).Value;
     $EventsBefore           = (Convert-IcingaPluginThresholds -Threshold $EventsBefore).Value;
     [string]$CheckHash      = (Get-StringSha1 ($LogName + $IncludeEventId + $ExcludeEventId + $IncludeUsername + $ExcludeUsername + $IncludeEntryType + $ExcludeEntryType + $IncludeMessage + $ExcludeMessage)) + '.lastcheck';
+    [hashtable]$ProblemList = @{ };
+    [hashtable]$ResolveList = @{ };
+    [int]$IndexOfEntries    = 0;
+
+    foreach ($entry in $ProblemIds) {
+        Add-IcingaHashtableItem -Hashtable $ProblemList -Key ([string]$entry) -Value @{
+            'NewestEntry' = '';
+            'Message'     = '';
+            'Count'       = 0;
+            'ResolvedId'  = $AcknowledgeIds[$IndexOfEntries];
+            'IsProblem'   = $TRUE;
+        } | Out-Null;
+    }
+
+    # Reset the Id's
+    [int]$IndexOfEntries = 0;
+
+    foreach ($entry in $AcknowledgeIds) {
+        Add-IcingaHashtableItem -Hashtable $ResolveList -Key ([string]$entry) -Value @{
+            'NewestEntry' = '';
+            'Count'       = 0;
+            'ProblemId'   = $ProblemIds[$IndexOfEntries];
+        } | Out-Null;
+    }
 
     if ([string]::IsNullOrEmpty($EventsAfter) -and $DisableTimeCache -eq $FALSE) {
         $time = Get-IcingaCacheData -Space 'provider' -CacheStore 'eventlog' -KeyName $CheckHash;
@@ -198,12 +228,26 @@ function New-IcingaProviderFilterDataEventlog()
     $EventLogQueryData = New-Object PSCustomObject;
     $EventLogQueryData | Add-Member -MemberType NoteProperty -Name 'List'      -Value (New-Object PSCustomObject);
     $EventLogQueryData | Add-Member -MemberType NoteProperty -Name 'Events'    -Value (New-Object PSCustomObject);
+    $EventLogQueryData | Add-Member -MemberType NoteProperty -Name 'Problems'  -Value (New-Object PSCustomObject);
     $EventLogQueryData | Add-Member -MemberType NoteProperty -Name 'HasEvents' -Value $FALSE;
 
     foreach ($event in $EventLogEntries) {
         # Filter out remaining message not matching our filter
         if ((Test-IcingaArrayFilter -InputObject $event.Message -Include $IncludeMessage -Exclude $ExcludeMessage) -eq $FALSE) {
             continue;
+        }
+
+        if ($ProblemList.ContainsKey([string]$event.Id)) {
+            if ([string]::IsNullOrEmpty($ProblemList[([string]$event.Id)].NewestEntry)) {
+                $ProblemList[([string]$event.Id)].NewestEntry = ([string]($event.TimeCreated));
+                $ProblemList[([string]$event.Id)].Message     = [string]($event.Message);
+            }
+            $ProblemList[([string]$event.Id)].Count     += 1;
+        }
+        if ($ResolveList.ContainsKey([string]$event.Id)) {
+            if ([string]::IsNullOrEmpty($ResolveList[([string]$event.Id)].NewestEntry)) {
+                $ResolveList[([string]$event.Id)].NewestEntry = ([string]($event.TimeCreated));
+            }
         }
 
         $EventLogQueryData.HasEvents = $TRUE;
@@ -239,6 +283,33 @@ function New-IcingaProviderFilterDataEventlog()
             $EventLogQueryData.Events | Add-Member -MemberType NoteProperty -Name $event.Id -Value 1;
         } else {
             $EventLogQueryData.Events.($event.Id) += 1;
+        }
+    }
+
+    if ($ProblemIds.Count -ne 0) {
+        foreach ($problemId in $ProblemList.Keys) {
+            [string]$ressolvedId    = $ProblemList[$problemId].ResolvedId;
+            $LastProblem  = $null;
+            $LastResolved = $null;
+
+            if ([string]::IsNullOrEmpty($ProblemList[$problemId].NewestEntry) -eq $FALSE) {
+                $LastProblem = [DateTime]$ProblemList[$problemId].NewestEntry;
+            }
+            if ([string]::IsNullOrEmpty($ResolveList[$ressolvedId].NewestEntry) -eq $FALSE) {
+                $LastResolved = [DateTime]$ResolveList[$ressolvedId].NewestEntry;
+            }
+
+            if ($ResolveList.ContainsKey($ressolvedId)) {
+                if ($null -ne $LastProblem -And $null -ne $LastResolved -And $LastProblem -le $LastResolved) {
+                    $ProblemList[$problemId].$IsProblem = $FALSE;
+                } else {
+                    $EventLogQueryData.Problems            | Add-Member -MemberType NoteProperty -Name $problemId    -Value (New-Object PSCustomObject);
+                    $EventLogQueryData.Problems.$problemId | Add-Member -MemberType NoteProperty -Name 'EventId'     -Value $problemId;
+                    $EventLogQueryData.Problems.$problemId | Add-Member -MemberType NoteProperty -Name 'Count'       -Value $ProblemList[$problemId].Count;
+                    $EventLogQueryData.Problems.$problemId | Add-Member -MemberType NoteProperty -Name 'Message'     -Value $ProblemList[$problemId].Message;
+                    $EventLogQueryData.Problems.$problemId | Add-Member -MemberType NoteProperty -Name 'NewestEntry' -Value $ProblemList[$problemId].NewestEntry;
+                }
+            }
         }
     }
 
