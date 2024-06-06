@@ -11,6 +11,12 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/32)
 
+### Bugfixes
+
+* [#734](https://github.com/Icinga/icinga-powershell-framework/issues/734) Fixes a scenario on which a JEA service could become orphaned while manually stopping the Icinga for Windows service, without gracefully shutting down JEA
+
+### Enhancements
+
 * [#732](https://github.com/Icinga/icinga-powershell-framework/pull/732) Adds support for TLS 1.3 and improves startup response
 
 ## 1.12.3 (2024-04-24)

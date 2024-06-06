@@ -17,69 +17,66 @@ function Start-IcingaForWindowsDaemon()
         [switch]$JEARestart   = $FALSE
     );
 
-    $Global:Icinga.Protected.RunAsDaemon                                  = [bool]$RunAsService;
-    $Global:Icinga.Protected.JEAContext                                   = [bool]$JEAContext;
-    [string]$MainServicePidFile                                           = (Join-Path -Path (Get-IcingaCacheDir) -ChildPath 'service.pid');
-    [string]$JeaPidFile                                                   = (Join-Path -Path (Get-IcingaCacheDir) -ChildPath 'jea.pid');
-    [string]$JeaProfile                                                   = Get-IcingaPowerShellConfig -Path 'Framework.JEAProfile';
-    [string]$JeaPid                                                       = '';
+    $Global:Icinga.Protected.RunAsDaemon = [bool]$RunAsService;
+    $Global:Icinga.Protected.JEAContext  = [bool]$JEAContext;
+    [string]$MainServicePidFile          = (Join-Path -Path (Get-IcingaCacheDir) -ChildPath 'service.pid');
+    [string]$JeaPidFile                  = (Join-Path -Path (Get-IcingaCacheDir) -ChildPath 'jea.pid');
+    [string]$JeaProfile                  = Get-IcingaPowerShellConfig -Path 'Framework.JEAProfile';
+    [string]$JeaPid                      = '';
 
-    if (Test-IcingaJEAServiceRunning) {
-        Write-IcingaEventMessage -EventId 1503 -Namespace 'Framework';
-        exit 1;
-    }
+    if ((Test-IcingaJEAServiceRunning) -eq $FALSE) {
+        Write-IcingaFileSecure -File ($MainServicePidFile) -Value $PID;
 
-    Write-IcingaFileSecure -File ($MainServicePidFile) -Value $PID;
+        if ([string]::IsNullOrEmpty($JeaProfile)) {
+            Write-IcingaDebugMessage -Message 'Starting Icinga for Windows service without JEA context' -Objects $RunAsService, $JEARestart, $JeaProfile;
 
-    if ([string]::IsNullOrEmpty($JeaProfile)) {
-        Write-IcingaDebugMessage -Message 'Starting Icinga for Windows service without JEA context' -Objects $RunAsService, $JEARestart, $JeaProfile;
-
-        # Todo: Add config for active background tasks. Set it to 20 for the moment
-        Add-IcingaThreadPool -Name 'MainPool' -MaxInstances 20;
-        $Global:Icinga.Public.Add(
-            'SSL',
-            @{
-                'Certificate'    = $null;
-                'CertFile'       = $null;
-                'CertThumbprint' = $null;
-                'CertFilter'     = $null;
-            }
-        );
-
-        New-IcingaThreadInstance -Name "Main" -ThreadPool (Get-IcingaThreadPool -Name 'MainPool') -Command 'Add-IcingaForWindowsDaemon' -Start;
-    } else {
-        Write-IcingaDebugMessage -Message 'Starting Icinga for Windows service inside JEA context' -Objects $RunAsService, $JEARestart, $JeaProfile;
-
-        & powershell.exe -NoProfile -NoLogo -ConfigurationName $JeaProfile -Command {
-            try {
-                Use-Icinga -Daemon;
-
-                Write-IcingaFileSecure -File ($args[0]) -Value $PID;
-
-                $Global:Icinga.Protected.JEAContext  = $TRUE;
-                $Global:Icinga.Protected.RunAsDaemon = $TRUE;
-                # Todo: Add config for active background tasks. Set it to 20 for the moment
-                Add-IcingaThreadPool -Name 'MainPool' -MaxInstances 20;
- 
-                $Global:Icinga.Public.Add(
-                    'SSL',
-                    @{
-                        'Certificate'    = $null;
-                        'CertFile'       = $null;
-                        'CertThumbprint' = $null;
-                        'CertFilter'     = $null;
-                    }
-                );
-
-                New-IcingaThreadInstance -Name "Main" -ThreadPool (Get-IcingaThreadPool -Name 'MainPool') -Command 'Add-IcingaForWindowsDaemon' -Start;
-
-                while ($TRUE) {
-                    Start-Sleep -Seconds 100;
+            # Todo: Add config for active background tasks. Set it to 20 for the moment
+            Add-IcingaThreadPool -Name 'MainPool' -MaxInstances 20;
+            $Global:Icinga.Public.Add(
+                'SSL',
+                @{
+                    'Certificate'    = $null;
+                    'CertFile'       = $null;
+                    'CertThumbprint' = $null;
+                    'CertFilter'     = $null;
                 }
-            } catch {
-                Write-IcingaEventMessage -EventId 1600 -Namespace 'Framework' -ExceptionObject $_;
-            }
-        } -Args $JeaPidFile;
+            );
+
+            New-IcingaThreadInstance -Name "Main" -ThreadPool (Get-IcingaThreadPool -Name 'MainPool') -Command 'Add-IcingaForWindowsDaemon' -Start;
+        } else {
+            Write-IcingaDebugMessage -Message 'Starting Icinga for Windows service inside JEA context' -Objects $RunAsService, $JEARestart, $JeaProfile;
+
+            & powershell.exe -NoProfile -NoLogo -ConfigurationName $JeaProfile -Command {
+                try {
+                    Use-Icinga -Daemon;
+
+                    Write-IcingaFileSecure -File ($args[0]) -Value $PID;
+
+                    $Global:Icinga.Protected.JEAContext  = $TRUE;
+                    $Global:Icinga.Protected.RunAsDaemon = $TRUE;
+                    # Todo: Add config for active background tasks. Set it to 20 for the moment
+                    Add-IcingaThreadPool -Name 'MainPool' -MaxInstances 20;
+
+                    $Global:Icinga.Public.Add(
+                        'SSL',
+                        @{
+                            'Certificate'    = $null;
+                            'CertFile'       = $null;
+                            'CertThumbprint' = $null;
+                            'CertFilter'     = $null;
+                        }
+                    );
+
+                    New-IcingaThreadInstance -Name "Main" -ThreadPool (Get-IcingaThreadPool -Name 'MainPool') -Command 'Add-IcingaForWindowsDaemon' -Start;
+
+                    while ($TRUE) {
+                        Start-Sleep -Seconds 100;
+                    }
+                } catch {
+                    Write-IcingaEventMessage -EventId 1600 -Namespace 'Framework' -ExceptionObject $_;
+                }
+            } -Args $JeaPidFile;
+        }
     }
 
     if ($JEARestart) {
