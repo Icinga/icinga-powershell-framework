@@ -13,6 +13,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 ### Bugfixes
 
+* [#729](https://github.com/Icinga/icinga-powershell-framework/issues/729) Fixes `Update-Icinga` to print an error in case a component is not installed, instead of silently continue
 * [#734](https://github.com/Icinga/icinga-powershell-framework/issues/734) Fixes a scenario on which a JEA service could become orphaned while manually stopping the Icinga for Windows service, without gracefully shutting down JEA
 
 ### Enhancements
