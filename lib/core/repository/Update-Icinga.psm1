@@ -16,6 +16,7 @@ function Update-Icinga()
     $CurrentInstallation   = Get-IcingaInstallation -Release:$Release -Snapshot:$Snapshot;
     [bool]$UpdateJEA       = $FALSE;
     [array]$ComponentsList = @();
+    [bool]$IsInstalled     = $FALSE;
 
     # We need to make sure that the framework is always installed first as component
     # to prevent possible race-conditions during update, in case we update plugins
@@ -43,6 +44,8 @@ function Update-Icinga()
         if ([string]::IsNullOrEmpty($Name) -eq $FALSE -And $Name -ne $entry) {
             continue;
         }
+
+        $IsInstalled = $TRUE;
 
         $NewVersion = $Component.LatestVersion;
 
@@ -74,6 +77,10 @@ function Update-Icinga()
         }
 
         Install-IcingaComponent -Name $entry -Version $NewVersion -Release:$Release -Snapshot:$Snapshot -Confirm:$Confirm -Force:$Force -KeepRepoErrors;
+    }
+
+    if ($IsInstalled -eq $FALSE) {
+        Write-IcingaConsoleError 'Failed to update the component "{0}", as it is not installed' -Objects $Name;
     }
 
     # Update JEA profile if JEA is enabled once the update is complete
