@@ -39,9 +39,15 @@ function Read-IcingaFileSecure()
                 [System.IO.FileShare]::Read
             );
 
-            $ReadArray    = New-Object Byte[] $FileStream.Length;
-            $UTF8Encoding = New-Object System.Text.UTF8Encoding $TRUE;
-            $FileContent  = '';
+            $ReadArray     = New-Object Byte[] $FileStream.Length;
+            [bool]$UTF8BOM = $FALSE;
+
+            if ((Get-FileEncoding -Path $File) -eq 'UTF8-BOM') {
+                $UTF8BOM = $TRUE;
+            }
+
+            $UTF8Encoding  = New-Object System.Text.UTF8Encoding $UTF8BOM;
+            $FileContent   = '';
 
             while ($FileStream.Read($ReadArray, 0 , $ReadArray.Length)) {
                 $FileContent = [System.String]::Concat($FileContent, $UTF8Encoding.GetString($ReadArray));
