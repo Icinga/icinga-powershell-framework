@@ -19,6 +19,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 ### Enhancements
 
 * [#732](https://github.com/Icinga/icinga-powershell-framework/pull/732) Adds support for TLS 1.3 and improves startup response
+* [#739](https://github.com/Icinga/icinga-powershell-framework/pull/739) Adds support to check the encoding of files to ensure we can properly load them and throw errors for unsupported encoding
 
 ## 1.12.3 (2024-04-24)
 
