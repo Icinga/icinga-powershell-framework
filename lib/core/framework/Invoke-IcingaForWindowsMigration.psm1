@@ -143,4 +143,13 @@ function Invoke-IcingaForWindowsMigration()
 
         Set-IcingaForWindowsMigration -MigrationVersion (New-IcingaVersionObject -Version '1.12.3');
     }
+
+    if (Test-IcingaForWindowsMigration -MigrationVersion (New-IcingaVersionObject -Version '1.13.0')) {
+        Write-IcingaConsoleNotice 'Applying pending migrations required for Icinga for Windows v1.13.0';
+
+        # Updates certificate renew task to handle changes made which now stores the Icinga CA inside the cert store
+        Start-IcingaWindowsScheduledTaskRenewCertificate;
+
+        Set-IcingaForWindowsMigration -MigrationVersion (New-IcingaVersionObject -Version '1.13.0');
+    }
 }

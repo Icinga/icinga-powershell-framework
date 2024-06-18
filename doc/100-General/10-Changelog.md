@@ -21,6 +21,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 * [#732](https://github.com/Icinga/icinga-powershell-framework/pull/732) Adds support for TLS 1.3 and improves startup response
 * [#735](https://github.com/Icinga/icinga-powershell-framework/pull/735) Adds support to provide occuring problem event id's for the Eventlog and corresponding acknowledgement id's, providing an indicator if certain issues are resolved or still present
+* [#740](https://github.com/Icinga/icinga-powershell-framework/pull/740) Adds new command `Invoke-IcingaForWindowsRESTApi` for easier API communication
 * [#742](https://github.com/Icinga/icinga-powershell-framework/pull/742) Adds support for the CPU provider to limit the CPU usage to 100% for each thread
 
 ## 1.12.3 (2024-04-24)
