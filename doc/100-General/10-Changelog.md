@@ -19,6 +19,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 ### Enhancements
 
 * [#732](https://github.com/Icinga/icinga-powershell-framework/pull/732) Adds support for TLS 1.3 and improves startup response
+* [#740](https://github.com/Icinga/icinga-powershell-framework/pull/740) Adds support to use the Icinga for Windows certificate to authenticate for the Icinga for Windows API, allowing smoother transitions by not disabling certificate validation and adds new command `Invoke-IcingaForWindowsRESTApi` for easier API communication
 
 ## 1.12.3 (2024-04-24)
 
