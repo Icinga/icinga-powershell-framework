@@ -146,6 +146,7 @@ function Test-IcingaForWindows()
             if ($ResolveProblems) {
                 Write-IcingaConsoleNotice 'Fixing problems with missing not signed Icinga for Windows certificate by re-creating it from the Icinga Agent certificate';
                 Start-IcingaWindowsScheduledTaskRenewCertificate;
+                Start-Sleep -Seconds 5;
                 $IfWCertificate = Get-IcingaForWindowsCertificate;
 
                 if ($IfWCertificate.Issuer.ToLower() -eq ([string]::Format('cn={0}', $Hostname).ToLower())) {
@@ -188,17 +189,16 @@ function Test-IcingaForWindows()
     }
 
     Set-IcingaTLSVersion;
-    Enable-IcingaUntrustedCertificateValidation -SuppressMessages;
 
     try {
-        $ApiResult = Invoke-WebRequest -UseBasicParsing -Uri 'https://localhost:5668/v1' -ErrorAction Stop;
-        Write-IcingaTestOutput -Severity Passed -Message 'The Icinga for Windows REST-Api responded successfully on "https://localhost:5668/v1"';
+        $ApiResult = Invoke-IcingaForWindowsRESTApi;
+        Write-IcingaTestOutput -Severity Passed -Message 'The Icinga for Windows REST-Api responded successfully on this machine';
     } catch {
         if ($IfWService.User.ToLower() -eq 'nt authority\networkservice') {
-            Write-IcingaTestOutput -Severity Failed -Message ([string]::Format('The Icinga for Windows REST-Api responded with an error on "https://localhost:5668/v1", which is expected when using the default NetworkService account [IWKB000018]: "{0}"', $_.Exception.Message));
+            Write-IcingaTestOutput -Severity Failed -Message ([string]::Format('The Icinga for Windows REST-Api responded with an error on this machine, which is expected when using the default NetworkService account [IWKB000018]: "{0}"', $_.Exception.Message));
         } else {
             if ($ResolveProblems -eq $FALSE) {
-                Write-IcingaTestOutput -Severity Failed -Message ([string]::Format('The Icinga for Windows REST-Api responded with an error on "https://localhost:5668/v1": "{0}"', $_.Exception.Message));
+                Write-IcingaTestOutput -Severity Failed -Message ([string]::Format('The Icinga for Windows REST-Api responded with an error on this machine: "{0}"', $_.Exception.Message));
             } else {
                 Write-IcingaConsoleNotice 'Fixing problems with Icinga for Windows REST-Api by restarting the Icinga for Windows service';
                 Restart-IcingaForWindows;

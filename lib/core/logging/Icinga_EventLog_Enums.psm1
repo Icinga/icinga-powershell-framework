@@ -122,6 +122,18 @@ if ($null -eq $IcingaEventLogEnums -Or $IcingaEventLogEnums.ContainsKey('Framewo
                 'Details'   = 'One of the internal Icinga for Windows threads was being active but not responding for at least 5 minutes. The frozen thread has been terminated and restarted.';
                 'EventId'   = 1507;
             };
+            1508 = @{
+                'EntryType' = 'Warning';
+                'Message'   = 'Icinga for Windows certificate is pending for signing';
+                'Details'   = 'The Icinga for Windows certificate is pending to be signed. This happens if the Icinga Agent certificate is not yet signed by the Icinga CA. The creation will pause for some minutes and try again.';
+                'EventId'   = 1508;
+            };
+            1509 = @{
+                'EntryType' = 'Error';
+                'Message'   = 'Icinga CA certificate could not be imported to the AuthRoot store';
+                'Details'   = 'The Icinga CA certificate could not be imported to the LocalMachine\AuthRoot store on this device. This will cause all local PowerShell requests to communicate with the API to be untrusted, requring to enable untrusted certificate request as otherwise the communication will fail.';
+                'EventId'   = 1509;
+            };
             1550 = @{
                 'EntryType' = 'Error';
                 'Message'   = 'Unsupported web authentication used';
@@ -163,6 +175,12 @@ if ($null -eq $IcingaEventLogEnums -Or $IcingaEventLogEnums.ContainsKey('Framewo
                 'Message'   = 'Exception on function calls in JEA context';
                 'Details'   = 'An exception occurred while executing Icinga for Windows code inside a JEA context.';
                 'EventId'   = 1600;
+            };
+            1700 = @{
+                'EntryType' = 'Error';
+                'Message'   = 'Icinga Agent hostname is not set inside the constants.conf';
+                'Details'   = 'Your current Icinga Agent configuration is missing a crutial configuration part inside your constants.conf, which should set the current configured hostname as NodeName. As long as this configuration is missing, certain Icinga for Windows feature might only partially work. Re-Installing Icinga for Windows might resolve this issue.';
+                'EventId'   = 1700;
             };
         }
     };
