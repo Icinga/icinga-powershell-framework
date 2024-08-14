@@ -750,6 +750,8 @@ function Start-IcingaAgentInstallWizard()
                 # First cleanup the system by removing all old Firewalls
                 Enable-IcingaFirewall -IcingaPort $CAPort -Force;
             }
+            # Ensure the Icinga Agent is not spamming the Application log by default
+            Write-IcingaAgentEventLogConfig -Severity 'warning';
             Test-IcingaAgent;
             if ($InstallFrameworkService) {
                 Restart-IcingaForWindows;

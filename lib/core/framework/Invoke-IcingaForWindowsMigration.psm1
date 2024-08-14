@@ -149,6 +149,8 @@ function Invoke-IcingaForWindowsMigration()
 
         # Updates certificate renew task to handle changes made which now stores the Icinga CA inside the cert store
         Start-IcingaWindowsScheduledTaskRenewCertificate;
+        # Ensure the Icinga Agent is not spamming the Application log by default
+        Write-IcingaAgentEventLogConfig -Severity 'warning';
 
         Set-IcingaForWindowsMigration -MigrationVersion (New-IcingaVersionObject -Version '1.13.0');
     }

@@ -203,6 +203,8 @@ function Start-IcingaForWindowsInstallation()
         Set-IcingaUserPermissions -IcingaUser $ServiceUser;
         Install-IcingaAgentBaseFeatures;
         Write-IcingaAgentApiConfig -Port $IcingaPort;
+        # Ensure the Icinga Agent is not spamming the Application log by default
+        Write-IcingaAgentEventLogConfig -Severity 'warning';
 
         # Fixes an issue with the local Icinga for Windows listen port and the defined ports for communicating with the Icinga Parent/CA Nodes
         # This will check if we provided a custom port for the endpoints and use this one instead of the configured listen port if Icinga for Windows
