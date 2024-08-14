@@ -19,6 +19,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 ### Enhancements
 
+* [#711](https://github.com/Icinga/icinga-powershell-framework/issues/711) Adds cmdlet `Write-IcingaAgentEventLogConfig` to update eventlog severity and defaults to `warning` during installation and migration
 * [#732](https://github.com/Icinga/icinga-powershell-framework/pull/732) Adds support for TLS 1.3 and improves startup response
 * [#735](https://github.com/Icinga/icinga-powershell-framework/pull/735) Adds support to provide occuring problem event id's for the Eventlog and corresponding acknowledgement id's, providing an indicator if certain issues are resolved or still present
 * [#739](https://github.com/Icinga/icinga-powershell-framework/pull/739) Adds support to check the encoding of files to ensure we can properly load them and throw errors for unsupported encoding
