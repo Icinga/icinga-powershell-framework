@@ -15,10 +15,12 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 * [#729](https://github.com/Icinga/icinga-powershell-framework/issues/729) Fixes `Update-Icinga` to print an error in case a component is not installed, instead of silently continue
 * [#734](https://github.com/Icinga/icinga-powershell-framework/issues/734) Fixes a scenario on which a JEA service could become orphaned while manually stopping the Icinga for Windows service, without gracefully shutting down JEA
+* [#735](https://github.com/Icinga/icinga-powershell-framework/pull/735) Fixes an issue with filter for EventLog events, which did not properly handle multiple event id includes, causing empty results
 
 ### Enhancements
 
 * [#732](https://github.com/Icinga/icinga-powershell-framework/pull/732) Adds support for TLS 1.3 and improves startup response
+* [#735](https://github.com/Icinga/icinga-powershell-framework/pull/735) Adds support to provide occuring problem event id's for the Eventlog and corresponding acknowledgement id's, providing an indicator if certain issues are resolved or still present
 
 ## 1.12.3 (2024-04-24)
 
