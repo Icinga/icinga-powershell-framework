@@ -22,7 +22,28 @@ if ($RegisteredBackgroundDaemons.ContainsKey('Start-IcingaWindowsRESTApi')) {
     }
 }
 
-Install-IcingaForWindowsCertificate -CertFile $CertificatePath;
+# Wait during the initial run as long as the certificate is not available
+while ($TRUE) {
+    Install-IcingaForWindowsCertificate -CertFile $CertificatePath;
+
+    if ((Test-IcingaForWindowsCertificate) -eq $FALSE) {
+        Write-IcingaEventMessage -EventId 1508 -Namespace 'Framework';
+        Start-Sleep -Seconds 60;
+
+        continue;
+    }
+
+    break;
+}
+
+# Ensure we import the Icinga ca.crt to the root store, which allows us to use the certificate
+# of the agent to connect the the Icinga for Windows API without having to break the certificate trust
+[bool]$CAImportSuccess = Import-IcingaCAToAuthRoot;
+
+if ($CAImportSuccess -eq $FALSE) {
+    Write-IcingaEventMessage -EventId 1509 -Namespace 'Framework';
+    exit 1;
+}
 
 # Tell the Task-Scheduler that the script was executed fine
 exit 0;
