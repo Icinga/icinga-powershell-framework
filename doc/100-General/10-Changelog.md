@@ -22,6 +22,7 @@ This beta release has reworked the entire handling on how thresholds and the che
 * [#735](https://github.com/Icinga/icinga-powershell-framework/pull/735) Fixes an issue with filter for EventLog events, which did not properly handle multiple event id includes, causing empty results
 * [#743](https://github.com/Icinga/icinga-powershell-framework/pull/743) In the REST API response header `Server`, tell the software version, not the machine name (RFC 9110)
 * [#745](https://github.com/Icinga/icinga-powershell-framework/pull/745) Fixes an issue for service provider with service names not interpreted correctly in case it contains `[]`
+* [#746](https://github.com/Icinga/icinga-powershell-framework/issues/746) Fixes an issue with performance counters, sometimes reporting empty values instead of at least 0
 
 ### Enhancements
 

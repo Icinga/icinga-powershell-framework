@@ -198,7 +198,7 @@ function New-IcingaCheck()
 
         [string]$LabelName      = (Format-IcingaPerfDataLabel -PerfData $this.Name);
         [string]$MultiLabelName = (Format-IcingaPerfDataLabel -PerfData $this.Name -MultiOutput);
-        $value                  = ConvertTo-Integer -Value $this.__ThresholdObject.Value -NullAsEmpty;
+        $value                  = ConvertTo-Integer -Value $this.__ThresholdObject.Value;
         $warning                = '';
         $critical               = '';
 
