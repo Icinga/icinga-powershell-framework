@@ -88,21 +88,27 @@ function Test-IcingaArrayFilter()
 
         return $FilteredArray;
     } else {
-        foreach ($entry in $Exclude) {
-            if (([string]$InputObject).ToLower() -Like ([string]$entry).ToLower()) {
-                return $FALSE;
+        try {
+            foreach ($entry in $Exclude) {
+                if (([string]$InputObject).ToLower() -Like ([string]$entry).ToLower()) {
+                    return $FALSE;
+                }
             }
-        }
 
-        if ($Include.Count -eq 0) {
-            return $TRUE;
-        }
-
-        foreach ($entry in $Include) {
-            if (([string]$InputObject).ToLower() -Like ([string]$entry).ToLower()) {
-                $IncludeFound = $TRUE;
-                break;
+            if ($Include.Count -eq 0) {
+                return $TRUE;
             }
+
+            foreach ($entry in $Include) {
+                if (([string]$InputObject).ToLower() -Like ([string]$entry).ToLower()) {
+                    $IncludeFound = $TRUE;
+                    break;
+                }
+            }
+        } catch {
+            Exit-IcingaThrowException -InputString $_.Exception.Message -StringPattern 'wildcard' -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.RegexError;
+            Exit-IcingaThrowException -CustomMessage $_.Exception.Message -ExceptionType 'Input' -ExceptionThrown $_.Exception.Message;
+            return $FALSE;
         }
 
         return $IncludeFound;

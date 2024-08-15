@@ -31,7 +31,8 @@
     CimClassNameUnknown     = 'The provided class name you try to fetch with Get-CimInstance is not known on this system.';
     WmiObjectClassUnknown   = 'The provided class name you try to fetch with Get-WmiObject is not known on this system.';
     MSSQLCredentialHandling = 'The connection to MSSQL was not possible because your login credential was not correct.';
-    MSSQLCommandMissing     = 'Failed to build a SQL query'
+    MSSQLCommandMissing     = 'Failed to build a SQL query';
+    RegexError              = 'A request was not handled properly because a provided regex could not be interpreted. Please validate your regex and try again. In case you are trying to access a ressource containing [], you will have to escape each symbol by using `. Example: myservice`[`]';
 };
 
 [hashtable]$Configuration = @{

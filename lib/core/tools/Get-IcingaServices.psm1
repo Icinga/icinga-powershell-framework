@@ -5,13 +5,14 @@ function Get-IcingaServices()
         [array]$Exclude = @()
     );
 
-    $ServiceInformation = Get-Service -Name $Service -ErrorAction SilentlyContinue;
+    $ServiceInformation = Get-Service;
     $ServiceWmiInfo     = $null;
 
     if ($Service.Count -eq 0) {
         $ServiceWmiInfo = Get-IcingaWindowsInformation Win32_Service;
     } else {
-        $ServiceWmiInfo = Get-IcingaWindowsInformation Win32_Service |
+        try {
+            $ServiceWmiInfo = Get-IcingaWindowsInformation Win32_Service |
             ForEach-Object {
                 foreach ($svc in $Service) {
                     if ($_.Name -Like $svc) {
@@ -19,6 +20,11 @@ function Get-IcingaServices()
                     }
                 }
             } | Select-Object StartName, Name, ExitCode, StartMode, PathName;
+        } catch {
+            Exit-IcingaThrowException -InputString $_.Exception.Message -StringPattern 'wildcard' -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.RegexError;
+            Exit-IcingaThrowException -CustomMessage $_.Exception.Message -ExceptionType 'Input' -ExceptionThrown $_.Exception.Message;
+            return $null;
+        }
     }
 
     if ($null -eq $ServiceInformation) {
@@ -27,7 +33,7 @@ function Get-IcingaServices()
 
     [hashtable]$ServiceData = @{ };
 
-    foreach ($service in $ServiceInformation) {
+    foreach ($si in $ServiceInformation) {
 
         [array]$DependentServices = $null;
         [array]$DependingServices = $null;
@@ -37,12 +43,12 @@ function Get-IcingaServices()
         [int]$StartModeId         = 5;
         [string]$StartMode        = 'Unknown';
 
-        if ((Test-IcingaArrayFilter -InputObject $Service.ServiceName -Exclude $Exclude) -eq $FALSE) {
+        if ((Test-IcingaArrayFilter -InputObject $si.ServiceName -Include $Service -Exclude $Exclude) -eq $FALSE) {
             continue;
         }
 
         foreach ($wmiService in $ServiceWmiInfo) {
-            if ($wmiService.Name -eq $service.ServiceName) {
+            if ($wmiService.Name -eq $si.ServiceName) {
                 $ServiceUser     = $wmiService.StartName;
                 $ServicePath     = $wmiService.PathName;
                 $ServiceExitCode = $wmiService.ExitCode;
@@ -55,7 +61,7 @@ function Get-IcingaServices()
         }
 
         #Dependent / Child
-        foreach ($dependency in $service.DependentServices) {
+        foreach ($dependency in $si.DependentServices) {
             if ($null -eq $DependentServices) {
                 $DependentServices = @();
             }
@@ -63,7 +69,7 @@ function Get-IcingaServices()
         }
 
         #Depends / Parent
-        foreach ($dependency in $service.ServicesDependedOn) {
+        foreach ($dependency in $si.ServicesDependedOn) {
             if ($null -eq $DependingServices) {
                 $DependingServices = @();
             }
@@ -71,29 +77,29 @@ function Get-IcingaServices()
         }
 
         $ServiceData.Add(
-            $service.Name, @{
+            $si.Name, @{
                 'metadata'      = @{
-                    'DisplayName'   = $service.DisplayName;
-                    'ServiceName'   = $service.ServiceName;
-                    'Site'          = $service.Site;
-                    'Container'     = $service.Container;
-                    'ServiceHandle' = $service.ServiceHandle;
+                    'DisplayName'   = $si.DisplayName;
+                    'ServiceName'   = $si.ServiceName;
+                    'Site'          = $si.Site;
+                    'Container'     = $si.Container;
+                    'ServiceHandle' = $si.ServiceHandle;
                     'Dependent'     = $DependentServices;
                     'Depends'       = $DependingServices;
                 };
                 'configuration' = @{
-                    'CanPauseAndContinue' = $service.CanPauseAndContinue;
-                    'CanShutdown'         = $service.CanShutdown;
-                    'CanStop'             = $service.CanStop;
+                    'CanPauseAndContinue' = $si.CanPauseAndContinue;
+                    'CanShutdown'         = $si.CanShutdown;
+                    'CanStop'             = $si.CanStop;
                     'Status'              = @{
-                        'raw'   = [int]$service.Status;
-                        'value' = $service.Status;
+                        'raw'   = [int]$si.Status;
+                        'value' = $si.Status;
                     };
                     'ServiceType'         = @{
-                        'raw'   = [int]$service.ServiceType;
-                        'value' = $service.ServiceType;
+                        'raw'   = [int]$si.ServiceType;
+                        'value' = $si.ServiceType;
                     };
-                    'ServiceHandle'       = $service.ServiceHandle;
+                    'ServiceHandle'       = $si.ServiceHandle;
                     'StartType'           = @{
                         'raw'   = $StartModeId;
                         'value' = $StartMode;
