@@ -26,3 +26,4 @@ For this reason you will find a list of Icinga knowledge base entries below. Ent
 | [IWKB000016](knowledgebase/IWKB000016.md) | Checks using Performance Counter fail with various messages like `Exception of type 'System.OutOfMemoryException' was thrown` or `Icinga Invalid Configuration Error was thrown: PerfCounterCategoryMissing: Category "Memory" not found` |
 | [IWKB000017](knowledgebase/IWKB000017.md) | Icinga throws exception during plugin execution after uninstalling SCOM or other vendor software using PowerShell modules |
 | [IWKB000018](knowledgebase/IWKB000018.md) | Icinga for Windows services throws event id 1500 with error `Exception while calling AuthenticateAsServer: The credentials supplied to the package were not recognized` |
+| [IWKB000019](knowledgebase/IWKB000019.md) | Icinga Invalid Input Error was thrown: RegexError |
