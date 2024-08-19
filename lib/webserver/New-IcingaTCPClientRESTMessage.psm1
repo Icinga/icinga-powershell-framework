@@ -39,8 +39,8 @@ function New-IcingaTCPClientRESTMessage()
             (New-IcingaNewLine)
         ),
         [string]::Format(
-            'Server: {0}{1}',
-            (Get-IcingaHostname -LowerCase $TRUE -AutoUseFQDN $TRUE),
+            'Server: IcingaForWindows/{0}{1}',
+            (Get-Module -Name icinga-powershell-framework).Version,
             (New-IcingaNewLine)
         ),
         [string]::Format(
