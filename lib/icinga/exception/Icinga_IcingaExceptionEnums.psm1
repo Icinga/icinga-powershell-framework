@@ -33,6 +33,7 @@
     MSSQLCredentialHandling = 'The connection to MSSQL was not possible because your login credential was not correct.';
     MSSQLCommandMissing     = 'Failed to build a SQL query';
     RegexError              = 'A request was not handled properly because a provided regex could not be interpreted. Please validate your regex and try again. In case you are trying to access a ressource containing [], you will have to escape each symbol by using `. Example: myservice`[`]';
+    InvalidThresholdValue   = 'A treshold value provided for the plugin was invalid and did not follow the Icinga for Windows threshold guidelines. Available formatting examples are: "20", "20:", "~:20", "20:30", "@20:30".';
 };
 
 [hashtable]$Configuration = @{

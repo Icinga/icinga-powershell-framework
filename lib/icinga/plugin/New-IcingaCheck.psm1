@@ -119,19 +119,19 @@ function New-IcingaCheck()
 
         $PluginThresholds = '';
         $TimeSpan         = '';
-        $PluginThresholds = $this.__ThresholdObject.FullMessage;
+        $PluginThresholds = $this.__ThresholdObject.Message;
 
         if ([string]::IsNullOrEmpty($PluginOutput) -eq $FALSE) {
             $PluginThresholds = $PluginOutput;
         }
 
-        if ($null -ne $this.__ThresholdObject -And [string]::IsNullOrEmpty($this.__ThresholdObject.TimeSpan) -eq $FALSE) {
+        <#if ($null -ne $this.__ThresholdObject -And [string]::IsNullOrEmpty($this.__ThresholdObject.TimeSpan) -eq $FALSE) {
             $TimeSpan = [string]::Format(
                 '{0}({1}m avg.)',
                 (&{ if ([string]::IsNullOrEmpty($PluginThresholds)) { return ''; } else { return ' ' } }),
                 $this.__ThresholdObject.TimeSpanOutput
             );
-        }
+        }#>
 
         [bool]$AddColon = $TRUE;
 
@@ -173,10 +173,10 @@ function New-IcingaCheck()
         $TimeSpan = $TimeSpanLabel.Replace($Label, '').Replace('_', '').Replace('::Interval', '').Replace('::', '');
 
         if ($null -ne $this.__WarningValue -And [string]::IsNullOrEmpty($this.__WarningValue.TimeSpan) -eq $FALSE -And $this.__WarningValue.TimeSpan -eq $TimeSpan) {
-            $TimeSpans.Warning = $this.__WarningValue.IcingaThreshold;
+            $TimeSpans.Warning = $this.__WarningValue.Threshold.Threshold;
         }
         if ($null -ne $this.__CriticalValue -And [string]::IsNullOrEmpty($this.__CriticalValue.TimeSpan) -eq $FALSE -And $this.__CriticalValue.TimeSpan -eq $TimeSpan) {
-            $TimeSpans.Critical = $this.__CriticalValue.IcingaThreshold;
+            $TimeSpans.Critical = $this.__CriticalValue.Threshold.Threshold;
         }
         $TimeSpans.Interval = $TimeSpan;
 
@@ -198,17 +198,17 @@ function New-IcingaCheck()
 
         [string]$LabelName      = (Format-IcingaPerfDataLabel -PerfData $this.Name);
         [string]$MultiLabelName = (Format-IcingaPerfDataLabel -PerfData $this.Name -MultiOutput);
-        $value                  = ConvertTo-Integer -Value $this.__ThresholdObject.RawValue -NullAsEmpty;
+        $value                  = ConvertTo-Integer -Value $this.__ThresholdObject.Value -NullAsEmpty;
         $warning                = '';
         $critical               = '';
 
         # Set our threshold to nothing if we use time spans, as it would cause performance metrics to
         # contain warning/critical values for everything, which is not correct
         if ([string]::IsNullOrEmpty($this.__WarningValue.TimeSpan)) {
-            $warning = ConvertTo-Integer -Value $this.__WarningValue.IcingaThreshold -NullAsEmpty;
+            $warning = ConvertTo-Integer -Value $this.__WarningValue.Threshold.Threshold -NullAsEmpty;
         }
         if ([string]::IsNullOrEmpty($this.__CriticalValue.TimeSpan)) {
-            $critical = ConvertTo-Integer -Value $this.__CriticalValue.IcingaThreshold -NullAsEmpty;
+            $critical = ConvertTo-Integer -Value $this.__CriticalValue.Threshold.Threshold -NullAsEmpty;
         }
 
         if ([string]::IsNullOrEmpty($this.LabelName) -eq $FALSE) {
@@ -226,7 +226,7 @@ function New-IcingaCheck()
             }
 
             if ([string]::IsNullOrEmpty($this.Maximum) -eq $FALSE -And (Test-Numeric $this.Maximum) -And (Test-Numeric $this.Value) -And $this.Value -gt $this.Maximum) {
-                $this.Maximum = $this.__ThresholdObject.RawValue;
+                $this.Maximum = $this.__ThresholdObject.Value;
             }
         }
 
@@ -236,21 +236,37 @@ function New-IcingaCheck()
             $PerfDataTemplate = $this.MetricTemplate;
         }
 
-        $this.__CheckPerfData = @{
-            'index'      = $this.MetricIndex;
-            'name'       = $this.MetricName;
-            'template'   = $PerfDataTemplate;
-            'label'      = $LabelName;
-            'multilabel' = $MultiLabelName;
-            'perfdata'   = '';
-            'unit'       = $this.__ThresholdObject.PerfUnit;
-            'value'      = (Format-IcingaPerfDataValue $value);
-            'warning'    = (Format-IcingaPerfDataValue $warning);
-            'critical'   =  (Format-IcingaPerfDataValue $critical);
-            'minimum'    = (Format-IcingaPerfDataValue $this.Minimum);
-            'maximum'    = (Format-IcingaPerfDataValue $this.Maximum);
-            'package'    = $FALSE;
-        };
+        [string]$PerfDataName = [string]::Format(
+            '{0}::ifw_{1}::{2}',
+            $this.MetricIndex,
+            $PerfDataTemplate.ToLower(),
+            $this.MetricName
+        );
+
+        # Ensure we only add a label with identical name once
+        if ($Global:Icinga.Private.Scheduler.PerfDataWriter.Cache.ContainsKey($PerfDataName) -eq $FALSE) {
+            $Global:Icinga.Private.Scheduler.PerfDataWriter.Cache.Add($PerfDataName, $TRUE);
+        } else {
+            return;
+        }
+
+        [string]$PerfDataLabel = [string]::Format(
+            '{0}={1}{2};{3};{4};{5};{6}',
+            $PerfDataName,
+            (Format-IcingaPerfDataValue $value),
+            $this.__ThresholdObject.PerfUnit,
+            (Format-IcingaPerfDataValue $warning),
+            (Format-IcingaPerfDataValue $critical),
+            (Format-IcingaPerfDataValue $this.Minimum),
+            (Format-IcingaPerfDataValue $this.Maximum)
+        );
+
+        # Add a space before adding another metric
+        if ($Global:Icinga.Private.Scheduler.PerfDataWriter.Storage.Length -ne 0) {
+            $Global:Icinga.Private.Scheduler.PerfDataWriter.Storage.Append(' ') | Out-Null;
+        }
+
+        $Global:Icinga.Private.Scheduler.PerfDataWriter.Storage.Append($PerfDataLabel.ToLower()) | Out-Null;
     }
 
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Name '__ValidateObject' -Value {
@@ -417,7 +433,7 @@ function New-IcingaCheck()
         if ($ThresholdObject.HasError) {
             $this.SetUnknown() | Out-Null;
             $this.__ThresholdObject = $ThresholdObject;
-            $this.__SetCheckOutput($this.__ThresholdObject.ErrorMessage);
+            $this.__SetCheckOutput($this.__ThresholdObject.Message);
             $this.__LockState();
             return;
         }
@@ -431,7 +447,7 @@ function New-IcingaCheck()
             $this.__ThresholdObject = $ThresholdObject;
         }
 
-        if ($ThresholdObject.InRange -eq $FALSE) {
+        if ($ThresholdObject.IsOk -eq $FALSE) {
             if ($this.__CheckState -lt $State) {
                 $this.__CheckState      = $State;
                 $this.__ThresholdObject = $ThresholdObject;
@@ -951,35 +967,53 @@ function New-IcingaCheck()
 
         [bool]$OutOfRange = $FALSE;
 
-        #Handles 20
-        if ($null -ne $this.__WarningValue.CompareValue -And $null -ne $this.__CriticalValue.CompareValue) {
-            if ($this.__WarningValue.CompareValue -gt $this.__CriticalValue.CompareValue) {
-                $OutOfRange = $TRUE;
-            }
-        }
+        # Both thresholds use the mode
+        if ($this.__WarningValue.Threshold.Mode -eq $this.__CriticalValue.Threshold.Mode) {
 
-        # Handles:  @30:40 and 30:40
-        # Never throw an "error" here, as these ranges can be dynamic
-        if ($null -ne $this.__WarningValue.MinRangeValue -And $null -ne $this.__CriticalValue.MinRangeValue -And $null -ne $this.__WarningValue.MaxRangeValue -And $null -ne $this.__CriticalValue.MaxRangeValue) {
-            return;
-        }
-
-        # Handles:  20:
-        if ($null -ne $this.__WarningValue.MinRangeValue -And $null -ne $this.__CriticalValue.MinRangeValue -And $null -eq $this.__WarningValue.MaxRangeValue -And $null -eq $this.__CriticalValue.MaxRangeValue) {
-            if ($this.__WarningValue.MinRangeValue -lt $this.__CriticalValue.MinRangeValue) {
-                $OutOfRange = $TRUE;
+            #Handles 20
+            if ($this.__WarningValue.Threshold.Mode -eq $IcingaEnums.IcingaThresholdMethod.Default -And $null -ne $this.__WarningValue.Threshold.Value -And $null -ne $this.__CriticalValue.Threshold.Value) {
+                if ($this.__WarningValue.Threshold.Value -gt $this.__CriticalValue.Threshold.Value) {
+                    $OutOfRange = $TRUE;
+                }
             }
-        }
 
-        # Handles:  ~:20
-        if ($null -eq $this.__WarningValue.MinRangeValue -And $null -eq $this.__CriticalValue.MinRangeValue -And $null -ne $this.__WarningValue.MaxRangeValue -And $null -ne $this.__CriticalValue.MaxRangeValue) {
-            if ($this.__WarningValue.MaxRangeValue -gt $this.__CriticalValue.MaxRangeValue) {
-                $OutOfRange = $TRUE;
+            # Handles: 30:40
+            if ($this.__WarningValue.Threshold.Mode -eq $IcingaEnums.IcingaThresholdMethod.Between) {
+                if ($this.__WarningValue.Threshold.StartRange -lt $this.__CriticalValue.Threshold.StartRange) {
+                    $OutOfRange = $TRUE;
+                }
+                if ($this.__WarningValue.Threshold.EndRange -gt $this.__CriticalValue.Threshold.EndRange) {
+                    $OutOfRange = $TRUE;
+                }
+            # Handles: @30:40
+            } elseif ($this.__WarningValue.Threshold.Mode -eq $IcingaEnums.IcingaThresholdMethod.Outside) {
+                if ($this.__WarningValue.Threshold.StartRange -ge $this.__CriticalValue.Threshold.StartRange) {
+                    $OutOfRange = $TRUE;
+                }
+                if ($this.__WarningValue.Threshold.EndRange -le $this.__CriticalValue.Threshold.EndRange) {
+                    $OutOfRange = $TRUE;
+                }
             }
+
+            # Handles:  20:
+            if ($this.__WarningValue.Threshold.Mode -eq $IcingaEnums.IcingaThresholdMethod.Lower -And $null -ne $this.__WarningValue.Threshold.Value -And $null -ne $this.__CriticalValue.Threshold.Value) {
+                if ($this.__WarningValue.Threshold.Value -lt $this.__CriticalValue.Threshold.Value) {
+                    $OutOfRange = $TRUE;
+                }
+            }
+
+            # Handles:  ~:20
+            if ($this.__WarningValue.Threshold.Mode -eq $IcingaEnums.IcingaThresholdMethod.Greater -And $null -ne $this.__WarningValue.Threshold.Value -And $null -ne $this.__CriticalValue.Threshold.Value) {
+                if ($this.__WarningValue.Threshold.Value -gt $this.__CriticalValue.Threshold.Value) {
+                    $OutOfRange = $TRUE;
+                }
+            }
+        } else {
+            # Todo: Implement handling for mixed modes
         }
 
         if ($OutOfRange) {
-            $this.SetUnknown([string]::Format('Warning threshold range "{0}" is greater than Critical threshold range "{1}"', $this.__WarningValue.RawThreshold, $this.__CriticalValue.RawThreshold), $TRUE) | Out-Null;
+            $this.SetUnknown([string]::Format('Warning threshold range "{0}" is greater than Critical threshold range "{1}"', $this.__WarningValue.Threshold.Threshold, $this.__CriticalValue.Threshold.Threshold), $TRUE) | Out-Null;
         }
     }
 

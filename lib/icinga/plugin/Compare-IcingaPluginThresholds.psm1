@@ -1,3 +1,83 @@
+<#
+.SYNOPSIS
+    Compares a value against specified thresholds and returns the result.
+
+.DESCRIPTION
+    The Compare-IcingaPluginThresholds function compares a given value against specified thresholds and returns an object containing the comparison result. It supports various comparison methods such as Matches, NotMatches, Between, LowerEqual, and GreaterEqual. If an error occurs during the comparison, the function returns an object with the error details.
+
+.PARAMETER Threshold
+    Specifies the threshold value or range to compare against. This can be a single value or a range specified in the format "min:max". If not provided, the function assumes no threshold.
+
+.PARAMETER InputValue
+    Specifies the value to compare against the threshold.
+
+.PARAMETER BaseValue
+    Specifies the base value for percentage calculations. If the unit is set to '%', the base value is used to calculate the percentage. If not provided, the function assumes no base value.
+
+.PARAMETER Matches
+    Indicates that the comparison should use the Matches method. This method checks if the input value matches the threshold.
+
+.PARAMETER NotMatches
+    Indicates that the comparison should use the NotMatches method. This method checks if the input value does not match the threshold.
+
+.PARAMETER DateTime
+    Specifies whether the input value is a DateTime object. If set to $true, the input value is treated as a DateTime object.
+
+.PARAMETER Unit
+    Specifies the unit of measurement for the values. This is used for percentage calculations. If not provided, the function assumes no unit.
+
+.PARAMETER ThresholdCache
+    Specifies a cache object to store threshold values for reuse.
+
+.PARAMETER CheckName
+    Specifies the name of the check being performed.
+
+.PARAMETER PerfDataLabel
+    Specifies the label for the performance data.
+
+.PARAMETER Translation
+    Specifies a hashtable for translating threshold values.
+
+.PARAMETER Minium
+    Specifies the minimum threshold value for comparison. This is used when the IsBetween method is used.
+
+.PARAMETER Maximum
+    Specifies the maximum threshold value for comparison. This is used when the IsBetween method is used.
+
+.PARAMETER IsBetween
+    Indicates that the comparison should use the IsBetween method. This method checks if the input value is between the minimum and maximum thresholds.
+
+.PARAMETER IsLowerEqual
+    Indicates that the comparison should use the IsLowerEqual method. This method checks if the input value is lower than or equal to the threshold.
+
+.PARAMETER IsGreaterEqual
+    Indicates that the comparison should use the IsGreaterEqual method. This method checks if the input value is greater than or equal to the threshold.
+
+.PARAMETER TimeInterval
+    Specifies the time interval for the comparison. This is used when the input value is a DateTime object.
+
+.OUTPUTS
+    The function returns an object containing the comparison result. The object has the following properties:
+    - Value: The input value.
+    - Unit: The unit of measurement.
+    - Message: The result message of the comparison.
+    - IsOK: Indicates whether the comparison result is OK.
+    - HasError: Indicates whether an error occurred during the comparison.
+    - Threshold: The threshold value or range used for comparison.
+    - Minimum: The minimum threshold value used for comparison.
+    - Maximum: The maximum threshold value used for comparison.
+
+.EXAMPLE
+    $threshold = "10:20"
+    $inputValue = 15
+    $baseValue = 100
+    $result = Compare-IcingaPluginThresholds -Threshold $threshold -InputValue $inputValue -BaseValue $baseValue
+    $result.IsOK
+    # Returns $true
+
+.NOTES
+    This function is part of the Icinga PowerShell Framework module.
+#>
 function Compare-IcingaPluginThresholds()
 {
     param (
@@ -20,489 +100,69 @@ function Compare-IcingaPluginThresholds()
         [string]$TimeInterval   = $null
     );
 
-    # Fix possible numeric value comparison issues
-    $TestInput = Test-IcingaDecimal $InputValue;
-    $BaseInput = Test-IcingaDecimal $BaseValue;
+    try {
+        # Fix possible numeric value comparison issues
+        $TestInput = Test-IcingaDecimal $InputValue;
+        $BaseInput = Test-IcingaDecimal $BaseValue;
 
-    if ($TestInput.Decimal) {
-        [decimal]$InputValue = [decimal]$TestInput.Value;
-    }
-    if ($BaseInput.Decimal) {
-        [decimal]$BaseValue = [decimal]$BaseInput.Value;
-    }
-
-    $IcingaThresholds = New-Object -TypeName PSObject;
-    $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'Value'           -Value $InputValue;
-    $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'BaseValue'       -Value $BaseValue;
-    $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'RawValue'        -Value $InputValue;
-    $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'Unit'            -Value $Unit;
-    $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'OriginalUnit'    -Value $Unit;
-    $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'PerfUnit'        -Value $Unit;
-    $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'IcingaThreshold' -Value $Threshold;
-    $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'RawThreshold'    -Value $Threshold;
-    $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'CompareValue'    -Value $null;
-    $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'MinRangeValue'   -Value $null;
-    $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'MaxRangeValue'   -Value $null;
-    $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'PercentValue'    -Value '';
-    $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'TimeSpan'        -Value '';
-    $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'TimeSpanOutput'  -Value '';
-    $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'InRange'         -Value $TRUE;
-    $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'Message'         -Value '';
-    $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'Range'           -Value '';
-    $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'FullMessage'     -Value (
-        [string]::Format('{0}', (ConvertTo-IcingaPluginOutputTranslation -Translation $Translation -Value (Convert-IcingaPluginValueToString -Unit $Unit -Value $InputValue)))
-    );
-    $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'HeaderValue'     -Value $IcingaThresholds.FullMessage;
-    $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'ErrorMessage'    -Value '';
-    $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'HasError'        -Value $FALSE;
-
-    # In case we are using % values, we should set the BaseValue always to 100
-    if ($Unit -eq '%' -And $null -eq $BaseValue) {
-        $BaseValue = 100;
-    }
-
-    if ([string]::IsNullOrEmpty($TimeInterval) -eq $FALSE -And $null -ne $ThresholdCache) {
-        $TimeSeconds            = ConvertTo-Seconds $TimeInterval;
-        $IntervalLabelName      = (Format-IcingaPerfDataLabel -PerfData $CheckName);
-        $IntervalMultiLabelName = (Format-IcingaPerfDataLabel -PerfData $CheckName -MultiOutput);
-
-        if ([string]::IsNullOrEmpty($PerfDataLabel) -eq $FALSE) {
-            $IntervalLabelName      = $PerfDataLabel;
-            $IntervalMultiLabelName = $PerfDataLabel;
+        if ($TestInput.Decimal) {
+            [decimal]$InputValue = [decimal]$TestInput.Value;
+        }
+        if ($BaseInput.Decimal) {
+            [decimal]$BaseValue = [decimal]$BaseInput.Value;
         }
 
-        $MinuteInterval      = [math]::round(([TimeSpan]::FromSeconds($TimeSeconds)).TotalMinutes, 0);
-        $CheckPerfDataLabel  = [string]::Format('{0}_{1}', $IntervalLabelName, $MinuteInterval);
-        $MultiPerfDataLabel  = [string]::Format('::{0}::Interval{1}', $IntervalMultiLabelName, $TimeSeconds);
-        [bool]$FoundInterval = $FALSE;
+        $IcingaThresholds = New-Object -TypeName PSObject;
+        $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'Value'     -Value $InputValue;
+        $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'Unit'      -Value $Unit;
+        $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'Message'   -Value '';
+        $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'IsOK'      -Value $FALSE;
+        $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'HasError'  -Value $FALSE;
+        $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'Threshold' -Value (Convert-IcingaPluginThresholds -Threshold $Threshold);
+        $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'Minimum'   -Value (Convert-IcingaPluginThresholds -Threshold $Minium);
+        $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'Maximum'   -Value (Convert-IcingaPluginThresholds -Threshold $Maximum);
 
-        if ($null -ne $ThresholdCache.$CheckPerfDataLabel) {
-            $InputValue                      = $ThresholdCache.$CheckPerfDataLabel;
-            $InputValue                      = [math]::round([decimal]$InputValue, 6);
-            $IcingaThresholds.TimeSpanOutput = $MinuteInterval;
-            $IcingaThresholds.TimeSpan       = $MinuteInterval;
-            $FoundInterval                   = $TRUE;
+        # In case we are using % values, we should set the BaseValue always to 100
+        if ($Unit -eq '%' -And $null -eq $BaseValue) {
+            $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'BaseValue' -Value 100;
+        } else {
+            $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'BaseValue' -Value $BaseValue;
         }
-        if ($null -ne $ThresholdCache.$MultiPerfDataLabel) {
-            $InputValue                      = $ThresholdCache.$MultiPerfDataLabel;
-            $InputValue                      = [math]::round([decimal]$InputValue, 6);
-            $IcingaThresholds.TimeSpanOutput = $MinuteInterval;
-            $IcingaThresholds.TimeSpan       = $TimeSeconds;
-            $FoundInterval                   = $TRUE;
+
+        $CheckResult = $null;
+
+        if ($Matches) {
+            $CheckResult = Compare-IcingaPluginValueToThreshold -Value $InputValue -BaseValue $IcingaThresholds.BaseValue -Threshold $IcingaThresholds.Threshold -Unit $Unit -Translation $Translation -OverrideMode $IcingaEnums.IcingaThresholdMethod.Matches;
+        } elseif ($NotMatches) {
+            $CheckResult = Compare-IcingaPluginValueToThreshold -Value $InputValue -BaseValue $IcingaThresholds.BaseValue -Threshold $IcingaThresholds.Threshold -Unit $Unit -Translation $Translation -OverrideMode $IcingaEnums.IcingaThresholdMethod.NotMatches;
+        } elseif ($IsBetween) {
+            $CheckResult = Compare-IcingaPluginValueToThreshold -Value $InputValue -BaseValue $IcingaThresholds.BaseValue -Threshold $IcingaThresholds.Threshold -Unit $Unit -Translation $Translation -OverrideMode $IcingaEnums.IcingaThresholdMethod.Between;
+        } elseif ($IsLowerEqual) {
+            $CheckResult = Compare-IcingaPluginValueToThreshold -Value $InputValue -BaseValue $IcingaThresholds.BaseValue -Threshold $IcingaThresholds.Threshold -Unit $Unit -Translation $Translation -OverrideMode $IcingaEnums.IcingaThresholdMethod.LowerEqual;
+        } elseif ($IsGreaterEqual) {
+            $CheckResult = Compare-IcingaPluginValueToThreshold -Value $InputValue -BaseValue $IcingaThresholds.BaseValue -Threshold $IcingaThresholds.Threshold -Unit $Unit -Translation $Translation -OverrideMode $IcingaEnums.IcingaThresholdMethod.GreaterEqual;
+        } else {
+            $CheckResult = Compare-IcingaPluginValueToThreshold -Value $InputValue -BaseValue $IcingaThresholds.BaseValue -Threshold $IcingaThresholds.Threshold -Unit $Unit -Translation $Translation;
         }
-        if ($FoundInterval -eq $FALSE) {
-            $IcingaThresholds.HasError     = $TRUE;
-            $IcingaThresholds.ErrorMessage = [string]::Format(
-                'The provided time interval "{0}" which translates to "{1}m" in your "-ThresholdInterval" argument does not exist',
-                $TimeInterval,
-                $MinuteInterval
-            );
 
-            return $IcingaThresholds;
-        }
-    } <#else {
-        # The symbol splitting our threshold from the time index value
-        # Examples:
-        # @20:40#15m
-        # ~:40#15m
-        # 40#15m
-        $TimeIndexSeparator = '#';
+        $IcingaThresholds.Message  = $CheckResult.Message;
+        $IcingaThresholds.IsOK     = $CheckResult.IsOK;
+        $IcingaThresholds.HasError = $CheckResult.HasError;
 
-        # In case we found a ~ not starting at the beginning, we should load the
-        # time index values created by our background daemon
-        # Allows us to specify something like "40:50#15"
-        if ($Threshold.Contains($TimeIndexSeparator) -And $null -ne $ThresholdCache) {
-            [int]$LastIndex = $Threshold.LastIndexOf($TimeIndexSeparator);
-            if ($LastIndex -ne 0) {
-                $TmpValue       = $Threshold;
-                $Threshold      = $TmpValue.Substring(0, $LastIndex);
-                $TimeIndex      = $TmpValue.Substring($LastIndex + 1, $TmpValue.Length - $LastIndex - 1);
-                $TimeSeconds    = ConvertTo-Seconds $TimeIndex;
-                $MinuteInterval = [math]::round(([TimeSpan]::FromSeconds($TimeSeconds)).TotalMinutes, 0);
-
-                $CheckPerfDataLabel = [string]::Format('{0}_{1}', (Format-IcingaPerfDataLabel $CheckName), $MinuteInterval);
-
-                if ($null -ne $ThresholdCache.$CheckPerfDataLabel) {
-                    $InputValue                = $ThresholdCache.$CheckPerfDataLabel;
-                    $InputValue                = [math]::round([decimal]$InputValue, 6);
-                    $IcingaThresholds.TimeSpan = $MinuteInterval;
-                } else {
-                    $IcingaThresholds.HasError     = $TRUE;
-                    $IcingaThresholds.ErrorMessage = [string]::Format(
-                        'The provided time interval "{0}{1}" which translates to "{2}m" in your "-ThresholdInterval" argument does not exist',
-                        $TimeIndexSeparator,
-                        $TimeIndex,
-                        $MinuteInterval
-                    );
-                }
-            }
-        }
-    }#>
-
-    [bool]$UseDynamicPercentage       = $FALSE;
-    [hashtable]$ConvertedThreshold    = Convert-IcingaPluginThresholds -Threshold $Threshold;
-    $Minimum                          = (Convert-IcingaPluginThresholds -Threshold $Minimum).Value;
-    $Maximum                          = (Convert-IcingaPluginThresholds -Threshold $Maximum).Value;
-    [string]$ThresholdValue           = $ConvertedThreshold.Value;
-    $IcingaThresholds.Unit            = $ConvertedThreshold.Unit;
-    $IcingaThresholds.IcingaThreshold = $ThresholdValue;
-    $TempValue                        = (Convert-IcingaPluginThresholds -Threshold ([string]::Format('{0}{1}', $InputValue, $Unit)));
-    $InputValue                       = $TempValue.Value;
-    $TmpUnit                          = $TempValue.Unit;
-    $TestInput                        = Test-IcingaDecimal $InputValue;
-
-    if ($TestInput.Decimal) {
-        [decimal]$InputValue = [decimal]$TestInput.Value;
-    }
-
-    $IcingaThresholds.RawValue        = $InputValue;
-    $TempValue                        = (Convert-IcingaPluginThresholds -Threshold ([string]::Format('{0}{1}', $BaseValue, $Unit)));
-    $BaseValue                        = $TempValue.Value;
-    $Unit                             = $TmpUnit;
-    $IcingaThresholds.PerfUnit        = $Unit;
-    $IcingaThresholds.BaseValue       = $BaseValue;
-
-    if ([string]::IsNullOrEmpty($IcingaThresholds.Unit)) {
-        $IcingaThresholds.Unit = $Unit;
-    }
-
-    # Calculate % value from base value of set
-    if ([string]::IsNullOrEmpty($BaseValue) -eq $FALSE -And $BaseValue -ne 0 -And $IcingaThresholds.Unit -eq '%') {
-        $InputValue           = $InputValue / $BaseValue * 100;
-        $UseDynamicPercentage = $TRUE;
-    } elseif ([string]::IsNullOrEmpty($BaseValue) -eq $TRUE -And $IcingaThresholds.Unit -eq '%') {
-        $IcingaThresholds.HasError = $TRUE;
-        $IcingaThresholds.ErrorMessage = 'This argument does not support the % unit';
+        return $IcingaThresholds;
+    } catch {
+        $IcingaThresholds = New-Object -TypeName PSObject;
+        $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'Value'     -Value $InputValue;
+        $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'Unit'      -Value $Unit;
+        $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'Message'   -Value $_.Exception.Message;
+        $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'IsOK'      -Value $FALSE;
+        $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'HasError'  -Value $TRUE;
+        $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'Threshold' -Value $Threshold;
+        $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'Minimum'   -Value $Minium;
+        $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'Maximum'   -Value $Maximum;
 
         return $IcingaThresholds;
     }
 
-    # Always override our InputValue, case we might have change it
-    $IcingaThresholds.Value = $InputValue;
-
-    # If we simply provide a numeric number, we always check Value > Threshold or Value < 0
-    if ($Matches) {
-        # Checks if the InputValue Matches the Threshold
-        if ($InputValue -Like $ThresholdValue) {
-            $IcingaThresholds.InRange = $FALSE;
-            $IcingaThresholds.Message = 'is matching threshold';
-            $IcingaThresholds.Range   = [string]::Format(
-                '{0}',
-                (ConvertTo-IcingaPluginOutputTranslation -Translation $Translation -Value (Convert-IcingaPluginValueToString -Unit $IcingaThresholds.Unit -Value $ThresholdValue -OriginalUnit $IcingaThresholds.OriginalUnit))
-            );
-        }
-    } elseif ($NotMatches) {
-        # Checks if the InputValue not Matches the Threshold
-        if ($InputValue -NotLike $ThresholdValue) {
-            $IcingaThresholds.InRange = $FALSE;
-            $IcingaThresholds.Message = 'is not matching threshold';
-            $IcingaThresholds.Range   = [string]::Format(
-                '{0}',
-                (ConvertTo-IcingaPluginOutputTranslation -Translation $Translation -Value (Convert-IcingaPluginValueToString -Unit $IcingaThresholds.Unit -Value $ThresholdValue -OriginalUnit $IcingaThresholds.OriginalUnit))
-            );
-        }
-    } elseif ($DateTime) {
-        # Checks if the InputValue Is Inside our time value
-
-        try {
-            $DateTimeValue          = 0;
-            [decimal]$TimeThreshold = 0;
-            $CurrentDate            = $global:Icinga.CurrentDate;
-            $IcingaThresholds.Unit  = '';
-
-            if ([string]::IsNullOrEmpty($InputValue) -eq $FALSE) {
-                $DateTimeValue          = [DateTime]::FromFileTime($InputValue);
-                $IcingaThresholds.Value = $DateTimeValue.ToString('yyyy\/MM\/dd HH:mm:ss');
-            }
-
-            if ([string]::IsNullOrEmpty($ThresholdValue) -eq $FALSE) {
-                $TimeThreshold                    = (ConvertTo-Seconds -Value $Threshold);
-                $CurrentDate                      = $CurrentDate.AddSeconds($TimeThreshold);
-                $IcingaThresholds.IcingaThreshold = $CurrentDate.ToFileTimeUtc();
-            }
-
-            if ([string]::IsNullOrEmpty($ThresholdValue) -eq $FALSE -And ($DateTimeValue -eq 0 -Or $DateTimeValue -lt $CurrentDate)) {
-                $IcingaThresholds.InRange = $FALSE;
-                $IcingaThresholds.Message = 'is lower than';
-                $IcingaThresholds.Range   = [string]::Format(
-                    '{0} ({1}{2})',
-                    ((Get-Date).ToString('yyyy\/MM\/dd HH:mm:ss')),
-                    ( $( if ($TimeThreshold -ge 0) { '+'; } else { ''; } )),
-                    $Threshold
-                );
-            }
-        } catch {
-            $IcingaThresholds.ErrorMessage = [string]::Format(
-                'Invalid date time specified. Your InputValue "{0}" seems not be a valid date time or your provided Threshold "{1}" cannot be converted to seconds. Exception: {2}',
-                $InputValue,
-                $ThresholdValue,
-                $_.Exception.Message
-            );
-            $IcingaThresholds.HasError = $TRUE;
-
-            return $IcingaThresholds;
-        }
-    } elseif ($IsBetween) {
-        if ($InputValue -gt $Minium -And $InputValue -lt $Maximum) {
-            $IcingaThresholds.InRange = $FALSE;
-            $IcingaThresholds.Message = 'is inside range';
-            $IcingaThresholds.Range   = [string]::Format(
-                '{0} and {1}',
-                (ConvertTo-IcingaPluginOutputTranslation -Translation $Translation -Value (Convert-IcingaPluginValueToString -Unit $IcingaThresholds.Unit -Value $Minium -OriginalUnit $IcingaThresholds.OriginalUnit)),
-                (ConvertTo-IcingaPluginOutputTranslation -Translation $Translation -Value (Convert-IcingaPluginValueToString -Unit $IcingaThresholds.Unit -Value $Maximum -OriginalUnit $IcingaThresholds.OriginalUnit))
-            );
-        }
-
-        if ($IcingaThresholds.Unit -eq '%') {
-            $IcingaThresholds.RawThreshold = [string]::Format(
-                '{0}% ({2}) {1}% ({3})',
-                (ConvertFrom-Percent -Value $BaseValue -Percent $Minium),
-                (ConvertFrom-Percent -Value $BaseValue -Percent $Maximum),
-                (Convert-IcingaPluginValueToString -Unit $Unit -Value $Minium -OriginalUnit $IcingaThresholds.OriginalUnit),
-                (Convert-IcingaPluginValueToString -Unit $Unit -Value $Maximum -OriginalUnit $IcingaThresholds.OriginalUnit)
-            );
-            $IcingaThresholds.PercentValue = [string]::Format(
-                '@{0}:{1}',
-                (ConvertFrom-Percent -Value $BaseValue -Percent $Minium),
-                (ConvertFrom-Percent -Value $BaseValue -Percent $Maximum)
-            );
-        }
-    } elseif ($IsLowerEqual) {
-        if ($InputValue -le $ThresholdValue) {
-            $IcingaThresholds.InRange = $FALSE;
-            $IcingaThresholds.Message = 'is lower equal than threshold';
-            $IcingaThresholds.Range   = [string]::Format(
-                '{0}',
-                (ConvertTo-IcingaPluginOutputTranslation -Translation $Translation -Value (Convert-IcingaPluginValueToString -Unit $IcingaThresholds.Unit -Value $ThresholdValue -OriginalUnit $IcingaThresholds.OriginalUnit))
-            );
-        }
-
-        if ($IcingaThresholds.Unit -eq '%') {
-            $IcingaThresholds.RawThreshold = [string]::Format(
-                '{0}% ({1})',
-                (ConvertFrom-Percent -Value $BaseValue -Percent $ThresholdValue),
-                (Convert-IcingaPluginValueToString -Unit $Unit -Value $ThresholdValue -OriginalUnit $IcingaThresholds.OriginalUnit)
-            );
-            $IcingaThresholds.PercentValue = [string]::Format(
-                '{0}:',
-                (ConvertFrom-Percent -Value $BaseValue -Percent $ThresholdValue)
-            );
-        }
-    } elseif ($IsGreaterEqual) {
-        if ($InputValue -ge $ThresholdValue) {
-            $IcingaThresholds.InRange = $FALSE;
-            $IcingaThresholds.Message = 'is greater equal than threshold';
-            $IcingaThresholds.Range   = [string]::Format(
-                '{0}',
-                (ConvertTo-IcingaPluginOutputTranslation -Translation $Translation -Value (Convert-IcingaPluginValueToString -Unit $IcingaThresholds.Unit -Value $ThresholdValue -OriginalUnit $IcingaThresholds.OriginalUnit))
-            );
-        }
-
-        if ($IcingaThresholds.Unit -eq '%') {
-            $IcingaThresholds.RawThreshold = [string]::Format(
-                '{0}% ({1})',
-                (ConvertFrom-Percent -Value $BaseValue -Percent $ThresholdValue),
-                (Convert-IcingaPluginValueToString -Unit $Unit -Value $ThresholdValue -OriginalUnit $IcingaThresholds.OriginalUnit)
-            );
-
-            $IcingaThresholds.PercentValue = [string]::Format(
-                '~:{0}',
-                (ConvertFrom-Percent -Value $BaseValue -Percent $ThresholdValue)
-            );
-        }
-    } else {
-        if ((Test-Numeric $ThresholdValue)) {
-            if ($InputValue -gt $ThresholdValue -Or $InputValue -lt 0) {
-                $IcingaThresholds.InRange = $FALSE;
-                $IcingaThresholds.Message = 'is greater than threshold';
-                $IcingaThresholds.Range   = [string]::Format('{0}', (Convert-IcingaPluginValueToString -Unit $Unit -Value $ThresholdValue -OriginalUnit $IcingaThresholds.OriginalUnit));
-            }
-
-            $IcingaThresholds.CompareValue = [decimal]$ThresholdValue;
-
-            if ($IcingaThresholds.Unit -eq '%') {
-                $IcingaThresholds.RawThreshold = [string]::Format('{0}% ({1})', $ThresholdValue, (Convert-IcingaPluginValueToString -Unit $Unit -Value (ConvertFrom-Percent -Value $BaseValue -Percent $ThresholdValue) -OriginalUnit $IcingaThresholds.OriginalUnit));
-
-                $IcingaThresholds.PercentValue = [string]::Format(
-                    '{0}',
-                    (ConvertFrom-Percent -Value $BaseValue -Percent $ThresholdValue)
-                );
-            }
-        } else {
-            # Transform our provided thresholds to split everything into single objects
-            [array]$thresholds = $ThresholdValue.Split(':');
-            [string]$rangeMin  = $thresholds[0];
-            [string]$rangeMax  = $thresholds[1];
-            [bool]$IsNegating  = $rangeMin.Contains('@');
-            [string]$rangeMin  = $rangeMin.Replace('@', '');
-
-            if ((Test-Numeric ($rangeMin.Replace('@', '').Replace('~', '')))) {
-                $IcingaThresholds.MinRangeValue = [decimal]($rangeMin.Replace('@', '').Replace('~', ''));
-                [decimal]$rangeMin = [decimal]$rangeMin;
-            }
-            if ((Test-Numeric $rangeMax)) {
-                $IcingaThresholds.MaxRangeValue = [decimal]$rangeMax;
-                [decimal]$rangeMax = [decimal]$rangeMax;
-            }
-
-            if ($IsNegating -eq $FALSE -And (Test-Numeric $rangeMin) -And (Test-Numeric $rangeMax)) {
-                # Handles:  30:40
-                # Error on: < 30 or > 40
-                # Ok on:    between {30 .. 40}
-
-                if ($InputValue -lt $rangeMin -Or $InputValue -gt $rangeMax) {
-                    $IcingaThresholds.InRange = $FALSE;
-                    $IcingaThresholds.Message = 'is outside range';
-                    $IcingaThresholds.Range   = [string]::Format(
-                        '{0} and {1}',
-                        (ConvertTo-IcingaPluginOutputTranslation -Translation $Translation -Value (Convert-IcingaPluginValueToString -Unit $IcingaThresholds.Unit -Value $rangeMin -OriginalUnit $IcingaThresholds.OriginalUnit)),
-                        (ConvertTo-IcingaPluginOutputTranslation -Translation $Translation -Value (Convert-IcingaPluginValueToString -Unit $IcingaThresholds.Unit -Value $rangeMax -OriginalUnit $IcingaThresholds.OriginalUnit))
-                    );
-                }
-
-                if ($IcingaThresholds.Unit -eq '%') {
-                    $IcingaThresholds.RawThreshold = [string]::Format(
-                        '{0}% ({2}) and {1}% ({3})',
-                        $rangeMin,
-                        $rangeMax,
-                        (Convert-IcingaPluginValueToString -Unit $Unit -Value (ConvertFrom-Percent -Value $BaseValue -Percent $rangeMin -OriginalUnit $IcingaThresholds.OriginalUnit)),
-                        (Convert-IcingaPluginValueToString -Unit $Unit -Value (ConvertFrom-Percent -Value $BaseValue -Percent $rangeMax -OriginalUnit $IcingaThresholds.OriginalUnit))
-                    );
-
-                    $IcingaThresholds.PercentValue = [string]::Format(
-                        '{0}:{1}',
-                        (ConvertFrom-Percent -Value $BaseValue -Percent $rangeMin),
-                        (ConvertFrom-Percent -Value $BaseValue -Percent $rangeMax)
-                    );
-                }
-            } elseif ((Test-Numeric $rangeMin) -And [string]::IsNullOrEmpty($rangeMax) -eq $TRUE) {
-                # Handles:  20:
-                # Error on: 20:
-                # Ok on:    between 20 .. ∞
-
-                if ($InputValue -lt $rangeMin) {
-                    $IcingaThresholds.InRange = $FALSE;
-                    $IcingaThresholds.Message = 'is lower than threshold';
-                    $IcingaThresholds.Range   = [string]::Format(
-                        '{0}',
-                        (ConvertTo-IcingaPluginOutputTranslation -Translation $Translation -Value (Convert-IcingaPluginValueToString -Unit $IcingaThresholds.Unit -Value $rangeMin -OriginalUnit $IcingaThresholds.OriginalUnit))
-                    );
-                }
-
-                if ($IcingaThresholds.Unit -eq '%') {
-                    $IcingaThresholds.RawThreshold = [string]::Format(
-                        '{0}% ({1})',
-                        $rangeMin,
-                        (Convert-IcingaPluginValueToString -Unit $Unit -Value (ConvertFrom-Percent -Value $BaseValue -Percent $rangeMin -OriginalUnit $IcingaThresholds.OriginalUnit))
-                    );
-
-                    $IcingaThresholds.PercentValue = [string]::Format(
-                        '{0}:',
-                        (ConvertFrom-Percent -Value $BaseValue -Percent $rangeMin)
-                    );
-                }
-            } elseif ($rangeMin -eq '~' -And (Test-Numeric $rangeMax)) {
-                # Handles:  ~:20
-                # Error on: > 20
-                # Ok on:    between -∞ .. 20
-
-                if ($InputValue -gt $rangeMax) {
-                    $IcingaThresholds.InRange = $FALSE;
-                    $IcingaThresholds.Message = 'is greater than threshold';
-                    $IcingaThresholds.Range   = [string]::Format(
-                        '{0}',
-                        (ConvertTo-IcingaPluginOutputTranslation -Translation $Translation -Value (Convert-IcingaPluginValueToString -Unit $IcingaThresholds.Unit -Value $rangeMax -OriginalUnit $IcingaThresholds.OriginalUnit))
-                    );
-                }
-
-                if ($IcingaThresholds.Unit -eq '%') {
-                    $IcingaThresholds.RawThreshold = [string]::Format(
-                        '{0}% ({1})',
-                        $rangeMax,
-                        (Convert-IcingaPluginValueToString -Unit $Unit -Value (ConvertFrom-Percent -Value $BaseValue -Percent $rangeMax -OriginalUnit $IcingaThresholds.OriginalUnit))
-                    );
-
-                    $IcingaThresholds.PercentValue = [string]::Format(
-                        '~:{0}',
-                        (ConvertFrom-Percent -Value $BaseValue -Percent $rangeMax)
-                    );
-                }
-            } elseif ($IsNegating -And (Test-Numeric $rangeMin) -And (Test-Numeric $rangeMax)) {
-                # Handles:  @30:40
-                # Error on: ≥ 30 and ≤ 40
-                # Ok on:    -∞ .. 29 and 41 .. ∞
-
-                if ($InputValue -ge $rangeMin -And $InputValue -le $rangeMax) {
-                    $IcingaThresholds.InRange = $FALSE;
-                    $IcingaThresholds.Message = 'is inside range';
-                    $IcingaThresholds.Range   = [string]::Format(
-                        '{0} and {1}',
-                        (ConvertTo-IcingaPluginOutputTranslation -Translation $Translation -Value (Convert-IcingaPluginValueToString -Unit $IcingaThresholds.Unit -Value $rangeMin -OriginalUnit $IcingaThresholds.OriginalUnit)),
-                        (ConvertTo-IcingaPluginOutputTranslation -Translation $Translation -Value (Convert-IcingaPluginValueToString -Unit $IcingaThresholds.Unit -Value $rangeMax -OriginalUnit $IcingaThresholds.OriginalUnit))
-                    );
-                }
-
-                if ($IcingaThresholds.Unit -eq '%') {
-                    $IcingaThresholds.RawThreshold = [string]::Format(
-                        '{0}% ({2}) {1}% ({3})',
-                        $rangeMin,
-                        $rangeMax,
-                        (Convert-IcingaPluginValueToString -Unit $Unit -Value (ConvertFrom-Percent -Value $BaseValue -Percent $rangeMin -OriginalUnit $IcingaThresholds.OriginalUnit)),
-                        (Convert-IcingaPluginValueToString -Unit $Unit -Value (ConvertFrom-Percent -Value $BaseValue -Percent $rangeMax -OriginalUnit $IcingaThresholds.OriginalUnit))
-                    );
-
-                    $IcingaThresholds.PercentValue = [string]::Format(
-                        '@{0}:{1}',
-                        (ConvertFrom-Percent -Value $BaseValue -Percent $rangeMin),
-                        (ConvertFrom-Percent -Value $BaseValue -Percent $rangeMax)
-                    );
-                }
-            } else {
-                if ([string]::IsNullOrEmpty($Threshold) -eq $FALSE) {
-                    # Unhandled
-                    $IcingaThresholds.ErrorMessage = [string]::Format(
-                        'Invalid range specified for threshold: InputValue "{0}" and Threshold {1}',
-                        $InputValue,
-                        $Threshold
-                    );
-                    $IcingaThresholds.HasError = $TRUE;
-
-                    return $IcingaThresholds;
-                }
-            }
-        }
-    }
-
-    $PluginOutputMessage = New-Object -TypeName 'System.Text.StringBuilder';
-
-    [string]$PluginCurrentValue = [string]::Format(
-        '{0}',
-        (ConvertTo-IcingaPluginOutputTranslation -Translation $Translation -Value (Convert-IcingaPluginValueToString -Unit $IcingaThresholds.Unit -Value $IcingaThresholds.Value -OriginalUnit $IcingaThresholds.OriginalUnit))
-    );
-
-    [string]$PluginThresholdValue = $IcingaThresholds.Range;
-
-    if ($UseDynamicPercentage -And $Unit -ne '%') {
-        $IcingaThresholds.IcingaThreshold = $IcingaThresholds.PercentValue;
-        $PluginCurrentValue       = [string]::Format('{0}% ({1})', ([string]([math]::Round($IcingaThresholds.Value, 2))).Replace(',', '.'), (Convert-IcingaPluginValueToString -Unit $Unit -Value $IcingaThresholds.RawValue -OriginalUnit $IcingaThresholds.OriginalUnit));
-        $PluginThresholdValue     = $IcingaThresholds.RawThreshold;
-    }
-
-    $IcingaThresholds.HeaderValue = $PluginCurrentValue;
-    $PluginOutputMessage.Append($PluginCurrentValue) | Out-Null;
-
-    if ([string]::IsNullOrEmpty($IcingaThresholds.Message) -eq $FALSE) {
-        $PluginOutputMessage.Append(' ') | Out-Null;
-        $PluginOutputMessage.Append($IcingaThresholds.Message.Replace(',', '.')) | Out-Null;
-
-        if ([string]::IsNullOrEmpty($PluginThresholdValue) -eq $FALSE) {
-            $PluginOutputMessage.Append(' ') | Out-Null;
-            $PluginOutputMessage.Append(([string]$PluginThresholdValue).Replace(',', '.')) | Out-Null;
-        }
-    }
-
-    # Lets build our full message for adding on the value
-    $IcingaThresholds.FullMessage = $PluginOutputMessage.ToString();
-
-    return $IcingaThresholds;
+    return $null;
 }

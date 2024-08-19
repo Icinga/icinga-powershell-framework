@@ -88,7 +88,7 @@ function Invoke-IcingaInternalServiceCall()
     $IcingaCR = ($IcingaResult.$Command.checkresult.Replace("`r`n", "`n"));
 
     if ($IcingaResult.$Command.perfdata.Count -ne 0) {
-        $IcingaCR = [string]::Format('{0}{1}| {2}', $IcingaCR, "`r`n", ([string]::Join(' ', $IcingaResult.$Command.perfdata)));
+        $IcingaCR = [string]::Format('{0}{1}| {2}', $IcingaCR, "`r`n", ([string]::Join('', $IcingaResult.$Command.perfdata)));
     }
 
     if ($NoExit) {

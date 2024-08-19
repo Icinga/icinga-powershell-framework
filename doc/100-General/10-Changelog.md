@@ -7,9 +7,13 @@ documentation before upgrading to a new release.
 
 Released closed milestones can be found on [GitHub](https://github.com/Icinga/icinga-powershell-framework/milestones?state=closed).
 
-## 1.13.0 (tbd)
+## 1.13.0 Beta-1 (2024-08-30)
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/32)
+
+### Notes
+
+This beta release has reworked the entire handling on how thresholds and the checker core operate. For that reason, the `Beta-1` release will **not** include the `Metrics over Time` feature. The goal of this beta is to get an idea if the threshold handling is working as expected and evaluate the performance gains for the new check handling. The `Metrics over Time` feature will be re-implemented with an entire new background task and configurations in `Beta-2`.
 
 ### Bugfixes
 
@@ -27,6 +31,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#739](https://github.com/Icinga/icinga-powershell-framework/pull/739) Adds support to check the encoding of files to ensure we can properly load them and throw errors for unsupported encoding
 * [#740](https://github.com/Icinga/icinga-powershell-framework/pull/740) Adds new command `Invoke-IcingaForWindowsRESTApi` for easier API communication
 * [#742](https://github.com/Icinga/icinga-powershell-framework/pull/742) Adds support for the CPU provider to limit the CPU usage to 100% for each thread
+* [#750](https://github.com/Icinga/icinga-powershell-framework/pull/750) Reworks the internal handling on how plugin thresholds are evaluated and the internal checker core, including on how performance metrics are generated
 
 ## 1.12.3 (2024-04-24)
 

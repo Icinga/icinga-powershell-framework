@@ -1,14 +1,14 @@
 function Write-IcingaPluginResult()
 {
     param (
-        [string]$PluginOutput  = '',
-        [array]$PluginPerfData = @()
+        [string]$PluginOutput   = '',
+        [string]$PluginPerfData = ''
     );
 
     [string]$CheckResult = $PluginOutput;
 
-    if ($PluginPerfData.Count -ne 0) {
-        $CheckResult = [string]::Format('{0}{1}| {2}', $CheckResult, "`r`n", ([string]::Join(' ', $PluginPerfData)));
+    if ([string]::IsNullOrEmpty($PluginPerfData) -eq $FALSE) {
+        $CheckResult = [string]::Format('{0}{1}| {2}', $CheckResult, "`r`n", $PluginPerfData);
     }
 
     Write-IcingaConsolePlain $CheckResult;

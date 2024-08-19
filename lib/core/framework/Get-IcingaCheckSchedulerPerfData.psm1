@@ -10,15 +10,19 @@
     Returns the last performance data output for executed plugins while the
     Framework is running as daemon
 .OUTPUTS
-    System.Object
+    System.String
 .LINK
     https://github.com/Icinga/icinga-powershell-framework
 #>
 
 function Get-IcingaCheckSchedulerPerfData()
 {
-    $PerfData                                               = $Global:Icinga.Private.Scheduler.PerformanceData;
-    [array]$Global:Icinga.Private.Scheduler.PerformanceData = @();
+    [string]$PerfData                                        = $Global:Icinga.Private.Scheduler.PerformanceData;
+    [string]$Global:Icinga.Private.Scheduler.PerformanceData = '';
+
+    # Ensure we clear our PerfDataWriter cache and storage to have a clean base state for the next plugin execution
+    $Global:Icinga.Private.Scheduler.PerfDataWriter.Cache.Clear() | Out-Null;
+    $Global:Icinga.Private.Scheduler.PerfDataWriter.Storage.Clear() | Out-Null;
 
     return $PerfData;
 }
