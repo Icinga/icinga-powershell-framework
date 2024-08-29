@@ -333,33 +333,6 @@ function New-IcingaCheckPackage()
         return '';
     }
 
-    # Override default behaviour from shared function
-    $IcingaCheckPackage | Add-Member -MemberType ScriptMethod -Force -Name '__GetPerformanceData' -Value {
-        [string]$perfData             = '';
-        [hashtable]$CollectedPerfData = @{ };
-
-        # At first lets collect all perf data, but ensure we only add possible label duplication only once
-        foreach ($check in $this.__Checks) {
-            $data = $check.__GetPerformanceData();
-
-            if ($null -eq $data -Or $null -eq $data.label) {
-                continue;
-            }
-
-            if ($CollectedPerfData.ContainsKey($data.label)) {
-                continue;
-            }
-
-            $CollectedPerfData.Add($data.label, $data);
-        }
-
-        return @{
-            'label'    = $this.Name;
-            'perfdata' = $CollectedPerfData;
-            'package'  = $TRUE;
-        }
-    }
-
     # __GetTimeSpanThreshold(0, 'Core_30_20', 'Core_30')
     $IcingaCheckPackage | Add-Member -MemberType ScriptMethod -Force -Name '__GetTimeSpanThreshold' -Value {
         param ($TimeSpanLabel, $Label, $MultiOutput);

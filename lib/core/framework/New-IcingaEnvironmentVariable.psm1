@@ -40,9 +40,13 @@ function New-IcingaEnvironmentVariable()
                 'CheckData'       = @{ };
                 'ThresholdCache'  = @{ };
                 'CheckResults'    = @();
-                'PerformanceData' = @();
+                'PerformanceData' = '';
                 'PluginException' = $null;
                 'ExitCode'        = $null;
+                'PerfDataWriter'  = @{
+                    'Cache'   = @{};
+                    'Storage' = (New-Object System.Text.StringBuilder);
+                }
             }
         );
 

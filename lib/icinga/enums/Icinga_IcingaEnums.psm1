@@ -25,6 +25,18 @@
     3 = 'Magenta';
 };
 
+[hashtable]$IcingaThresholdMethod = @{
+    Default      = 0; # 20
+    Lower        = 1; # 20:
+    LowerEqual   = 2;
+    Greater      = 3; # ~:20
+    GreaterEqual = 4;
+    Between      = 5; # 30:40
+    Outside      = 6; # @20:30
+    Matches      = 7;
+    NotMatches   = 8;
+};
+
 [hashtable]$IcingaMeasurementUnits = @{
     's'    = 'seconds';
     'ms'   = 'milliseconds';
@@ -79,6 +91,7 @@ if ($null -eq $IcingaEnums) {
     [hashtable]$IcingaEnums = @{
         IcingaExitCode         = $IcingaExitCode;
         IcingaExitCodeText     = $IcingaExitCodeText;
+        IcingaThresholdMethod  = $IcingaThresholdMethod;
         IcingaExitCodeColor    = $IcingaExitCodeColor;
         IcingaMeasurementUnits = $IcingaMeasurementUnits;
         #services

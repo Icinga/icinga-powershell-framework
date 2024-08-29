@@ -4,7 +4,6 @@ function New-IcingaCheckBaseObject()
 
     $IcingaCheckBaseObject | Add-Member -MemberType NoteProperty -Name 'Name'             -Value '';
     $IcingaCheckBaseObject | Add-Member -MemberType NoteProperty -Name 'Verbose'          -Value 0;
-    $IcingaCheckBaseObject | Add-Member -MemberType NoteProperty -Name '__CheckPerfData'  -Value @{ };
     $IcingaCheckBaseObject | Add-Member -MemberType NoteProperty -Name '__Hidden'         -Value $FALSE;
     $IcingaCheckBaseObject | Add-Member -MemberType NoteProperty -Name '__SkipSummary'    -Value $FALSE;
     $IcingaCheckBaseObject | Add-Member -MemberType NoteProperty -Name '__Parent'         -Value $IcingaCheckBaseObject;
@@ -181,10 +180,6 @@ function New-IcingaCheckBaseObject()
 
         # For any other verbosity, print everything
         return $TRUE;
-    }
-
-    $IcingaCheckBaseObject | Add-Member -MemberType ScriptMethod -Name '__GetPerformanceData' -Value {
-        return $this.__CheckPerfData;
     }
 
     $IcingaCheckBaseObject | Add-Member -MemberType ScriptMethod -Name '__ValidateThresholdInput' -Value {
