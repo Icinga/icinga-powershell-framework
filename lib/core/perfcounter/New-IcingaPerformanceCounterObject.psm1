@@ -82,6 +82,7 @@ function New-IcingaPerformanceCounterObject()
         # Initialise the counter
         try {
             $this.PerfCounter.NextValue() | Out-Null;
+            $this.PerfCounter.NextSample() | Out-Null;
         } catch {
             # Nothing to do here, will be handled later
         }
@@ -110,17 +111,23 @@ function New-IcingaPerformanceCounterObject()
     $pc_instance | Add-Member -MemberType ScriptMethod -Name 'Value' -Value {
         [hashtable]$CounterData = @{ };
 
+        $CounterValue = $this.PerfCounter.NextValue();
+
+        if ($null -eq $CounterValue) {
+            $CounterValue = 0;
+        }
+
         try {
             [string]$CounterType = $this.PerfCounter.CounterType;
-            $CounterData.Add('value', ([math]::Round([decimal]$this.PerfCounter.NextValue(), 6)));
+            $CounterData.Add('value', ([math]::Round([decimal]$CounterValue, 6)));
             $CounterData.Add('sample', $this.PerfCounter.NextSample());
             $CounterData.Add('help', $this.PerfCounter.CounterHelp);
             $CounterData.Add('type', $CounterType);
             $CounterData.Add('error', $null);
         } catch {
             $CounterData = @{ };
-            $CounterData.Add('value', $null);
-            $CounterData.Add('sample', $null);
+            $CounterData.Add('value', 0); # Set the value to 0 in case of an error
+            $CounterData.Add('sample', 0);
             $CounterData.Add('help', $null);
             $CounterData.Add('type', $null);
             $CounterData.Add('error', $_.Exception.Message);
