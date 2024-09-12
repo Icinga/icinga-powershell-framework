@@ -23,6 +23,13 @@ function Write-IcingaAgentEventLogConfig()
         [string]$Severity = 'information'
     );
 
+    [string]$FilePath = (Join-Path -Path (Get-IcingaAgentConfigDirectory) -ChildPath 'features-available\windowseventlog.conf');
+
+    if ((Test-Path -Path $FilePath) -eq $FALSE) {
+        Write-IcingaConsoleNotice 'Windows Eventlog configuration for the Icinga Agent was not written. Either the Icinga Agent is not installed or your installed version does not support this feature';
+        return;
+    }
+
     $EventLogConf = New-Object System.Text.StringBuilder;
 
     $EventLogConf.AppendLine('/**') | Out-Null;
@@ -33,6 +40,6 @@ function Write-IcingaAgentEventLogConfig()
     $EventLogConf.AppendLine([string]::Format('    severity = "{0}"', $Severity)) | Out-Null;
     $EventLogConf.Append('}') | Out-Null;
 
-    Write-IcingaFileSecure -File (Join-Path -Path (Get-IcingaAgentConfigDirectory) -ChildPath 'features-available\windowseventlog.conf') -Value $EventLogConf.ToString();
+    Write-IcingaFileSecure -File $FilePath -Value $EventLogConf.ToString();
     Write-IcingaConsoleNotice 'Windows Eventlog configuration has been written successfully to use severity level: {0} - Please restart the Icinga Agent to apply this change' -Objects $Severity;
 }
