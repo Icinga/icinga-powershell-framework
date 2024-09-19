@@ -1,4 +1,4 @@
-function Stop-IcingaWindowsService()
+function Stop-IcingaForWindows()
 {
     [string]$JeaPid = Get-IcingaJEAServicePid;
 
@@ -8,3 +8,5 @@ function Stop-IcingaWindowsService()
         Stop-Process -Id $JeaPid -Force;
     }
 }
+
+Set-Alias -Name 'Stop-IcingaWindowsService' -Value 'Stop-IcingaForWindows';

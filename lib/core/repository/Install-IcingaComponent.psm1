@@ -163,7 +163,7 @@ function Install-IcingaComponent()
 
                 if ($ServiceStatus -eq 'Running') {
                     Write-IcingaConsoleNotice 'Stopping Icinga for Windows service';
-                    Stop-IcingaWindowsService;
+                    Stop-IcingaForWindows;
                     Start-Sleep -Seconds 1;
                 }
                 if ($AgentStatus -eq 'Running') {

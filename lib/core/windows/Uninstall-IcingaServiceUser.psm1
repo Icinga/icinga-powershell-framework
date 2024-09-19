@@ -12,7 +12,7 @@ function Uninstall-IcingaServiceUser()
     Write-IcingaConsoleNotice 'Uninstalling user "{0}"' -Objects $IcingaUser;
 
     Stop-IcingaService 'icinga2';
-    Stop-IcingaWindowsService;
+    Stop-IcingaForWindows;
 
     Set-IcingaPowerShellConfig -Path 'Framework.Icinga.ServiceUser' -Value '';
 
