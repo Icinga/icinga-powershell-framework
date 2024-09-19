@@ -9,6 +9,8 @@ function Restart-IcingaForWindows()
     }
 
     Restart-IcingaService -Service 'icingapowershell';
+    # Update the process priority after each restart
+    Start-IcingaWindowsScheduledTaskProcessPriority;
 }
 
 Set-Alias -Name 'Restart-IcingaWindowsService' -Value 'Restart-IcingaForWindows';
