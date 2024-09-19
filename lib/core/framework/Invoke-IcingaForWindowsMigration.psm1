@@ -151,7 +151,18 @@ function Invoke-IcingaForWindowsMigration()
         Start-IcingaWindowsScheduledTaskRenewCertificate;
         # Ensure the Icinga Agent is not spamming the Application log by default
         Write-IcingaAgentEventLogConfig -Severity 'warning';
+        # Set our newly added process update task
+        Register-IcingaWindowsScheduledTaskProcessPriority -Force;
 
         Set-IcingaForWindowsMigration -MigrationVersion (New-IcingaVersionObject -Version '1.13.0');
+    }
+
+    if (Test-IcingaForWindowsMigration -MigrationVersion (New-IcingaVersionObject -Version '1.13.0.1')) {
+        Write-IcingaConsoleNotice 'Applying pending migrations required for Icinga for Windows v1.13.0.1';
+
+        # Set our newly added process update task
+        Register-IcingaWindowsScheduledTaskProcessPriority -Force;
+
+        Set-IcingaForWindowsMigration -MigrationVersion (New-IcingaVersionObject -Version '1.13.0.1');
     }
 }

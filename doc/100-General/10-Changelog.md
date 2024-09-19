@@ -18,6 +18,8 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 ### Enhancements
 
+* [#756](https://github.com/Icinga/icinga-powershell-framework/pull/756) Adds feature to set process priority for Icinga for Windows to BelowNormal for improved Host performance
+
 ## 1.13.0 Beta-1 (2024-08-30)
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/32)
