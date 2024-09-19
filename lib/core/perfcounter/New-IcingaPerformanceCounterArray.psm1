@@ -42,9 +42,11 @@ function New-IcingaPerformanceCounterArray()
         # pre-caching / configuration handler
         $CachedCounter = Get-IcingaPerformanceCounterCacheItem -Counter $Counter;
 
-        if ($null -ne $CachedCounter) {
-            $RequireSleep = $FALSE;
-        }
+        # Remove this for now to ensure our CPU metrics will not be cached
+        # and represent correct values, not exceeding 200% and beyond
+        #if ($null -ne $CachedCounter) {
+        #    $RequireSleep = $FALSE;
+        #}
 
         $obj = New-IcingaPerformanceCounter -Counter $counter -SkipWait $TRUE;
         if ($CounterResult.ContainsKey($obj.Name()) -eq $FALSE) {

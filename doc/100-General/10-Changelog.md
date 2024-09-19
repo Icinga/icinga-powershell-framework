@@ -14,6 +14,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 ### Bugfixes
 
 * [#752](https://github.com/Icinga/icinga-powershell-framework/pull/752) Fixes an exception for the windowseventlog feature of the Icinga Agent, in case it is not installed.
+* [#755](https://github.com/Icinga/icinga-powershell-framework/pull/755) Fixes CPU and other performance data metrics to report proper values
 
 ### Enhancements
 
