@@ -57,7 +57,7 @@ function Install-IcingaFrameworkUpdate()
 
     if ($ServiceStatus -eq 'Running') {
         Write-IcingaConsoleNotice 'Stopping Icinga PowerShell service';
-        Stop-IcingaWindowsService;
+        Stop-IcingaForWindows;
         Start-Sleep -Seconds 1;
     }
     if ($AgentStatus -eq 'Running') {

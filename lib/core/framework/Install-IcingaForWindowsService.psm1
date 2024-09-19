@@ -46,7 +46,7 @@ function Install-IcingaForWindowsService()
 
         if ($IfWService.Status -eq 'Running') {
             Write-IcingaConsoleNotice 'Stopping Icinga PowerShell service';
-            Stop-IcingaWindowsService;
+            Stop-IcingaForWindows;
             Start-Sleep -Seconds 1;
         }
 
@@ -93,7 +93,7 @@ function Install-IcingaForWindowsService()
     Set-IcingaServiceUser -User 'LocalSystem' -Service 'icingapowershell' | Out-Null;
     Restart-IcingaForWindows;
     Start-Sleep -Seconds 1;
-    Stop-IcingaWindowsService;
+    Stop-IcingaForWindows;
     Start-Sleep -Seconds 1;
 
     if ($IfWService.Status -eq 'Running') {
