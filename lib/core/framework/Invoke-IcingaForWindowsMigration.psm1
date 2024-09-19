@@ -17,7 +17,7 @@ function Invoke-IcingaForWindowsMigration()
 
         Write-IcingaConsoleNotice 'Applying pending migrations required for Icinga for Windows v1.8.0';
         if ($ServiceStatus -eq 'Running') {
-            Stop-IcingaWindowsService;
+            Stop-IcingaForWindows;
         }
 
         $ApiChecks = Get-IcingaPowerShellConfig -Path 'Framework.Experimental.UseApiChecks';
@@ -46,7 +46,7 @@ function Invoke-IcingaForWindowsMigration()
         $ServiceStatus = (Get-Service 'icingapowershell' -ErrorAction SilentlyContinue).Status;
 
         if ($ServiceStatus -eq 'Running') {
-            Stop-IcingaWindowsService;
+            Stop-IcingaForWindows;
         }
 
         # Convert the time intervals for the background daemon services from the previous index handling

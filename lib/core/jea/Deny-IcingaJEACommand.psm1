@@ -65,7 +65,7 @@ function Deny-IcingaJEACommand()
             'Restart-IcingaForWindows'.ToLower() {
                 return $TRUE;
             };
-            'Stop-IcingaWindowsService'.ToLower() {
+            'Stop-IcingaForWindows'.ToLower() {
                 return $TRUE;
             };
             'Stop-IcingaService'.ToLower() {
