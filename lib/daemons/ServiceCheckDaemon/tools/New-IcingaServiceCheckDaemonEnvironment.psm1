@@ -47,7 +47,7 @@ function New-IcingaServiceCheckDaemonEnvironment()
         }
     }
 
-    $Global:Icinga.Private.Daemons.ServiceCheck.MaxTimeInSeconds = $Global:Icinga.Private.Daemons.ServiceCheck.MaxTime * 60;
+    $Global:Icinga.Private.Daemons.ServiceCheck.MaxTimeInSeconds = $Global:Icinga.Private.Daemons.ServiceCheck.MaxTime;
 
     if ($Global:Icinga.Private.Scheduler.CheckData.ContainsKey($CheckCommand) -eq $FALSE) {
         $Global:Icinga.Private.Scheduler.CheckData.Add(
