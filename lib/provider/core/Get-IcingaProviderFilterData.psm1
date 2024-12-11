@@ -2,7 +2,7 @@ function Get-IcingaProviderFilterData()
 {
     param (
         [string]$ProviderName      = '',
-        [hashtable]$ProviderFilter = @()
+        [hashtable]$ProviderFilter = @{ }
     );
 
     [hashtable]$FilterResult = @{ };

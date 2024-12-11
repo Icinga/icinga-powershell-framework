@@ -3,7 +3,7 @@ function Get-IcingaProviderDataValuesCpu()
     param (
         [array]$IncludeFilter      = @(),
         [array]$ExcludeFilter      = @(),
-        [hashtable]$ProviderFilter = @(),
+        [hashtable]$ProviderFilter = @{ },
         [switch]$IncludeDetails    = $FALSE
     );
 
