@@ -7,6 +7,12 @@ documentation before upgrading to a new release.
 
 Released closed milestones can be found on [GitHub](https://github.com/Icinga/icinga-powershell-framework/milestones?state=closed).
 
+## 1.13.0 (2025-01-30)
+
+### Bugfixes
+
+* [#759](https://github.com/Icinga/icinga-powershell-framework/pull/759) Fixes maximum cache duration for service daemons to the right value
+
 ## 1.13.0 Beta-2 (2024-09-19)
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/36)
