@@ -28,6 +28,10 @@ function New-IcingaCheckResult()
             Write-IcingaPluginPerfData -IcingaCheck $this.Check;
         }
 
+        # Clear our metrics over time cache, as we need to load them again for the next
+        # plugin execution
+        $Global:Icinga.Private.Scheduler.PerfDataWriter.MetricsOverTime = '';
+
         # Ensure we reset our internal cache once the plugin was executed
         $CheckCommand = $this.Check.__GetCheckCommand();
         if ([string]::IsNullOrEmpty($CheckCommand) -eq $FALSE -And $Global:Icinga.Private.Scheduler.ThresholdCache.ContainsKey($CheckCommand)) {

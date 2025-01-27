@@ -8,7 +8,7 @@ function New-IcingaServiceCheckDaemonEnvironment()
 
     if ($Global:Icinga.Public.Daemons.ServiceCheck.PerformanceDataCache.ContainsKey($CheckCommand) -eq $FALSE) {
         $Global:Icinga.Public.Daemons.ServiceCheck.PerformanceDataCache.Add(
-            $CheckCommand, @{ }
+            $CheckCommand, ''
         );
     }
 
