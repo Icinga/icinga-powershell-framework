@@ -12,6 +12,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 ### Bugfixes
 
 * [#759](https://github.com/Icinga/icinga-powershell-framework/pull/759) Fixes maximum cache duration for service daemons to the right value
+* [#773](https://github.com/Icinga/icinga-powershell-framework/pull/773) Fixes REST-Api invoke command `Invoke-IcingaForWindowsRESTApi` by removing CA certificate check
 
 ### Enhancements
 
