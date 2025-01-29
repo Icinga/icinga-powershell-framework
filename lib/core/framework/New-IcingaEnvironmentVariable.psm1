@@ -37,6 +37,7 @@ function New-IcingaEnvironmentVariable()
         $Global:Icinga.Private.Add(
             'Scheduler',
             @{
+                'CheckCommand'    = '';
                 'CheckData'       = @{ };
                 'ThresholdCache'  = @{ };
                 'CheckResults'    = @();
@@ -44,8 +45,10 @@ function New-IcingaEnvironmentVariable()
                 'PluginException' = $null;
                 'ExitCode'        = $null;
                 'PerfDataWriter'  = @{
-                    'Cache'   = @{};
-                    'Storage' = (New-Object System.Text.StringBuilder);
+                    'Cache'           = @{ };
+                    'Storage'         = (New-Object System.Text.StringBuilder);
+                    'Daemon'          = @{ };
+                    'MetricsOverTime' = '';
                 }
             }
         );

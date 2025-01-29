@@ -191,6 +191,23 @@ function New-IcingaCheck()
         return $this.__CriticalValue;
     }
 
+    $IcingaCheck | Add-Member -MemberType ScriptMethod -Name '__CreatePerfDataLabel' -Value {
+        $PerfDataTemplate = ($this.__CheckCommand.Replace('Invoke-IcingaCheck', ''));
+
+        if ([string]::IsNullOrEmpty($this.MetricTemplate) -eq $FALSE) {
+            $PerfDataTemplate = $this.MetricTemplate;
+        }
+
+        [string]$PerfDataName = [string]::Format(
+            '{0}::ifw_{1}::{2}',
+            $this.MetricIndex,
+            $PerfDataTemplate.ToLower(),
+            $this.MetricName
+        );
+
+        return $PerfDataName;
+    }
+
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Name '__SetPerformanceData' -Value {
         if ($null -eq $this.__ThresholdObject -Or $this.NoPerfData) {
             return;
@@ -230,18 +247,7 @@ function New-IcingaCheck()
             }
         }
 
-        $PerfDataTemplate = ($this.__CheckCommand.Replace('Invoke-IcingaCheck', ''));
-
-        if ([string]::IsNullOrEmpty($this.MetricTemplate) -eq $FALSE) {
-            $PerfDataTemplate = $this.MetricTemplate;
-        }
-
-        [string]$PerfDataName = [string]::Format(
-            '{0}::ifw_{1}::{2}',
-            $this.MetricIndex,
-            $PerfDataTemplate.ToLower(),
-            $this.MetricName
-        );
+        [string]$PerfDataName = $this.__CreatePerfDataLabel();
 
         # Ensure we only add a label with identical name once
         if ($Global:Icinga.Private.Scheduler.PerfDataWriter.Cache.ContainsKey($PerfDataName) -eq $FALSE) {
@@ -264,6 +270,23 @@ function New-IcingaCheck()
         # Add a space before adding another metric
         if ($Global:Icinga.Private.Scheduler.PerfDataWriter.Storage.Length -ne 0) {
             $Global:Icinga.Private.Scheduler.PerfDataWriter.Storage.Append(' ') | Out-Null;
+        }
+
+        # This is just to make sure the background daemon has data to work with and also ensure we don't increase
+        # memory in case we don't have the daemon running
+        if ($Global:Icinga.Private.Scheduler.PerfDataWriter.Daemon.ContainsKey($PerfDataName) -eq $FALSE) {
+            $Global:Icinga.Private.Scheduler.PerfDataWriter.Daemon.Add(
+                $PerfDataName,
+                @{
+                    'Value' = $value;
+                    'Unit'  = $this.__ThresholdObject.PerfUnit
+                }
+            );
+        } else {
+            $Global:Icinga.Private.Scheduler.PerfDataWriter.Daemon[$PerfDataName] = @{
+                'Value' = $value;
+                'Unit'  = $this.__ThresholdObject.PerfUnit
+            }
         }
 
         $Global:Icinga.Private.Scheduler.PerfDataWriter.Storage.Append($PerfDataLabel.ToLower()) | Out-Null;
@@ -463,7 +486,7 @@ function New-IcingaCheck()
             '-BaseValue'      = $this.BaseValue;
             '-Unit'           = $this.Unit;
             '-CheckName'      = $this.__GetName();
-            '-PerfDataLabel'  = $this.LabelName;
+            '-PerfDataLabel'  = $this.__CreatePerfDataLabel();
             '-ThresholdCache' = (Get-IcingaThresholdCache -CheckCommand $this.__CheckCommand);
             '-Translation'    = $this.Translation;
             '-TimeInterval'   = $this.__TimeInterval;

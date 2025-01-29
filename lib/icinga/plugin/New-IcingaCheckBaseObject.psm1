@@ -20,7 +20,8 @@ function New-IcingaCheckBaseObject()
         foreach ($entry in $CallStack) {
             [string]$CheckCommand = $entry.Command;
             if ($CheckCommand.ToLower() -Like 'invoke-icingacheck*') {
-                $this.__CheckCommand = $CheckCommand;
+                $this.__CheckCommand                          = $CheckCommand;
+                $Global:Icinga.Private.Scheduler.CheckCommand = $CheckCommand;
                 break;
             }
         }

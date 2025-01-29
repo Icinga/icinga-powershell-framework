@@ -17,7 +17,14 @@ function Add-IcingaServiceCheckTask()
     # Read our check result store data from disk for this service check
     Read-IcingaCheckResultStore -CheckCommand $CheckCommand;
 
-    [int]$CheckInterval   = ConvertTo-Seconds $Interval;
+    $MetricCacheFile           = Join-Path -Path (Join-Path -Path (Join-Path -Path (Get-IcingaCacheDir) -ChildPath 'service_check_cache') -ChildPath 'metrics') -ChildPath ([string]::Format('{0}.xml', $CheckCommand));
+    [int]$CheckInterval        = ConvertTo-Seconds $Interval;
+    [hashtable]$CheckDataCache = @{ };
+    [array]$PerfDataEntries    = @();
+
+    if (Test-Path -Path $MetricCacheFile) {
+        $CheckDataCache = [System.Management.Automation.PSSerializer]::Deserialize((Get-Content -Path $MetricCacheFile -Raw -Encoding UTF8));
+    }
 
     while ($TRUE) {
         if ($Global:Icinga.Private.Daemons.ServiceCheck.PassedTime -lt $CheckInterval) {
@@ -28,6 +35,9 @@ function Add-IcingaServiceCheckTask()
         }
 
         $Global:Icinga.Private.Daemons.ServiceCheck.PassedTime = 0;
+
+        # Clear possible previous performance data from the daemon cache
+        $Global:Icinga.Private.Scheduler.PerfDataWriter.Daemon.Clear();
 
         # Execute our check with possible arguments
         try {
@@ -45,93 +55,79 @@ function Add-IcingaServiceCheckTask()
 
         $UnixTime = Get-IcingaUnixTime;
 
-        try {
-            foreach ($result in $global:Icinga.Private.Scheduler.CheckData[$CheckCommand]['results'].Keys) {
-                [string]$HashIndex                                       = $result;
-                $Global:Icinga.Private.Daemons.ServiceCheck.SortedResult = $global:Icinga.Private.Scheduler.CheckData[$CheckCommand]['results'][$HashIndex].GetEnumerator() | Sort-Object name -Descending;
+        foreach ($PerfLabel in $Global:Icinga.Private.Scheduler.PerfDataWriter.Daemon.Keys) {
+            $PerfValue = $Global:Icinga.Private.Scheduler.PerfDataWriter.Daemon[$PerfLabel].Value;
+            $PerfUnit  = $Global:Icinga.Private.Scheduler.PerfDataWriter.Daemon[$PerfLabel].Unit;
 
-                Add-IcingaHashtableItem `
-                    -Hashtable $Global:Icinga.Private.Daemons.ServiceCheck.PerformanceCache `
-                    -Key $HashIndex `
-                    -Value @{ } | Out-Null;
+            if ($CheckDataCache.ContainsKey($PerfLabel) -eq $FALSE) {
+                $CheckDataCache.Add($PerfLabel, (New-Object System.Collections.ArrayList));
+            }
 
-                foreach ($timeEntry in $Global:Icinga.Private.Daemons.ServiceCheck.SortedResult) {
+            $CheckDataCache[$PerfLabel].Add(
+                @{
+                    'Time'  = $UnixTime;
+                    'Value' = $PerfValue;
+                    'Unit'  = $PerfUnit;
+                }
+            ) | Out-Null;
 
-                    if ((Test-Numeric $timeEntry.Value) -eq $FALSE) {
-                        continue;
-                    }
-
-                    foreach ($calc in $Global:Icinga.Private.Daemons.ServiceCheck.AverageCalculation.Keys) {
-                        if (($UnixTime - $Global:Icinga.Private.Daemons.ServiceCheck.AverageCalculation[$calc].Time) -le [int]$timeEntry.Key) {
-                            $Global:Icinga.Private.Daemons.ServiceCheck.AverageCalculation[$calc].Sum   += $timeEntry.Value;
-                            $Global:Icinga.Private.Daemons.ServiceCheck.AverageCalculation[$calc].Count += 1;
-                        }
-                    }
-                    if (($UnixTime - $Global:Icinga.Private.Daemons.ServiceCheck.MaxTimeInSeconds) -le [int]$timeEntry.Key) {
-                        Add-IcingaHashtableItem `
-                            -Hashtable $Global:Icinga.Private.Daemons.ServiceCheck.PerformanceCache[$HashIndex] `
-                            -Key ([string]$timeEntry.Key) `
-                            -Value ([string]$timeEntry.Value) | Out-Null;
-                    }
+            [int]$IndexCount  = $CheckDataCache[$PerfLabel].Count;
+            [int]$RemoveIndex = 0;
+            for ($i = 0; $i -lt $IndexCount; $i++) {
+                # In case we store more values than we require for our max time range, remove the oldest one
+                if (($UnixTime - $Global:Icinga.Private.Daemons.ServiceCheck.MaxTimeInSeconds) -gt [int]($CheckDataCache[$PerfLabel][$i].Time)) {
+                    $RemoveIndex += 1;
+                    continue;
                 }
 
+                # Calculate the average value for our performance data based on the remaining data
                 foreach ($calc in $Global:Icinga.Private.Daemons.ServiceCheck.AverageCalculation.Keys) {
-                    if ($Global:Icinga.Private.Daemons.ServiceCheck.AverageCalculation[$calc].Count -ne 0) {
-                        $AverageValue            = ($Global:Icinga.Private.Daemons.ServiceCheck.AverageCalculation[$calc].Sum / $Global:Icinga.Private.Daemons.ServiceCheck.AverageCalculation[$calc].Count);
-                        [string]$MetricMultiName = [string]::Format('::{0}::Interval{1}', (Format-IcingaPerfDataLabel -PerfData $HashIndex -MultiOutput), $Global:Icinga.Private.Daemons.ServiceCheck.AverageCalculation[$calc].Time);
-                        $Global:Icinga.Private.Scheduler.CheckData[$CheckCommand]['average'] | Add-Member -MemberType NoteProperty -Name $MetricMultiName -Value $AverageValue -Force;
-                    }
-
-                    $Global:Icinga.Private.Daemons.ServiceCheck.AverageCalculation[$calc].Sum   = 0;
-                    $Global:Icinga.Private.Daemons.ServiceCheck.AverageCalculation[$calc].Count = 0;
-                }
-            }
-
-            Write-IcingaDebugMessage `
-                -Message 'Object dump of service check daemon' `
-                -Objects @(
-                    $CheckCommand,
-                    'Average Calc',
-                    ($Global:Icinga.Private.Daemons.ServiceCheck.AverageCalculation | Out-String),
-                    'PerformanceCache',
-                    $Global:Icinga.Private.Daemons.ServiceCheck.PerformanceCache,
-                    'Max Time in Seconds',
-                    $Global:Icinga.Private.Daemons.ServiceCheck.MaxTimeInSeconds,
-                    'Unix Time',
-                    $UnixTime
-                );
-
-            # Flush data we no longer require in our cache to free memory
-            [array]$CheckStores = $Global:Icinga.Private.Scheduler.CheckData[$CheckCommand]['results'].Keys;
-
-            foreach ($CheckStore in $CheckStores) {
-                [string]$CheckKey       = $CheckStore;
-                [array]$CheckTimeStamps = $global:Icinga.Private.Scheduler.CheckData[$CheckCommand]['results'][$CheckKey].Keys;
-
-                foreach ($TimeSample in $CheckTimeStamps) {
-                    if (($UnixTime - $Global:Icinga.Private.Daemons.ServiceCheck.MaxTimeInSeconds) -gt [int]$TimeSample) {
-                        Remove-IcingaHashtableItem -Hashtable $global:Icinga.Private.Scheduler.CheckData[$CheckCommand]['results'][$CheckKey] -Key ([string]$TimeSample);
+                    if (($UnixTime - $Global:Icinga.Private.Daemons.ServiceCheck.AverageCalculation[$calc].Time) -le [int]($CheckDataCache[$PerfLabel][$i].Time)) {
+                        $Global:Icinga.Private.Daemons.ServiceCheck.AverageCalculation[$calc].Sum   += $CheckDataCache[$PerfLabel][$i].Value;
+                        $Global:Icinga.Private.Daemons.ServiceCheck.AverageCalculation[$calc].Count += 1;
                     }
                 }
             }
 
-            Set-IcingaCacheData -Space 'sc_daemon' -CacheStore 'checkresult' -KeyName $CheckCommand -Value $global:Icinga.Private.Scheduler.CheckData[$CheckCommand]['average'];
+            # Remove older entries more efficiently. As we store the data in an ArrayList, the oldest entries are at the beginning
+            # Therefore we can just remove a range of entries from the beginning of the list or clear the list if we need to remove all entries
+            if ($RemoveIndex -gt 0) {
+                if ($RemoveIndex -ge $IndexCount) {
+                    $CheckDataCache[$PerfLabel].Clear() | Out-Null;
+                } else {
+                    $CheckDataCache[$PerfLabel].RemoveRange(0, $RemoveIndex) | Out-Null;
+                }
+                $RemoveIndex = 0;
+            }
 
-            # Make the performance data available for all threads
-            $Global:Icinga.Public.Daemons.ServiceCheck.PerformanceDataCache[$CheckCommand] = $global:Icinga.Private.Scheduler.CheckData[$CheckCommand]['average'];
-            # Write collected metrics to disk in case we reload the daemon. We will load them back into the module after reload then
-            Set-IcingaCacheData -Space 'sc_daemon' -CacheStore 'checkresult_store' -KeyName $CheckCommand -Value $Global:Icinga.Private.Daemons.ServiceCheck.PerformanceCache;
+            # Now calculate the average values for our performance data
+            foreach ($calc in $Global:Icinga.Private.Daemons.ServiceCheck.AverageCalculation.Keys) {
+                if ($Global:Icinga.Private.Daemons.ServiceCheck.AverageCalculation[$calc].Count -ne 0) {
+                    $AverageValue            = ($Global:Icinga.Private.Daemons.ServiceCheck.AverageCalculation[$calc].Sum / $Global:Icinga.Private.Daemons.ServiceCheck.AverageCalculation[$calc].Count);
+                    [string]$MetricMultiName = [string]::Format('{0}::Interval{1}={2}{3}', $PerfLabel, $Global:Icinga.Private.Daemons.ServiceCheck.AverageCalculation[$calc].Time, (Format-IcingaPerfDataValue $AverageValue), $PerfUnit);
+                    # Write our  performance data label
+                    $PerfDataEntries        += $MetricMultiName;
+                }
 
-        } catch {
-            Write-IcingaEventMessage -EventId 1452 -Namespace 'Framework' -ExceptionObject $_ -Objects $CheckCommand, ($Arguments | Out-String), (Get-IcingaInternalPluginOutput);
+                $Global:Icinga.Private.Daemons.ServiceCheck.AverageCalculation[$calc].Sum   = 0;
+                $Global:Icinga.Private.Daemons.ServiceCheck.AverageCalculation[$calc].Count = 0;
+            }
         }
 
-        # Always ensure our check data is cleared regardless of possible
-        # exceptions which might occur
-        Clear-IcingaCheckSchedulerEnvironment;
-        # Reset certain values from the scheduler environment
-        Clear-IcingaServiceCheckDaemonEnvironment;
-        # Force Icinga for Windows Garbage Collection
-        Optimize-IcingaForWindowsMemory -ClearErrorStack -SmartGC;
+        $Global:Icinga.Public.Daemons.ServiceCheck.PerformanceDataCache[$CheckCommand] = $PerfDataEntries -Join ' ';
+        $PerfDataEntries = @();
+
+        $PerformanceLabelFile = Join-Path -Path (Join-Path -Path (Join-Path -Path (Get-IcingaCacheDir) -ChildPath 'service_check_cache') -ChildPath 'performance_labels') -ChildPath ([string]::Format('{0}.db', $CheckCommand));
+        $CheckCacheXMLObj     = [System.Management.Automation.PSSerializer]::Serialize($CheckDataCache);
+
+        if ((Test-Path -Path $PerformanceLabelFile) -eq $FALSE) {
+            New-Item -Path $PerformanceLabelFile -ItemType File -Force | Out-Null;
+        }
+        if ((Test-Path -Path $MetricCacheFile) -eq $FALSE) {
+            New-Item -Path $MetricCacheFile -ItemType File -Force | Out-Null;
+        }
+
+        Set-Content -Path $PerformanceLabelFile -Value $Global:Icinga.Public.Daemons.ServiceCheck.PerformanceDataCache[$CheckCommand] -Force -Encoding UTF8;
+        Set-Content -Path $MetricCacheFile      -Value $CheckCacheXMLObj -Force -Encoding UTF8;
     }
 }
