@@ -11,6 +11,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 ### Bugfixes
 
+* [#754](https://github.com/Icinga/icinga-powershell-framework/issues/754) Fixes EventLog error handling by no longer parsing command arguments to ensure passwords are not stored on the EventLog, unless the debug mode of Icinga for Windows is enable
 * [#759](https://github.com/Icinga/icinga-powershell-framework/pull/759) Fixes maximum cache duration for service daemons to the right value
 * [#773](https://github.com/Icinga/icinga-powershell-framework/pull/773) Fixes REST-Api invoke command `Invoke-IcingaForWindowsRESTApi` by removing CA certificate check
 
