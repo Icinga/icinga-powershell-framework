@@ -71,13 +71,12 @@ function Add-IcingaServiceCheckTask()
                 }
             ) | Out-Null;
 
-            [int]$IndexCount = $CheckDataCache[$PerfLabel].Count;
+            [int]$IndexCount  = $CheckDataCache[$PerfLabel].Count;
+            [int]$RemoveIndex = 0;
             for ($i = 0; $i -lt $IndexCount; $i++) {
                 # In case we store more values than we require for our max time range, remove the oldest one
                 if (($UnixTime - $Global:Icinga.Private.Daemons.ServiceCheck.MaxTimeInSeconds) -gt [int]($CheckDataCache[$PerfLabel][$i].Time)) {
-                    $CheckDataCache[$PerfLabel].RemoveAt($i) | Out-Null;
-                    $i--;
-                    $IndexCount--;
+                    $RemoveIndex += 1;
                     continue;
                 }
 
@@ -88,6 +87,17 @@ function Add-IcingaServiceCheckTask()
                         $Global:Icinga.Private.Daemons.ServiceCheck.AverageCalculation[$calc].Count += 1;
                     }
                 }
+            }
+
+            # Remove older entries more efficiently. As we store the data in an ArrayList, the oldest entries are at the beginning
+            # Therefore we can just remove a range of entries from the beginning of the list or clear the list if we need to remove all entries
+            if ($RemoveIndex -gt 0) {
+                if ($RemoveIndex -ge $IndexCount) {
+                    $CheckDataCache[$PerfLabel].Clear() | Out-Null;
+                } else {
+                    $CheckDataCache[$PerfLabel].RemoveRange(0, $RemoveIndex) | Out-Null;
+                }
+                $RemoveIndex = 0;
             }
 
             # Now calculate the average values for our performance data
