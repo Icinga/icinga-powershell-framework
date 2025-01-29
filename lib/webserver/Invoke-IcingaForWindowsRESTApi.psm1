@@ -7,10 +7,12 @@ function Invoke-IcingaForWindowsRESTApi()
         [hashtable]$Body = @{ }
     );
 
+    <# Disable this for now, as there is no way to properly handle this with Windows tool and localhost listener
     if ((Test-IcingaCAInstalledToAuthRoot) -eq $FALSE) {
         Write-IcingaConsoleError 'The Icinga CA certificate is not installed to the local machine certificate store. Please run the "Start-IcingaWindowsScheduledTaskRenewCertificate" command to fix this issue.';
         return $null;
     }
+    #>
 
     Set-IcingaTLSVersion;
     Enable-IcingaUntrustedCertificateValidation -SuppressMessages;
