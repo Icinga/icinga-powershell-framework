@@ -72,8 +72,15 @@ function Compare-IcingaPluginValueToThreshold()
     # This will properly handle metrics over time
     $MoTObject     = ConvertTo-IcingaMetricsOverTime -MetricsOverTime $MetricsOverTime;
     $OriginalValue = $Value;
-    if ($MoTObject.Apply) {
-        $Value = $MoTObject.Value;
+    if ($MoTObject.Error -eq $FALSE) {
+        if ($MoTObject.Apply) {
+            $Value = $MoTObject.Value;
+        }
+    } else {
+        $RetValue.Message  = $MoTObject.Message;
+        $RetValue.HasError = $TRUE;
+
+        return $RetValue;
     }
 
     # The MoT message is by default empty and will do nothing. In case we use checks for
