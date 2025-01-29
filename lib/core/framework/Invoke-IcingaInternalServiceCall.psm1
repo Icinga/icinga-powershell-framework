@@ -61,12 +61,18 @@ function Invoke-IcingaInternalServiceCall()
     Set-IcingaTLSVersion;
     Enable-IcingaUntrustedCertificateValidation -SuppressMessages;
 
+    # For security reasons, we will not log the arguments in case of an error, only in debug mode
+    $ErrorArguments = '';
+    if ($Global:Icinga.Protected.DebugMode) {
+        $ErrorArguments =  $Arguments;
+    }
+
     # Now queue the check inside our REST-Api
     try {
         $ApiResult = Invoke-WebRequest -Method POST -UseBasicParsing -Uri ([string]::Format('https://localhost:{0}/v1/checker?command={1}', $RestApiPort, $Command)) -Body (ConvertTo-JsonUTF8Bytes -InputObject $Arguments -Depth 100 -Compress) -ContentType 'application/json' -TimeoutSec $Timeout;
     } catch {
         # Fallback to execute plugin locally
-        Write-IcingaEventMessage -Namespace 'Framework' -EventId 1553 -ExceptionObject $_ -Objects $Command, $Arguments;
+        Write-IcingaEventMessage -Namespace 'Framework' -EventId 1553 -ExceptionObject $_ -Objects $Command, $ErrorArguments;
         return $NULL;
     }
 
@@ -76,12 +82,12 @@ function Invoke-IcingaInternalServiceCall()
 
     # In case we didn't receive a check result, fallback to local execution
     if ([string]::IsNullOrEmpty($IcingaResult.$Command.checkresult)) {
-        Write-IcingaEventMessage -Namespace 'Framework' -EventId 1553 -Objects 'The check result for the executed command was empty', $Command, $Arguments;
+        Write-IcingaEventMessage -Namespace 'Framework' -EventId 1553 -Objects 'The check result for the executed command was empty', $Command, $ErrorArguments;
         return $NULL;
     }
 
     if ([string]::IsNullOrEmpty($IcingaResult.$Command.exitcode)) {
-        Write-IcingaEventMessage -Namespace 'Framework' -EventId 1553 -Objects 'The check result for the executed command was empty', $Command, $Arguments;
+        Write-IcingaEventMessage -Namespace 'Framework' -EventId 1553 -Objects 'The check result for the executed command was empty', $Command, $ErrorArguments;
         return $NULL;
     }
 
