@@ -17,6 +17,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 ### Enhancements
 
+* [#766](https://github.com/Icinga/icinga-powershell-framework/issues/766) Adds argument `-IntervalInSeconds` for `Enable-IcingaServiceRecovery` to allow setting a custom time interval for the service to restart, while setting the default to 120 seconds (2 minutes)
 * [#772](https://github.com/Icinga/icinga-powershell-framework/pull/772) Adds new Metric over Time handling
 
 ## 1.13.0 Beta-2 (2024-09-19)
