@@ -9,6 +9,8 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 ## 1.13.0 (2025-01-30)
 
+[Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/37)
+
 ### Bugfixes
 
 * [#754](https://github.com/Icinga/icinga-powershell-framework/issues/754) Fixes EventLog error handling by no longer parsing command arguments to ensure passwords are not stored on the EventLog, unless the debug mode of Icinga for Windows is enable
