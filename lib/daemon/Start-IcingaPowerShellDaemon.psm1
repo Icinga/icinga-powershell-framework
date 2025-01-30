@@ -52,6 +52,9 @@ function Start-IcingaForWindowsDaemon()
 
                     Write-IcingaFileSecure -File ($args[0]) -Value $PID;
 
+                    # Make sure a new JEA session is always updated with the correct process priority
+                    Start-IcingaWindowsScheduledTaskProcessPriority;
+
                     $Global:Icinga.Protected.JEAContext  = $TRUE;
                     $Global:Icinga.Protected.RunAsDaemon = $TRUE;
                     # Todo: Add config for active background tasks. Set it to 20 for the moment
