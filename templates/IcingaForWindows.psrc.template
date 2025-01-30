@@ -9,7 +9,7 @@
     # Company associated with this document
     CompanyName         = 'Icinga GmbH'
     # Copyright statement for this document
-    Copyright           = '(c) 2024 Icinga GmbH | MIT'
+    Copyright           = '(c) 2025 Icinga GmbH | MIT'
     # Modules to import when applied to a session
     ModulesToImport     = ''
     # Cmdlets to make visible when applied to a session

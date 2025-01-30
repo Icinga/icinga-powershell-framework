@@ -4,7 +4,7 @@
     GUID              = 'fcd7a805-a41b-49f9-afee-9d17a2b76d42'
     Author            = 'Lord Hepipud'
     CompanyName       = 'Icinga GmbH'
-    Copyright         = '(c) 2024 Icinga GmbH | MIT'
+    Copyright         = '(c) 2025 Icinga GmbH | MIT'
     Description       = 'Icinga for Windows module which allows to entirely monitor the Windows Host system.'
     PowerShellVersion = '4.0'
     NestedModules     = @( '.\cache\framework_cache.psm1' )

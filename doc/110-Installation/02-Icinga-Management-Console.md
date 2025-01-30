@@ -49,7 +49,7 @@ In this case, `master` would be our value we want to add and can confirm this by
 ```text
 *******************************************
 ** Icinga for Windows Management Console **
-** Copyright (c) 2024 Icinga GmbH | MIT  **
+** Copyright (c) 2025 Icinga GmbH | MIT  **
 **   User environment ws-icinga\icinga   **
 **  Icinga PowerShell Framework v1.6.0   **
 *******************************************

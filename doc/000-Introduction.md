@@ -37,6 +37,7 @@ We officially support Windows machines running the following operating systems:
 * Windows Server 2016
 * Windows Server 2019
 * Windows Server 2022
+* Windows Server 2025
 
 It may work on the following systems, but is currently untested, not supported and certain features may not work as expected:
 
