@@ -19,9 +19,8 @@ try {
     $SvcData = Get-IcingaServices "$ServiceName" -ErrorAction Stop;
 
     if ($null -ne $SvcData) {
-        $ServiceConfig = $SvcData."$ServiceName".configuration;
-        $ServiceMeta   = $SvcData."$ServiceName".metadata;
-
+        $ServiceConfig           = $SvcData."$ServiceName".configuration;
+        $ServiceMeta             = $SvcData."$ServiceName".metadata;
         $ServiceInfo.Status      = [string]$ServiceConfig.Status.value;
         $ServiceInfo.User        = [string]$ServiceConfig.ServiceUser;
         $ServiceInfo.ServicePath = [string]$ServiceConfig.ServicePath;
