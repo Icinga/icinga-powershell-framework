@@ -19,11 +19,13 @@ try {
     $SvcData = Get-IcingaServices "$ServiceName" -ErrorAction Stop;
 
     if ($null -ne $SvcData) {
-        $ServiceData.Status      = [string]$SvcData."$ServiceName".configuration.Status.value;
-        $ServiceData.User        = [string]$SvcData."$ServiceName".configuration.ServiceUser;
-        $ServiceData.ServicePath = [string]$SvcData."$ServiceName".configuration.ServicePath;
-        $ServiceData.Name        = $SvcData."$ServiceName".metadata.ServiceName;
-        $ServiceData.DisplayName = $SvcData."$ServiceName".metadata.DisplayName;
+        $ServiceConfig           = $SvcData."$ServiceName".configuration;
+        $ServiceMeta             = $SvcData."$ServiceName".metadata;
+        $ServiceInfo.Status      = [string]$ServiceConfig.Status.value;
+        $ServiceInfo.User        = [string]$ServiceConfig.ServiceUser;
+        $ServiceInfo.ServicePath = [string]$ServiceConfig.ServicePath;
+        $ServiceInfo.Name        = $ServiceMeta.ServiceName;
+        $ServiceInfo.DisplayName = $ServiceMeta.DisplayName;
         $ServiceData.Present     = $TRUE;
     }
 } catch {
