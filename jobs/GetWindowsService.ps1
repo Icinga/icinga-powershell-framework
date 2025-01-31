@@ -21,11 +21,11 @@ try {
     if ($null -ne $SvcData) {
         $ServiceConfig           = $SvcData."$ServiceName".configuration;
         $ServiceMeta             = $SvcData."$ServiceName".metadata;
-        $ServiceInfo.Status      = [string]$ServiceConfig.Status.value;
-        $ServiceInfo.User        = [string]$ServiceConfig.ServiceUser;
-        $ServiceInfo.ServicePath = [string]$ServiceConfig.ServicePath;
-        $ServiceInfo.Name        = $ServiceMeta.ServiceName;
-        $ServiceInfo.DisplayName = $ServiceMeta.DisplayName;
+        $ServiceData.Status      = [string]$ServiceConfig.Status.value;
+        $ServiceData.User        = [string]$ServiceConfig.ServiceUser;
+        $ServiceData.ServicePath = [string]$ServiceConfig.ServicePath;
+        $ServiceData.Name        = $ServiceMeta.metadata.ServiceName;
+        $ServiceData.DisplayName = $ServiceMeta.metadata.DisplayName;
         $ServiceData.Present     = $TRUE;
     }
 } catch {
