@@ -11,6 +11,16 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/38)
 
+## 1.13.2 (2025-02-03)
+
+[Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/40)
+
+* [#780](https://github.com/Icinga/icinga-powershell-framework/issues/780) Fixes Icinga for Windows service installation not working properly on certain Windows environments
+
+### Bugfixes
+
+* [#778](https://github.com/Icinga/icinga-powershell-framework/issues/778) Fixes test commands like `Test-IcingaForWindows` failing because of wrong assigned ServiceData information.
+
 ## 1.13.1 (2025-01-31)
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/39)
