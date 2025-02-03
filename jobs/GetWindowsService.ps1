@@ -18,7 +18,7 @@ Use-Icinga -Minimal;
 try {
     $SvcData = Get-IcingaServices "$ServiceName" -ErrorAction Stop;
 
-    if ($null -ne $SvcData) {
+    if ($null -ne $SvcData -And $SvcData.Count -ne 0) {
         $ServiceConfig           = $SvcData."$ServiceName".configuration;
         $ServiceMeta             = $SvcData."$ServiceName".metadata;
         $ServiceData.Status      = [string]$ServiceConfig.Status.value;
