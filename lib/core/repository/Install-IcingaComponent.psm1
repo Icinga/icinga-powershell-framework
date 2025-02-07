@@ -394,7 +394,7 @@ function Install-IcingaComponent()
 
         if ($InstallProcess.ExitCode -ne 0) {
             Write-IcingaConsoleError -Message 'Failed to install component "agent": {0}{1}' -Objects $InstallProcess.Message, $InstallProcess.Error;
-            return $FALSE;
+            return;
         }
 
         $Global:Icinga.Protected.Environment.'Icinga Service'.Present = $TRUE;
