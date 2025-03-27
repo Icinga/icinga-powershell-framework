@@ -57,6 +57,7 @@ function Compare-IcingaPluginValueToThreshold()
         $Value           = $null,
         $BaseValue       = $null,
         $Unit            = $null,
+        $CheckUnit       = $null,
         $Translation     = $null,
         $Threshold       = $null,
         $OverrideMode    = $null,
@@ -94,7 +95,7 @@ function Compare-IcingaPluginValueToThreshold()
 
     # Otherwise just convert the values to human readble values
     $HumanReadableValue = ConvertTo-IcingaPluginOutputTranslation -Translation $Translation -Value $HumanReadableValue;
-    $HumanReadableValue = Convert-IcingaPluginValueToString -Value $HumanReadableValue -Unit $Unit;
+    $HumanReadableValue = Convert-IcingaPluginValueToString -Value $HumanReadableValue -Unit $Unit -OriginalUnit $CheckUnit;
 
     if ($null -eq $Value -Or $null -eq $Threshold -Or [string]::IsNullOrEmpty($Threshold.Raw)) {
         $RetValue.Message = $HumanReadableValue;
@@ -139,7 +140,7 @@ function Compare-IcingaPluginValueToThreshold()
                 }
 
                 if ($Value -gt $Threshold.Value) {
-                    $RetValue.Message = [string]::Format('Value {0} is greater than threshold {1}{2}', $HumanReadableValue, (Convert-IcingaPluginValueToString -Value $Threshold.Value -BaseValue $BaseValue -Unit $Threshold.Unit -OriginalUnit $Unit -UsePercent:$UsePercent -IsThreshold), $MoTMessage);
+                    $RetValue.Message = [string]::Format('Value {0} is greater than threshold {1}{2}', $HumanReadableValue, (Convert-IcingaPluginValueToString -Value $Threshold.Value -BaseValue $BaseValue -Unit $Threshold.Unit -OriginalUnit $CheckUnit -UsePercent:$UsePercent -IsThreshold), $MoTMessage);
                     return $RetValue;
                 }
             }
@@ -147,42 +148,42 @@ function Compare-IcingaPluginValueToThreshold()
         };
         $IcingaEnums.IcingaThresholdMethod.Lower {
             if ($Value -lt $Threshold.Value) {
-                $RetValue.Message = [string]::Format('Value {0} is lower than threshold {1}{2}', $HumanReadableValue, (Convert-IcingaPluginValueToString -Value $Threshold.Value -BaseValue $BaseValue -Unit $Threshold.Unit -OriginalUnit $Unit -UsePercent:$UsePercent -IsThreshold), $MoTMessage);
+                $RetValue.Message = [string]::Format('Value {0} is lower than threshold {1}{2}', $HumanReadableValue, (Convert-IcingaPluginValueToString -Value $Threshold.Value -BaseValue $BaseValue -Unit $Threshold.Unit -OriginalUnit $CheckUnit -UsePercent:$UsePercent -IsThreshold), $MoTMessage);
                 return $RetValue;
             }
             break;
         };
         $IcingaEnums.IcingaThresholdMethod.LowerEqual {
             if ($Value -le $Threshold.Value) {
-                $RetValue.Message = [string]::Format('Value {0} is lower or equal than threshold {1}{2}', $HumanReadableValue, (Convert-IcingaPluginValueToString -Value $Threshold.Value -BaseValue $BaseValue -Unit $Threshold.Unit -OriginalUnit $Unit -UsePercent:$UsePercent -IsThreshold), $MoTMessage);
+                $RetValue.Message = [string]::Format('Value {0} is lower or equal than threshold {1}{2}', $HumanReadableValue, (Convert-IcingaPluginValueToString -Value $Threshold.Value -BaseValue $BaseValue -Unit $Threshold.Unit -OriginalUnit $CheckUnit -UsePercent:$UsePercent -IsThreshold), $MoTMessage);
                 return $RetValue;
             }
             break;
         };
         $IcingaEnums.IcingaThresholdMethod.Greater {
             if ($Value -gt $Threshold.Value) {
-                $RetValue.Message = [string]::Format('Value {0} is greater than threshold {1}{2}', $HumanReadableValue, (Convert-IcingaPluginValueToString -Value $Threshold.Value -BaseValue $BaseValue -Unit $Threshold.Unit -OriginalUnit $Unit -UsePercent:$UsePercent -IsThreshold), $MoTMessage);
+                $RetValue.Message = [string]::Format('Value {0} is greater than threshold {1}{2}', $HumanReadableValue, (Convert-IcingaPluginValueToString -Value $Threshold.Value -BaseValue $BaseValue -Unit $Threshold.Unit -OriginalUnit $CheckUnit -UsePercent:$UsePercent -IsThreshold), $MoTMessage);
                 return $RetValue;
             }
             break;
         };
         $IcingaEnums.IcingaThresholdMethod.GreaterEqual {
             if ($Value -gt $Threshold.Value) {
-                $RetValue.Message = [string]::Format('Value {0} is greater or equal than threshold {1}{2}', $HumanReadableValue, (Convert-IcingaPluginValueToString -Value $Threshold.Value -BaseValue $BaseValue -Unit $Threshold.Unit -OriginalUnit $Unit -UsePercent:$UsePercent -IsThreshold), $MoTMessage);
+                $RetValue.Message = [string]::Format('Value {0} is greater or equal than threshold {1}{2}', $HumanReadableValue, (Convert-IcingaPluginValueToString -Value $Threshold.Value -BaseValue $BaseValue -Unit $Threshold.Unit -OriginalUnit $CheckUnit -UsePercent:$UsePercent -IsThreshold), $MoTMessage);
                 return $RetValue;
             }
             break;
         };
         $IcingaEnums.IcingaThresholdMethod.Between {
             if ($Value -lt $Threshold.StartRange -Or $Value -gt $Threshold.EndRange) {
-                $RetValue.Message = [string]::Format('Value {0} is not between thresholds <{1} or >{2}{3}', $HumanReadableValue, (Convert-IcingaPluginValueToString -Value $Threshold.StartRange -BaseValue $BaseValue -Unit $Threshold.Unit -OriginalUnit $Unit -UsePercent:$UsePercent -IsThreshold), (Convert-IcingaPluginValueToString -Value $Threshold.EndRange -BaseValue $BaseValue -Unit $Threshold.Unit -OriginalUnit $Unit -UsePercent:$UsePercent -IsThreshold), $MoTMessage);
+                $RetValue.Message = [string]::Format('Value {0} is not between thresholds <{1} or >{2}{3}', $HumanReadableValue, (Convert-IcingaPluginValueToString -Value $Threshold.StartRange -BaseValue $BaseValue -Unit $Threshold.Unit -OriginalUnit $CheckUnit -UsePercent:$UsePercent -IsThreshold), (Convert-IcingaPluginValueToString -Value $Threshold.EndRange -BaseValue $BaseValue -Unit $Threshold.Unit -OriginalUnit $Unit -UsePercent:$UsePercent -IsThreshold), $MoTMessage);
                 return $RetValue;
             }
             break;
         };
         $IcingaEnums.IcingaThresholdMethod.Outside {
             if ($Value -ge $Threshold.StartRange -And $Value -le $Threshold.EndRange) {
-                $RetValue.Message = [string]::Format('Value {0} is between thresholds >={1} and <={2}{3}', $HumanReadableValue, (Convert-IcingaPluginValueToString -Value $Threshold.StartRange -BaseValue $BaseValue -Unit $Threshold.Unit -OriginalUnit $Unit -UsePercent:$UsePercent -IsThreshold), (Convert-IcingaPluginValueToString -Value $Threshold.EndRange -BaseValue $BaseValue -Unit $Threshold.Unit -OriginalUnit $Unit -UsePercent:$UsePercent -IsThreshold), $MoTMessage);
+                $RetValue.Message = [string]::Format('Value {0} is between thresholds >={1} and <={2}{3}', $HumanReadableValue, (Convert-IcingaPluginValueToString -Value $Threshold.StartRange -BaseValue $BaseValue -Unit $Threshold.Unit -OriginalUnit $CheckUnit -UsePercent:$UsePercent -IsThreshold), (Convert-IcingaPluginValueToString -Value $Threshold.EndRange -BaseValue $BaseValue -Unit $Threshold.Unit -OriginalUnit $Unit -UsePercent:$UsePercent -IsThreshold), $MoTMessage);
                 return $RetValue;
             }
             break;

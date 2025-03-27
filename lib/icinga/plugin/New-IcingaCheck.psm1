@@ -258,9 +258,9 @@ function New-IcingaCheck()
 
         [string]$PerfDataLabel = [string]::Format(
             '{0}={1}{2};{3};{4};{5};{6}',
-            $PerfDataName,
+            $PerfDataName.ToLower(),
             (Format-IcingaPerfDataValue $value),
-            $this.__ThresholdObject.PerfUnit,
+            $this.__ThresholdObject.Unit,
             (Format-IcingaPerfDataValue $warning),
             (Format-IcingaPerfDataValue $critical),
             (Format-IcingaPerfDataValue $this.Minimum),
@@ -289,7 +289,7 @@ function New-IcingaCheck()
             }
         }
 
-        $Global:Icinga.Private.Scheduler.PerfDataWriter.Storage.Append($PerfDataLabel.ToLower()) | Out-Null;
+        $Global:Icinga.Private.Scheduler.PerfDataWriter.Storage.Append($PerfDataLabel) | Out-Null;
     }
 
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Name '__ValidateObject' -Value {
