@@ -13,6 +13,10 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 * [#787](https://github.com/Icinga/icinga-powershell-framework/pull/787) Fixes the return value in case the `Agent` component could not be installed from `$FALSE` to `null`
 
+## 1.13.3 (tbd)
+
+* [#800](https://github.com/Icinga/icinga-powershell-framework/pull/800) Fixes an issue for certain plugins, like `Invoke-IcingaCheckProcess`, which reports unknown if MetricsOverTime is used for checks that do not write performance data
+
 ## 1.13.2 (2025-02-03)
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/40)
