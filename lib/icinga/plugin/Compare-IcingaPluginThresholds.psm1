@@ -97,7 +97,8 @@ function Compare-IcingaPluginThresholds()
         [switch]$IsBetween      = $FALSE,
         [switch]$IsLowerEqual   = $FALSE,
         [switch]$IsGreaterEqual = $FALSE,
-        [string]$TimeInterval   = $null
+        [string]$TimeInterval   = $null,
+        [switch]$NoPerfData     = $FALSE
     );
 
     try {
@@ -108,6 +109,13 @@ function Compare-IcingaPluginThresholds()
             'Label'    = $PerfDataLabel;
             'Interval' = $TimeInterval;
         };
+
+        # Ensure we do not include our checks for which we do not write any performance data
+        # Metrics over time will not work for those, as the metrics are not stored.
+        # There just set the variable to null which means they won't be processed
+        if ($NoPerfData) {
+            $MoTData = $null;
+        }
 
         if ($TestInput.Decimal) {
             [decimal]$InputValue = [decimal]$TestInput.Value;

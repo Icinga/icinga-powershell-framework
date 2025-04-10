@@ -39,7 +39,7 @@ function New-IcingaCheck()
     $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'ObjectExists'      -Value $ObjectExists;
     $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'Translation'       -Value $Translation;
     $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'LabelName'         -Value $LabelName;
-    $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'NoPerfData'        -Value $NoPerfData;
+    $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'NoPerfData'        -Value ([bool]$NoPerfData);
     $IcingaCheck | Add-Member -MemberType NoteProperty -Name '__WarningValue'    -Value $null;
     $IcingaCheck | Add-Member -MemberType NoteProperty -Name '__CriticalValue'   -Value $null;
     $IcingaCheck | Add-Member -MemberType NoteProperty -Name '__LockedState'     -Value $FALSE;
@@ -490,6 +490,7 @@ function New-IcingaCheck()
             '-ThresholdCache' = (Get-IcingaThresholdCache -CheckCommand $this.__CheckCommand);
             '-Translation'    = $this.Translation;
             '-TimeInterval'   = $this.__TimeInterval;
+            '-NoPerfData'     = $this.NoPerfData;
         };
     }
 
