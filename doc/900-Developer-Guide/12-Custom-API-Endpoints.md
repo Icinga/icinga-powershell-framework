@@ -1,6 +1,6 @@
 # Developer Guide: Custom API-Endpoints
 
-Starting with Icinga [PowerShell Framework v1.1.0](https://icinga.com/docs/windows/latest) plenty of features and functionality have been added for shipping data by using a REST-API. This Developer Guide will describe on how to write custom API endpoints by using the [PowerShell Framework v1.1.0](https://icinga.com/docs/windows/latest) and the [Icinga PowerShell REST-Api](https://icinga.com/docs/windows/latest/restapi/doc/01-Introduction/). In this example we will write a custom endpoint to simply provide a file list for a specific folder.
+Starting with Icinga [PowerShell Framework v1.1.0](https://icinga.com/docs/windows/latest) plenty of features and functionality have been added for shipping data by using a REST-API. This Developer Guide will describe on how to write custom API endpoints by using the [PowerShell Framework v1.1.0](https://icinga.com/docs/windows/latest) and [REST-Api listener](../110-Installation/30-API-Check-Forwarder.md). In this example we will write a custom endpoint to simply provide a file list for a specific folder.
 
 ## File Structure
 

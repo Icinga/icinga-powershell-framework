@@ -97,10 +97,9 @@ For quick installation, here the list of commands to get everything running:
 ```powershell
 Register-IcingaBackgroundDaemon -Command 'Start-IcingaWindowsRESTApi';
 Add-IcingaRESTApiCommand -Command 'Invoke-IcingaCheck*' -Endpoint 'apichecks';
+Enable-IcingaFrameworkApiChecks;
 
 Restart-IcingaForWindows;
-
-Enable-IcingaFrameworkApiChecks;
 ```
 
 ## EventLog Errors
