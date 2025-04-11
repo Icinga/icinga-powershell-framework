@@ -12,28 +12,28 @@ The project is continuously developed and delivered as set of 3-month milestones
 
 Below is a schedule of milestones for new releases and components. The dates are rough estimates and are subject to change.
 
-| Milestone End Date | Milestone Name | Preview Release Blog Post |
+| Milestone End Date | Milestone Name | GitHub Release |
 | ------------------ | -------------- | ------------------------- |
-| 2020-02-19 | [1.0.0-framework] in Icinga for Windows<br>[1.0.0-plugins] in Icinga PowerShell Plugins | [Icinga for Windows 1.0.0 Release](https://icinga.com/2020/02/19/announcing-icinga-for-windows-v1-0/) |
-| 2020-03-18 | [1.0.1-framework] in Icinga for Windows | [Icinga for Windows 1.0.1 Release](https://icinga.com/2020/03/19/icinga-for-windows-bugfix-release-v1-0-1/) |
+| 2020-02-19 | [1.0.0-framework] in Icinga for Windows<br>[1.0.0-plugins] in Icinga PowerShell Plugins | [Icinga for Windows 1.0.0 Release](https://github.com/Icinga/icinga-powershell-framework/releases/tag/v1.0.0) |
+| 2020-03-18 | [1.0.1-framework] in Icinga for Windows | [Icinga for Windows 1.0.1 Release](https://github.com/Icinga/icinga-powershell-framework/releases/tag/v1.0.1) |
 | 2020-04-16 | [1.0.2-framework] in Icinga for Windows | |
-| 2020-06-02 | [1.1.0-framework] in Icinga for Windows<br>[1.1.0-plugins] in Icinga PowerShell Plugins<br>[1.0.0-restapi] in Icinga PowerShell REST-Api<br>[1.0.0-inventory] in Icinga PowerShell Inventory | [Icinga for Windows 1.1.0 Release](https://icinga.com/2020/06/03/icinga-for-windows-v1-1-0-release/) |
+| 2020-06-02 | [1.1.0-framework] in Icinga for Windows<br>[1.1.0-plugins] in Icinga PowerShell Plugins<br>[1.0.0-restapi] in Icinga PowerShell REST-Api<br>[1.0.0-inventory] in Icinga PowerShell Inventory | [Icinga for Windows 1.1.0 Release](https://github.com/Icinga/icinga-powershell-framework/releases/tag/v1.1.0) |
 | 2020-06-18 | [1.1.1-framework] in Icinga for Windows | |
 | 2020-06-26 | [1.1.2-framework] in Icinga for Windows | |
-| 2020-08-31 | [1.2.0-framework] in Icinga for Windows<br>[1.2.0-plugins] in Icinga PowerShell Plugins | [Icinga for Windows 1.2.0 Release](https://icinga.com/2020/08/31/releasing-icinga-for-windows-v1-2-0/) |
-| 2020-10-13 | [1.0.0-mssql] in Icinga PowerShell MSSQL | [Icinga PowerShell MSSQL v1.0.0 Release](https://icinga.com/2020/10/13/icinga-for-windows-mssql-plugin-release-v1-0-0/)
-| 2020-12-01 | [1.3.0-framework] in Icinga for Windows<br>[1.3.0-plugins] in Icinga PowerShell Plugins<br>[1.2.0-kickstart] in Icinga PowerShell Kickstart | [Icinga for Windows v1.3.0 – Yet another release!](https://icinga.com/blog/2020/12/01/icinga-for-windows-v1-3-0-yet-another-release/) |
+| 2020-08-31 | [1.2.0-framework] in Icinga for Windows<br>[1.2.0-plugins] in Icinga PowerShell Plugins | [Icinga for Windows 1.2.0 Release](https://github.com/Icinga/icinga-powershell-framework/releases/tag/v1.2.0) |
+| 2020-10-13 | [1.0.0-mssql] in Icinga PowerShell MSSQL | [Icinga PowerShell MSSQL v1.0.0 Release](https://github.com/Icinga/icinga-powershell-mssql/releases/tag/v1.0.0)
+| 2020-12-01 | [1.3.0-framework] in Icinga for Windows<br>[1.3.0-plugins] in Icinga PowerShell Plugins<br>[1.2.0-kickstart] in Icinga PowerShell Kickstart | [Icinga for Windows v1.3.0](https://github.com/Icinga/icinga-powershell-framework/releases/tag/v1.3.0) |
 | 2021-02-04 | [1.3.1-plugins] in Icinga PowerShell Plugins | |
-| 2021-06-10 | [1.0.0-hyperv] in Icinga PowerShell Hyper-V<br>[1.0.0-cluster] in Icinga PowerShell Cluster | [Icinga PowerShell Hyper-V and MSSQL Release](https://icinga.com/blog/2021/06/10/icinga-for-windows-hyper-v-and-cluster-plugin-release-v1-0/) |
-| 2021-03-02 | [1.4.0-framework] in Icinga for Windows<br>[1.4.0-plugins] in Icinga PowerShell Plugins | [Icinga for Windows v1.4.0 Release](https://icinga.com/blog/2021/03/02/icinga-for-windows-v1-4-0-join-the-next-level/) |
-| 2021-03-10 | [1.4.1-framework] in Icinga for Windows | [Icinga for Windows v1.4.1 Release](https://icinga.com/blog/2021/03/10/icinga-for-windows-v1-4-1-get-the-fix-while-its-hot/) |
-| 2021-06-02 | [1.5.0-framework] in Icinga for Windows<br>[1.5.0-plugins] in Icinga PowerShell Plugins | [Icinga for Windows v1.5.0 Release](https://icinga.com/blog/2021/06/02/releasing-icinga-for-windows-v1-5-0/) |
-| 2021-07-07 | [1.5.1-framework] in Icinga for Windows<br>[1.5.1-plugins] in Icinga PowerShell Plugins | [Icinga for Windows v1.5.1 Release](https://icinga.com/blog/2021/07/07/icinga-for-windows-v1-5-1-bugfix-release/) |
-| 2021-07-09 | [1.3.2-framework] in Icinga for Windows<br>[1.4.2-framework] in Icinga for Windows<br>[1.5.2-framework] in Icinga for Windows | [Icinga for Windows Security Release](https://icinga.com/blog/2021/07/09/icinga-for-windows-security-release-for-1-3-x-1-4-x-and-1-5-x/) |
+| 2021-06-10 | [1.0.0-hyperv] in Icinga PowerShell Hyper-V<br>[1.0.0-cluster] in Icinga PowerShell Cluster | [Icinga PowerShell Hyper-V 1.0.0 Release](https://github.com/Icinga/icinga-powershell-hyperv/releases/tag/v1.0.0)<br>[Icinga PowerShell MSSQL 1.0.0 Release](https://github.com/Icinga/icinga-powershell-mssql/releases/tag/v1.0.0) |
+| 2021-03-02 | [1.4.0-framework] in Icinga for Windows<br>[1.4.0-plugins] in Icinga PowerShell Plugins | [Icinga for Windows v1.4.0 Release](https://github.com/Icinga/icinga-powershell-framework/releases/tag/v1.4.0) |
+| 2021-03-10 | [1.4.1-framework] in Icinga for Windows | [Icinga for Windows v1.4.1 Release](https://github.com/Icinga/icinga-powershell-framework/releases/tag/v1.4.1) |
+| 2021-06-02 | [1.5.0-framework] in Icinga for Windows<br>[1.5.0-plugins] in Icinga PowerShell Plugins | [Icinga for Windows v1.5.0 Release](https://github.com/Icinga/icinga-powershell-framework/releases/tag/v1.5.0) |
+| 2021-07-07 | [1.5.1-framework] in Icinga for Windows<br>[1.5.1-plugins] in Icinga PowerShell Plugins | [Icinga for Windows v1.5.1 Release](https://github.com/Icinga/icinga-powershell-framework/releases/tag/v1.5.1) |
+| 2021-07-09 | [1.3.2-framework] in Icinga for Windows<br>[1.4.2-framework] in Icinga for Windows<br>[1.5.2-framework] in Icinga for Windows | [Icinga for Windows Security Release](https://github.com/Icinga/icinga-powershell-framework/releases/tag/v1.5.1) |
 | 2021-09-07 | [1.6.0-framework] in Icinga for Windows<br>[1.6.0-plugins] in Icinga PowerShell Plugins | [Icinga for Windows v1.6.0 Release](https://icinga.com/blog/2021/09/07/releasing-icinga-for-windows-v1-6-0-easier-and-more-secure/) |
-| 2021-09-15 | [1.6.1-framework] in Icinga for Windows | [Icinga for Windows v1.6.1 Release](https://icinga.com/blog/2021/09/15/releasing-icinga-for-windows-v1-6-1-begin-the-bug-hunt/) |
-| 2021-11-09 | [1.7.0-framework] in Icinga for Windows<br>[1.7.0-plugins] in Icinga PowerShell Plugins | [Icinga for Windows v1.7.0 Release](https://icinga.com/blog/2021/11/09/icinga-for-windows-releasing-v1-7-0-start-your-contribution/) |
-| 2021-11-12 | [1.7.1-framework] in Icinga for Windows | [Icinga for Windows v1.7.1 Release](https://icinga.com/blog/2021/11/12/icinga-for-windows-releasing-v1-7-1-doh/) |
+| 2021-09-15 | [1.6.1-framework] in Icinga for Windows | [Icinga for Windows v1.6.1 Release](https://github.com/Icinga/icinga-powershell-framework/releases/tag/v1.6.0) |
+| 2021-11-09 | [1.7.0-framework] in Icinga for Windows<br>[1.7.0-plugins] in Icinga PowerShell Plugins | [Icinga for Windows v1.7.0 Release](https://github.com/Icinga/icinga-powershell-framework/releases/tag/v1.7.0) |
+| 2021-11-12 | [1.7.1-framework] in Icinga for Windows | [Icinga for Windows v1.7.1 Release](https://github.com/Icinga/icinga-powershell-framework/releases/tag/v1.7.1) |
 | 2022-02-08 | [1.8.0-framework] in Icinga for Windows | tbd |
 | 2022-05-03 | [1.9.0-framework] in Icinga for Windows | tbd |
 
