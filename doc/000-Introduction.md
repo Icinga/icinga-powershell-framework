@@ -74,12 +74,12 @@ Below you will find a list of currently available modules published by the Icing
 
 ### Extensions
 
-| Icinga PowerShell REST-Api | Icinga PowerShell Inventory | Icinga PowerShell Api-Checks |
-| --- | --- | --- |
-| [![Rest-API](images/02_icons/restapi.png)](https://icinga.com/docs/windows/latest/restapi/doc/01-Introduction/) | [![Inventory](images/02_icons/inventory.png)](https://icinga.com/docs/windows/latest/inventory/doc/01-Introduction/) | [![Frame](images/02_icons/plugins.png)](https://icinga.com/docs/icinga-for-windows/latest/apichecks/doc/01-Introduction/) |
+| Icinga PowerShell Inventory |
+| --- |
+| [![Inventory](images/02_icons/inventory.png)](https://icinga.com/docs/windows/latest/inventory/doc/01-Introduction/) | |
 
 ### Additional Plugins
 
-| Icinga PowerShell Hyper-V | Icinga PowerShell MSSQL |  Icinga PowerShell Cluster |
-| --- | --- | --- |
-| [![Hyper-V](images/02_icons/hyperv.png)](https://icinga.com/docs/icinga-for-windows/latest/hyperv/doc/01-Introduction/) | [![MSSQL](images/02_icons/mssql.png)](https://icinga.com/docs/windows/latest/mssql/doc/01-Introduction/) |  [![Cluster](images/02_icons/hyperv.png)](https://icinga.com/docs/icinga-for-windows/latest/cluster/doc/01-Introduction/) |
+| Icinga PowerShell Hyper-V | Icinga PowerShell MSSQL |  Icinga PowerShell Cluster | Icinga PowerShell IIS |
+| --- | --- | --- |  --- |
+| [![Hyper-V](images/02_icons/hyperv.png)](https://icinga.com/docs/icinga-for-windows/latest/hyperv/doc/01-Introduction/) | [![MSSQL](images/02_icons/mssql.png)](https://icinga.com/docs/windows/latest/mssql/doc/01-Introduction/) | [![Cluster](images/02_icons/hyperv.png)](https://icinga.com/docs/icinga-for-windows/latest/cluster/doc/01-Introduction/) | [![IIS](images/02_icons/iis.png)](https://icinga.com/docs/icinga-for-windows/latest/iis/doc/01-Introduction/) |
