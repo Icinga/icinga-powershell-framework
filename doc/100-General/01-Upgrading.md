@@ -91,7 +91,7 @@ Please [contact us](https://icinga.com/company/contact/) in case you require ass
 
 ### REST-Api and Api-Checks
 
-With Icinga for Windows v1.7.0, the previously separate available components REST-Api [icinga-powershell-restapi](https://icinga.com/docs/icinga-for-windows/latest/restapi/doc/01-Introduction/) and API-Checks [icinga-powershell-apichecks](https://icinga.com/docs/icinga-for-windows/latest/apichecks/doc/01-Introduction/) are now directly baked into the Icinga PowerShell Framework. You will no longer require to install these components in addition.
+With Icinga for Windows v1.7.0, the previously separate available components REST-Api (icinga-powershell-restapi) and API-Checks (icinga-powershell-apichecks) are now directly baked into the Icinga PowerShell Framework. You will no longer require to install these components in addition.
 
 **Upgrading**: If you previously installed these components, you should remove them from the system before actively using Icinga for Windows v1.7.0, as additional changes were made in this case.
 

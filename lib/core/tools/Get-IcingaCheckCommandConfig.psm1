@@ -172,7 +172,7 @@ function Get-IcingaCheckCommandConfig()
     $ThresholdIntervalArg | Add-Member -MemberType NoteProperty -Name 'Name'             -Value 'ThresholdInterval';
     $ThresholdIntervalArg | Add-Member -MemberType NoteProperty -Name 'required'         -Value $FALSE;
     $ThresholdIntervalArg.type | Add-Member -MemberType NoteProperty -Name 'name'        -Value 'String';
-    $ThresholdIntervalArg.Description | Add-Member -MemberType NoteProperty -Name 'Text' -Value 'Change the value your defined threshold checks against from the current value to a collected time threshold of the Icinga for Windows daemon, as described here: https://icinga.com/docs/icinga-for-windows/latest/doc/service/10-Register-Service-Checks/ An example for this argument would be 1m or 15m which will use the average of 1m or 15m for monitoring.';
+    $ThresholdIntervalArg.Description | Add-Member -MemberType NoteProperty -Name 'Text' -Value 'Change the value your defined threshold checks against from the current value to a collected time threshold of the Icinga for Windows daemon, as described here: https://icinga.com/docs/icinga-for-windows/latest/doc/110-Installation/06-Collect-Metrics-over-Time/ An example for this argument would be 1m or 15m which will use the average of 1m or 15m for monitoring.';
 
     # Loop through ${CheckName}, to get information on every command specified/all commands.
     foreach ($check in $CheckName) {

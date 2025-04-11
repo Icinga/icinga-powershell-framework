@@ -376,7 +376,7 @@ This beta release has reworked the entire handling on how thresholds and the che
 
 ### Enhancements
 
-* [#383](https://github.com/Icinga/icinga-powershell-framework/pull/383) Moves the components REST-Api [icinga-powershell-restapi](https://icinga.com/docs/icinga-for-windows/latest/restapi/doc/01-Introduction/) and API-Checks [icinga-powershell-apichecks](https://icinga.com/docs/icinga-for-windows/latest/apichecks/doc/01-Introduction/) directly into the Framework
+* [#383](https://github.com/Icinga/icinga-powershell-framework/pull/383) Moves the components REST-Api (icinga-powershell-restapi) and API-Checks (icinga-powershell-apichecks) directly into the Framework
 * [#389](https://github.com/Icinga/icinga-powershell-framework/pull/389) Adds developer tools for easier start and management of development custom extensions for Icinga for Windows
 * [#392](https://github.com/Icinga/icinga-powershell-framework/pull/392) Adds support to read logs from Windows EventLog while using `Read-IcingaAgentLogFile`
 * [#393](https://github.com/Icinga/icinga-powershell-framework/pull/393) Adds generic reader function `Read-IcingaWindowsEventLog`, allowing to read any EventLog as stream on the console and adds in addition `Read-IcingaForWindowsLog` for reading Icinga for Windows specific logs
