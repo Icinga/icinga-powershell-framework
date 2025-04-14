@@ -11,9 +11,14 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/38)
 
+## 1.13.3 (tbd)
+
+[Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/39)
+
 ### Bugfixes
 
 * [#787](https://github.com/Icinga/icinga-powershell-framework/pull/787) Fixes the return value in case the `Agent` component could not be installed from `$FALSE` to `null`
+* [#796](https://github.com/Icinga/icinga-powershell-framework/issues/796) [#798](https://github.com/Icinga/icinga-powershell-framework/issues/798) Fixes an issue with the new check handling, which did not properly convert values from checks to the correct performance data values and base values in some cases
 
 ## 1.13.2 (2025-02-03)
 
