@@ -134,6 +134,24 @@ function Compare-IcingaPluginThresholds()
         $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'Minimum'   -Value (Convert-IcingaPluginThresholds -Threshold $Minium);
         $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'Maximum'   -Value (Convert-IcingaPluginThresholds -Threshold $Maximum);
 
+        if ($TestInput.Decimal) {
+            $ConvertedValue = Convert-IcingaPluginThresholds -Threshold ([string]::Format('{0}{1}', $InputValue, $Unit));
+
+            if ((Test-IcingaDecimal -Value $ConvertedValue.Value).Decimal) {
+                $InputValue             = [decimal]$ConvertedValue.Value;
+                $IcingaThresholds.Value = [decimal]$ConvertedValue.Value;
+                $IcingaThresholds.Unit  = $ConvertedValue.Unit;
+            }
+        }
+
+        if ($BaseInput.Decimal) {
+            $ConvertedBaseValue = Convert-IcingaPluginThresholds -Threshold ([string]::Format('{0}{1}', $BaseValue, $Unit));
+
+            if ((Test-IcingaDecimal -Value $ConvertedBaseValue.Value).Decimal) {
+                $BaseValue = [decimal]$ConvertedBaseValue.Value;
+            }
+        }
+
         # In case we are using % values, we should set the BaseValue always to 100
         if ($Unit -eq '%' -And $null -eq $BaseValue) {
             $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'BaseValue' -Value 100;
@@ -144,17 +162,17 @@ function Compare-IcingaPluginThresholds()
         $CheckResult = $null;
 
         if ($Matches) {
-            $CheckResult = Compare-IcingaPluginValueToThreshold -Value $InputValue -BaseValue $IcingaThresholds.BaseValue -Threshold $IcingaThresholds.Threshold -Unit $Unit -Translation $Translation -OverrideMode $IcingaEnums.IcingaThresholdMethod.Matches -MetricsOverTime $MoTData;
+            $CheckResult = Compare-IcingaPluginValueToThreshold -Value $InputValue -BaseValue $IcingaThresholds.BaseValue -Threshold $IcingaThresholds.Threshold -Unit $IcingaThresholds.Unit -CheckUnit $Unit -Translation $Translation -OverrideMode $IcingaEnums.IcingaThresholdMethod.Matches -MetricsOverTime $MoTData;
         } elseif ($NotMatches) {
-            $CheckResult = Compare-IcingaPluginValueToThreshold -Value $InputValue -BaseValue $IcingaThresholds.BaseValue -Threshold $IcingaThresholds.Threshold -Unit $Unit -Translation $Translation -OverrideMode $IcingaEnums.IcingaThresholdMethod.NotMatches -MetricsOverTime $MoTData;
+            $CheckResult = Compare-IcingaPluginValueToThreshold -Value $InputValue -BaseValue $IcingaThresholds.BaseValue -Threshold $IcingaThresholds.Threshold -Unit $IcingaThresholds.Unit -CheckUnit $Unit -Translation $Translation -OverrideMode $IcingaEnums.IcingaThresholdMethod.NotMatches -MetricsOverTime $MoTData;
         } elseif ($IsBetween) {
-            $CheckResult = Compare-IcingaPluginValueToThreshold -Value $InputValue -BaseValue $IcingaThresholds.BaseValue -Threshold $IcingaThresholds.Threshold -Unit $Unit -Translation $Translation -OverrideMode $IcingaEnums.IcingaThresholdMethod.Between -MetricsOverTime $MoTData;
+            $CheckResult = Compare-IcingaPluginValueToThreshold -Value $InputValue -BaseValue $IcingaThresholds.BaseValue -Threshold $IcingaThresholds.Threshold -Unit $IcingaThresholds.Unit -CheckUnit $Unit -Translation $Translation -OverrideMode $IcingaEnums.IcingaThresholdMethod.Between -MetricsOverTime $MoTData;
         } elseif ($IsLowerEqual) {
-            $CheckResult = Compare-IcingaPluginValueToThreshold -Value $InputValue -BaseValue $IcingaThresholds.BaseValue -Threshold $IcingaThresholds.Threshold -Unit $Unit -Translation $Translation -OverrideMode $IcingaEnums.IcingaThresholdMethod.LowerEqual -MetricsOverTime $MoTData;
+            $CheckResult = Compare-IcingaPluginValueToThreshold -Value $InputValue -BaseValue $IcingaThresholds.BaseValue -Threshold $IcingaThresholds.Threshold -Unit $IcingaThresholds.Unit -CheckUnit $Unit -Translation $Translation -OverrideMode $IcingaEnums.IcingaThresholdMethod.LowerEqual -MetricsOverTime $MoTData;
         } elseif ($IsGreaterEqual) {
-            $CheckResult = Compare-IcingaPluginValueToThreshold -Value $InputValue -BaseValue $IcingaThresholds.BaseValue -Threshold $IcingaThresholds.Threshold -Unit $Unit -Translation $Translation -OverrideMode $IcingaEnums.IcingaThresholdMethod.GreaterEqual -MetricsOverTime $MoTData;
+            $CheckResult = Compare-IcingaPluginValueToThreshold -Value $InputValue -BaseValue $IcingaThresholds.BaseValue -Threshold $IcingaThresholds.Threshold -Unit $IcingaThresholds.Unit -CheckUnit $Unit -Translation $Translation -OverrideMode $IcingaEnums.IcingaThresholdMethod.GreaterEqual -MetricsOverTime $MoTData;
         } else {
-            $CheckResult = Compare-IcingaPluginValueToThreshold -Value $InputValue -BaseValue $IcingaThresholds.BaseValue -Threshold $IcingaThresholds.Threshold -Unit $Unit -Translation $Translation -MetricsOverTime $MoTData;
+            $CheckResult = Compare-IcingaPluginValueToThreshold -Value $InputValue -BaseValue $IcingaThresholds.BaseValue -Threshold $IcingaThresholds.Threshold -Unit $IcingaThresholds.Unit -CheckUnit $Unit -Translation $Translation -MetricsOverTime $MoTData;
         }
 
         $IcingaThresholds.Message  = $CheckResult.Message;
