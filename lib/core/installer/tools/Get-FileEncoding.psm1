@@ -38,7 +38,10 @@ function Get-FileEncoding()
         return $null;
     }
 
-    $Bytes = Get-Content -Encoding Byte -ReadCount 4 -TotalCount 4 -Path $Path;
+    $FileStream = [System.IO.File]::OpenRead($Path);
+    $Bytes      = New-Object Byte[] 4;
+    $FileStream.Read($Bytes, 0, 4) | Out-Null;
+    $FileStream.Close();
 
     if ($Bytes[0] -eq 0xef -and $Bytes[1] -eq 0xbb -and $Bytes[2] -eq 0xbf) {
         return 'UTF8-BOM';
@@ -52,8 +55,14 @@ function Get-FileEncoding()
         return 'UTF32';
     } else {
         # Check if the file is ASCII or UTF8 without BOM
-        $Content = Get-Content -Encoding String -Path $Path;
-        $Bytes   = [System.Text.Encoding]::UTF8.GetBytes($content);
+        $Content = Get-Content -Encoding String -Path $Path -ErrorAction SilentlyContinue;
+
+        # In case the file is empty, we assume it's UTF8
+        if ([string]::IsNullOrEmpty($Content)) {
+            return 'UTF8';
+        }
+
+        $Bytes = [System.Text.Encoding]::UTF8.GetBytes($content);
 
         # Check each byte to see if it's outside the ASCII range
         foreach ($byte in $Bytes) {
