@@ -18,6 +18,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 ### Bugfixes
 
 * [#785](https://github.com/Icinga/icinga-powershell-framework/issues/785) Fixes Icinga for Windows freezing during loading in case the `config.json` is empty
+* [#786](https://github.com/Icinga/icinga-powershell-framework/issues/786) Fixes Icinga for Windows installer to always force the installation of the service, to ensure it is present
 * [#787](https://github.com/Icinga/icinga-powershell-framework/pull/787) Fixes the return value in case the `Agent` component could not be installed from `$FALSE` to `null`
 * [#796](https://github.com/Icinga/icinga-powershell-framework/issues/796) [#798](https://github.com/Icinga/icinga-powershell-framework/issues/798) Fixes an issue with the new check handling, which did not properly convert values from checks to the correct performance data values and base values in some cases
 * [#797](https://github.com/Icinga/icinga-powershell-framework/issues/797) Fixes plugins throwing `UNKNOWN` in case `-TresholdInterval` is used for Metrics over Time, when checks are newly registered and checked, before the first MoT is executed and collected
