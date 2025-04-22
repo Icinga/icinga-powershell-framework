@@ -17,6 +17,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 ### Bugfixes
 
+* [#781](https://github.com/Icinga/icinga-powershell-framework/issues/781) Fixes Icinga for Windows being stuck during installation while fetching service information over CIM-Instances, if other services are frozen, blocking the CIM-Request
 * [#784](https://github.com/Icinga/icinga-powershell-framework/issues/784) Fixes Icinga for Windows threshold comparison which wrongly compared warning/critical thresholds for non-range values (like Match)
 * [#785](https://github.com/Icinga/icinga-powershell-framework/issues/785) Fixes Icinga for Windows freezing during loading in case the `config.json` is empty
 * [#786](https://github.com/Icinga/icinga-powershell-framework/issues/786) Fixes Icinga for Windows installer to always force the installation of the service, to ensure it is present

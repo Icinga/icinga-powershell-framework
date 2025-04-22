@@ -1,30 +1,66 @@
 function Get-IcingaServices()
 {
     param (
-        [array]$Service,
+        [array]$Service = @(),
         [array]$Exclude = @()
     );
 
     $ServiceInformation = Get-Service;
     $ServiceWmiInfo     = $null;
+    $ServiceFilter      = New-Object System.Text.StringBuilder;
 
-    if ($Service.Count -eq 0) {
-        $ServiceWmiInfo = Get-IcingaWindowsInformation Win32_Service;
-    } else {
-        try {
-            $ServiceWmiInfo = Get-IcingaWindowsInformation Win32_Service |
-            ForEach-Object {
-                foreach ($svc in $Service) {
-                    if ($_.Name -Like $svc) {
-                        return $_;
-                    }
-                }
-            } | Select-Object StartName, Name, ExitCode, StartMode, PathName;
-        } catch {
-            Exit-IcingaThrowException -InputString $_.Exception.Message -StringPattern 'wildcard' -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.RegexError;
-            Exit-IcingaThrowException -CustomMessage $_.Exception.Message -ExceptionType 'Input' -ExceptionThrown $_.Exception.Message;
-            return $null;
+    if ($Service.Count -gt 0) {
+        $ServiceFilter.Append('(') | Out-Null;
+
+        foreach ($svc in $Service) {
+            if ($ServiceFilter.Length -gt 1) {
+                $ServiceFilter.Append(' OR ') | Out-Null;
+            }
+
+            $ServiceFilter.Append(
+                [string]::Format(
+                    'Name LIKE "{0}"',
+                    $svc.Replace('*', '%')
+                )
+            ) | Out-Null;
         }
+
+        $ServiceFilter.Append(')') | Out-Null;
+    }
+
+    if ($Exclude.Count -gt 0) {
+        if ($ServiceFilter.Length -gt 0) {
+            $ServiceFilter.Append(' AND (') | Out-Null;
+        } else {
+            $ServiceFilter.Append('(') | Out-Null;
+        }
+
+        [bool]$First = $TRUE;
+
+        foreach ($svc in $Exclude) {
+            if ($First -eq $FALSE) {
+                $ServiceFilter.Append(' AND ') | Out-Null;
+            }
+
+            $First = $FALSE;
+
+            $ServiceFilter.Append(
+                [string]::Format(
+                    'NOT Name LIKE "{0}"',
+                    $svc.Replace('*', '%')
+                )
+            ) | Out-Null;
+        }
+
+        $ServiceFilter.Append(')') | Out-Null;
+    }
+
+    try {
+        $ServiceWmiInfo = Get-IcingaWindowsInformation -ClassName Win32_Service -Filter $ServiceFilter.ToString() | Select-Object StartName, Name, ExitCode, StartMode, PathName;
+    } catch {
+        Exit-IcingaThrowException -InputString $_.Exception.Message -StringPattern 'wildcard' -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.RegexError;
+        Exit-IcingaThrowException -CustomMessage $_.Exception.Message -ExceptionType 'Input' -ExceptionThrown $_.Exception.Message;
+        return $null;
     }
 
     if ($null -eq $ServiceInformation) {
