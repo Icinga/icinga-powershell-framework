@@ -21,19 +21,27 @@ function Add-IcingaServiceCheckTask()
     [int]$CheckInterval        = ConvertTo-Seconds $Interval;
     [hashtable]$CheckDataCache = @{ };
     [array]$PerfDataEntries    = @();
+    [bool]$ForceExecution      = $FALSE;
 
     if (Test-Path -Path $MetricCacheFile) {
         $CheckDataCache = [System.Management.Automation.PSSerializer]::Deserialize((Get-Content -Path $MetricCacheFile -Raw -Encoding UTF8));
     }
 
+    # In case we run this code for the first time for a CheckCommand and no data is available, ensure we run the check immediately
+    # This will ensure our plugins will always return proper values and not throw unknowns, in case the execution is set to a higher interval
+    if ($null -eq $CheckDataCache -Or $CheckDataCache.Count -eq 0) {
+        $ForceExecution = $TRUE;
+    }
+
     while ($TRUE) {
-        if ($Global:Icinga.Private.Daemons.ServiceCheck.PassedTime -lt $CheckInterval) {
+        if ($ForceExecution -eq $FALSE -And $Global:Icinga.Private.Daemons.ServiceCheck.PassedTime -lt $CheckInterval) {
             $Global:Icinga.Private.Daemons.ServiceCheck.PassedTime += 1;
             Start-Sleep -Seconds 1;
 
             continue;
         }
 
+        $ForceExecution                                        = $FALSE;
         $Global:Icinga.Private.Daemons.ServiceCheck.PassedTime = 0;
 
         # Clear possible previous performance data from the daemon cache
