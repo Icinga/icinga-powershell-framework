@@ -29,22 +29,23 @@ function New-IcingaCheck()
         $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'Value' -Value $Value;
     }
 
-    $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'BaseValue'         -Value $BaseValue;
-    $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'Unit'              -Value $Unit;
-    $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'MetricIndex'       -Value $MetricIndex;
-    $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'MetricName'        -Value $MetricName;
-    $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'MetricTemplate'    -Value $MetricTemplate;
-    $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'Minimum'           -Value $Minimum;
-    $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'Maximum'           -Value $Maximum;
-    $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'ObjectExists'      -Value $ObjectExists;
-    $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'Translation'       -Value $Translation;
-    $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'LabelName'         -Value $LabelName;
-    $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'NoPerfData'        -Value ([bool]$NoPerfData);
-    $IcingaCheck | Add-Member -MemberType NoteProperty -Name '__WarningValue'    -Value $null;
-    $IcingaCheck | Add-Member -MemberType NoteProperty -Name '__CriticalValue'   -Value $null;
-    $IcingaCheck | Add-Member -MemberType NoteProperty -Name '__LockedState'     -Value $FALSE;
-    $IcingaCheck | Add-Member -MemberType NoteProperty -Name '__ThresholdObject' -Value $null;
-    $IcingaCheck | Add-Member -MemberType NoteProperty -Name '__TimeInterval'    -Value $null;
+    $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'BaseValue'                    -Value $BaseValue;
+    $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'Unit'                         -Value $Unit;
+    $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'MetricIndex'                  -Value $MetricIndex;
+    $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'MetricName'                   -Value $MetricName;
+    $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'MetricTemplate'               -Value $MetricTemplate;
+    $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'Minimum'                      -Value $Minimum;
+    $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'Maximum'                      -Value $Maximum;
+    $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'ObjectExists'                 -Value $ObjectExists;
+    $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'Translation'                  -Value $Translation;
+    $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'LabelName'                    -Value $LabelName;
+    $IcingaCheck | Add-Member -MemberType NoteProperty -Name 'NoPerfData'                   -Value ([bool]$NoPerfData);
+    $IcingaCheck | Add-Member -MemberType NoteProperty -Name '__WarningValue'               -Value $null;
+    $IcingaCheck | Add-Member -MemberType NoteProperty -Name '__CriticalValue'              -Value $null;
+    $IcingaCheck | Add-Member -MemberType NoteProperty -Name '__LockedState'                -Value $FALSE;
+    $IcingaCheck | Add-Member -MemberType NoteProperty -Name '__ThresholdObject'            -Value $null;
+    $IcingaCheck | Add-Member -MemberType NoteProperty -Name '__RequireThresholdValidation' -Value $TRUE;
+    $IcingaCheck | Add-Member -MemberType NoteProperty -Name '__TimeInterval'               -Value $null;
 
     $IcingaCheck.__SetNoHeaderReport($NoHeaderReport);
 
@@ -552,6 +553,8 @@ function New-IcingaCheck()
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Name 'WarnIfLike' -Value {
         param ($Threshold);
 
+        $this.__RequireThresholdValidation = $FALSE;
+
         if ($null -ne $Threshold -And $Threshold.GetType().BaseType.Name.ToLower() -eq 'array') {
             foreach ($entry in $Threshold) {
                 $this.WarnIfLike($entry) | Out-Null;
@@ -579,6 +582,8 @@ function New-IcingaCheck()
 
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Name 'WarnIfNotLike' -Value {
         param ($Threshold);
+
+        $this.__RequireThresholdValidation = $FALSE;
 
         if ($null -ne $Threshold -And $Threshold.GetType().BaseType.Name.ToLower() -eq 'array') {
             foreach ($entry in $Threshold) {
@@ -675,6 +680,8 @@ function New-IcingaCheck()
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Name 'CritIfLike' -Value {
         param ($Threshold);
 
+        $this.__RequireThresholdValidation = $FALSE;
+
         if ($null -ne $Threshold -And $Threshold.GetType().BaseType.Name.ToLower() -eq 'array') {
             foreach ($entry in $Threshold) {
                 $this.CritIfLike($entry) | Out-Null;
@@ -702,6 +709,8 @@ function New-IcingaCheck()
 
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Name 'CritIfNotLike' -Value {
         param ($Threshold);
+
+        $this.__RequireThresholdValidation = $FALSE;
 
         if ($null -ne $Threshold -And $Threshold.GetType().BaseType.Name.ToLower() -eq 'array') {
             foreach ($entry in $Threshold) {
@@ -986,6 +995,10 @@ function New-IcingaCheck()
 
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Force -Name '__ValidateThresholdInput' -Value {
         if ($null -eq $this.__WarningValue -Or $null -eq $this.__CriticalValue) {
+            return;
+        }
+
+        if ($this.__RequireThresholdValidation -eq $FALSE) {
             return;
         }
 
