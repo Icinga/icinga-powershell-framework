@@ -237,7 +237,7 @@ function Start-IcingaForWindowsInstallation()
         Set-IcingaPowerShellConfig -Path 'Framework.Icinga.IcingaForWindowsService' -Value $WindowsServiceDir;
         Set-IcingaInternalPowerShellServicePassword -Password (ConvertTo-IcingaSecureString $ServicePassword);
 
-        Install-IcingaComponent -Name 'service' -Release -Confirm;
+        Install-IcingaComponent -Name 'service' -Release -Confirm -Force;
         Register-IcingaBackgroundDaemon -Command 'Start-IcingaServiceCheckDaemon';
     }
 
