@@ -24,6 +24,10 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#796](https://github.com/Icinga/icinga-powershell-framework/issues/796) [#798](https://github.com/Icinga/icinga-powershell-framework/issues/798) Fixes an issue with the new check handling, which did not properly convert values from checks to the correct performance data values and base values in some cases
 * [#797](https://github.com/Icinga/icinga-powershell-framework/issues/797) Fixes plugins throwing `UNKNOWN` in case `-TresholdInterval` is used for Metrics over Time, when checks are newly registered and checked, before the first MoT is executed and collected
 
+### Enhancements
+
+* [#810](https://github.com/Icinga/icinga-powershell-framework/pull/810) Adds support to suppress messages for `Disable-IcingaUntrustedCertificateValidation`
+
 ## 1.13.3 (tbd)
 
 * [#800](https://github.com/Icinga/icinga-powershell-framework/pull/800) Fixes an issue for certain plugins, like `Invoke-IcingaCheckProcess`, which reports unknown if MetricsOverTime is used for checks that do not write performance data
