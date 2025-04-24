@@ -101,8 +101,8 @@ function New-IcingaCheckPackage()
         $CheckSummary     = New-Object -TypeName 'System.Text.StringBuilder';
         [bool]$HasContent = $FALSE;
 
-        # Only apply this to the top parent package
-        if ($this.__GetIndention() -eq 0) {
+        # Always apply this to the first package or if we specify AddSummaryHeader
+        if ($this.__GetIndention() -eq 0 -Or $this.AddSummaryHeader) {
             if ($this.__UnknownChecks.Count -ne 0) {
                 $UnknownChecks = [string]::Format(' [UNKNOWN] {0}', ([string]::Join(', ', $this.__UnknownChecks)));
                 $CheckSummary.Append(
