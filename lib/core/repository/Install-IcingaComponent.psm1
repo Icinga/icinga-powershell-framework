@@ -288,6 +288,7 @@ function Install-IcingaComponent()
                     [void](Install-IcingaForWindowsService -Path $ServiceBin -User $ServiceUser -Password (Get-IcingaInternalPowerShellServicePassword));
                     Update-IcingaServiceUser;
                     Set-IcingaInternalPowerShellServicePassword -Password $null;
+                    Set-IcingaForWindowsServicesDelayedStart;
                     $Success = 1;
                     break;
                 }
@@ -405,6 +406,7 @@ function Install-IcingaComponent()
 
         Set-IcingaServiceUser -User $ServiceUser -SetPermission | Out-Null;
         Update-IcingaServiceUser;
+        Set-IcingaForWindowsServicesDelayedStart;
 
         Write-IcingaConsoleNotice 'Installation of component "agent" with version "{0}" was successful.' -Objects $MSIData.ProductVersion;
     } else {
