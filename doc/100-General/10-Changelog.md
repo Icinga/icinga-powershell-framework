@@ -25,15 +25,13 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#787](https://github.com/Icinga/icinga-powershell-framework/pull/787) Fixes the return value in case the `Agent` component could not be installed from `$FALSE` to `null`
 * [#796](https://github.com/Icinga/icinga-powershell-framework/issues/796) [#798](https://github.com/Icinga/icinga-powershell-framework/issues/798) Fixes an issue with the new check handling, which did not properly convert values from checks to the correct performance data values and base values in some cases
 * [#797](https://github.com/Icinga/icinga-powershell-framework/issues/797) Fixes plugins throwing `UNKNOWN` in case `-TresholdInterval` is used for Metrics over Time, when checks are newly registered and checked, before the first MoT is executed and collected
+* [#800](https://github.com/Icinga/icinga-powershell-framework/pull/800) Fixes an issue for certain plugins, like `Invoke-IcingaCheckProcess`, which reports unknown if MetricsOverTime is used for checks that do not write performance data
 * [#809](https://github.com/Icinga/icinga-powershell-framework/issues/809) Fixes plugin compiler not handling `AddSummaryHeader` properly for nested check packages, not adding any check information
 
 ### Enhancements
 
 * [#810](https://github.com/Icinga/icinga-powershell-framework/pull/810) Adds support to suppress messages for `Disable-IcingaUntrustedCertificateValidation`
-
-## 1.13.3 (tbd)
-
-* [#800](https://github.com/Icinga/icinga-powershell-framework/pull/800) Fixes an issue for certain plugins, like `Invoke-IcingaCheckProcess`, which reports unknown if MetricsOverTime is used for checks that do not write performance data
+* [#812](https://github.com/Icinga/icinga-powershell-framework/pull/812) Adds new Cmdlet `Set-IcingaForWindowsServicesDelayedStart` which will update the Icinga Agent and Icinga for Windows service to run with delayed autostart
 
 ## 1.13.2 (2025-02-03)
 

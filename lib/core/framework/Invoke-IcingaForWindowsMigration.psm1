@@ -165,4 +165,13 @@ function Invoke-IcingaForWindowsMigration()
 
         Set-IcingaForWindowsMigration -MigrationVersion (New-IcingaVersionObject -Version '1.13.0.1');
     }
+
+    if (Test-IcingaForWindowsMigration -MigrationVersion (New-IcingaVersionObject -Version '1.13.3')) {
+        Write-IcingaConsoleNotice 'Applying pending migrations required for Icinga for Windows v1.13.3';
+
+        # Update the Icinga Agent and Icinga for Windows service to delayed start
+        Set-IcingaForWindowsServicesDelayedStart;
+
+        Set-IcingaForWindowsMigration -MigrationVersion (New-IcingaVersionObject -Version '1.13.3');
+    }
 }

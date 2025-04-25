@@ -60,7 +60,7 @@ function Repair-IcingaService()
         -Objects $IcingaServicePath;
 
     $IcingaServicePath = [string]::Format('\"{0}\" --scm \"daemon\"', $IcingaServicePath);
-    $IcingaService     = Start-IcingaProcess -Executable 'sc.exe' -Arguments ([string]::Format('create icinga2 binPath= "{0}" DisplayName= "Icinga 2" start= auto', $IcingaServicePath));
+    $IcingaService     = Start-IcingaProcess -Executable 'sc.exe' -Arguments ([string]::Format('create icinga2 binPath= "{0}" DisplayName= "Icinga 2" start= delayed-auto', $IcingaServicePath));
 
     if ($IcingaService.ExitCode -ne 0) {
         Write-IcingaConsoleError `
