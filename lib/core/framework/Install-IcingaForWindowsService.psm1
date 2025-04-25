@@ -68,7 +68,7 @@ function Install-IcingaForWindowsService()
     );
 
     if ($IfWService.Present -eq $FALSE) {
-        $ServiceCreation = Start-IcingaProcess -Executable 'sc.exe' -Arguments ([string]::Format('create icingapowershell binPath= "{0}" DisplayName= "Icinga PowerShell Service" start= auto', $Path));
+        $ServiceCreation = Start-IcingaProcess -Executable 'sc.exe' -Arguments ([string]::Format('create icingapowershell binPath= "{0}" DisplayName= "Icinga PowerShell Service" start= delayed-auto', $Path));
         $Global:Icinga.Protected.Environment.'PowerShell Service'.Present     = $TRUE;
         $Global:Icinga.Protected.Environment.'PowerShell Service'.User        = $User;
         $Global:Icinga.Protected.Environment.'PowerShell Service'.ServicePath = $Path;
