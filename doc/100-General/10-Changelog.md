@@ -11,6 +11,14 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/38)
 
+## 1.13.4 (tbd)
+
+[Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/42)
+
+### Bugfixes
+
+* [#814](https://github.com/Icinga/icinga-powershell-framework/pull/814) Fixes random chars function to truly generate unpredictable character sequences and to replace `Get-Random` which is not entirely secure
+
 ## 1.13.3 (2025-05-08)
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/39)
