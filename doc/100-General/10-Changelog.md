@@ -15,6 +15,9 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/42)
 
+### Bugfixes
+
+* [#814](https://github.com/Icinga/icinga-powershell-framework/pull/814) Fixes random chars function to truly generate unpredictable character sequences and to replace `Get-Random` which is not entirely secure
 * [#815](https://github.com/Icinga/icinga-powershell-framework/pull/815) Fixes a possible crash for `Test-IcingaAddTypeExist`, causing the Icinga for Windows installation to fail when third party components are checked which are malfunctioning
 
 ## 1.13.3 (2025-05-08)
