@@ -11,6 +11,12 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/38)
 
+## 1.13.4 (tbd)
+
+[Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/42)
+
+* [#815](https://github.com/Icinga/icinga-powershell-framework/pull/815) Fixes a possible crash for `Test-IcingaAddTypeExist`, causing the Icinga for Windows installation to fail when third party components are checked which are malfunctioning
+
 ## 1.13.3 (2025-05-08)
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/39)
