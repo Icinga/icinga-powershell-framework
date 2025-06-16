@@ -31,12 +31,15 @@ function Test-IcingaAddTypeExist()
     }
 
     foreach ($entry in [System.AppDomain]::CurrentDomain.GetAssemblies()) {
-        if ($entry.GetTypes() -Match $Type) {
-            $LoadedTypes.Add($Type, $TRUE);
+        try {
+            if ($entry.GetTypes() -Match $Type) {
+                $LoadedTypes.Add($Type, $TRUE);
 
-            Set-IcingaPrivateEnvironmentVariable -Name 'AddTypeFunctions' -Value $LoadedTypes;
+                Set-IcingaPrivateEnvironmentVariable -Name 'AddTypeFunctions' -Value $LoadedTypes;
 
-            return $TRUE;
+                return $TRUE;
+            }
+        } catch {
         }
     }
 
