@@ -20,6 +20,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 ### Enhancements
 
 * [#838](https://github.com/Icinga/icinga-powershell-framework/pull/838) Enhances Icinga for Windows to never load and user PowerShell profiles
+* [#11](https://github.com/Icinga/icinga-powershell-framework/pull/11) Adds feature to update the cache for performance counter instances to keep track of system changes
 
 ## 1.13.4 (tbd)
 

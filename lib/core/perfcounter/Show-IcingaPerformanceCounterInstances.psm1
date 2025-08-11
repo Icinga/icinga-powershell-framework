@@ -35,7 +35,7 @@ function Show-IcingaPerformanceCounterInstances()
         return;
     }
 
-    $PerfCounter  = New-IcingaPerformanceCounter -Counter $Counter -SkipWait $TRUE;
+    $PerfCounter  = New-IcingaPerformanceCounter -Counter $Counter -SkipWait $TRUE -NoCache;
 
     foreach ($entry in $PerfCounter.Counters) {
         $Instances.Add(
