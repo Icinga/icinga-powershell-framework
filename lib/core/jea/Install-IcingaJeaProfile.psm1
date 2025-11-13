@@ -23,7 +23,8 @@ function Install-IcingaJEAProfile()
     }
 
     Write-IcingaConsoleNotice 'Writing Icinga for Windows environment information as JEA profile';
-    Write-IcingaJEAProfile -RebuildFramework:$RebuildFramework -AllowScriptBlocks:$AllowScriptBlocks;
+    # Always rebuild the framework to ensure we have the latest configuration
+    Write-IcingaJEAProfile -RebuildFramework -AllowScriptBlocks:$AllowScriptBlocks;
     Write-IcingaConsoleNotice 'Registering Icinga for Windows JEA profile';
     Register-IcingaJEAProfile -IcingaUser $IcingaUser -TestEnv:$TestEnv -ConstrainedLanguage:$ConstrainedLanguage;
     # We need to run the task renewal with our scheduled task to fix errors while using WinRM / SSH
