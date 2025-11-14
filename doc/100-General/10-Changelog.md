@@ -12,6 +12,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/38)
 
 * [#835](https://github.com/Icinga/icinga-powershell-framework/pull/835) Fixes JEA compiler to always enforce a rebuild of the Framework to ensure integrity of JEA profiles
+* [#836](https://github.com/Icinga/icinga-powershell-framework/issues/836) Fixes Metric over Time collector not working on Windows 2012 R2 and older
 
 ## 1.13.4 (tbd)
 

@@ -24,7 +24,7 @@ function Start-IcingaServiceCheckDaemon()
 {
     New-IcingaThreadInstance `
         -Name 'Main' `
-        -ThreadPool (Get-IcingaThreadPool -Name 'MainPool') `
+        -ThreadPool (Get-IcingaThreadPool -Name 'ServiceDaemonPool') `
         -Command 'Add-IcingaServiceCheckDaemon' `
         -Start;
 }
