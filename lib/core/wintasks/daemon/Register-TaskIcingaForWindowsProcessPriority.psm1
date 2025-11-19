@@ -15,7 +15,7 @@ function Register-IcingaWindowsScheduledTaskProcessPriority()
     }
 
     $ScriptPath    = Join-Path -Path (Get-IcingaFrameworkRootPath) -ChildPath '\jobs\SetProcessPriority.ps1';
-    $TaskAction    = New-ScheduledTaskAction -Execute 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -Argument ([string]::Format("-WindowStyle Hidden -Command &{{ & '{0}' }}", $ScriptPath));
+    $TaskAction    = New-ScheduledTaskAction -Execute 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -Argument ([string]::Format("-NoProfile -WindowStyle Hidden -Command &{{ & '{0}' }}", $ScriptPath));
     $TaskPrincipal = New-ScheduledTaskPrincipal -UserId 'S-1-5-18' -RunLevel 'Highest' -LogonType ServiceAccount;
     $TaskSettings  = New-ScheduledTaskSettingsSet -DontStopIfGoingOnBatteries -AllowStartIfOnBatteries -StartWhenAvailable;
 

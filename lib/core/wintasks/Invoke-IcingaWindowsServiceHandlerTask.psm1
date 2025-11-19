@@ -19,7 +19,7 @@ function Invoke-IcingaWindowsServiceHandlerTask()
         return $null;
     }
 
-    $WinAction    = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument ([string]::Format("-WindowStyle Hidden -Command &{{ & '{0}' -ServiceName '{1}' -TmpFilePath '{2}' }}", $ScriptPath, $ServiceName, $TmpFile));
+    $WinAction    = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument ([string]::Format("-NoProfile -WindowStyle Hidden -Command &{{ & '{0}' -ServiceName '{1}' -TmpFilePath '{2}' }}", $ScriptPath, $ServiceName, $TmpFile));
     $TaskSettings = New-ScheduledTaskSettingsSet -DontStopIfGoingOnBatteries -AllowStartIfOnBatteries -StartWhenAvailable;
     # We need to schedule this task as LocalSystem to ensure we can fetch the information while connected over WinRM/SSH
     # We require high admin privilleges anyway, therefor this shouldn't hurt

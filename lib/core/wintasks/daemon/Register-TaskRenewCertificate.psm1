@@ -16,7 +16,7 @@ function Register-IcingaWindowsScheduledTaskRenewCertificate()
 
     $ScriptPath    = Join-Path -Path (Get-IcingaFrameworkRootPath) -ChildPath '\jobs\RenewCertificate.ps1';
     $TaskTrigger   = New-ScheduledTaskTrigger -Daily -DaysInterval 1 -At '1am';
-    $TaskAction    = New-ScheduledTaskAction -Execute 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -Argument ([string]::Format("-WindowStyle Hidden -Command &{{ & '{0}' }}", $ScriptPath));
+    $TaskAction    = New-ScheduledTaskAction -Execute 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' -Argument ([string]::Format("-NoProfile -WindowStyle Hidden -Command &{{ & '{0}' }}", $ScriptPath));
     $TaskPrincipal = New-ScheduledTaskPrincipal -UserId 'S-1-5-18' -RunLevel 'Highest' -LogonType ServiceAccount;
     $TaskSettings  = New-ScheduledTaskSettingsSet -DontStopIfGoingOnBatteries -AllowStartIfOnBatteries -StartWhenAvailable;
 

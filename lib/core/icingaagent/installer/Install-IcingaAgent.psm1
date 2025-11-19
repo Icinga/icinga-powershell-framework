@@ -73,7 +73,7 @@ function Install-IcingaAgent()
         }
     }
 
-    $InstallProcess = & powershell.exe -Command {
+    $InstallProcess = & powershell.exe -NoProfile -Command {
         Use-Icinga -Minimal;
 
         $IcingaInstaller = $args[0];

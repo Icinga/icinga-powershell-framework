@@ -340,7 +340,7 @@ function Invoke-IcingaCommand()
     # Ensure we set the path to another folder to prevent locking the Framework Root Folder
     Set-Location (Get-IcingaForWindowsRootPath);
 
-    powershell.exe -NoExit -Command {
+    powershell.exe -NoProfile -NoExit -Command {
         $Script          = $args[0];
         $RootPath        = $args[1];
         $Version         = $args[2];
@@ -427,7 +427,7 @@ function Start-IcingaShellAsUser()
         -Verb RunAs `
         -ArgumentList (
             [string]::Format(
-                "-Command `"Start-Process -FilePath `"powershell.exe`" -WorkingDirectory `"{0}`" -Credential (Get-Credential -UserName '{1}' -Message 'Please enter your credentials to open an Icinga Shell with') -ArgumentList icinga`"",
+                "-NoProfile -Command `"Start-Process -FilePath `"powershell.exe`" -WorkingDirectory `"{0}`" -Credential (Get-Credential -UserName '{1}' -Message 'Please enter your credentials to open an Icinga Shell with') -ArgumentList icinga`"",
                 $PSHOME,
                 $User
             )

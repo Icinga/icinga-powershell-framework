@@ -27,7 +27,7 @@ function Start-IcingaService()
     if (Get-Service $Service -ErrorAction SilentlyContinue) {
         Write-IcingaConsoleNotice -Message 'Starting service "{0}"' -Objects $Service;
 
-        & powershell.exe -Command {
+        & powershell.exe -NoProfile -Command {
             Use-Icinga -Minimal;
 
             $Service = $args[0];
