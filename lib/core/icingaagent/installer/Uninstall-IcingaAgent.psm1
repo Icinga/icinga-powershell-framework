@@ -22,7 +22,7 @@ function Uninstall-IcingaAgent()
 
     Stop-IcingaService -Service 'icinga2';
 
-    $Uninstaller = & powershell.exe -Command {
+    $Uninstaller = & powershell.exe -NoProfile -Command {
         Use-Icinga -Minimal;
 
         $IcingaData  = $args[0];

@@ -12,7 +12,7 @@ function Show-IcingaForWindowsMenuManageViewLogs()
                 'AdminMenu'      = $TRUE;
                 'Action'         = @{
                     'Command'   = 'Start-Process';
-                    'Arguments' = @{ '-FilePath' = 'powershell.exe'; '-ArgumentList' = "-Command  `"&{ icinga { Read-IcingaAgentLogFile; }; }`"" };
+                    'Arguments' = @{ '-FilePath' = 'powershell.exe'; '-ArgumentList' = "-NoProfile -Command  `"&{ icinga { Read-IcingaAgentLogFile; }; }`"" };
                 }
             },
             @{
@@ -24,7 +24,7 @@ function Show-IcingaForWindowsMenuManageViewLogs()
                 'AdminMenu'      = $TRUE;
                 'Action'         = @{
                     'Command'   = 'Start-Process';
-                    'Arguments' = @{ '-FilePath' = 'powershell.exe'; '-ArgumentList' = "-Command  `"&{ icinga { Read-IcingaAgentDebugLogFile; }; }`"" };
+                    'Arguments' = @{ '-FilePath' = 'powershell.exe'; '-ArgumentList' = "-NoProfile -Command  `"&{ icinga { Read-IcingaAgentDebugLogFile; }; }`"" };
                 }
             },
             @{
@@ -34,7 +34,7 @@ function Show-IcingaForWindowsMenuManageViewLogs()
                 'AdminMenu' = $TRUE;
                 'Action'    = @{
                     'Command'   = 'Start-Process';
-                    'Arguments' = @{ '-FilePath' = 'powershell.exe'; '-ArgumentList' = "-Command  `"&{ icinga { Read-IcingaForWindowsLog; }; }`"" };
+                    'Arguments' = @{ '-FilePath' = 'powershell.exe'; '-ArgumentList' = "-NoProfile -Command  `"&{ icinga { Read-IcingaForWindowsLog; }; }`"" };
                 }
             },
             @{
@@ -44,7 +44,7 @@ function Show-IcingaForWindowsMenuManageViewLogs()
                 'AdminMenu' = $TRUE;
                 'Action'    = @{
                     'Command'   = 'Start-Process';
-                    'Arguments' = @{ '-FilePath' = 'powershell.exe'; '-ArgumentList' = "-Command  `"&{ icinga { Read-IcingaWindowsEventLog -LogName 'Icinga for Windows' -Source 'IfW::Debug'; }; }`"" };
+                    'Arguments' = @{ '-FilePath' = 'powershell.exe'; '-ArgumentList' = "-NoProfile -Command  `"&{ icinga { Read-IcingaWindowsEventLog -LogName 'Icinga for Windows' -Source 'IfW::Debug'; }; }`"" };
                 }
             }
         );

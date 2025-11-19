@@ -82,7 +82,7 @@ Update-IcingaJEAProfile -IcingaUser 'MyOwnIcingaUser';
 If you used `TestEnv` to create a test environment for JEA for the current user, you can simply enter the PowerShell JEA session with this command:
 
 ```powershell
-powershell.exe -ConfigurationName 'IcingaForWindowsTest';
+powershell.exe -NoProfile -ConfigurationName 'IcingaForWindowsTest';
 ```
 
 This will open a new `remote` PowerShell session over `WinRM` on the local machine with the provided JEA profile 'IcingaForWindowsTest'.

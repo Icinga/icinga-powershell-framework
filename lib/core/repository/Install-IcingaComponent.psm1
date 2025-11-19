@@ -358,7 +358,7 @@ function Install-IcingaComponent()
             }
         }
 
-        $MSIData = & powershell.exe -Command {
+        $MSIData = & powershell.exe -NoProfile -Command {
             Use-Icinga -Minimal;
 
             $DownloadDestination = $args[0];
@@ -380,7 +380,7 @@ function Install-IcingaComponent()
             }
         }
 
-        $InstallProcess = & powershell.exe -Command {
+        $InstallProcess = & powershell.exe -NoProfile -Command {
             Use-Icinga -Minimal;
 
             $DownloadDestination = $args[0];

@@ -27,7 +27,7 @@ function Restart-IcingaService()
     if (Get-Service "$Service" -ErrorAction SilentlyContinue) {
         Write-IcingaConsoleNotice ([string]::Format('Restarting service "{0}"', $Service));
 
-        & powershell.exe -Command {
+        & powershell.exe -NoProfile -Command {
             Use-Icinga -Minimal;
 
             $Service = $args[0];
