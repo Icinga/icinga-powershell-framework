@@ -12,6 +12,10 @@ function Get-IcingaAgentInstallation()
     $RegistryData = Get-ItemProperty $regPath;
     $IcingaData   = $null;
     foreach ($entry in $RegistryData) {
+        if ($null -eq $entry -or $null -eq $entry.DisplayName) {
+            continue;
+        }
+
         if ($entry.DisplayName -eq 'Icinga 2') {
             $IcingaData = $entry;
             break;
