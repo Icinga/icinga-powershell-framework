@@ -38,6 +38,16 @@ function Set-IcingaCacheData()
     $CacheTmpFile = [string]::Format('{0}.tmp', $CacheFile);
     $cacheData    = @{ };
 
+    if ($null -eq $Value) {
+        if (Test-Path $CacheTmpFile) {
+            Remove-ItemSecure -Path $CacheTmpFile -Retries 5 -Force | Out-Null;
+        }
+        if (Test-Path $CacheFile) {
+            Remove-ItemSecure -Path $CacheFile -Retries 5 -Force | Out-Null;
+        }
+        return;
+    }
+
     if ((Test-IcingaCacheDataTempFile -Space $Space -CacheStore $CacheStore -KeyName $KeyName)) {
         Copy-IcingaCacheTempFile -CacheFile $CacheFile -CacheTmpFile $CacheTmpFile;
     }
