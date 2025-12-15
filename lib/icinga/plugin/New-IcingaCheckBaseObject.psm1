@@ -2,17 +2,19 @@ function New-IcingaCheckBaseObject()
 {
     $IcingaCheckBaseObject = New-Object -TypeName PSObject;
 
-    $IcingaCheckBaseObject | Add-Member -MemberType NoteProperty -Name 'Name'             -Value '';
-    $IcingaCheckBaseObject | Add-Member -MemberType NoteProperty -Name 'Verbose'          -Value 0;
-    $IcingaCheckBaseObject | Add-Member -MemberType NoteProperty -Name '__Hidden'         -Value $FALSE;
-    $IcingaCheckBaseObject | Add-Member -MemberType NoteProperty -Name '__SkipSummary'    -Value $FALSE;
-    $IcingaCheckBaseObject | Add-Member -MemberType NoteProperty -Name '__Parent'         -Value $IcingaCheckBaseObject;
-    $IcingaCheckBaseObject | Add-Member -MemberType NoteProperty -Name '__Indention'      -Value 0;
-    $IcingaCheckBaseObject | Add-Member -MemberType NoteProperty -Name '__ErrorMessage'   -Value '';
-    $IcingaCheckBaseObject | Add-Member -MemberType NoteProperty -Name '__CheckState'     -Value $IcingaEnums.IcingaExitCode.Ok;
-    $IcingaCheckBaseObject | Add-Member -MemberType NoteProperty -Name '__CheckCommand'   -Value '';
-    $IcingaCheckBaseObject | Add-Member -MemberType NoteProperty -Name '__CheckOutput'    -Value $null;
-    $IcingaCheckBaseObject | Add-Member -MemberType NoteProperty -Name '__ObjectType'     -Value 'IcingaCheckBaseObject';
+    $IcingaCheckBaseObject | Add-Member -MemberType NoteProperty -Name 'Name'                   -Value '';
+    $IcingaCheckBaseObject | Add-Member -MemberType NoteProperty -Name 'Verbose'                -Value 0;
+    $IcingaCheckBaseObject | Add-Member -MemberType NoteProperty -Name '__Hidden'               -Value $FALSE;
+    $IcingaCheckBaseObject | Add-Member -MemberType NoteProperty -Name '__SkipSummary'          -Value $FALSE;
+    $IcingaCheckBaseObject | Add-Member -MemberType NoteProperty -Name '__Parent'               -Value $IcingaCheckBaseObject;
+    $IcingaCheckBaseObject | Add-Member -MemberType NoteProperty -Name '__Indention'            -Value 0;
+    $IcingaCheckBaseObject | Add-Member -MemberType NoteProperty -Name '__ErrorMessage'         -Value '';
+    $IcingaCheckBaseObject | Add-Member -MemberType NoteProperty -Name '__CheckState'           -Value $IcingaEnums.IcingaExitCode.Ok;
+    $IcingaCheckBaseObject | Add-Member -MemberType NoteProperty -Name '__CheckCommand'         -Value '';
+    $IcingaCheckBaseObject | Add-Member -MemberType NoteProperty -Name '__CheckOutput'          -Value $null;
+    $IcingaCheckBaseObject | Add-Member -MemberType NoteProperty -Name '__IsNoticeObject'       -Value $FALSE;
+    $IcingaCheckBaseObject | Add-Member -MemberType NoteProperty -Name '__HandleAsNoticeObject' -Value $FALSE;
+    $IcingaCheckBaseObject | Add-Member -MemberType NoteProperty -Name '__ObjectType'           -Value 'IcingaCheckBaseObject';
 
     $IcingaCheckBaseObject | Add-Member -MemberType ScriptMethod -Name '__SetCheckCommand' -Value {
         $CallStack = Get-PSCallStack;
@@ -103,7 +105,7 @@ function New-IcingaCheckBaseObject()
     }
 
     $IcingaCheckBaseObject | Add-Member -MemberType ScriptMethod -Force -Name '__SetCheckOutput' -Value {
-        param ($PluginOutput);
+        param ($PluginOutput, $CheckOverride);
     }
 
     $IcingaCheckBaseObject | Add-Member -MemberType ScriptMethod -Name '__GetCheckOutput' -Value {
