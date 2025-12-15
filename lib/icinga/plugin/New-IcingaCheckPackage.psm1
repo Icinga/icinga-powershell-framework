@@ -9,9 +9,11 @@ function New-IcingaCheckPackage()
         [int]$OperatorMax           = -1,
         [array]$Checks              = @(),
         [int]$Verbose               = 0,
+        [int]$OverrideExitCode      = -1,
         [switch]$IgnoreEmptyPackage = $FALSE,
         [switch]$Hidden             = $FALSE,
-        [switch]$AddSummaryHeader   = $FALSE
+        [switch]$AddSummaryHeader   = $FALSE,
+        [switch]$IsNoticePackage    = $FALSE
     );
 
     $IcingaCheckPackage = New-IcingaCheckBaseObject;
@@ -28,6 +30,11 @@ function New-IcingaCheckPackage()
     $IcingaCheckPackage | Add-Member -MemberType NoteProperty -Name 'OperatorMax'        -Value $OperatorMax;
     $IcingaCheckPackage | Add-Member -MemberType NoteProperty -Name 'IgnoreEmptyPackage' -Value $IgnoreEmptyPackage;
     $IcingaCheckPackage | Add-Member -MemberType NoteProperty -Name 'AddSummaryHeader'   -Value $AddSummaryHeader;
+    $IcingaCheckPackage | Add-Member -MemberType NoteProperty -Name 'OverrideExitCode'   -Value $OverrideExitCode;
+    $IcingaCheckPackage | Add-Member -MemberType NoteProperty -Name 'IsNoticePackage'    -Value $IsNoticePackage;
+    # Each check package should have at least one element which provides active checks information,
+    #  otherwise we should display the package as INFO package
+    $IcingaCheckPackage | Add-Member -MemberType NoteProperty -Name '__hasActiveChecks'  -Value $FALSE;
     $IcingaCheckPackage | Add-Member -MemberType NoteProperty -Name '__Checks'           -Value @();
     $IcingaCheckPackage | Add-Member -MemberType NoteProperty -Name '__OkChecks'         -Value @();
     $IcingaCheckPackage | Add-Member -MemberType NoteProperty -Name '__WarningChecks'    -Value @();
@@ -93,7 +100,7 @@ function New-IcingaCheckPackage()
 
     # Override shared function
     $IcingaCheckPackage | Add-Member -MemberType ScriptMethod -Force -Name '__SetCheckOutput' -Value {
-        param ($PluginOutput);
+        param ($PluginOutput, $CheckOverride);
 
         $UnknownChecks    = '';
         $CriticalChecks   = '';
@@ -140,9 +147,18 @@ function New-IcingaCheckPackage()
             $HasContent = $TRUE;
         }
 
+        [string]$PluginStatusString = $IcingaEnums.IcingaExitCodeText[$this.__GetCheckState()];
+
+        # Set this object to [INFO] state in case it is a notice package or no active checks are found
+        # This will ensure we tell the use which check is using active checks
+        if ($this.IsNoticePackage -or $this.__hasActiveChecks -eq $FALSE) {
+            $PluginStatusString          = '[INFO]';
+            $this.__HandleAsNoticeObject = $TRUE;
+        }
+
         $this.__CheckOutput = [string]::Format(
             '{0} {1}{2}{3}{4}{5}{6}{7}{8}',
-            $IcingaEnums.IcingaExitCodeText[$this.__GetCheckState()],
+            $PluginStatusString,
             $this.Name,
             (&{ if ($HasContent) { return ':'; } else { return ''; } }),
             $CheckSummary.ToString(),
@@ -178,6 +194,13 @@ function New-IcingaCheckPackage()
         foreach ($check in $this.__Checks) {
 
             $check.Compile();
+
+            # If we find at least one check which is not a notice object, we can consider
+            # this package as active checks package
+            if ($check.__HandleAsNoticeObject -eq $FALSE) {
+                $this.__hasActiveChecks      = $TRUE;
+                $this.__HandleAsNoticeObject = $FALSE;
+            }
 
             if ($check.__IsHidden() -Or $check.__NoHeaderReport()) {
                 continue;
@@ -314,6 +337,10 @@ function New-IcingaCheckPackage()
 
     $IcingaCheckPackage | Add-Member -MemberType ScriptMethod -Force -Name '__ShowPackageConfig' -Value {
         if ($this.__GetVerbosity() -lt 3) {
+            return '';
+        }
+
+        if ($this.IsNoticePackage) {
             return '';
         }
 

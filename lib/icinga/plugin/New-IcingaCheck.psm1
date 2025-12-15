@@ -112,7 +112,7 @@ function New-IcingaCheck()
 
     # Override shared function
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Force -Name '__SetCheckOutput' -Value {
-        param ($PluginOutput);
+        param ($PluginOutput, $CheckOverride);
 
         if ($this.__InLockState()) {
             return;
@@ -140,9 +140,25 @@ function New-IcingaCheck()
             $AddColon = $FALSE;
         }
 
+        [string]$PluginStatusString = $IcingaEnums.IcingaExitCodeText[$this.__CheckState];
+
+        # If our thresholds are empty, we handle this as notice object
+        if (-not $CheckOverride -And ([string]::IsNullOrEmpty($this.__WarningValue.Threshold.Raw) -and [string]::IsNullOrEmpty($this.__CriticalValue.Threshold.Raw))) {
+            # If our call sets CheckOverride, it means we could have used something like SetWarning() before
+            # By doing so, we actively interact with the object and therefore we should not handle it as notice object
+            $this.__HandleAsNoticeObject = $TRUE;
+        }
+
+        # Set this object to [INFO] state in case it is a notice or no thresholds are defined
+        # This will ensure we tell the use which check is using active checks
+        if ($this.__IsNoticeObject -or $this.__HandleAsNoticeObject) {
+            $PluginStatusString          = '[INFO]';
+            $this.__HandleAsNoticeObject = $TRUE;
+        }
+
         $this.__CheckOutput = [string]::Format(
             '{0} {1}{2} {3}{4}',
-            $IcingaEnums.IcingaExitCodeText[$this.__CheckState],
+            $PluginStatusString,
             $this.Name,
             (&{ if ($AddColon) { return ':'; } else { return ''; } }),
             $PluginThresholds,
@@ -296,7 +312,7 @@ function New-IcingaCheck()
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Name '__ValidateObject' -Value {
         if ($null -eq $this.ObjectExists) {
             $this.SetUnknown() | Out-Null;
-            $this.__SetCheckOutput('The object does not exist');
+            $this.__SetCheckOutput('The object does not exist', $TRUE);
             $this.__LockState();
         }
     }
@@ -317,7 +333,8 @@ function New-IcingaCheck()
                     'Usage of invalid plugin unit "{0}". Allowed units are: {1}',
                     $this.Unit,
                     (($IcingaEnums.IcingaMeasurementUnits.Keys | Sort-Object name)  -Join ', ')
-                )
+                ),
+                $TRUE
             );
 
             $this.__LockState();
@@ -395,8 +412,12 @@ function New-IcingaCheck()
         param ([string]$Message, [bool]$Lock);
 
         if ($this.__InLockState() -eq $FALSE) {
+            # If we update the state of an object to anything, we actively tell the system
+            # that this is no longer a notice object
+            $this.__HandleAsNoticeObject = $FALSE;
+
             $this.__CheckState = $IcingaEnums.IcingaExitCode.Ok;
-            $this.__SetCheckOutput($Message);
+            $this.__SetCheckOutput($Message, $TRUE);
         }
 
         if ($Lock) {
@@ -410,8 +431,11 @@ function New-IcingaCheck()
         param ([string]$Message, [bool]$Lock);
 
         if ($this.__InLockState() -eq $FALSE) {
+            # If we update the state of an object to anything, we actively tell the system
+            # that this is no longer a notice object
+            $this.__HandleAsNoticeObject = $FALSE;
             $this.__CheckState = $IcingaEnums.IcingaExitCode.Warning;
-            $this.__SetCheckOutput($Message);
+            $this.__SetCheckOutput($Message, $TRUE);
         }
 
         if ($Lock) {
@@ -425,7 +449,25 @@ function New-IcingaCheck()
         param ([string]$Message, [bool]$Lock);
 
         if ($this.__InLockState() -eq $FALSE) {
+            # If we update the state of an object to anything, we actively tell the system
+            # that this is no longer a notice object
+            $this.__HandleAsNoticeObject = $FALSE;
             $this.__CheckState = $IcingaEnums.IcingaExitCode.Critical;
+            $this.__SetCheckOutput($Message, $TRUE);
+        }
+
+        if ($Lock) {
+            $this.__LockState();
+        }
+
+        return $this;
+    }
+
+    $IcingaCheck | Add-Member -MemberType ScriptMethod -Name 'SetNotice' -Value {
+        param ([string]$Message, [bool]$Lock);
+
+        if ($this.__InLockState() -eq $FALSE) {
+            $this.__IsNoticeObject = $TRUE;
             $this.__SetCheckOutput($Message);
         }
 
@@ -440,8 +482,11 @@ function New-IcingaCheck()
         param ([string]$Message, [bool]$Lock);
 
         if ($this.__InLockState() -eq $FALSE) {
+            # If we update the state of an object to anything, we actively tell the system
+            # that this is no longer a notice object
+            $this.__HandleAsNoticeObject = $FALSE;
             $this.__CheckState = $IcingaEnums.IcingaExitCode.Unknown;
-            $this.__SetCheckOutput($Message);
+            $this.__SetCheckOutput($Message, $TRUE);
         }
 
         if ($Lock) {
@@ -457,7 +502,7 @@ function New-IcingaCheck()
         if ($ThresholdObject.HasError) {
             $this.SetUnknown() | Out-Null;
             $this.__ThresholdObject = $ThresholdObject;
-            $this.__SetCheckOutput($this.__ThresholdObject.Message);
+            $this.__SetCheckOutput($this.__ThresholdObject.Message, $TRUE);
             $this.__LockState();
             return;
         }
