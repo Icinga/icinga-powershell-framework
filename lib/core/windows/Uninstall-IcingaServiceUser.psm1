@@ -11,6 +11,10 @@ function Uninstall-IcingaServiceUser()
 
     Write-IcingaConsoleNotice 'Uninstalling user "{0}"' -Objects $IcingaUser;
 
+    # Fetch the current service user and SID
+    $ServiceUser    = Get-IcingaServiceUser;
+    $ServiceUserSID = Get-IcingaUserSID $ServiceUser;
+
     Stop-IcingaService 'icinga2';
     Stop-IcingaForWindows;
 
@@ -20,12 +24,9 @@ function Uninstall-IcingaServiceUser()
     Set-IcingaServiceUser -User 'NT Authority\NetworkService' -Service 'icingapowershell' | Out-Null;
 
     Set-IcingaUserPermissions -IcingaUser $IcingaUser -Remove;
+    Update-IcingaWindowsUserPermission -SID $ServiceUserSID -Remove;
 
-    $UserConfig = Remove-IcingaWindowsUser -IcingaUser $IcingaUser;
-
-    if ($null -ne $UserConfig -And ([string]::IsNullOrEmpty($UserConfig.SID) -eq $FALSE)) {
-        Update-IcingaWindowsUserPermission -SID $UserConfig.SID -Remove;
-    }
+    Remove-IcingaWindowsUser -IcingaUser $IcingaUser | Out-Null;
 
     Restart-IcingaService 'icinga2';
     Restart-IcingaForWindows;

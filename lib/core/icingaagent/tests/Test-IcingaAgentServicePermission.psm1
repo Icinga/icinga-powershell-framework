@@ -14,6 +14,12 @@ function Test-IcingaAgentServicePermission()
         return $TRUE;
     }
 
+    # Never update system SIDs
+    if ($ServiceUserSID.Length -le 16) {
+        Write-IcingaTestOutput -Severity 'Passed' -Message ([string]::Format('It seems the provided SID "{0}" is a system SID. Skipping permission check', $ServiceUserSID));
+        return $TRUE;
+    }
+
     if ([string]::IsNullOrEmpty($ServiceUser)) {
         if (-Not $Silent) {
             Write-IcingaTestOutput -Severity 'Failed' -Message 'There is no user assigned to the Icinga 2 service or the service is not yet installed';
