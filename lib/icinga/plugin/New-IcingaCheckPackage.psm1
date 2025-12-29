@@ -181,11 +181,15 @@ function New-IcingaCheckPackage()
         $NotOkChecks = 0;
         $OkChecks    = 0;
 
-        if ($this.__Checks.Count -eq 0 -And $this.IgnoreEmptyPackage -eq $FALSE) {
+        if ($this.__Checks.Count -eq 0 -and ($this.IgnoreEmptyPackage -eq $FALSE -and $this.IsNoticePackage -eq $FALSE)) {
             $this.__ErrorMessage = 'No checks added to this package';
             $this.__SetCheckState($IcingaEnums.IcingaExitCode.Unknown);
             $this.__SetCheckOutput();
             return;
+        }
+
+        if ($this.__Checks.Count -eq 0 -and $this.IsNoticePackage) {
+            $this.__ErrorMessage = 'Nothing to report';
         }
 
         [array]$this.__Checks = ($this.__Checks | Sort-Object -Property Name);
