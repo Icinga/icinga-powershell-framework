@@ -43,6 +43,7 @@ function New-IcingaCheck()
     $IcingaCheck | Add-Member -MemberType NoteProperty -Name '__WarningValue'               -Value $null;
     $IcingaCheck | Add-Member -MemberType NoteProperty -Name '__CriticalValue'              -Value $null;
     $IcingaCheck | Add-Member -MemberType NoteProperty -Name '__LockedState'                -Value $FALSE;
+    $IcingaCheck | Add-Member -MemberType NoteProperty -Name '__FixedState'                 -Value $FALSE;
     $IcingaCheck | Add-Member -MemberType NoteProperty -Name '__ThresholdObject'            -Value $null;
     $IcingaCheck | Add-Member -MemberType NoteProperty -Name '__RequireThresholdValidation' -Value $TRUE;
     $IcingaCheck | Add-Member -MemberType NoteProperty -Name '__TimeInterval'               -Value $null;
@@ -112,9 +113,11 @@ function New-IcingaCheck()
 
     # Override shared function
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Force -Name '__SetCheckOutput' -Value {
-        param ($PluginOutput, $CheckOverride);
+        param ($PluginOutput);
 
         if ($this.__InLockState()) {
+            # Even when we are in lock state, we need to ensure performance data is set
+            $this.__SetPerformanceData();
             return;
         }
 
@@ -143,7 +146,7 @@ function New-IcingaCheck()
         [string]$PluginStatusString = $IcingaEnums.IcingaExitCodeText[$this.__CheckState];
 
         # If our thresholds are empty, we handle this as notice object
-        if (-not $CheckOverride -And ([string]::IsNullOrEmpty($this.__WarningValue.Threshold.Raw) -and [string]::IsNullOrEmpty($this.__CriticalValue.Threshold.Raw))) {
+        if (-not $this.__FixedState -And ([string]::IsNullOrEmpty($this.__WarningValue.Threshold.Raw) -and [string]::IsNullOrEmpty($this.__CriticalValue.Threshold.Raw))) {
             # If our call sets CheckOverride, it means we could have used something like SetWarning() before
             # By doing so, we actively interact with the object and therefore we should not handle it as notice object
             $this.__HandleAsNoticeObject = $TRUE;
@@ -230,6 +233,11 @@ function New-IcingaCheck()
             return;
         }
 
+        # Ensure we never write non-numeric performance data
+        if ((Test-Numeric $this.__ThresholdObject.Value) -eq $FALSE) {
+            return;
+        }
+
         [string]$LabelName      = (Format-IcingaPerfDataLabel -PerfData $this.Name);
         [string]$MultiLabelName = (Format-IcingaPerfDataLabel -PerfData $this.Name -MultiOutput);
         $value                  = ConvertTo-Integer -Value $this.__ThresholdObject.Value;
@@ -312,7 +320,8 @@ function New-IcingaCheck()
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Name '__ValidateObject' -Value {
         if ($null -eq $this.ObjectExists) {
             $this.SetUnknown() | Out-Null;
-            $this.__SetCheckOutput('The object does not exist', $TRUE);
+            $this.__FixedState = $TRUE;
+            $this.__SetCheckOutput('The object does not exist');
             $this.__LockState();
         }
     }
@@ -328,13 +337,13 @@ function New-IcingaCheck()
     $IcingaCheck | Add-Member -MemberType ScriptMethod -Name '__ValidateUnit' -Value {
         if ([string]::IsNullOrEmpty($this.Unit) -eq $FALSE -And (-Not $IcingaEnums.IcingaMeasurementUnits.ContainsKey($this.Unit))) {
             $this.SetUnknown();
+            $this.__FixedState = $TRUE;
             $this.__SetCheckOutput(
                 [string]::Format(
                     'Usage of invalid plugin unit "{0}". Allowed units are: {1}',
                     $this.Unit,
                     (($IcingaEnums.IcingaMeasurementUnits.Keys | Sort-Object name)  -Join ', ')
-                ),
-                $TRUE
+                )
             );
 
             $this.__LockState();
@@ -415,9 +424,12 @@ function New-IcingaCheck()
             # If we update the state of an object to anything, we actively tell the system
             # that this is no longer a notice object
             $this.__HandleAsNoticeObject = $FALSE;
-
+            # Create a basic threshold object to always write the correct performance data
+            # with the given value
+            $this.__FixedState = $TRUE;
+            $this.__CreateDefaultThresholdObject();
             $this.__CheckState = $IcingaEnums.IcingaExitCode.Ok;
-            $this.__SetCheckOutput($Message, $TRUE);
+            $this.__SetCheckOutput($Message);
         }
 
         if ($Lock) {
@@ -434,8 +446,12 @@ function New-IcingaCheck()
             # If we update the state of an object to anything, we actively tell the system
             # that this is no longer a notice object
             $this.__HandleAsNoticeObject = $FALSE;
+            # Create a basic threshold object to always write the correct performance data
+            # with the given value
+            $this.__FixedState = $TRUE;
+            $this.__CreateDefaultThresholdObject();
             $this.__CheckState = $IcingaEnums.IcingaExitCode.Warning;
-            $this.__SetCheckOutput($Message, $TRUE);
+            $this.__SetCheckOutput($Message);
         }
 
         if ($Lock) {
@@ -452,8 +468,12 @@ function New-IcingaCheck()
             # If we update the state of an object to anything, we actively tell the system
             # that this is no longer a notice object
             $this.__HandleAsNoticeObject = $FALSE;
+            # Create a basic threshold object to always write the correct performance data
+            # with the given value
+            $this.__FixedState = $TRUE;
+            $this.__CreateDefaultThresholdObject();
             $this.__CheckState = $IcingaEnums.IcingaExitCode.Critical;
-            $this.__SetCheckOutput($Message, $TRUE);
+            $this.__SetCheckOutput($Message);
         }
 
         if ($Lock) {
@@ -468,6 +488,9 @@ function New-IcingaCheck()
 
         if ($this.__InLockState() -eq $FALSE) {
             $this.__IsNoticeObject = $TRUE;
+            # Create a basic threshold object to always write the correct performance data
+            # with the given value
+            $this.__CreateDefaultThresholdObject();
             $this.__SetCheckOutput($Message);
         }
 
@@ -485,8 +508,12 @@ function New-IcingaCheck()
             # If we update the state of an object to anything, we actively tell the system
             # that this is no longer a notice object
             $this.__HandleAsNoticeObject = $FALSE;
+            # Create a basic threshold object to always write the correct performance data
+            # with the given value
+            $this.__FixedState = $TRUE;
+            $this.__CreateDefaultThresholdObject();
             $this.__CheckState = $IcingaEnums.IcingaExitCode.Unknown;
-            $this.__SetCheckOutput($Message, $TRUE);
+            $this.__SetCheckOutput($Message);
         }
 
         if ($Lock) {
@@ -502,7 +529,8 @@ function New-IcingaCheck()
         if ($ThresholdObject.HasError) {
             $this.SetUnknown() | Out-Null;
             $this.__ThresholdObject = $ThresholdObject;
-            $this.__SetCheckOutput($this.__ThresholdObject.Message, $TRUE);
+            $this.__FixedState = $TRUE;
+            $this.__SetCheckOutput($this.__ThresholdObject.Message);
             $this.__LockState();
             return;
         }
