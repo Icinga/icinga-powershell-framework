@@ -17,6 +17,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#834](https://github.com/Icinga/icinga-powershell-framework/issues/834) Fixes security catalog compilation error on non-english Windows versions, while properly skipping checks on system SID's and improves security by always adding the `SeDenyNetworkLogonRight` and `SeDenyInteractiveLogonRight` privilege section for the JEA user SID
 * [#835](https://github.com/Icinga/icinga-powershell-framework/pull/835) Fixes JEA compiler to always enforce a rebuild of the Framework to ensure integrity of JEA profiles
 * [#836](https://github.com/Icinga/icinga-powershell-framework/issues/836) Fixes Metric over Time collector not working on Windows 2012 R2 and older
+* [#845](https://github.com/Icinga/icinga-powershell-framework/issues/845) Fixes a bunch of issues present in the New-IcingaCheck component, resulting in non-desired output value
 
 ### Enhancements
 
