@@ -21,7 +21,7 @@ function Get-IcingaRandomChars()
             # Generate random bytes
             $CryptoProvider.GetBytes($ByteValue);
             $RandomNumber = [BitConverter]::ToUInt32($ByteValue, 0);
-            # Ensure the random number is within the valid range to avoid maximum security
+            # Ensure the random number is within the valid range to ensure maximum security
         } while ($RandomNumber -ge $maxValid);
 
         # Calculate the index for the symbol array

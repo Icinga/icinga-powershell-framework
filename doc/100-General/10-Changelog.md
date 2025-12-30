@@ -13,6 +13,9 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 ### Bugfixes
 
+* [#814](https://github.com/Icinga/icinga-powershell-framework/pull/814) Fixes random chars function to truly generate unpredictable character sequences and to replace `Get-Random` which is not entirely secure
+* [#815](https://github.com/Icinga/icinga-powershell-framework/pull/815) Fixes a possible crash for `Test-IcingaAddTypeExist`, causing the Icinga for Windows installation to fail when third party components are checked which are malfunctioning
+* [#829](https://github.com/Icinga/icinga-powershell-framework/pull/829) Fixes `Set-IcingaCacheData` to properly remove cache files in case `$null` is passed as value
 * [#833](https://github.com/Icinga/icinga-powershell-framework/issues/833) Fixes registry lookup for Icinga Agent installation to check if the required `DisplayName` attribute is defined before checking
 * [#834](https://github.com/Icinga/icinga-powershell-framework/issues/834) Fixes security catalog compilation error on non-english Windows versions, while properly skipping checks on system SID's and improves security by always adding the `SeDenyNetworkLogonRight` and `SeDenyInteractiveLogonRight` privilege section for the JEA user SID
 * [#835](https://github.com/Icinga/icinga-powershell-framework/pull/835) Fixes JEA compiler to always enforce a rebuild of the Framework to ensure integrity of JEA profiles
@@ -24,16 +27,6 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#11](https://github.com/Icinga/icinga-powershell-framework/pull/11) Adds feature to update the cache for performance counter instances to keep track of system changes
 * [#838](https://github.com/Icinga/icinga-powershell-framework/pull/838) Enhances Icinga for Windows to never load and user PowerShell profiles
 * [#841](https://github.com/Icinga/icinga-powershell-framework/pull/841) Adds new [INFO] state for notice and un-checked monitoring objects
-
-## 1.13.4 (tbd)
-
-[Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/42)
-
-### Bugfixes
-
-* [#814](https://github.com/Icinga/icinga-powershell-framework/pull/814) Fixes random chars function to truly generate unpredictable character sequences and to replace `Get-Random` which is not entirely secure
-* [#815](https://github.com/Icinga/icinga-powershell-framework/pull/815) Fixes a possible crash for `Test-IcingaAddTypeExist`, causing the Icinga for Windows installation to fail when third party components are checked which are malfunctioning
-* [#829](https://github.com/Icinga/icinga-powershell-framework/pull/829) Fixes `Set-IcingaCacheData` to properly remove cache files in case `$null` is passed as value
 
 ## 1.13.3 (2025-05-08)
 
