@@ -55,7 +55,7 @@ function Uninstall-IcingaForWindowsService()
     $ServiceFolderContent = Get-ChildItem -Path $ServiceData.Directory;
 
     foreach ($entry in $ServiceFolderContent) {
-        if ($entry.Name -eq 'icinga-service.exe' -Or $entry.Name -eq 'icinga-service.exe.md5' -Or $entry.Name -eq 'icinga-service.exe.update') {
+        if ($entry.Name -eq 'icinga-service.exe' -Or $entry.Name -eq 'icinga-service.exe.md5' -Or $entry.Name -eq 'icinga-service.exe.sha256' -Or $entry.Name -eq 'icinga-service.exe.update') {
             Remove-Item $entry.FullName -Force;
             Write-IcingaConsoleNotice 'Removing file "{0}"' -Objects $entry.FullName;
         }

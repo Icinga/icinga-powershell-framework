@@ -13,6 +13,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 ### Bugfixes
 
+* [#783](https://github.com/Icinga/icinga-powershell-framework/issues/783) Fixes possible FIPS exception on some Windows machines, caused by `MD5` hash algorithm used to verify the service binary file integrity after download instead of `SHA256`
 * [#814](https://github.com/Icinga/icinga-powershell-framework/pull/814) Fixes random chars function to truly generate unpredictable character sequences and to replace `Get-Random` which is not entirely secure
 * [#815](https://github.com/Icinga/icinga-powershell-framework/pull/815) Fixes a possible crash for `Test-IcingaAddTypeExist`, causing the Icinga for Windows installation to fail when third party components are checked which are malfunctioning
 * [#816](https://github.com/Icinga/icinga-powershell-framework/issues/816) Fixes plugin execution error while using any `%IfNotMatch`/`%IfNotLike`/`%IfMatch`/`%IfLike` check function for strings containing special characters like `:`
