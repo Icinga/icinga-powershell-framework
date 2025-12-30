@@ -103,12 +103,19 @@ function Compare-IcingaPluginThresholds()
 
     try {
         # Fix possible numeric value comparison issues
-        $TestInput = Test-IcingaDecimal $InputValue;
-        $BaseInput = Test-IcingaDecimal $BaseValue;
-        $MoTData   = @{
+        [bool]$RawValue = $false;
+        $TestInput      = Test-IcingaDecimal $InputValue;
+        $BaseInput      = Test-IcingaDecimal $BaseValue;
+        $MoTData        = @{
             'Label'    = $PerfDataLabel;
             'Interval' = $TimeInterval;
         };
+
+        # Ensure we never do threshold conversions for match/not match checks
+        # This ensures that string values are properly compared to each other
+        if ($Matches -or $NotMatches) {
+            $RawValue = $true;
+        }
 
         # Ensure we do not include our checks for which we do not write any performance data
         # Metrics over time will not work for those, as the metrics are not stored.
@@ -130,9 +137,9 @@ function Compare-IcingaPluginThresholds()
         $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'Message'   -Value '';
         $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'IsOK'      -Value $FALSE;
         $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'HasError'  -Value $FALSE;
-        $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'Threshold' -Value (Convert-IcingaPluginThresholds -Threshold $Threshold);
-        $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'Minimum'   -Value (Convert-IcingaPluginThresholds -Threshold $Minium);
-        $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'Maximum'   -Value (Convert-IcingaPluginThresholds -Threshold $Maximum);
+        $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'Threshold' -Value (Convert-IcingaPluginThresholds -Threshold $Threshold -RawValue:$RawValue);
+        $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'Minimum'   -Value (Convert-IcingaPluginThresholds -Threshold $Minium -RawValue:$RawValue);
+        $IcingaThresholds | Add-Member -MemberType NoteProperty -Name 'Maximum'   -Value (Convert-IcingaPluginThresholds -Threshold $Maximum -RawValue:$RawValue);
 
         if ($TestInput.Decimal) {
             $ConvertedValue = Convert-IcingaPluginThresholds -Threshold ([string]::Format('{0}{1}', $InputValue, $Unit));

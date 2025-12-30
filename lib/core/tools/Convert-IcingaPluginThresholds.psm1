@@ -28,6 +28,12 @@
 .FUNCTIONALITY
     Converts values with units to the lowest unit of this category.
     Accepts Icinga Thresholds.
+.PARAMETER Threshold
+    The threshold value to convert. Supports Icinga plugin threshold
+    syntax.
+.PARAMETER RawValue
+    If set, the function will return the raw value without any conversion.
+    This is required for match/not match checks as example
 .EXAMPLE
     PS>Convert-IcingaPluginThresholds -Threshold '20d';
 
@@ -128,7 +134,8 @@
 function Convert-IcingaPluginThresholds()
 {
     param (
-        [string]$Threshold = $null
+        [string]$Threshold = $null,
+        [switch]$RawValue  = $false
     );
 
     [hashtable]$RetValue = @{
@@ -142,7 +149,10 @@ function Convert-IcingaPluginThresholds()
         'IsDateTime' = $FALSE;
     };
 
-    if ([string]::IsNullOrEmpty($Threshold)) {
+    # Always ensure Value is set, because we just want the raw value
+    if ([string]::IsNullOrEmpty($Threshold) -or $RawValue) {
+        $RetValue.Value = $Threshold;
+
         return $RetValue;
     }
 
