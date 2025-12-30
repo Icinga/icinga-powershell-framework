@@ -1,18 +1,18 @@
 <#
 .SYNOPSIS
-    Compares a binary within a .zip file to a included .md5 to ensure
+    Compares a binary within a .zip file to a included .sha256 to ensure
     the checksum is matching
 .DESCRIPTION
-    Compares a possible included .md5 checksum file with the provided binary
+    Compares a possible included .sha256 checksum file with the provided binary
     to ensure they are identical
 .FUNCTIONALITY
-    Compares a binary within a .zip file to a included .md5 to ensure
+    Compares a binary within a .zip file to a included .sha256 to ensure
     the checksum is matching.
 .EXAMPLE
     PS>Test-IcingaZipBinaryChecksum -Path 'C:\Program Files\icinga-service\icinga-service.exe';
 .PARAMETER Path
-    Path to the binary to be checked for. A Corresponding .md5 file with the
-    extension added on the file is required, like icinga-service.exe.md5
+    Path to the binary to be checked for. A Corresponding .sha256 file with the
+    extension added on the file is required, like icinga-service.exe.sha256
 .INPUTS
    System.String
 .OUTPUTS
@@ -27,18 +27,18 @@ function Test-IcingaZipBinaryChecksum()
         $Path
     );
 
-    $MD5Path = [string]::Format('{0}.md5', $Path);
+    $SHA256Path = [string]::Format('{0}.sha256', $Path);
 
-    if ((Test-Path $MD5Path) -eq $FALSE) {
-        return $TRUE;
+    if ((Test-Path $SHA256Path) -eq $FALSE) {
+        return $FALSE;
     }
 
-    [string]$MD5Checksum = Get-Content $MD5Path;
-    $MD5Checksum         = ($MD5Checksum.Split(' ')[0]).ToLower();
+    [string]$SHA256Checksum = Get-Content $SHA256Path;
+    $SHA256Checksum         = ($SHA256Checksum.Split(' ')[0]).ToLower();
 
-    $FileHash = ((Get-IcingaFileHash $Path -Algorithm MD5).Hash).ToLower();
+    $FileHash = ((Get-IcingaFileHash $Path -Algorithm SHA256).Hash).ToLower();
 
-    if ($MD5Checksum -ne $FileHash) {
+    if ($SHA256Checksum -ne $FileHash) {
         return $FALSE;
     }
 

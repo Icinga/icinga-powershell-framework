@@ -80,7 +80,7 @@ function Get-IcingaFrameworkServiceBinary()
     }
 
     if ((Test-IcingaZipBinaryChecksum -Path $TmpServiceBin) -eq $FALSE) {
-        throw 'The checksum of the downloaded file and the required MD5 hash are not matching';
+        throw 'The checksum of the downloaded file and the required SHA256 hash are not matching';
     }
 
     Copy-ItemSecure -Path $TmpServiceBin -Destination $UpdateBin -Force | Out-Null;

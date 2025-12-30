@@ -6,7 +6,7 @@ Besides [adding](01-Add-Repositories.md) and/or [syncing](02-Sync-Repositories.m
 
 To prepare your new repository, you will simply require an `empty` folder somewhere on your local Windows machine or accessible network share. For example we can create a new folder directly under `C:`, like `C:\icinga_repositories\custom`.
 
-Now after having an `empty` folder, copy all files you want to add to this repository there. This includes the `.zip` files for Icinga for Windows components, the Icinga Agents `.msi` files and the Icinga for Windows `Service` `.zip` files which include the `.exe` and the `.md5` hash file.
+Now after having an `empty` folder, copy all files you want to add to this repository there. This includes the `.zip` files for Icinga for Windows components, the Icinga Agents `.msi` files and the Icinga for Windows `Service` `.zip` files which include the `.exe` and the `.sha256` hash file.
 
 ## Initialize The Repository
 
