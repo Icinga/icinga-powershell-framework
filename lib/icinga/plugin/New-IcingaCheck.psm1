@@ -1075,6 +1075,11 @@ function New-IcingaCheck()
             return;
         }
 
+        # Just in case one of the thresholds is not set, we cannot validate anything
+        if ([string]::IsNullOrEmpty($this.__WarningValue.Threshold.Threshold) -or [string]::IsNullOrEmpty($this.__CriticalValue.Threshold.Threshold)) {
+            return;
+        }
+
         [bool]$OutOfRange = $FALSE;
 
         # Both thresholds use the mode
