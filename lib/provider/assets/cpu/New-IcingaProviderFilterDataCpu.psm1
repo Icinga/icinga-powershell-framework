@@ -10,21 +10,36 @@ function New-IcingaProviderFilterDataCpu()
         [switch]$IncludeDetails  = $FALSE
     );
 
-    $CpuData               = New-IcingaProviderObject -Name 'Cpu';
-    $CpuCounter            = New-IcingaPerformanceCounterArray '\Processor Information(*)\% Processor Utility';
-    $CounterStructure      = New-IcingaPerformanceCounterStructure -CounterCategory 'Processor Information' -PerformanceCounterHash $CpuCounter;
-    [int]$TotalCpuThreads  = 0;
-    [decimal]$TotalCpuLoad = 0;
-    [int]$SocketCount      = 0;
-    [hashtable]$SocketList = @{ };
+    # TODO: Cleanup this mess
+    $CpuData                       = New-IcingaProviderObject -Name 'Cpu';
+    $CpuCounter                    = New-IcingaPerformanceCounterArray '\Processor(*)\% Processor Time';
+    $CounterStructure              = New-IcingaPerformanceCounterStructure -CounterCategory 'Processor' -PerformanceCounterHash $CpuCounter;
+    [int]$TotalCpuThreads          = 0;
+    [decimal]$TotalCpuLoad         = 0;
+    [int]$SocketCount              = 0;
+    [hashtable]$SocketList         = @{ };
+    # Store some general data about the CPU sockets and cores. As we moved back to
+    # \Processor(*)\% Processor Time, we need to manually try to map cores to sockets
+    # Remove ony entry from the counter list, which is not a core but the total load entry
+    [int]$NumberOfThreadsPerSocket = ($CpuCounter.Values.Keys.Count - 1) / $Global:Icinga.Protected.CPUSockets;
+    [int]$CurrentSocket            = 0;
+    [int]$CurrentThread            = 0;
+    [array]$SortedCoreList         = $CounterStructure.Keys | Sort-Object { [int]($_ -replace '^\D+', ''); };
 
-    foreach ($currentcore in $CounterStructure.Keys) {
-        [string]$Socket     = $currentcore.Split(',')[0];
-        [string]$CoreId     = $currentcore.Split(',')[1];
-        [string]$SocketName = [string]::Format('Socket #{0}', $Socket);
+    foreach ($currentcore in $SortedCoreList) {
+        [string]$CoreId = $currentcore.Trim();
 
-        if ($Socket -eq '_Total' -Or $CoreId -eq '_Total') {
+        # We will handle the _Total entry ourselves later
+        if ($CoreId -eq '_Total') {
             continue;
+        }
+
+        [string]$SocketName = [string]::Format('Socket #{0}', $CurrentSocket);
+
+        $CurrentThread += 1;
+        if ($CurrentThread -ge $NumberOfThreadsPerSocket) {
+            $CurrentSocket += 1;
+            $CurrentThread = 0;
         }
 
         if ($SocketList.ContainsKey($SocketName) -eq $FALSE) {
@@ -41,7 +56,7 @@ function New-IcingaProviderFilterDataCpu()
             $CpuData.Metrics | Add-Member -MemberType NoteProperty -Name $SocketName -Value (New-Object PSCustomObject);
         }
 
-        [decimal]$CoreLoad = $CounterStructure[$currentcore]['% Processor Utility'].value;
+        [decimal]$CoreLoad = $CounterStructure[$CoreId]['% Processor Time'].value;
 
         if ($Limit100Percent) {
             if ($CoreLoad -gt 100) {
