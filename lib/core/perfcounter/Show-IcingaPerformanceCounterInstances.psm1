@@ -1,12 +1,14 @@
 <#
 .SYNOPSIS
-   Displays all available instances for a provided Performance Counter
+    Displays all available instances for a provided Performance Counter
 .DESCRIPTION
-   Displays all available instances for a provided Performance Counter
+    Displays all available instances for a provided Performance Counter
 .FUNCTIONALITY
-   Displays all available instances for a provided Performance Counter
+    Displays all available instances for a provided Performance Counter
 .PARAMETER Counter
-   The name of the Performance Counter to fetch data for
+    The name of the Performance Counter to fetch data for
+.PARAMETER NoNoticeOnMissingInstances
+    If specified, no notice will be displayed if no instances are found for the provided counter
 .EXAMPLE
    PS>Show-IcingaPerformanceCounterInstances -Counter '\Processor(*)\% processor time';
 
@@ -25,7 +27,8 @@
 function Show-IcingaPerformanceCounterInstances()
 {
     param (
-        [string]$Counter
+        [string]$Counter,
+        [switch]$NoNoticeOnMissingInstances = $FALSE
     );
 
     [hashtable]$Instances = @{ };
@@ -45,9 +48,11 @@ function Show-IcingaPerformanceCounterInstances()
     }
 
     if ($Instances.Count -eq 0) {
-        Write-IcingaConsoleNotice `
-            -Message 'No instances were found for Performance Counter "{0}". Please ensure the provided counter has instances and you are using "*" for the instance name.' `
-            -Objects $Counter;
+        if ($NoNoticeOnMissingInstances -eq $FALSE) {
+            Write-IcingaConsoleNotice `
+                -Message 'No instances were found for Performance Counter "{0}". Please ensure the provided counter has instances and you are using "*" for the instance name.' `
+                -Objects $Counter;
+        }
 
         return;
     }
@@ -55,4 +60,4 @@ function Show-IcingaPerformanceCounterInstances()
     return (
         $Instances.GetEnumerator() | Sort-Object Name
     );
-}
+}e

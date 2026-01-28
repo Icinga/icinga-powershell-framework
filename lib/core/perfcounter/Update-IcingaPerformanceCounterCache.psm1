@@ -37,7 +37,7 @@ function Update-IcingaPerformanceCounterCache()
 
     # First we need to prepare some data by fetching the current instances of the counter
     # and the cached instances. We will then compare them and update the cache accordingly
-    [array]$CounterInstances    = Show-IcingaPerformanceCounterInstances -Counter $Counter;
+    [array]$CounterInstances    = Show-IcingaPerformanceCounterInstances -Counter $Counter -NoNoticeOnMissingInstances;
     [array]$CachedInstances     = $Global:Icinga.Private.PerformanceCounter.Cache[$Counter];
     [array]$UpdatedInstances    = @();
     [array]$CachedInstanceNames = $CachedInstances.FullName;
