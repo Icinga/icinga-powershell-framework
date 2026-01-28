@@ -150,6 +150,8 @@ function New-IcingaCheck()
             # If our call sets CheckOverride, it means we could have used something like SetWarning() before
             # By doing so, we actively interact with the object and therefore we should not handle it as notice object
             $this.__HandleAsNoticeObject = $TRUE;
+        } else {
+            $this.__HandleAsNoticeObject = $FALSE;
         }
 
         # Set this object to [INFO] state in case it is a notice or no thresholds are defined
