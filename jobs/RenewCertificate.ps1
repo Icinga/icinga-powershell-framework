@@ -33,6 +33,11 @@ while ($TRUE) {
         continue;
     }
 
+    # Let make sure the permissions are updated for the entire Icinga installation
+    # on a regular basis to ensure system integrity, in case users or other processes
+    # modify the permissions incorrectly
+    Set-IcingaUserPermissions;
+
     break;
 }
 

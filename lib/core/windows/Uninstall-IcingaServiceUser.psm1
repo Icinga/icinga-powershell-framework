@@ -19,7 +19,8 @@ function Uninstall-IcingaServiceUser()
     Set-IcingaServiceUser -User 'NT Authority\NetworkService' -Service 'icinga2' | Out-Null;
     Set-IcingaServiceUser -User 'NT Authority\NetworkService' -Service 'icingapowershell' | Out-Null;
 
-    Set-IcingaUserPermissions -IcingaUser $IcingaUser -Remove;
+    Set-IcingaUserPermissions -IcingaUser 'NT Authority\NetworkService';
+    Update-IcingaWindowsUserPermission -SID $ServiceUserSID -Remove;
 
     $UserConfig = Remove-IcingaWindowsUser -IcingaUser $IcingaUser;
 

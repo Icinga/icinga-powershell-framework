@@ -7,6 +7,12 @@ documentation before upgrading to a new release.
 
 Released closed milestones can be found on [GitHub](https://github.com/Icinga/icinga-powershell-framework/milestones?state=closed).
 
+## 1.13.4 (2026-01-29)
+
+### Security
+
+* [#850](https://github.com/Icinga/icinga-powershell-framework/pull/850) Fixes security issue, allowing to access the private key file of the Icinga Agent/Icinga for Windows certificate file [GHSA](https://github.com/Icinga/icinga-powershell-framework/security/advisories/GHSA-88h5-rrm6-5973) [CVE-2026-24414](https://www.cve.org/CVERecord?id=CVE-2026-24414)
+
 ## 1.13.3 (2025-05-08)
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/39)
