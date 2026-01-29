@@ -143,4 +143,17 @@ function Invoke-IcingaForWindowsMigration()
 
         Set-IcingaForWindowsMigration -MigrationVersion (New-IcingaVersionObject -Version '1.12.3');
     }
+
+    if (Test-IcingaForWindowsMigration -MigrationVersion (New-IcingaVersionObject -Version '1.12.4')) {
+        Write-IcingaConsoleNotice 'Applying pending migrations required for Icinga for Windows v1.12.4';
+
+        # Fixes potential permission issues with the Icinga Service User and the SeServiceLogonRight privilege
+        $ServiceUser    = Get-IcingaServiceUser;
+        $ServiceUserSID = Get-IcingaUserSID $ServiceUser;
+
+        Update-IcingaWindowsUserPermission -SID $ServiceUserSID;
+        Set-IcingaUserPermissions -IcingaUser $ServiceUser;
+
+        Set-IcingaForWindowsMigration -MigrationVersion (New-IcingaVersionObject -Version '1.12.4');
+    }
 }
