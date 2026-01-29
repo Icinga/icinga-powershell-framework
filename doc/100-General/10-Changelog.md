@@ -7,6 +7,12 @@ documentation before upgrading to a new release.
 
 Released closed milestones can be found on [GitHub](https://github.com/Icinga/icinga-powershell-framework/milestones?state=closed).
 
+## 1.12.5 (2026-02-02)
+
+### Bugfixes
+
+* [#851](https://github.com/Icinga/icinga-powershell-framework/pull/851) Fixes an issue with user updates on domain controllers, which included the domain besides the user name, causing the user updates to fail
+
 ## 1.12.4 (2026-01-29)
 
 ### Security

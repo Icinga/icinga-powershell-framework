@@ -38,7 +38,7 @@ function New-IcingaWindowsUser()
             [bool]$Success = $FALSE;
 
             while ($Attempts -lt 10) {
-                $Result = Start-IcingaProcess -Executable 'net' -Arguments ([string]::Format('user "{0}" "{1}"', $IcingaUser, (ConvertFrom-IcingaSecureString -SecureString (New-IcingaWindowsUserPassword))));
+                $Result = Start-IcingaProcess -Executable 'net' -Arguments ([string]::Format('user "{0}" "{1}"', $IcingaUserInfo.User, (ConvertFrom-IcingaSecureString -SecureString (New-IcingaWindowsUserPassword))));
 
                 if ($Result.ExitCode -eq 0) {
                     $Success = $TRUE;
@@ -49,7 +49,7 @@ function New-IcingaWindowsUser()
             }
 
             if ($Success -eq $FALSE) {
-                Write-IcingaConsoleError 'Failed to update password for user "{0}": {1}' -Objects $IcingaUser, $Result.Error;
+                Write-IcingaConsoleError 'Failed to update password for user "{0}": {1}' -Objects $IcingaUserInfo.User, $Result.Error;
 
                 return @{
                     'User' = $UserConfig.Caption;
@@ -58,7 +58,7 @@ function New-IcingaWindowsUser()
             }
             Write-IcingaConsoleNotice 'User updated successfully.';
         } else {
-            Write-IcingaConsoleWarning 'User "{0}" is not managed by Icinga for Windows. No changes were made.' -Objects $IcingaUser;
+            Write-IcingaConsoleWarning 'User "{0}" is not managed by Icinga for Windows. No changes were made.' -Objects $IcingaUserInfo.User;
         }
 
         return @{
@@ -69,7 +69,7 @@ function New-IcingaWindowsUser()
 
     # Access our local Account Database
     $AccountDB        = [ADSI]"WinNT://$Env:COMPUTERNAME,Computer";
-    $IcingaUserObject = $AccountDB.Create("User", $IcingaUser);
+    $IcingaUserObject = $AccountDB.Create("User", $IcingaUserInfo.User);
     $IcingaUserObject.SetPassword((ConvertFrom-IcingaSecureString -SecureString (New-IcingaWindowsUserPassword)));
     $IcingaUserObject.SetInfo();
     $IcingaUserObject.FullName    = $UserMetadata.FullName;
