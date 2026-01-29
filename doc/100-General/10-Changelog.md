@@ -11,6 +11,10 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/38)
 
+### Security
+
+* [#850](https://github.com/Icinga/icinga-powershell-framework/pull/850) Fixes security issue, allowing to access the private key file of the Icinga Agent/Icinga for Windows certificate file [GHSA](https://github.com/Icinga/icinga-powershell-framework/security/advisories/GHSA-88h5-rrm6-5973) [CVE-2026-24414](https://www.cve.org/CVERecord?id=CVE-2026-24414)
+
 ### Bugfixes
 
 * [#783](https://github.com/Icinga/icinga-powershell-framework/issues/783) Fixes possible FIPS exception on some Windows machines, caused by `MD5` hash algorithm used to verify the service binary file integrity after download instead of `SHA256`

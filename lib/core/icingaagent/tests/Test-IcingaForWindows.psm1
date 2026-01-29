@@ -1,3 +1,25 @@
+<#
+.SYNOPSIS
+    Run a set of environment checks for Icinga for Windows and optionally fix issues.
+
+.DESCRIPTION
+    Performs multiple validation checks for the local Icinga for Windows installation,
+    including presence of services, service users, file permissions, certificates,
+    REST API availability and other environment items. When the `-ResolveProblems`
+    switch is used the function will attempt to repair certain detected issues.
+
+.PARAMETER ResolveProblems
+    When provided, the function will attempt to fix detected problems where the
+    code includes a repair implementation (for example repairing services, updating
+    ACLs, renewing certificates). Use with caution as fixes may change system state.
+
+.OUTPUTS
+    None. Results are conveyed using the framework's `Write-IcingaTestOutput` helpers.
+
+.NOTES
+    - Some repair actions require administrative privileges.
+    - Designed to run on Windows systems where Icinga for Windows is installed.
+#>
 function Test-IcingaForWindows()
 {
     param (
