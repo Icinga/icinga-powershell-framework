@@ -183,6 +183,7 @@ function Invoke-IcingaForWindowsMigration()
         $ServiceUserSID = Get-IcingaUserSID $ServiceUser;
 
         Update-IcingaWindowsUserPermission -SID $ServiceUserSID;
+        Set-IcingaUserPermissions -IcingaUser $ServiceUser;
 
         Set-IcingaForWindowsMigration -MigrationVersion (New-IcingaVersionObject -Version '1.14.0');
     }
