@@ -1,6 +1,6 @@
-Use-Icinga -Minimal;
+Use-Icinga;
 
-# This script will simply install the Icinga for Windows certificate everyime the
+# This script will simply install the Icinga for Windows certificate every time the
 # scheduled task is running. This does not impact our system at all, because we
 # can update the certificate at any time without having to worry about the state
 

@@ -30,6 +30,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 * [#836](https://github.com/Icinga/icinga-powershell-framework/issues/836) Fixes Metric over Time collector not working on Windows 2012 R2 and older
 * [#845](https://github.com/Icinga/icinga-powershell-framework/issues/845) Fixes a bunch of issues present in the New-IcingaCheck component, resulting in non-desired output value
 * [#851](https://github.com/Icinga/icinga-powershell-framework/pull/851) Fixes an issue with user updates on domain controllers, which included the domain besides the user name, causing the user updates to fail
+* [#854](https://github.com/Icinga/icinga-powershell-framework/pull/854) Fixes an issue with the renew certificate job, which updated file permissions with the wrong user `NT Authority\NetworkService` instead of the correct assigned user
 
 ### Enhancements
 
