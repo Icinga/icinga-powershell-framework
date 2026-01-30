@@ -12,6 +12,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 ### Bugfixes
 
 * [#851](https://github.com/Icinga/icinga-powershell-framework/pull/851) Fixes an issue with user updates on domain controllers, which included the domain besides the user name, causing the user updates to fail
+* [#854](https://github.com/Icinga/icinga-powershell-framework/pull/854) Fixes an issue with the renew certificate job, which updated file permissions with the wrong user `NT Authority\NetworkService` instead of the correct assigned user
 
 ## 1.13.4 (2026-01-29)
 
