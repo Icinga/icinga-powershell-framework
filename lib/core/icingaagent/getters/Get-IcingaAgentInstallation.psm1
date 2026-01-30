@@ -9,7 +9,7 @@ function Get-IcingaAgentInstallation()
         $regPath = @('HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*', 'HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*');
     }
 
-    $RegistryData = Get-ItemProperty $regPath;
+    $RegistryData = Get-ItemProperty $regPath -ErrorAction SilentlyContinue;
     $IcingaData   = $null;
     foreach ($entry in $RegistryData) {
         if ($null -eq $entry -or $null -eq $entry.DisplayName) {
