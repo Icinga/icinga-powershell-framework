@@ -36,10 +36,28 @@ function Get-IcingaAgentInstallation()
         };
     }
 
+    # Sometimes it can happen that the DisplayVersion in the registry is not correct
+    # (e.g. after manual upgrades or installation failures), so we try to fetch the version from the binary itself
+    $IcingaVersion = $IcingaData.DisplayVersion;
+
+    try {
+        [string]$IcingaBinary = Join-Path -Path $IcingaData.InstallLocation -ChildPath 'sbin\icinga2.exe';
+
+        if (Test-Path -Path $IcingaBinary) {
+            $IcingaVersion = (Get-Item -Path $IcingaBinary).VersionInfo.FileVersion;
+        }
+
+        if ($IcingaVersion -ne $IcingaData.DisplayVersion) {
+            Write-IcingaConsoleError 'The Icinga version retrieved from the registry ({0}) differs from the version retrieved from the binary ({1}). Please make sure the installation went through and the Icinga Agent is properly updated.' -Objects $IcingaData.DisplayVersion, $IcingaVersion;
+        }
+    } catch {
+        Write-IcingaConsoleError 'Failed to determine Icinga version from binary located at "{0}": {1}' -Objects $IcingaBinary, $_.Exception.Message;
+    }
+
     return @{
         'Installed'    = $TRUE;
         'RootDir'      = $IcingaData.InstallLocation;
-        'Version'      = (Split-IcingaVersion $IcingaData.DisplayVersion);
+        'Version'      = (Split-IcingaVersion $IcingaVersion);
         'Architecture' = $architecture;
         'Uninstaller'  = $IcingaData.UninstallString.Replace("MsiExec.exe ", "");
         'InstallDate'  = $IcingaData.InstallDate;
