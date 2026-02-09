@@ -35,7 +35,7 @@ function Set-IcingaAcl()
 {
     param (
         [string]$Directory    = $null,
-        [string]$Owner        = 'NT AUTHORITY\SYSTEM',
+        [string]$Owner        = (Get-IcingaUsernameFromSID -SID 'S-1-5-18'),
         [string[]]$IcingaUser = (Get-IcingaServiceUser),
         [string]$DomainName   = ($env:USERDOMAIN).ToLower()
     );
@@ -66,10 +66,13 @@ function Set-IcingaAcl()
         }
     }
 
+    # Local Administrators group SID
+    [string]$AdminGroup = Get-IcingaUsernameFromSID -SID 'S-1-5-32-544';
+
     # Validate if the local Administrators group exists (shouldn't happen anyway)
     try {
-        $adminGroup = New-Object System.Security.Principal.NTAccount('Administrators');
-        $adminGroup.Translate([System.Security.Principal.SecurityIdentifier]) | Out-Null;
+        $adminGroupTest = New-Object System.Security.Principal.NTAccount($AdminGroup);
+        $adminGroupTest.Translate([System.Security.Principal.SecurityIdentifier]) | Out-Null;
     } catch {
         Write-IcingaConsoleError -Message 'The local Administrators group does not exist or is invalid' -Objects $null;
         return;
@@ -98,7 +101,7 @@ function Set-IcingaAcl()
 
         # Update the owner of the folder to "Administrators" first, to ensure we don't
         # run into any exceptions
-        $acl.SetOwner((New-Object System.Security.Principal.NTAccount('Administrators'))) | Out-Null;
+        $acl.SetOwner((New-Object System.Security.Principal.NTAccount($AdminGroup))) | Out-Null;
 
         Write-IcingaConsoleNotice -Message 'Disabled inheritance for directory {0}' -Objects $Directory;
 
@@ -124,7 +127,7 @@ function Set-IcingaAcl()
 
         # Add local Administrators group (Full Control)
         $adminRule = New-Object System.Security.AccessControl.FileSystemAccessRule(
-            'Administrators',
+            $AdminGroup,
             'FullControl',
             'ContainerInherit, ObjectInherit',
             'None',
@@ -160,7 +163,7 @@ function Set-IcingaAcl()
                 # As our parent or current Acl might be owned by SYSTEM,
                 # we need to set the owner to Administrators here as well to fix exceptions
                 # for SYSTEM user not being allowed to own this file
-                $childAcl.SetOwner((New-Object System.Security.Principal.NTAccount('Administrators'))) | Out-Null;
+                $childAcl.SetOwner((New-Object System.Security.Principal.NTAccount($AdminGroup))) | Out-Null;
 
                 Set-Acl -Path $_.FullName -AclObject $childAcl | Out-Null;
             } catch {
