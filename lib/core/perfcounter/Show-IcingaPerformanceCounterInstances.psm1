@@ -60,4 +60,4 @@ function Show-IcingaPerformanceCounterInstances()
     return (
         $Instances.GetEnumerator() | Sort-Object Name
     );
-}e
+}
