@@ -103,6 +103,6 @@ function New-IcingaEnvironmentVariable()
                 'FetchedServices'    = $FALSE;
             }
         );
-        $Global:Icinga.Protected.Add('CPUSockets', (Get-IcingaWindowsInformation Win32_Processor).Count);
+        $Global:Icinga.Protected.Add('CPUSockets', ([array](Get-IcingaWindowsInformation Win32_Processor)).count);
     }
 }

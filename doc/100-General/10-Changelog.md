@@ -7,6 +7,14 @@ documentation before upgrading to a new release.
 
 Released closed milestones can be found on [GitHub](https://github.com/Icinga/icinga-powershell-framework/milestones?state=closed).
 
+## 1.14.1 (2026-02-11)
+
+[Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/43)
+
+### Bugfixes
+
+* [#859](https://github.com/Icinga/icinga-powershell-framework/issues/859) Fixes CPU plugin throwing an exception on certain Windows machines with `Divided by 0`
+
 ## 1.14.0 (2026-02-11)
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/38)
