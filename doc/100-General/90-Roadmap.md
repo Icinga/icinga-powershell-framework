@@ -6,7 +6,7 @@ This document outlines our roadmap for the Icinga for Windows solution. It does 
 
 ## Milestones
 
-The project is continuously developed and delivered as set of 3-month milestones. New features and functionality are provided within the [Icinga PowerShell Framework master branch](https://github.com/Icinga/icinga-powershell-framework) as well as other related repositories. Changes ahead on the master are always provided within the [changelog](https://github.com/Icinga/icinga-powershell-framework/blob/master/doc/31-Changelog.md) of each project.
+The project is continuously developed and delivered as set of 3-month milestones. New features and functionality are provided within the [Icinga PowerShell Framework master branch](https://github.com/Icinga/icinga-powershell-framework) as well as other related repositories. Changes ahead on the master are always provided within the [changelog](https://github.com/Icinga/icinga-powershell-framework/blob/master/doc/100-General/10-Changelog.md) of each project.
 
 ## Icinga for Windows Roadmap / Timeline
 
