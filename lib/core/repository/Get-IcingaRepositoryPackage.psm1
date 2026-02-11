@@ -33,7 +33,7 @@ function Get-IcingaRepositoryPackage()
     $SourceRepo             = $null;
     $RepoName               = $null;
     [bool]$HasRepo          = $FALSE;
-    [bool]$Isx86            = [bool]([IntPtr]::Size -eq 4);
+    [bool]$Isx86            = [bool](-not (Test-Path 'Env:ProgramFiles(x86)'));
 
     foreach ($entry in $Repositories) {
         $RepoContent        = Read-IcingaRepositoryFile -Name $entry.Name;
