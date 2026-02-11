@@ -7,7 +7,7 @@ documentation before upgrading to a new release.
 
 Released closed milestones can be found on [GitHub](https://github.com/Icinga/icinga-powershell-framework/milestones?state=closed).
 
-## 1.14.0 (tbd)
+## 1.14.0 (2026-02-11)
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/38)
 
