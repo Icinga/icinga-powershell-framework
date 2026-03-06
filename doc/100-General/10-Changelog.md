@@ -7,6 +7,14 @@ documentation before upgrading to a new release.
 
 Released closed milestones can be found on [GitHub](https://github.com/Icinga/icinga-powershell-framework/milestones?state=closed).
 
+## 1.14.2 (2026-03-31)
+
+[Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/44)
+
+### Bugfixes
+
+* [#861](https://github.com/Icinga/icinga-powershell-framework/pull/861) Fixes `Update-IcingaWindowsUserPermission` to ensure permissions for logon as service are granted for non-managed users, while the removal process and any logon deny rights are never touched to not break possible third-party software and manually user configuration for those users
+
 ## 1.14.1 (2026-02-11)
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/43)
