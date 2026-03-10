@@ -15,8 +15,12 @@ function Update-IcingaWindowsUserPermission()
         return;
     }
 
-    if ((Test-IcingaManagedUser -SID $SID) -eq $FALSE) {
-        Write-IcingaConsoleWarning 'This user is not managed by Icinga directly. Skipping permission update';
+    [bool]$IsManagedUser = Test-IcingaManagedUser -SID $SID;
+
+    # If we are removing permissions, but the user is not a managed user, we should skip the removal, as we don't want to remove permissions for system accounts or other non-managed users
+    # which might have been added manually or by other software
+    if ($Remove -and -not $IsManagedUser) {
+        Write-IcingaConsoleWarning 'The specified SID "{0}" is not a managed user. Skipping permission removal' -Objects $SID;
         return;
     }
 
@@ -56,11 +60,12 @@ function Update-IcingaWindowsUserPermission()
             $IsPrivilegedSection = $FALSE;
 
             # If we are adding permissions, ensure the deny logon rights are present
-            if ($HasDenyNetworkLogon -eq $FALSE) {
+            # Only applies for managed users, as we don't want to add deny logon rights for system accounts or other non-managed users
+            if ($HasDenyNetworkLogon -eq $FALSE -and $IsManagedUser) {
                 Write-IcingaConsoleWarning 'Adding missing "SeDenyNetworkLogonRight" privilege to security profile';
                 $NewSecurityProfile += [string]::Format('SeDenyNetworkLogonRight = *{0}', $SID);
             }
-            if ($HasDenyInteractiveLogon -eq $FALSE) {
+            if ($HasDenyInteractiveLogon -eq $FALSE -and $IsManagedUser) {
                 Write-IcingaConsoleWarning 'Adding missing "SeDenyInteractiveLogonRight" privilege to security profile';
                 $NewSecurityProfile += [string]::Format('SeDenyInteractiveLogonRight = *{0}', $SID);
             }
@@ -75,6 +80,12 @@ function Update-IcingaWindowsUserPermission()
             }
             if ($privilegeName -eq 'SeDenyInteractiveLogonRight') {
                 $HasDenyInteractiveLogon = $TRUE;
+            }
+
+            # Skip deny logon rights for non-managed users, as we don't want to add deny logon rights for system accounts or other non-managed users
+            if (-not $IsManagedUser -and ($privilegeName -eq 'SeDenyNetworkLogonRight' -or $privilegeName -eq 'SeDenyInteractiveLogonRight')) {
+                $NewSecurityProfile += $line;
+                continue;
             }
 
             [string[]]$entryList     = @();
