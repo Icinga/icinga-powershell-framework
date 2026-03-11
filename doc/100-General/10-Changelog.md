@@ -14,6 +14,7 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 ### Bugfixes
 
 * [#861](https://github.com/Icinga/icinga-powershell-framework/pull/861) Fixes `Update-IcingaWindowsUserPermission` to ensure permissions for logon as service are granted for non-managed users, while the removal process and any logon deny rights are never touched to not break possible third-party software and manually user configuration for those users
+* [#864](https://github.com/Icinga/icinga-powershell-framework/pull/864) Fixes process provider which could throw an exception for integer overflow on memory usage
 
 ## 1.14.1 (2026-02-11)
 

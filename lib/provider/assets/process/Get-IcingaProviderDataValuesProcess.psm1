@@ -129,7 +129,7 @@ function Get-IcingaProviderDataValuesProcess()
             } else {
                 [string]$MEMProcessName = $TopMEMUsage.Key.Split('|')[0];
                 [int]$MEPProcessId      = $TopMEMUsage.Key.Split('|')[1];
-                [int]$MemoryUsage       = $TopMEMUsage.Value;
+                [decimal]$MemoryUsage   = $TopMEMUsage.Value;
             }
 
             if ($TopMEMUsage.Value[$IterationIndex] -gt 0) {
