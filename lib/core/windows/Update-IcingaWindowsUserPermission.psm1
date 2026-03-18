@@ -100,6 +100,17 @@ function Update-IcingaWindowsUserPermission()
                     if ([string]::IsNullOrEmpty($token) -eq $FALSE) {
                         # Detect any entries that are not SIDs (SIDs start with '*' and S-1-...)
                         if (-not ($token -match '^\*S-1-\d+(-\d+)*$')) {
+                            # Try to fetch the SID for the user entry and add it if a SID
+                            # is found to ensure we don't accidentally remove entries which are still valid
+                            $SIDFromToken = Get-IcingaUserSID -User $token;
+
+                            if ([string]::IsNullOrEmpty($SIDFromToken) -eq $FALSE) {
+                                $entryList += $token;
+                                continue;
+                            }
+
+                            # Add the non-SID entry to a list to print a warning later, but don't add it to the entry list,
+                            # as we don't want to remove it if we are removing permissions for the managed user
                             $nonSidEntries += $token;
                             continue;
                         }
