@@ -22,9 +22,11 @@
 
 function Start-IcingaServiceCheckDaemon()
 {
-    New-IcingaThreadInstance `
-        -Name 'Main' `
-        -ThreadPool (Get-IcingaThreadPool -Name 'ServiceDaemonPool') `
-        -Command 'Add-IcingaServiceCheckDaemon' `
-        -Start;
+   Add-IcingaThreadPool -Name 'ServiceDaemonPool' -MaxInstances 100;
+
+   New-IcingaThreadInstance `
+      -Name 'Main' `
+      -ThreadPool (Get-IcingaThreadPool -Name 'ServiceDaemonPool') `
+      -Command 'Add-IcingaServiceCheckDaemon' `
+      -Start;
 }
