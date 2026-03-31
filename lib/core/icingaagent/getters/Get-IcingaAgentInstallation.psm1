@@ -1,12 +1,12 @@
 function Get-IcingaAgentInstallation()
 {
     [string]$architecture = '';
-    if ([IntPtr]::Size -eq 4) {
-        $architecture = "x86";
-        $regPath = 'HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*';
-    } else {
+    if (Test-Path 'Env:ProgramFiles(x86)') {
         $architecture = "x86_64";
         $regPath = @('HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*', 'HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*');
+    } else {
+        $architecture = "x86";
+        $regPath = 'HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*';
     }
 
     $RegistryData = Get-ItemProperty $regPath -ErrorAction SilentlyContinue;
