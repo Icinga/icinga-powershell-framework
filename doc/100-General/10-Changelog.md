@@ -7,6 +7,14 @@ documentation before upgrading to a new release.
 
 Released closed milestones can be found on [GitHub](https://github.com/Icinga/icinga-powershell-framework/milestones?state=closed).
 
+## 1.15.0 (2026-06-30)
+
+[Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/45)
+
+### Bugfixes
+
+* [#874](https://github.com/Icinga/icinga-powershell-framework/pull/874) Fixes Icinga CA importer to only import the CA from our "Icinga CA" into the Windows cert store, leaving custom CA's alone, as they are handled seperately on environments anyway.
+
 ## 1.14.2 (2026-03-31)
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/44)

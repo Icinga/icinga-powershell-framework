@@ -8,6 +8,14 @@ function Test-IcingaCAInstalledToAuthRoot()
 
     $IcingaCACert = New-Object Security.Cryptography.X509Certificates.X509Certificate2 $IcingaCAFile;
 
+    # If the issuer of our CA is not the "Icinga CA", always return true as this is a custom CA then.
+    # Generally speaking, custom CA's are handled properly anyway so this is the correct behavior.
+    if ($IcingaCACert.Issuer -ne 'CN=Icinga CA') {
+        $IcingaCACert = $null;
+
+        return $TRUE;
+    }
+
     [bool]$IcingaCAInstalled = $FALSE;
 
     Get-ChildItem -Recurse -Path 'Cert:\LocalMachine\AuthRoot\' | Where-Object {
