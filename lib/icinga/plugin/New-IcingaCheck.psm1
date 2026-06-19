@@ -529,11 +529,11 @@ function New-IcingaCheck()
         param ($ThresholdObject, $State);
 
         if ($ThresholdObject.HasError) {
-	    $this.__HandleAsNoticeObject = $FALSE;
+	        $this.__HandleAsNoticeObject = $FALSE;
             $this.__ThresholdObject      = $ThresholdObject;
             $this.__CheckState           = $IcingaEnums.IcingaExitCode.Unknown;
-	    $this.__FixedState           = $TRUE;
-	    $this.__SetCheckOutput($this.__ThresholdObject.Message);
+	        $this.__FixedState           = $TRUE;
+	        $this.__SetCheckOutput($this.__ThresholdObject.Message);
             $this.__LockState();
             return;
         }
