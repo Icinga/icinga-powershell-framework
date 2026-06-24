@@ -11,6 +11,10 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/44)
 
+### Enhancements
+
+* [#865](https://github.com/Icinga/icinga-powershell-framework/pull/865) Adds support for MSSQL shared memory feature, by not using a port for the connection string by using 0 or lower as port number
+
 ### Bugfixes
 
 * [#877](https://github.com/Icinga/icinga-powershell-framework/pull/877) Fixes threshold comparison while using `%`-Values, which caused falsely report of `Warning` threshold being larger than `Critical` threshold
