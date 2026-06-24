@@ -7,6 +7,14 @@ documentation before upgrading to a new release.
 
 Released closed milestones can be found on [GitHub](https://github.com/Icinga/icinga-powershell-framework/milestones?state=closed).
 
+## 1.15.0 (2026-06-30)
+
+[Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/44)
+
+### Bugfixes
+
+* [#873](https://github.com/Icinga/icinga-powershell-framework/issues/873) Fixes `StackOverflowException` while using `-ThresholdInterval` if no Metrics over Time are present [@bewshy]
+
 ## 1.14.2 (2026-03-31)
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/44)
