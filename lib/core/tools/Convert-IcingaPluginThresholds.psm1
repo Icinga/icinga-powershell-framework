@@ -314,7 +314,11 @@ function Convert-IcingaPluginThresholds()
 
     switch ($RetValue.Mode) {
         $IcingaEnums.IcingaThresholdMethod.Default {
-            $RetValue.Value = $ConvertedValue[0];
+            if (Test-Numeric $ConvertedValue[0]) {
+                $RetValue.Value = [decimal]$ConvertedValue[0];
+            } else {
+                $RetValue.Value = $ConvertedValue[0];
+            }
 
             if ([string]::IsNullOrEmpty($RetValue.Value)) {
                 Exit-IcingaThrowException -CustomMessage ([string]::Format('Could not convert the provided threshold value {0} to a valid Icinga for Windows range', $RetValue.Raw)) -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.InvalidThresholdValue -Force;
@@ -323,7 +327,11 @@ function Convert-IcingaPluginThresholds()
             break;
         };
         $IcingaEnums.IcingaThresholdMethod.Lower {
-            $RetValue.Value = $ConvertedValue[0];
+            if (Test-Numeric $ConvertedValue[0]) {
+                $RetValue.Value = [decimal]$ConvertedValue[0];
+            } else {
+                $RetValue.Value = $ConvertedValue[0];
+            }
 
             if ([string]::IsNullOrEmpty($RetValue.Value)) {
                 Exit-IcingaThrowException -CustomMessage ([string]::Format('Could not convert the provided threshold value {0} to a valid Icinga for Windows range', $RetValue.Raw)) -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.InvalidThresholdValue -Force;
@@ -332,7 +340,11 @@ function Convert-IcingaPluginThresholds()
             break;
         };
         $IcingaEnums.IcingaThresholdMethod.Greater {
-            $RetValue.Value = $ConvertedValue[1];
+            if (Test-Numeric $ConvertedValue[1]) {
+                $RetValue.Value = [decimal]$ConvertedValue[1];
+            } else {
+                $RetValue.Value = $ConvertedValue[1];
+            }
 
             if ([string]::IsNullOrEmpty($RetValue.Value)) {
                 Exit-IcingaThrowException -CustomMessage ([string]::Format('Could not convert the provided threshold value {0} to a valid Icinga for Windows range', $RetValue.Raw)) -ExceptionType 'Input' -ExceptionThrown $IcingaExceptions.Inputs.InvalidThresholdValue -Force;
