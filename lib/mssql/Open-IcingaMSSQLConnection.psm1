@@ -66,7 +66,13 @@ function Open-IcingaMSSQLConnection()
 
     try {
         $SqlConnection                  = New-Object System.Data.SqlClient.SqlConnection;
-        $SqlConnection.ConnectionString = "Server=$Address,$Port;";
+
+        # Only add the port if it is above 0. Otherwise the fall back to the Shared Memory feature of MSSQL
+        if ($Port -le 0) {
+            $SqlConnection.ConnectionString = "Server=$Address;";
+        } else {
+            $SqlConnection.ConnectionString = "Server=$Address,$Port;";
+        }
 
         if ([string]::IsNullOrEmpty($SqlDatabase) -eq $FALSE) {
             $SqlConnection.ConnectionString += "Database=$SqlDatabase;";
