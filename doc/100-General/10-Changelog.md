@@ -9,11 +9,12 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 ## 1.15.0 (2026-06-30)
 
-[Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/44)
+[Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/45)
 
 ### Bugfixes
 
 * [#873](https://github.com/Icinga/icinga-powershell-framework/issues/873) Fixes `StackOverflowException` while using `-ThresholdInterval` if no Metrics over Time are present [@bewshy]
+* [#874](https://github.com/Icinga/icinga-powershell-framework/pull/874) Fixes Icinga CA importer to only import the CA from our "Icinga CA" into the Windows cert store, leaving custom CA's alone, as they are handled seperately on environments anyway.
 * [#877](https://github.com/Icinga/icinga-powershell-framework/pull/877) Fixes threshold comparison while using `%`-Values, which caused falsely report of `Warning` threshold being larger than `Critical` threshold
 
 ### Enhancements
