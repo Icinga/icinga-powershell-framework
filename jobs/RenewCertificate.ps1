@@ -22,6 +22,12 @@ if ($RegisteredBackgroundDaemons.ContainsKey('Start-IcingaWindowsRESTApi')) {
     }
 }
 
+# If we do not provide a custom certificate path and the Icinga Agent is not installed on the host, we can skip this entire procedure
+# as we will never be able to create a certificate from nothing
+if ([string]::IsNullOrEmpty($CertificatePath) -And -not $Global:Icinga.Protected.Environment.'Icinga Service'.Present) {
+    exit 0;
+}
+
 # Wait during the initial run as long as the certificate is not available
 while ($TRUE) {
     Install-IcingaForWindowsCertificate -CertFile $CertificatePath;
