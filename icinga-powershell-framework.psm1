@@ -44,6 +44,11 @@ function Use-Icinga()
         Enable-IcingaFrameworkDebugMode;
     }
 
+    # Enable Windows Update Offload in case it is enabled in our config
+    if (Get-IcingaWindowsUpdateOffload) {
+        Enable-IcingaWindowsUpdateOffload -Silent;
+    }
+
     $EventLogMessages = Invoke-IcingaNamespaceCmdlets -Command 'Register-IcingaEventLogMessages*';
     foreach ($entry in $EventLogMessages.Values) {
         foreach ($event in $entry.Keys) {

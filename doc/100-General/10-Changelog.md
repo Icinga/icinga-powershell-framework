@@ -11,6 +11,10 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/46)
 
+### Enhancements
+
+* [#884](https://github.com/Icinga/icinga-powershell-framework/pull/884) Adds new feature, allowing to offload Windows Updates to a background task running as SYSTEM, ensuring Icinga for Windows itself can only run with minimal privileges, while Windows updates can still be fetched by using `Invoke-IcingaCheckUpdates`
+
 ## 1.15.0 (2026-06-30)
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/45)
