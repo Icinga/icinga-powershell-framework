@@ -1,11 +1,13 @@
 Use-Icinga;
 
-$UpdateFile    = Join-Path -Path (Get-IcingaCacheDir) -ChildPath 'provider\windows_updates\pending.xml';
-$UpdateTmpFile = Join-Path -Path (Get-IcingaCacheDir) -ChildPath 'provider\windows_updates\pending.xml.tmp';
+$UpdateDir     = Join-Path -Path (Get-IcingaCacheDir) -ChildPath 'provider\windows_updates';
+$UpdateFile    = Join-Path -Path $UpdateDir -ChildPath 'pending.xml';
+$UpdateTmpFile = Join-Path -Path $UpdateDir -ChildPath 'pending.xml.tmp';
 
 # In case the file does not yet exist, create it once and ensure we update the permissions that
 # noone besides the SYSTEM and Icinga for Windows user can access them
-if (-not (Test-Path -Path $UpdateFile)) {
+if (-not (Test-Path -Path $UpdateDir)) {
+    New-Item -Path $UpdateDir -ItemType Directory | Out-Null;
     Set-IcingaUserPermissions;
 }
 
