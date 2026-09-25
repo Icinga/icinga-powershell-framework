@@ -20,14 +20,15 @@
 
 function Disable-IcingaWindowsUpdateOffload()
 {
+    # Disable scheduled tasks and clear internal config values
+    $Global:Icinga.Protected.WindowsUpdateOffload = $FALSE;
+
     # Only run this if we use an administrative shell
     if (-not (Test-AdministrativeShell)) {
         Write-IcingaConsoleError 'You require administrative privileges to run this command';
         return;
     }
 
-    # Disable scheduled tasks and clear internal config values
-    $Global:Icinga.Protected.WindowsUpdateOffload = $FALSE;
     Set-IcingaPowerShellConfig -Path 'Framework.WindowsUpdateOffload' -Value $FALSE;
 
     Unregister-IcingaWindowsScheduledTaskWindowsUpdates;

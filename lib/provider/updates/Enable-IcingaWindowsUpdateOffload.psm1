@@ -29,6 +29,9 @@ function Enable-IcingaWindowsUpdateOffload()
         [switch]$Silent = $false
     );
 
+    # Register the scheduled task and set internal config values
+    $Global:Icinga.Protected.WindowsUpdateOffload = $TRUE;
+
     # Only run this if we use an administrative shell
     if (-not (Test-AdministrativeShell)) {
         if (-not $Silent) {
@@ -38,8 +41,6 @@ function Enable-IcingaWindowsUpdateOffload()
         return;
     }
 
-    # Register the scheduled task and set internal config values
-    $Global:Icinga.Protected.WindowsUpdateOffload = $TRUE;
     Set-IcingaPowerShellConfig -Path 'Framework.WindowsUpdateOffload' -Value $TRUE;
 
     Register-IcingaWindowsScheduledTaskWindowsUpdates -Silent:$Silent;
