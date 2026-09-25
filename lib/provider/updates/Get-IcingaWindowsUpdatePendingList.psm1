@@ -58,21 +58,16 @@ function Get-IcingaWindowsUpdatePendingList()
         }
 
         $WindowsUpdates = Read-IcingaFileSecure -File $UpdateFile;
-        $Pending        = ([System.Management.Automation.PSSerializer]::Deserialize($WindowsUpdates));
+        $Pending        = [System.Management.Automation.PSSerializer]::Deserialize($WindowsUpdates);
+        if ($null -eq $Pending) {
+            $Pending = @();
+        }
         $LastWriteTime  = [System.IO.File]::GetLastWriteTimeUtc($UpdateFile);
         $PendingUpdates.Add('fetched_hr', $LastWriteTime.ToString("yyyy-MM-dd HH:mm:ss 'UTC'"));
         $PendingUpdates.Add('fetched', (Get-IcingaUnixTimeOffsetNow -UnixTime ([DateTimeOffset]$LastWriteTime).ToUnixTimeSeconds()));
     } else {
         # Fetch all informations about installed updates and add them
-        try {
-            $WindowsUpdates = New-Object -ComObject "Microsoft.Update.Session" -ErrorAction Stop;
-            $SearchIndex    = $WindowsUpdates.CreateUpdateSearcher();
-            # Get a list of current pending updates which are not yet installed on the system
-            $Pending        = $SearchIndex.Search("IsInstalled=0");
-            $Pending        = $Pending.Updates;
-        } catch {
-            Exit-IcingaThrowException -ExceptionType 'Permission' -ExceptionThrown $IcingaExceptions.Permission.WindowsUpdate -Force;
-        }
+        $Pending = Get-IcingaWindowsUpdateRaw;
 
         $PendingUpdates.Add('fetched_hr', [DateTime]::UtcNow.ToString("yyyy-MM-dd HH:mm:ss 'UTC'"));
         $PendingUpdates.Add('fetched', 0);

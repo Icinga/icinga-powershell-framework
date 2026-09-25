@@ -15,11 +15,8 @@ while ($TRUE) {
     try {
         #$WindowsUpdates = Get-IcingaWindowsUpdatePendingList -AsTask;
         # Fetch all informations about installed updates and add them
-        $WindowsUpdates = New-Object -ComObject 'Microsoft.Update.Session' -ErrorAction Stop;
-        $SearchIndex    = $WindowsUpdates.CreateUpdateSearcher();
-        # Get a list of current pending updates which are not yet installed on the system
-        $Pending        = $SearchIndex.Search('IsInstalled=0');
-        $XMLObj         = [System.Management.Automation.PSSerializer]::Serialize($Pending.Updates, 3);
+        $Updates = Get-IcingaWindowsUpdateRaw;
+        $XMLObj  = [System.Management.Automation.PSSerializer]::Serialize($Updates, 3);
 
         # First write the new update data to a tmp file to avoid race conditions
         Write-IcingaFileSecure -File $UpdateTmpFile -Value $XMLObj;
@@ -33,10 +30,8 @@ while ($TRUE) {
     } catch {
         Write-IcingaEventMessage -EventId 1200 -Namespace 'Framework' -Objects $UpdateFile, $XMLObj, $_.Exception.Message;
     } finally {
-        $WindowsUpdates = $null;
-        $SearchIndex    = $null;
-        $Pending        = $null;
-        $XMLObj         = $null;
+        $Updates = $null;
+        $XMLObj  = $null;
         # Fetch Windows Updates every 10 minutes (600 seconds)
         Start-Sleep -Seconds 600;
     }
