@@ -11,6 +11,10 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/46)
 
+### Bugfixes
+
+* [#885](https://github.com/Icinga/icinga-powershell-framework/issues/885) Fixes check packages counting `[INFO]` checks as `Ok` in the summary header and for operator evaluation, as these checks are not compared against any thresholds
+
 ## 1.15.0 (2026-06-30)
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/45)
