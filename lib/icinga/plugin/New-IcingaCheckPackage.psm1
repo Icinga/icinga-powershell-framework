@@ -226,6 +226,10 @@ function New-IcingaCheckPackage()
 
             switch ($check.__GetCheckState()) {
                 $IcingaEnums.IcingaExitCode.Ok {
+                    # Checks handled as [INFO] are not compared against thresholds, so do not count them as Ok
+                    if ($check.__HandleAsNoticeObject) {
+                        break;
+                    }
                     $this.__OkChecks += $CheckStateOutput;
                     $OkChecks += 1;
                     break;
