@@ -77,6 +77,7 @@ function New-IcingaEnvironmentVariable()
 
         $Global:Icinga.Protected.Add('DeveloperMode', $FALSE);
         $Global:Icinga.Protected.Add('DebugMode', $FALSE);
+        $Global:Icinga.Protected.Add('WindowsUpdateOffload', $FALSE);
         $Global:Icinga.Protected.Add('JEAContext', $FALSE);
         $Global:Icinga.Protected.Add('RunAsDaemon', $FALSE);
         $Global:Icinga.Protected.Add('Minimal', $FALSE);

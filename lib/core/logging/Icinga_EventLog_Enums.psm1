@@ -44,6 +44,12 @@ if ($null -eq $IcingaEventLogEnums -Or $IcingaEventLogEnums.ContainsKey('Framewo
                 'Details'   = 'Icinga for Windows could not read the specified cache file, as the content seems to be corrupt. This happens mostly in case of unexpected shutdowns or terminations during the write process.';
                 'EventId'   = 1104;
             };
+            1200 = @{
+                'EntryType' = 'Error';
+                'Message'   = 'Unable to fetch Windows Updates from background task';
+                'Details'   = 'Icinga for Windows failed to fetch the pending Windows updates by using the scheduled background task due to an error.';
+                'EventId'   = 1200;
+            };
             1400 = @{
                 'EntryType' = 'Error';
                 'Message'   = 'Icinga for Windows background daemon not found';
