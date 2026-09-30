@@ -9,7 +9,7 @@ Like with [adding existing repositories](01-Add-Repositories.md), each synced re
 | Argument     | Type   | Description                                                                     |
 | ---          |---     | ---                                                                             |
 | Name         | String | The unique name of the repository. This name can only exist once on your system |
-| Path         | String | The location on where the files from the remote repository will be synced to. This can either be a local path, a network share or a Linux path, including user and hostname like `icinga@example.com:/vaw/www/icingarepo/`
+| Path         | String | The location on where the files from the remote repository will be synced to. This can either be a local path, a network share or a Linux path, including user and hostname like `icinga@example.com:/var/www/icingarepo/`
 | RemotePath   | String | The path pointing to the location Icinga for Windows tries to lookup all your files. You can either replicate the `Path` variable for network shares for example, or use a web url which is made available based on `Path` to fetch and download files from. If left empty, it will default to the `Path` variable content |
 | Source       | String | The source from where the repository will be synced from. This can either be pointing directly to the `ifw.repo.json` or the root directory, as long as the file is fetch able from this point. A source can be a web, local or network share |
 | UseSCP       | Switch | If you set `Path` to a Linux path as mentioned in the first example, you will have to enable this switch to use SCP to copy files from the source to the Linux system. Requires `scp` and `ssh` being installed on the system |
