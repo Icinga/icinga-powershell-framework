@@ -44,7 +44,8 @@ function Get-IcingaAgentInstallation()
         [string]$IcingaBinary = Join-Path -Path $IcingaData.InstallLocation -ChildPath 'sbin\icinga2.exe';
 
         if (Test-Path -Path $IcingaBinary) {
-            $IcingaVersion = (Get-Item -Path $IcingaBinary).VersionInfo.FileVersion;
+            # The binary reports its version as e.g. '2.16.6-1', while the registry uses '2.16.6.1'
+            $IcingaVersion = ([string](Get-Item -Path $IcingaBinary).VersionInfo.FileVersion).Replace('-', '.');
         }
 
         if ($IcingaVersion -ne $IcingaData.DisplayVersion) {
