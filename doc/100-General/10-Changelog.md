@@ -11,6 +11,10 @@ Released closed milestones can be found on [GitHub](https://github.com/Icinga/ic
 
 [Issues and PRs](https://github.com/Icinga/icinga-powershell-framework/milestone/47)
 
+### Enhancements
+
+* [#890](https://github.com/Icinga/icinga-powershell-framework/pull/890) Adds support for relative `RemoteSource` values like `.` inside repository files, which are resolved against the location of the `ifw.repo.json` itself
+
 ### Bugfixes
 
 * [#889](https://github.com/Icinga/icinga-powershell-framework/pull/889) Fixes Icinga Agent version detection failing with `Cannot convert value "6-1" to type "System.Int32"` and a false registry/binary version mismatch error, as the binary reports its version as `2.16.6-1` while the registry uses `2.16.6.1`

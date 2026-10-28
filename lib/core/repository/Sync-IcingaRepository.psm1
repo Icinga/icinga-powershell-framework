@@ -97,11 +97,13 @@ function Sync-IcingaRepository()
     } else { # Sync Source is web path
         $ProgressPreference = "SilentlyContinue";
 
-        $Result = Invoke-IcingaWebRequest -UseBasicParsing -Uri $Source -OutFile $RepoFile;
+        $RepoFileSource = $Source;
+        $Result         = Invoke-IcingaWebRequest -UseBasicParsing -Uri $RepoFileSource -OutFile $RepoFile;
 
         if ($Result.HasError -Or (Test-IcingaValidJSON -File $RepoFile) -eq $FALSE) {
 
-            $Result = Invoke-IcingaWebRequest -UseBasicParsing -Uri (Join-WebPath -Path $Source -ChildPath 'ifw.repo.json') -OutFile $RepoFile;
+            $RepoFileSource = Join-WebPath -Path $Source -ChildPath 'ifw.repo.json';
+            $Result         = Invoke-IcingaWebRequest -UseBasicParsing -Uri $RepoFileSource -OutFile $RepoFile;
 
             if ($Result.HasError -Or (Test-IcingaValidJSON -File $RepoFile) -eq $FALSE) {
                 Write-IcingaConsoleError 'Unable to download repository file from "{0}". Exception: "{1}"' -Objects $Source, $_.Exception.Message;
@@ -112,6 +114,10 @@ function Sync-IcingaRepository()
 
         $RepoContent = Get-Content -Path $RepoFile -Raw;
         $JsonRepo    = ConvertFrom-Json -InputObject $RepoContent;
+
+        if (Test-PSCustomObjectMember -PSObject $JsonRepo.Info -Name 'RemoteSource') {
+            $JsonRepo.Info.RemoteSource = Resolve-IcingaRepositoryRemoteSource -RemoteSource $JsonRepo.Info.RemoteSource -RepositoryFile $RepoFileSource;
+        }
 
         foreach ($component in $JsonRepo.Packages.PSObject.Properties.Name) {
             $IfWPackage = $JsonRepo.Packages.$component
