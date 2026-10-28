@@ -18,7 +18,7 @@ Now as the folder is prepared and all files are placed inside, we can run `New-I
 | ---        |---     | ---                                                                             |
 | Name       | String | The name of the repository to add. Only for local references required. |
 | Path       | String | The location of the path you prepared in the first step in which all files are inside, for creating your repository |
-| RemotePath | String | Will add the remote path for later adding of this repository to another system. Only suitable for network shares and is optional |
+| RemotePath | String | Will add the remote path for later adding of this repository to another system. Only suitable for network shares and is optional. Can also be relative to the `ifw.repo.json` file, like `.` |
 | Force      | Switch | In case a repository with the given name is already present, it will be overwritten |
 
 ### Create Our Repository
@@ -32,6 +32,10 @@ New-IcingaRepository `
 ```
 
 Depending on the amount of files inside, every single one will be analyzed for their component name and version and a new repo file `ifw.repo.json` is created. From the local Windows machine, you can also use this repository to install components from, as it will be added automatically.
+
+### Relative Remote Paths
+
+The `RemoteSource` stored inside the `ifw.repo.json` is used to download packages with relative locations. Instead of an absolute URL, it can be a path relative to the `ifw.repo.json` file itself, like `.`, `./` or `../stable`. For example, if the repository is loaded from `https://icingarepo.example.com/icingacustom/ifw.repo.json`, a `RemoteSource` of `.` resolves to `https://icingarepo.example.com/icingacustom/`. This way, the repository can be moved to another location without having to update the `RemoteSource`.
 
 ### Sync Own Repositories
 

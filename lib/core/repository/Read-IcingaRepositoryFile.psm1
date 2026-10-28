@@ -109,5 +109,9 @@ function Read-IcingaRepositoryFile()
         Add-IcingaRepositoryErrorState -Repository $Name;
     }
 
+    if ($null -ne $RepositoryObject -And (Test-PSCustomObjectMember -PSObject $RepositoryObject.Info -Name 'RemoteSource')) {
+        $RepositoryObject.Info.RemoteSource = Resolve-IcingaRepositoryRemoteSource -RemoteSource $RepositoryObject.Info.RemoteSource -RepositoryFile $RepoPath;
+    }
+
     return $RepositoryObject;
 }
